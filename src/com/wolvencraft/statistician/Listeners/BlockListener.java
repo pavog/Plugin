@@ -7,13 +7,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import com.wolvencraft.statistician.StatisticianPlugin;
 import com.wolvencraft.statistician.EventDataHandlers.EDHPlayer;
 
 public class BlockListener implements Listener {
 	private EDHPlayer edhPlayer;
 
-	public BlockListener(EDHPlayer passedEDH) {
+	public BlockListener(StatisticianPlugin plugin, EDHPlayer passedEDH) {
 		this.edhPlayer = passedEDH;
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

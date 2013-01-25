@@ -15,13 +15,15 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 
+import com.wolvencraft.statistician.StatisticianPlugin;
 import com.wolvencraft.statistician.EventDataHandlers.EDHPlayer;
 
 public class EntityListener implements Listener {
 	private EDHPlayer edhPlayer;
 
-	public EntityListener(EDHPlayer passedEDH) {
+	public EntityListener(StatisticianPlugin plugin, EDHPlayer passedEDH) {
 		this.edhPlayer = passedEDH;
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

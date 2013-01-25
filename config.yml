@@ -1,7 +1,8 @@
-verbose_errors: true
-database_address: localhost
-database_port: 3306
-database_name: mc_statistician
-database_username: mc_statistician
-database_password: mc_statistician
-database_update_time: 120
+debug: true
+database:
+  host: 'localhost'
+  port: 3306
+  name: ''
+  user: 'root'
+  pass: 'root'
+ping: 120

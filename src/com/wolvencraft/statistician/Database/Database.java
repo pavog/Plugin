@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.wolvencraft.statistician.StatisticianPlugin;
-import com.wolvencraft.statistician.Config.Config;
 
 public class Database {
 	private static Database _singletonDB = null;
@@ -33,7 +32,7 @@ public class Database {
 
 	private void ConnectToDB() throws DBConnectFail {
 		try {
-			this.connection = DriverManager.getConnection("jdbc:mysql://" + Config.getConfig().getDBAddress() + ":" + Config.getConfig().getDBPort() + "/" + Config.getConfig().getDBName(), Config.getConfig().getDBUsername(), Config.getConfig().getDBPassword());
+			this.connection = DriverManager.getConnection(StatisticianPlugin.getSettings().DB_CONNECT, StatisticianPlugin.getSettings().DB_USER, StatisticianPlugin.getSettings().DB_PASS);
 		} catch (SQLException e) {
 			throw new DBConnectFail(e);
 		}
@@ -49,9 +48,7 @@ public class Database {
 			statement.close();
 		} catch (SQLException e) {
 			StatisticianPlugin.getInstance().getLogger().warning(sql + " :: Update failed, checking connection... (" + e.getMessage() + ")");
-			if (Config.getConfig().isVerboseErrors()) {
-				e.printStackTrace();
-			}
+			if (StatisticianPlugin.getSettings().DEBUG) e.printStackTrace();
 			this.checkConnectionTryReconnect();
 			return false;
 		} finally {
@@ -81,9 +78,7 @@ public class Database {
 			}
 		} catch (SQLException e) {
 			StatisticianPlugin.getInstance().getLogger().warning(sql + " :: Query failed, checking connection... (" + e.getMessage() + ")");
-			if (Config.getConfig().isVerboseErrors()) {
-				e.printStackTrace();
-			}
+			if (StatisticianPlugin.getSettings().DEBUG) e.printStackTrace();
 			this.checkConnectionTryReconnect();
 			return null;
 		} finally {
@@ -102,7 +97,7 @@ public class Database {
 	}
 
 	public boolean callStoredProcedure(String procName, List<String> variables) {
-		StringBuilder sb = new StringBuilder("CALL `" + Config.getConfig().getDBName() + "`." + procName + "(");
+		StringBuilder sb = new StringBuilder("CALL `" + StatisticianPlugin.getSettings().DB_NAME + "`." + procName + "(");
 		if (variables != null) {
 			for (String variable : variables) {
 				sb.append("'" + variable + "',");
@@ -117,9 +112,7 @@ public class Database {
 			statement.executeUpdate(sb.toString());
 		} catch (SQLException e) {
 			StatisticianPlugin.getInstance().getLogger().warning(sb.toString() + " :: Stored procedure failed, checking connection... (" + e.getMessage() + ")");
-			if (Config.getConfig().isVerboseErrors()) {
-				e.printStackTrace();
-			}
+			if (StatisticianPlugin.getSettings().DEBUG) e.printStackTrace();
 			this.checkConnectionTryReconnect();
 			return false;
 		} finally {
@@ -141,9 +134,7 @@ public class Database {
 				this.reconnect();
 			}
 		} catch (SQLException e) {
-			if (Config.getConfig().isVerboseErrors()) {
-				e.printStackTrace();
-			}
+			if (StatisticianPlugin.getSettings().DEBUG) e.printStackTrace();
 		}
 	}
 
@@ -154,9 +145,7 @@ public class Database {
 			StatisticianPlugin.getInstance().getLogger().info("Connection to the database re-established, some stats were lost though");
 		} catch (DBConnectFail e) {
 			StatisticianPlugin.getInstance().getLogger().severe("Could not reconnect, stats are going to be lost");
-			if (Config.getConfig().isVerboseErrors()) {
-				e.printStackTrace();
-			}
+			if (StatisticianPlugin.getSettings().DEBUG) e.printStackTrace();
 		}
 	}
 
@@ -171,10 +160,10 @@ public class Database {
 			version = 0;
 		}
 
-		if (version < Config.getDBVersion()) {
-			StatisticianPlugin.getInstance().getLogger().info("Patching database from v" + version + " to v" + Config.getDBVersion() + ".");
+		if (version < StatisticianPlugin.getSettings().DB_VERSION) {
+			StatisticianPlugin.getInstance().getLogger().info("Patching database from v" + version + " to v" + StatisticianPlugin.getSettings().DB_VERSION + ".");
 
-			while (version < Config.getDBVersion()) {
+			while (version < StatisticianPlugin.getSettings().DB_VERSION) {
 				++version;
 
 				InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/stats_v" + version + ".sql");

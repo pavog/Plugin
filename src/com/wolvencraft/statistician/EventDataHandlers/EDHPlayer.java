@@ -1,8 +1,5 @@
 package com.wolvencraft.statistician.EventDataHandlers;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -13,11 +10,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.statistician.StatisticianPlugin;
 import com.wolvencraft.statistician.Database.DBSynchDataGetSet;
-import com.wolvencraft.statistician.Database.DataValues.DBDataValues_Players;
-import com.wolvencraft.statistician.Database.DataValues.DataStores;
-import com.wolvencraft.statistician.Database.DataValues.DataValues_Config;
 import com.wolvencraft.statistician.Stats.KillTag;
-import com.wolvencraft.statistician.Utils.StringHandler;
 
 public class EDHPlayer {
 	public void PlayerBlockBreak(final Player player, final Integer blockID) {
@@ -55,21 +48,9 @@ public class EDHPlayer {
 					if (DBSynchDataGetSet.isPlayerInDB(player.getUniqueId().toString())) {
 						// Player Exists and has been here before
 						DBSynchDataGetSet.playerLogin(player.getUniqueId().toString());
-						if (DataValues_Config.SHOW_LASTJOIN_WELCOME.getValueAsBoolean()) {
-							// Show Last Joined Message
-							String lastJoinMessage = StringHandler.formatForChat(DataValues_Config.LASTJOIN_WELCOME_MSG.getValue(), player);
-							String timeStamp = DBSynchDataGetSet.getValue(DataStores.PLAYER, DBDataValues_Players.LAST_LOGOUT, DBDataValues_Players.UUID, player.getUniqueId().toString());
-							String lastJoin = new SimpleDateFormat(DataValues_Config.DATE_FORMAT.getValue()).format(new Date(Long.parseLong(timeStamp) * 1000));
-							lastJoinMessage = lastJoinMessage.replaceAll("\\{lastJoin}", lastJoin);
-							player.sendMessage(lastJoinMessage);
-						}
 					} else {
 						// First Time Player Logged in with Statistician Running
 						DBSynchDataGetSet.playerCreate(player.getUniqueId().toString(), player.getName());
-						if (DataValues_Config.SHOW_FIRSTJOIN_WELCOME.getValueAsBoolean()) {
-							// If they want to show first join message
-							player.sendMessage(StringHandler.formatForChat(DataValues_Config.FIRSTJOIN_WELCOME_MSG.getValue(), player));
-						}
 					}
 					// Check and update the most users ever logged on
 					StatisticianPlugin.getInstance().getDB().callStoredProcedure("updateMostEverOnline", null);
@@ -113,12 +94,12 @@ public class EDHPlayer {
 	}
 
 	public void PlayerKilledByPlayer(final Player killer, final Player victim, final DamageCause cause) {
-		if (!StatisticianPlugin.getInstance().permissionToRecordStat(victim)) return;
+		if (!StatisticianPlugin.getInstance().statExempt(victim)) return;
 		this.execute(killer, new KillTag(killer, victim, cause));
 	}
 
 	public void PlayerKilledByPlayerProjectile(final Player killer, final Player victim, final Entity projectile, final DamageCause cause) {
-		if (!StatisticianPlugin.getInstance().permissionToRecordStat(victim)) return;
+		if (!StatisticianPlugin.getInstance().statExempt(victim)) return;
 		this.execute(killer, new KillTag(killer, victim, (Projectile)projectile, cause));
 	}
 
@@ -168,7 +149,7 @@ public class EDHPlayer {
 	}
 
 	private void execute(Player player, Runnable runnable) {
-		if (!StatisticianPlugin.getInstance().permissionToRecordStat(player)) return;
+		if (!StatisticianPlugin.getInstance().statExempt(player)) return;
 		if (runnable != null) {
 			StatisticianPlugin.getInstance().getExecutor().execute(runnable);
 		}

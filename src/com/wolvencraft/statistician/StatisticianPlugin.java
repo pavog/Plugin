@@ -6,10 +6,8 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.wolvencraft.statistician.Config.Config;
 import com.wolvencraft.statistician.Database.DBConnectFail;
 import com.wolvencraft.statistician.Database.Database;
 import com.wolvencraft.statistician.Database.DataValues.DataValues_Config;
@@ -18,9 +16,13 @@ import com.wolvencraft.statistician.Listeners.BlockListener;
 import com.wolvencraft.statistician.Listeners.EntityListener;
 import com.wolvencraft.statistician.Listeners.PlayerListener;
 import com.wolvencraft.statistician.Stats.PlayerData;
+import com.wolvencraft.statistician.Utils.Message;
+import com.wolvencraft.statistician.Utils.Settings;
 
 public class StatisticianPlugin extends JavaPlugin {
-	private static StatisticianPlugin singleton = null;
+	private static StatisticianPlugin plugin;
+	private static Settings settings;
+	
 	private Database database;
 	private ExecutorService executorService;
 	private DataProcessor dataProcessor;
@@ -28,41 +30,29 @@ public class StatisticianPlugin extends JavaPlugin {
 	private PlayerData playerData;
 	private EDHPlayer edhPlayer;
 
-	private PlayerListener playerListener;
-	private BlockListener blockListener;
-	private EntityListener entityListener;
-
-	//private InventoryListener inventoryListener;
-
-	public static StatisticianPlugin getInstance() {
-		return StatisticianPlugin.singleton;
-	}
-
 	@Override
 	public void onEnable() {
-		if (StatisticianPlugin.singleton != null) return;
-
-		StatisticianPlugin.singleton = this;
-
+		plugin = this;
+		
 		this.setNaggable(false);
 
-		if (this.database == null) {
-			try {
-				this.database = new Database();
-			} catch (ClassNotFoundException e) {
-				this.getLogger().severe("MySQL Driver not found");
-				if (Config.getConfig().isVerboseErrors()) {
-					e.printStackTrace();
-				}
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+		settings = new Settings(this);
+		
+		if (database == null) {
+			try { database = new Database(); }
+			catch (ClassNotFoundException e) {
+				Message.log(Level.SEVERE, "MySQL Driver not found");
+				if (settings.DEBUG) e.printStackTrace();
 			} catch (DBConnectFail e) {
-				this.getLogger().log(Level.SEVERE, "Critical Error, could not connect to mySQL. Is the database Available? Check config file and try again. (" + e.getMessage() + ")");
-				if (Config.getConfig().isVerboseErrors()) {
-					e.printStackTrace();
-				}
+				Message.log(Level.SEVERE, "Critical Error, could not connect to mySQL. Is the database Available? Check config file and try again. (" + e.getMessage() + ")");
+				if (settings.DEBUG) e.printStackTrace();
 			}
 		}
-		if (this.database == null) {
-			StatisticianPlugin.singleton = null;
+		
+		if (database == null) {
+			StatisticianPlugin.plugin = null;
 			this.getPluginLoader().disablePlugin(this);
 			return;
 		}
@@ -70,26 +60,19 @@ public class StatisticianPlugin extends JavaPlugin {
 		DataValues_Config.refresh();
 
 		this.database.callStoredProcedure("pluginStartup", null);
-
 		this.executorService = Executors.newCachedThreadPool();
-
 		this.edhPlayer = new EDHPlayer();
-
 		this.playerData = new PlayerData();
-
 		this.dataProcessor = new DataProcessor();
 		this.dataProcessor.addProcessable(this.playerData);
 
 		this.dataProcessorTimer = new Timer(true);
-		this.dataProcessorTimer.scheduleAtFixedRate(this.dataProcessor, Config.getConfig().getDBUpdateTime(), Config.getConfig().getDBUpdateTime());
+		this.dataProcessorTimer.scheduleAtFixedRate(this.dataProcessor, 0, settings.PING);
 
 		// Setup Listeners
-		this.playerListener = new PlayerListener(this.edhPlayer);
-		this.blockListener = new BlockListener(this.edhPlayer);
-		this.entityListener = new EntityListener(this.edhPlayer);
-		//this.inventoryListener = new InventoryListener(this.edhPlayer);
-
-		this.registerEvents();
+		new PlayerListener(this, this.edhPlayer);
+		new BlockListener(this, this.edhPlayer);
+		new EntityListener(this, this.edhPlayer);
 
 		// This could be a reload so see if people are logged in
 		for (Player player : this.getServer().getOnlinePlayers()) {
@@ -99,7 +82,7 @@ public class StatisticianPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		if (StatisticianPlugin.singleton == null || !StatisticianPlugin.singleton.equals(this)) return;
+		if (StatisticianPlugin.plugin == null || !StatisticianPlugin.plugin.equals(this)) return;
 
 		this.dataProcessorTimer.cancel();
 
@@ -118,33 +101,24 @@ public class StatisticianPlugin extends JavaPlugin {
 			this.database = null;
 		}
 
-		StatisticianPlugin.singleton = null;
+		plugin = null;
 
 		if (this.executorService != null) {
 			this.executorService.shutdown();
 		}
 	}
-
-	private void registerEvents() {
-		PluginManager pm = this.getServer().getPluginManager();
-		pm.registerEvents(this.blockListener, this);
-		pm.registerEvents(this.entityListener, this);
-		pm.registerEvents(this.playerListener, this);
+	
+	public static StatisticianPlugin getInstance() 	{ return plugin; }
+	public static Settings getSettings()			{ return settings; }
+	public static void reloadSettings() {
+		plugin.getConfig().options().copyDefaults(true);
+		plugin.saveConfig();
+		settings = null;
+		settings = new Settings(plugin);
+		
 	}
-
-	public Database getDB() {
-		return this.database;
-	}
-
-	public ExecutorService getExecutor() {
-		return this.executorService;
-	}
-
-	public PlayerData getPlayerData() {
-		return this.playerData;
-	}
-
-	public boolean permissionToRecordStat(Player player) {
-		return !player.hasPermission("statistician.ignore");
-	}
+	public Database getDB() 						{ return this.database; }
+	public ExecutorService getExecutor()			{ return this.executorService; }
+	public PlayerData getPlayerData()				{ return this.playerData; }
+	public boolean statExempt(Player player)		{ return !player.hasPermission("statistician.ignore"); }
 }

@@ -9,13 +9,15 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.wolvencraft.statistician.StatisticianPlugin;
 import com.wolvencraft.statistician.EventDataHandlers.EDHPlayer;
 
 public class PlayerListener implements Listener {
 	private EDHPlayer edhPlayer;
 
-	public PlayerListener(EDHPlayer passedEDH) {
+	public PlayerListener(StatisticianPlugin plugin, EDHPlayer passedEDH) {
 		this.edhPlayer = passedEDH;
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

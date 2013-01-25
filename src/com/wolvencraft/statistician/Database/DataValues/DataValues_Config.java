@@ -3,7 +3,7 @@ package com.wolvencraft.statistician.Database.DataValues;
 import java.util.List;
 import java.util.Map;
 
-import com.wolvencraft.statistician.Config.Config;
+import com.wolvencraft.statistician.StatisticianPlugin;
 import com.wolvencraft.statistician.Database.DBSynchDataGetSet;
 
 public enum DataValues_Config implements IDataValues {
@@ -43,7 +43,7 @@ public enum DataValues_Config implements IDataValues {
 	}
 
 	public static void refresh() {
-		List<Map<String, String>> results = DBSynchDataGetSet.getValues(DataStores.CONFIGURATION, DataValues_Config.DATABASE_VERSION, Integer.toString(Config.getDBVersion()));
+		List<Map<String, String>> results = DBSynchDataGetSet.getValues(DataStores.CONFIGURATION, DataValues_Config.DATABASE_VERSION, Integer.toString(StatisticianPlugin.getSettings().DB_VERSION));
 		for (int x = 0; x < DataValues_Config.values().length; ++x) {
 			DataValues_Config.values()[x].configValue = results.get(0).get(DataValues_Config.values()[x].columnName);
 		}
