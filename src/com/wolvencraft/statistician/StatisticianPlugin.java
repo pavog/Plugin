@@ -67,7 +67,7 @@ public class StatisticianPlugin extends JavaPlugin {
 		this.dataProcessor.addProcessable(this.playerData);
 
 		this.dataProcessorTimer = new Timer(true);
-		this.dataProcessorTimer.scheduleAtFixedRate(this.dataProcessor, 0, settings.PING);
+		this.dataProcessorTimer.scheduleAtFixedRate(this.dataProcessor, settings.PING, settings.PING);
 
 		// Setup Listeners
 		new PlayerListener(this, this.edhPlayer);
