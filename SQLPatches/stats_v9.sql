@@ -19,8 +19,8 @@ INSERT INTO `creatures` VALUES ('30', 'Iron Golem');
 -- Resource updates 
 -- -----------------------
 
-INSERT INTO `resource_desc` VALUES ('123', 'Redstone Lamp (inactive)');
-INSERT INTO `resource_desc` VALUES ('124', 'Redstone Lamp (active)');
+INSERT INTO `resource_desc` VALUES ('123', 'Redstone Lamp Off');
+INSERT INTO `resource_desc` VALUES ('124', 'Redstone Lamp');
 
 -- ---------------------------
 -- Update DBVersion To 9

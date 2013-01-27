@@ -19,7 +19,7 @@ INSERT INTO `resource_desc` VALUES ('106', 'Vines');
 INSERT INTO `resource_desc` VALUES ('107', 'Fence Gate');
 INSERT INTO `resource_desc` VALUES ('108', 'Brick Stairs');
 INSERT INTO `resource_desc` VALUES ('109', 'Stone Brick Stairs');
-INSERT INTO `resource_desc` VALUES ('360', 'Melon (Slice)');
+INSERT INTO `resource_desc` VALUES ('360', 'Melon Slice');
 INSERT INTO `resource_desc` VALUES ('361', 'Pumpkin Seeds');
 INSERT INTO `resource_desc` VALUES ('362', 'Melon Seeds');
 INSERT INTO `resource_desc` VALUES ('363', 'Raw Beef');
