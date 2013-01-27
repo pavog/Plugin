@@ -1,11 +1,10 @@
-name: Statistician
-main: com.wolvencraft.statistician.StatisticianPlugin
+name: YetAnotherStatisticsPlugin
+main: com.wolvencraft.yasp.StatsPlugin
 version: 2.1
-description: Extremely detailed player/server statistic tracking with web portal.
-website: http://dev.bukkit.org/server-mods/statisticianv2/
-authors: [ChaseHQ, Coryf88]
+description: Extremely detailed player/server statistic tracking with web portal
+authors: [ChaseHQ, Coryf88, bitWolfy]
 softdepend: [Vault]
 permissions:
-  statistician.ignore:
+  stats.exempt:
     description: Don't record statistics of the player.
     default: false
