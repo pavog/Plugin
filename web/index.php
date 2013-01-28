@@ -23,6 +23,9 @@ if(!isset($_GET['view'])) {
 	$curPage = $_GET['view'];
 }
 
+include("./data/blocks/token.php");
+include("./data/blocks/security.php");
+
 ?>
 
 
@@ -37,6 +40,7 @@ if(!isset($_GET['view'])) {
 	<meta name="author" content="">
 
 	<link href="./src/css/bootstrap.css" rel="stylesheet">
+	<link href="./src/css/bootstrap-responsive.css" rel="stylesheet">
 	<link href="./src/css/style.css" rel="stylesheet">
 	<link href="./src/css/font-awesome.css" rel="stylesheet">
 	<link href="./src/css/tablesorter/style.css" rel="stylesheet">
@@ -44,6 +48,8 @@ if(!isset($_GET['view'])) {
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+	
+	
 </head>
 
 <body>
@@ -51,27 +57,52 @@ if(!isset($_GET['view'])) {
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 	<div class="container-fluid page-width force-center">
+		
 		<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</a>
-		<a class="brand" href="../"><img src="./src/img/logo.png" style="width:25px; height: 25px; margin-right: 15px;" /><?php echo (SERVER_NAME); ?></a>
-	<div class="pull-right" style="padding-top: 10px;">
-		<?php
-			if ($online) echo "Server status: <span class='label label-success'>Online</span>";
-			else echo "Server status: <span class='label label-important'>Offline</span>";
-		?>
+		<a class="brand" href="../">
+			<img src="<?php echo LOGO_URL; ?>" style="width:25px; height: 25px; margin-right: 15px;" alt="<?php echo SERVER_NAME; ?>" />
+			<?php echo SERVER_NAME; ?>
+		</a>
+	
+	
+		<ul class="nav pull-right">
+			<li><a>
+			<?php
+				if ($online) { echo "Server status: <span class='label label-success'>Online</span>"; }
+				else { echo "Server status: <span class='label label-important'>Offline</span>"; }
+			?>
+			</a></li>
+			<?php if ($login == "Guest") { ?>
+			
+			<li><a href="../?view=login">Log in</a></li>
+			
+			<?php } else { ?>
+			
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdwn" data-target="#">
+					<?php echo $login; ?>
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<li role="menuitem"><a href="../?view=settings">Settings</a></li>
+					<li role="menuitem"><a href="../?view=logout">Log out</a></li>
+				</ul>
+			</li>
+			
+			<?php } ?>
+		</ul>
 	</div>
 	</div>
-</div>
-
 </div>
 
 <div class="container page-width">
 	<div class="row-fluid">
 		<div class="span2">
-			<div class="well sidebar-nav">
+			<div class="well sidebar-nav" style="position: fixed; width: 160px;">
 				<ul class="nav nav-list">
 					<li class="nav-header">General</li>
 					<li<?php if ($curPage == "main") echo " class='active'"; ?>><a href="../"><i class="icon-star"></i> Dashboard</a></li>
@@ -80,9 +111,6 @@ if(!isset($_GET['view'])) {
 					<li<?php if ($curPage == "player") echo " class='active'"; ?>><a href="../?view=player"><i class="icon-group"></i> Players</a></li>
 					<li<?php if ($curPage == "world") echo " class='active'"; ?>><a href="../?view=world"><i class="icon-book"></i> World</a></li>
 					<li<?php if ($curPage == "kills") echo " class='active'"; ?>><a href="../?view=kills"><i class="icon-tint"></i> Death Log</a></li>
-					<li class="divider"></li>
-					<li class="nav-header">Other</li>
-					<li<?php if ($curPage == "settings") echo " class='active'"; ?>><a href="../?view=settings""><i class="icon-cogs"></i> Settings</a></li>
 				</ul>
 			</div><!--/.well -->
 		</div><!--/span-->
@@ -93,20 +121,23 @@ if(!isset($_GET['view'])) {
 		switch ($curPage) {
 				
 			case 'player':
-				include ('./page/player.php');
+				include ('./data/player.php');
 				break;
 			case 'world':
-				include ('./page/world.php');
+				include ('./data/world.php');
 				break;
 			case 'kills':
-				include ('./page/deaths.php');
+				include ('./data/deaths.php');
+				break;
+			case 'login':
+				include ('./data/login.php');
 				break;
 			case 'settings':
-				include ('./page/settings.php');
+				include ('./data/settings.php');
 				break;
 			case 'main':
 			default:
-                		include ('./page/server.php');
+                		include ('./data/server.php');
 				break;
 			
 		}
@@ -122,19 +153,23 @@ if(!isset($_GET['view'])) {
 		<p class="pull-right">&copy; 2013 Yet Another Statistics Plugin<br />Based on <a href="http://dev.bukkit.org/server-mods/statisticianv2/" target="_blank">Statistician 2</a> technology</p>
 	</footer>
 
-</div><!--/.fluid-container-->
+</div>
 
-<script src="./src/js/jquery.js" type="text/javascript"></script>
+<script src="./src/js/jq.js" type="text/javascript"></script>
 <script src="./src/js/bootstrap.js" type="text/javascript"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
 <script src="./src/js/jquery.tablesorter.js" type="text/javascript"></script> 
-<script type="text/javascript">
+<script type="text/javascript">	
 	$(document).ready(function() {
-	$(".table").tablesorter(
-		{sortList: [[0,0]]}
-	);
+		$('.dropdown-toggle').dropdown();
+		$(".table").tablesorter(
+			{sortList: [[0,0]]}
+		);
 	} 
 ); 
 </script>
+
+
 
 </body>
 </html>

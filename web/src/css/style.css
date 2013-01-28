@@ -46,3 +46,7 @@ a.paginate {
 	padding: 2px 6px 2px 6px;
 	text-decoration: none;
 }
+
+.dropdown-menu {
+	margin-top: 15px;
+}

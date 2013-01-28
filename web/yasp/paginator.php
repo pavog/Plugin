@@ -98,7 +98,7 @@ class Paginator {
         else {
             for($i = 1; $i <= $this->num_pages; $i++) {
                 $this->return .= ($i ==
-                                  $this->current_page) ? "<a class=\"current\" href=\"#\">$i</a> " : "<a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=$i&ipp=$this->items_per_page$this->querystring\">$i</a> ";
+                                  $this->current_page) ? "<li class=\"active\"><a class=\"current\" href=\"#\">$i</a></li> " : "<li class=\"active\"><a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=$i&ipp=$this->items_per_page$this->querystring\">$i</a> ";
             }
 //cut 2
         }
