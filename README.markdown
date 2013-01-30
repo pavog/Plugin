@@ -1,4 +1,4 @@
-![YASP](http://stats.wolvencraft.com/src/img/plogo.png)
+![YASP](http://stats.wolvencraft.com/src/img/plugin_logo.png)
 
 **YASP** is an unofficial fork of a popular Minecraft Plugin called **[Statistician](http://dev.bukkit.org/server-mods/statisticianv2/)**, first made by ChaseHQ and continued by Coryf88, Crimsonfoxy, and Dazzel_.
 While Statistican does a decent job logging many aspects of Minecraft gameplay and produces a working webpage with statistics, the default web portal that goes with the plugin is just outright ugly.
