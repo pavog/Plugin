@@ -46,9 +46,24 @@ class SERVER {
 
         return mysql_num_rows(mysql_query('SELECT uuid FROM players ' . $search));
     }
+    
+    public function getAllPlayersForRealNow() {
+    	return mysql_query('SELECT uuid FROM players ORDER BY player_name ASC');
+    }
 
     public function getAllPlayersOnlineCount() {
         return mysql_num_rows(mysql_query('SELECT uuid FROM players WHERE online = "Y"'));
+    }
+
+    public function getAllPlayerNames() {
+        $query = mysql_query('SELECT uuid FROM players ORDER BY player_name ASC');
+        $ar = array();
+        while($row = mysql_fetch_assoc($query)) {
+            $ar[] = $this->getPlayer($row['uuid'])->getName();
+        }
+
+        return $ar;
+
     }
 
     public function getAllPlayersOnline() {
@@ -247,6 +262,52 @@ class SERVER {
     public function getTotalKills() {
         $row = mysql_fetch_assoc(mysql_query('SELECT COUNT(id) total FROM kills'));
         return $row['total'];
+    }
+    
+    public function getAllKills() {
+
+        $order = QueryUtils::getOrderType(true);
+        if($order == '') { $order = 'DESC'; }
+
+        if(isset($_GET['by'])) {
+            switch(strtolower($_GET['by'])) {
+                case 'time':
+                default:
+                    $by = 'time';
+                    break;
+                case 'killer':
+                    $by = 'killer';
+                    break;
+                case 'victim':
+                    $by = 'victim';
+                    break;
+                case 'weapon':
+                    $by = 'weapon';
+                    break;
+            }
+        }
+        else
+            $by = 'time';
+
+        return mysql_query('SELECT r.description weapon,
+		    						c.creature_name killer, 
+		    						p.player_name killer_player, 
+		    						p.uuid killerID,
+		    						c2.creature_name killed, 
+		    						p2.player_name killed_player, 
+		    						p2.uuid killedID,
+		    						k.time time 
+		    					FROM kills k
+                                INNER JOIN resource_desc r ON k.killed_using = r.resource_id
+                                LEFT JOIN creatures c ON k.killed_by = c.id
+                                LEFT JOIN creatures c2 ON k.killed = c2.id
+                                LEFT JOIN players p ON k.killed_by_uuid = p.uuid
+                                LEFT JOIN players p2 ON k.killed_uuid = p2.uuid
+                                WHERE k.killed_by != 0
+                                	AND k.killed_by != 18
+                                	AND k.killed != 0
+                                	AND k.killed != 18
+                                ORDER BY ' . $by . ' ' . $order . '');
     }
     
     public function getKills($limit) {
