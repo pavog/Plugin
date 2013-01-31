@@ -8,14 +8,15 @@ import java.util.logging.Level;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.wolvencraft.yasp.Database.DBConnectFail;
 import com.wolvencraft.yasp.Database.Database;
 import com.wolvencraft.yasp.Database.DataValues.DataValues_Config;
+import com.wolvencraft.yasp.Database.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.EventDataHandlers.EDHPlayer;
 import com.wolvencraft.yasp.Listeners.BlockListener;
 import com.wolvencraft.yasp.Listeners.EntityListener;
 import com.wolvencraft.yasp.Listeners.PlayerListener;
 import com.wolvencraft.yasp.Stats.PlayerData;
+import com.wolvencraft.yasp.Utils.DBProcedure;
 import com.wolvencraft.yasp.Utils.Message;
 import com.wolvencraft.yasp.Utils.Settings;
 
@@ -45,7 +46,7 @@ public class StatsPlugin extends JavaPlugin {
 			catch (ClassNotFoundException e) {
 				Message.log(Level.SEVERE, "MySQL Driver not found");
 				if (settings.DEBUG) e.printStackTrace();
-			} catch (DBConnectFail e) {
+			} catch (DatabaseConnectionException e) {
 				Message.log(Level.SEVERE, "Critical Error, could not connect to mySQL. Is the database Available? Check config file and try again. (" + e.getMessage() + ")");
 				if (settings.DEBUG) e.printStackTrace();
 			}
@@ -59,7 +60,7 @@ public class StatsPlugin extends JavaPlugin {
 
 		DataValues_Config.refresh();
 
-		this.database.callStoredProcedure("pluginStartup", null);
+		this.database.callStoredProcedure(DBProcedure.PLUGIN_STARTUP, null);
 		this.executorService = Executors.newCachedThreadPool();
 		this.edhPlayer = new EDHPlayer();
 		this.playerData = new PlayerData();
@@ -97,7 +98,7 @@ public class StatsPlugin extends JavaPlugin {
 		}
 
 		if (this.database != null) {
-			this.database.callStoredProcedure("pluginShutdown", null);
+			this.database.callStoredProcedure(DBProcedure.PLUGIN_SHUTDOWN, null);
 			this.database = null;
 		}
 
@@ -108,14 +109,13 @@ public class StatsPlugin extends JavaPlugin {
 		}
 	}
 	
-	public static StatsPlugin getInstance() 	{ return plugin; }
+	public static StatsPlugin getInstance() 		{ return plugin; }
 	public static Settings getSettings()			{ return settings; }
 	public static void reloadSettings() {
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 		settings = null;
 		settings = new Settings(plugin);
-		
 	}
 	public Database getDB() 						{ return this.database; }
 	public ExecutorService getExecutor()			{ return this.executorService; }

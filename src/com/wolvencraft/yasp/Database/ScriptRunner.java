@@ -33,6 +33,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.wolvencraft.yasp.Database.exceptions.RuntimeSQLException;
+
 public class ScriptRunner {
 
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
@@ -88,7 +90,7 @@ public class ScriptRunner {
 		this.fullLineDelimiter = fullLineDelimiter;
 	}
 
-	public void runScript(Reader reader) throws RuntimeSqlException {
+	public void runScript(Reader reader) throws RuntimeSQLException {
 		this.setAutoCommit();
 
 		try {
@@ -102,7 +104,7 @@ public class ScriptRunner {
 		}
 	}
 
-	private void executeFullScript(Reader reader) throws RuntimeSqlException {
+	private void executeFullScript(Reader reader) throws RuntimeSQLException {
 		StringBuilder script = new StringBuilder();
 		try {
 			BufferedReader lineReader = new BufferedReader(reader);
@@ -116,11 +118,11 @@ public class ScriptRunner {
 		} catch (Exception e) {
 			String message = "Error executing: " + script + ".  Cause: " + e;
 			this.printlnError(message);
-			throw new RuntimeSqlException(message, e);
+			throw new RuntimeSQLException(message, e);
 		}
 	}
 
-	private void executeLineByLine(Reader reader) throws RuntimeSqlException {
+	private void executeLineByLine(Reader reader) throws RuntimeSQLException {
 		StringBuilder command = new StringBuilder();
 		try {
 			BufferedReader lineReader = new BufferedReader(reader);
@@ -133,7 +135,7 @@ public class ScriptRunner {
 		} catch (Exception e) {
 			String message = "Error executing: " + command + ".  Cause: " + e;
 			this.printlnError(message);
-			throw new RuntimeSqlException(message, e);
+			throw new RuntimeSQLException(message, e);
 		}
 	}
 
@@ -145,23 +147,23 @@ public class ScriptRunner {
 		}
 	}
 
-	private void setAutoCommit() throws RuntimeSqlException {
+	private void setAutoCommit() throws RuntimeSQLException {
 		try {
 			if (this.autoCommit != this.connection.getAutoCommit()) {
 				this.connection.setAutoCommit(this.autoCommit);
 			}
 		} catch (Throwable t) {
-			throw new RuntimeSqlException("Could not set AutoCommit to " + this.autoCommit + ". Cause: " + t, t);
+			throw new RuntimeSQLException("Could not set AutoCommit to " + this.autoCommit + ". Cause: " + t, t);
 		}
 	}
 
-	private void commitConnection() throws RuntimeSqlException {
+	private void commitConnection() throws RuntimeSQLException {
 		try {
 			if (!this.connection.getAutoCommit()) {
 				this.connection.commit();
 			}
 		} catch (Throwable t) {
-			throw new RuntimeSqlException("Could not commit transaction. Cause: " + t, t);
+			throw new RuntimeSQLException("Could not commit transaction. Cause: " + t, t);
 		}
 	}
 
@@ -175,8 +177,8 @@ public class ScriptRunner {
 		}
 	}
 
-	private void checkForMissingLineTerminator(StringBuilder command) throws RuntimeSqlException {
-		if (command != null && command.toString().trim().length() > 0) throw new RuntimeSqlException("Line missing end-of-line terminator (" + this.delimiter + ") => " + command);
+	private void checkForMissingLineTerminator(StringBuilder command) throws RuntimeSQLException {
+		if (command != null && command.toString().trim().length() > 0) throw new RuntimeSQLException("Line missing end-of-line terminator (" + this.delimiter + ") => " + command);
 	}
 
 	private StringBuilder handleLine(StringBuilder command, String line) throws SQLException, UnsupportedEncodingException {

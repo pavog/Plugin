@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.Database.DBSynchDataGetSet;
 import com.wolvencraft.yasp.Stats.KillTag;
+import com.wolvencraft.yasp.Utils.DBProcedure;
 
 public class EDHPlayer {
 	public void PlayerBlockBreak(final Player player, final Integer blockID) {
@@ -53,7 +54,7 @@ public class EDHPlayer {
 						DBSynchDataGetSet.playerCreate(player.getUniqueId().toString(), player.getName());
 					}
 					// Check and update the most users ever logged on
-					StatsPlugin.getInstance().getDB().callStoredProcedure("updateMostEverOnline", null);
+					StatsPlugin.getInstance().getDB().callStoredProcedure(DBProcedure.UPDATE_MOST_EVER_ONLINE, null);
 				} catch (NullPointerException e) {
 
 				} finally {

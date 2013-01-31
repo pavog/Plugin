@@ -11,58 +11,144 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Database.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.Database.exceptions.RuntimeSQLException;
+import com.wolvencraft.yasp.Utils.DBProcedure;
+import com.wolvencraft.yasp.Utils.Message;
+import com.wolvencraft.yasp.Utils.Settings;
 
 public class Database {
-	private static Database _singletonDB = null;
+	private static Database singletonDB = null;
 
 	private Connection connection = null;
 
-	public Database() throws ClassNotFoundException, DBConnectFail {
-		if (Database._singletonDB != null) return;
-
-		// Connect To DB And Hold info
+	/**
+	 * Default constructor. Connects to the remote database, performs patches if necessary, and holds to the DB info.<br />
+	 * @throws ClassNotFoundException Thrown if mysql.jdbc.Driver is not available
+	 * @throws DatabaseConnectionException Thrown if the plugin could not connect to the database
+	 */
+	public Database() throws ClassNotFoundException, DatabaseConnectionException {
+		if (Database.singletonDB != null) return;
+		
 		Class.forName("com.mysql.jdbc.Driver");
-		this.ConnectToDB();
-		this.patchDB();
+		connectToDB();
+		patchDB();
 
-		Database._singletonDB = this;
+		Database.singletonDB = this;
 	}
-
-	private void ConnectToDB() throws DBConnectFail {
+	
+	/**
+	 * Connects to the remote database according to the data stored in the configuration
+	 * @throws DatabaseConnectionException Thrown if an error occurs while connecting to the database
+	 */
+	private void connectToDB() throws DatabaseConnectionException {
 		try {
-			this.connection = DriverManager.getConnection(StatsPlugin.getSettings().DB_CONNECT, StatsPlugin.getSettings().DB_USER, StatsPlugin.getSettings().DB_PASS);
+			Settings settings = StatsPlugin.getSettings();
+			this.connection = DriverManager.getConnection(settings.DB_CONNECT, settings.DB_USER, settings.DB_PASS);
+		} catch (SQLException e) { throw new DatabaseConnectionException(e); }
+	}
+	
+	/**
+	 * Patches the remote database to the latest version
+	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
+	 */
+	private void patchDB() throws DatabaseConnectionException {
+		int version = 0;
+		try {
+			ResultSet rs = connection.createStatement().executeQuery("SELECT dbVersion FROM config");
+			rs.next();
+			version = rs.getInt(1);
 		} catch (SQLException e) {
-			throw new DBConnectFail(e);
+			Message.log(Level.WARNING, "Could not determine target database version. Creating a new one from scratch.");
+			version = 0;
+		}
+		
+		Settings settings = StatsPlugin.getSettings();
+		if(version < settings.DB_VERSION) {
+			Message.log("Target database is outdated. Patching database: v." + version + " => v." + settings.DB_VERSION);
+			
+			while(version < StatsPlugin.getSettings().DB_VERSION) {
+				version++;
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/stats_v" + version + ".sql");
+				if (is == null) throw new DatabaseConnectionException("Unable to patch the database to v." + version);
+				ScriptRunner sr = new ScriptRunner(connection);
+				sr.setLogWriter(null);
+				sr.setErrorLogWriter(null);
+				sr.setAutoCommit(false);
+				sr.setStopOnError(true);
+				sr.setSendFullScript(false);
+				sr.setRemoveCRs(true);
+				try {sr.runScript(new InputStreamReader(is)); }
+				catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + version, e); }
+			}
+		} else {
+			Message.log("Target database is up to date.");
 		}
 	}
-
-	public boolean executeSynchUpdate(String sql) {
+	
+	/**
+	 * Attempts to reconnect to the remote server
+	 * @return <b>true</b> if the connection was present, or reconnect is successful. <b>false</b> otherwise.
+	 */
+	private boolean reconnect() {
+		try {
+			if (connection.isValid(10)) {
+				Message.log("Connection is still present. Malformed query detected.");
+				return true;
+			}
+			else {
+				Message.log(Level.WARNING, "Attempting to re-connect to the remote database");
+				try {
+					connectToDB();
+					Message.log("Connection re-established. Some data might be lost.");
+					return true;
+				} catch (DatabaseConnectionException e) {
+					Message.log(Level.SEVERE, "Failed to re-connect to the remote database. Data loss imminent.");
+					if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * Pushes data to the remote database
+	 * @param sql SQL query
+	 * @return <b>true</b> if the sync is successful, <b>false</b> otherwise
+	 */
+	public boolean pushData(String sql) {
 		int rowsChanged = 0;
-
 		Statement statement = null;
 		try {
-			statement = this.connection.createStatement();
+			statement = connection.createStatement();
 			rowsChanged = statement.executeUpdate(sql);
 			statement.close();
 		} catch (SQLException e) {
-			StatsPlugin.getInstance().getLogger().warning(sql + " :: Update failed, checking connection... (" + e.getMessage() + ")");
+			Message.log(Level.WARNING, sql + " Failed to push data to the remote database. Checking connection . . .");
 			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
-			this.checkConnectionTryReconnect();
-			return false;
+			return reconnect();
 		} finally {
 			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {}
+				try { statement.close(); }
+				catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
 			}
 		}
 		return rowsChanged > 0;
 	}
-
-	public List<Map<String, String>> executeSynchQuery(String sql) {
-		List<Map<String, String>> ColData = new ArrayList<Map<String, String>>();
+	
+	/**
+	 * Returns the data from the remote server according to the sql query
+	 * @param sql SQL query
+	 * @return Data from the remote database
+	 */
+	public List<Map<String, String>> fetchData(String sql) {
+		List<Map<String, String>> colData = new ArrayList<Map<String, String>>();
 
 		Statement statement = null;
 		ResultSet rs = null;
@@ -74,12 +160,12 @@ public class Database {
 				for (int x = 1; x <= rs.getMetaData().getColumnCount(); ++x) {
 					rowToAdd.put(rs.getMetaData().getColumnName(x), rs.getString(x));
 				}
-				ColData.add(rowToAdd);
+				colData.add(rowToAdd);
 			}
 		} catch (SQLException e) {
-			StatsPlugin.getInstance().getLogger().warning(sql + " :: Query failed, checking connection... (" + e.getMessage() + ")");
+			Message.log(Level.WARNING, sql + " :: Query failed, checking connection... (" + e.getMessage() + ")");
 			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
-			this.checkConnectionTryReconnect();
+			reconnect();
 			return null;
 		} finally {
 			if (rs != null) {
@@ -90,100 +176,41 @@ public class Database {
 			if (statement != null) {
 				try {
 					statement.close();
-				} catch (SQLException e) {}
+				} catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
 			}
 		}
-		return ColData;
+		return colData;
 	}
-
-	public boolean callStoredProcedure(String procName, List<String> variables) {
-		StringBuilder sb = new StringBuilder("CALL `" + StatsPlugin.getSettings().DB_NAME + "`." + procName + "(");
-		if (variables != null) {
-			for (String variable : variables) {
-				sb.append("'" + variable + "',");
-			}
+	
+	/**
+	 * Calls a pre-defined procedured with custom variables
+	 * @param procName Procedure to call
+	 * @param variables Variables
+	 * @return <b>true</b> if the procedure was successfully called, <b>false</b> otherwise
+	 */
+	public boolean callStoredProcedure(DBProcedure procedure, List<String> variables) {
+		StringBuilder sb = new StringBuilder("CALL `" + StatsPlugin.getSettings().DB_NAME + "`." + procedure.getName() + "(");
+		if (variables != null && !variables.isEmpty()) {
+			for (String variable : variables) { sb.append("'" + variable + "',"); }
 			sb.deleteCharAt(sb.length() - 1);
 		}
 		sb.append(");");
 
 		Statement statement = null;
 		try {
-			statement = this.connection.createStatement();
+			statement = connection.createStatement();
 			statement.executeUpdate(sb.toString());
 		} catch (SQLException e) {
-			StatsPlugin.getInstance().getLogger().warning(sb.toString() + " :: Stored procedure failed, checking connection... (" + e.getMessage() + ")");
+			Message.log(Level.WARNING, sb.toString() + " :: Stored procedure failed, checking connection... (" + e.getMessage() + ")");
 			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
-			this.checkConnectionTryReconnect();
-			return false;
+			return reconnect();
 		} finally {
 			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {}
+				try { statement.close(); }
+				catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
 			}
 		}
 
 		return true;
-	}
-
-	private void checkConnectionTryReconnect() {
-		try {
-			if (this.connection.isValid(10)) {
-				StatsPlugin.getInstance().getLogger().info("Connection is still present, it may of been a malformed query.");
-			} else {
-				this.reconnect();
-			}
-		} catch (SQLException e) {
-			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
-		}
-	}
-
-	private void reconnect() {
-		StatsPlugin.getInstance().getLogger().warning("Connection has been lost with database, attempting to reconnect.");
-		try {
-			this.ConnectToDB();
-			StatsPlugin.getInstance().getLogger().info("Connection to the database re-established, some stats were lost though");
-		} catch (DBConnectFail e) {
-			StatsPlugin.getInstance().getLogger().severe("Could not reconnect, stats are going to be lost");
-			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
-		}
-	}
-
-	private void patchDB() throws DBConnectFail {
-		int version = 0;
-		try {
-			ResultSet rs = this.connection.createStatement().executeQuery("SELECT dbVersion FROM config");
-			rs.next();
-			version = rs.getInt(1);
-		} catch (SQLException e) {
-			StatsPlugin.getInstance().getLogger().info("Could not find a database version, creating one from scratch.");
-			version = 0;
-		}
-
-		if (version < StatsPlugin.getSettings().DB_VERSION) {
-			StatsPlugin.getInstance().getLogger().info("Patching database from v" + version + " to v" + StatsPlugin.getSettings().DB_VERSION + ".");
-
-			while (version < StatsPlugin.getSettings().DB_VERSION) {
-				++version;
-
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/stats_v" + version + ".sql");
-				if (is == null) throw new DBConnectFail("Could not load database patch v" + version + ".");
-
-				ScriptRunner sr = new ScriptRunner(this.connection);
-				sr.setLogWriter(null);
-				sr.setErrorLogWriter(null);
-				sr.setAutoCommit(false);
-				sr.setStopOnError(true);
-				sr.setSendFullScript(false);
-				sr.setRemoveCRs(true);
-				try {
-					sr.runScript(new InputStreamReader(is));
-				} catch (RuntimeSqlException e) {
-					throw new DBConnectFail("An error occured while executing the database patch v" + version + ".", e);
-				}
-			}
-
-			StatsPlugin.getInstance().getLogger().info("Database patched to version " + version + ".");
-		}
 	}
 }
