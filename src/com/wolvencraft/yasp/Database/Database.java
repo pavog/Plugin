@@ -10,18 +10,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Database.data.DBEntry;
 import com.wolvencraft.yasp.Database.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.Database.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.Utils.DBProcedure;
 import com.wolvencraft.yasp.Utils.Message;
-import com.wolvencraft.yasp.Utils.Settings;
+import com.wolvencraft.yasp.Utils.Configuration;
 
 public class Database {
-	private static Database singletonDB = null;
+	private static Database instance = null;
 
 	private Connection connection = null;
 
@@ -31,13 +31,16 @@ public class Database {
 	 * @throws DatabaseConnectionException Thrown if the plugin could not connect to the database
 	 */
 	public Database() throws ClassNotFoundException, DatabaseConnectionException {
-		if (Database.singletonDB != null) return;
+		if (instance != null) {
+			Message.log(Level.SEVERE, "Attempted to establish a duplicate connection with a remote database");
+			return;
+		}
 		
 		Class.forName("com.mysql.jdbc.Driver");
 		connectToDB();
 		patchDB();
 
-		Database.singletonDB = this;
+		instance = this;
 	}
 	
 	/**
@@ -46,7 +49,7 @@ public class Database {
 	 */
 	private void connectToDB() throws DatabaseConnectionException {
 		try {
-			Settings settings = StatsPlugin.getSettings();
+			Configuration settings = StatsPlugin.getSettings();
 			this.connection = DriverManager.getConnection(settings.DB_CONNECT, settings.DB_USER, settings.DB_PASS);
 		} catch (SQLException e) { throw new DatabaseConnectionException(e); }
 	}
@@ -66,7 +69,7 @@ public class Database {
 			version = 0;
 		}
 		
-		Settings settings = StatsPlugin.getSettings();
+		Configuration settings = StatsPlugin.getSettings();
 		if(version < settings.DB_VERSION) {
 			Message.log("Target database is outdated. Patching database: v." + version + " => v." + settings.DB_VERSION);
 			
@@ -147,8 +150,8 @@ public class Database {
 	 * @param sql SQL query
 	 * @return Data from the remote database
 	 */
-	public List<Map<String, String>> fetchData(String sql) {
-		List<Map<String, String>> colData = new ArrayList<Map<String, String>>();
+	public List<DBEntry> fetchData(String sql) {
+		List<DBEntry> colData = new ArrayList<DBEntry>();
 
 		Statement statement = null;
 		ResultSet rs = null;
@@ -160,7 +163,7 @@ public class Database {
 				for (int x = 1; x <= rs.getMetaData().getColumnCount(); ++x) {
 					rowToAdd.put(rs.getMetaData().getColumnName(x), rs.getString(x));
 				}
-				colData.add(rowToAdd);
+				colData.add(new DBEntry(rowToAdd));
 			}
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, sql + " :: Query failed, checking connection... (" + e.getMessage() + ")");
@@ -188,9 +191,9 @@ public class Database {
 	 * @param variables Variables
 	 * @return <b>true</b> if the procedure was successfully called, <b>false</b> otherwise
 	 */
-	public boolean callStoredProcedure(DBProcedure procedure, List<String> variables) {
+	public boolean callStoredProcedure(DBProcedure procedure, String... variables) {
 		StringBuilder sb = new StringBuilder("CALL `" + StatsPlugin.getSettings().DB_NAME + "`." + procedure.getName() + "(");
-		if (variables != null && !variables.isEmpty()) {
+		if (variables != null && variables.length != 0) {
 			for (String variable : variables) { sb.append("'" + variable + "',"); }
 			sb.deleteCharAt(sb.length() - 1);
 		}
@@ -213,4 +216,10 @@ public class Database {
 
 		return true;
 	}
+	
+	/**
+	 * Returns the current running instance of the database
+	 * @return Database instance
+	 */
+	public static Database getInstance() { return instance; }
 }

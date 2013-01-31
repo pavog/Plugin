@@ -9,20 +9,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.Database.Database;
-import com.wolvencraft.yasp.Database.DataValues.DataValues_Config;
+import com.wolvencraft.yasp.Database.QueryUtils;
+import com.wolvencraft.yasp.Database.data.DBSettings;
 import com.wolvencraft.yasp.Database.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.EventDataHandlers.EDHPlayer;
 import com.wolvencraft.yasp.Listeners.BlockListener;
 import com.wolvencraft.yasp.Listeners.EntityListener;
 import com.wolvencraft.yasp.Listeners.PlayerListener;
 import com.wolvencraft.yasp.Stats.PlayerData;
-import com.wolvencraft.yasp.Utils.DBProcedure;
 import com.wolvencraft.yasp.Utils.Message;
-import com.wolvencraft.yasp.Utils.Settings;
+import com.wolvencraft.yasp.Utils.Configuration;
 
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin plugin;
-	private static Settings settings;
+	private static Configuration settings;
 	
 	private Database database;
 	private ExecutorService executorService;
@@ -39,7 +39,7 @@ public class StatsPlugin extends JavaPlugin {
 
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-		settings = new Settings(this);
+		settings = new Configuration(this);
 		
 		if (database == null) {
 			try { database = new Database(); }
@@ -58,9 +58,9 @@ public class StatsPlugin extends JavaPlugin {
 			return;
 		}
 
-		DataValues_Config.refresh();
-
-		this.database.callStoredProcedure(DBProcedure.PLUGIN_STARTUP, null);
+		DBSettings.refresh();
+		
+		QueryUtils.pluginStartup();
 		this.executorService = Executors.newCachedThreadPool();
 		this.edhPlayer = new EDHPlayer();
 		this.playerData = new PlayerData();
@@ -98,7 +98,7 @@ public class StatsPlugin extends JavaPlugin {
 		}
 
 		if (this.database != null) {
-			this.database.callStoredProcedure(DBProcedure.PLUGIN_SHUTDOWN, null);
+			QueryUtils.pluginShutdown();
 			this.database = null;
 		}
 
@@ -110,12 +110,12 @@ public class StatsPlugin extends JavaPlugin {
 	}
 	
 	public static StatsPlugin getInstance() 		{ return plugin; }
-	public static Settings getSettings()			{ return settings; }
+	public static Configuration getSettings()			{ return settings; }
 	public static void reloadSettings() {
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 		settings = null;
-		settings = new Settings(plugin);
+		settings = new Configuration(plugin);
 	}
 	public Database getDB() 						{ return this.database; }
 	public ExecutorService getExecutor()			{ return this.executorService; }

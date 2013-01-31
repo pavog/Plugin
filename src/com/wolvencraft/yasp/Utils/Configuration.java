@@ -2,7 +2,7 @@ package com.wolvencraft.yasp.Utils;
 
 import com.wolvencraft.yasp.StatsPlugin;
 
-public class Settings {
+public class Configuration {
 	
 	public final int DB_VERSION = 10;
 	public final String LOG_PREFIX = StatsPlugin.getInstance().getDescription().getName();
@@ -25,7 +25,7 @@ public class Settings {
 	public final boolean lastJoinShow;
 	public final String lastJoinText;
 	
-	public Settings(StatsPlugin plugin) {
+	public Configuration(StatsPlugin plugin) {
 		DEBUG = plugin.getConfig().getBoolean("debug");
 		
 		DB_HOST = plugin.getConfig().getString("database.host");

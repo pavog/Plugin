@@ -9,9 +9,8 @@ import org.bukkit.entity.Slime;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.Database.DBSynchDataGetSet;
+import com.wolvencraft.yasp.Database.QueryUtils;
 import com.wolvencraft.yasp.Stats.KillTag;
-import com.wolvencraft.yasp.Utils.DBProcedure;
 
 public class EDHPlayer {
 	public void PlayerBlockBreak(final Player player, final Integer blockID) {
@@ -46,15 +45,15 @@ public class EDHPlayer {
 			@Override
 			public void run() {
 				try {
-					if (DBSynchDataGetSet.isPlayerInDB(player.getUniqueId().toString())) {
+					if (QueryUtils.isPlayerRegistered(player.getUniqueId().toString())) {
 						// Player Exists and has been here before
-						DBSynchDataGetSet.playerLogin(player.getUniqueId().toString());
+						QueryUtils.playerLogin(player.getUniqueId().toString());
 					} else {
 						// First Time Player Logged in with Statistician Running
-						DBSynchDataGetSet.playerCreate(player.getUniqueId().toString(), player.getName());
+						QueryUtils.playerFirstJoin(player.getUniqueId().toString(), player.getPlayerListName());
 					}
 					// Check and update the most users ever logged on
-					StatsPlugin.getInstance().getDB().callStoredProcedure(DBProcedure.UPDATE_MOST_EVER_ONLINE, null);
+					QueryUtils.updateMaxOnlineCount();
 				} catch (NullPointerException e) {
 
 				} finally {
@@ -87,7 +86,7 @@ public class EDHPlayer {
 		this.execute(player, new Runnable() {
 			@Override
 			public void run() {
-				DBSynchDataGetSet.playerLogout(player.getUniqueId().toString());
+				QueryUtils.playerLogout(player.getUniqueId().toString());
 				// Unwatch Them
 				StatsPlugin.getInstance().getPlayerData().removePlayerToWatch(player.getUniqueId().toString());
 			}
