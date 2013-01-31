@@ -19,6 +19,12 @@ public class Settings {
 	public final String DB_PASS;
 	public final int PING;
 	
+	public final boolean firstJoinShow;
+	public final String firstJoinText;
+	
+	public final boolean lastJoinShow;
+	public final String lastJoinText;
+	
 	public Settings(StatsPlugin plugin) {
 		DEBUG = plugin.getConfig().getBoolean("debug");
 		
@@ -31,5 +37,11 @@ public class Settings {
 		DB_USER = plugin.getConfig().getString("database.user");
 		DB_PASS = plugin.getConfig().getString("database.pass");
 		PING = plugin.getConfig().getInt("ping");
+		
+		firstJoinShow = plugin.getConfig().getBoolean("messages.firstjoin.show");
+		firstJoinText = plugin.getConfig().getString("messages.firstjoin.text");
+		
+		lastJoinShow = plugin.getConfig().getBoolean("messages.lastjoin.show");
+		lastJoinText = plugin.getConfig().getString("messages.lastjoin.text");
 	}
 }

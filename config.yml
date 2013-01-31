@@ -1,8 +1,15 @@
 debug: true
+ping: 120
+messages:
+  firstjoin:
+    show: true
+    text: "&aWelcome, &d{playerName}! &3[Statistician] &ahas begun logging you."
+  lastjoin:
+    show: true
+    text: "&aWelcome back, &d{playerName}. The last time you were here was &e{lastJoin}"
 database:
   host: 'localhost'
   port: 3306
   name: ''
   user: 'root'
   pass: 'root'
-ping: 120
