@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.Database.Database;
 import com.wolvencraft.yasp.Database.QueryUtils;
-import com.wolvencraft.yasp.Database.data.DBSettings;
+import com.wolvencraft.yasp.Database.data.normal.Settings;
 import com.wolvencraft.yasp.Database.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.EventDataHandlers.EDHPlayer;
 import com.wolvencraft.yasp.Listeners.BlockListener;
@@ -58,7 +58,7 @@ public class StatsPlugin extends JavaPlugin {
 			return;
 		}
 
-		DBSettings.refresh();
+		Settings.refresh();
 		
 		QueryUtils.pluginStartup();
 		this.executorService = Executors.newCachedThreadPool();

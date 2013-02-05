@@ -1,18 +1,14 @@
-package com.wolvencraft.yasp.Database.data;
+package com.wolvencraft.yasp.Database.data.normal;
 
 import java.util.List;
 
+import com.wolvencraft.yasp.Database.DBEntry;
 import com.wolvencraft.yasp.Database.Database;
 
-/**
- * Represents the database's <b>config</b> table
- * @author bitWolfy
- *
- */
-public enum DBSettings {
+public class Settings implements NormalData {
 	DATABASE_VERSION("dbVersion", "10");
 
-	private DBSettings(String key, String value) {
+	private Settings(String key, String value) {
 		this.key = key;
 		this.value = value;
 	}
@@ -35,15 +31,25 @@ public enum DBSettings {
 	public static void refresh() {
 		List<DBEntry> results = Database.getInstance().fetchData("SELECT * FROM config");
 		for(DBEntry entry : results) {
-			DBSettings setting = DBSettings.getByKey(entry.getValue("key"));
+			Settings setting = Settings.getByKey(entry.getValue("key"));
 			setting.value = entry.getValue("value");
 		}
 	}
 	
-	private static DBSettings getByKey(String key) {
-		for(DBSettings entry : DBSettings.values()) {
+	private static Settings getByKey(String key) {
+		for(Settings entry : Settings.values()) {
 			if(entry.getKey().equals(key)) return entry;
 		}
 		return null;
+	}
+	@Override
+	public void fetchData() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void pushData() {
+		// TODO Auto-generated method stub
+		
 	}
 }

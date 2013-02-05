@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.Database.data.DBEntry;
 import com.wolvencraft.yasp.Database.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.Database.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.Utils.DBProcedure;
