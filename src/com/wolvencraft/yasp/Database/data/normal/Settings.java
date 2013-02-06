@@ -7,7 +7,7 @@ import com.wolvencraft.yasp.Database.DBEntry;
 import com.wolvencraft.yasp.Database.QueryUtils;
 import com.wolvencraft.yasp.Database.tables.normal.SettingsTable;
 
-public class Settings implements NormalData {
+public class Settings implements DataHolder {
 
 	public Settings(StatsPlugin plugin) {
 		debug = plugin.getConfig().getBoolean("debug");
@@ -76,4 +76,8 @@ public class Settings implements NormalData {
 	public int getPing() { return ping; }
 	public String getWelcomeMessage() { if(showWelcomeMessages) return welcomeMessage; else return null; }
 	public String getFirstJoinMessage() { if(showFirstJoinMessages) return firstJoinMessage; else return null; }
+	
+	@Override
+	public String getDataHolderName() { return "Settings"; }
+	
 }

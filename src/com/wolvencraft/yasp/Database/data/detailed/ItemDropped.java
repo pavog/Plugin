@@ -8,7 +8,7 @@ import com.wolvencraft.yasp.Database.CachedData;
 import com.wolvencraft.yasp.Database.tables.detailed.ItemsDroppedTable;
 import com.wolvencraft.yasp.Utils.Util;
 
-public class ItemDropped implements DetailedData {
+public class ItemDropped implements DetailedDataHolder {
 	
 	private boolean onHold = false;
 	

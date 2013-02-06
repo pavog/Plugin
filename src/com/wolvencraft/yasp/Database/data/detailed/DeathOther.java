@@ -7,7 +7,7 @@ import com.wolvencraft.yasp.Database.CachedData;
 import com.wolvencraft.yasp.Database.tables.detailed.PlayersDeathTable;
 import com.wolvencraft.yasp.Utils.Util;
 
-public class DeathOther implements DetailedData {
+public class DeathOther implements DetailedDataHolder {
 	
 	private boolean onHold = false;
 	

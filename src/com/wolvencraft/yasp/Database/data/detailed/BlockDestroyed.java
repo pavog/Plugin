@@ -7,7 +7,7 @@ import com.wolvencraft.yasp.Database.CachedData;
 import com.wolvencraft.yasp.Database.tables.detailed.BlocksDestroyedTable;
 import com.wolvencraft.yasp.Utils.Util;
 
-public class BlockDestroyed implements DetailedData {
+public class BlockDestroyed implements DetailedDataHolder {
 	
 	private boolean onHold = false;
 	

@@ -7,7 +7,7 @@ import com.wolvencraft.yasp.Database.CachedData;
 import com.wolvencraft.yasp.Database.tables.detailed.BlocksPlacedTable;
 import com.wolvencraft.yasp.Utils.Util;
 
-public class BlockPlaced implements DetailedData {
+public class BlockPlaced implements DetailedDataHolder {
 	
 	private boolean onHold = false;
 	

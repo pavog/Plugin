@@ -8,7 +8,7 @@ import com.wolvencraft.yasp.Database.CachedData;
 import com.wolvencraft.yasp.Database.tables.detailed.PlayersLogTable;
 import com.wolvencraft.yasp.Utils.Util;
 
-public class PlayerLog implements DetailedData {
+public class PlayerLog implements DetailedDataHolder {
 	
 	private boolean onHold = true;
 	

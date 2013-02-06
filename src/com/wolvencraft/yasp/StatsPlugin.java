@@ -1,15 +1,20 @@
 package com.wolvencraft.yasp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.Database.Database;
 import com.wolvencraft.yasp.Database.QueryUtils;
+import com.wolvencraft.yasp.Database.data.detailed.DetailedDataHolder;
+import com.wolvencraft.yasp.Database.data.normal.DataHolder;
 import com.wolvencraft.yasp.Database.data.normal.Settings;
 import com.wolvencraft.yasp.Database.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.EventDataHandlers.EDHPlayer;
@@ -22,19 +27,14 @@ import com.wolvencraft.yasp.Utils.Message;
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin plugin;
 	private static Settings settings;
-	
 	private Database database;
-	private ExecutorService executorService;
-	private DataProcessor dataProcessor;
-	private Timer dataProcessorTimer;
-	private PlayerData playerData;
-	private EDHPlayer edhPlayer;
-
+	
+	private List<DataHolder> simpleData;
+	private List<DetailedDataHolder> detailedData;
+	
 	@Override
 	public void onEnable() {
 		plugin = this;
-		
-		this.setNaggable(false);
 
 		getConfig().options().copyDefaults(true);
 		saveConfig();
@@ -57,59 +57,41 @@ public class StatsPlugin extends JavaPlugin {
 			return;
 		}
 		
-		QueryUtils.pluginStartup();
-		this.executorService = Executors.newCachedThreadPool();
-		this.edhPlayer = new EDHPlayer();
-		this.playerData = new PlayerData();
-		this.dataProcessor = new DataProcessor();
-		this.dataProcessor.addProcessable(this.playerData);
-
-		this.dataProcessorTimer = new Timer(true);
-		this.dataProcessorTimer.scheduleAtFixedRate(this.dataProcessor, settings.getPing(), settings.getPing());
-
+		Message.log("Database connection established successfully");
+		
+		simpleData = new ArrayList<DataHolder>();
+		detailedData = new ArrayList<DetailedDataHolder>();
+		
 		// Setup Listeners
 		new PlayerListener(this, this.edhPlayer);
 		new BlockListener(this, this.edhPlayer);
 		new EntityListener(this, this.edhPlayer);
+		
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
 
-		// This could be a reload so see if people are logged in
-		for (Player player : this.getServer().getOnlinePlayers()) {
-			this.edhPlayer.PlayerJoin(player);
-		}
+			@Override
+			public void run() {
+				for(DetailedDataHolder holder : detailedData) {
+					if(holder.isOnHold()) { holder.refresh(); continue; }
+					QueryUtils.pushData(holder.getQuery());
+				}
+				
+				for(DataHolder holder : simpleData) holder.pushData();
+				
+			}
+				
+		}, settings.getPing(), settings.getPing());
 	}
 
 	@Override
 	public void onDisable() {
 		if (StatsPlugin.plugin == null || !StatsPlugin.plugin.equals(this)) return;
 
-		this.dataProcessorTimer.cancel();
-
-		if (this.edhPlayer != null) {
-			for (Player player : this.getServer().getOnlinePlayers()) {
-				this.edhPlayer.PlayerQuit(player);
-			}
-		}
-
-		if (this.playerData != null) {
-			this.playerData._processData();
-		}
-
-		if (this.database != null) {
-			QueryUtils.pluginShutdown();
-			this.database = null;
-		}
-
-		plugin = null;
-
-		if (this.executorService != null) {
-			this.executorService.shutdown();
-		}
+		
 	}
 	
 	public static StatsPlugin getInstance() 		{ return plugin; }
 	public static Settings getSettings()			{ return settings; }
 	public Database getDB() 						{ return this.database; }
-	public ExecutorService getExecutor()			{ return this.executorService; }
-	public PlayerData getPlayerData()				{ return this.playerData; }
 	public boolean statExempt(Player player)		{ return !player.hasPermission("statistician.ignore"); }
 }

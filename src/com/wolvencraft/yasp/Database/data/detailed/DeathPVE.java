@@ -10,7 +10,7 @@ import com.wolvencraft.yasp.Database.CachedData;
 import com.wolvencraft.yasp.Database.tables.detailed.PVETable;
 import com.wolvencraft.yasp.Utils.Util;
 
-public class DeathPVE implements DetailedData {
+public class DeathPVE implements DetailedDataHolder {
 	
 	private boolean onHold = false;
 	

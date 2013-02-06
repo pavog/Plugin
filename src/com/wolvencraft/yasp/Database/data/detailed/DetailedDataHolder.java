@@ -6,7 +6,7 @@ package com.wolvencraft.yasp.Database.data.detailed;
  * @author bitWolfy
  *
  */
-public interface DetailedData {
+public interface DetailedDataHolder {
 	
 	/**
 	 * Returns a SQL query that needs to be ran in order to push data to the database

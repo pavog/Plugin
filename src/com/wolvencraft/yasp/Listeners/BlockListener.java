@@ -8,25 +8,21 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.EventDataHandlers.EDHPlayer;
 
 public class BlockListener implements Listener {
-	private EDHPlayer edhPlayer;
-
-	public BlockListener(StatsPlugin plugin, EDHPlayer passedEDH) {
-		this.edhPlayer = passedEDH;
+	
+	public BlockListener(StatsPlugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
-		this.edhPlayer.PlayerBlockBreak(event.getPlayer(), event.getBlock().getTypeId());
+		// Register BlockBreak
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (event.getBlock().getType() != Material.AIR) {
-			this.edhPlayer.PlayerBlockPlace(event.getPlayer(), event.getBlock().getTypeId());
-		}
+		if (event.getBlock().getType() == Material.AIR) return;
+		// Register BlockPlace
 	}
 }

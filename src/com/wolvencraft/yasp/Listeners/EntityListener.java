@@ -19,67 +19,65 @@ import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.EventDataHandlers.EDHPlayer;
 
 public class EntityListener implements Listener {
-	private EDHPlayer edhPlayer;
 
-	public EntityListener(StatsPlugin plugin, EDHPlayer passedEDH) {
-		this.edhPlayer = passedEDH;
+	public EntityListener(StatsPlugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) {
-		Entity entity = event.getEntity();
-		EntityDamageEvent lastDamageEvent = entity.getLastDamageCause();
-		if (lastDamageEvent != null) {
-			DamageCause cause = lastDamageEvent.getCause();
+		Entity victim = event.getEntity();
+		EntityDamageEvent victimLastDamageEvent = victim.getLastDamageCause();
+		
+		if (victimLastDamageEvent == null) return;
+		DamageCause deathCause = victimLastDamageEvent.getCause();
 
-			if (entity instanceof Player) {
-				Player victim = (Player)entity;
-				if (lastDamageEvent instanceof EntityDamageByEntityEvent) {
-					Entity damager = ((EntityDamageByEntityEvent)lastDamageEvent).getDamager();
+		if (victim instanceof Player) {
+			Player playerVictim = (Player) victim;
+			if (victimLastDamageEvent instanceof EntityDamageByEntityEvent) {
+				Entity damager = ((EntityDamageByEntityEvent) victimLastDamageEvent).getDamager();
 
-					if (damager instanceof Arrow) {
-						Arrow arrow = (Arrow)damager;
+				if (damager instanceof Arrow) {
+						Arrow arrow = (Arrow) damager;
 						if (arrow.getShooter() instanceof Player) {
-							this.edhPlayer.PlayerKilledByPlayerProjectile((Player)arrow.getShooter(), victim, arrow, cause);
+							// Register PVP
 						} else if (arrow.getShooter() instanceof Creature) {
-							this.edhPlayer.PlayerKilledByCreatureProjectile(victim, (Creature)arrow.getShooter(), arrow, cause);
+							// Register PVE
 						}
-					} else if (damager instanceof Player) {
-						this.edhPlayer.PlayerKilledByPlayer((Player)damager, victim, cause);
-					} else if (damager instanceof Explosive) {
-						this.edhPlayer.PlayerKilledByOtherCause(victim, cause);
-					} else if (damager instanceof Creature) {
-						this.edhPlayer.PlayerKilledByCreature(victim, (Creature)damager, cause);
-					} else if (damager instanceof Slime) {
-						this.edhPlayer.PlayerKilledBySlime(victim, (Slime)damager, cause);
-					}
-				} else if (lastDamageEvent instanceof EntityDamageByBlockEvent) {
-					this.edhPlayer.PlayerKilledByBlock(victim, ((EntityDamageByBlockEvent)lastDamageEvent).getDamager(), cause);
-				} else {
-					this.edhPlayer.PlayerKilledByOtherCause(victim, cause);
+				} else if (damager instanceof Player) {
+					// Register PVP
+				} else if (damager instanceof Explosive) {
+					// Register Other
+				} else if (damager instanceof Creature) {
+					// Register PVE
+				} else if (damager instanceof Slime) {
+					// Register PVE
 				}
+			} else if (victimLastDamageEvent instanceof EntityDamageByBlockEvent) {
+				// Register Other
 			} else {
-				if (lastDamageEvent instanceof EntityDamageByEntityEvent) {
-					Entity damager = ((EntityDamageByEntityEvent)lastDamageEvent).getDamager();
-
-					if (damager instanceof Arrow) {
-						Arrow arrow = (Arrow)damager;
-						if (arrow.getShooter() instanceof Player) {
-							Player playerKiller = (Player)arrow.getShooter();
-							if (entity instanceof Creature) {
-								this.edhPlayer.PlayerKilledCreatureProjectile(playerKiller, (Creature)entity, arrow, cause);
-							} else if (entity instanceof Slime) {
-								this.edhPlayer.PlayerKilledSlimeProjectile(playerKiller, (Slime)entity, arrow, cause);
-							}
-						}
-					} else if (damager instanceof Player) {
-						Player playerKiller = (Player)damager;
+				// Register Other
+			}
+		} else {
+			if (lastDamageEvent instanceof EntityDamageByEntityEvent) {
+				Entity damager = ((EntityDamageByEntityEvent)lastDamageEvent).getDamager();
+				
+				if (damager instanceof Arrow) {
+					Arrow arrow = (Arrow)damager;
+					if (arrow.getShooter() instanceof Player) {
+					Player playerKiller = (Player)arrow.getShooter();
 						if (entity instanceof Creature) {
-							this.edhPlayer.PlayerKilledCreature(playerKiller, (Creature)entity, cause);
+							this.edhPlayer.PlayerKilledCreatureProjectile(playerKiller, (Creature)entity, arrow, cause);
 						} else if (entity instanceof Slime) {
-							this.edhPlayer.PlayerKilledSlime(playerKiller, (Slime)entity, cause);
+							this.edhPlayer.PlayerKilledSlimeProjectile(playerKiller, (Slime)entity, arrow, cause);
 						}
+					}
+				} else if (damager instanceof Player) {
+					Player playerKiller = (Player)damager;
+					if (entity instanceof Creature) {
+						this.edhPlayer.PlayerKilledCreature(playerKiller, (Creature)entity, cause);
+					} else if (entity instanceof Slime) {
+						this.edhPlayer.PlayerKilledSlime(playerKiller, (Slime)entity, cause);
 					}
 				}
 			}

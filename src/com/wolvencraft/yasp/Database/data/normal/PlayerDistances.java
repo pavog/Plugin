@@ -9,9 +9,9 @@ import com.wolvencraft.yasp.Database.DBEntry;
 import com.wolvencraft.yasp.Database.QueryUtils;
 import com.wolvencraft.yasp.Database.tables.normal.PlayersDistanceTable;
 
-public class PlayersDistances implements NormalData {
+public class PlayerDistances implements DataHolder {
 	
-	public PlayersDistances(Player player) {
+	public PlayerDistances(Player player) {
 		this.playerName = player.getPlayerListName();
 		foot = 0;
 		boat = 0;
@@ -41,5 +41,12 @@ public class PlayersDistances implements NormalData {
 		String query = "INSERT";
 		
 	}
-
+	
+	public void addFootDistance(int distance) { foot += distance; }
+	public void addBoatDistance(int distance) { boat += distance; }
+	public void addMinecartDistance(int distance) { minecart += distance; }
+	public void addPigDistance (int distance) { pig += distance; }
+	
+	@Override
+	public String getDataHolderName() { return "PlayerDistances:" + playerName; }
 }

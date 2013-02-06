@@ -8,7 +8,7 @@ import com.wolvencraft.yasp.Database.CachedData;
 import com.wolvencraft.yasp.Database.tables.detailed.ItemsPickedUpTable;
 import com.wolvencraft.yasp.Utils.Util;
 
-public class ItemPickedUp implements DetailedData {
+public class ItemPickedUp implements DetailedDataHolder {
 	
 	private boolean onHold = false;
 	
