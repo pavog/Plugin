@@ -18,11 +18,10 @@ import com.wolvencraft.yasp.Listeners.EntityListener;
 import com.wolvencraft.yasp.Listeners.PlayerListener;
 import com.wolvencraft.yasp.Stats.PlayerData;
 import com.wolvencraft.yasp.Utils.Message;
-import com.wolvencraft.yasp.Utils.Configuration;
 
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin plugin;
-	private static Configuration settings;
+	private static Settings settings;
 	
 	private Database database;
 	private ExecutorService executorService;
@@ -39,16 +38,16 @@ public class StatsPlugin extends JavaPlugin {
 
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-		settings = new Configuration(this);
+		settings = new Settings(this);
 		
 		if (database == null) {
 			try { database = new Database(); }
 			catch (ClassNotFoundException e) {
 				Message.log(Level.SEVERE, "MySQL Driver not found");
-				if (settings.DEBUG) e.printStackTrace();
+				if (settings.getDebug()) e.printStackTrace();
 			} catch (DatabaseConnectionException e) {
-				Message.log(Level.SEVERE, "Critical Error, could not connect to mySQL. Is the database Available? Check config file and try again. (" + e.getMessage() + ")");
-				if (settings.DEBUG) e.printStackTrace();
+				Message.log(Level.SEVERE, "Could not connect to the database. Is the plugin configured correctly?");
+				if (settings.getDebug()) e.printStackTrace();
 			}
 		}
 		
@@ -57,8 +56,6 @@ public class StatsPlugin extends JavaPlugin {
 			this.getPluginLoader().disablePlugin(this);
 			return;
 		}
-
-		Settings.refresh();
 		
 		QueryUtils.pluginStartup();
 		this.executorService = Executors.newCachedThreadPool();
@@ -68,7 +65,7 @@ public class StatsPlugin extends JavaPlugin {
 		this.dataProcessor.addProcessable(this.playerData);
 
 		this.dataProcessorTimer = new Timer(true);
-		this.dataProcessorTimer.scheduleAtFixedRate(this.dataProcessor, settings.PING, settings.PING);
+		this.dataProcessorTimer.scheduleAtFixedRate(this.dataProcessor, settings.getPing(), settings.getPing());
 
 		// Setup Listeners
 		new PlayerListener(this, this.edhPlayer);
@@ -110,13 +107,7 @@ public class StatsPlugin extends JavaPlugin {
 	}
 	
 	public static StatsPlugin getInstance() 		{ return plugin; }
-	public static Configuration getSettings()			{ return settings; }
-	public static void reloadSettings() {
-		plugin.getConfig().options().copyDefaults(true);
-		plugin.saveConfig();
-		settings = null;
-		settings = new Configuration(plugin);
-	}
+	public static Settings getSettings()			{ return settings; }
 	public Database getDB() 						{ return this.database; }
 	public ExecutorService getExecutor()			{ return this.executorService; }
 	public PlayerData getPlayerData()				{ return this.playerData; }

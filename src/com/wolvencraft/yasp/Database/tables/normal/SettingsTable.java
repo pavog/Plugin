@@ -4,6 +4,7 @@ import com.wolvencraft.yasp.Database.tables.DBTable;
 
 public enum SettingsTable implements DBTable {
 	
+	TableName("settings"),
 	Key("key"),
 	Value("value");
 	

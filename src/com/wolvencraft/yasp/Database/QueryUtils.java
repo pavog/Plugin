@@ -56,6 +56,7 @@ public class QueryUtils {
 	
 	/**
 	 * Calls on a stored procedure in the database to signify that the plugin is starting up.
+	 * @deprecated
 	 * @return <b>true</b> if called successfully, <b>false</b> otherwise
 	 */
 	public static boolean pluginStartup() {
@@ -64,6 +65,7 @@ public class QueryUtils {
 	
 	/**
 	 * Calls on a stored procedure in the database to signify that the plugin is shutting up.
+	 * @deprecated
 	 * @return <b>true</b> if called successfully, <b>false</b> otherwise
 	 */
 	public static boolean pluginShutdown() {

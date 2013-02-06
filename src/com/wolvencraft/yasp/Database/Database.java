@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.logging.Level;
 
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Database.data.normal.Settings;
 import com.wolvencraft.yasp.Database.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.Database.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.Utils.DBProcedure;
 import com.wolvencraft.yasp.Utils.Message;
-import com.wolvencraft.yasp.Utils.Configuration;
 
 public class Database {
 	private static Database instance = null;
@@ -48,8 +48,8 @@ public class Database {
 	 */
 	private void connectToDB() throws DatabaseConnectionException {
 		try {
-			Configuration settings = StatsPlugin.getSettings();
-			this.connection = DriverManager.getConnection(settings.DB_CONNECT, settings.DB_USER, settings.DB_PASS);
+			Settings settings = StatsPlugin.getSettings();
+			this.connection = DriverManager.getConnection(settings.getConnectionPath(), settings.getDatabaseUsername(), settings.getDatabasePassword());
 		} catch (SQLException e) { throw new DatabaseConnectionException(e); }
 	}
 	
@@ -58,24 +58,16 @@ public class Database {
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
 	private void patchDB() throws DatabaseConnectionException {
-		int version = 0;
-		try {
-			ResultSet rs = connection.createStatement().executeQuery("SELECT dbVersion FROM config");
-			rs.next();
-			version = rs.getInt(1);
-		} catch (SQLException e) {
-			Message.log(Level.WARNING, "Could not determine target database version. Creating a new one from scratch.");
-			version = 0;
-		}
-		
-		Configuration settings = StatsPlugin.getSettings();
-		if(version < settings.DB_VERSION) {
-			Message.log("Target database is outdated. Patching database: v." + version + " => v." + settings.DB_VERSION);
+		Settings settings = StatsPlugin.getSettings();
+		int remoteVersion = settings.getRemoteVersion();
+		int currentVersion = settings.getLatestVersion();
+		if(remoteVersion < currentVersion) {
+			Message.log("Target database is outdated. Patching database: v." + currentVersion + " => v." + remoteVersion);
 			
-			while(version < StatsPlugin.getSettings().DB_VERSION) {
-				version++;
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/stats_v" + version + ".sql");
-				if (is == null) throw new DatabaseConnectionException("Unable to patch the database to v." + version);
+			while(remoteVersion < currentVersion) {
+				remoteVersion++;
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/stats_v" + remoteVersion + ".sql");
+				if (is == null) throw new DatabaseConnectionException("Unable to patch the database to v." + remoteVersion);
 				ScriptRunner sr = new ScriptRunner(connection);
 				sr.setLogWriter(null);
 				sr.setErrorLogWriter(null);
@@ -84,7 +76,7 @@ public class Database {
 				sr.setSendFullScript(false);
 				sr.setRemoveCRs(true);
 				try {sr.runScript(new InputStreamReader(is)); }
-				catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + version, e); }
+				catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + remoteVersion, e); }
 			}
 		} else {
 			Message.log("Target database is up to date.");
@@ -102,19 +94,19 @@ public class Database {
 				return true;
 			}
 			else {
-				Message.log(Level.WARNING, "Attempting to re-connect to the remote database");
+				Message.log(Level.WARNING, "Attempting to re-connect to the database");
 				try {
 					connectToDB();
-					Message.log("Connection re-established. Some data might be lost.");
+					Message.log("Connection re-established. No data is lost.");
 					return true;
 				} catch (DatabaseConnectionException e) {
-					Message.log(Level.SEVERE, "Failed to re-connect to the remote database. Data loss imminent.");
-					if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
+					Message.log(Level.SEVERE, "Failed to re-connect to the database. Data is being stored locally.");
+					if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
 					return false;
 				}
 			}
 		} catch (SQLException e) {
-			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
+			if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
 			return false;
 		}
 	}
@@ -133,7 +125,7 @@ public class Database {
 			statement.close();
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, sql + " Failed to push data to the remote database. Checking connection . . .");
-			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
+			if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
 			return reconnect();
 		} finally {
 			if (statement != null) {
@@ -166,7 +158,7 @@ public class Database {
 			}
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, sql + " :: Query failed, checking connection... (" + e.getMessage() + ")");
-			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
+			if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
 			reconnect();
 			return null;
 		} finally {
@@ -186,12 +178,13 @@ public class Database {
 	
 	/**
 	 * Calls a pre-defined procedured with custom variables
+	 * @deprecated
 	 * @param procName Procedure to call
 	 * @param variables Variables
 	 * @return <b>true</b> if the procedure was successfully called, <b>false</b> otherwise
 	 */
 	public boolean callStoredProcedure(DBProcedure procedure, String... variables) {
-		StringBuilder sb = new StringBuilder("CALL `" + StatsPlugin.getSettings().DB_NAME + "`." + procedure.getName() + "(");
+		StringBuilder sb = new StringBuilder("CALL `" + StatsPlugin.getSettings().getDatabaseName() + "`." + procedure.getName() + "(");
 		if (variables != null && variables.length != 0) {
 			for (String variable : variables) { sb.append("'" + variable + "',"); }
 			sb.deleteCharAt(sb.length() - 1);
@@ -204,7 +197,7 @@ public class Database {
 			statement.executeUpdate(sb.toString());
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, sb.toString() + " :: Stored procedure failed, checking connection... (" + e.getMessage() + ")");
-			if (StatsPlugin.getSettings().DEBUG) e.printStackTrace();
+			if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
 			return reconnect();
 		} finally {
 			if (statement != null) {
