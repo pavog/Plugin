@@ -2,27 +2,22 @@ package com.wolvencraft.yasp;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.wolvencraft.yasp.Database.Database;
-import com.wolvencraft.yasp.Database.QueryUtils;
-import com.wolvencraft.yasp.Database.data.detailed.DetailedDataHolder;
-import com.wolvencraft.yasp.Database.data.normal.DataHolder;
-import com.wolvencraft.yasp.Database.data.normal.Settings;
-import com.wolvencraft.yasp.Database.exceptions.DatabaseConnectionException;
-import com.wolvencraft.yasp.EventDataHandlers.EDHPlayer;
-import com.wolvencraft.yasp.Listeners.BlockListener;
-import com.wolvencraft.yasp.Listeners.EntityListener;
-import com.wolvencraft.yasp.Listeners.PlayerListener;
-import com.wolvencraft.yasp.Stats.PlayerData;
-import com.wolvencraft.yasp.Utils.Message;
+import com.wolvencraft.yasp.db.Database;
+import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.data.detailed.DetailedDataHolder;
+import com.wolvencraft.yasp.db.data.normal.DataHolder;
+import com.wolvencraft.yasp.db.data.normal.Settings;
+import com.wolvencraft.yasp.db.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.events.BlockListener;
+import com.wolvencraft.yasp.events.EntityListener;
+import com.wolvencraft.yasp.events.PlayerListener;
+import com.wolvencraft.yasp.util.Message;
 
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin plugin;
@@ -63,9 +58,9 @@ public class StatsPlugin extends JavaPlugin {
 		detailedData = new ArrayList<DetailedDataHolder>();
 		
 		// Setup Listeners
-		new PlayerListener(this, this.edhPlayer);
-		new BlockListener(this, this.edhPlayer);
-		new EntityListener(this, this.edhPlayer);
+		new PlayerListener(this);
+		new BlockListener(this);
+		new EntityListener(this);
 		
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
 
