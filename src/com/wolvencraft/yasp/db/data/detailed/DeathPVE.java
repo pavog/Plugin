@@ -1,7 +1,6 @@
 package com.wolvencraft.yasp.db.data.detailed;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,9 +13,9 @@ public class DeathPVE implements DetailedDataHolder {
 	
 	private boolean onHold = false;
 	
-	public DeathPVE(Player player, Entity creature, ItemStack weapon, boolean playerKilled) {
+	public DeathPVE(Player player, EntityType creatureType, ItemStack weapon, boolean playerKilled) {
 		this.playerName = player.getPlayerListName();
-		this.creatureName = creature.getType();
+		this.creatureType = creatureType;
 		this.weapon = weapon;
 		this.location = player.getLocation();
 		this.playerKilled = playerKilled;
@@ -24,7 +23,7 @@ public class DeathPVE implements DetailedDataHolder {
 	}
 	
 	private String playerName;
-	private EntityType creatureName;
+	private EntityType creatureType;
 	private ItemStack weapon;
 	private Location location;
 	private boolean playerKilled;
@@ -34,7 +33,7 @@ public class DeathPVE implements DetailedDataHolder {
 	public String getQuery() {
 		if(onHold) return null;
 		String query = "INSERT INTO " + PVETable.TableName + " (" + PVETable.PlayerID + ", " + PVETable.CreatureID + ", " + PVETable.MaterialID + ", " + PVETable.Cause + ", " + PVETable.World + ", " + PVETable.XCoord + ", " + PVETable.YCoord + ", " + PVETable.ZCoord + ", " + PVETable.Timestamp + ", " + PVETable.PlayerKilled + ") " +
-				"VALUES (" + CachedData.getCachedPlayerId(playerName) + ", " + creatureName + ", " + weapon.getTypeId() + ", " + "getting hit a bunch of times" + ", " + location.getWorld().getName() + ", " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ", " + timestamp + ", " + playerKilled + ")";;
+				"VALUES (" + CachedData.getCachedPlayerId(playerName) + ", " + creatureType.getName() + ", " + weapon.getTypeId() + ", " + "getting hit a bunch of times" + ", " + location.getWorld().getName() + ", " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ", " + timestamp + ", " + playerKilled + ")";;
 		return query;
 	}
 

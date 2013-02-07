@@ -15,7 +15,7 @@ public class TotalItems implements DataHolder {
 	}
 	
 	@Override
-	public String getDataHolderName() { return "TotalItems"; }
+	public String getDataLabel() { return DataLabel.TotalItems.getAlias(); }
 	
 
 }

@@ -2,8 +2,6 @@ package com.wolvencraft.yasp.db;
 
 import java.util.List;
 
-import com.wolvencraft.yasp.StatsPlugin;
-
 /**
  * Database object wrapper; provides additional methods for simpler fetching and pushing data.<br />
  * All methods are applied to the currently running instance of the Database
@@ -68,6 +66,6 @@ public class QueryUtils {
 	 * @return <b>true</b> if called successfully, <b>false</b> otherwise
 	 */
 	public static boolean pluginShutdown() {
-		return StatsPlugin.getInstance().getDB().callStoredProcedure(DBProcedure.PLUGIN_SHUTDOWN);
+		return Database.getInstance().callStoredProcedure(DBProcedure.PLUGIN_SHUTDOWN);
 	}
 }

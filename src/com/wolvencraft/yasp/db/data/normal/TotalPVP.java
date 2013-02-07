@@ -15,7 +15,7 @@ public class TotalPVP implements DataHolder {
 	}
 	
 	@Override
-	public String getDataHolderName() { return "TotalPVP"; }
+	public String getDataLabel() { return DataLabel.TotalPVP.getAlias(); }
 	
 
 }

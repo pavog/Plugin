@@ -15,7 +15,7 @@ public class TotalBlocks implements DataHolder {
 	}
 	
 	@Override
-	public String getDataHolderName() { return "TotalBlocks"; }
+	public String getDataLabel() { return DataLabel.TotalBlocks.getAlias(); }
 	
 
 }

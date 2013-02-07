@@ -15,7 +15,7 @@ public class TotalPVE implements DataHolder {
 	}
 	
 	@Override
-	public String getDataHolderName() { return "TotalPVE"; }
+	public String getDataLabel() { return DataLabel.TotalPVE.getAlias(); }
 	
 
 }

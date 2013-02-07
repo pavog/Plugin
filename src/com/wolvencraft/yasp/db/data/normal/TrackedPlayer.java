@@ -42,7 +42,7 @@ public class TrackedPlayer implements DataHolder {
 	}
 	
 	@Override
-	public String getDataHolderName() { return "TrackedPlayer:" + playerName; }
+	public String getDataLabel() { return DataLabel.Player + ":" + playerName; }
 	
 
 }

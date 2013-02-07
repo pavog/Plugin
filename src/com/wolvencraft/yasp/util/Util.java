@@ -3,6 +3,7 @@ package com.wolvencraft.yasp.util;
 import java.sql.Timestamp;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 public class Util {
  		
@@ -28,5 +29,14 @@ public class Util {
 	public static Timestamp getCurrentTime() {
 		java.util.Date date= new java.util.Date();
 		return new Timestamp(date.getTime());
+	}
+	
+	/**
+	 * Checks if the player is exempt from the statistics
+	 * @param player Player in question
+	 * @return <b>true</b> if the player's stats should not be registered, <b>false</b> otherwise
+	 */
+	public boolean isExempt(Player player) {
+		return !(player.hasPermission("statistician.ignore") || player.hasPermission("stats.ignore"));
 	}
 }

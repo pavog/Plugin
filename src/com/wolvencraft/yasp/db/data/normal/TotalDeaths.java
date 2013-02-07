@@ -15,6 +15,6 @@ public class TotalDeaths implements DataHolder {
 	}
 	
 	@Override
-	public String getDataHolderName() { return "TotalDeaths"; }
+	public String getDataLabel() { return DataLabel.TotalDeaths.getAlias(); }
 
 }

@@ -10,6 +10,10 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.db.data.detailed.ItemDropped;
+import com.wolvencraft.yasp.db.data.detailed.ItemPickedUp;
+import com.wolvencraft.yasp.db.data.detailed.PlayerLog;
+import com.wolvencraft.yasp.stats.CollectedData;
 
 public class PlayerListener implements Listener {
 
@@ -17,14 +21,14 @@ public class PlayerListener implements Listener {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		// Player joined
+		CollectedData.addDetailedData(new PlayerLog(event.getPlayer()));
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		// Player quit
+		// Player logged out
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -34,11 +38,11 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		// Player picked up item
+		CollectedData.addDetailedData(new ItemPickedUp(event.getPlayer(), event.getItem()));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
-		// Player dropped an item
+		CollectedData.addDetailedData(new ItemDropped(event.getPlayer(), event.getItemDrop()));
 	}
 }

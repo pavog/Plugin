@@ -48,5 +48,5 @@ public class PlayerDistances implements DataHolder {
 	public void addPigDistance (int distance) { pig += distance; }
 	
 	@Override
-	public String getDataHolderName() { return "PlayerDistances:" + playerName; }
+	public String getDataLabel() { return DataLabel.PlayerDistance.getAlias() + ":" + playerName; }
 }

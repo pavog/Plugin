@@ -1,6 +1,7 @@
 package com.wolvencraft.yasp.db.data.detailed;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,15 +13,15 @@ public class ItemDropped implements DetailedDataHolder {
 	
 	private boolean onHold = false;
 	
-	public ItemDropped(Player player, ItemStack item) {
+	public ItemDropped(Player player, Item item) {
 		this.playerName = player.getPlayerListName();
-		this.item = item;
+		this.itemStack = item.getItemStack();
 		this.location = player.getLocation();
 		this.timestamp = Util.getCurrentTime().getTime();
 	}
 	
 	private String playerName;
-	private ItemStack item;
+	private ItemStack itemStack;
 	private Location location;
 	private long timestamp;
 
@@ -28,7 +29,7 @@ public class ItemDropped implements DetailedDataHolder {
 	public String getQuery() {
 		if(onHold) return null;
 		String query = "INSERT INTO " + ItemsDroppedTable.TableName + " (" + ItemsDroppedTable.MaterialId + ", " + ItemsDroppedTable.PlayerId + ", " + ItemsDroppedTable.World + ", " + ItemsDroppedTable.XCoord + ", " + ItemsDroppedTable.YCoord + ", " + ItemsDroppedTable.ZCoord + ", " + ItemsDroppedTable.Timestamp + ") " 
-				+ "VALUES (" + item.getTypeId() + ", " + CachedData.getCachedPlayerId(playerName) + ", " + location.getWorld().getName() + ", " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ", " + timestamp + ")";
+				+ "VALUES (" + itemStack.getTypeId() + ", " + CachedData.getCachedPlayerId(playerName) + ", " + location.getWorld().getName() + ", " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ", " + timestamp + ")";
 		return query;
 	}
 

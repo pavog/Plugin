@@ -82,6 +82,6 @@ public class Settings implements DataHolder {
 	public String getFirstJoinMessage() { if(showFirstJoinMessages) return firstJoinMessage; else return null; }
 	
 	@Override
-	public String getDataHolderName() { return "Settings"; }
+	public String getDataLabel() { return DataLabel.Settings.getAlias(); }
 	
 }
