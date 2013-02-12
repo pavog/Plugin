@@ -1,6 +1,9 @@
 package com.wolvencraft.yasp.db;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Database object wrapper; provides additional methods for simpler fetching and pushing data.<br />
@@ -42,7 +45,7 @@ public class QueryUtils {
 	
 	/**
 	 * Confirms that the player is tracked (has an entry in the players table in the database)
-	 * @param UUID UUID of the player
+	 * @param username Username of the checked player
 	 * @return <b>true</b> if the user is tracked, <b>false</b> otherwise
 	 */
 	public static boolean isPlayerRegistered(String username) {
@@ -52,20 +55,126 @@ public class QueryUtils {
 	}
 	
 	/**
-	 * Calls on a stored procedure in the database to signify that the plugin is starting up.
-	 * @deprecated
-	 * @return <b>true</b> if called successfully, <b>false</b> otherwise
+	 * Builds a SELECT query based on arguments provided
+	 * @param table Database table to select from
+	 * @param subject The columns that should be selected from the table
+	 * @param condition Conditions that should apply to columns
+	 * @return <b>String</b> SELECT query
 	 */
-	public static boolean pluginStartup() {
-		return Database.getInstance().callStoredProcedure(DBProcedure.PLUGIN_STARTUP);
+	public static String buildSelectQuery(String table, String subject, String... condition) {
+		String query = "";
+		String conditions = "";
+		for(String str : condition) {
+			if(!conditions.equals("")) conditions += " AND ";
+			conditions += str;
+		}
+		query = "SELECT " + subject + " FROM " + table + " WHERE " + conditions;
+		return query;
 	}
 	
 	/**
-	 * Calls on a stored procedure in the database to signify that the plugin is shutting up.
-	 * @deprecated
-	 * @return <b>true</b> if called successfully, <b>false</b> otherwise
+	 * Builds a SELECT query based on arguments provided
+	 * @param table Database table to select from
+	 * @param subject The columns that should be selected from the table
+	 * @return <b>String</b> SELECT query
 	 */
-	public static boolean pluginShutdown() {
-		return Database.getInstance().callStoredProcedure(DBProcedure.PLUGIN_SHUTDOWN);
+	public static String buildSelectQuery(String table, String subject) {
+		return "SELECT " + subject + " FROM " + table;
+	}
+	
+	/**
+	 * Builds and runs a SELECT query based on arguments provided
+	 * @param table Database table to select from
+	 * @param subject The columns that should be selected from the table
+	 * @param condition Conditions that should apply to columns
+	 * @return Data from the remote database
+	 */
+	public static List<DBEntry> select(String table, String subject, String... condition) {
+		return Database.getInstance().fetchData(buildSelectQuery(table, subject, condition));
+	}
+	
+	/**
+	 * Builds and runs a SELECT query based on arguments provided
+	 * @param table Database table to select from
+	 * @param subject The columns that should be selected from the table
+	 * @return Data from the remote database
+	 */
+	public static List<DBEntry> select(String table, String subject) {
+		return Database.getInstance().fetchData(buildSelectQuery(table, subject));
+	}
+	
+	/**
+	 * Builds an INSERT query based on arguments provided
+	 * @param table Database table to insert into
+	 * @param valueMap Map of column names and values that are to be inserted into the database
+	 * @return <b>String</b> INSERT query
+	 */
+	public static String buildInsertQuery(String table, Map<String, Object> valueMap) {
+		String query = "";
+		String fields = "";
+		String values = "";
+		Iterator<Entry<String, Object>> it = valueMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
+			if(!fields.equals("")) fields += ", ";
+			if(!values.equals("")) values += ", ";
+			
+			fields += pairs.getKey();
+			values += pairs.getValue().toString();
+			it.remove();
+		}
+		query = "INSERT INTO " + table + " (" + fields + ")  VALUES (" + values + ")";
+		return query;
+	}
+	
+	/**
+	 * Builds and runs an INSERT query based on arguments provided
+	 * @param table Database table to insert into
+	 * @param valueMap Map of column names and values that are to be inserted into the database
+	 * @return <b>true</b> if the insertion was successful, <b>false</b> if an error occurred
+	 */
+	public static boolean insert(String table, Map<String, Object> valueMap) {
+		return Database.getInstance().pushData(buildInsertQuery(table, valueMap));
+	}
+	
+	/**
+	 * Builds an UPDATE query based on arguments provided
+	 * @param table Database table to update
+	 * @param valueMap  Map of column names and values that are to be updated in the database
+	 * @param condition Conditions that should apply to columns
+	 * @return <b>String</b> UPDATE query
+	 */
+	public static String buildUpdateQuery(String table, Map<String, Object> valueMap, String... condition) {
+		String query = "";
+		String fields = "";
+		String values = "";
+		String conditions = "";
+		Iterator<Entry<String, Object>> it = valueMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
+			if(!fields.equals("")) fields += ", ";
+			if(!values.equals("")) values += ", ";
+			
+			fields += pairs.getKey();
+			values += pairs.getValue().toString();
+			it.remove();
+		}
+		for(String str : condition) {
+			if(!conditions.equals("")) conditions += " AND ";
+			conditions += str;
+		}
+		query = "UPDATE " + table + " (" + fields + ")  SET (" + values + ") WHERE " + conditions;
+		return query;
+	}
+	
+	/**
+	 * Builds and runs an UPDATE query based on arguments provided
+	 * @param table Database table to update
+	 * @param valueMap  Map of column names and values that are to be updated in the database
+	 * @param condition Conditions that should apply to columns
+	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
+	 */
+	public static boolean update(String table, Map<String, Object> valueMap, String... condition) {
+		return Database.getInstance().pushData(buildUpdateQuery(table, valueMap, condition));
 	}
 }

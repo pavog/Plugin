@@ -1,14 +1,26 @@
 package com.wolvencraft.yasp.db.data.normal;
 
 import java.util.List;
+import java.util.Map;
 
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.SettingsTable;
 
+/**
+ * Settings is a unique DataHolder. Unlike other holders, Settins is never synched back to the database.<br />
+ * Any changes made to it will remain local. Additionally, the configuration pulled from config.yml is also stored in this DataHolder.<br />
+ * If there is no connection to the database, or the plugin is running for the first time, the default settings will be used.
+ * @author bitWolfy
+ *
+ */
 public class Settings implements DataHolder {
-
+	
+	/**
+	 * Default constructor. Takes in the plugin instance as argument.
+	 * @param plugin Plugin instance
+	 */
 	public Settings(StatsPlugin plugin) {
 		debug = plugin.getConfig().getBoolean("debug");
 		
@@ -52,7 +64,7 @@ public class Settings implements DataHolder {
 	
 	@Override
 	public void fetchData() {
-		List<DBEntry> entries = QueryUtils.fetchData("SELECT * FROM " + SettingsTable.TableName);
+		List<DBEntry> entries = QueryUtils.select(SettingsTable.TableName.toString(), "*");
 		for(DBEntry entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("version")) remoteVersion = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value");
@@ -64,9 +76,13 @@ public class Settings implements DataHolder {
 	}
 	
 	@Override
-	public void pushData() {
-		// We do not need to sync settings back to the database
-	}
+	public boolean pushData() { return true; }
+	
+	@Override
+	public Map<String, Object> getValues() { return null; }
+	
+	@Override
+	public String getDataLabel() { return DataLabel.Settings.getAlias(); }
 	
 	public boolean getDebug() { return debug; }
 	public int getLatestVersion() { return latestVersion; }
@@ -80,8 +96,5 @@ public class Settings implements DataHolder {
 	public int getPing() { return ping; }
 	public String getWelcomeMessage() { if(showWelcomeMessages) return welcomeMessage; else return null; }
 	public String getFirstJoinMessage() { if(showFirstJoinMessages) return firstJoinMessage; else return null; }
-	
-	@Override
-	public String getDataLabel() { return DataLabel.Settings.getAlias(); }
 	
 }

@@ -4,6 +4,7 @@ import com.wolvencraft.yasp.db.tables.DBTable;
 
 public enum TotalDeathsTable implements DBTable {
 	
+	TableName("total_deaths"),
 	TotalBlocksId("totaldeathsID"),
 	PlayerId("player_id"),
 	Cause("cause"),
@@ -17,4 +18,7 @@ public enum TotalDeathsTable implements DBTable {
 	
 	@Override
 	public String getColumnName() { return columnName; }
+	
+	@Override
+	public String toString() { return columnName; }
 }

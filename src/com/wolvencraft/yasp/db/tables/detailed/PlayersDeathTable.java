@@ -23,4 +23,7 @@ public enum PlayersDeathTable implements DBTable {
 	
 	@Override
 	public String getColumnName() { return columnName; }
+	
+	@Override
+	public String toString() { return columnName; }
 }
