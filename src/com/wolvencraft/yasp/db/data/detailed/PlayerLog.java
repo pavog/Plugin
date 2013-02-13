@@ -1,10 +1,14 @@
 package com.wolvencraft.yasp.db.data.detailed;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.CachedData;
+import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.detailed.PlayersLogTable;
 import com.wolvencraft.yasp.util.Util;
 
@@ -14,21 +18,35 @@ public class PlayerLog implements DetailedDataHolder {
 	
 	public PlayerLog(Player player) {
 		this.playerName = player.getPlayerListName();
+		this.playerId = CachedData.getCachedPlayerId(playerName);
 		this.login = Util.getCurrentTime().getTime();
 		this.logout = -1;
 		this.location = player.getLocation();
 	}
 	
 	private String playerName;
+	private int playerId;
 	private long login;
 	private long logout;
 	private Location location;
 	
 	@Override
-	public String getQuery() {
-		String query = "INSERT INTO " + PlayersLogTable.TableName + " (" + PlayersLogTable.PlayerId + ", " + PlayersLogTable.LoggedIn + ", " + PlayersLogTable.LoggedOut + ", " + PlayersLogTable.World + ", " + PlayersLogTable.XCoord + ", " + PlayersLogTable.YCoord + ", " + PlayersLogTable.ZCoord + ") " + 
-				"VALUES (" + CachedData.getCachedPlayerId(playerName) + ", " + login + ", " + logout + ", " + location.getWorld().getName() + ", " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ")";
-		return query;
+	public boolean pushData() {
+		if(onHold && refresh()) return false;
+		return QueryUtils.insert(PlayersLogTable.TableName.toString(), getValues());
+	}
+
+	@Override
+	public Map<String, Object> getValues() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put(PlayersLogTable.PlayerId.toString(), playerId);
+		map.put(PlayersLogTable.LoggedIn.toString(), login);
+		map.put(PlayersLogTable.LoggedOut.toString(), logout);
+		map.put(PlayersLogTable.World.toString(), location.getWorld().getName());
+		map.put(PlayersLogTable.XCoord.toString(), location.getBlockX());
+		map.put(PlayersLogTable.YCoord.toString(), location.getBlockY());
+		map.put(PlayersLogTable.ZCoord.toString(), location.getBlockZ());
+		return map;
 	}
 
 	@Override

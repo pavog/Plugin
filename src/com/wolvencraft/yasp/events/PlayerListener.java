@@ -1,5 +1,8 @@
 package com.wolvencraft.yasp.events;
 
+import java.util.List;
+
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -13,7 +16,10 @@ import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.data.detailed.ItemDropped;
 import com.wolvencraft.yasp.db.data.detailed.ItemPickedUp;
 import com.wolvencraft.yasp.db.data.detailed.PlayerLog;
-import com.wolvencraft.yasp.stats.CollectedData;
+import com.wolvencraft.yasp.db.data.normal.DataHolder;
+import com.wolvencraft.yasp.db.data.normal.DataLabel;
+import com.wolvencraft.yasp.db.data.normal.TrackedPlayer;
+import com.wolvencraft.yasp.stats.DataCollector;
 
 public class PlayerListener implements Listener {
 
@@ -23,7 +29,18 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		CollectedData.addDetailedData(new PlayerLog(event.getPlayer()));
+		Player player = event.getPlayer();
+		
+		DataCollector.addDetailedData(new PlayerLog(player));
+		
+		List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.Player.getAliasParameterized(player.getPlayerListName()));
+		DataHolder trackedPlayer;
+		if(data.isEmpty()) {
+			trackedPlayer = new TrackedPlayer(player);
+			DataCollector.addNormalData(trackedPlayer);
+		} else trackedPlayer = data.get(0);
+		
+		// TODO Log player data
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -38,11 +55,11 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		CollectedData.addDetailedData(new ItemPickedUp(event.getPlayer(), event.getItem()));
+		DataCollector.addDetailedData(new ItemPickedUp(event.getPlayer(), event.getItem()));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
-		CollectedData.addDetailedData(new ItemDropped(event.getPlayer(), event.getItemDrop()));
+		DataCollector.addDetailedData(new ItemDropped(event.getPlayer(), event.getItemDrop()));
 	}
 }

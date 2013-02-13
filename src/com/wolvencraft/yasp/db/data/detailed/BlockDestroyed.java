@@ -1,9 +1,13 @@
 package com.wolvencraft.yasp.db.data.detailed;
 
-import org.bukkit.block.Block;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.db.CachedData;
+import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.detailed.BlocksDestroyedTable;
 import com.wolvencraft.yasp.util.Util;
 
@@ -11,24 +15,32 @@ public class BlockDestroyed implements DetailedDataHolder {
 	
 	private boolean onHold = false;
 	
-	public BlockDestroyed(Player player, Block block) {
+	public BlockDestroyed(Player player, MaterialData materialData) {
 		this.playerName = player.getPlayerListName();
-		this.block = block;
+		this.playerId = CachedData.getCachedPlayerId(playerName);
+		this.materialData = materialData;
 		this.timestamp = Util.getCurrentTime().getTime();
 	}
 	
 	private String playerName;
-	private Block block;
+	private int playerId;
+	private MaterialData materialData;
 	private long timestamp;
 
 	@Override
-	public String getQuery() {
-		if(onHold) return null;
-		String query = "INSERT INTO " + BlocksDestroyedTable.TableName + " (" + BlocksDestroyedTable.MaterialId + ", " + BlocksDestroyedTable.PlayerId + ", " + BlocksDestroyedTable.World + ", " + BlocksDestroyedTable.XCoord + ", " + BlocksDestroyedTable.YCoord + ", " + BlocksDestroyedTable.ZCoord + ", " + BlocksDestroyedTable.Timestamp + ") " 
-				+ "VALUES (" + block.getTypeId() + ", " + CachedData.getCachedPlayerId(playerName) + ", " + block.getWorld().getName() + ", " + block.getLocation().getBlockX() + ", " + block.getLocation().getBlockY() + ", " + block.getLocation().getBlockZ() + ", " + timestamp + ")";
-		return query;
+	public boolean pushData() {
+		return QueryUtils.insert(BlocksDestroyedTable.TableName.toString(), getValues());
 	}
 
+	@Override
+	public Map<String, Object> getValues() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put(BlocksDestroyedTable.PlayerId.toString(), playerId);
+		map.put(BlocksDestroyedTable.MaterialId.toString(), materialData.getItemTypeId());
+		map.put(BlocksDestroyedTable.Timestamp.toString(), timestamp);
+		return map;
+	}
+	
 	@Override
 	public boolean isOnHold() { return onHold; }
 

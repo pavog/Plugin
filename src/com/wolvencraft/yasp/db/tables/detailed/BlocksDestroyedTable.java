@@ -21,8 +21,5 @@ public enum BlocksDestroyedTable implements DBTable {
 	private String columnName;
 	
 	@Override
-	public String getColumnName() { return columnName; }
-	
-	@Override
 	public String toString() { return columnName; }
 }

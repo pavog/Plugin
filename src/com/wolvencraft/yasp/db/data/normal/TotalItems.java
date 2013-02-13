@@ -59,7 +59,7 @@ public class TotalItems implements DataHolder {
 	}
 	
 	@Override
-	public String getDataLabel() { return DataLabel.TotalItems.getAlias(); }
+	public String getDataLabel() { return DataLabel.TotalItems.getAlias() + ":" + playerName; }
 	
 	@Override
 	public Map<String, Object> getValues() {

@@ -1,4 +1,6 @@
-package com.wolvencraft.yasp.db.tables;
+package com.wolvencraft.yasp.db.tables.detailed;
+
+import com.wolvencraft.yasp.db.tables.DBTable;
 
 public enum ItemsUsedTable implements DBTable {
 
@@ -15,5 +17,5 @@ public enum ItemsUsedTable implements DBTable {
 	private String columnName;
 	
 	@Override
-	public String getColumnName() { return columnName; }
+	public String toString() { return columnName; }
 }

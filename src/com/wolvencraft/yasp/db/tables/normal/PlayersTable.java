@@ -4,6 +4,8 @@ import com.wolvencraft.yasp.db.tables.DBTable;
 
 
 public enum PlayersTable implements DBTable {
+	
+	TableName("players"),
 	PlayerId("player_id"),
 	Name("name"),
 	Online("online"),
@@ -21,9 +23,6 @@ public enum PlayersTable implements DBTable {
 	}
 	
 	private String columnName;
-	
-	@Override
-	public String getColumnName() { return columnName; }
 	
 	@Override
 	public String toString() { return columnName; }

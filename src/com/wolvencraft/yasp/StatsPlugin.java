@@ -11,7 +11,7 @@ import com.wolvencraft.yasp.db.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.events.BlockListener;
 import com.wolvencraft.yasp.events.EntityListener;
 import com.wolvencraft.yasp.events.PlayerListener;
-import com.wolvencraft.yasp.stats.CollectedData;
+import com.wolvencraft.yasp.stats.DataCollector;
 import com.wolvencraft.yasp.stats.DatabaseSync;
 import com.wolvencraft.yasp.util.Message;
 
@@ -28,29 +28,29 @@ public class StatsPlugin extends JavaPlugin {
 		saveConfig();
 		settings = new Settings(this);
 		
-		if (database == null) {
-			try { database = new Database(); }
-			catch (ClassNotFoundException e) {
-				Message.log(Level.SEVERE, "MySQL Driver not found");
-				if (settings.getDebug()) e.printStackTrace();
-			} catch (DatabaseConnectionException e) {
-				Message.log(Level.SEVERE, "Could not connect to the database. Is the plugin configured correctly?");
-				if (settings.getDebug()) e.printStackTrace();
-			}
+		try { database = new Database(); }
+		catch (ClassNotFoundException e) {
+			Message.log(Level.SEVERE, "MySQL Driver not found");
+			if (settings.getDebug()) e.printStackTrace();
+			this.setEnabled(false);
+			return;
+		} catch (DatabaseConnectionException e) {
+			Message.log(Level.SEVERE, "Could not connect to the database. Is the plugin configured correctly?");
+			if (settings.getDebug()) e.printStackTrace();
+			this.setEnabled(false);
+			return;
 		}
 		
 		if (database == null) {
 			StatsPlugin.plugin = null;
-			this.getPluginLoader().disablePlugin(this);
+			this.setEnabled(false);
 			return;
 		}
 		
-		Message.log("Database connection established successfully");
+		Message.log("Established database connection");
 		
-		// Set up data collecter
-		new CollectedData();
+		new DataCollector();
 		
-		// Setup Listeners
 		new PlayerListener(this);
 		new BlockListener(this);
 		new EntityListener(this);
@@ -60,9 +60,7 @@ public class StatsPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		if (StatsPlugin.plugin == null || !StatsPlugin.plugin.equals(this)) return;
-
-		
+		Bukkit.getScheduler().cancelAllTasks();
 	}
 	
 	public static StatsPlugin getInstance() 		{ return plugin; }

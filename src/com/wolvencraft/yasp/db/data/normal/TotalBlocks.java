@@ -59,7 +59,7 @@ public class TotalBlocks implements DataHolder {
 	}
 	
 	@Override
-	public String getDataLabel() { return DataLabel.TotalBlocks.getAlias(); }
+	public String getDataLabel() { return DataLabel.TotalBlocks.getAlias() + ":" + playerName; }
 	
 	@Override
 	public Map<String, Object> getValues() {
@@ -75,12 +75,12 @@ public class TotalBlocks implements DataHolder {
 	 * Adds the specified number of blocks to the total number of blocks destroyed
 	 * @param blocks Blocks to add
 	 */
-	public void addBroken(int blocks) { broken += blocks; }
+	public void addBroken() { broken ++; }
 	
 	/**
 	 * Adds the specified number of blocks to the total number of blocks placed
 	 * @param blocks Blocks to add
 	 */
-	public void addPlaced(int blocks) { placed += blocks; }
+	public void addPlaced() { placed ++; }
 	
 }

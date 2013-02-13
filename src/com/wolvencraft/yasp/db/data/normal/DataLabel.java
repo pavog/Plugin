@@ -17,6 +17,7 @@ public enum DataLabel {
 	String alias;
 	
 	public String getAlias() { return alias; }
+	public String getAliasParameterized(String param) { return alias + ":" + param; }
 	
 	public static DataLabel getByAlias(String str) {
 		for(DataLabel label : DataLabel.values()) {

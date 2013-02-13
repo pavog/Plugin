@@ -52,7 +52,7 @@ public class TotalDeaths implements DataHolder {
 	}
 	
 	@Override
-	public String getDataLabel() { return DataLabel.TotalDeaths.getAlias(); }
+	public String getDataLabel() { return DataLabel.TotalDeaths.getAlias() + ":" + playerName; }
 
 	@Override
 	public Map<String, Object> getValues() {
@@ -67,6 +67,6 @@ public class TotalDeaths implements DataHolder {
 	 * Adds the specified number of deaths to the existing value
 	 * @param extraTimes Number of deaths to add
 	 */
-	public void addTimes(int extraTimes) { times += extraTimes; }
+	public void addTimes() { times++; }
 	
 }

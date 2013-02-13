@@ -10,7 +10,6 @@ public enum PVETable implements DBTable {
 	PlayerID("player_id"),
 	CreatureID("creature_id"),
 	MaterialID("material_id"),
-	Cause("cause"),
 	PlayerKilled("player_killed"),
 	World("world"),
 	XCoord("x"),
@@ -23,9 +22,6 @@ public enum PVETable implements DBTable {
 	}
 	
 	private String columnName;
-	
-	@Override
-	public String getColumnName() { return columnName; }
 	
 	@Override
 	public String toString() { return columnName; }

@@ -48,10 +48,10 @@ public class PlayerDistances implements DataHolder {
 		);
 		if(results.isEmpty()) QueryUtils.insert(PlayersDistanceTable.TableName.toString(), getValues());
 		else {
-			foot = results.get(0).getValueAsInteger(PlayersDistanceTable.Foot.getColumnName());
-			boat = results.get(0).getValueAsInteger(PlayersDistanceTable.Boat.getColumnName());
-			minecart = results.get(0).getValueAsInteger(PlayersDistanceTable.Minecart.getColumnName());
-			pig = results.get(0).getValueAsInteger(PlayersDistanceTable.Pig.getColumnName());
+			foot = results.get(0).getValueAsInteger(PlayersDistanceTable.Foot.toString());
+			boat = results.get(0).getValueAsInteger(PlayersDistanceTable.Boat.toString());
+			minecart = results.get(0).getValueAsInteger(PlayersDistanceTable.Minecart.toString());
+			pig = results.get(0).getValueAsInteger(PlayersDistanceTable.Pig.toString());
 		}
 	}
 
