@@ -12,6 +12,12 @@ import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.TotalDeathsTable;
 
+/**
+ * Represents the total number of times a player died of a particular cause.<br />
+ * Each entry must have a unique player and a unique death cause.
+ * @author bitWolfy
+ *
+ */
 public class TotalDeaths implements DataHolder {
 	
 	public TotalDeaths(Player player, DamageCause cause) {
@@ -52,7 +58,7 @@ public class TotalDeaths implements DataHolder {
 	}
 	
 	@Override
-	public String getDataLabel() { return DataLabel.TotalDeaths.getAlias() + ":" + playerName; }
+	public String getDataLabel() { return DataLabel.TotalDeaths.getAlias() + ":" + playerName + ":" + cause; }
 
 	@Override
 	public Map<String, Object> getValues() {
@@ -62,10 +68,31 @@ public class TotalDeaths implements DataHolder {
 		map.put(TotalDeathsTable.Times.toString(), times);
 		return map;
 	}
+
+	@Override
+	public boolean equals(DataHolder holder) {
+		return holder instanceof TotalDeaths
+				&& holder.getPlayerName().equals(playerName)
+				&& ((TotalDeaths) holder).getCause().equals(cause);
+	}
+
+	@Override
+	public boolean equals(String... arguments) {
+		return arguments[0].equals(playerName)
+				&& arguments[1].equals(cause.name());
+	}
+	
+	@Override
+	public String getPlayerName() { return playerName; }
 	
 	/**
-	 * Adds the specified number of deaths to the existing value
-	 * @param extraTimes Number of deaths to add
+	 * Returns the death cause
+	 * @return <b>DamageCause</b> death cause
+	 */
+	public DamageCause getCause() { return cause; }
+	
+	/**
+	 * Increments the number of times a player died from the specified cause.
 	 */
 	public void addTimes() { times++; }
 	

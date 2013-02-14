@@ -4,12 +4,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.PlayersTable;
 
+/**
+ * Represents the Player data that is being tracked.<br />
+ * Each entry must have a unique player name.
+ * @author bitWolfy
+ *
+ */
 public class TrackedPlayer implements DataHolder {
 	
 	public TrackedPlayer (Player player) {
@@ -51,6 +58,7 @@ public class TrackedPlayer implements DataHolder {
 
 	@Override
 	public boolean pushData() {
+		refreshPlayerData();
 		return QueryUtils.update(
 			PlayersTable.TableName.toString(),
 			getValues(), 
@@ -77,5 +85,41 @@ public class TrackedPlayer implements DataHolder {
 		map.put(PlayersTable.Deaths.toString(), deaths);
 		return map;
 	}
+
+	@Override
+	public boolean equals(DataHolder holder) {
+		return holder instanceof TrackedPlayer
+				&& holder.getPlayerName().equals(playerName);
+	}
+
+	@Override
+	public boolean equals(String... arguments) {
+		return arguments[0].equals(playerName);
+	}
+	
+	@Override
+	public String getPlayerName() { return playerName; }
+	
+	/**
+	 * Fetches the player data from the player, if he is online
+	 */
+	public void refreshPlayerData() {
+		Player player = null;
+		for(Player pl : Bukkit.getServer().getOnlinePlayers()) {
+			if(pl.getPlayerListName().equals(playerName)) player = pl;
+		}
+		if(player == null) return;
+		
+		this.expPercent = player.getExp();
+		this.expTotal = player.getTotalExperience();
+		this.expLevel = player.getLevel();
+		this.foodLevel = player.getFoodLevel();
+		this.healthLevel = player.getHealth();
+	}
+	
+	/**
+	 * Increments the number of deaths player experienced
+	 */
+	public void addDeaths() { deaths++; }
 	
 }

@@ -83,6 +83,19 @@ public class Settings implements DataHolder {
 	
 	@Override
 	public String getDataLabel() { return DataLabel.Settings.getAlias(); }
+
+	@Override
+	public boolean equals(DataHolder holder) {
+		return false;
+	}
+
+	@Override
+	public boolean equals(String... arguments) {
+		return false;
+	}
+	
+	@Override
+	public String getPlayerName() { return null; }
 	
 	public boolean getDebug() { return debug; }
 	public int getLatestVersion() { return latestVersion; }

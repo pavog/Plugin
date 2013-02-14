@@ -12,6 +12,12 @@ import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.TotalItemsTable;
 
+/**
+ * Represents the total number of items player dropped and picked up.<br />
+ * Each entry must have a unique player - material ID combination.
+ * @author bitWolfy
+ *
+ */
 public class TotalItems implements DataHolder {
 	
 	/**
@@ -70,6 +76,28 @@ public class TotalItems implements DataHolder {
 		map.put(TotalItemsTable.PickedUp.toString(), pickedUp);
 		return map;
 	}
+
+	@Override
+	public boolean equals(DataHolder holder) {
+		return holder instanceof TotalItems
+				&& holder.getPlayerName().equals(playerName)
+				&& ((TotalItems) holder).getMaterial().equals(material);
+	}
+
+	@Override
+	public boolean equals(String... arguments) {
+		return arguments[0].equals(playerName)
+				&& arguments[1].equals(material.getItemTypeId());
+	}
+	
+	@Override
+	public String getPlayerName() { return playerName; }
+	
+	/**
+	 * Returns the material data
+	 * @return <b>MaterialData</b> material
+	 */
+	public MaterialData getMaterial() { return material; }
 	
 	/**
 	 * Adds the specified number of blocks to the total number of blocks destroyed

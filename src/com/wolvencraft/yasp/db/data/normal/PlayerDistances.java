@@ -11,6 +11,12 @@ import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.PlayersDistanceTable;
 
+/**
+ * Represents the distances a player travelled.
+ * Only one entry per player is allowed.
+ * @author bitWolfy
+ *
+ */
 public class PlayerDistances implements DataHolder {
 	
 	/**
@@ -72,6 +78,19 @@ public class PlayerDistances implements DataHolder {
 		valueMap.put(PlayersDistanceTable.Pig.toString(), pig);
 		return valueMap;
 	}
+
+	@Override
+	public boolean equals(DataHolder holder) {
+		return ((holder instanceof PlayerDistances) && (holder.getPlayerName().equals(playerName)));
+	}
+
+	@Override
+	public boolean equals(String... arguments) {
+		return arguments[0].equals(playerName);
+	}
+	
+	@Override
+	public String getPlayerName() { return playerName; }
 	
 	/**
 	 * Increments the distance travelled by foot by the specified amount.

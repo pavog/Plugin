@@ -11,8 +11,21 @@ import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.TotalPVPTable;
 
+/**
+ * Represents a logged event, in which one player killed another.<br />
+ * Each entry must have a unique killer - victim combination.<br />
+ * <b>TotalPVP(player1, player2)</b> != <b>TotalPVP(player2, player1)</b>
+ * @author bitWolfy
+ *
+ */
 public class TotalPVP implements DataHolder {
 	
+	/**
+	 * <b>Default constructor</b><br />
+	 * Creates a new TotalPVP object based on the killer and victim in question
+	 * @param killer Player who killed the victim
+	 * @param victim Player who was killed
+	 */
 	public TotalPVP(Player killer, Player victim) {
 		this.killerName = killer.getPlayerListName();
 		this.killerId = CachedData.getCachedPlayerId(killerName);
@@ -62,6 +75,34 @@ public class TotalPVP implements DataHolder {
 		map.put(TotalPVPTable.Times.toString(), times);
 		return map;
 	}
+
+	@Override
+	public boolean equals(DataHolder holder) {
+		return holder instanceof TotalPVP
+				&& ((TotalPVP) holder).getKillerName().equals(killerName)
+				&& ((TotalPVP) holder).getVictimName().equals(victimName);
+	}
+
+	@Override
+	public boolean equals(String... arguments) {
+		return arguments[0].equals(killerName)
+				&& arguments[1].equals(victimName);
+	}
+	
+	@Override
+	public String getPlayerName() { return killerName; }
+	
+	/**
+	 * Returns the name of the killer
+	 * @return <b>String</b> killer's name
+	 */
+	public String getKillerName() { return killerName; }
+	
+	/**
+	 * Returns the name of the victim
+	 * @return <b>String</b> victim's name
+	 */
+	public String getVictimName() { return victimName; }
 	
 	/**
 	 * Increments the number of times the victim was killed
