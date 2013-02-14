@@ -41,6 +41,9 @@ public class TotalPVP implements DataHolder {
 	private int times;
 	
 	@Override
+	public String getDataLabel() { return DataLabel.TotalPVP.toParameterizedString(killerName, victimName); }
+	
+	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
 			TotalPVPTable.TableName.toString(),
@@ -63,9 +66,6 @@ public class TotalPVP implements DataHolder {
 			TotalPVPTable.VictimId + " = " + victimId
 		);
 	}
-	
-	@Override
-	public String getDataLabel() { return DataLabel.TotalPVP.getAlias() + ":" + killerName; }
 
 	@Override
 	public Map<String, Object> getValues() {

@@ -30,7 +30,7 @@ public class BlockListener implements Listener {
 		
 		DataCollector.addDetailedData(new BlockDestroyed(player, new MaterialData(event.getBlock().getType())));
 		
-		List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalBlocks.getAliasParameterized(player.getPlayerListName()));
+		List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalBlocks.toParameterizedString(player.getPlayerListName()));
 		DataHolder totalBlocks;
 		if(data.isEmpty()) {
 			totalBlocks = new TotalBlocks(player, new MaterialData(event.getBlock().getType()));
@@ -46,7 +46,7 @@ public class BlockListener implements Listener {
 		
 		DataCollector.addDetailedData(new BlockPlaced(player, new MaterialData(event.getBlock().getType())));
 		
-		List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalBlocks.getAliasParameterized(player.getPlayerListName()));
+		List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalBlocks.toParameterizedString(player.getPlayerListName()));
 		DataHolder totalBlocks;
 		if(data.isEmpty()) {
 			totalBlocks = new TotalBlocks(player, new MaterialData(event.getBlock().getType()));

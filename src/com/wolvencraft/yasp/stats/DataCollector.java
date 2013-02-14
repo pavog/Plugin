@@ -50,7 +50,7 @@ public class DataCollector {
 	public static List<DataHolder> getNormalDataByType(DataLabel label) {
 		List<DataHolder> data = new ArrayList<DataHolder>();
 		for(DataHolder holder : simpleData) {
-			if(holder.getDataLabel().startsWith(label.getAlias())) data.add(holder);
+			if(holder.getDataLabel().startsWith(label.toString())) data.add(holder);
 		}
 		return data;
 	}

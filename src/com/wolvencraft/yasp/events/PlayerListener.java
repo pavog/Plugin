@@ -33,7 +33,7 @@ public class PlayerListener implements Listener {
 		
 		DataCollector.addDetailedData(new PlayerLog(player));
 		
-		List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.Player.getAliasParameterized(player.getPlayerListName()));
+		List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.Player.toParameterizedString(player.getPlayerListName()));
 		DataHolder trackedPlayer;
 		if(data.isEmpty()) {
 			trackedPlayer = new TrackedPlayer(player);

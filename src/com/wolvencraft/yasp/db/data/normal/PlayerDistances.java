@@ -43,7 +43,7 @@ public class PlayerDistances implements DataHolder {
 	private int pig;
 
 	@Override
-	public String getDataLabel() { return DataLabel.PlayerDistance.getAlias() + ":" + playerName; }
+	public String getDataLabel() { return DataLabel.PlayerDistance.toParameterizedString(playerName); }
 	
 	@Override
 	public void fetchData() {

@@ -63,6 +63,9 @@ public class Settings implements DataHolder {
 	private String firstJoinMessage;
 	
 	@Override
+	public String getDataLabel() { return DataLabel.Settings.toString(); }
+	
+	@Override
 	public void fetchData() {
 		List<DBEntry> entries = QueryUtils.select(SettingsTable.TableName.toString(), "*");
 		for(DBEntry entry : entries) {
@@ -80,9 +83,6 @@ public class Settings implements DataHolder {
 	
 	@Override
 	public Map<String, Object> getValues() { return null; }
-	
-	@Override
-	public String getDataLabel() { return DataLabel.Settings.getAlias(); }
 
 	@Override
 	public boolean equals(DataHolder holder) {

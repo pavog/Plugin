@@ -41,6 +41,9 @@ public class TotalPVE implements DataHolder {
 	private int creatureDeaths;
 	
 	@Override
+	public String getDataLabel() { return DataLabel.TotalPVE.toParameterizedString(playerName, creatureId); }
+	
+	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
 			TotalPVETable.TableName.toString(),
@@ -64,9 +67,6 @@ public class TotalPVE implements DataHolder {
 			TotalPVETable.CreatureId.toString() + " = " + creatureId
 		);
 	}
-	
-	@Override
-	public String getDataLabel() { return DataLabel.TotalPVE.getAlias() + ":" + playerName + ":" + creatureId; }
 
 	@Override
 	public Map<String, Object> getValues() {

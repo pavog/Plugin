@@ -40,6 +40,9 @@ public class TotalBlocks implements DataHolder {
 	private int placed;
 	
 	@Override
+	public String getDataLabel() { return DataLabel.TotalBlocks.toParameterizedString(playerName, material.getItemTypeId() + ""); }
+	
+	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
 			TotalBlocksTable.TableName.toString(),
@@ -63,9 +66,6 @@ public class TotalBlocks implements DataHolder {
 			TotalBlocksTable.MaterialId + " = " + material.getItemTypeId()
 		);
 	}
-	
-	@Override
-	public String getDataLabel() { return DataLabel.TotalBlocks.getAlias() + ":" + playerName; }
 	
 	@Override
 	public Map<String, Object> getValues() {

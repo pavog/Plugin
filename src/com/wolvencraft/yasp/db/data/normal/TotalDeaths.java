@@ -33,6 +33,9 @@ public class TotalDeaths implements DataHolder {
 	private int times;
 	
 	@Override
+	public String getDataLabel() { return DataLabel.TotalDeaths.toParameterizedString(playerName, cause.name()); }
+	
+	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
 			TotalDeathsTable.TableName.toString(),
@@ -56,9 +59,6 @@ public class TotalDeaths implements DataHolder {
 			TotalDeathsTable.Cause + " = " + cause.name()
 		);
 	}
-	
-	@Override
-	public String getDataLabel() { return DataLabel.TotalDeaths.getAlias() + ":" + playerName + ":" + cause; }
 
 	@Override
 	public Map<String, Object> getValues() {

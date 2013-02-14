@@ -61,7 +61,7 @@ public class EntityListener implements Listener {
 									new ItemStack(Material.ARROW)
 								)
 							);
-							List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVP.getAliasParameterized(killer.getPlayerListName()));
+							List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVP.toParameterizedString(killer.getPlayerListName(), ((Player) victim).getPlayerListName()));
 							DataHolder totalPVP;
 							if(data.isEmpty()) {
 								totalPVP = new TotalPVP(killer, playerVictim);
@@ -78,7 +78,7 @@ public class EntityListener implements Listener {
 									true
 								)
 							);
-							List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.getAliasParameterized(playerVictim.getPlayerListName()));
+							List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.toParameterizedString(playerVictim.getPlayerListName(), ((Creature)arrow.getShooter()).getType().name()));
 							DataHolder totalPVE;
 							if(data.isEmpty()) {
 								totalPVE = new TotalPVE(playerVictim, (Creature)(arrow.getShooter()));
@@ -96,7 +96,7 @@ public class EntityListener implements Listener {
 							((Player) damager).getItemInHand()
 						)
 					);
-					List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVP.getAliasParameterized(killer.getPlayerListName()));
+					List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVP.toParameterizedString(killer.getPlayerListName(), ((Player) victim).getPlayerListName()));
 					DataHolder totalPVP;
 					if(data.isEmpty()) {
 						totalPVP = new TotalPVP(killer, playerVictim);
@@ -111,7 +111,7 @@ public class EntityListener implements Listener {
 							deathCause
 						)
 					);
-					List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalDeaths.getAliasParameterized(playerVictim.getPlayerListName()));
+					List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalDeaths.toParameterizedString(playerVictim.getPlayerListName(), deathCause.name()));
 					DataHolder totalDeaths;
 					if(data.isEmpty()) {
 						totalDeaths = new TotalDeaths(playerVictim, deathCause);
@@ -128,7 +128,7 @@ public class EntityListener implements Listener {
 							true
 						)
 					);
-					List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.getAliasParameterized(playerVictim.getPlayerListName()));
+					List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.toParameterizedString(playerVictim.getPlayerListName(), damager.getType().name()));
 					DataHolder totalPVE;
 					if(data.isEmpty()) {
 						totalPVE = new TotalPVE(playerVictim, (Creature)(damager));
@@ -145,7 +145,7 @@ public class EntityListener implements Listener {
 							true
 						)
 					);
-					List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.getAliasParameterized(playerVictim.getPlayerListName()));
+					List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.toParameterizedString(playerVictim.getPlayerListName(), damager.getType().name()));
 					DataHolder totalPVE;
 					if(data.isEmpty()) {
 						totalPVE = new TotalPVE(playerVictim, (Creature)(damager));
@@ -161,7 +161,7 @@ public class EntityListener implements Listener {
 						deathCause
 					)
 				);
-				List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalDeaths.getAliasParameterized(playerVictim.getPlayerListName()));
+				List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalDeaths.toParameterizedString(playerVictim.getPlayerListName(), deathCause.name()));
 				DataHolder totalDeaths;
 				if(data.isEmpty()) {
 					totalDeaths = new TotalDeaths(playerVictim, deathCause);
@@ -176,7 +176,7 @@ public class EntityListener implements Listener {
 						deathCause
 					)
 				);
-				List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalDeaths.getAliasParameterized(playerVictim.getPlayerListName()));
+				List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalDeaths.toParameterizedString(playerVictim.getPlayerListName(), deathCause.name()));
 				DataHolder totalDeaths;
 				if(data.isEmpty()) {
 					totalDeaths = new TotalDeaths(playerVictim, deathCause);
@@ -202,7 +202,7 @@ public class EntityListener implements Listener {
 								false
 							)
 						);
-						List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.getAliasParameterized(playerKiller.getPlayerListName()));
+						List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.toParameterizedString(playerKiller.getPlayerListName(), victim.getType().name()));
 						DataHolder totalPVE;
 						if(data.isEmpty()) {
 							totalPVE = new TotalPVE(playerKiller, (Creature)(victim));
@@ -219,7 +219,7 @@ public class EntityListener implements Listener {
 								false
 							)
 						);
-						List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.getAliasParameterized(playerKiller.getPlayerListName()));
+						List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.toParameterizedString(playerKiller.getPlayerListName(), victim.getType().name()));
 						DataHolder totalPVE;
 						if(data.isEmpty()) {
 							totalPVE = new TotalPVE(playerKiller, (Creature)(victim));
@@ -239,7 +239,7 @@ public class EntityListener implements Listener {
 								false
 							)
 						);
-						List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.getAliasParameterized(playerKiller.getPlayerListName()));
+						List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.toParameterizedString(playerKiller.getPlayerListName(), victim.getType().name()));
 						DataHolder totalPVE;
 						if(data.isEmpty()) {
 							totalPVE = new TotalPVE(playerKiller, (Creature)(victim));
@@ -256,7 +256,7 @@ public class EntityListener implements Listener {
 								false
 							)
 						);
-						List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.getAliasParameterized(playerKiller.getPlayerListName()));
+						List<DataHolder> data = DataCollector.getNormalDataByType(DataLabel.TotalPVE.toParameterizedString(playerKiller.getPlayerListName(), victim.getType().name()));
 						DataHolder totalPVE;
 						if(data.isEmpty()) {
 							totalPVE = new TotalPVE(playerKiller, (Creature)(victim));

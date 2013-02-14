@@ -43,6 +43,9 @@ public class TrackedPlayer implements DataHolder {
 	private int deaths;
 	
 	@Override
+	public String getDataLabel() { return DataLabel.Player.toParameterizedString(playerName); }
+	
+	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
 			PlayersTable.TableName.toString(),
@@ -65,9 +68,6 @@ public class TrackedPlayer implements DataHolder {
 			PlayersTable.Name.toString() + " = " + playerName
 		);
 	}
-	
-	@Override
-	public String getDataLabel() { return DataLabel.Player.getAlias() + ":" + playerName; }
 
 	@Override
 	public Map<String, Object> getValues() {
