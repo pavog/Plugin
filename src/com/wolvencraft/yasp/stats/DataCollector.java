@@ -21,6 +21,10 @@ public class DataCollector {
 		sessions = new ArrayList<LocalSession>();
 	}
 	
+	public static void add(LocalSession newSession) {
+		sessions.add(newSession);
+	}
+	
 	public static List<LocalSession> get() {
 		List<LocalSession> tempList = new ArrayList<LocalSession>();
 		for(LocalSession session : sessions) tempList.add(session);

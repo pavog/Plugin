@@ -93,28 +93,28 @@ public class LocalSession {
 	 * Increments the distance traveled by foot.
 	 * @param distance Additional distance traveled by foot.
 	 */
-	public void addDistanceFoot(int distance) { playersDistances.addFootDistance(distance); }
+	public void addDistanceFoot(double distance) { playersDistances.addFootDistance(distance); }
 	
 	/**
 	 * <b>PlayersDistances</b> wrapper.<br />
 	 * Increments the distance traveled by boat.
 	 * @param distance Additional distance traveled by boat
 	 */
-	public void addDistanceBoat(int distance) { playersDistances.addBoatDistance(distance); }
+	public void addDistanceBoat(double distance) { playersDistances.addBoatDistance(distance); }
 	
 	/**
 	 * <b>PlayersDistances</b> wrapper.<br />
 	 * Increments the distance traveled by minecart.
 	 * @param distance Additional distance traveled by minecart
 	 */
-	public void addDistanceMinecart(int distance) { playersDistances.addMinecartDistance(distance); }
+	public void addDistanceMinecart(double distance) { playersDistances.addMinecartDistance(distance); }
 	
 	/**
 	 * <b>PlayersDistances</b> wrapper.<br />
 	 * Increments the distance traveled by pig.
 	 * @param distance Additional distance traveled by pig
 	 */
-	public void addDistancePig(int distance) { playersDistances.addPigDistance(distance); }
+	public void addDistancePig(double distance) { playersDistances.addPigDistance(distance); }
 	
 	/**
 	 * Registers player logging in with all corresponding statistics trackers.

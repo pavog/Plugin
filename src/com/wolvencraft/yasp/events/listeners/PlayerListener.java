@@ -1,6 +1,10 @@
 package com.wolvencraft.yasp.events.listeners;
 
+import java.util.logging.Level;
+
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,7 +15,10 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.db.exceptions.LocalSessionException;
 import com.wolvencraft.yasp.stats.DataCollector;
+import com.wolvencraft.yasp.stats.LocalSession;
+import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
 public class PlayerListener implements Listener {
@@ -24,6 +31,11 @@ public class PlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
+		try { DataCollector.add(new LocalSession(player)); }
+		catch (LocalSessionException e) {
+			Message.log(Level.SEVERE, e.getMessage());
+			return;
+		}
 		DataCollector.get(player).login();
 	}
 
@@ -38,6 +50,19 @@ public class PlayerListener implements Listener {
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
+		double distance = player.getLocation().distance(event.getTo());
+		if(player.isInsideVehicle()) {
+			Vehicle vehicle = (Vehicle) player.getVehicle();
+			if(vehicle.getType().equals(EntityType.MINECART)) {
+				DataCollector.get(player).addDistanceMinecart(distance);
+			} else if(vehicle.getType().equals(EntityType.BOAT)) {
+				DataCollector.get(player).addDistanceBoat(distance);
+			} else if(vehicle.getType().equals(EntityType.PIG)) {
+				DataCollector.get(player).addDistancePig(distance);
+			}
+		} else {
+			DataCollector.get(player).addDistanceFoot(distance);
+		}
 		//TODO Movement tracking
 	}
 

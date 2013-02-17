@@ -32,10 +32,10 @@ public class PlayerDistances implements DynamicData {
 	}
 	
 	private int playerId;
-	private int foot;
-	private int boat;
-	private int minecart;
-	private int pig;
+	private double foot;
+	private double boat;
+	private double minecart;
+	private double pig;
 	
 	@Override
 	public void fetchData() {
@@ -75,24 +75,24 @@ public class PlayerDistances implements DynamicData {
 	 * Increments the distance travelled by foot by the specified amount.
 	 * @param distance Distance to add to the statistics
 	 */
-	public void addFootDistance(int distance) { foot += distance; }
+	public void addFootDistance(double distance) { foot += distance; }
 	
 	/**
 	 * Increments the distance travelled by boat by the specified amount.
 	 * @param distance Distance to add to the statistics
 	 */
-	public void addBoatDistance(int distance) { boat += distance; }
+	public void addBoatDistance(double distance) { boat += distance; }
 	
 	/**
 	 * Increments the distance travelled by minecart by the specified amount.
 	 * @param distance Distance to add to the statistics
 	 */
-	public void addMinecartDistance(int distance) { minecart += distance; }
+	public void addMinecartDistance(double distance) { minecart += distance; }
 	
 	/**
 	 * Increments the distance travelled by pig by the specified amount.
 	 * @param distance Distance to add to the statistics
 	 */
-	public void addPigDistance (int distance) { pig += distance; }
+	public void addPigDistance (double distance) { pig += distance; }
 	
 }
