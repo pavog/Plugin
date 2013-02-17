@@ -6,11 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.db.data.normal.Settings;
+import com.wolvencraft.yasp.db.data.Dynamic.Settings;
 import com.wolvencraft.yasp.db.exceptions.DatabaseConnectionException;
-import com.wolvencraft.yasp.events.BlockListener;
-import com.wolvencraft.yasp.events.EntityListener;
-import com.wolvencraft.yasp.events.PlayerListener;
+import com.wolvencraft.yasp.events.listeners.*;
 import com.wolvencraft.yasp.stats.DataCollector;
 import com.wolvencraft.yasp.stats.DatabaseSync;
 import com.wolvencraft.yasp.util.Message;

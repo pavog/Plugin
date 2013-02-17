@@ -1,117 +1,82 @@
 package com.wolvencraft.yasp.stats;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import com.wolvencraft.yasp.db.data.detailed.DetailedDataHolder;
-import com.wolvencraft.yasp.db.data.normal.DataHolder;
-import com.wolvencraft.yasp.db.data.normal.DataLabel;
+import org.bukkit.entity.Player;
+
+import com.wolvencraft.yasp.db.DBEntry;
+import com.wolvencraft.yasp.db.QueryUtils;
 
 public class DataCollector {
 
-	private static List<DataHolder> simpleData;
-	private static List<DetailedDataHolder> detailedData;
+	private static List<LocalSession> sessions;
+	private static Map<String, Integer> players = new HashMap<String, Integer>();
 	
-	/**
-	 * <b>Default constructor</b><br />
-	 * Stores statistical data until it is synched with the database
-	 */
 	public DataCollector() {
-		simpleData = new ArrayList<DataHolder>();
-		detailedData = new ArrayList<DetailedDataHolder>();
+		sessions = new ArrayList<LocalSession>();
 	}
 	
-	/**
-	 * Returns all re-writable data.<br />
-	 * The resulting list is not synchronized; adding or removing new objects will be ineffective
-	 * @return List of re-writable DataHolders
-	 */
-	public static List<DataHolder> getNormalData() {
-		List<DataHolder> data = new ArrayList<DataHolder>();
-		for(DataHolder entry : simpleData) data.add(entry);
-		return data;
+	public static List<LocalSession> get() {
+		List<LocalSession> tempList = new ArrayList<LocalSession>();
+		for(LocalSession session : sessions) tempList.add(session);
+		return tempList;
 	}
 	
-	/**
-	 * Clears the re-writable data of all local data
-	 * @return <b>true</b> if the data was cleared, <b>false</b> if the data bank was already empty
-	 */
-	public static boolean flushNormalData() {
-		if(simpleData.isEmpty()) return false;
-		simpleData.clear();
-		return true;
-	}
-	
-	/**
-	 * Returns a list of all DataHolders by type
-	 * @param label DataLabel
-	 * @return List of DataHolders
-	 */
-	public static List<DataHolder> getNormalDataByType(DataLabel label) {
-		List<DataHolder> data = new ArrayList<DataHolder>();
-		for(DataHolder holder : simpleData) {
-			if(holder.getDataLabel().startsWith(label.toString())) data.add(holder);
+	public static LocalSession get(int playerId) {
+		for(LocalSession session : sessions) {
+			if(session.getPlayerId() == playerId) return session;
 		}
-		return data;
+		return null;
 	}
 	
-	/**
-	 * Returns a list of all DataHolders by type
-	 * @param label DataLabel
-	 * @return List of DataHolders
-	 */
-	public static List<DataHolder> getNormalDataByType(String label) {
-		List<DataHolder> data = new ArrayList<DataHolder>();
-		for(DataHolder holder : simpleData) {
-			if(holder.getDataLabel().equals(label)) data.add(holder);
+	public static LocalSession get(Player player) {
+		return get(getCachedPlayerId(player.getPlayerListName()));
+	}
+	
+	public static LocalSession get(String playerName) {
+		return get(getCachedPlayerId(playerName));
+	}
+	
+	public static void clear() {
+		sessions.clear();
+	}
+	
+	public static void remove(int playerId) {
+		sessions.remove(get(playerId));
+	}
+	
+	public static void remove(String playerName) {
+		sessions.remove(get(playerName));
+	}
+	
+	public static void remove(Player player) {
+		sessions.remove(get(player));
+	}
+	
+	public static void remove(LocalSession session) {
+		sessions.remove(session);
+	}
+	
+	public static Integer getCachedPlayerId(String username) {
+		Iterator<Entry<String, Integer>> it = players.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry<String, Integer> pairs = (Map.Entry<String, Integer>) it.next();
+			if(pairs.getKey().equals(username)) return pairs.getValue();
+			it.remove();
 		}
-		return data;
-	}
-	
-	/**
-	 * Adds a new DataHolder to be stored and synchronized
-	 * @param newHolder DataHolder to add
-	 * @return <b>true</b> if the DataHolder was added, <b>false</b> if a holder with this name already exists
-	 */
-	public static boolean addNormalData(DataHolder newHolder) {
-		for(DataHolder holder : simpleData) {
-			if(holder.getDataLabel().equals(newHolder.getDataLabel())) return false;
-		}
-		simpleData.add(newHolder);
-		return true;
-	}
-	
-	/**
-	 * Returns all read-only data.<Br />
-	 * The resulting list is not synchronized; adding or removing new objects will be ineffective
-	 * @return List of read-only DataHolders
-	 */
-	public static List<DetailedDataHolder> getDetailedData() {
-		List<DetailedDataHolder> data = new ArrayList<DetailedDataHolder>();
-		for(DetailedDataHolder entry : detailedData) data.add(entry);
-		return data;
-	}
-	
-	/**
-	 * Clears the re-writable data of all local data
-	 * @param force Force remove all (even <i>on-hold</i>) data
-	 * @return <b>true</b> if the data was cleared, <b>false</b> if the data bank was already empty
-	 */
-	public static boolean flushDetailedData(boolean force) {
-		if(detailedData.isEmpty()) return false;
-		for(DetailedDataHolder entry : getDetailedData()) {
-			if(force || !entry.isOnHold()) detailedData.remove(entry);
-		}
-		return true;
-	}
-	
-	/**
-	 * Adds a new DataHolder to be stored and synchronized
-	 * @param newHolder DataHolder to add
-	 * @return <b>true</b> if the DataHolder was added, <b>false</b> if a holder with this name already exists
-	 */
-	public static boolean addDetailedData(DetailedDataHolder newHolder) {
-		detailedData.add(newHolder);
-		return true;
+		int playerId = -1;
+		List<DBEntry> results = QueryUtils.fetchData("SELECT name, player_id FROM players WHERE name = '" + username + "'");
+		if(results.isEmpty()) {
+			QueryUtils.pushData("INSERT name INTO players");
+			List<DBEntry> newResults = QueryUtils.fetchData("SELECT name, player_id FROM players WHERE name = '" + username + "'");
+			playerId = newResults.get(0).getValueAsInteger("player_id");
+		} else playerId = results.get(0).getValueAsInteger("player_id");
+		players.put(username, playerId);
+		return playerId;
 	}
 }
