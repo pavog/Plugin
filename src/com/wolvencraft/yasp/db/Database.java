@@ -65,7 +65,7 @@ public class Database {
 			
 			while(remoteVersion < currentVersion) {
 				remoteVersion++;
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/stats_v" + remoteVersion + ".sql");
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/v" + remoteVersion + ".sql");
 				if (is == null) throw new DatabaseConnectionException("Unable to patch the database to v." + remoteVersion);
 				ScriptRunner sr = new ScriptRunner(connection);
 				try {sr.runScript(new InputStreamReader(is)); }
