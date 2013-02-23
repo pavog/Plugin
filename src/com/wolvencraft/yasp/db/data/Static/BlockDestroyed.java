@@ -6,9 +6,9 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.Static.BlocksDestroyedTable;
-import com.wolvencraft.yasp.stats.DataCollector;
 import com.wolvencraft.yasp.util.Util;
 
 public class BlockDestroyed implements StaticData {

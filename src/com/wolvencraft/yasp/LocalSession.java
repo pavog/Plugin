@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.stats;
+package com.wolvencraft.yasp;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Creature;
@@ -7,36 +7,35 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import com.wolvencraft.yasp.db.data.DetailedDataHolder;
+import com.wolvencraft.yasp.db.data.BlocksDataHolder;
+import com.wolvencraft.yasp.db.data.DeathsDataHolder;
+import com.wolvencraft.yasp.db.data.ItemsDataHolder;
+import com.wolvencraft.yasp.db.data.PVEDataHolder;
+import com.wolvencraft.yasp.db.data.PVPDataHolder;
 import com.wolvencraft.yasp.db.data.Dynamic.*;
 import com.wolvencraft.yasp.db.data.Static.*;
-import com.wolvencraft.yasp.db.exceptions.LocalSessionException;
-import com.wolvencraft.yasp.stats.data.DetailedData;
-import com.wolvencraft.yasp.stats.data.TotalBlocks;
-import com.wolvencraft.yasp.stats.data.TotalDeaths;
-import com.wolvencraft.yasp.stats.data.TotalItems;
-import com.wolvencraft.yasp.stats.data.TotalPVE;
-import com.wolvencraft.yasp.stats.data.TotalPVP;
 
 public class LocalSession {
 	
-	public LocalSession() throws LocalSessionException {
-		throw new LocalSessionException("Attempted to create a session without specifying a player");
+	public LocalSession() throws Exception {
+		throw new Exception("Attempted to create a session without specifying a player");
 	}
 	
-	public LocalSession(Player player) throws LocalSessionException {
+	public LocalSession(Player player) {
 		this.playerName = player.getPlayerListName();
 		this.playerId = DataCollector.getCachedPlayerId(playerName);
 		this.playerData = new PlayerData(player, playerName, playerId);
 		
 		this.playersDistances = new PlayerDistances(playerId);
 		
-		this.totalBlocks = new TotalBlocks();
-		this.totalItems = new TotalItems();
-		this.totalDeaths = new TotalDeaths();
-		this.totalPVE = new TotalPVE();
-		this.totalPVP = new TotalPVP();
+		this.totalBlocks = new BlocksDataHolder();
+		this.totalItems = new ItemsDataHolder();
+		this.totalDeaths = new DeathsDataHolder();
+		this.totalPVE = new PVEDataHolder();
+		this.totalPVP = new PVPDataHolder();
 		
-		this.detailedData = new DetailedData();
+		this.detailedData = new DetailedDataHolder();
 	}
 	
 	private String playerName;
@@ -44,13 +43,13 @@ public class LocalSession {
 	
 	private PlayerData playerData;
 	private PlayerDistances playersDistances;
-	private TotalBlocks totalBlocks;
-	private TotalItems totalItems;
-	private TotalDeaths totalDeaths;
-	private TotalPVE totalPVE;
-	private TotalPVP totalPVP;
+	private BlocksDataHolder totalBlocks;
+	private ItemsDataHolder totalItems;
+	private DeathsDataHolder totalDeaths;
+	private PVEDataHolder totalPVE;
+	private PVPDataHolder totalPVP;
 	
-	private DetailedData detailedData;
+	private DetailedDataHolder detailedData;
 	
 	public void pushData() {
 		playerData.pushData();

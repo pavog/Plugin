@@ -8,9 +8,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.Static.PVETable;
-import com.wolvencraft.yasp.stats.DataCollector;
 import com.wolvencraft.yasp.util.Util;
 
 public class DeathPVE implements StaticData {

@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.stats.data;
+package com.wolvencraft.yasp.db.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,11 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.data.Dynamic.TotalItemsEntry;
 
-public class TotalItems {
+public class ItemsDataHolder {
 	
 	private List<TotalItemsEntry> data;
 	
-	public TotalItems() {
+	public ItemsDataHolder() {
 		data = new ArrayList<TotalItemsEntry>();
 	}
 	

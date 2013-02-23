@@ -7,9 +7,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.Static.PlayersDeathTable;
-import com.wolvencraft.yasp.stats.DataCollector;
 import com.wolvencraft.yasp.util.Util;
 
 public class DeathOther implements StaticData {

@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.stats;
+package com.wolvencraft.yasp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.exceptions.LocalSessionException;
 
 public class DataCollector {
 
@@ -28,7 +27,7 @@ public class DataCollector {
 	
 	public static void add(Player player) {
 		try { sessions.add(new LocalSession(player)); }
-		catch (LocalSessionException e) { e.printStackTrace(); }
+		catch (Exception e) { e.printStackTrace(); }
 	}
 	
 	public static List<LocalSession> get() {

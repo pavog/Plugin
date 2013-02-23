@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.stats.data;
+package com.wolvencraft.yasp.db.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,11 @@ import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.db.data.Dynamic.TotalBlocksEntry;
 
-public class TotalBlocks {
+public class BlocksDataHolder {
 	
 	private List<TotalBlocksEntry> data;
 	
-	public TotalBlocks() {
+	public BlocksDataHolder() {
 		data = new ArrayList<TotalBlocksEntry>();
 	}
 	

@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.events.listeners;
+package com.wolvencraft.yasp.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -17,8 +17,8 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.stats.DataCollector;
 import com.wolvencraft.yasp.util.Util;
 
 public class EntityListener implements Listener {

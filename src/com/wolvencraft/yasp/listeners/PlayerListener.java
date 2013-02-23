@@ -1,6 +1,4 @@
-package com.wolvencraft.yasp.events.listeners;
-
-import java.util.logging.Level;
+package com.wolvencraft.yasp.listeners;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -14,11 +12,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.LocalSession;
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.exceptions.LocalSessionException;
-import com.wolvencraft.yasp.stats.DataCollector;
-import com.wolvencraft.yasp.stats.LocalSession;
-import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
 public class PlayerListener implements Listener {
@@ -32,10 +28,7 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		try { DataCollector.add(new LocalSession(player)); }
-		catch (LocalSessionException e) {
-			Message.log(Level.SEVERE, e.getMessage());
-			return;
-		}
+		catch (Exception e) { e.printStackTrace(); return; }
 		DataCollector.get(player).login();
 	}
 

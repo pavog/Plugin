@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.events.listeners;
+package com.wolvencraft.yasp.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -7,8 +7,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.material.MaterialData;
 
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.stats.DataCollector;
 import com.wolvencraft.yasp.util.Util;
 
 public class BlockListener implements Listener {

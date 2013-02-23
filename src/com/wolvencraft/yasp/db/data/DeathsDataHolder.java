@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.stats.data;
+package com.wolvencraft.yasp.db.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,11 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.db.data.Dynamic.TotalDeathsEntry;
 
-public class TotalDeaths {
+public class DeathsDataHolder {
 	
 	private List<TotalDeathsEntry> data;
 	
-	public TotalDeaths() {
+	public DeathsDataHolder() {
 		data = new ArrayList<TotalDeathsEntry>();
 	}
 	

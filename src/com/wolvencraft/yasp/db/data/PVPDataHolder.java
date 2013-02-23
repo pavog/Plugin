@@ -1,15 +1,15 @@
-package com.wolvencraft.yasp.stats.data;
+package com.wolvencraft.yasp.db.data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.wolvencraft.yasp.db.data.Dynamic.TotalPVPEntry;
 
-public class TotalPVP {
+public class PVPDataHolder {
 	
 	private List<TotalPVPEntry> data;
 	
-	public TotalPVP() {
+	public PVPDataHolder() {
 		data = new ArrayList<TotalPVPEntry>();
 	}
 	

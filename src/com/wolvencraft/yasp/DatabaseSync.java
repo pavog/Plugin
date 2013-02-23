@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.stats;
+package com.wolvencraft.yasp;
 
 public class DatabaseSync implements Runnable {
 
