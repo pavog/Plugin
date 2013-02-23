@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.TotalPVPTable;
+import com.wolvencraft.yasp.db.tables.Dynamic.TotalPVPKills;
 
 /**
  * Represents a logged event, in which one player killed another.<br />
@@ -36,33 +36,33 @@ public class TotalPVPEntry implements DynamicData {
 	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
-			TotalPVPTable.TableName.toString(),
+			TotalPVPKills.TableName.toString(),
 			"*",
-			TotalPVPTable.PlayerId.toString() + " = " + killerId,
-			TotalPVPTable.VictimId + " = " + victimId
+			TotalPVPKills.PlayerId.toString() + " = " + killerId,
+			TotalPVPKills.VictimId + " = " + victimId
 		);
-		if(results.isEmpty()) QueryUtils.insert(TotalPVPTable.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalPVPKills.TableName.toString(), getValues());
 		else {
-			times = results.get(0).getValueAsInteger(TotalPVPTable.Times.toString());
+			times = results.get(0).getValueAsInteger(TotalPVPKills.Times.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData() {
 		return QueryUtils.update(
-			TotalPVPTable.TableName.toString(),
+			TotalPVPKills.TableName.toString(),
 			getValues(), 
-			TotalPVPTable.PlayerId.toString() + " = " + killerId,
-			TotalPVPTable.VictimId + " = " + victimId
+			TotalPVPKills.PlayerId.toString() + " = " + killerId,
+			TotalPVPKills.VictimId + " = " + victimId
 		);
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(TotalPVPTable.PlayerId.toString(), killerId);
-		map.put(TotalPVPTable.VictimId.toString(), victimId);
-		map.put(TotalPVPTable.Times.toString(), times);
+		map.put(TotalPVPKills.PlayerId.toString(), killerId);
+		map.put(TotalPVPKills.VictimId.toString(), victimId);
+		map.put(TotalPVPKills.Times.toString(), times);
 		return map;
 	}
 	

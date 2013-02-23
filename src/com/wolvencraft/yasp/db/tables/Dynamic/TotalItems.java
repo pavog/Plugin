@@ -1,16 +1,17 @@
 package com.wolvencraft.yasp.db.tables.Dynamic;
 
 
-public enum TotalItemsTable implements DynamicTable {
+public enum TotalItems implements _DynamicTable {
 	
 	TableName("total_items"),
+	
 	TotalBlocksId("total_items_id"),
 	MaterialId("material_id"),
 	PlayerId("player_id"),
-	Dropped("drop"),
-	PickedUp("pickup");
+	Dropped("dropped"),
+	PickedUp("picked_up");
 	
-	TotalItemsTable(String columnName) {
+	TotalItems(String columnName) {
 		this.columnName = columnName;
 	}
 	

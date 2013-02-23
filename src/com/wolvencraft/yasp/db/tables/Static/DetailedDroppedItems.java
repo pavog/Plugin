@@ -1,9 +1,10 @@
 package com.wolvencraft.yasp.db.tables.Static;
 
-public enum BlocksDestroyedTable implements StaticTable {
+public enum DetailedDroppedItems implements _StaticTable {
+
+	TableName("detailed_dropped_items"),
 	
-	TableName("detailed_blocks_destroyed"),
-	DestroyedBlockId("bdestroyedID"),
+	EntryId("detailed_dropped_items_id"),
 	MaterialId("material_id"),
 	PlayerId("player_id"),
 	World("world"),
@@ -12,7 +13,7 @@ public enum BlocksDestroyedTable implements StaticTable {
 	ZCoord("z"),
 	Timestamp("time");
 	
-	BlocksDestroyedTable(String columnName) {
+	DetailedDroppedItems(String columnName) {
 		this.columnName = columnName;
 	}
 	

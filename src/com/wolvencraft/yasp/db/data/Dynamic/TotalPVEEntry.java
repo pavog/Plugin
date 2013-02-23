@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.TotalPVETable;
+import com.wolvencraft.yasp.db.tables.Dynamic.TotalPVEKills;
 
 /**
  * Represents a logged event, in which either a player or a creature was killed.<br />
@@ -37,35 +37,35 @@ public class TotalPVEEntry implements DynamicData {
 	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
-			TotalPVETable.TableName.toString(),
+			TotalPVEKills.TableName.toString(),
 			"*",
-			TotalPVETable.PlayerId.toString() + " = " + playerId,
-			TotalPVETable.CreatureId.toString() + " = " + creatureId
+			TotalPVEKills.PlayerId.toString() + " = " + playerId,
+			TotalPVEKills.CreatureId.toString() + " = " + creatureId
 		);
-		if(results.isEmpty()) QueryUtils.insert(TotalPVETable.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalPVEKills.TableName.toString(), getValues());
 		else {
-			playerDeaths = results.get(0).getValueAsInteger(TotalPVETable.PlayerKilled.toString());
-			creatureDeaths = results.get(0).getValueAsInteger(TotalPVETable.CreatureKilled.toString());
+			playerDeaths = results.get(0).getValueAsInteger(TotalPVEKills.PlayerKilled.toString());
+			creatureDeaths = results.get(0).getValueAsInteger(TotalPVEKills.CreatureKilled.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData() {
 		return QueryUtils.update(
-			TotalPVETable.TableName.toString(),
+			TotalPVEKills.TableName.toString(),
 			getValues(), 
-			TotalPVETable.PlayerId.toString() + " = " + playerId,
-			TotalPVETable.CreatureId.toString() + " = " + creatureId
+			TotalPVEKills.PlayerId.toString() + " = " + playerId,
+			TotalPVEKills.CreatureId.toString() + " = " + creatureId
 		);
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(TotalPVETable.PlayerId.toString(), playerId);
-		map.put(TotalPVETable.CreatureId.toString(), creatureId);
-		map.put(TotalPVETable.PlayerKilled.toString(), playerDeaths);
-		map.put(TotalPVETable.CreatureKilled.toString(), creatureDeaths);
+		map.put(TotalPVEKills.PlayerId.toString(), playerId);
+		map.put(TotalPVEKills.CreatureId.toString(), creatureId);
+		map.put(TotalPVEKills.PlayerKilled.toString(), playerDeaths);
+		map.put(TotalPVEKills.CreatureKilled.toString(), creatureDeaths);
 		return map;
 	}
 	

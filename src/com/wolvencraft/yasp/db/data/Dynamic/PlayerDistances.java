@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.PlayersDistanceTable;
+import com.wolvencraft.yasp.db.tables.Dynamic.DistancePlayers;
 
 /**
  * Represents the distances a player travelled.
@@ -40,34 +40,34 @@ public class PlayerDistances implements DynamicData {
 	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
-			PlayersDistanceTable.TableName.toString(),
+			DistancePlayers.TableName.toString(),
 			"*",
-			PlayersDistanceTable.PlayerId.toString() + " = " + playerId
+			DistancePlayers.PlayerId.toString() + " = " + playerId
 		);
-		if(results.isEmpty()) QueryUtils.insert(PlayersDistanceTable.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(DistancePlayers.TableName.toString(), getValues());
 		else {
-			foot = results.get(0).getValueAsInteger(PlayersDistanceTable.Foot.toString());
-			boat = results.get(0).getValueAsInteger(PlayersDistanceTable.Boat.toString());
-			minecart = results.get(0).getValueAsInteger(PlayersDistanceTable.Minecart.toString());
-			pig = results.get(0).getValueAsInteger(PlayersDistanceTable.Pig.toString());
+			foot = results.get(0).getValueAsInteger(DistancePlayers.Foot.toString());
+			boat = results.get(0).getValueAsInteger(DistancePlayers.Boat.toString());
+			minecart = results.get(0).getValueAsInteger(DistancePlayers.Minecart.toString());
+			pig = results.get(0).getValueAsInteger(DistancePlayers.Pig.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData() {
-		return QueryUtils.update(PlayersDistanceTable.TableName.toString(),
+		return QueryUtils.update(DistancePlayers.TableName.toString(),
 			getValues(),
-			PlayersDistanceTable.PlayerId + " = " + playerId
+			DistancePlayers.PlayerId + " = " + playerId
 		);
 	}
 	
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> valueMap = new HashMap<String, Object>();
-		valueMap.put(PlayersDistanceTable.Foot.toString(), foot);
-		valueMap.put(PlayersDistanceTable.Boat.toString(), boat);
-		valueMap.put(PlayersDistanceTable.Minecart.toString(), minecart);
-		valueMap.put(PlayersDistanceTable.Pig.toString(), pig);
+		valueMap.put(DistancePlayers.Foot.toString(), foot);
+		valueMap.put(DistancePlayers.Boat.toString(), boat);
+		valueMap.put(DistancePlayers.Minecart.toString(), minecart);
+		valueMap.put(DistancePlayers.Pig.toString(), pig);
 		return valueMap;
 	}
 	

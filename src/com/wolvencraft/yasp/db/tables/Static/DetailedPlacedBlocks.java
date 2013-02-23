@@ -1,20 +1,19 @@
 package com.wolvencraft.yasp.db.tables.Static;
 
-public enum PVETable implements StaticTable {
-
-	TableName("detailed_pvp"),
-	PveId("pve_id"),
-	PlayerID("player_id"),
-	CreatureID("creature_id"),
-	MaterialID("material_id"),
-	PlayerKilled("player_killed"),
+public enum DetailedPlacedBlocks implements _StaticTable {
+	
+	TableName("detailed_placed_blocks"),
+	
+	EntryId("detailed_placed_blocks_id"),
+	MaterialId("material_id"),
+	PlayerId("player_id"),
 	World("world"),
 	XCoord("x"),
 	YCoord("y"),
 	ZCoord("z"),
 	Timestamp("time");
 	
-	PVETable (String columnName) {
+	DetailedPlacedBlocks(String columnName) {
 		this.columnName = columnName;
 	}
 	

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.PlayersTable;
+import com.wolvencraft.yasp.db.tables.Dynamic.Players;
 
 /**
  * Represents the Player data that is being tracked.<br />
@@ -30,7 +30,6 @@ public class PlayerData implements DynamicData {
 		this.foodLevel = player.getFoodLevel();
 		this.healthLevel = player.getHealth();
 		this.logins = 0;
-		this.deaths = 0;
 	}
 	
 	private int playerId;
@@ -44,19 +43,17 @@ public class PlayerData implements DynamicData {
 	private int healthLevel;
 	private long firstJoin;
 	private int logins;
-	private int deaths;
 	
 	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
-			PlayersTable.TableName.toString(),
+			Players.TableName.toString(),
 			"*",
-			PlayersTable.PlayerId.toString() + " = " + playerId
+			Players.PlayerId.toString() + " = " + playerId
 		);
-		if(results.isEmpty()) QueryUtils.insert(PlayersTable.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(Players.TableName.toString(), getValues());
 		else {
-			logins = results.get(0).getValueAsInteger(PlayersTable.Logins.toString());
-			deaths = results.get(0).getValueAsInteger(PlayersTable.Deaths.toString());
+			logins = results.get(0).getValueAsInteger(Players.Logins.toString());
 		}
 	}
 
@@ -64,26 +61,25 @@ public class PlayerData implements DynamicData {
 	public boolean pushData() {
 		refreshPlayerData();
 		return QueryUtils.update(
-			PlayersTable.TableName.toString(),
+			Players.TableName.toString(),
 			getValues(), 
-			PlayersTable.PlayerId.toString() + " = " + playerId
+			Players.PlayerId.toString() + " = " + playerId
 		);
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(PlayersTable.Name.toString(), playerName);
-		if(online) map.put(PlayersTable.Online.toString(), "Y");
-		else map.put(PlayersTable.Online.toString(), "N");
-		map.put(PlayersTable.ExperiencePercent.toString(), expPercent);
-		map.put(PlayersTable.ExperienceTotal.toString(), expTotal);
-		map.put(PlayersTable.ExperienceLevel.toString(), expLevel);
-		map.put(PlayersTable.FoodLevel.toString(), foodLevel);
-		map.put(PlayersTable.HealthLevel.toString(), healthLevel);
-		map.put(PlayersTable.FirstLogin.toString(), firstJoin);
-		map.put(PlayersTable.Logins.toString(), logins);
-		map.put(PlayersTable.Deaths.toString(), deaths);
+		map.put(Players.Name.toString(), playerName);
+		if(online) map.put(Players.Online.toString(), "Y");
+		else map.put(Players.Online.toString(), "N");
+		map.put(Players.ExperiencePercent.toString(), expPercent);
+		map.put(Players.ExperienceTotal.toString(), expTotal);
+		map.put(Players.ExperienceLevel.toString(), expLevel);
+		map.put(Players.FoodLevel.toString(), foodLevel);
+		map.put(Players.HealthLevel.toString(), healthLevel);
+		map.put(Players.FirstLogin.toString(), firstJoin);
+		map.put(Players.Logins.toString(), logins);
 		return map;
 	}
 	
@@ -109,11 +105,6 @@ public class PlayerData implements DynamicData {
 	 * @return <b>true</b> if the player is online, <b>false</b> otherwise
 	 */
 	public boolean getOnline() { return online; }
-	
-	/**
-	 * Increments the number of deaths player experienced
-	 */
-	public void addDeaths() { deaths++; }
 	
 	/**
 	 * Changes the online status of the player

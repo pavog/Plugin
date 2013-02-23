@@ -1,6 +1,6 @@
-package com.wolvencraft.yasp.db.tables.Static;
+package com.wolvencraft.yasp.db.tables.Dynamic;
 
-public interface StaticTable {
+public interface _DynamicTable {
 	
 	/**
 	 * Returns the name of the column as specified in the database

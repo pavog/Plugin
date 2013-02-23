@@ -6,7 +6,7 @@ import java.util.Map;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.SettingsTable;
+import com.wolvencraft.yasp.db.tables.Dynamic._Settings;
 
 /**
  * Settings is a unique DataHolder. Unlike other holders, Settins is never synched back to the database.<br />
@@ -64,7 +64,7 @@ public class Settings implements DynamicData {
 	
 	@Override
 	public void fetchData() {
-		List<DBEntry> entries = QueryUtils.select(SettingsTable.TableName.toString(), "*");
+		List<DBEntry> entries = QueryUtils.select(_Settings.TableName.toString(), "*");
 		for(DBEntry entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("version")) remoteVersion = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value");

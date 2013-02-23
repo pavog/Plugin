@@ -8,7 +8,7 @@ import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.TotalBlocksTable;
+import com.wolvencraft.yasp.db.tables.Dynamic.TotalBlocks;
 
 public class TotalBlocksEntry implements DynamicData {
 	
@@ -28,35 +28,35 @@ public class TotalBlocksEntry implements DynamicData {
 	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
-			TotalBlocksTable.TableName.toString(),
+			TotalBlocks.TableName.toString(),
 			"*",
-			TotalBlocksTable.PlayerId + " = " + playerId
+			TotalBlocks.PlayerId + " = " + playerId
 		);
 		
-		if(results.isEmpty()) QueryUtils.insert(TotalBlocksTable.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalBlocks.TableName.toString(), getValues());
 		else {
-			broken = results.get(0).getValueAsInteger(TotalBlocksTable.Destroyed.toString());
-			placed = results.get(0).getValueAsInteger(TotalBlocksTable.Placed.toString());
+			broken = results.get(0).getValueAsInteger(TotalBlocks.Destroyed.toString());
+			placed = results.get(0).getValueAsInteger(TotalBlocks.Placed.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData() {
 		return QueryUtils.update(
-			TotalBlocksTable.TableName.toString(),
+			TotalBlocks.TableName.toString(),
 			getValues(),
-			TotalBlocksTable.PlayerId + " = " + playerId,
-			TotalBlocksTable.MaterialId + " = " + material.getItemTypeId()
+			TotalBlocks.PlayerId + " = " + playerId,
+			TotalBlocks.MaterialId + " = " + material.getItemTypeId()
 		);
 	}
 	
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(TotalBlocksTable.PlayerId.toString(), playerId);
-		map.put(TotalBlocksTable.MaterialId.toString(), material.getItemTypeId());
-		map.put(TotalBlocksTable.Destroyed.toString(), broken);
-		map.put(TotalBlocksTable.Placed.toString(), placed);
+		map.put(TotalBlocks.PlayerId.toString(), playerId);
+		map.put(TotalBlocks.MaterialId.toString(), material.getItemTypeId());
+		map.put(TotalBlocks.Destroyed.toString(), broken);
+		map.put(TotalBlocks.Placed.toString(), placed);
 		return map;
 	}
 	

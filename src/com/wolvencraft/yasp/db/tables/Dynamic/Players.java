@@ -2,22 +2,22 @@ package com.wolvencraft.yasp.db.tables.Dynamic;
 
 
 
-public enum PlayersTable implements DynamicTable {
+public enum Players implements _DynamicTable {
 	
 	TableName("players"),
+	
 	PlayerId("player_id"),
 	Name("name"),
 	Online("online"),
 	ExperiencePercent("exp_perc"),
 	ExperienceTotal("exp_total"),
-	ExperienceLevel("exp_level"),
+	ExperienceLevel("level"),
 	FoodLevel("food_level"),
-	HealthLevel("health_level"),
+	HealthLevel("health"),
 	FirstLogin("first_login"),
-	Logins("logins"),
-	Deaths("deaths");
+	Logins("logins");
 	
-	PlayersTable(String columnName) {
+	Players(String columnName) {
 		this.columnName = columnName;
 	}
 	

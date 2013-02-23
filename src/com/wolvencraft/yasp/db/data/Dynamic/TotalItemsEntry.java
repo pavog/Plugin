@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.TotalItemsTable;
+import com.wolvencraft.yasp.db.tables.Dynamic.TotalItems;
 
 /**
  * Represents the total number of items player dropped and picked up.<br />
@@ -39,35 +39,35 @@ public class TotalItemsEntry implements DynamicData {
 	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
-			TotalItemsTable.TableName.toString(),
+			TotalItems.TableName.toString(),
 			"*",
-			TotalItemsTable.PlayerId + " = " + playerId
+			TotalItems.PlayerId + " = " + playerId
 		);
 		
-		if(results.isEmpty()) QueryUtils.insert(TotalItemsTable.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalItems.TableName.toString(), getValues());
 		else {
-			dropped = results.get(0).getValueAsInteger(TotalItemsTable.Dropped.toString());
-			pickedUp = results.get(0).getValueAsInteger(TotalItemsTable.PickedUp.toString());
+			dropped = results.get(0).getValueAsInteger(TotalItems.Dropped.toString());
+			pickedUp = results.get(0).getValueAsInteger(TotalItems.PickedUp.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData() {
 		return QueryUtils.update(
-			TotalItemsTable.TableName.toString(),
+			TotalItems.TableName.toString(),
 			getValues(),
-			TotalItemsTable.PlayerId + " = " + playerId,
-			TotalItemsTable.MaterialId + " = " + itemStack.getTypeId()
+			TotalItems.PlayerId + " = " + playerId,
+			TotalItems.MaterialId + " = " + itemStack.getTypeId()
 		);
 	}
 	
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(TotalItemsTable.PlayerId.toString(), playerId);
-		map.put(TotalItemsTable.MaterialId.toString(), itemStack.getTypeId());
-		map.put(TotalItemsTable.Dropped.toString(), dropped);
-		map.put(TotalItemsTable.PickedUp.toString(), pickedUp);
+		map.put(TotalItems.PlayerId.toString(), playerId);
+		map.put(TotalItems.MaterialId.toString(), itemStack.getTypeId());
+		map.put(TotalItems.Dropped.toString(), dropped);
+		map.put(TotalItems.PickedUp.toString(), pickedUp);
 		return map;
 	}
 	

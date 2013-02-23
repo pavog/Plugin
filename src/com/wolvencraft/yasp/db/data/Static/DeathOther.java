@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.PlayersDeathTable;
+import com.wolvencraft.yasp.db.tables.Static.DetailedDeathPlayers;
 import com.wolvencraft.yasp.util.Util;
 
 public class DeathOther implements StaticData {
@@ -30,19 +30,19 @@ public class DeathOther implements StaticData {
 
 	@Override
 	public boolean pushData() {
-		return QueryUtils.insert(PlayersDeathTable.TableName.toString(), getValues());
+		return QueryUtils.insert(DetailedDeathPlayers.TableName.toString(), getValues());
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(PlayersDeathTable.PlayerId.toString(), playerId);
-		map.put(PlayersDeathTable.Cause.toString(), deathCause);
-		map.put(PlayersDeathTable.World.toString(), location.getWorld().getName());
-		map.put(PlayersDeathTable.XCoord.toString(), location.getBlockX());
-		map.put(PlayersDeathTable.YCoord.toString(), location.getBlockY());
-		map.put(PlayersDeathTable.ZCoord.toString(), location.getBlockZ());
-		map.put(PlayersDeathTable.Timestamp.toString(), timestamp);
+		map.put(DetailedDeathPlayers.PlayerId.toString(), playerId);
+		map.put(DetailedDeathPlayers.Cause.toString(), deathCause);
+		map.put(DetailedDeathPlayers.World.toString(), location.getWorld().getName());
+		map.put(DetailedDeathPlayers.XCoord.toString(), location.getBlockX());
+		map.put(DetailedDeathPlayers.YCoord.toString(), location.getBlockY());
+		map.put(DetailedDeathPlayers.ZCoord.toString(), location.getBlockZ());
+		map.put(DetailedDeathPlayers.Timestamp.toString(), timestamp);
 		return map;
 	}
 

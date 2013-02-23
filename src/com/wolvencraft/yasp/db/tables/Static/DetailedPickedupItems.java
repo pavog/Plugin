@@ -1,19 +1,19 @@
 package com.wolvencraft.yasp.db.tables.Static;
 
+public enum DetailedPickedupItems implements _StaticTable {
 
-public enum PlayersDeathTable implements StaticTable {
-
-	TableName("detailed_pvp"),
-	DeathId("pdeathID"),
+	TableName("detailed_pickedup_items"),
+	
+	EntryId("detailed_pickedup_items_id"),
+	MaterialId("material_id"),
 	PlayerId("player_id"),
-	Cause("cause"),
 	World("world"),
 	XCoord("x"),
 	YCoord("y"),
 	ZCoord("z"),
 	Timestamp("time");
 	
-	PlayersDeathTable (String columnName) {
+	DetailedPickedupItems(String columnName) {
 		this.columnName = columnName;
 	}
 	

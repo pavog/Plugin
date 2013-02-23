@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.TotalDeathsTable;
+import com.wolvencraft.yasp.db.tables.Dynamic.TotalDeathPlayers;
 
 /**
  * Represents the total number of times a player died of a particular cause.<br />
@@ -31,34 +31,34 @@ public class TotalDeathsEntry implements DynamicData {
 	@Override
 	public void fetchData() {
 		List<DBEntry> results = QueryUtils.select(
-			TotalDeathsTable.TableName.toString(),
+			TotalDeathPlayers.TableName.toString(),
 			"*",
-			TotalDeathsTable.PlayerId + " = " + playerId,
-			TotalDeathsTable.Cause + " = " + cause.name()
+			TotalDeathPlayers.PlayerId + " = " + playerId,
+			TotalDeathPlayers.Cause + " = " + cause.name()
 		);
 		
-		if(results.isEmpty()) QueryUtils.insert(TotalDeathsTable.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalDeathPlayers.TableName.toString(), getValues());
 		else {
-			times = results.get(0).getValueAsInteger(TotalDeathsTable.Times.toString());
+			times = results.get(0).getValueAsInteger(TotalDeathPlayers.Times.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData() {
 		return QueryUtils.update(
-			TotalDeathsTable.TableName.toString(),
+			TotalDeathPlayers.TableName.toString(),
 			getValues(),
-			TotalDeathsTable.PlayerId + " = " + playerId,
-			TotalDeathsTable.Cause + " = " + cause.name()
+			TotalDeathPlayers.PlayerId + " = " + playerId,
+			TotalDeathPlayers.Cause + " = " + cause.name()
 		);
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(TotalDeathsTable.PlayerId.toString(), playerId);
-		map.put(TotalDeathsTable.Cause.toString(), cause.name());
-		map.put(TotalDeathsTable.Times.toString(), times);
+		map.put(TotalDeathPlayers.PlayerId.toString(), playerId);
+		map.put(TotalDeathPlayers.Cause.toString(), cause.name());
+		map.put(TotalDeathPlayers.Times.toString(), times);
 		return map;
 	}
 	

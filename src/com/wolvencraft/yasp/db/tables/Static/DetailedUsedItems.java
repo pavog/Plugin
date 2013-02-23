@@ -1,18 +1,19 @@
 package com.wolvencraft.yasp.db.tables.Static;
 
-public enum BlocksPlacedTable implements StaticTable {
+public enum DetailedUsedItems implements _StaticTable {
+
+	TableName("detailed_used_items"),
 	
-	TableName("detailed_blocks_placed"),
-	PlacedBlockId("bplacedID"),
+	ItemUseId("detailed_used_items_id"),
 	MaterialId("material_id"),
 	PlayerId("player_id"),
 	World("world"),
 	XCoord("x"),
 	YCoord("y"),
 	ZCoord("z"),
-	Timestamp("time");
+	Times("times");
 	
-	BlocksPlacedTable(String columnName) {
+	DetailedUsedItems(String columnName) {
 		this.columnName = columnName;
 	}
 	

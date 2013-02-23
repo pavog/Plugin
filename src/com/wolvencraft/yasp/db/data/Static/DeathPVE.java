@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.PVETable;
+import com.wolvencraft.yasp.db.tables.Static.DetailedPVEKills;
 import com.wolvencraft.yasp.util.Util;
 
 public class DeathPVE implements StaticData {
@@ -35,22 +35,22 @@ public class DeathPVE implements StaticData {
 	
 	@Override
 	public boolean pushData() {
-		return QueryUtils.insert(PVETable.TableName.toString(), getValues());
+		return QueryUtils.insert(DetailedPVEKills.TableName.toString(), getValues());
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(PVETable.PlayerID.toString(), playerId);
-		map.put(PVETable.CreatureID.toString(), creatureType);
-		map.put(PVETable.MaterialID.toString(), weapon.getTypeId());
-		if(playerKilled) map.put(PVETable.PlayerKilled.toString(), "Y");
-		else map.put(PVETable.PlayerKilled.toString(), "N");
-		map.put(PVETable.World.toString(), location.getWorld().getName());
-		map.put(PVETable.XCoord.toString(), location.getBlockX());
-		map.put(PVETable.YCoord.toString(), location.getBlockY());
-		map.put(PVETable.ZCoord.toString(), location.getBlockZ());
-		map.put(PVETable.Timestamp.toString(), timestamp);
+		map.put(DetailedPVEKills.PlayerID.toString(), playerId);
+		map.put(DetailedPVEKills.CreatureId.toString(), creatureType);
+		map.put(DetailedPVEKills.MaterialId.toString(), weapon.getTypeId());
+		if(playerKilled) map.put(DetailedPVEKills.PlayerKilled.toString(), "Y");
+		else map.put(DetailedPVEKills.PlayerKilled.toString(), "N");
+		map.put(DetailedPVEKills.World.toString(), location.getWorld().getName());
+		map.put(DetailedPVEKills.XCoord.toString(), location.getBlockX());
+		map.put(DetailedPVEKills.YCoord.toString(), location.getBlockY());
+		map.put(DetailedPVEKills.ZCoord.toString(), location.getBlockZ());
+		map.put(DetailedPVEKills.Timestamp.toString(), timestamp);
 		return map;
 	}
 

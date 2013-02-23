@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.PlayersLogTable;
+import com.wolvencraft.yasp.db.tables.Static.DetailedLogPlayers;
 import com.wolvencraft.yasp.util.Util;
 
 public class PlayerLog implements StaticData {
@@ -32,19 +32,19 @@ public class PlayerLog implements StaticData {
 	@Override
 	public boolean pushData() {
 		if(onHold && refresh()) return false;
-		return QueryUtils.insert(PlayersLogTable.TableName.toString(), getValues());
+		return QueryUtils.insert(DetailedLogPlayers.TableName.toString(), getValues());
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(PlayersLogTable.PlayerId.toString(), playerId);
-		map.put(PlayersLogTable.LoggedIn.toString(), login);
-		map.put(PlayersLogTable.LoggedOut.toString(), logout);
-		map.put(PlayersLogTable.World.toString(), location.getWorld().getName());
-		map.put(PlayersLogTable.XCoord.toString(), location.getBlockX());
-		map.put(PlayersLogTable.YCoord.toString(), location.getBlockY());
-		map.put(PlayersLogTable.ZCoord.toString(), location.getBlockZ());
+		map.put(DetailedLogPlayers.PlayerId.toString(), playerId);
+		map.put(DetailedLogPlayers.LoggedIn.toString(), login);
+		map.put(DetailedLogPlayers.LoggedOut.toString(), logout);
+		map.put(DetailedLogPlayers.World.toString(), location.getWorld().getName());
+		map.put(DetailedLogPlayers.XCoord.toString(), location.getBlockX());
+		map.put(DetailedLogPlayers.YCoord.toString(), location.getBlockY());
+		map.put(DetailedLogPlayers.ZCoord.toString(), location.getBlockZ());
 		return map;
 	}
 

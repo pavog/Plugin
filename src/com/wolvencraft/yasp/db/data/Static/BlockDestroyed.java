@@ -8,7 +8,7 @@ import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.BlocksDestroyedTable;
+import com.wolvencraft.yasp.db.tables.Static.DetailedDestroyedBlocks;
 import com.wolvencraft.yasp.util.Util;
 
 public class BlockDestroyed implements StaticData {
@@ -27,15 +27,15 @@ public class BlockDestroyed implements StaticData {
 
 	@Override
 	public boolean pushData() {
-		return QueryUtils.insert(BlocksDestroyedTable.TableName.toString(), getValues());
+		return QueryUtils.insert(DetailedDestroyedBlocks.TableName.toString(), getValues());
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(BlocksDestroyedTable.PlayerId.toString(), playerId);
-		map.put(BlocksDestroyedTable.MaterialId.toString(), materialData.getItemTypeId());
-		map.put(BlocksDestroyedTable.Timestamp.toString(), timestamp);
+		map.put(DetailedDestroyedBlocks.PlayerId.toString(), playerId);
+		map.put(DetailedDestroyedBlocks.MaterialId.toString(), materialData.getItemTypeId());
+		map.put(DetailedDestroyedBlocks.Timestamp.toString(), timestamp);
 		return map;
 	}
 	

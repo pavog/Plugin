@@ -2,17 +2,18 @@ package com.wolvencraft.yasp.db.tables.Dynamic;
 
 
 
-public enum PlayersDistanceTable implements DynamicTable {
+public enum DistancePlayers implements _DynamicTable {
 	
-	TableName("players_distance"),
-	DistanceId("distID"),
+	TableName("distance_players"),
+	
+	DistanceId("distance_player_id"),
 	PlayerId("player_id"),
 	Foot("foot"),
 	Boat("boat"),
 	Minecart("minecart"),
 	Pig("pig");
 	
-	PlayersDistanceTable(String columnName) {
+	DistancePlayers(String columnName) {
 		this.columnName = columnName;
 	}
 	

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.ItemsDroppedTable;
+import com.wolvencraft.yasp.db.tables.Static.DetailedDroppedItems;
 import com.wolvencraft.yasp.util.Util;
 
 public class ItemDropped implements StaticData {
@@ -30,19 +30,19 @@ public class ItemDropped implements StaticData {
 	
 	@Override
 	public boolean pushData() {
-		return QueryUtils.insert(ItemsDroppedTable.TableName.toString(), getValues());
+		return QueryUtils.insert(DetailedDroppedItems.TableName.toString(), getValues());
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(ItemsDroppedTable.PlayerId.toString(), playerId);
-		map.put(ItemsDroppedTable.MaterialId.toString(), itemStack.getTypeId());
-		map.put(ItemsDroppedTable.World.toString(), location.getWorld().getName());
-		map.put(ItemsDroppedTable.XCoord.toString(), location.getBlockX());
-		map.put(ItemsDroppedTable.YCoord.toString(), location.getBlockY());
-		map.put(ItemsDroppedTable.ZCoord.toString(), location.getBlockZ());
-		map.put(ItemsDroppedTable.Timestamp.toString(), timestamp);
+		map.put(DetailedDroppedItems.PlayerId.toString(), playerId);
+		map.put(DetailedDroppedItems.MaterialId.toString(), itemStack.getTypeId());
+		map.put(DetailedDroppedItems.World.toString(), location.getWorld().getName());
+		map.put(DetailedDroppedItems.XCoord.toString(), location.getBlockX());
+		map.put(DetailedDroppedItems.YCoord.toString(), location.getBlockY());
+		map.put(DetailedDroppedItems.ZCoord.toString(), location.getBlockZ());
+		map.put(DetailedDroppedItems.Timestamp.toString(), timestamp);
 		return map;
 	}
 

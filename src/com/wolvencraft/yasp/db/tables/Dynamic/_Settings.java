@@ -1,13 +1,13 @@
 package com.wolvencraft.yasp.db.tables.Dynamic;
 
 
-public enum SettingsTable implements DynamicTable {
+public enum _Settings implements _DynamicTable {
 	
 	TableName("settings"),
 	Key("key"),
 	Value("value");
 	
-	SettingsTable(String columnName) {
+	_Settings(String columnName) {
 		this.columnName = columnName;
 	}
 	

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.PVPTable;
+import com.wolvencraft.yasp.db.tables.Static.DetailedPVPKills;
 import com.wolvencraft.yasp.util.Util;
 
 public class DeathPVP implements StaticData {
@@ -32,20 +32,20 @@ public class DeathPVP implements StaticData {
 	
 	@Override
 	public boolean pushData() {
-		return QueryUtils.insert(PVPTable.TableName.toString(), getValues());
+		return QueryUtils.insert(DetailedPVPKills.TableName.toString(), getValues());
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(PVPTable.PlayerID.toString(), killerId);
-		map.put(PVPTable.VictimID.toString(), victimId);
-		map.put(PVPTable.MaterialID.toString(), weapon.getTypeId());
-		map.put(PVPTable.World.toString(), location.getWorld().getName());
-		map.put(PVPTable.XCoord.toString(), location.getBlockX());
-		map.put(PVPTable.YCoord.toString(), location.getBlockY());
-		map.put(PVPTable.ZCoord.toString(), location.getBlockZ());
-		map.put(PVPTable.Timestamp.toString(), timestamp);
+		map.put(DetailedPVPKills.PlayerID.toString(), killerId);
+		map.put(DetailedPVPKills.VictimID.toString(), victimId);
+		map.put(DetailedPVPKills.MaterialID.toString(), weapon.getTypeId());
+		map.put(DetailedPVPKills.World.toString(), location.getWorld().getName());
+		map.put(DetailedPVPKills.XCoord.toString(), location.getBlockX());
+		map.put(DetailedPVPKills.YCoord.toString(), location.getBlockY());
+		map.put(DetailedPVPKills.ZCoord.toString(), location.getBlockZ());
+		map.put(DetailedPVPKills.Timestamp.toString(), timestamp);
 		return map;
 	}
 

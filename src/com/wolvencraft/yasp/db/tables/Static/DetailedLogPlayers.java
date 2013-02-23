@@ -1,9 +1,10 @@
 package com.wolvencraft.yasp.db.tables.Static;
 
-public enum PlayersLogTable implements StaticTable {
+public enum DetailedLogPlayers implements _StaticTable {
 	
 	TableName("detailed_players_log"),
-	LogId("logID"),
+	
+	EntryId("logID"),
 	PlayerId("player_id"),
 	LoggedIn("logged_in"),
 	LoggedOut("logged_out"),
@@ -12,7 +13,7 @@ public enum PlayersLogTable implements StaticTable {
 	YCoord("y"),
 	ZCoord("z");
 	
-	PlayersLogTable(String columnName) {
+	DetailedLogPlayers(String columnName) {
 		this.columnName = columnName;
 	}
 	
