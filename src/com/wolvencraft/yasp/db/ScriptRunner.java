@@ -1,13 +1,6 @@
 package com.wolvencraft.yasp.db;
 
-/* http://code.google.com/p/mybatis/source/browse/trunk/src/main/java/org/apache/ibatis/jdbc/ScriptRunner.java
- * r4535 - Jan 5, 2012
- */
-/* Added the ability to change the delimiter so you can run scripts that 
- * contain stored procedures.
- * - ChaseHQ
- */
-/*
+/* 
  *    Copyright 2009-2011 The MyBatis Team
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +14,15 @@ package com.wolvencraft.yasp.db;
  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
+ *    
+ *    Changelog:
+ *    
+ *    Cut down on unused code and generally optimized for desired tasks.
+ *    - bitWolfy
+ *    
+ *    Added the ability to change the delimiter so you can run scripts that 
+ *    contain stored procedures.
+ *    - ChaseHQ
  */
 
 import java.io.BufferedReader;
@@ -38,7 +40,6 @@ import com.wolvencraft.yasp.db.exceptions.RuntimeSQLException;
 public class ScriptRunner {
 
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
-
 	private static final String DEFAULT_DELIMITER = ";";
 
 	private Connection connection;
@@ -56,39 +57,21 @@ public class ScriptRunner {
 
 	public ScriptRunner(Connection connection) {
 		this.connection = connection;
+		
+		autoCommit = false;
+		stopOnError = true;
+		sendFullScript = false;
+		removeCRs = true;
 	}
 
-	public void setStopOnError(boolean stopOnError) {
-		this.stopOnError = stopOnError;
-	}
-
-	public void setAutoCommit(boolean autoCommit) {
-		this.autoCommit = autoCommit;
-	}
-
-	public void setSendFullScript(boolean sendFullScript) {
-		this.sendFullScript = sendFullScript;
-	}
-
-	public void setRemoveCRs(boolean removeCRs) {
-		this.removeCRs = removeCRs;
-	}
-
-	public void setLogWriter(PrintWriter logWriter) {
-		this.logWriter = logWriter;
-	}
-
-	public void setErrorLogWriter(PrintWriter errorLogWriter) {
-		this.errorLogWriter = errorLogWriter;
-	}
-
-	public void setDelimiter(String delimiter) {
-		this.delimiter = delimiter;
-	}
-
-	public void setFullLineDelimiter(boolean fullLineDelimiter) {
-		this.fullLineDelimiter = fullLineDelimiter;
-	}
+	public void setStopOnError(boolean stopOnError) { this.stopOnError = stopOnError; }
+	public void setAutoCommit(boolean autoCommit) { this.autoCommit = autoCommit; }
+	public void setSendFullScript(boolean sendFullScript) { this.sendFullScript = sendFullScript; }
+	public void setRemoveCRs(boolean removeCRs) { this.removeCRs = removeCRs; }
+	public void setLogWriter(PrintWriter logWriter) { this.logWriter = logWriter; }
+	public void setErrorLogWriter(PrintWriter errorLogWriter) { this.errorLogWriter = errorLogWriter; }
+	public void setDelimiter(String delimiter) { this.delimiter = delimiter; }
+	public void setFullLineDelimiter(boolean fullLineDelimiter) { this.fullLineDelimiter = fullLineDelimiter; }
 
 	public void runScript(Reader reader) throws RuntimeSQLException {
 		this.setAutoCommit();
@@ -103,7 +86,7 @@ public class ScriptRunner {
 			this.rollbackConnection();
 		}
 	}
-
+	
 	private void executeFullScript(Reader reader) throws RuntimeSQLException {
 		StringBuilder script = new StringBuilder();
 		try {
@@ -121,7 +104,7 @@ public class ScriptRunner {
 			throw new RuntimeSQLException(message, e);
 		}
 	}
-
+	
 	private void executeLineByLine(Reader reader) throws RuntimeSQLException {
 		StringBuilder command = new StringBuilder();
 		try {
@@ -138,20 +121,16 @@ public class ScriptRunner {
 			throw new RuntimeSQLException(message, e);
 		}
 	}
-
+	
 	public void closeConnection() {
-		try {
-			this.connection.close();
-		} catch (Exception e) {
-			// ignore
-		}
+		try { this.connection.close(); }
+		catch (Exception e) { }
 	}
-
+	
 	private void setAutoCommit() throws RuntimeSQLException {
 		try {
-			if (this.autoCommit != this.connection.getAutoCommit()) {
+			if (this.autoCommit != this.connection.getAutoCommit())
 				this.connection.setAutoCommit(this.autoCommit);
-			}
 		} catch (Throwable t) {
 			throw new RuntimeSQLException("Could not set AutoCommit to " + this.autoCommit + ". Cause: " + t, t);
 		}
@@ -159,9 +138,8 @@ public class ScriptRunner {
 
 	private void commitConnection() throws RuntimeSQLException {
 		try {
-			if (!this.connection.getAutoCommit()) {
+			if (!this.connection.getAutoCommit())
 				this.connection.commit();
-			}
 		} catch (Throwable t) {
 			throw new RuntimeSQLException("Could not commit transaction. Cause: " + t, t);
 		}
@@ -169,16 +147,14 @@ public class ScriptRunner {
 
 	private void rollbackConnection() {
 		try {
-			if (!this.connection.getAutoCommit()) {
+			if (!this.connection.getAutoCommit())
 				this.connection.rollback();
-			}
-		} catch (Throwable t) {
-			// ignore
-		}
+		} catch (Throwable t) { }
 	}
 
 	private void checkForMissingLineTerminator(StringBuilder command) throws RuntimeSQLException {
-		if (command != null && command.toString().trim().length() > 0) throw new RuntimeSQLException("Line missing end-of-line terminator (" + this.delimiter + ") => " + command);
+		if (command != null && command.toString().trim().length() > 0)
+			throw new RuntimeSQLException("Line missing end-of-line terminator (" + this.delimiter + ") => " + command);
 	}
 
 	private StringBuilder handleLine(StringBuilder command, String line) throws SQLException, UnsupportedEncodingException {

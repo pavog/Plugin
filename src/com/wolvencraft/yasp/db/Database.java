@@ -68,12 +68,6 @@ public class Database {
 				InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/stats_v" + remoteVersion + ".sql");
 				if (is == null) throw new DatabaseConnectionException("Unable to patch the database to v." + remoteVersion);
 				ScriptRunner sr = new ScriptRunner(connection);
-				sr.setLogWriter(null);
-				sr.setErrorLogWriter(null);
-				sr.setAutoCommit(false);
-				sr.setStopOnError(true);
-				sr.setSendFullScript(false);
-				sr.setRemoveCRs(true);
 				try {sr.runScript(new InputStreamReader(is)); }
 				catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + remoteVersion, e); }
 			}
