@@ -57,6 +57,7 @@ public class StatsPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Bukkit.getScheduler().cancelAllTasks();
+		DataCollector.clear();
 	}
 	
 	public static StatsPlugin getInstance() 		{ return plugin; }
