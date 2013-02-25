@@ -35,6 +35,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.exceptions.RuntimeSQLException;
 
 public class ScriptRunner {
@@ -44,11 +45,6 @@ public class ScriptRunner {
 
 	private Connection connection;
 
-	private boolean stopOnError;
-	private boolean autoCommit;
-	private boolean sendFullScript;
-	private boolean removeCRs;
-
 	private PrintWriter logWriter = new PrintWriter(System.out);
 	private PrintWriter errorLogWriter = new PrintWriter(System.err);
 
@@ -57,99 +53,51 @@ public class ScriptRunner {
 
 	public ScriptRunner(Connection connection) {
 		this.connection = connection;
-		
-		autoCommit = false;
-		stopOnError = true;
-		sendFullScript = false;
-		removeCRs = true;
 	}
 
-	public void setStopOnError(boolean stopOnError) { this.stopOnError = stopOnError; }
-	public void setAutoCommit(boolean autoCommit) { this.autoCommit = autoCommit; }
-	public void setSendFullScript(boolean sendFullScript) { this.sendFullScript = sendFullScript; }
-	public void setRemoveCRs(boolean removeCRs) { this.removeCRs = removeCRs; }
-	public void setLogWriter(PrintWriter logWriter) { this.logWriter = logWriter; }
-	public void setErrorLogWriter(PrintWriter errorLogWriter) { this.errorLogWriter = errorLogWriter; }
 	public void setDelimiter(String delimiter) { this.delimiter = delimiter; }
 	public void setFullLineDelimiter(boolean fullLineDelimiter) { this.fullLineDelimiter = fullLineDelimiter; }
 
 	public void runScript(Reader reader) throws RuntimeSQLException {
-		this.setAutoCommit();
+		try { if (this.connection.getAutoCommit()) this.connection.setAutoCommit(false); }
+		catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
 
 		try {
-			if (this.sendFullScript) {
-				this.executeFullScript(reader);
-			} else {
-				this.executeLineByLine(reader);
+			StringBuilder command = new StringBuilder();
+			try {
+				BufferedReader lineReader = new BufferedReader(reader);
+				String line = "";
+				String dbName = StatsPlugin.getSettings().getDatabaseName();
+				String dbPrefix = StatsPlugin.getSettings().getTablePrefix();
+				while ((line = lineReader.readLine()) != null) {
+					line = line.replace("$dbname", dbName);
+					line = line.replace("$prefix", dbPrefix);
+					command = this.handleLine(command, line);
+				}
+				this.commitConnection();
+				this.checkForMissingLineTerminator(command);
+			} catch (Exception e) {
+				String message = "Error executing: " + command + ".  Cause: " + e;
+				this.printlnError(message);
+				throw new RuntimeSQLException(message, e);
 			}
-		} finally {
-			this.rollbackConnection();
 		}
-	}
-	
-	private void executeFullScript(Reader reader) throws RuntimeSQLException {
-		StringBuilder script = new StringBuilder();
-		try {
-			BufferedReader lineReader = new BufferedReader(reader);
-			String line;
-			while ((line = lineReader.readLine()) != null) {
-				script.append(line);
-				script.append(ScriptRunner.LINE_SEPARATOR);
-			}
-			this.executeStatement(script.toString());
-			this.commitConnection();
-		} catch (Exception e) {
-			String message = "Error executing: " + script + ".  Cause: " + e;
-			this.printlnError(message);
-			throw new RuntimeSQLException(message, e);
-		}
-	}
-	
-	private void executeLineByLine(Reader reader) throws RuntimeSQLException {
-		StringBuilder command = new StringBuilder();
-		try {
-			BufferedReader lineReader = new BufferedReader(reader);
-			String line;
-			while ((line = lineReader.readLine()) != null) {
-				command = this.handleLine(command, line);
-			}
-			this.commitConnection();
-			this.checkForMissingLineTerminator(command);
-		} catch (Exception e) {
-			String message = "Error executing: " + command + ".  Cause: " + e;
-			this.printlnError(message);
-			throw new RuntimeSQLException(message, e);
-		}
+		finally { this.rollbackConnection(); }
 	}
 	
 	public void closeConnection() {
 		try { this.connection.close(); }
 		catch (Exception e) { }
 	}
-	
-	private void setAutoCommit() throws RuntimeSQLException {
-		try {
-			if (this.autoCommit != this.connection.getAutoCommit())
-				this.connection.setAutoCommit(this.autoCommit);
-		} catch (Throwable t) {
-			throw new RuntimeSQLException("Could not set AutoCommit to " + this.autoCommit + ". Cause: " + t, t);
-		}
-	}
 
 	private void commitConnection() throws RuntimeSQLException {
-		try {
-			if (!this.connection.getAutoCommit())
-				this.connection.commit();
-		} catch (Throwable t) {
-			throw new RuntimeSQLException("Could not commit transaction. Cause: " + t, t);
-		}
+		try { this.connection.commit(); }
+		catch (Throwable t) { throw new RuntimeSQLException("Could not commit transaction. Cause: " + t, t); }
 	}
 
 	private void rollbackConnection() {
-		try {
-			if (!this.connection.getAutoCommit())
-				this.connection.rollback();
-		} catch (Throwable t) { }
+		try { this.connection.rollback(); }
+		catch (Throwable t) { }
 	}
 
 	private void checkForMissingLineTerminator(StringBuilder command) throws RuntimeSQLException {
@@ -159,7 +107,7 @@ public class ScriptRunner {
 
 	private StringBuilder handleLine(StringBuilder command, String line) throws SQLException, UnsupportedEncodingException {
 		String trimmedLine = line.trim();
-		if (trimmedLine.toLowerCase().startsWith("delimiter")) { // Support changing of the delimiter in the SQL.
+		if (trimmedLine.toLowerCase().startsWith("delimiter")) {
 			this.setDelimiter(trimmedLine.substring(10));
 		} else if (this.lineIsComment(trimmedLine)) {
 			this.println(trimmedLine);
@@ -188,19 +136,10 @@ public class ScriptRunner {
 		boolean hasResults = false;
 		Statement statement = this.connection.createStatement();
 		String sql = command;
-		if (this.removeCRs) {
-			sql = sql.replaceAll("\r\n", "\n");
-		}
-		if (this.stopOnError) {
-			hasResults = statement.execute(sql);
-		} else {
-			try {
-				hasResults = statement.execute(sql);
-			} catch (SQLException e) {
-				String message = "Error executing: " + command + ".  Cause: " + e;
-				this.printlnError(message);
-			}
-		}
+		sql = sql.replaceAll("\r\n", "\n");
+		
+		hasResults = statement.execute(sql);
+		
 		this.printResults(statement, hasResults);
 		try {
 			statement.close();

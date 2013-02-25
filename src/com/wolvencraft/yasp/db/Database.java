@@ -35,8 +35,8 @@ public class Database {
 		}
 		
 		Class.forName("com.mysql.jdbc.Driver");
-		connectToDB();
-		patchDB();
+		connect();
+		patch();
 
 		instance = this;
 	}
@@ -45,7 +45,7 @@ public class Database {
 	 * Connects to the remote database according to the data stored in the configuration
 	 * @throws DatabaseConnectionException Thrown if an error occurs while connecting to the database
 	 */
-	private void connectToDB() throws DatabaseConnectionException {
+	private void connect() throws DatabaseConnectionException {
 		try {
 			Settings settings = StatsPlugin.getSettings();
 			this.connection = DriverManager.getConnection(settings.getConnectionPath(), settings.getDatabaseUsername(), settings.getDatabasePassword());
@@ -56,7 +56,7 @@ public class Database {
 	 * Patches the remote database to the latest version
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
-	private void patchDB() throws DatabaseConnectionException {
+	private void patch() throws DatabaseConnectionException {
 		Settings settings = StatsPlugin.getSettings();
 		int remoteVersion = settings.getRemoteVersion();
 		int currentVersion = settings.getLatestVersion();
@@ -89,7 +89,7 @@ public class Database {
 			else {
 				Message.log(Level.WARNING, "Attempting to re-connect to the database");
 				try {
-					connectToDB();
+					connect();
 					Message.log("Connection re-established. No data is lost.");
 					return true;
 				} catch (DatabaseConnectionException e) {
