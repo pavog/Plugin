@@ -280,31 +280,6 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_settings` (
 
 
 -- -----------------------------------------------------
--- Table `$dbname`.`$prefix_total_use_items`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_total_use_items` ;
-
-CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_use_items` (
-  `total_items_use_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `player_id` INT NOT NULL ,
-  `times` INT(10) NOT NULL ,
-  PRIMARY KEY (`total_items_use_id`, `material_id`, `player_id`) ,
-  INDEX `fk_player_id9_idx` (`player_id` ASC) ,
-  INDEX `fk_material_id5_idx` (`material_id` ASC) ,
-  CONSTRAINT `fk_player_id9`
-    FOREIGN KEY (`player_id` )
-    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id5`
-    FOREIGN KEY (`material_id` )
-    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION);
-
-
--- -----------------------------------------------------
 -- Table `$dbname`.`$prefix_detailed_pve_kills`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pve_kills` ;
@@ -379,6 +354,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_items` (
   `player_id` INT NOT NULL ,
   `dropped` INT UNSIGNED NULL ,
   `picked_up` INT UNSIGNED NULL ,
+  `used` INT UNSIGNED NULL ,
   PRIMARY KEY (`total_items_id`, `material_id`, `player_id`) ,
   INDEX `fk_player_id10_idx` (`player_id` ASC) ,
   INDEX `fk_material_id6_idx` (`material_id` ASC) ,
