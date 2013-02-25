@@ -11,7 +11,7 @@ public enum DetailedUsedItems implements _DetailedData {
 	XCoord("x"),
 	YCoord("y"),
 	ZCoord("z"),
-	Times("times");
+	Timestamp("time");
 	
 	DetailedUsedItems(String columnName) {
 		this.columnName = columnName;
