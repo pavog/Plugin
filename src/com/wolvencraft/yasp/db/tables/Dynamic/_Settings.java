@@ -1,6 +1,5 @@
 package com.wolvencraft.yasp.db.tables.Dynamic;
 
-
 public enum _Settings implements _DynamicTable {
 	
 	TableName("settings"),

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.wolvencraft.yasp.StatsPlugin;
+
 /**
  * Database object wrapper; provides additional methods for simpler fetching and pushing data.<br />
  * All methods are applied to the currently running instance of the Database
@@ -19,8 +21,8 @@ public class QueryUtils {
 	 * @param sql SQL query
 	 * @return <b>true</b> if the sync is successful, <b>false</b> otherwise
 	 */
-	public static void pushData(String sql) {
-		Database.getInstance().pushData(sql);
+	public static boolean pushData(String sql) {
+		return Database.getInstance().pushData(sql);
 	}
 	
 	/**
@@ -34,29 +36,8 @@ public class QueryUtils {
 	}
 	
 	/**
-	 * Fetches the version number from the database
-	 * @return Version number, or <b>null</b> if it does not exist
-	 */
-	public static int getDatabaseVersion() {
-		List<DBEntry> results = Database.getInstance().fetchData("SELECT dbVersion FROM config");
-		if(results == null) return 0;
-		return Integer.parseInt(results.get(0).getValue(""));
-	}
-	
-	/**
-	 * Confirms that the player is tracked (has an entry in the players table in the database)
-	 * @param username Username of the checked player
-	 * @return <b>true</b> if the user is tracked, <b>false</b> otherwise
-	 */
-	public static boolean isPlayerRegistered(String username) {
-		List<DBEntry> results = Database.getInstance().fetchData("SELECT name FROM players WHERE name = '" + username + "'");
-		if(results.isEmpty()) return false;
-		return true;
-	}
-	
-	/**
 	 * Builds a SELECT query based on arguments provided
-	 * @param table Database table to select from
+	 * @param table Database table to select from (without prefix)
 	 * @param subject The columns that should be selected from the table
 	 * @param condition Conditions that should apply to columns
 	 * @return <b>String</b> SELECT query
@@ -68,23 +49,23 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += str;
 		}
-		query = "SELECT " + subject + " FROM " + table + " WHERE " + conditions;
+		query = "SELECT " + subject + " FROM " + StatsPlugin.getSettings().getTablePrefix() + table + " WHERE " + conditions;
 		return query;
 	}
 	
 	/**
 	 * Builds a SELECT query based on arguments provided
-	 * @param table Database table to select from
+	 * @param table Database table to select from (without prefix)
 	 * @param subject The columns that should be selected from the table
 	 * @return <b>String</b> SELECT query
 	 */
 	public static String buildSelectQuery(String table, String subject) {
-		return "SELECT " + subject + " FROM " + table;
+		return "SELECT " + subject + " FROM " + StatsPlugin.getSettings().getTablePrefix() + table;
 	}
 	
 	/**
 	 * Builds and runs a SELECT query based on arguments provided
-	 * @param table Database table to select from
+	 * @param table Database table to select from (without prefix)
 	 * @param subject The columns that should be selected from the table
 	 * @param condition Conditions that should apply to columns
 	 * @return Data from the remote database
@@ -95,7 +76,7 @@ public class QueryUtils {
 	
 	/**
 	 * Builds and runs a SELECT query based on arguments provided
-	 * @param table Database table to select from
+	 * @param table Database table to select from (without prefix)
 	 * @param subject The columns that should be selected from the table
 	 * @return Data from the remote database
 	 */
@@ -105,7 +86,7 @@ public class QueryUtils {
 	
 	/**
 	 * Builds an INSERT query based on arguments provided
-	 * @param table Database table to insert into
+	 * @param table Database table to insert into (without prefix)
 	 * @param valueMap Map of column names and values that are to be inserted into the database
 	 * @return <b>String</b> INSERT query
 	 */
@@ -123,13 +104,13 @@ public class QueryUtils {
 			values += pairs.getValue().toString();
 			it.remove();
 		}
-		query = "INSERT INTO " + table + " (" + fields + ")  VALUES (" + values + ")";
+		query = "INSERT INTO " + StatsPlugin.getSettings().getTablePrefix() + table + " (" + fields + ")  VALUES (" + values + ")";
 		return query;
 	}
 	
 	/**
 	 * Builds and runs an INSERT query based on arguments provided
-	 * @param table Database table to insert into
+	 * @param table Database table to insert into (without prefix)
 	 * @param valueMap Map of column names and values that are to be inserted into the database
 	 * @return <b>true</b> if the insertion was successful, <b>false</b> if an error occurred
 	 */
@@ -139,7 +120,7 @@ public class QueryUtils {
 	
 	/**
 	 * Builds an UPDATE query based on arguments provided
-	 * @param table Database table to update
+	 * @param table Database table to update (without prefix)
 	 * @param valueMap  Map of column names and values that are to be updated in the database
 	 * @param condition Conditions that should apply to columns
 	 * @return <b>String</b> UPDATE query
@@ -163,13 +144,13 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += str;
 		}
-		query = "UPDATE " + table + " (" + fields + ")  SET (" + values + ") WHERE " + conditions;
+		query = "UPDATE " + StatsPlugin.getSettings().getTablePrefix() + table + " (" + fields + ")  SET (" + values + ") WHERE " + conditions;
 		return query;
 	}
 	
 	/**
 	 * Builds and runs an UPDATE query based on arguments provided
-	 * @param table Database table to update
+	 * @param table Database table to update (without prefix)
 	 * @param valueMap  Map of column names and values that are to be updated in the database
 	 * @param condition Conditions that should apply to columns
 	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred

@@ -28,6 +28,8 @@ public class Settings implements DynamicData {
 		dbport = plugin.getConfig().getInt("database.port");
 		dbname = plugin.getConfig().getString("database.name");
 		
+		dbprefix = plugin.getConfig().getString("database.prefix");
+		
 		dbconnect = "jdbc:mysql://" + dbhost + ":" + dbport + "/" + dbname;
 		
 		dbuser = plugin.getConfig().getString("database.user");
@@ -51,6 +53,8 @@ public class Settings implements DynamicData {
 	private String dbname;
 	private String dbuser;
 	private String dbpass;
+	
+	private String dbprefix;
 	
 	private String dbconnect;
 	private String logPrefix;
@@ -87,6 +91,7 @@ public class Settings implements DynamicData {
 	public String getDatabaseName() { return dbname; }
 	public String getDatabaseUsername() { return dbuser; }
 	public String getDatabasePassword() { return dbpass; }
+	public String getTablePrefix() { return dbprefix; }
 	public String getLogPrefix() { return logPrefix; }
 	
 	public int getRemoteVersion() { return remoteVersion; }

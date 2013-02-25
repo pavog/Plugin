@@ -1,7 +1,5 @@
 package com.wolvencraft.yasp.db.tables.Dynamic;
 
-
-
 public enum DistancePlayers implements _DynamicTable {
 	
 	TableName("distance_players"),

@@ -11,5 +11,6 @@ database:
   host: 'localhost'
   port: 3306
   name: ''
+  prefix: 'yasp_'
   user: 'root'
   pass: 'root'

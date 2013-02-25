@@ -1,7 +1,5 @@
 package com.wolvencraft.yasp.db.tables.Dynamic;
 
-
-
 public enum Players implements _DynamicTable {
 	
 	TableName("players"),

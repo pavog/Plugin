@@ -1,6 +1,5 @@
 package com.wolvencraft.yasp.db.tables.Dynamic;
 
-
 public enum TotalDeathPlayers implements _DynamicTable {
 	
 	TableName("total_death_players"),
