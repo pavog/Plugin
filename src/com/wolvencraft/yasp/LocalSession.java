@@ -14,7 +14,7 @@ import com.wolvencraft.yasp.db.data.ItemsDataHolder;
 import com.wolvencraft.yasp.db.data.PVEDataHolder;
 import com.wolvencraft.yasp.db.data.PVPDataHolder;
 import com.wolvencraft.yasp.db.data.Detailed.*;
-import com.wolvencraft.yasp.db.data.Dynamic.*;
+import com.wolvencraft.yasp.db.data.normal.*;
 
 public class LocalSession {
 	
@@ -166,7 +166,12 @@ public class LocalSession {
 		detailedData.add(new DetailedPickedupItemsData(getPlayer(), itemStack));
 	}
 	
+	/**
+	 * Registers item use with all corresponding statistics trackers
+	 * @param itemStack Stack of items in question
+	 */
 	public void itemUse(ItemStack itemStack) {
+		totalItems.get(playerId,  itemStack).addUsed();
 		detailedData.add(new DetailedUsedItemsData(getPlayer(), itemStack));
 	}
 	
