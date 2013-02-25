@@ -14,8 +14,6 @@ import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPickedupItemsData implements _DetailedData {
 	
-	private boolean onHold = false;
-	
 	public DetailedPickedupItemsData(Player player, ItemStack itemStack) {
 		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
 		this.itemStack = itemStack;
@@ -31,7 +29,10 @@ public class DetailedPickedupItemsData implements _DetailedData {
 	
 	@Override
 	public boolean pushData() {
-		return QueryUtils.insert(DetailedPickedupItems.TableName.toString(), getValues());
+		return QueryUtils.insert(
+			DetailedPickedupItems.TableName.toString(),
+			getValues()
+		);
 	}
 
 	@Override
@@ -46,14 +47,5 @@ public class DetailedPickedupItemsData implements _DetailedData {
 		map.put(DetailedPickedupItems.Timestamp.toString(), timestamp);
 		return map;
 	}
-
-	@Override
-	public boolean isOnHold() { return onHold; }
-
-	@Override
-	public void setOnHold(boolean onHold) { this.onHold = onHold; }
-
-	@Override
-	public boolean refresh() { return onHold; }
 
 }

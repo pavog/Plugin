@@ -2,7 +2,7 @@ package com.wolvencraft.yasp.db.data.normal;
 
 import java.util.Map;
 
-public interface DynamicData {
+public interface _NormalData {
 	
 	/**
 	 * Performs a database operation to fetch the data from the remote database.<br />

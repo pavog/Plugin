@@ -9,13 +9,13 @@ import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal._Settings;
 
 /**
- * Settings is a unique DataHolder. Unlike other holders, Settins is never synched back to the database.<br />
+ * Settings is a unique DataHolder. Unlike other holders, Settings are never synchronized back to the database.<br />
  * Any changes made to it will remain local. Additionally, the configuration pulled from config.yml is also stored in this DataHolder.<br />
  * If there is no connection to the database, or the plugin is running for the first time, the default settings will be used.
  * @author bitWolfy
  *
  */
-public class Settings implements DynamicData {
+public class Settings implements _NormalData {
 	
 	/**
 	 * Default constructor. Takes in the plugin instance as argument.

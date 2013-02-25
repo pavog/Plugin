@@ -81,11 +81,15 @@ public class LocalSession {
 	public Player getPlayer() { return Bukkit.getServer().getPlayer(playerName); }
 	
 	/**
-	 * <b>PlayerData</b> wrapper.<br />
-	 * Returns the player's online status
+	 * Returns the player's current online status.
 	 * @return <b>true</b> if online, <b>false</b> otherwise
 	 */
-	public boolean getOnline() { return playerData.getOnline(); }
+	public boolean getOnline() {
+		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+			if(player.getPlayerListName().equals(playerName)) return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * <b>PlayersDistances</b> wrapper.<br />
@@ -120,14 +124,15 @@ public class LocalSession {
 	 */
 	public void login() {
 		playerData.setOnline(true);
-		detailedData.add(new DetailedLogPlayersData(getPlayer(), playerId));
+		detailedData.add(new DetailedLogPlayersData(getPlayer(), playerId, true));
 	}
 	
 	/**
 	 * Registers player logging out with all corresponding statistics trackers.
 	 */
 	public void logout() {
-		playerData.setOnline(true);
+		playerData.setOnline(false);
+		detailedData.add(new DetailedLogPlayersData(getPlayer(), playerId, false));
 	}
 	
 	/**

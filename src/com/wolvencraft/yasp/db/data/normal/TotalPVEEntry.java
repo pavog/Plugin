@@ -14,7 +14,7 @@ import com.wolvencraft.yasp.db.tables.normal.TotalPVEKills;
  * @author bitWolfy
  *
  */
-public class TotalPVEEntry implements DynamicData {
+public class TotalPVEEntry implements _NormalData {
 	
 	/**
 	 * <b>Default constructor</b><br />

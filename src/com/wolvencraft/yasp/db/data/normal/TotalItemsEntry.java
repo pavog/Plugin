@@ -16,7 +16,7 @@ import com.wolvencraft.yasp.db.tables.normal.TotalItems;
  * @author bitWolfy
  *
  */
-public class TotalItemsEntry implements DynamicData {
+public class TotalItemsEntry implements _NormalData {
 	
 	/**
 	 * Default constructor. Takes in the Player object and the MaterialData of the block

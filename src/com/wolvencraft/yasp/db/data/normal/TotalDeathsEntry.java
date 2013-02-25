@@ -16,7 +16,7 @@ import com.wolvencraft.yasp.db.tables.normal.TotalDeathPlayers;
  * @author bitWolfy
  *
  */
-public class TotalDeathsEntry implements DynamicData {
+public class TotalDeathsEntry implements _NormalData {
 	
 	public TotalDeathsEntry(int playerId, DamageCause cause) {
 		this.playerId = playerId;

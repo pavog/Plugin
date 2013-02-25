@@ -33,7 +33,7 @@ public class DetailedDataHolder {
 	
 	public void sync() {
 		for(_DetailedData entry : get()) {
-			if(entry.pushData() && entry.refresh()) remove(entry);
+			if(entry.pushData()) remove(entry);
 		}
 	}
 }

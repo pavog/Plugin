@@ -22,22 +22,4 @@ public interface _DetailedData {
 	 * @return Map of column names and values
 	 */
 	public Map<String, Object> getValues();
-	
-	/**
-	 * Checks if the data point is held due to some of the fields being incomplete
-	 * @return  <b>true</b> if the holder can be removed, <b>false</b> if it is on hold
-	 */
-	public boolean isOnHold();
-	
-	/**
-	 * Set the hold status of the data point
-	 * @param onHold Should the data be held back during the database sync
-	 */
-	public void setOnHold(boolean onHold);
-	
-	/**
-	 * Refreshes the data point to see if it should still be held back
-	 * @return <b>true</b> if the holder has been synchronized and can be removed, <b>false</b> if it is on hold
-	 */
-	public boolean refresh();
 }

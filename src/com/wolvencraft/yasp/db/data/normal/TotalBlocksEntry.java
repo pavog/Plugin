@@ -10,7 +10,7 @@ import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.TotalBlocks;
 
-public class TotalBlocksEntry implements DynamicData {
+public class TotalBlocksEntry implements _NormalData {
 	
 	public TotalBlocksEntry(int playerId, MaterialData material) {
 		

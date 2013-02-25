@@ -14,7 +14,7 @@ import com.wolvencraft.yasp.db.tables.normal.DistancePlayers;
  * @author bitWolfy
  *
  */
-public class PlayerDistances implements DynamicData {
+public class PlayerDistances implements _NormalData {
 	
 	/**
 	 * Default constructor. Takes in the Player object and pulls corresponding values from the remote database.<br />

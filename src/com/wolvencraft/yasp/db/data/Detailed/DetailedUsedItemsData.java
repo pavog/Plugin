@@ -14,8 +14,6 @@ import com.wolvencraft.yasp.util.Util;
 
 public class DetailedUsedItemsData implements _DetailedData {
 	
-	private boolean onHold = false;
-	
 	public DetailedUsedItemsData(Player player, ItemStack itemStack) {
 		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
 		this.itemStack = itemStack;
@@ -30,7 +28,10 @@ public class DetailedUsedItemsData implements _DetailedData {
 	
 	@Override
 	public boolean pushData() {
-		return QueryUtils.insert(DetailedUsedItems.TableName.toString(), getValues());
+		return QueryUtils.insert(
+			DetailedUsedItems.TableName.toString(),
+			getValues()
+		);
 	}
 
 	@Override
@@ -45,14 +46,5 @@ public class DetailedUsedItemsData implements _DetailedData {
 		map.put(DetailedUsedItems.Timestamp.toString(), timestamp);
 		return map;
 	}
-
-	@Override
-	public boolean isOnHold() { return onHold; }
-
-	@Override
-	public void setOnHold(boolean onHold) { this.onHold = onHold; }
-
-	@Override
-	public boolean refresh() { return onHold; }
 
 }

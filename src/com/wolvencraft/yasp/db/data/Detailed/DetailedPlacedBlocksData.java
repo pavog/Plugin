@@ -13,8 +13,6 @@ import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPlacedBlocksData implements _DetailedData {
 	
-	private boolean onHold = false;
-	
 	public DetailedPlacedBlocksData(Player player, MaterialData materialData) {
 		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
 		this.materialData = materialData;
@@ -27,7 +25,10 @@ public class DetailedPlacedBlocksData implements _DetailedData {
 
 	@Override
 	public boolean pushData() {
-		return QueryUtils.insert(DetailedPlacedBlocks.TableName.toString(), getValues());
+		return QueryUtils.insert(
+			DetailedPlacedBlocks.TableName.toString(),
+			getValues()
+		);
 	}
 
 	@Override
@@ -38,14 +39,5 @@ public class DetailedPlacedBlocksData implements _DetailedData {
 		map.put(DetailedPlacedBlocks.Timestamp.toString(), timestamp);
 		return map;
 	}
-
-	@Override
-	public boolean isOnHold() { return onHold; }
-
-	@Override
-	public void setOnHold(boolean onHold) { this.onHold = onHold; }
-
-	@Override
-	public boolean refresh() { return onHold; }
 	
 }

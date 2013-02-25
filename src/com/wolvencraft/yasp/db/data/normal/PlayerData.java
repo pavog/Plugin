@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.Players;
+import com.wolvencraft.yasp.util.Util;
 
 /**
  * Represents the Player data that is being tracked.<br />
@@ -17,7 +18,7 @@ import com.wolvencraft.yasp.db.tables.normal.Players;
  * @author bitWolfy
  *
  */
-public class PlayerData implements DynamicData {
+public class PlayerData implements _NormalData {
 	
 	public PlayerData (Player player, String playerName, int playerId) {
 		this.playerId = playerId;
@@ -71,8 +72,8 @@ public class PlayerData implements DynamicData {
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(Players.Name.toString(), playerName);
-		if(online) map.put(Players.Online.toString(), "Y");
-		else map.put(Players.Online.toString(), "N");
+		if(online) map.put(Players.Online.toString(), 1);
+		else map.put(Players.Online.toString(), 0);
 		map.put(Players.ExperiencePercent.toString(), expPercent);
 		map.put(Players.ExperienceTotal.toString(), expTotal);
 		map.put(Players.ExperienceLevel.toString(), expLevel);
@@ -86,14 +87,14 @@ public class PlayerData implements DynamicData {
 	public static Map<String, Object> getDefaultValues(String name) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(Players.Name.toString(), name);
-		map.put(Players.Online.toString(), "Y");
-		map.put(Players.ExperiencePercent.toString(), "0");
-		map.put(Players.ExperienceTotal.toString(), "0");
-		map.put(Players.ExperienceLevel.toString(), "0");
-		map.put(Players.FoodLevel.toString(), "0");
-		map.put(Players.HealthLevel.toString(), "0");
-		map.put(Players.FirstLogin.toString(), "");
-		map.put(Players.Logins.toString(), "");
+		map.put(Players.Online.toString(), 1);
+		map.put(Players.ExperiencePercent.toString(), 0);
+		map.put(Players.ExperienceTotal.toString(), 0);
+		map.put(Players.ExperienceLevel.toString(), 0);
+		map.put(Players.FoodLevel.toString(), 0);
+		map.put(Players.HealthLevel.toString(), 0);
+		map.put(Players.FirstLogin.toString(), Util.getCurrentTime());
+		map.put(Players.Logins.toString(), 0);
 		return map;
 	}
 	
@@ -113,12 +114,6 @@ public class PlayerData implements DynamicData {
 		this.foodLevel = player.getFoodLevel();
 		this.healthLevel = player.getHealth();
 	}
-	
-	/**
-	 * Returns the online status of the player
-	 * @return <b>true</b> if the player is online, <b>false</b> otherwise
-	 */
-	public boolean getOnline() { return online; }
 	
 	/**
 	 * Changes the online status of the player

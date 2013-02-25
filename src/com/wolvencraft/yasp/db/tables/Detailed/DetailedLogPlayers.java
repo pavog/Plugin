@@ -2,12 +2,12 @@ package com.wolvencraft.yasp.db.tables.detailed;
 
 public enum DetailedLogPlayers implements _DetailedData {
 	
-	TableName("detailed_players_log"),
+	TableName("detailed_log_players"),
 	
 	EntryId("logID"),
 	PlayerId("player_id"),
-	LoggedIn("logged_in"),
-	LoggedOut("logged_out"),
+	Time("time"),
+	IsLogin("is_login"),
 	World("world"),
 	XCoord("x"),
 	YCoord("y"),
