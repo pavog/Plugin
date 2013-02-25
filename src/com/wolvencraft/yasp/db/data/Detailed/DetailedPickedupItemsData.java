@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Static;
+package com.wolvencraft.yasp.db.data.Detailed;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,16 +9,17 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.DetailedDroppedItems;
+import com.wolvencraft.yasp.db.tables.Detailed.DetailedPickedupItems;
 import com.wolvencraft.yasp.util.Util;
 
-public class ItemDropped implements StaticData {
+public class DetailedPickedupItemsData implements _DetailedData {
 	
 	private boolean onHold = false;
 	
-	public ItemDropped(Player player, ItemStack itemStack) {
+	public DetailedPickedupItemsData(Player player, ItemStack itemStack) {
 		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
 		this.itemStack = itemStack;
+		this.itemStack.setAmount(1);
 		this.location = player.getLocation();
 		this.timestamp = Util.getCurrentTime().getTime();
 	}
@@ -30,19 +31,19 @@ public class ItemDropped implements StaticData {
 	
 	@Override
 	public boolean pushData() {
-		return QueryUtils.insert(DetailedDroppedItems.TableName.toString(), getValues());
+		return QueryUtils.insert(DetailedPickedupItems.TableName.toString(), getValues());
 	}
 
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(DetailedDroppedItems.PlayerId.toString(), playerId);
-		map.put(DetailedDroppedItems.MaterialId.toString(), itemStack.getTypeId());
-		map.put(DetailedDroppedItems.World.toString(), location.getWorld().getName());
-		map.put(DetailedDroppedItems.XCoord.toString(), location.getBlockX());
-		map.put(DetailedDroppedItems.YCoord.toString(), location.getBlockY());
-		map.put(DetailedDroppedItems.ZCoord.toString(), location.getBlockZ());
-		map.put(DetailedDroppedItems.Timestamp.toString(), timestamp);
+		map.put(DetailedPickedupItems.PlayerId.toString(), playerId);
+		map.put(DetailedPickedupItems.MaterialId.toString(), itemStack.getTypeId());
+		map.put(DetailedPickedupItems.World.toString(), location.getWorld().getName());
+		map.put(DetailedPickedupItems.XCoord.toString(), location.getBlockX());
+		map.put(DetailedPickedupItems.YCoord.toString(), location.getBlockY());
+		map.put(DetailedPickedupItems.ZCoord.toString(), location.getBlockZ());
+		map.put(DetailedPickedupItems.Timestamp.toString(), timestamp);
 		return map;
 	}
 

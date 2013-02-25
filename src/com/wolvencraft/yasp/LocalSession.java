@@ -13,8 +13,8 @@ import com.wolvencraft.yasp.db.data.DeathsDataHolder;
 import com.wolvencraft.yasp.db.data.ItemsDataHolder;
 import com.wolvencraft.yasp.db.data.PVEDataHolder;
 import com.wolvencraft.yasp.db.data.PVPDataHolder;
+import com.wolvencraft.yasp.db.data.Detailed.*;
 import com.wolvencraft.yasp.db.data.Dynamic.*;
-import com.wolvencraft.yasp.db.data.Static.*;
 
 public class LocalSession {
 	
@@ -120,7 +120,7 @@ public class LocalSession {
 	 */
 	public void login() {
 		playerData.setOnline(true);
-		detailedData.add(new PlayerLog(getPlayer(), playerId));
+		detailedData.add(new DetailedLogPlayersData(getPlayer(), playerId));
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public class LocalSession {
 	 */
 	public void blockBreak(MaterialData materialData) {
 		totalBlocks.get(playerId, materialData).addBroken();
-		detailedData.add(new BlockDestroyed(getPlayer(), materialData));
+		detailedData.add(new DetailedDestroyerdBlocksData(getPlayer(), materialData));
 	}
 	
 	/**
@@ -145,7 +145,7 @@ public class LocalSession {
 	 */
 	public void blockPlace(MaterialData materialData) {
 		totalBlocks.get(playerId, materialData).addPlaced();
-		detailedData.add(new BlockPlaced(getPlayer(), materialData));
+		detailedData.add(new DetailedPlacedBlocksData(getPlayer(), materialData));
 	}
 	
 	/**
@@ -154,7 +154,7 @@ public class LocalSession {
 	 */
 	public void itemDrop(ItemStack itemStack) {
 		totalItems.get(playerId, itemStack).addDropped();
-		detailedData.add(new ItemDropped(getPlayer(), itemStack));
+		detailedData.add(new DetailedDroppedItemsData(getPlayer(), itemStack));
 	}
 	
 	/**
@@ -163,7 +163,7 @@ public class LocalSession {
 	 */
 	public void itemPickUp(ItemStack itemStack) {
 		totalItems.get(playerId, itemStack).addPickedUp();
-		detailedData.add(new ItemPickedUp(getPlayer(), itemStack));
+		detailedData.add(new DetailedPickedupItemsData(getPlayer(), itemStack));
 	}
 	
 	/**
@@ -175,7 +175,7 @@ public class LocalSession {
 	public void playerKilledPlayer(Player killer, Player victim, ItemStack weapon) {
 		int victimId = DataCollector.getCachedPlayerId(victim.getPlayerListName());
 		totalPVP.get(playerId, victimId).addTimes();
-		detailedData.add(new DeathPVP(killer, victim, weapon));
+		detailedData.add(new DetailedPVPKillsData(killer, victim, weapon));
 	}
 	
 	/**
@@ -187,7 +187,7 @@ public class LocalSession {
 	public void playerKilledCreature(Player killer, Creature victim, ItemStack weapon) {
 		String victimId = victim.getType().name();
 		totalPVE.get(playerId, victimId).addCreatureDeaths();
-		detailedData.add(new DeathPVE(killer, victim.getType(), weapon, false));
+		detailedData.add(new DetailedPVEKillsData(killer, victim.getType(), weapon, false));
 	}
 	
 	/**
@@ -199,7 +199,7 @@ public class LocalSession {
 	public void creatureKilledPlayer(Creature killer, Player victim, ItemStack weapon) {
 		String killerId = killer.getType().name();
 		totalPVE.get(playerId, killerId).addPlayerDeaths();
-		detailedData.add(new DeathPVE(victim, killer.getType(), weapon, true));
+		detailedData.add(new DetailedPVEKillsData(victim, killer.getType(), weapon, true));
 	}
 	
 	/**
@@ -209,6 +209,6 @@ public class LocalSession {
 	 */
 	public void playerDied(Player player, DamageCause cause) {
 		totalDeaths.get(playerId, cause).addTimes();
-		detailedData.add(new DeathOther(player, cause));
+		detailedData.add(new DetailedDeathPlayersData(player, cause));
 	}
 }

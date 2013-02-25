@@ -1,10 +1,10 @@
-package com.wolvencraft.yasp.db.tables.Static;
+package com.wolvencraft.yasp.db.tables.Detailed;
 
-public enum DetailedPickedupItems implements _StaticTable {
-
-	TableName("detailed_pickedup_items"),
+public enum DetailedDestroyedBlocks implements _DetailedData {
 	
-	EntryId("detailed_pickedup_items_id"),
+	TableName("detailed_destroyed_blocks"),
+	
+	EntryId("detailed_destroyed_blocks_id"),
 	MaterialId("material_id"),
 	PlayerId("player_id"),
 	World("world"),
@@ -13,7 +13,7 @@ public enum DetailedPickedupItems implements _StaticTable {
 	ZCoord("z"),
 	Timestamp("time");
 	
-	DetailedPickedupItems(String columnName) {
+	DetailedDestroyedBlocks(String columnName) {
 		this.columnName = columnName;
 	}
 	

@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Static;
+package com.wolvencraft.yasp.db.data.Detailed;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import java.util.Map;
  * @author bitWolfy
  *
  */
-public interface StaticData {
+public interface _DetailedData {
 	
 	/**
 	 * Explicitly pushes data to the remote database.<br />

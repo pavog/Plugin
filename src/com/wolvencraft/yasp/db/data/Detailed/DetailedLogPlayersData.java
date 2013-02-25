@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Static;
+package com.wolvencraft.yasp.db.data.Detailed;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,14 +8,14 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.DetailedLogPlayers;
+import com.wolvencraft.yasp.db.tables.Detailed.DetailedLogPlayers;
 import com.wolvencraft.yasp.util.Util;
 
-public class PlayerLog implements StaticData {
+public class DetailedLogPlayersData implements _DetailedData {
 	
 	private boolean onHold = true;
 	
-	public PlayerLog(Player player, int playerId) {
+	public DetailedLogPlayersData(Player player, int playerId) {
 		playerName = player.getPlayerListName();
 		this.playerId = playerId;
 		this.login = Util.getCurrentTime().getTime();

@@ -1,6 +1,6 @@
-package com.wolvencraft.yasp.db.tables.Static;
+package com.wolvencraft.yasp.db.tables.Detailed;
 
-public enum DetailedLogPlayers implements _StaticTable {
+public enum DetailedLogPlayers implements _DetailedData {
 	
 	TableName("detailed_players_log"),
 	

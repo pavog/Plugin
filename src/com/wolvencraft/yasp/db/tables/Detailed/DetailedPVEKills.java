@@ -1,6 +1,6 @@
-package com.wolvencraft.yasp.db.tables.Static;
+package com.wolvencraft.yasp.db.tables.Detailed;
 
-public enum DetailedPVEKills implements _StaticTable {
+public enum DetailedPVEKills implements _DetailedData {
 
 	TableName("detailed_pve_kills"),
 	

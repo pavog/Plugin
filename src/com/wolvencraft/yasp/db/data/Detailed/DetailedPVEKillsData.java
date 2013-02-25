@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Static;
+package com.wolvencraft.yasp.db.data.Detailed;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,14 +10,14 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.DetailedPVEKills;
+import com.wolvencraft.yasp.db.tables.Detailed.DetailedPVEKills;
 import com.wolvencraft.yasp.util.Util;
 
-public class DeathPVE implements StaticData {
+public class DetailedPVEKillsData implements _DetailedData {
 	
 	private boolean onHold = false;
 	
-	public DeathPVE(Player player, EntityType creatureType, ItemStack weapon, boolean playerKilled) {
+	public DetailedPVEKillsData(Player player, EntityType creatureType, ItemStack weapon, boolean playerKilled) {
 		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
 		this.creatureType = creatureType;
 		this.weapon = weapon;

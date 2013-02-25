@@ -1,7 +1,7 @@
-package com.wolvencraft.yasp.db.tables.Static;
+package com.wolvencraft.yasp.db.tables.Detailed;
 
 
-public enum DetailedDeathPlayers implements _StaticTable {
+public enum DetailedDeathPlayers implements _DetailedData {
 
 	TableName("detailed_death_players"),
 	

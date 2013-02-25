@@ -1,6 +1,6 @@
-package com.wolvencraft.yasp.db.tables.Static;
+package com.wolvencraft.yasp.db.tables.Detailed;
 
-public enum DetailedUsedItems implements _StaticTable {
+public enum DetailedUsedItems implements _DetailedData {
 
 	TableName("detailed_used_items"),
 	

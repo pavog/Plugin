@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Static;
+package com.wolvencraft.yasp.db.data.Detailed;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,14 +9,14 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Static.DetailedDeathPlayers;
+import com.wolvencraft.yasp.db.tables.Detailed.DetailedDeathPlayers;
 import com.wolvencraft.yasp.util.Util;
 
-public class DeathOther implements StaticData {
+public class DetailedDeathPlayersData implements _DetailedData {
 	
 	private boolean onHold = false;
 	
-	public DeathOther(Player player, DamageCause deathCause) {
+	public DetailedDeathPlayersData(Player player, DamageCause deathCause) {
 		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
 		this.deathCause = deathCause.name();
 		this.location = player.getLocation();

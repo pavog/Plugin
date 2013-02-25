@@ -1,6 +1,6 @@
-package com.wolvencraft.yasp.db.tables.Static;
+package com.wolvencraft.yasp.db.tables.Detailed;
 
-public interface _StaticTable {
+public interface _DetailedData {
 	
 	/**
 	 * Returns the name of the column as specified in the database
