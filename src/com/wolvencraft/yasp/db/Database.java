@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.data.Dynamic.Settings;
+import com.wolvencraft.yasp.db.data.normal.Settings;
 import com.wolvencraft.yasp.db.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.db.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.util.Message;

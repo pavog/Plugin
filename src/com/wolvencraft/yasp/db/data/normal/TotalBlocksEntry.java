@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Dynamic;
+package com.wolvencraft.yasp.db.data.normal;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.TotalBlocks;
+import com.wolvencraft.yasp.db.tables.normal.TotalBlocks;
 
 public class TotalBlocksEntry implements DynamicData {
 	

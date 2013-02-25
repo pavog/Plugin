@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.material.MaterialData;
 
-import com.wolvencraft.yasp.db.data.Dynamic.TotalBlocksEntry;
+import com.wolvencraft.yasp.db.data.normal.TotalBlocksEntry;
 
 public class BlocksDataHolder {
 	

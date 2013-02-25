@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.tables.Dynamic;
+package com.wolvencraft.yasp.db.tables.normal;
 
 public enum Players implements _DynamicTable {
 	

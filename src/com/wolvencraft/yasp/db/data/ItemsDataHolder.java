@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.db.data.Dynamic.TotalItemsEntry;
+import com.wolvencraft.yasp.db.data.normal.TotalItemsEntry;
 
 public class ItemsDataHolder {
 	

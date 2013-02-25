@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.wolvencraft.yasp.db.data.Dynamic.TotalDeathsEntry;
+import com.wolvencraft.yasp.db.data.normal.TotalDeathsEntry;
 
 public class DeathsDataHolder {
 	

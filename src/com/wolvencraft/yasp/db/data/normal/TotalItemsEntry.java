@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Dynamic;
+package com.wolvencraft.yasp.db.data.normal;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic.TotalItems;
+import com.wolvencraft.yasp.db.tables.normal.TotalItems;
 
 /**
  * Represents the total number of items player dropped and picked up.<br />
@@ -29,12 +29,14 @@ public class TotalItemsEntry implements DynamicData {
 		this.itemStack.setAmount(1);
 		this.dropped = 0;
 		this.pickedUp = 0;
+		this.used = 0;
 	}
 	
 	private int playerId;
 	private ItemStack itemStack;
 	private int dropped;
 	private int pickedUp;
+	private int used;
 	
 	@Override
 	public void fetchData() {
@@ -68,6 +70,7 @@ public class TotalItemsEntry implements DynamicData {
 		map.put(TotalItems.MaterialId.toString(), itemStack.getTypeId());
 		map.put(TotalItems.Dropped.toString(), dropped);
 		map.put(TotalItems.PickedUp.toString(), pickedUp);
+		map.put(TotalItems.Used.toString(), used);
 		return map;
 	}
 	
@@ -78,15 +81,20 @@ public class TotalItemsEntry implements DynamicData {
 	public ItemStack getItemStack() { return itemStack; }
 	
 	/**
-	 * Adds the specified number of blocks to the total number of blocks dropped
+	 * Adds the specified number of blocks to the total number of items used
 	 * @param blocks Items to add
 	 */
 	public void addDropped() { dropped++; }
 	
 	/**
-	 * Adds the specified number of blocks to the total number of blocks picked up
+	 * Adds the specified number of blocks to the total number of items used
 	 * @param blocks Items to add
 	 */
 	public void addPickedUp() { pickedUp++; }
-
+	
+	/**
+	 * Adds the specified number of blocks to the total number of items used
+	 * @param blocks Items to add
+	 */
+	public void addUsed() { used++; }
 }

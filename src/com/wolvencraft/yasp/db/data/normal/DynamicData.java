@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Dynamic;
+package com.wolvencraft.yasp.db.data.normal;
 
 import java.util.Map;
 

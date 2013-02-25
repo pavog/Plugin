@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.tables.Dynamic;
+package com.wolvencraft.yasp.db.tables.normal;
 
 
 public enum TotalItems implements _DynamicTable {
@@ -9,7 +9,8 @@ public enum TotalItems implements _DynamicTable {
 	MaterialId("material_id"),
 	PlayerId("player_id"),
 	Dropped("dropped"),
-	PickedUp("picked_up");
+	PickedUp("picked_up"),
+	Used("used");
 	
 	TotalItems(String columnName) {
 		this.columnName = columnName;

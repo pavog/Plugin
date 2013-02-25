@@ -3,7 +3,7 @@ package com.wolvencraft.yasp.db.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wolvencraft.yasp.db.data.Dynamic.TotalPVPEntry;
+import com.wolvencraft.yasp.db.data.normal.TotalPVPEntry;
 
 public class PVPDataHolder {
 	

@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Dynamic;
+package com.wolvencraft.yasp.db.data.normal;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Dynamic._Settings;
+import com.wolvencraft.yasp.db.tables.normal._Settings;
 
 /**
  * Settings is a unique DataHolder. Unlike other holders, Settins is never synched back to the database.<br />
