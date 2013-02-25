@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.tables.Detailed;
+package com.wolvencraft.yasp.db.tables.detailed;
 
 public enum DetailedPVEKills implements _DetailedData {
 

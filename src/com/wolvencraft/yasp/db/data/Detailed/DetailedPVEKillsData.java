@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Detailed;
+package com.wolvencraft.yasp.db.data.detailed;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Detailed.DetailedPVEKills;
+import com.wolvencraft.yasp.db.tables.detailed.DetailedPVEKills;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPVEKillsData implements _DetailedData {

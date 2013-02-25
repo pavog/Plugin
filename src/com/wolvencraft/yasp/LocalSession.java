@@ -13,7 +13,7 @@ import com.wolvencraft.yasp.db.data.DeathsDataHolder;
 import com.wolvencraft.yasp.db.data.ItemsDataHolder;
 import com.wolvencraft.yasp.db.data.PVEDataHolder;
 import com.wolvencraft.yasp.db.data.PVPDataHolder;
-import com.wolvencraft.yasp.db.data.Detailed.*;
+import com.wolvencraft.yasp.db.data.detailed.*;
 import com.wolvencraft.yasp.db.data.normal.*;
 
 public class LocalSession {

@@ -3,7 +3,7 @@ package com.wolvencraft.yasp.db.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wolvencraft.yasp.db.data.Detailed._DetailedData;
+import com.wolvencraft.yasp.db.data.detailed._DetailedData;
 
 public class DetailedDataHolder {
 	

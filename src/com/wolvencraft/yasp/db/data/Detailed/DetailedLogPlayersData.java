@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Detailed;
+package com.wolvencraft.yasp.db.data.detailed;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Detailed.DetailedLogPlayers;
+import com.wolvencraft.yasp.db.tables.detailed.DetailedLogPlayers;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedLogPlayersData implements _DetailedData {

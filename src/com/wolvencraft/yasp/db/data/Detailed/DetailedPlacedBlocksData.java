@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Detailed;
+package com.wolvencraft.yasp.db.data.detailed;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Detailed.DetailedPlacedBlocks;
+import com.wolvencraft.yasp.db.tables.detailed.DetailedPlacedBlocks;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPlacedBlocksData implements _DetailedData {

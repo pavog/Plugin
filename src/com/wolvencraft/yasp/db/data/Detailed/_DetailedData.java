@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Detailed;
+package com.wolvencraft.yasp.db.data.detailed;
 
 import java.util.Map;
 

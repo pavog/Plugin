@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data.Detailed;
+package com.wolvencraft.yasp.db.data.detailed;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Detailed.DetailedDeathPlayers;
+import com.wolvencraft.yasp.db.tables.detailed.DetailedDeathPlayers;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedDeathPlayersData implements _DetailedData {
