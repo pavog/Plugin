@@ -11,66 +11,72 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.data.normal.PlayerData;
+import com.wolvencraft.yasp.db.tables.normal.Players;
 
+/**
+ * Stores collected statistical data until it can be processed and sent to the database
+ * @author bitWolfy
+ *
+ */
 public class DataCollector {
 
 	private static List<LocalSession> sessions;
 	private static Map<String, Integer> players = new HashMap<String, Integer>();
 	
+	/**
+	 * <b>Default constructor.</b><br />
+	 * Initializes an empty list of LocalSessions
+	 */
 	public DataCollector() {
 		sessions = new ArrayList<LocalSession>();
 	}
 	
-	public static void add(LocalSession newSession) {
-		sessions.add(newSession);
-	}
-	
-	public static void add(Player player) {
-		try { sessions.add(new LocalSession(player)); }
-		catch (Exception e) { e.printStackTrace(); }
-	}
-	
+	/**
+	 * Returns all stored sessions
+	 * @return List of stored player sessions
+	 */
 	public static List<LocalSession> get() {
 		List<LocalSession> tempList = new ArrayList<LocalSession>();
 		for(LocalSession session : sessions) tempList.add(session);
 		return tempList;
 	}
 	
-	public static LocalSession get(int playerId) {
-		for(LocalSession session : sessions) {
-			if(session.getPlayerId() == playerId) return session;
-		}
-		return null;
-	}
-	
+	/**
+	 * Returns the LocalSession associated with the specified player.<br />
+	 * If no session is found, it will be created.
+	 * @param player Tracked player
+	 * @return LocalSession associated with the player.
+	 */
 	public static LocalSession get(Player player) {
-		return get(getCachedPlayerId(player.getPlayerListName()));
+		for(LocalSession session : sessions) {
+			if(session.getPlayerName().equals(player.getPlayerListName())) return session;
+		}
+		LocalSession newSession = new LocalSession(player);
+		sessions.add(newSession);
+		return newSession;
 	}
 	
-	public static LocalSession get(String playerName) {
-		return get(getCachedPlayerId(playerName));
-	}
-	
+	/**
+	 * Purges the stored sessions list of all data
+	 */
 	public static void clear() {
 		sessions.clear();
 	}
 	
-	public static void remove(int playerId) {
-		sessions.remove(get(playerId));
-	}
-	
-	public static void remove(String playerName) {
-		sessions.remove(get(playerName));
-	}
-	
-	public static void remove(Player player) {
-		sessions.remove(get(player));
-	}
-	
+	/**
+	 * Removes the specified session
+	 * @param session Session to remove
+	 */
 	public static void remove(LocalSession session) {
 		sessions.remove(session);
 	}
 	
+	/**
+	 * Returns the playerID of the specified player
+	 * @param username Player to look up
+	 * @return <b>int</b> playerID
+	 */
 	public static Integer getCachedPlayerId(String username) {
 		Iterator<Entry<String, Integer>> it = players.entrySet().iterator();
 		while(it.hasNext()) {
@@ -79,12 +85,12 @@ public class DataCollector {
 			it.remove();
 		}
 		int playerId = -1;
-		List<DBEntry> results = QueryUtils.fetchData("SELECT name, player_id FROM players WHERE name = '" + username + "'");
+		List<DBEntry> results = QueryUtils.select(Players.TableName.toString(), Players.Name.toString() +", " + Players.PlayerId.toString(), "name = " + username);
 		if(results.isEmpty()) {
-			QueryUtils.pushData("INSERT name INTO players");
-			List<DBEntry> newResults = QueryUtils.fetchData("SELECT name, player_id FROM players WHERE name = '" + username + "'");
-			playerId = newResults.get(0).getValueAsInteger("player_id");
-		} else playerId = results.get(0).getValueAsInteger("player_id");
+			QueryUtils.insert(Players.TableName.toString(), PlayerData.getDefaultValues(username));
+			List<DBEntry> newResults = QueryUtils.select(Players.TableName.toString(), Players.Name.toString() +", " + Players.PlayerId.toString(), "name = " + username);
+			playerId = newResults.get(0).getValueAsInteger(Players.PlayerId.toString());
+		} else playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
 		players.put(username, playerId);
 		return playerId;
 	}

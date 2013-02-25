@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.wolvencraft.yasp.DataCollector;
-import com.wolvencraft.yasp.LocalSession;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.util.Util;
 
@@ -28,8 +27,6 @@ public class PlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
-		try { DataCollector.add(new LocalSession(player)); }
-		catch (Exception e) { e.printStackTrace(); return; }
 		DataCollector.get(player).login();
 	}
 

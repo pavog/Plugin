@@ -83,6 +83,20 @@ public class PlayerData implements DynamicData {
 		return map;
 	}
 	
+	public static Map<String, Object> getDefaultValues(String name) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put(Players.Name.toString(), name);
+		map.put(Players.Online.toString(), "Y");
+		map.put(Players.ExperiencePercent.toString(), "0");
+		map.put(Players.ExperienceTotal.toString(), "0");
+		map.put(Players.ExperienceLevel.toString(), "0");
+		map.put(Players.FoodLevel.toString(), "0");
+		map.put(Players.HealthLevel.toString(), "0");
+		map.put(Players.FirstLogin.toString(), "");
+		map.put(Players.Logins.toString(), "");
+		return map;
+	}
+	
 	/**
 	 * Fetches the player data from the player, if he is online
 	 */
