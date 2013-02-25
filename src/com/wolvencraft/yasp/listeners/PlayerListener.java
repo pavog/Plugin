@@ -6,6 +6,7 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -56,7 +57,6 @@ public class PlayerListener implements Listener {
 		} else {
 			DataCollector.get(player).addDistanceFoot(distance);
 		}
-		//TODO Movement tracking
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -71,5 +71,13 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).itemDrop(event.getItemDrop().getItemStack());
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerItemUse(FoodLevelChangeEvent event) {
+		if(!(event.getEntity() instanceof Player)) return;
+		Player player = (Player) event.getEntity();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).itemUse(player.getItemInHand());
 	}
 }

@@ -166,6 +166,10 @@ public class LocalSession {
 		detailedData.add(new DetailedPickedupItemsData(getPlayer(), itemStack));
 	}
 	
+	public void itemUse(ItemStack itemStack) {
+		detailedData.add(new DetailedUsedItemsData(getPlayer(), itemStack));
+	}
+	
 	/**
 	 * Registers player death from other player with all corresponding statistics trackers
 	 * @param killer Player who killed the victim
