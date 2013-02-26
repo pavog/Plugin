@@ -21,4 +21,9 @@ public class DBEntry {
 		try { return Integer.parseInt(fields.get(column)); }
 		catch (NumberFormatException e) { return -1; }
 	}
+	
+	public long getValueAsLong(String column) {
+		try { return Long.parseLong(fields.get(column)); }
+		catch (NumberFormatException e) { return -1; }
+	}
 }

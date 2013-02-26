@@ -7,31 +7,58 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.data.normal.PlayerData;
+import com.wolvencraft.yasp.db.data.normal.ServerStatistics;
 import com.wolvencraft.yasp.db.data.normal.Settings;
 import com.wolvencraft.yasp.db.tables.normal.Players;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.Util;
 
 /**
  * Stores collected statistical data until it can be processed and sent to the database
  * @author bitWolfy
  *
  */
-public class DataCollector {
+public class DataCollector implements Runnable {
 
-	private static List<LocalSession> sessions;
-	private static Map<String, Integer> players = new HashMap<String, Integer>();
-	
 	/**
 	 * <b>Default constructor.</b><br />
 	 * Initializes an empty list of LocalSessions
 	 */
 	public DataCollector() {
 		sessions = new ArrayList<LocalSession>();
+		serverStatistics = new ServerStatistics(StatsPlugin.getInstance());
+		
+		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+			if(!Util.isExempt(player)) get(player);
+		}
+	}
+	
+	private static List<LocalSession> sessions;
+	private static ServerStatistics serverStatistics;
+	private static Map<String, Integer> players = new HashMap<String, Integer>();
+
+	@Override
+	public void run() {
+		pushAllData();
+	}
+	
+	/**
+	 * Pushes all data to the database.<br />
+	 * This method is run periodically, as well as on plugin shutdown.
+	 */
+	public static void pushAllData() {
+		for(LocalSession session : get()) {
+			session.pushData();
+			if(session.getOnline() == false) remove(session);
+		}
+		
+		serverStatistics.pushData();
 	}
 	
 	/**
@@ -99,5 +126,22 @@ public class DataCollector {
 		} else playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
 		players.put(username, playerId);
 		return playerId;
+	}
+	
+	/**
+	 * Updates the maximum online players count.<br />
+	 * Wraps around the corresponding <b>ServerStatistics</b> method.
+	 * @param players Maximum players online
+	 */
+	public static void updateMaxPlayersOnline(int players) {
+		serverStatistics.updateMaxPlayers(players);
+	}
+	
+	/**
+	 * Indicates that the plugin is shutting down and registers the current shutdown time.<br />
+	 * Wraps around the corresponding <b>ServerStatistics</b> method.
+	 */
+	public static void pluginShutdown() {
+		serverStatistics.shutdown();
 	}
 }

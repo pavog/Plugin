@@ -280,6 +280,17 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_settings` (
 
 
 -- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_server_statistics`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_server_statistics` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_server_statistics` (
+  `key` VARCHAR(64) NOT NULL ,
+  `value` TEXT NOT NULL ,
+  PRIMARY KEY (`key`) );
+
+
+-- -----------------------------------------------------
 -- Table `$dbname`.`$prefix_detailed_pve_kills`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pve_kills` ;
