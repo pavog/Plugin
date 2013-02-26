@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.data.DetailedDataHolder;
 import com.wolvencraft.yasp.db.data.BlocksDataHolder;
 import com.wolvencraft.yasp.db.data.DeathsDataHolder;
@@ -15,6 +16,7 @@ import com.wolvencraft.yasp.db.data.PVEDataHolder;
 import com.wolvencraft.yasp.db.data.PVPDataHolder;
 import com.wolvencraft.yasp.db.data.detailed.*;
 import com.wolvencraft.yasp.db.data.normal.*;
+import com.wolvencraft.yasp.db.tables.normal.Players;
 
 public class LocalSession {
 	
@@ -116,19 +118,33 @@ public class LocalSession {
 	public void addDistancePig(double distance) { playersDistances.addPigDistance(distance); }
 	
 	/**
-	 * Registers player logging in with all corresponding statistics trackers.
+	 * Registers player logging in with all corresponding statistics trackers.<br />
+	 * Player's online status is updated in the database instantly.
 	 */
 	public void login() {
 		playerData.setOnline(true);
 		detailedData.add(new DetailedLogPlayersData(getPlayer(), playerId, true));
+		QueryUtils.update(
+			Players.TableName.toString(),
+			Players.Online.toString(),
+			1 + "",
+			Players.PlayerId + " = " + playerId
+		);
 	}
 	
 	/**
-	 * Registers player logging out with all corresponding statistics trackers.
+	 * Registers player logging out with all corresponding statistics trackers.<br />
+	 * Player's online status is updated in the database instantly.
 	 */
 	public void logout() {
 		playerData.setOnline(false);
 		detailedData.add(new DetailedLogPlayersData(getPlayer(), playerId, false));
+		QueryUtils.update(
+				Players.TableName.toString(),
+				Players.Online.toString(),
+				0 + "",
+				Players.PlayerId + " = " + playerId
+			);
 	}
 	
 	/**
