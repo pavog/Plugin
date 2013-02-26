@@ -18,10 +18,6 @@ import com.wolvencraft.yasp.db.data.normal.*;
 
 public class LocalSession {
 	
-	public LocalSession() throws Exception {
-		throw new Exception("Attempted to create a session without specifying a player");
-	}
-	
 	public LocalSession(Player player) {
 		this.playerName = player.getPlayerListName();
 		this.playerId = DataCollector.getCachedPlayerId(playerName);

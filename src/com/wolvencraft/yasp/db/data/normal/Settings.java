@@ -72,8 +72,11 @@ public class Settings implements _NormalData {
 	
 	@Override
 	public boolean pushData() {
-		QueryUtils.update(_Settings.TableName.toString(), "version", databaseVersion + "", "key = version");
-		return true;
+		return QueryUtils.update(_Settings.TableName.toString(), "version", databaseVersion + "", "key = version");
+	}
+	
+	public static boolean updateVersion() {
+		return QueryUtils.update(_Settings.TableName.toString(), "version", databaseVersion + "", "key = version");
 	}
 	
 	@Override

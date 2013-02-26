@@ -50,7 +50,17 @@ public class StatsPlugin extends JavaPlugin {
 		new BlockListener(this);
 		new EntityListener(this);
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseSync(), 0L, Settings.getPing());
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				for(LocalSession session : DataCollector.get()) {
+					session.pushData();
+					if(session.getOnline() == false) DataCollector.remove(session);
+				}
+			}
+			
+		}, 0L, Settings.getPing());
 	}
 
 	@Override
