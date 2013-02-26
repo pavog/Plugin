@@ -7,7 +7,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.db.DBEntry;
+import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.Players;
 import com.wolvencraft.yasp.util.Util;
@@ -47,7 +47,7 @@ public class PlayerData implements _NormalData {
 	
 	@Override
 	public void fetchData() {
-		List<DBEntry> results = QueryUtils.select(
+		List<QueryResult> results = QueryUtils.select(
 			Players.TableName.toString(),
 			"*",
 			Players.PlayerId.toString() + " = " + playerId

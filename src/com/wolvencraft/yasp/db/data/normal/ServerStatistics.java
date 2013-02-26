@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.DBEntry;
+import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal._ServerStatistics;
 import com.wolvencraft.yasp.util.Util;
@@ -31,8 +31,8 @@ public class ServerStatistics implements _NormalData {
 	
 	@Override
 	public void fetchData() {
-		List<DBEntry> entries = QueryUtils.select(_ServerStatistics.TableName.toString(), "*");
-		for(DBEntry entry : entries) {
+		List<QueryResult> entries = QueryUtils.select(_ServerStatistics.TableName.toString(), "*");
+		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("first_startup")) firstStartupTime = entry.getValueAsLong("value");
 			else if(entry.getValue("key").equalsIgnoreCase("last_startup")) startupTime = entry.getValueAsLong("value");
 			else if(entry.getValue("key").equalsIgnoreCase("last_shutdown")) shutdownTime = entry.getValueAsLong("value");

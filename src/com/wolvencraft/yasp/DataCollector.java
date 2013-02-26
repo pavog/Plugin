@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.db.DBEntry;
+import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.data.normal.PlayerData;
 import com.wolvencraft.yasp.db.data.normal.ServerStatistics;
@@ -118,10 +118,10 @@ public class DataCollector implements Runnable {
 			it.remove();
 		}
 		int playerId = -1;
-		List<DBEntry> results = QueryUtils.select(Players.TableName.toString(), Players.Name.toString() +", " + Players.PlayerId.toString(), "name = " + username);
+		List<QueryResult> results = QueryUtils.select(Players.TableName.toString(), Players.Name.toString() +", " + Players.PlayerId.toString(), "name = " + username);
 		if(results.isEmpty()) {
 			QueryUtils.insert(Players.TableName.toString(), PlayerData.getDefaultValues(username));
-			List<DBEntry> newResults = QueryUtils.select(Players.TableName.toString(), Players.Name.toString() +", " + Players.PlayerId.toString(), "name = " + username);
+			List<QueryResult> newResults = QueryUtils.select(Players.TableName.toString(), Players.Name.toString() +", " + Players.PlayerId.toString(), "name = " + username);
 			playerId = newResults.get(0).getValueAsInteger(Players.PlayerId.toString());
 		} else playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
 		players.put(username, playerId);

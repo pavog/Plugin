@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.db.DBEntry;
+import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.TotalItems;
 
@@ -40,7 +40,7 @@ public class TotalItemsEntry implements _NormalData {
 	
 	@Override
 	public void fetchData() {
-		List<DBEntry> results = QueryUtils.select(
+		List<QueryResult> results = QueryUtils.select(
 			TotalItems.TableName.toString(),
 			"*",
 			TotalItems.PlayerId + " = " + playerId

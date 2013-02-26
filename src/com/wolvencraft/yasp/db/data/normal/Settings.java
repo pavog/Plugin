@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.DBEntry;
+import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal._Settings;
 
@@ -59,8 +59,8 @@ public class Settings implements _NormalData {
 	
 	@Override
 	public void fetchData() {
-		List<DBEntry> entries = QueryUtils.select(_Settings.TableName.toString(), "*");
-		for(DBEntry entry : entries) {
+		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), "*");
+		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("version")) databaseVersion = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("show_welcome_messages")) showWelcomeMessages = entry.getValueAsBoolean("value");

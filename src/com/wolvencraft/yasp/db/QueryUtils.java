@@ -47,17 +47,17 @@ public class QueryUtils {
 	 * @param sql SQL query
 	 * @return Data from the remote database
 	 */
-	private static List<DBEntry> fetchData(String sql) {
+	private static List<QueryResult> fetchData(String sql) {
 		try {
 			return Database.getInstance().fetchData(sql);
 		} catch (DatabaseConnectionException ex) {
 			Message.log(Level.SEVERE, ex.getMessage());
-			return new ArrayList<DBEntry>();
+			return new ArrayList<QueryResult>();
 		} catch (Exception e) {
 			Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
 			e.printStackTrace();
 			Message.log(Level.SEVERE, "End of error log");
-			return new ArrayList<DBEntry>();
+			return new ArrayList<QueryResult>();
 		}
 	}
 	
@@ -68,7 +68,7 @@ public class QueryUtils {
 	 * @param condition Conditions that should apply to columns
 	 * @return Data from the remote database
 	 */
-	public static List<DBEntry> select(String table, String subject, String... condition) {
+	public static List<QueryResult> select(String table, String subject, String... condition) {
 		String query = "";
 		String conditions = "";
 		for(String str : condition) {
@@ -85,7 +85,7 @@ public class QueryUtils {
 	 * @param subject The columns that should be selected from the table
 	 * @return Data from the remote database
 	 */
-	public static List<DBEntry> select(String table, String subject) {
+	public static List<QueryResult> select(String table, String subject) {
 		String query = "SELECT " + subject + " FROM " + Settings.getTablePrefix() + table;
 		return fetchData(query);
 	}

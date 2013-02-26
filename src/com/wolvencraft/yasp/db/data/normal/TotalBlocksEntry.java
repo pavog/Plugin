@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.bukkit.material.MaterialData;
 
-import com.wolvencraft.yasp.db.DBEntry;
+import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.TotalBlocks;
 
@@ -27,7 +27,7 @@ public class TotalBlocksEntry implements _NormalData {
 	
 	@Override
 	public void fetchData() {
-		List<DBEntry> results = QueryUtils.select(
+		List<QueryResult> results = QueryUtils.select(
 			TotalBlocks.TableName.toString(),
 			"*",
 			TotalBlocks.PlayerId + " = " + playerId

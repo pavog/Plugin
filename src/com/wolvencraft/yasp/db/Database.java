@@ -131,8 +131,8 @@ public class Database {
 	 * @param sql SQL query
 	 * @return Data from the remote database
 	 */
-	public List<DBEntry> fetchData(String sql) {
-		List<DBEntry> colData = new ArrayList<DBEntry>();
+	public List<QueryResult> fetchData(String sql) {
+		List<QueryResult> colData = new ArrayList<QueryResult>();
 
 		Statement statement = null;
 		ResultSet rs = null;
@@ -144,7 +144,7 @@ public class Database {
 				for (int x = 1; x <= rs.getMetaData().getColumnCount(); ++x) {
 					rowToAdd.put(rs.getMetaData().getColumnName(x), rs.getString(x));
 				}
-				colData.add(new DBEntry(rowToAdd));
+				colData.add(new QueryResult(rowToAdd));
 			}
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, sql + " :: Query failed, checking connection... (" + e.getMessage() + ")");

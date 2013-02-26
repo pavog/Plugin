@@ -71,7 +71,7 @@ public class ScriptRunner {
 				String dbPrefix = Settings.getTablePrefix();
 				while ((line = lineReader.readLine()) != null) {
 					line = line.replace("$dbname", dbName);
-					line = line.replace("$prefix", dbPrefix);
+					line = line.replace("$prefix_", dbPrefix);
 					command = this.handleLine(command, line);
 				}
 				this.commitConnection();
