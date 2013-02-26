@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.db.data.normal.Settings;
 
 public class Message {
 	private static Logger logger = StatsPlugin.getInstance().getLogger();
@@ -26,11 +27,11 @@ public class Message {
 	}
 	
 	public static void sendFormattedSuccess(CommandSender sender, String message) {
-		sendFormatted(sender, ChatColor.DARK_GREEN + StatsPlugin.getSettings().getLogPrefix(), message);
+		sendFormatted(sender, ChatColor.DARK_GREEN + Settings.getLogPrefix(), message);
 	}
 
 	public static void sendFormattedError(CommandSender sender, String message) {
-		sendFormatted(sender, ChatColor.DARK_RED + StatsPlugin.getSettings().getLogPrefix(), message);
+		sendFormatted(sender, ChatColor.DARK_RED + Settings.getLogPrefix(), message);
 	}
 	
     /**
@@ -39,7 +40,7 @@ public class Message {
      */
     public static void broadcast(String message) {
         for (Player p : Bukkit.getServer().getOnlinePlayers())
-        	sendFormatted(p, ChatColor.DARK_GREEN + StatsPlugin.getSettings().getLogPrefix(), message);
+        	sendFormatted(p, ChatColor.DARK_GREEN + Settings.getLogPrefix(), message);
         log(Util.parseChatColors(message));
     }
     
@@ -48,7 +49,7 @@ public class Message {
      * @param message Message to be sent
      */
     public static void debug(String message) {
-        if (StatsPlugin.getSettings().getDebug()) log(message);
+        if (Settings.getDebug()) log(message);
     }
     
 	/**

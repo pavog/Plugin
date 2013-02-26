@@ -13,7 +13,6 @@ import com.wolvencraft.yasp.util.Message;
 
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin plugin;
-	private static Settings settings;
 	private Database database;
 	
 	@Override
@@ -22,17 +21,17 @@ public class StatsPlugin extends JavaPlugin {
 
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-		settings = new Settings(this);
+		new Settings(this);
 		
 		try { database = new Database(); }
 		catch (ClassNotFoundException e) {
 			Message.log(Level.SEVERE, "MySQL Driver not found");
-			if (settings.getDebug()) e.printStackTrace();
+			if (Settings.getDebug()) e.printStackTrace();
 			this.setEnabled(false);
 			return;
 		} catch (DatabaseConnectionException e) {
 			Message.log(Level.SEVERE, "Could not connect to the database. Is the plugin configured correctly?");
-			if (settings.getDebug()) e.printStackTrace();
+			if (Settings.getDebug()) e.printStackTrace();
 			this.setEnabled(false);
 			return;
 		}
@@ -51,7 +50,7 @@ public class StatsPlugin extends JavaPlugin {
 		new BlockListener(this);
 		new EntityListener(this);
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseSync(), 0L, settings.getPing());
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseSync(), 0L, Settings.getPing());
 	}
 
 	@Override
@@ -61,5 +60,4 @@ public class StatsPlugin extends JavaPlugin {
 	}
 	
 	public static StatsPlugin getInstance() 		{ return plugin; }
-	public static Settings getSettings()			{ return settings; }
 }

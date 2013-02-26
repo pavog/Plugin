@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.data.normal.PlayerData;
+import com.wolvencraft.yasp.db.data.normal.Settings;
 import com.wolvencraft.yasp.db.tables.normal.Players;
 import com.wolvencraft.yasp.util.Message;
 
@@ -52,13 +53,13 @@ public class DataCollector {
 	public static LocalSession get(Player player) {
 		for(LocalSession session : sessions) {
 			if(session.getPlayerName().equals(player.getPlayerListName())) {
-				if(StatsPlugin.getSettings().getWelcomeMessage() != null) Message.send(player, StatsPlugin.getSettings().getWelcomeMessage());
+				if(Settings.getWelcomeMessage() != null) Message.send(player, Settings.getWelcomeMessage());
 				return session;
 			}
 		}
 		LocalSession newSession = new LocalSession(player);
 		sessions.add(newSession);
-		if(StatsPlugin.getSettings().getFirstJoinMessage() != null) Message.send(player, StatsPlugin.getSettings().getFirstJoinMessage());
+		if(Settings.getFirstJoinMessage() != null) Message.send(player, Settings.getFirstJoinMessage());
 		return newSession;
 	}
 	

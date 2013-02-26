@@ -35,7 +35,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.db.data.normal.Settings;
 import com.wolvencraft.yasp.db.exceptions.RuntimeSQLException;
 
 public class ScriptRunner {
@@ -67,8 +67,8 @@ public class ScriptRunner {
 			try {
 				BufferedReader lineReader = new BufferedReader(reader);
 				String line = "";
-				String dbName = StatsPlugin.getSettings().getDatabaseName();
-				String dbPrefix = StatsPlugin.getSettings().getTablePrefix();
+				String dbName = Settings.getDatabaseName();
+				String dbPrefix = Settings.getTablePrefix();
 				while ((line = lineReader.readLine()) != null) {
 					line = line.replace("$dbname", dbName);
 					line = line.replace("$prefix", dbPrefix);

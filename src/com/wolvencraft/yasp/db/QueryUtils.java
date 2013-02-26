@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.db.data.normal.Settings;
 import com.wolvencraft.yasp.db.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.util.Message;
 
@@ -33,8 +33,10 @@ public class QueryUtils {
 			return false;
 		} catch (Exception e) {
 			Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
-			e.printStackTrace();
-			Message.log(Level.SEVERE, "End of error log");
+			if(Settings.getDebug()) {
+				e.printStackTrace();
+				Message.log(Level.SEVERE, "End of error log");
+			}
 			return false;
 		}
 	}
@@ -73,7 +75,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += str;
 		}
-		query = "SELECT " + subject + " FROM " + StatsPlugin.getSettings().getTablePrefix() + table + " WHERE " + conditions;
+		query = "SELECT " + subject + " FROM " + Settings.getTablePrefix() + table + " WHERE " + conditions;
 		return fetchData(query);
 	}
 	
@@ -84,7 +86,7 @@ public class QueryUtils {
 	 * @return Data from the remote database
 	 */
 	public static List<DBEntry> select(String table, String subject) {
-		String query = "SELECT " + subject + " FROM " + StatsPlugin.getSettings().getTablePrefix() + table;
+		String query = "SELECT " + subject + " FROM " + Settings.getTablePrefix() + table;
 		return fetchData(query);
 	}
 	
@@ -108,7 +110,7 @@ public class QueryUtils {
 			values += pairs.getValue().toString();
 			it.remove();
 		}
-		query = "INSERT INTO " + StatsPlugin.getSettings().getTablePrefix() + table + " (" + fields + ")  VALUES (" + values + ")";
+		query = "INSERT INTO " + Settings.getTablePrefix() + table + " (" + fields + ")  VALUES (" + values + ")";
 		return pushData(query);
 	}
 	
@@ -128,7 +130,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += str;
 		}
-		query = "UPDATE " + StatsPlugin.getSettings().getTablePrefix() + table + " (" + field + ")  SET (" + value + ") WHERE " + conditions;
+		query = "UPDATE " + Settings.getTablePrefix() + table + " (" + field + ")  SET (" + value + ") WHERE " + conditions;
 		return pushData(query);
 	}
 	
@@ -158,7 +160,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += str;
 		}
-		query = "UPDATE " + StatsPlugin.getSettings().getTablePrefix() + table + " (" + fields + ")  SET (" + values + ") WHERE " + conditions;
+		query = "UPDATE " + Settings.getTablePrefix() + table + " (" + fields + ")  SET (" + values + ") WHERE " + conditions;
 		return pushData(query);
 	}
 }

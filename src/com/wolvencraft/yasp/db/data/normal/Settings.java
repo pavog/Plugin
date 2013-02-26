@@ -27,35 +27,35 @@ public class Settings implements _NormalData {
 		
 		logPrefix = plugin.getDescription().getName();
 		
-		this.databaseVersion = 0;
-		this.ping = 120;
-		this.showWelcomeMessages = false;
-		this.welcomeMessage = "The server owner did not configure plugin's database connection properly.";
-		this.showFirstJoinMessages = false;
-		this.firstJoinMessage = "The server owner did not configure plugin's database connection properly.";
+		databaseVersion = 0;
+		ping = 120;
+		showWelcomeMessages = false;
+		welcomeMessage = "The server owner did not configure plugin's database connection properly.";
+		showFirstJoinMessages = false;
+		firstJoinMessage = "The server owner did not configure plugin's database connection properly.";
 		
 		fetchData();
 	}
 	
-	private boolean debug;
+	private static boolean debug;
 	
-	private String dbhost;
-	private int dbport;
-	private String dbname;
-	private String dbuser;
-	private String dbpass;
-	private String dbconnect;
-	private String tablePrefix;
+	private static String dbhost;
+	private static int dbport;
+	private static String dbname;
+	private static String dbuser;
+	private static String dbpass;
+	private static String dbconnect;
+	private static String tablePrefix;
 	
-	private String logPrefix;
+	private static String logPrefix;
 	
-	private int databaseVersion;
+	private static int databaseVersion;
 	
-	private int ping;
-	private boolean showWelcomeMessages;
-	private String welcomeMessage;
-	private boolean showFirstJoinMessages;
-	private String firstJoinMessage;
+	private static int ping;
+	private static boolean showWelcomeMessages;
+	private static String welcomeMessage;
+	private static boolean showFirstJoinMessages;
+	private static String firstJoinMessage;
 	
 	@Override
 	public void fetchData() {
@@ -79,18 +79,18 @@ public class Settings implements _NormalData {
 	@Override
 	public Map<String, Object> getValues() { return null; }
 	
-	public boolean getDebug() { return debug; }
-	public String getConnectionPath() { return dbconnect; }
-	public String getDatabaseName() { return dbname; }
-	public String getDatabaseUsername() { return dbuser; }
-	public String getDatabasePassword() { return dbpass; }
-	public String getTablePrefix() { return tablePrefix; }
-	public String getLogPrefix() { return logPrefix; }
+	public static boolean getDebug() { return debug; }
+	public static String getConnectionPath() { return dbconnect; }
+	public static String getDatabaseName() { return dbname; }
+	public static String getDatabaseUsername() { return dbuser; }
+	public static String getDatabasePassword() { return dbpass; }
+	public static String getTablePrefix() { return tablePrefix; }
+	public static String getLogPrefix() { return logPrefix; }
 	
-	public int getDatabaseVersion() { return databaseVersion; }
+	public static int getDatabaseVersion() { return databaseVersion; }
 	
-	public int getPing() { return ping; }
-	public String getWelcomeMessage() { if(showWelcomeMessages) return welcomeMessage; else return null; }
-	public String getFirstJoinMessage() { if(showFirstJoinMessages) return firstJoinMessage; else return null; }
+	public static int getPing() { return ping; }
+	public static String getWelcomeMessage() { if(showWelcomeMessages) return welcomeMessage; else return null; }
+	public static String getFirstJoinMessage() { if(showFirstJoinMessages) return firstJoinMessage; else return null; }
 	
 }

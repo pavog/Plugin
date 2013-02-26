@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
-import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.data.normal.Settings;
 import com.wolvencraft.yasp.db.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.db.exceptions.RuntimeSQLException;
@@ -47,8 +46,7 @@ public class Database {
 	 */
 	private void connect() throws DatabaseConnectionException {
 		try {
-			Settings settings = StatsPlugin.getSettings();
-			this.connection = DriverManager.getConnection(settings.getConnectionPath(), settings.getDatabaseUsername(), settings.getDatabasePassword());
+			this.connection = DriverManager.getConnection(Settings.getConnectionPath(), Settings.getDatabaseUsername(),Settings.getDatabasePassword());
 		} catch (SQLException e) { throw new DatabaseConnectionException(e); }
 	}
 	
@@ -57,7 +55,7 @@ public class Database {
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
 	private void patch() throws DatabaseConnectionException {
-		int databaseVersion = StatsPlugin.getSettings().getDatabaseVersion();
+		int databaseVersion = Settings.getDatabaseVersion();
 		do {
 			databaseVersion++;
 			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + databaseVersion + ".sql");
@@ -89,12 +87,12 @@ public class Database {
 					return true;
 				} catch (DatabaseConnectionException e) {
 					Message.log(Level.SEVERE, "Failed to re-connect to the database. Data is being stored locally.");
-					if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
+					if (Settings.getDebug()) e.printStackTrace();
 					return false;
 				}
 			}
 		} catch (SQLException e) {
-			if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
+			if (Settings.getDebug()) e.printStackTrace();
 			return false;
 		}
 	}
@@ -113,7 +111,7 @@ public class Database {
 			statement.close();
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, sql + " Failed to push data to the remote database. Checking connection . . .");
-			if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
+			if (Settings.getDebug()) e.printStackTrace();
 			return reconnect();
 		} finally {
 			if (statement != null) {
@@ -146,7 +144,7 @@ public class Database {
 			}
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, sql + " :: Query failed, checking connection... (" + e.getMessage() + ")");
-			if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
+			if (Settings.getDebug()) e.printStackTrace();
 			reconnect();
 			return null;
 		} finally {
@@ -172,7 +170,7 @@ public class Database {
 	 * @return <b>true</b> if the procedure was successfully called, <b>false</b> otherwise
 	 */
 	public boolean callStoredProcedure(DBProcedure procedure, String... variables) {
-		StringBuilder sb = new StringBuilder("CALL `" + StatsPlugin.getSettings().getDatabaseName() + "`." + procedure.getName() + "(");
+		StringBuilder sb = new StringBuilder("CALL `" + Settings.getDatabaseName() + "`." + procedure.getName() + "(");
 		if (variables != null && variables.length != 0) {
 			for (String variable : variables) { sb.append("'" + variable + "',"); }
 			sb.deleteCharAt(sb.length() - 1);
@@ -185,7 +183,7 @@ public class Database {
 			statement.executeUpdate(sb.toString());
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, sb.toString() + " :: Stored procedure failed, checking connection... (" + e.getMessage() + ")");
-			if (StatsPlugin.getSettings().getDebug()) e.printStackTrace();
+			if (Settings.getDebug()) e.printStackTrace();
 			return reconnect();
 		} finally {
 			if (statement != null) {
