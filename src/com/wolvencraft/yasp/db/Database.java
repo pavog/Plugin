@@ -57,23 +57,29 @@ public class Database {
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
 	private void patch() throws DatabaseConnectionException {
-		Settings settings = StatsPlugin.getSettings();
-		int remoteVersion = settings.getRemoteVersion();
-		int currentVersion = settings.getLatestVersion();
-		if(remoteVersion < currentVersion) {
-			Message.log("Target database is outdated. Patching database: v." + currentVersion + " => v." + remoteVersion);
-			
-			while(remoteVersion < currentVersion) {
-				remoteVersion++;
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + remoteVersion + ".sql");
-				if (is == null) throw new DatabaseConnectionException("Unable to patch the database to v." + remoteVersion);
-				ScriptRunner sr = new ScriptRunner(connection);
-				try {sr.runScript(new InputStreamReader(is)); }
-				catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + remoteVersion, e); }
-			}
-		} else {
-			Message.log("Target database is up to date.");
-		}
+		int databaseVersion = StatsPlugin.getSettings().getDatabaseVersion();
+		do {
+			databaseVersion++;
+			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + databaseVersion + ".sql");
+			if (is == null) break;
+			Message.log("Executing database patch v." + databaseVersion);
+			ScriptRunner sr = new ScriptRunner(connection);
+			try {sr.runScript(new InputStreamReader(is)); }
+			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
+		} while (true);
+		
+		int itemsTableVersion = StatsPlugin.getSettings().getItemsTableVersion();
+		do {
+			itemsTableVersion++;
+			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/items_v" + itemsTableVersion + ".sql");
+			if (is == null) break;
+			Message.log("Executing items table patch v." + databaseVersion);
+			ScriptRunner sr = new ScriptRunner(connection);
+			try {sr.runScript(new InputStreamReader(is)); }
+			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
+		} while (true);
+		
+		Message.log("Target database is up to date.");
 	}
 	
 	/**

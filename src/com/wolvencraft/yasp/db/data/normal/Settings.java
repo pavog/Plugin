@@ -37,7 +37,8 @@ public class Settings implements _NormalData {
 		
 		logPrefix = plugin.getDescription().getName();
 		
-		this.remoteVersion = 1;
+		this.databaseVersion = 0;
+		this.itemsTableVersion = 0;
 		this.ping = 120;
 		this.showWelcomeMessages = false;
 		this.welcomeMessage = "The server owner did not configure plugin's database connection properly.";
@@ -47,7 +48,6 @@ public class Settings implements _NormalData {
 	
 	private boolean debug;
 	
-	private int latestVersion;
 	private String dbhost;
 	private int dbport;
 	private String dbname;
@@ -59,7 +59,9 @@ public class Settings implements _NormalData {
 	private String dbconnect;
 	private String logPrefix;
 	
-	private int remoteVersion;
+	private int databaseVersion;
+	private int itemsTableVersion;
+	
 	private int ping;
 	private boolean showWelcomeMessages;
 	private String welcomeMessage;
@@ -70,7 +72,8 @@ public class Settings implements _NormalData {
 	public void fetchData() {
 		List<DBEntry> entries = QueryUtils.select(_Settings.TableName.toString(), "*");
 		for(DBEntry entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("version")) remoteVersion = entry.getValueAsInteger("value");
+			if(entry.getValue("key").equalsIgnoreCase("version")) databaseVersion = entry.getValueAsInteger("value");
+			else if(entry.getValue("key").equalsIgnoreCase("items_table_version")) itemsTableVersion = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("show_welcome_messages")) showWelcomeMessages = entry.getValueAsBoolean("value");
 			else if(entry.getValue("key").equalsIgnoreCase("welcome_message")) welcomeMessage = entry.getValue("value");
@@ -86,7 +89,6 @@ public class Settings implements _NormalData {
 	public Map<String, Object> getValues() { return null; }
 	
 	public boolean getDebug() { return debug; }
-	public int getLatestVersion() { return latestVersion; }
 	public String getConnectionPath() { return dbconnect; }
 	public String getDatabaseName() { return dbname; }
 	public String getDatabaseUsername() { return dbuser; }
@@ -94,7 +96,9 @@ public class Settings implements _NormalData {
 	public String getTablePrefix() { return dbprefix; }
 	public String getLogPrefix() { return logPrefix; }
 	
-	public int getRemoteVersion() { return remoteVersion; }
+	public int getDatabaseVersion() { return databaseVersion; }
+	public int getItemsTableVersion()	{ return itemsTableVersion; }
+	
 	public int getPing() { return ping; }
 	public String getWelcomeMessage() { if(showWelcomeMessages) return welcomeMessage; else return null; }
 	public String getFirstJoinMessage() { if(showFirstJoinMessages) return firstJoinMessage; else return null; }
