@@ -167,39 +167,6 @@ public class Database {
 	}
 	
 	/**
-	 * Calls a pre-defined procedured with custom variables
-	 * @deprecated
-	 * @param procName Procedure to call
-	 * @param variables Variables
-	 * @return <b>true</b> if the procedure was successfully called, <b>false</b> otherwise
-	 */
-	public boolean callStoredProcedure(DBProcedure procedure, String... variables) {
-		StringBuilder sb = new StringBuilder("CALL `" + Settings.getDatabaseName() + "`." + procedure.getName() + "(");
-		if (variables != null && variables.length != 0) {
-			for (String variable : variables) { sb.append("'" + variable + "',"); }
-			sb.deleteCharAt(sb.length() - 1);
-		}
-		sb.append(");");
-
-		Statement statement = null;
-		try {
-			statement = connection.createStatement();
-			statement.executeUpdate(sb.toString());
-		} catch (SQLException e) {
-			Message.log(Level.WARNING, sb.toString() + " :: Stored procedure failed, checking connection... (" + e.getMessage() + ")");
-			if (Settings.getDebug()) e.printStackTrace();
-			return reconnect();
-		} finally {
-			if (statement != null) {
-				try { statement.close(); }
-				catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
-			}
-		}
-
-		return true;
-	}
-	
-	/**
 	 * Returns the current running instance of the database
 	 * @return Database instance
 	 */
