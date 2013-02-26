@@ -17,6 +17,12 @@ import com.wolvencraft.yasp.db.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.db.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.util.Message;
 
+/**
+ * Represents a running database instance.<br />
+ * There can only be one instance running at any given time.
+ * @author bitWolfy
+ *
+ */
 public class Database {
 	
 	private static Database instance = null;
@@ -24,7 +30,6 @@ public class Database {
 
 	/**
 	 * Default constructor. Connects to the remote database, performs patches if necessary, and holds to the DB info.<br />
-	 * @throws ClassNotFoundException Thrown if mysql.jdbc.Driver is not available
 	 * @throws DatabaseConnectionException Thrown if the plugin could not connect to the database
 	 */
 	public Database() throws DatabaseConnectionException {
@@ -102,7 +107,9 @@ public class Database {
 	}
 	
 	/**
-	 * Pushes data to the remote database
+	 * Pushes data to the remote database.<br />
+	 * This is a raw method and should never be used by itself. Use the <b>QueryUtils</b> wrapper for more options 
+	 * and proper error handling. This method is not to be used for regular commits to the database.
 	 * @param sql SQL query
 	 * @return <b>true</b> if the sync is successful, <b>false</b> otherwise
 	 */
@@ -127,7 +134,9 @@ public class Database {
 	}
 	
 	/**
-	 * Returns the data from the remote server according to the sql query
+	 * Returns the data from the remote server according to the SQL query.<br />
+	 * This is a raw method and should never be used by itself. Use the <b>QueryUtils</b> wrapper for more options 
+	 * and proper error handling. This method is not to be used for regular commits to the database.
 	 * @param sql SQL query
 	 * @return Data from the remote database
 	 */
@@ -169,6 +178,7 @@ public class Database {
 	/**
 	 * Returns the current running instance of the database
 	 * @return Database instance
+	 * @throws DatabaseConnectionException Thrown if there is no active connection to the database
 	 */
 	public static Database getInstance() throws DatabaseConnectionException {
 		if(instance == null) throw new DatabaseConnectionException("Could not find an active connection to the database");
