@@ -19,8 +19,8 @@ import com.wolvencraft.yasp.db.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.util.Message;
 
 public class Database {
+	
 	private static Database instance = null;
-
 	private Connection connection = null;
 
 	/**
@@ -63,17 +63,6 @@ public class Database {
 			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + databaseVersion + ".sql");
 			if (is == null) break;
 			Message.log("Executing database patch v." + databaseVersion);
-			ScriptRunner sr = new ScriptRunner(connection);
-			try {sr.runScript(new InputStreamReader(is)); }
-			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
-		} while (true);
-		
-		int itemsTableVersion = StatsPlugin.getSettings().getItemsTableVersion();
-		do {
-			itemsTableVersion++;
-			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/items_v" + itemsTableVersion + ".sql");
-			if (is == null) break;
-			Message.log("Executing items table patch v." + databaseVersion);
 			ScriptRunner sr = new ScriptRunner(connection);
 			try {sr.runScript(new InputStreamReader(is)); }
 			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
@@ -212,5 +201,8 @@ public class Database {
 	 * Returns the current running instance of the database
 	 * @return Database instance
 	 */
-	public static Database getInstance() { return instance; }
+	public static Database getInstance() throws DatabaseConnectionException {
+		if(instance == null) throw new DatabaseConnectionException("Could not find an active connection to the database");
+		return instance;
+	}
 }

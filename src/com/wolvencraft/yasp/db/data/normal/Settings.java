@@ -8,13 +8,6 @@ import com.wolvencraft.yasp.db.DBEntry;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal._Settings;
 
-/**
- * Settings is a unique DataHolder. Unlike other holders, Settings are never synchronized back to the database.<br />
- * Any changes made to it will remain local. Additionally, the configuration pulled from config.yml is also stored in this DataHolder.<br />
- * If there is no connection to the database, or the plugin is running for the first time, the default settings will be used.
- * @author bitWolfy
- *
- */
 public class Settings implements _NormalData {
 	
 	/**
@@ -27,23 +20,21 @@ public class Settings implements _NormalData {
 		dbhost = plugin.getConfig().getString("database.host");
 		dbport = plugin.getConfig().getInt("database.port");
 		dbname = plugin.getConfig().getString("database.name");
-		
-		dbprefix = plugin.getConfig().getString("database.prefix");
-		
 		dbconnect = "jdbc:mysql://" + dbhost + ":" + dbport + "/" + dbname;
-		
 		dbuser = plugin.getConfig().getString("database.user");
 		dbpass = plugin.getConfig().getString("database.pass");
+		tablePrefix = plugin.getConfig().getString("database.prefix");
 		
 		logPrefix = plugin.getDescription().getName();
 		
 		this.databaseVersion = 0;
-		this.itemsTableVersion = 0;
 		this.ping = 120;
 		this.showWelcomeMessages = false;
 		this.welcomeMessage = "The server owner did not configure plugin's database connection properly.";
 		this.showFirstJoinMessages = false;
 		this.firstJoinMessage = "The server owner did not configure plugin's database connection properly.";
+		
+		fetchData();
 	}
 	
 	private boolean debug;
@@ -53,14 +44,12 @@ public class Settings implements _NormalData {
 	private String dbname;
 	private String dbuser;
 	private String dbpass;
-	
-	private String dbprefix;
-	
 	private String dbconnect;
+	private String tablePrefix;
+	
 	private String logPrefix;
 	
 	private int databaseVersion;
-	private int itemsTableVersion;
 	
 	private int ping;
 	private boolean showWelcomeMessages;
@@ -73,7 +62,6 @@ public class Settings implements _NormalData {
 		List<DBEntry> entries = QueryUtils.select(_Settings.TableName.toString(), "*");
 		for(DBEntry entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("version")) databaseVersion = entry.getValueAsInteger("value");
-			else if(entry.getValue("key").equalsIgnoreCase("items_table_version")) itemsTableVersion = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("show_welcome_messages")) showWelcomeMessages = entry.getValueAsBoolean("value");
 			else if(entry.getValue("key").equalsIgnoreCase("welcome_message")) welcomeMessage = entry.getValue("value");
@@ -83,7 +71,10 @@ public class Settings implements _NormalData {
 	}
 	
 	@Override
-	public boolean pushData() { return true; }
+	public boolean pushData() {
+		QueryUtils.update(_Settings.TableName.toString(), "version", databaseVersion + "", "key = version");
+		return true;
+	}
 	
 	@Override
 	public Map<String, Object> getValues() { return null; }
@@ -93,11 +84,10 @@ public class Settings implements _NormalData {
 	public String getDatabaseName() { return dbname; }
 	public String getDatabaseUsername() { return dbuser; }
 	public String getDatabasePassword() { return dbpass; }
-	public String getTablePrefix() { return dbprefix; }
+	public String getTablePrefix() { return tablePrefix; }
 	public String getLogPrefix() { return logPrefix; }
 	
 	public int getDatabaseVersion() { return databaseVersion; }
-	public int getItemsTableVersion()	{ return itemsTableVersion; }
 	
 	public int getPing() { return ping; }
 	public String getWelcomeMessage() { if(showWelcomeMessages) return welcomeMessage; else return null; }
