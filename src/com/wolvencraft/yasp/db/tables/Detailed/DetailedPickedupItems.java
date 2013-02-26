@@ -1,6 +1,6 @@
 package com.wolvencraft.yasp.db.tables.detailed;
 
-public enum DetailedPickedupItems implements _DetailedData {
+public enum DetailedPickedupItems implements _DetailedTable {
 
 	TableName("detailed_pickedup_items"),
 	

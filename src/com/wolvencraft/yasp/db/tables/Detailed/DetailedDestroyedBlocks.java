@@ -1,6 +1,6 @@
 package com.wolvencraft.yasp.db.tables.detailed;
 
-public enum DetailedDestroyedBlocks implements _DetailedData {
+public enum DetailedDestroyedBlocks implements _DetailedTable {
 	
 	TableName("detailed_destroyed_blocks"),
 	

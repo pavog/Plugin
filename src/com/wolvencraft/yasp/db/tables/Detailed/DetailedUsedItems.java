@@ -1,6 +1,6 @@
 package com.wolvencraft.yasp.db.tables.detailed;
 
-public enum DetailedUsedItems implements _DetailedData {
+public enum DetailedUsedItems implements _DetailedTable {
 
 	TableName("detailed_used_items"),
 	

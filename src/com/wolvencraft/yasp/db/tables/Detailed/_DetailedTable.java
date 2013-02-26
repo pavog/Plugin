@@ -1,6 +1,6 @@
-package com.wolvencraft.yasp.db.tables.normal;
+package com.wolvencraft.yasp.db.tables.detailed;
 
-public interface _DynamicTable {
+public interface _DetailedTable {
 	
 	/**
 	 * Returns the name of the column as specified in the database

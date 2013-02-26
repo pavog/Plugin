@@ -1,6 +1,6 @@
 package com.wolvencraft.yasp.db.tables.detailed;
 
-public enum DetailedPVPKills implements _DetailedData {
+public enum DetailedPVPKills implements _DetailedTable {
 	
 	TableName("detailed_pvp"),
 	

@@ -1,6 +1,6 @@
 package com.wolvencraft.yasp.db.tables.detailed;
 
-public enum DetailedPlacedBlocks implements _DetailedData {
+public enum DetailedPlacedBlocks implements _DetailedTable {
 	
 	TableName("detailed_placed_blocks"),
 	

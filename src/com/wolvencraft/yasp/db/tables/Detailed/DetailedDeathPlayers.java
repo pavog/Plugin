@@ -1,7 +1,7 @@
 package com.wolvencraft.yasp.db.tables.detailed;
 
 
-public enum DetailedDeathPlayers implements _DetailedData {
+public enum DetailedDeathPlayers implements _DetailedTable {
 
 	TableName("detailed_death_players"),
 	

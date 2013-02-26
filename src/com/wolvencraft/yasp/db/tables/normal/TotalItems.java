@@ -1,7 +1,7 @@
 package com.wolvencraft.yasp.db.tables.normal;
 
 
-public enum TotalItems implements _DynamicTable {
+public enum TotalItems implements _NormalTable {
 	
 	TableName("total_items"),
 	

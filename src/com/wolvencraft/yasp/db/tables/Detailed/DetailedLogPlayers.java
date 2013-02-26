@@ -1,6 +1,6 @@
 package com.wolvencraft.yasp.db.tables.detailed;
 
-public enum DetailedLogPlayers implements _DetailedData {
+public enum DetailedLogPlayers implements _DetailedTable {
 	
 	TableName("detailed_log_players"),
 	

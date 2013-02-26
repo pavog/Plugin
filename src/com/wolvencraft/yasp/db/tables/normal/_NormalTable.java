@@ -1,6 +1,6 @@
-package com.wolvencraft.yasp.db.tables.detailed;
+package com.wolvencraft.yasp.db.tables.normal;
 
-public interface _DetailedData {
+public interface _NormalTable {
 	
 	/**
 	 * Returns the name of the column as specified in the database

@@ -1,6 +1,6 @@
 package com.wolvencraft.yasp.db.tables.normal;
 
-public enum Players implements _DynamicTable {
+public enum Players implements _NormalTable {
 	
 	TableName("players"),
 	
