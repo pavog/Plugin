@@ -12,12 +12,12 @@ import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.util.Message;
 
 public class StatsPlugin extends JavaPlugin {
-	private static StatsPlugin plugin;
+	private static StatsPlugin instance;
 	private Database database;
 	
 	@Override
 	public void onEnable() {
-		plugin = this;
+		instance = this;
 
 		getConfig().options().copyDefaults(true);
 		saveConfig();
@@ -37,7 +37,7 @@ public class StatsPlugin extends JavaPlugin {
 		}
 		
 		if (database == null) {
-			StatsPlugin.plugin = null;
+			instance = null;
 			this.setEnabled(false);
 			return;
 		}
@@ -55,9 +55,10 @@ public class StatsPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		instance = null;
 		Bukkit.getScheduler().cancelAllTasks();
 		DataCollector.clear();
 	}
 	
-	public static StatsPlugin getInstance() 		{ return plugin; }
+	public static StatsPlugin getInstance() 		{ return instance; }
 }
