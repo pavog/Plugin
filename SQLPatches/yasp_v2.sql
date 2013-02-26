@@ -2,9 +2,9 @@
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("version", "0");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("ping", "120");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_welcome_messages", "1");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("welcome_message", "");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("welcome_message", "Welcome, <PLAYER>!");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_first_join_message", "1");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("first_join_message", "");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("first_join_message", "Welcome, <PLAYER>! Your statistics on this server are now being tracked.");
 
 -- Materials
 INSERT INTO `$prefix_materials` (`material_id` , `data` , `tp_name`) VALUES ("1", "0", "stone");
