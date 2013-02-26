@@ -69,7 +69,7 @@ public class Database {
 			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
 		} while (true);
 		
-		Settings.updateVersion();
+		Settings.updateVersion(databaseVersion--);
 		Message.log("Target database is up to date.");
 	}
 	
