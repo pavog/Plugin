@@ -24,13 +24,8 @@ public class StatsPlugin extends JavaPlugin {
 		new Settings(this);
 		
 		try { database = new Database(); }
-		catch (ClassNotFoundException e) {
-			Message.log(Level.SEVERE, "MySQL Driver not found");
-			if (Settings.getDebug()) e.printStackTrace();
-			this.setEnabled(false);
-			return;
-		} catch (DatabaseConnectionException e) {
-			Message.log(Level.SEVERE, "Could not connect to the database. Is the plugin configured correctly?");
+		catch (DatabaseConnectionException e) {
+			Message.log(Level.SEVERE, e.getMessage());
 			if (Settings.getDebug()) e.printStackTrace();
 			this.setEnabled(false);
 			return;
@@ -41,8 +36,6 @@ public class StatsPlugin extends JavaPlugin {
 			this.setEnabled(false);
 			return;
 		}
-		
-		Message.log("Established database connection");
 		
 		new DataCollector();
 		

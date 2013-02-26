@@ -27,13 +27,12 @@ public class Database {
 	 * @throws ClassNotFoundException Thrown if mysql.jdbc.Driver is not available
 	 * @throws DatabaseConnectionException Thrown if the plugin could not connect to the database
 	 */
-	public Database() throws ClassNotFoundException, DatabaseConnectionException {
-		if (instance != null) {
-			Message.log(Level.SEVERE, "Attempted to establish a duplicate connection with a remote database");
-			return;
-		}
+	public Database() throws DatabaseConnectionException {
+		if (instance != null) throw new DatabaseConnectionException("Attempted to establish a duplicate connection with a remote database");
 		
-		Class.forName("com.mysql.jdbc.Driver");
+		try { Class.forName("com.mysql.jdbc.Driver"); }
+		catch (ClassNotFoundException ex) { throw new DatabaseConnectionException("MySQL driver was not found!"); }
+		
 		connect();
 		patch();
 
@@ -46,7 +45,11 @@ public class Database {
 	 */
 	private void connect() throws DatabaseConnectionException {
 		try {
-			this.connection = DriverManager.getConnection(Settings.getConnectionPath(), Settings.getDatabaseUsername(),Settings.getDatabasePassword());
+			this.connection = DriverManager.getConnection(
+				Settings.getConnectionPath(),
+				Settings.getDatabaseUsername(),
+				Settings.getDatabasePassword()
+			);
 		} catch (SQLException e) { throw new DatabaseConnectionException(e); }
 	}
 	
