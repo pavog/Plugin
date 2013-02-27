@@ -26,12 +26,9 @@ package com.wolvencraft.yasp.db;
  */
 
 import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -44,9 +41,6 @@ public class ScriptRunner {
 	private static final String DEFAULT_DELIMITER = ";";
 
 	private Connection connection;
-
-	private PrintWriter logWriter = new PrintWriter(System.out);
-	private PrintWriter errorLogWriter = new PrintWriter(System.err);
 
 	private String delimiter = ScriptRunner.DEFAULT_DELIMITER;
 	private boolean fullLineDelimiter = false;
@@ -78,7 +72,6 @@ public class ScriptRunner {
 				this.checkForMissingLineTerminator(command);
 			} catch (Exception e) {
 				String message = "Error executing: " + command + ".  Cause: " + e;
-				this.printlnError(message);
 				throw new RuntimeSQLException(message, e);
 			}
 		}
@@ -110,11 +103,9 @@ public class ScriptRunner {
 		if (trimmedLine.toLowerCase().startsWith("delimiter")) {
 			this.setDelimiter(trimmedLine.substring(10));
 		} else if (this.lineIsComment(trimmedLine)) {
-			this.println(trimmedLine);
 		} else if (this.commandReadyToExecute(trimmedLine)) {
 			command.append(line.substring(0, line.lastIndexOf(this.delimiter)));
 			command.append(ScriptRunner.LINE_SEPARATOR);
-			this.println(command);
 			this.executeStatement(command.toString());
 			command.setLength(0);
 		} else if (trimmedLine.length() > 0) {
@@ -133,66 +124,14 @@ public class ScriptRunner {
 	}
 
 	private void executeStatement(String command) throws SQLException, UnsupportedEncodingException {
-		boolean hasResults = false;
 		Statement statement = this.connection.createStatement();
 		String sql = command;
 		sql = sql.replaceAll("\r\n", "\n");
 		
-		hasResults = statement.execute(sql);
+		statement.execute(sql);
 		
-		this.printResults(statement, hasResults);
-		try {
-			statement.close();
-		} catch (Exception e) {
-			// Ignore to workaround a bug in some connection pools
-		}
+		try { statement.close(); }
+		catch (Exception e) { }
 	}
-
-	private void printResults(Statement statement, boolean hasResults) {
-		try {
-			if (hasResults) {
-				ResultSet rs = statement.getResultSet();
-				if (rs != null) {
-					ResultSetMetaData md = rs.getMetaData();
-					int cols = md.getColumnCount();
-					for (int i = 0; i < cols; i++) {
-						String name = md.getColumnLabel(i + 1);
-						this.print(name + "\t");
-					}
-					this.println("");
-					while (rs.next()) {
-						for (int i = 0; i < cols; i++) {
-							String value = rs.getString(i + 1);
-							this.print(value + "\t");
-						}
-						this.println("");
-					}
-				}
-			}
-		} catch (SQLException e) {
-			this.printlnError("Error printing results: " + e.getMessage());
-		}
-	}
-
-	private void print(Object o) {
-		if (this.logWriter != null) {
-			this.logWriter.print(o);
-			this.logWriter.flush();
-		}
-	}
-
-	private void println(Object o) {
-		if (this.logWriter != null) {
-			this.logWriter.println(o);
-			this.logWriter.flush();
-		}
-	}
-
-	private void printlnError(Object o) {
-		if (this.errorLogWriter != null) {
-			this.errorLogWriter.println(o);
-			this.errorLogWriter.flush();
-		}
-	}
-
+	
 }
