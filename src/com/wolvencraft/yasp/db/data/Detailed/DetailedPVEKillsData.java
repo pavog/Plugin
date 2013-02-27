@@ -43,7 +43,7 @@ public class DetailedPVEKillsData implements _DetailedData {
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedPVEKills.PlayerID.toString(), playerId);
-		map.put(DetailedPVEKills.CreatureId.toString(), creatureType);
+		map.put(DetailedPVEKills.CreatureId.toString(), creatureType.getTypeId());
 		if(playerKilled) {
 			map.put(DetailedPVEKills.PlayerKilled.toString(), 1);
 			map.put(DetailedPVEKills.MaterialId.toString(), -1);

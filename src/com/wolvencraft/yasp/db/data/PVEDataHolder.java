@@ -3,6 +3,7 @@ package com.wolvencraft.yasp.db.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.data.normal.TotalPVEEntry;
@@ -25,11 +26,11 @@ public class PVEDataHolder {
 		return temp;
 	}
 	
-	public TotalPVEEntry get(int killerId, String victimId, ItemStack weapon) {
+	public TotalPVEEntry get(int killerId, EntityType creatureType, ItemStack weapon) {
 		for(TotalPVEEntry entry : data) {
-			if(entry.equals(killerId, victimId, weapon)) return entry;
+			if(entry.equals(killerId, creatureType, weapon)) return entry;
 		}
-		TotalPVEEntry entry = new TotalPVEEntry(killerId, victimId, weapon);
+		TotalPVEEntry entry = new TotalPVEEntry(killerId, creatureType, weapon);
 		data.add(entry);
 		return entry;
 	}

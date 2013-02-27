@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.QueryResult;
@@ -24,16 +25,16 @@ public class TotalPVEEntry implements _NormalData {
 	 * @param player Player in question
 	 * @param creature Creature in question
 	 */
-	public TotalPVEEntry(int playerId, String creatureId, ItemStack weapon) {
+	public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
 		this.playerId = playerId;
-		this.creatureId = creatureId;
+		this.creatureType = creatureType;
 		this.weapon = weapon;
 		this.playerDeaths = 0;
 		this.creatureDeaths = 0;
 	}
 	
 	private int playerId;
-	private String creatureId;
+	private EntityType creatureType;
 	private ItemStack weapon;
 	private int playerDeaths;
 	private int creatureDeaths;
@@ -44,7 +45,7 @@ public class TotalPVEEntry implements _NormalData {
 			TotalPVEKills.TableName.toString(),
 			"*",
 			TotalPVEKills.PlayerId.toString() + " = " + playerId,
-			TotalPVEKills.CreatureId.toString() + " = " + creatureId,
+			TotalPVEKills.CreatureId.toString() + " = " + creatureType.getTypeId(),
 			TotalPVEKills.MaterialId.toString() + " = " + weapon.getTypeId(),
 			TotalPVEKills.MaterialData.toString() + " = " + weapon.getData().getData()
 		);
@@ -61,7 +62,7 @@ public class TotalPVEEntry implements _NormalData {
 			TotalPVEKills.TableName.toString(),
 			getValues(), 
 			TotalPVEKills.PlayerId.toString() + " = " + playerId,
-			TotalPVEKills.CreatureId.toString() + " = " + creatureId,
+			TotalPVEKills.CreatureId.toString() + " = " + creatureType.getTypeId(),
 			TotalPVEKills.MaterialId.toString() + " = " + weapon.getTypeId(),
 			TotalPVEKills.MaterialData.toString() + " = " + weapon.getData().getData()
 		);
@@ -71,7 +72,7 @@ public class TotalPVEEntry implements _NormalData {
 	public Map<String, Object> getValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalPVEKills.PlayerId.toString(), playerId);
-		map.put(TotalPVEKills.CreatureId.toString(), creatureId);
+		map.put(TotalPVEKills.CreatureId.toString(), creatureType.getTypeId());
 		map.put(TotalPVEKills.MaterialId.toString(), weapon.getTypeId());
 		map.put(TotalPVEKills.MaterialData.toString(), weapon.getData().getData());
 		map.put(TotalPVEKills.PlayerKilled.toString(), playerDeaths);
@@ -79,15 +80,15 @@ public class TotalPVEEntry implements _NormalData {
 		return map;
 	}
 	
-	public boolean equals(int playerId, String creatureId, ItemStack weapon) {
-		return this.playerId == playerId && this.creatureId.equals(creatureId) && this.weapon.equals(weapon);
+	public boolean equals(int playerId, EntityType creatureType, ItemStack weapon) {
+		return this.playerId == playerId && this.creatureType.equals(creatureType) && this.weapon.equals(weapon);
 	}
 	
 	/**
 	 * Returns the creature type
 	 * @return <b>String</b> creature type
 	 */
-	public String getCreatureId() { return creatureId; }
+	public EntityType getCreatureId() { return creatureType; }
 	
 	/**
 	 * Increments the number of time a player died

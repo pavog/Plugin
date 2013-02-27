@@ -227,8 +227,7 @@ public class LocalSession {
 	 * @param weapon Weapon used by killer
 	 */
 	public void playerKilledCreature(Player killer, Creature victim, ItemStack weapon) {
-		String victimId = victim.getType().name();
-		totalPVE.get(playerId, victimId, weapon).addCreatureDeaths();
+		totalPVE.get(playerId, victim.getType(), weapon).addCreatureDeaths();
 		detailedData.add(new DetailedPVEKillsData(killer, victim.getType(), weapon, false));
 	}
 	
@@ -239,8 +238,7 @@ public class LocalSession {
 	 * @param weapon Weapon used by killer
 	 */
 	public void creatureKilledPlayer(Creature killer, Player victim, ItemStack weapon) {
-		String killerId = killer.getType().name();
-		totalPVE.get(playerId, killerId, weapon).addPlayerDeaths();
+		totalPVE.get(playerId, killer.getType(), weapon).addPlayerDeaths();
 		detailedData.add(new DetailedPVEKillsData(victim, killer.getType(), weapon, true));
 	}
 	
