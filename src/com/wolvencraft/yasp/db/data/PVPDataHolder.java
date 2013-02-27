@@ -3,6 +3,8 @@ package com.wolvencraft.yasp.db.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.inventory.ItemStack;
+
 import com.wolvencraft.yasp.db.data.normal.TotalPVPEntry;
 
 public class PVPDataHolder {
@@ -23,11 +25,11 @@ public class PVPDataHolder {
 		return temp;
 	}
 	
-	public TotalPVPEntry get(int killerId, int victimId) {
+	public TotalPVPEntry get(int killerId, int victimId, ItemStack weapon) {
 		for(TotalPVPEntry entry : data) {
-			if(entry.equals(killerId, victimId)) return entry;
+			if(entry.equals(killerId, victimId, weapon)) return entry;
 		}
-		TotalPVPEntry entry = new TotalPVPEntry(killerId, victimId);
+		TotalPVPEntry entry = new TotalPVPEntry(killerId, victimId, weapon);
 		data.add(entry);
 		return entry;
 	}

@@ -76,8 +76,8 @@ public class TotalPVPEntry implements _NormalData {
 		return map;
 	}
 	
-	public boolean equals(int killerId, int victimId) {
-		return this.killerId == killerId && this.victimId == victimId;
+	public boolean equals(int killerId, int victimId, ItemStack weapon) {
+		return this.killerId == killerId && this.victimId == victimId && this.weapon.equals(weapon);
 	}
 	
 	/**

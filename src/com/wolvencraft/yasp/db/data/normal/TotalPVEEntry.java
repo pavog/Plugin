@@ -79,8 +79,8 @@ public class TotalPVEEntry implements _NormalData {
 		return map;
 	}
 	
-	public boolean equals(int playerId, String creatureId) {
-		return this.playerId == playerId && this.creatureId.equals(creatureId);
+	public boolean equals(int playerId, String creatureId, ItemStack weapon) {
+		return this.playerId == playerId && this.creatureId.equals(creatureId) && this.weapon.equals(weapon);
 	}
 	
 	/**

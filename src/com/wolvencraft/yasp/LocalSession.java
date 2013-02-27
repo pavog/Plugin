@@ -216,7 +216,7 @@ public class LocalSession {
 	 */
 	public void playerKilledPlayer(Player killer, Player victim, ItemStack weapon) {
 		int victimId = DataCollector.getCachedPlayerId(victim.getPlayerListName());
-		totalPVP.get(playerId, victimId).addTimes();
+		totalPVP.get(playerId, victimId, weapon).addTimes();
 		detailedData.add(new DetailedPVPKillsData(killer, victim, weapon));
 	}
 	
@@ -228,7 +228,7 @@ public class LocalSession {
 	 */
 	public void playerKilledCreature(Player killer, Creature victim, ItemStack weapon) {
 		String victimId = victim.getType().name();
-		totalPVE.get(playerId, victimId).addCreatureDeaths();
+		totalPVE.get(playerId, victimId, weapon).addCreatureDeaths();
 		detailedData.add(new DetailedPVEKillsData(killer, victim.getType(), weapon, false));
 	}
 	
@@ -240,7 +240,7 @@ public class LocalSession {
 	 */
 	public void creatureKilledPlayer(Creature killer, Player victim, ItemStack weapon) {
 		String killerId = killer.getType().name();
-		totalPVE.get(playerId, killerId).addPlayerDeaths();
+		totalPVE.get(playerId, killerId, weapon).addPlayerDeaths();
 		detailedData.add(new DetailedPVEKillsData(victim, killer.getType(), weapon, true));
 	}
 	
