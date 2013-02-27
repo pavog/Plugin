@@ -23,8 +23,19 @@ public class StatsPlugin extends JavaPlugin {
 		saveConfig();
 		new Settings(this);
 		
+		if(!Database.testConnection()) {
+			Message.log(Level.SEVERE, "Could not establish a connection to the database.");
+			this.setEnabled(false);
+			return;
+		}
+		
 		try { database = new Database(); }
 		catch (DatabaseConnectionException e) {
+			Message.log(Level.SEVERE, e.getMessage());
+			if (Settings.getDebug()) e.printStackTrace();
+			this.setEnabled(false);
+			return;
+		} catch (Exception e) {
 			Message.log(Level.SEVERE, e.getMessage());
 			if (Settings.getDebug()) e.printStackTrace();
 			this.setEnabled(false);
@@ -46,10 +57,13 @@ public class StatsPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		DataCollector.pushAllData();
-		instance = null;
-		Bukkit.getScheduler().cancelAllTasks();
-		DataCollector.clear();
+		Message.log("Plugin shutting down");
+		try {
+			DataCollector.pushAllData();
+			instance = null;
+			Bukkit.getScheduler().cancelAllTasks();
+			DataCollector.clear();
+		} catch (Exception e) { }
 	}
 	
 	public static StatsPlugin getInstance() 		{ return instance; }

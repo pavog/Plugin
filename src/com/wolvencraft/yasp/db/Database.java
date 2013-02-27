@@ -44,6 +44,19 @@ public class Database {
 		instance = this;
 	}
 	
+	public static boolean testConnection() {
+		Connection testConnection = null;
+		try {
+			testConnection = DriverManager.getConnection(
+				Settings.getConnectionPath(),
+				Settings.getDatabaseUsername(),
+				Settings.getDatabasePassword()
+			);
+			testConnection.close();
+		} catch (Exception e) { return false; }
+		return true;
+	}
+	
 	/**
 	 * Connects to the remote database according to the data stored in the configuration
 	 * @throws DatabaseConnectionException Thrown if an error occurs while connecting to the database
