@@ -80,13 +80,15 @@ public class PlayerListener implements Listener {
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).itemUse(player.getItemInHand());
 	}
-	
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerCraft(CraftItemEvent event) {
 		Player player = (Player) event.getWhoClicked();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).itemCraft(event.getCurrentItem());
 	}
-	
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerSmelt(FurnaceExtractEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
