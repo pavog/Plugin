@@ -29,10 +29,10 @@ public class TotalBlocksEntry implements _NormalData {
 	public void fetchData() {
 		List<QueryResult> results = QueryUtils.select(
 			TotalBlocks.TableName.toString(),
-			"*",
-			TotalBlocks.PlayerId.toString() + " = " + playerId,
-			TotalBlocks.MaterialId.toString() + " = " + material.getItemTypeId(),
-			TotalBlocks.MaterialData.toString() + " = " + material.getData()
+			new String[] {"*"},
+			new String[] { TotalBlocks.PlayerId.toString(), playerId + ""},
+			new String[] { TotalBlocks.MaterialId.toString(), material.getItemTypeId() + ""},
+			new String[] { TotalBlocks.MaterialData.toString(), material.getData() + ""}
 		);
 		
 		if(results.isEmpty()) QueryUtils.insert(TotalBlocks.TableName.toString(), getValues());
@@ -47,9 +47,9 @@ public class TotalBlocksEntry implements _NormalData {
 		return QueryUtils.update(
 			TotalBlocks.TableName.toString(),
 			getValues(),
-			TotalBlocks.PlayerId.toString() + " = " + playerId,
-			TotalBlocks.MaterialId.toString() + " = " + material.getItemTypeId(),
-			TotalBlocks.MaterialData.toString() + " = " + material.getData()
+			new String[] { TotalBlocks.PlayerId.toString(), playerId + ""},
+			new String[] { TotalBlocks.MaterialId.toString(), material.getItemTypeId() + ""},
+			new String[] { TotalBlocks.MaterialData.toString(), material.getData() + ""}
 		);
 	}
 	

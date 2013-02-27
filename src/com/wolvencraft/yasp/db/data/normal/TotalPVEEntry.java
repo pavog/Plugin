@@ -43,11 +43,11 @@ public class TotalPVEEntry implements _NormalData {
 	public void fetchData() {
 		List<QueryResult> results = QueryUtils.select(
 			TotalPVEKills.TableName.toString(),
-			"*",
-			TotalPVEKills.PlayerId.toString() + " = " + playerId,
-			TotalPVEKills.CreatureId.toString() + " = " + creatureType.getTypeId(),
-			TotalPVEKills.MaterialId.toString() + " = " + weapon.getTypeId(),
-			TotalPVEKills.MaterialData.toString() + " = " + weapon.getData().getData()
+			new String[] {"*"},
+			new String[] { TotalPVEKills.PlayerId.toString(), playerId + ""},
+			new String[] { TotalPVEKills.CreatureId.toString(), creatureType.getTypeId() + ""},
+			new String[] { TotalPVEKills.MaterialId.toString(), weapon.getTypeId() + ""},
+			new String[] { TotalPVEKills.MaterialData.toString(), weapon.getData().getData() + ""}
 		);
 		if(results.isEmpty()) QueryUtils.insert(TotalPVEKills.TableName.toString(), getValues());
 		else {
@@ -60,11 +60,11 @@ public class TotalPVEEntry implements _NormalData {
 	public boolean pushData() {
 		return QueryUtils.update(
 			TotalPVEKills.TableName.toString(),
-			getValues(), 
-			TotalPVEKills.PlayerId.toString() + " = " + playerId,
-			TotalPVEKills.CreatureId.toString() + " = " + creatureType.getTypeId(),
-			TotalPVEKills.MaterialId.toString() + " = " + weapon.getTypeId(),
-			TotalPVEKills.MaterialData.toString() + " = " + weapon.getData().getData()
+			getValues(),
+			new String[] { TotalPVEKills.PlayerId.toString(), playerId + ""},
+			new String[] { TotalPVEKills.CreatureId.toString(), creatureType.getTypeId() + ""},
+			new String[] { TotalPVEKills.MaterialId.toString(), weapon.getTypeId() + ""},
+			new String[] { TotalPVEKills.MaterialData.toString(), weapon.getData().getData() + ""}
 		);
 	}
 

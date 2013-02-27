@@ -46,10 +46,10 @@ public class TotalItemsEntry implements _NormalData {
 	public void fetchData() {
 		List<QueryResult> results = QueryUtils.select(
 			TotalItems.TableName.toString(),
-			"*",
-			TotalItems.PlayerId.toString() + " = " + playerId,
-			TotalItems.MaterialId.toString() + " = " + itemStack.getTypeId(),
-			TotalItems.MaterialData.toString() + " = " + itemStack.getData().getData()
+			new String[] {"*"},
+			new String[] { TotalItems.PlayerId.toString(), playerId + ""},
+			new String[] { TotalItems.MaterialId.toString(), itemStack.getTypeId() + ""},
+			new String[] { TotalItems.MaterialData.toString(), itemStack.getData().getData() + ""}
 		);
 		
 		if(results.isEmpty()) QueryUtils.insert(TotalItems.TableName.toString(), getValues());
@@ -67,9 +67,9 @@ public class TotalItemsEntry implements _NormalData {
 		return QueryUtils.update(
 			TotalItems.TableName.toString(),
 			getValues(),
-			TotalItems.PlayerId + " = " + playerId,
-			TotalItems.MaterialId + " = " + itemStack.getTypeId(),
-			TotalItems.MaterialData.toString() + " = " + itemStack.getData().getData()
+			new String[] { TotalItems.PlayerId.toString(), playerId + ""},
+			new String[] { TotalItems.MaterialId.toString(), itemStack.getTypeId() + ""},
+			new String[] { TotalItems.MaterialData.toString(), itemStack.getData().getData() + ""}
 		);
 	}
 	

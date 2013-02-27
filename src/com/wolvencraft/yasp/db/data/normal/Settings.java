@@ -28,13 +28,11 @@ public class Settings implements _NormalData {
 		logPrefix = plugin.getDescription().getName();
 		
 		databaseVersion = 0;
-		ping = 120;
+		ping = 2400;
 		showWelcomeMessages = false;
 		welcomeMessage = "The server owner did not configure plugin's database connection properly.";
 		showFirstJoinMessages = false;
 		firstJoinMessage = "The server owner did not configure plugin's database connection properly.";
-		
-		fetchData();
 	}
 	
 	private static boolean debug;
@@ -51,18 +49,31 @@ public class Settings implements _NormalData {
 	
 	private static int databaseVersion;
 	
-	private static int ping;
+	private static long ping;
 	private static boolean showWelcomeMessages;
 	private static String welcomeMessage;
 	private static boolean showFirstJoinMessages;
 	private static String firstJoinMessage;
 	
 	@Override
+	@Deprecated
 	public void fetchData() {
-		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), "*");
+		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("version")) databaseVersion = entry.getValueAsInteger("value");
-			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value");
+			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsLong("value") * 20;
+			else if(entry.getValue("key").equalsIgnoreCase("show_welcome_messages")) showWelcomeMessages = entry.getValueAsBoolean("value");
+			else if(entry.getValue("key").equalsIgnoreCase("welcome_message")) welcomeMessage = entry.getValue("value");
+			else if(entry.getValue("key").equalsIgnoreCase("show_first_join_messages")) showFirstJoinMessages = entry.getValueAsBoolean("value");
+			else if(entry.getValue("key").equalsIgnoreCase("first_join_message")) firstJoinMessage = entry.getValue("value");
+		}
+	}
+	
+	public static void retrieveData() {
+		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
+		for(QueryResult entry : entries) {
+			if(entry.getValue("key").equalsIgnoreCase("version")) databaseVersion = entry.getValueAsInteger("value");
+			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value") * 20;
 			else if(entry.getValue("key").equalsIgnoreCase("show_welcome_messages")) showWelcomeMessages = entry.getValueAsBoolean("value");
 			else if(entry.getValue("key").equalsIgnoreCase("welcome_message")) welcomeMessage = entry.getValue("value");
 			else if(entry.getValue("key").equalsIgnoreCase("show_first_join_messages")) showFirstJoinMessages = entry.getValueAsBoolean("value");
@@ -71,12 +82,21 @@ public class Settings implements _NormalData {
 	}
 	
 	@Override
+	@Deprecated
 	public boolean pushData() {
-		return QueryUtils.update(_Settings.TableName.toString(), "value", databaseVersion + "", "key = version");
+		return QueryUtils.update(_Settings.TableName.toString(), "value", databaseVersion + "", new String[] {"key", "version"});
+	}
+	
+	public static int getDatabaseVersion() { 
+		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
+		for(QueryResult entry : entries) {
+			if(entry.getValue("key").equalsIgnoreCase("version")) databaseVersion = entry.getValueAsInteger("value");
+		}
+		return databaseVersion;
 	}
 	
 	public static boolean updateVersion(int version) {
-		return QueryUtils.update(_Settings.TableName.toString(), "value", version + "", "key = version");
+		return QueryUtils.update(_Settings.TableName.toString(), "value", version + "", new String[] {"key", "version"});
 	}
 	
 	@Override
@@ -90,9 +110,7 @@ public class Settings implements _NormalData {
 	public static String getTablePrefix() { return tablePrefix; }
 	public static String getLogPrefix() { return logPrefix; }
 	
-	public static int getDatabaseVersion() { return databaseVersion; }
-	
-	public static int getPing() { return ping; }
+	public static long getPing() { return ping; }
 	public static String getWelcomeMessage() { if(showWelcomeMessages) return welcomeMessage; else return null; }
 	public static String getFirstJoinMessage() { if(showFirstJoinMessages) return firstJoinMessage; else return null; }
 	

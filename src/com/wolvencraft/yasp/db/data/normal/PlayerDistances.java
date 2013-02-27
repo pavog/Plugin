@@ -41,8 +41,8 @@ public class PlayerDistances implements _NormalData {
 	public void fetchData() {
 		List<QueryResult> results = QueryUtils.select(
 			DistancePlayers.TableName.toString(),
-			"*",
-			DistancePlayers.PlayerId.toString() + " = " + playerId
+			new String[] {"*"},
+			new String[] { DistancePlayers.PlayerId.toString(), playerId + ""}
 		);
 		if(results.isEmpty()) QueryUtils.insert(DistancePlayers.TableName.toString(), getValues());
 		else {
@@ -57,7 +57,7 @@ public class PlayerDistances implements _NormalData {
 	public boolean pushData() {
 		return QueryUtils.update(DistancePlayers.TableName.toString(),
 			getValues(),
-			DistancePlayers.PlayerId + " = " + playerId
+			new String[] { DistancePlayers.PlayerId.toString(), playerId + ""}
 		);
 	}
 	

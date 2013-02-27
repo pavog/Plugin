@@ -38,10 +38,11 @@ public class Database {
 		try { Class.forName("com.mysql.jdbc.Driver"); }
 		catch (ClassNotFoundException ex) { throw new DatabaseConnectionException("MySQL driver was not found!"); }
 		
+		instance = this;
+		
 		connect();
 		patch();
-
-		instance = this;
+		Settings.retrieveData();
 	}
 	
 	public static boolean testConnection() {
@@ -76,18 +77,19 @@ public class Database {
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
 	private void patch() throws DatabaseConnectionException {
+		Message.log("Attempting to patch the database. This will take a while.");
 		int databaseVersion = Settings.getDatabaseVersion();
 		do {
-			databaseVersion++;
-			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + databaseVersion + ".sql");
+			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + (databaseVersion + 1) + ".sql");
 			if (is == null) break;
+			databaseVersion++;
 			Message.log("Executing database patch v." + databaseVersion);
 			ScriptRunner sr = new ScriptRunner(connection);
 			try {sr.runScript(new InputStreamReader(is)); }
 			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
 		} while (true);
 		
-		Settings.updateVersion(databaseVersion--);
+		Settings.updateVersion(databaseVersion);
 		Message.log("Target database is up to date.");
 	}
 	
@@ -134,7 +136,8 @@ public class Database {
 			rowsChanged = statement.executeUpdate(sql);
 			statement.close();
 		} catch (SQLException e) {
-			Message.log(Level.WARNING, sql + " Failed to push data to the remote database. Checking connection . . .");
+			Message.log(Level.WARNING, "Failed to push data to the remote database");
+			if(Settings.getDebug()) Message.log(Level.WARNING, sql);
 			if (Settings.getDebug()) e.printStackTrace();
 			return reconnect();
 		} finally {
@@ -169,10 +172,13 @@ public class Database {
 				colData.add(new QueryResult(rowToAdd));
 			}
 		} catch (SQLException e) {
-			Message.log(Level.WARNING, sql + " :: Query failed, checking connection... (" + e.getMessage() + ")");
-			if (Settings.getDebug()) e.printStackTrace();
+			Message.log(Level.WARNING, "Error retrieving data from the database");
+			if(Settings.getDebug()) {
+				Message.log(Level.WARNING, e.getMessage());
+				Message.log(Level.WARNING, sql);
+			}
 			reconnect();
-			return null;
+			return new ArrayList<QueryResult>();
 		} finally {
 			if (rs != null) {
 				try {

@@ -128,7 +128,7 @@ public class LocalSession {
 			Players.TableName.toString(),
 			Players.Online.toString(),
 			1 + "",
-			Players.PlayerId + " = " + playerId
+			new String[] {Players.PlayerId.toString(), playerId + ""}
 		);
 	}
 	
@@ -143,7 +143,7 @@ public class LocalSession {
 				Players.TableName.toString(),
 				Players.Online.toString(),
 				0 + "",
-				Players.PlayerId + " = " + playerId
+				new String[] {Players.PlayerId.toString(), playerId + ""}
 			);
 	}
 	

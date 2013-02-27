@@ -49,8 +49,8 @@ public class PlayerData implements _NormalData {
 	public void fetchData() {
 		List<QueryResult> results = QueryUtils.select(
 			Players.TableName.toString(),
-			"*",
-			Players.PlayerId.toString() + " = " + playerId
+			new String[] {Players.PlayerId.toString(), Players.Logins.toString()},
+			new String[] { Players.PlayerId.toString(), playerId + ""}
 		);
 		if(results.isEmpty()) QueryUtils.insert(Players.TableName.toString(), getValues());
 		else {
@@ -64,7 +64,7 @@ public class PlayerData implements _NormalData {
 		return QueryUtils.update(
 			Players.TableName.toString(),
 			getValues(), 
-			Players.PlayerId.toString() + " = " + playerId
+			new String[] { Players.PlayerId.toString(), playerId + ""}
 		);
 	}
 

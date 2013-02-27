@@ -53,6 +53,7 @@ public class DataCollector implements Runnable {
 	 * This method is run periodically, as well as on plugin shutdown.
 	 */
 	public static void pushAllData() {
+		Message.debug("Data is being sent to the remote database");
 		for(LocalSession session : get()) {
 			session.pushData();
 			if(session.getOnline() == false) remove(session);
@@ -118,10 +119,10 @@ public class DataCollector implements Runnable {
 			it.remove();
 		}
 		int playerId = -1;
-		List<QueryResult> results = QueryUtils.select(Players.TableName.toString(), Players.Name.toString() +", " + Players.PlayerId.toString(), "name = " + username);
+		List<QueryResult> results = QueryUtils.select(Players.TableName.toString(), new String[] {Players.Name.toString(), Players.PlayerId.toString()}, new String[] {"name", username} );
 		if(results.isEmpty()) {
 			QueryUtils.insert(Players.TableName.toString(), PlayerData.getDefaultValues(username));
-			List<QueryResult> newResults = QueryUtils.select(Players.TableName.toString(), Players.Name.toString() +", " + Players.PlayerId.toString(), "name = " + username);
+			List<QueryResult> newResults = QueryUtils.select(Players.TableName.toString(), new String[] {Players.Name.toString(), Players.PlayerId.toString()}, new String[] {"name", username} );
 			playerId = newResults.get(0).getValueAsInteger(Players.PlayerId.toString());
 		} else playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
 		players.put(username, playerId);

@@ -32,9 +32,9 @@ public class TotalDeathsEntry implements _NormalData {
 	public void fetchData() {
 		List<QueryResult> results = QueryUtils.select(
 			TotalDeathPlayers.TableName.toString(),
-			"*",
-			TotalDeathPlayers.PlayerId + " = " + playerId,
-			TotalDeathPlayers.Cause + " = " + cause.name()
+			new String[] {"*"},
+			new String[] { TotalDeathPlayers.PlayerId.toString(), playerId + ""},
+			new String[] { TotalDeathPlayers.Cause.toString(), cause.name()}
 		);
 		
 		if(results.isEmpty()) QueryUtils.insert(TotalDeathPlayers.TableName.toString(), getValues());
@@ -48,8 +48,8 @@ public class TotalDeathsEntry implements _NormalData {
 		return QueryUtils.update(
 			TotalDeathPlayers.TableName.toString(),
 			getValues(),
-			TotalDeathPlayers.PlayerId + " = " + playerId,
-			TotalDeathPlayers.Cause + " = " + cause.name()
+			new String[] { TotalDeathPlayers.PlayerId.toString(), playerId + ""},
+			new String[] { TotalDeathPlayers.Cause.toString(), cause.name()}
 		);
 	}
 

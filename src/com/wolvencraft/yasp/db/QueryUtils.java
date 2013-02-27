@@ -68,25 +68,43 @@ public class QueryUtils {
 	 * @param condition Conditions that should apply to columns
 	 * @return Data from the remote database
 	 */
-	public static List<QueryResult> select(String table, String subject, String... condition) {
+	public static List<QueryResult> select(String table, String[] subject, String[]... condition) {
 		String query = "";
-		String conditions = "";
-		for(String str : condition) {
-			if(!conditions.equals("")) conditions += " AND ";
-			conditions += str;
+		table = "`" + Settings.getTablePrefix() + table + "`";
+		
+		String subjects = "";
+		for(String str : subject) {
+			if(!subjects.equals("")) subjects += ", ";
+			if(str.equals("*")) subjects += "*";
+			else subjects += "`" + str + "`";
 		}
-		query = "SELECT " + subject + " FROM " + Settings.getTablePrefix() + table + " WHERE " + conditions;
+		
+		String conditions = "";
+		for(String[] str : condition) {
+			if(!conditions.equals("")) conditions += " AND ";
+			conditions += "`" + str[0] + "`='" + str[1] + "'";
+		}
+		query = "SELECT " + subjects + " FROM " + table + " WHERE " + conditions;
 		return fetchData(query);
 	}
 	
 	/**
-	 * Builds and runs a SELECT query based on arguments provided
+	 * Builds and runs a SELECT query based on arguments provided.<br />
+	 * <b>Example:</b> QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});<br />
+	 * <b>Becomes:</b> SELECT `yasp_settings`.`key`, `yasp_settings`.`value` FROM `yasp_settings`
 	 * @param table Database table to select from (without prefix)
 	 * @param subject The columns that should be selected from the table
 	 * @return Data from the remote database
 	 */
-	public static List<QueryResult> select(String table, String subject) {
-		String query = "SELECT " + subject + " FROM " + Settings.getTablePrefix() + table;
+	public static List<QueryResult> select(String table, String[] subject) {
+		table = "`" + Settings.getTablePrefix() + table + "`";
+		String subjects = "";
+		for(String str : subject) {
+			if(!subjects.equals("")) subjects += ", ";
+			if(str.equals("*")) subjects += "*";
+			else subjects += "`" + str + "`";
+		}
+		String query = "SELECT " + subjects + " FROM " + table;
 		return fetchData(query);
 	}
 	
@@ -106,11 +124,11 @@ public class QueryUtils {
 			if(!fields.equals("")) fields += ", ";
 			if(!values.equals("")) values += ", ";
 			
-			fields += pairs.getKey();
-			values += pairs.getValue().toString();
+			fields += "`" + pairs.getKey() + "`";
+			values += "'" + pairs.getValue().toString() + "'";
 			it.remove();
 		}
-		query = "INSERT INTO " + Settings.getTablePrefix() + table + " (" + fields + ")  VALUES (" + values + ")";
+		query = "INSERT INTO `" + Settings.getTablePrefix() + table + "` (" + fields + ")  VALUES (" + values + ")";
 		return pushData(query);
 	}
 	
@@ -123,14 +141,14 @@ public class QueryUtils {
 	 * @param condition Conditions that should apply to columns
 	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
 	 */
-	public static boolean update(String table, String field, String value, String... condition) {
+	public static boolean update(String table, String field, String value, String[]... condition) {
 		String query = "";
 		String conditions = "";
-		for(String str : condition) {
+		for(String[] str : condition) {
 			if(!conditions.equals("")) conditions += " AND ";
-			conditions += str;
+			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "UPDATE " + Settings.getTablePrefix() + table + " (" + field + ")  SET (" + value + ") WHERE " + conditions;
+		query = "UPDATE `" + Settings.getTablePrefix() + table + "` SET `" + field + "`='" + value + "' WHERE " + conditions;
 		return pushData(query);
 	}
 	
@@ -141,7 +159,7 @@ public class QueryUtils {
 	 * @param condition Conditions that should apply to columns
 	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
 	 */
-	public static boolean update(String table, Map<String, Object> valueMap, String... condition) {
+	public static boolean update(String table, Map<String, Object> valueMap, String[]... condition) {
 		String query = "";
 		String fields = "";
 		String values = "";
@@ -151,16 +169,16 @@ public class QueryUtils {
 			Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
 			if(!fields.equals("")) fields += ", ";
 			if(!values.equals("")) values += ", ";
-			
-			fields += pairs.getKey();
-			values += pairs.getValue().toString();
+
+			fields += "`" + pairs.getKey() + "`";
+			values += "'" + pairs.getValue().toString() + "'";
 			it.remove();
 		}
-		for(String str : condition) {
+		for(String str[] : condition) {
 			if(!conditions.equals("")) conditions += " AND ";
-			conditions += str;
+			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "UPDATE " + Settings.getTablePrefix() + table + " (" + fields + ")  SET (" + values + ") WHERE " + conditions;
+		query = "UPDATE `" + Settings.getTablePrefix() + table + "` (" + fields + ") SET (" + values + ") WHERE " + conditions;
 		return pushData(query);
 	}
 }

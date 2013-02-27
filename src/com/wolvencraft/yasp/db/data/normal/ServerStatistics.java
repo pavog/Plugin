@@ -31,7 +31,7 @@ public class ServerStatistics implements _NormalData {
 	
 	@Override
 	public void fetchData() {
-		List<QueryResult> entries = QueryUtils.select(_ServerStatistics.TableName.toString(), "*");
+		List<QueryResult> entries = QueryUtils.select(_ServerStatistics.TableName.toString(), new String[] {"*"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("first_startup")) firstStartupTime = entry.getValueAsLong("value");
 			else if(entry.getValue("key").equalsIgnoreCase("last_startup")) startupTime = entry.getValueAsLong("value");
@@ -49,12 +49,12 @@ public class ServerStatistics implements _NormalData {
 		currentUptime = Util.getCurrentTime().getTime() - startupTime;
 		totalUptime += currentUptime;
 		return
-			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", firstStartupTime + "", "key = first_startup") &&
-			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", startupTime + "", "key = last_startup") &&  
-			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", shutdownTime + "", "key = shutdown_time") && 
-			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", currentUptime + "", "key = current_uptime") && 
-			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", totalUptime + "", "key = total_uptime") && 
-			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", maxPlayersOnline + "", "key = max_players_online");
+			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", firstStartupTime + "", new String[] {"key", "first_startup"} ) &&
+			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", startupTime + "", new String[] {"key", "last_startup"} ) &&  
+			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", shutdownTime + "", new String[] {"key", "shutdown_time"} ) && 
+			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", currentUptime + "", new String[] {"key", "current_uptime"} ) && 
+			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", totalUptime + "", new String[] {"key", "total_uptime"} ) && 
+			QueryUtils.update(_ServerStatistics.TableName.toString(), "value", maxPlayersOnline + "", new String[] {"key", "max_players_online"} );
 	}
 
 	@Override

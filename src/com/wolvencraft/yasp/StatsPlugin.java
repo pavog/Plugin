@@ -18,7 +18,7 @@ public class StatsPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
-
+		
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		new Settings(this);
@@ -59,6 +59,7 @@ public class StatsPlugin extends JavaPlugin {
 	public void onDisable() {
 		Message.log("Plugin shutting down");
 		try {
+			DataCollector.pluginShutdown();
 			DataCollector.pushAllData();
 			instance = null;
 			Bukkit.getScheduler().cancelAllTasks();
