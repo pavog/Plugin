@@ -47,12 +47,14 @@ public class StatsPlugin extends JavaPlugin {
 			this.setEnabled(false);
 			return;
 		}
-		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing());
+
+		Settings.retrieveData();
 		
 		new PlayerListener(this);
 		new BlockListener(this);
 		new EntityListener(this);
+		
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing());
 	}
 
 	@Override

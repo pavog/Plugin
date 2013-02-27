@@ -56,7 +56,7 @@ public class DataCollector implements Runnable {
 		Message.debug("Data is being sent to the remote database");
 		for(LocalSession session : get()) {
 			session.pushData();
-			if(session.getOnline() == false) remove(session);
+			if(!session.isOnline()) remove(session);
 		}
 		
 		serverStatistics.pushData();
@@ -81,10 +81,12 @@ public class DataCollector implements Runnable {
 	public static LocalSession get(Player player) {
 		for(LocalSession session : sessions) {
 			if(session.getPlayerName().equals(player.getPlayerListName())) {
+				Message.debug("Retrieving a user session for " + player.getPlayerListName());
 				if(Settings.getWelcomeMessage() != null) Message.send(player, Settings.getWelcomeMessage());
 				return session;
 			}
 		}
+		Message.debug("Creating a new user session for " + player.getPlayerListName());
 		LocalSession newSession = new LocalSession(player);
 		sessions.add(newSession);
 		if(Settings.getFirstJoinMessage() != null) Message.send(player, Settings.getFirstJoinMessage());
@@ -103,6 +105,7 @@ public class DataCollector implements Runnable {
 	 * @param session Session to remove
 	 */
 	public static void remove(LocalSession session) {
+		Message.debug("Removing a user session for " + session.getPlayerName());
 		sessions.remove(session);
 	}
 	
@@ -112,6 +115,7 @@ public class DataCollector implements Runnable {
 	 * @return <b>int</b> playerID
 	 */
 	public static Integer getCachedPlayerId(String username) {
+		Message.debug("Retriving a player ID for " + username);
 		Iterator<Entry<String, Integer>> it = players.entrySet().iterator();
 		while(it.hasNext()) {
 			Map.Entry<String, Integer> pairs = (Map.Entry<String, Integer>) it.next();
@@ -126,6 +130,7 @@ public class DataCollector implements Runnable {
 			playerId = newResults.get(0).getValueAsInteger(Players.PlayerId.toString());
 		} else playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
 		players.put(username, playerId);
+		Message.debug("User ID found: " + playerId);
 		return playerId;
 	}
 	

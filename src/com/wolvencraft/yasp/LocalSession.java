@@ -82,7 +82,7 @@ public class LocalSession {
 	 * Returns the player's current online status.
 	 * @return <b>true</b> if online, <b>false</b> otherwise
 	 */
-	public boolean getOnline() {
+	public boolean isOnline() {
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if(player.getPlayerListName().equals(playerName)) return true;
 		}

@@ -42,7 +42,6 @@ public class Database {
 		
 		connect();
 		patch();
-		Settings.retrieveData();
 	}
 	
 	public static boolean testConnection() {
