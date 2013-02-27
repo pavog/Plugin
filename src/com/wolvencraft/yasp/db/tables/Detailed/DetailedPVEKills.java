@@ -8,6 +8,7 @@ public enum DetailedPVEKills implements _DetailedTable {
 	PlayerID("player_id"),
 	CreatureId("creature_id"),
 	MaterialId("material_id"),
+	MaterialData("material_data"),
 	PlayerKilled("player_killed"),
 	World("world"),
 	XCoord("x"),

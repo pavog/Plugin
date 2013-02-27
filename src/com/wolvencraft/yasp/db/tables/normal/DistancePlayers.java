@@ -4,7 +4,7 @@ public enum DistancePlayers implements _NormalTable {
 	
 	TableName("distance_players"),
 	
-	DistanceId("distance_player_id"),
+	EntryId("distance_player_id"),
 	PlayerId("player_id"),
 	Foot("foot"),
 	Boat("boat"),

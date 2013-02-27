@@ -4,7 +4,7 @@ public enum TotalDeathPlayers implements _NormalTable {
 	
 	TableName("total_death_players"),
 	
-	TotalBlocksId("total_death_players_id"),
+	EntryId("total_death_players_id"),
 	PlayerId("player_id"),
 	Cause("cause"),
 	Times("times");

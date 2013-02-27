@@ -39,6 +39,7 @@ public class DetailedDroppedItemsData implements _DetailedData {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedDroppedItems.PlayerId.toString(), playerId);
 		map.put(DetailedDroppedItems.MaterialId.toString(), itemStack.getTypeId());
+		map.put(DetailedDroppedItems.MaterialData.toString(), itemStack.getData().getData());
 		map.put(DetailedDroppedItems.World.toString(), location.getWorld().getName());
 		map.put(DetailedDroppedItems.XCoord.toString(), location.getBlockX());
 		map.put(DetailedDroppedItems.YCoord.toString(), location.getBlockY());

@@ -42,6 +42,7 @@ public class DetailedPVPKillsData implements _DetailedData {
 		map.put(DetailedPVPKills.PlayerID.toString(), killerId);
 		map.put(DetailedPVPKills.VictimID.toString(), victimId);
 		map.put(DetailedPVPKills.MaterialID.toString(), weapon.getTypeId());
+		map.put(DetailedPVPKills.MaterialData.toString(), weapon.getData().getData());
 		map.put(DetailedPVPKills.World.toString(), location.getWorld().getName());
 		map.put(DetailedPVPKills.XCoord.toString(), location.getBlockX());
 		map.put(DetailedPVPKills.YCoord.toString(), location.getBlockY());

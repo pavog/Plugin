@@ -6,6 +6,7 @@ public enum DetailedDestroyedBlocks implements _DetailedTable {
 	
 	EntryId("detailed_destroyed_blocks_id"),
 	MaterialId("material_id"),
+	MaterialData("material_data"),
 	PlayerId("player_id"),
 	World("world"),
 	XCoord("x"),

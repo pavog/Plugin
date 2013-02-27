@@ -36,6 +36,7 @@ public class DetailedDestroyerdBlocksData implements _DetailedData {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedDestroyedBlocks.PlayerId.toString(), playerId);
 		map.put(DetailedDestroyedBlocks.MaterialId.toString(), materialData.getItemTypeId());
+		map.put(DetailedDestroyedBlocks.MaterialData.toString(), materialData.getData());
 		map.put(DetailedDestroyedBlocks.Timestamp.toString(), timestamp);
 		return map;
 	}

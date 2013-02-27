@@ -5,7 +5,9 @@ public enum TotalPVPKills implements _NormalTable {
 	
 	TableName("total_pvp_kills"),
 	
-	TotalBlocksId("total_pvp_id"),
+	EntryId("total_pvp_id"),
+	MaterialId("material_id"),
+	MaterialData("material_data"),
 	PlayerId("player_id"),
 	VictimId("victim_id"),
 	Times("times");

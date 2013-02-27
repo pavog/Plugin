@@ -5,8 +5,9 @@ public enum TotalItems implements _NormalTable {
 	
 	TableName("total_items"),
 	
-	TotalBlocksId("total_items_id"),
+	EntryId("total_items_id"),
 	MaterialId("material_id"),
+	MaterialData("material_data"),
 	PlayerId("player_id"),
 	Dropped("dropped"),
 	PickedUp("picked_up"),

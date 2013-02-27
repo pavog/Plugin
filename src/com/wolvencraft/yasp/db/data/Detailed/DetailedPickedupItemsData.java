@@ -40,6 +40,7 @@ public class DetailedPickedupItemsData implements _DetailedData {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedPickedupItems.PlayerId.toString(), playerId);
 		map.put(DetailedPickedupItems.MaterialId.toString(), itemStack.getTypeId());
+		map.put(DetailedPickedupItems.MaterialData.toString(), itemStack.getData().getData());
 		map.put(DetailedPickedupItems.World.toString(), location.getWorld().getName());
 		map.put(DetailedPickedupItems.XCoord.toString(), location.getBlockX());
 		map.put(DetailedPickedupItems.YCoord.toString(), location.getBlockY());

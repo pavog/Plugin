@@ -6,6 +6,7 @@ public enum DetailedPVPKills implements _DetailedTable {
 	
 	EntryId("detailed_pvp_id"),
 	MaterialID("material_id"),
+	MaterialData("material_data"),
 	PlayerID("player_id"),
 	VictimID("victim_id"),
 	Cause("cause"),

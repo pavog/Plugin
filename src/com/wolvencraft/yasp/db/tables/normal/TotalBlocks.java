@@ -6,6 +6,7 @@ public enum TotalBlocks implements _NormalTable {
 	
 	EntryId("total_blocks_id"),
 	MaterialId("material_id"),
+	MaterialData("material_data"),
 	PlayerId("player_id"),
 	Destroyed("destroyed"),
 	Placed("placed");

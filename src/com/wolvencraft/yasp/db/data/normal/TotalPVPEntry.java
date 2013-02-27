@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.inventory.ItemStack;
+
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal.TotalPVPKills;
@@ -23,14 +25,16 @@ public class TotalPVPEntry implements _NormalData {
 	 * @param killer Player who killed the victim
 	 * @param victim Player who was killed
 	 */
-	public TotalPVPEntry(int killerId, int victimId) {
+	public TotalPVPEntry(int killerId, int victimId, ItemStack weapon) {
 		this.killerId = killerId;
 		this.victimId = victimId;
+		this.weapon = weapon;
 		this.times = 0;
 	}
 	
 	private int killerId;
 	private int victimId;
+	private ItemStack weapon;
 	private int times;
 	
 	@Override
@@ -39,7 +43,9 @@ public class TotalPVPEntry implements _NormalData {
 			TotalPVPKills.TableName.toString(),
 			"*",
 			TotalPVPKills.PlayerId.toString() + " = " + killerId,
-			TotalPVPKills.VictimId + " = " + victimId
+			TotalPVPKills.VictimId.toString() + " = " + victimId,
+			TotalPVPKills.MaterialId.toString() + " = " + weapon.getTypeId(),
+			TotalPVPKills.MaterialData.toString() + " = " + weapon.getData().getData()
 		);
 		if(results.isEmpty()) QueryUtils.insert(TotalPVPKills.TableName.toString(), getValues());
 		else {
@@ -53,7 +59,9 @@ public class TotalPVPEntry implements _NormalData {
 			TotalPVPKills.TableName.toString(),
 			getValues(), 
 			TotalPVPKills.PlayerId.toString() + " = " + killerId,
-			TotalPVPKills.VictimId + " = " + victimId
+			TotalPVPKills.VictimId + " = " + victimId,
+			TotalPVPKills.MaterialId.toString() + " = " + weapon.getTypeId(),
+			TotalPVPKills.MaterialData.toString() + " = " + weapon.getData().getData()
 		);
 	}
 
@@ -62,6 +70,8 @@ public class TotalPVPEntry implements _NormalData {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalPVPKills.PlayerId.toString(), killerId);
 		map.put(TotalPVPKills.VictimId.toString(), victimId);
+		map.put(TotalPVPKills.MaterialId.toString(), weapon.getTypeId());
+		map.put(TotalPVPKills.MaterialData.toString(), weapon.getData().getData());
 		map.put(TotalPVPKills.Times.toString(), times);
 		return map;
 	}

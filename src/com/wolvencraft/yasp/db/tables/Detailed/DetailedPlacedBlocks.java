@@ -6,6 +6,7 @@ public enum DetailedPlacedBlocks implements _DetailedTable {
 	
 	EntryId("detailed_placed_blocks_id"),
 	MaterialId("material_id"),
+	MaterialData("material_data"),
 	PlayerId("player_id"),
 	World("world"),
 	XCoord("x"),

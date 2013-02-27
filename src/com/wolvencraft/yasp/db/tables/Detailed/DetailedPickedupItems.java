@@ -6,6 +6,7 @@ public enum DetailedPickedupItems implements _DetailedTable {
 	
 	EntryId("detailed_pickedup_items_id"),
 	MaterialId("material_id"),
+	MaterialData("material_data"),
 	PlayerId("player_id"),
 	World("world"),
 	XCoord("x"),

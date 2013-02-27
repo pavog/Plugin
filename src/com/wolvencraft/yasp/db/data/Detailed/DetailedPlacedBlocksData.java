@@ -36,6 +36,7 @@ public class DetailedPlacedBlocksData implements _DetailedData {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedPlacedBlocks.PlayerId.toString(), playerId);
 		map.put(DetailedPlacedBlocks.MaterialId.toString(), materialData.getItemTypeId());
+		map.put(DetailedPlacedBlocks.MaterialData.toString(), materialData.getData());
 		map.put(DetailedPlacedBlocks.Timestamp.toString(), timestamp);
 		return map;
 	}

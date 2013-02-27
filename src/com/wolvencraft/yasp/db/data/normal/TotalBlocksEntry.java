@@ -30,7 +30,9 @@ public class TotalBlocksEntry implements _NormalData {
 		List<QueryResult> results = QueryUtils.select(
 			TotalBlocks.TableName.toString(),
 			"*",
-			TotalBlocks.PlayerId + " = " + playerId
+			TotalBlocks.PlayerId.toString() + " = " + playerId,
+			TotalBlocks.MaterialId.toString() + " = " + material.getItemTypeId(),
+			TotalBlocks.MaterialData.toString() + " = " + material.getData()
 		);
 		
 		if(results.isEmpty()) QueryUtils.insert(TotalBlocks.TableName.toString(), getValues());
@@ -45,8 +47,9 @@ public class TotalBlocksEntry implements _NormalData {
 		return QueryUtils.update(
 			TotalBlocks.TableName.toString(),
 			getValues(),
-			TotalBlocks.PlayerId + " = " + playerId,
-			TotalBlocks.MaterialId + " = " + material.getItemTypeId()
+			TotalBlocks.PlayerId.toString() + " = " + playerId,
+			TotalBlocks.MaterialId.toString() + " = " + material.getItemTypeId(),
+			TotalBlocks.MaterialData.toString() + " = " + material.getData()
 		);
 	}
 	
@@ -55,6 +58,7 @@ public class TotalBlocksEntry implements _NormalData {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalBlocks.PlayerId.toString(), playerId);
 		map.put(TotalBlocks.MaterialId.toString(), material.getItemTypeId());
+		map.put(TotalBlocks.MaterialData.toString(), material.getData());
 		map.put(TotalBlocks.Destroyed.toString(), broken);
 		map.put(TotalBlocks.Placed.toString(), placed);
 		return map;

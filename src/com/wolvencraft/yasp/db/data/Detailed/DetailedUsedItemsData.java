@@ -39,6 +39,7 @@ public class DetailedUsedItemsData implements _DetailedData {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedUsedItems.PlayerId.toString(), playerId);
 		map.put(DetailedUsedItems.MaterialId.toString(), itemStack.getTypeId());
+		map.put(DetailedUsedItems.MaterialData.toString(), itemStack.getData().getData());
 		map.put(DetailedUsedItems.World.toString(), location.getWorld().getName());
 		map.put(DetailedUsedItems.XCoord.toString(), location.getBlockX());
 		map.put(DetailedUsedItems.YCoord.toString(), location.getBlockY());

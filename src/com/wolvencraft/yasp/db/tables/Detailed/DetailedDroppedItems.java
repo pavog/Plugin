@@ -6,6 +6,7 @@ public enum DetailedDroppedItems implements _DetailedTable {
 	
 	EntryId("detailed_dropped_items_id"),
 	MaterialId("material_id"),
+	MaterialData("material_data"),
 	PlayerId("player_id"),
 	World("world"),
 	XCoord("x"),

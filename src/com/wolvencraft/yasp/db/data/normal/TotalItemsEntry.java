@@ -48,7 +48,8 @@ public class TotalItemsEntry implements _NormalData {
 			TotalItems.TableName.toString(),
 			"*",
 			TotalItems.PlayerId.toString() + " = " + playerId,
-			TotalItems.MaterialId.toString() + " = " + itemStack.getTypeId()
+			TotalItems.MaterialId.toString() + " = " + itemStack.getTypeId(),
+			TotalItems.MaterialData.toString() + " = " + itemStack.getData().getData()
 		);
 		
 		if(results.isEmpty()) QueryUtils.insert(TotalItems.TableName.toString(), getValues());
@@ -67,7 +68,8 @@ public class TotalItemsEntry implements _NormalData {
 			TotalItems.TableName.toString(),
 			getValues(),
 			TotalItems.PlayerId + " = " + playerId,
-			TotalItems.MaterialId + " = " + itemStack.getTypeId()
+			TotalItems.MaterialId + " = " + itemStack.getTypeId(),
+			TotalItems.MaterialData.toString() + " = " + itemStack.getData().getData()
 		);
 	}
 	
@@ -76,6 +78,7 @@ public class TotalItemsEntry implements _NormalData {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalItems.PlayerId.toString(), playerId);
 		map.put(TotalItems.MaterialId.toString(), itemStack.getTypeId());
+		map.put(TotalItems.MaterialData.toString(), itemStack.getData().getData());
 		map.put(TotalItems.Dropped.toString(), dropped);
 		map.put(TotalItems.PickedUp.toString(), pickedUp);
 		map.put(TotalItems.Used.toString(), used);

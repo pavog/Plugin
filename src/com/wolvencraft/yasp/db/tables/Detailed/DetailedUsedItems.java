@@ -4,8 +4,9 @@ public enum DetailedUsedItems implements _DetailedTable {
 
 	TableName("detailed_used_items"),
 	
-	ItemUseId("detailed_used_items_id"),
+	EntryId("detailed_used_items_id"),
 	MaterialId("material_id"),
+	MaterialData("material_data"),
 	PlayerId("player_id"),
 	World("world"),
 	XCoord("x"),
