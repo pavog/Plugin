@@ -366,6 +366,8 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_items` (
   `dropped` INT UNSIGNED NULL DEFAULT 0 ,
   `picked_up` INT UNSIGNED NULL DEFAULT 0 ,
   `used` INT UNSIGNED NULL DEFAULT 0 ,
+  `crafted` INT UNSIGNED NULL DEFAULT 0 ,
+  `smelted` INT UNSIGNED NULL DEFAULT 0 ,
   PRIMARY KEY (`total_items_id`, `material_id`, `player_id`) ,
   INDEX `fk_player_id10_idx` (`player_id` ASC) ,
   INDEX `fk_material_id6_idx` (`material_id` ASC) ,

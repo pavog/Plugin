@@ -7,11 +7,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
@@ -76,5 +79,17 @@ public class PlayerListener implements Listener {
 		Player player = (Player) event.getEntity();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).itemUse(player.getItemInHand());
+	}
+	
+	public void onPlayerCraft(CraftItemEvent event) {
+		Player player = (Player) event.getWhoClicked();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).itemCraft(event.getCurrentItem());
+	}
+	
+	public void onPlayerSmelt(FurnaceExtractEvent event) {
+		Player player = event.getPlayer();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).itemSmelt(new ItemStack(event.getItemType()));
 	}
 }

@@ -193,6 +193,22 @@ public class LocalSession {
 	}
 	
 	/**
+	 * Registers item crafting with all corresponding statistics trackers
+	 * @param itemStack Stack of items in question
+	 */
+	public void itemCraft(ItemStack itemStack) {
+		totalItems.get(playerId, itemStack).addCrafted();
+	}
+	
+	/**
+	 * Registers item smelting with all corresponding statistics trackers
+	 * @param itemStack Stack of items in question
+	 */
+	public void itemSmelt(ItemStack itemStack) {
+		totalItems.get(playerId, itemStack).addSmelted();
+	}
+	
+	/**
 	 * Registers player death from other player with all corresponding statistics trackers
 	 * @param killer Player who killed the victim
 	 * @param victim Player who was killed 

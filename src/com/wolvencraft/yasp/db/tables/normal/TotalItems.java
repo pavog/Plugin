@@ -10,7 +10,9 @@ public enum TotalItems implements _NormalTable {
 	PlayerId("player_id"),
 	Dropped("dropped"),
 	PickedUp("picked_up"),
-	Used("used");
+	Used("used"),
+	Crafted("crafted"),
+	Smelted("smelted");
 	
 	TotalItems(String columnName) {
 		this.columnName = columnName;

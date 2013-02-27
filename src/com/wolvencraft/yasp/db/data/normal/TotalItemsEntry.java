@@ -30,6 +30,8 @@ public class TotalItemsEntry implements _NormalData {
 		this.dropped = 0;
 		this.pickedUp = 0;
 		this.used = 0;
+		this.crafted = 0;
+		this.smelted = 0;
 	}
 	
 	private int playerId;
@@ -37,19 +39,25 @@ public class TotalItemsEntry implements _NormalData {
 	private int dropped;
 	private int pickedUp;
 	private int used;
+	private int crafted;
+	private int smelted;
 	
 	@Override
 	public void fetchData() {
 		List<QueryResult> results = QueryUtils.select(
 			TotalItems.TableName.toString(),
 			"*",
-			TotalItems.PlayerId + " = " + playerId
+			TotalItems.PlayerId.toString() + " = " + playerId,
+			TotalItems.MaterialId.toString() + " = " + itemStack.getTypeId()
 		);
 		
 		if(results.isEmpty()) QueryUtils.insert(TotalItems.TableName.toString(), getValues());
 		else {
 			dropped = results.get(0).getValueAsInteger(TotalItems.Dropped.toString());
 			pickedUp = results.get(0).getValueAsInteger(TotalItems.PickedUp.toString());
+			used = results.get(0).getValueAsInteger(TotalItems.Used.toString());
+			crafted = results.get(0).getValueAsInteger(TotalItems.Crafted.toString());
+			smelted = results.get(0).getValueAsInteger(TotalItems.Smelted.toString());
 		}
 	}
 
@@ -71,6 +79,8 @@ public class TotalItemsEntry implements _NormalData {
 		map.put(TotalItems.Dropped.toString(), dropped);
 		map.put(TotalItems.PickedUp.toString(), pickedUp);
 		map.put(TotalItems.Used.toString(), used);
+		map.put(TotalItems.Crafted.toString(), crafted);
+		map.put(TotalItems.Smelted.toString(), smelted);
 		return map;
 	}
 	
@@ -81,13 +91,13 @@ public class TotalItemsEntry implements _NormalData {
 	public ItemStack getItemStack() { return itemStack; }
 	
 	/**
-	 * Adds the specified number of blocks to the total number of items used
+	 * Adds the specified number of blocks to the total number of items dropped
 	 * @param blocks Items to add
 	 */
 	public void addDropped() { dropped++; }
 	
 	/**
-	 * Adds the specified number of blocks to the total number of items used
+	 * Adds the specified number of blocks to the total number of items picked up
 	 * @param blocks Items to add
 	 */
 	public void addPickedUp() { pickedUp++; }
@@ -97,4 +107,16 @@ public class TotalItemsEntry implements _NormalData {
 	 * @param blocks Items to add
 	 */
 	public void addUsed() { used++; }
+
+	/**
+	 * Adds the specified number of blocks to the total number of items crafted
+	 * @param blocks Items to add
+	 */
+	public void addCrafted() { crafted++; }
+
+	/**
+	 * Adds the specified number of blocks to the total number of items smelted
+	 * @param blocks Items to add
+	 */
+	public void addSmelted() { smelted++; }
 }
