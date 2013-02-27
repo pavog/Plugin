@@ -69,14 +69,14 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_distance_players` (
 
 
 -- -----------------------------------------------------
--- Table `$dbname`.`$prefix_creatures`
+-- Table `$dbname`.`$prefix_entities`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_creatures` ;
+DROP TABLE IF EXISTS `$dbname`.`$prefix_entities` ;
 
-CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_creatures` (
-  `creature_id` INT NOT NULL AUTO_INCREMENT ,
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_entities` (
+  `entity_id` INT NOT NULL AUTO_INCREMENT ,
   `tp_name` VARCHAR(100) NULL ,
-  PRIMARY KEY (`creature_id`) );
+  PRIMARY KEY (`entity_id`) );
 
 
 -- -----------------------------------------------------
@@ -86,10 +86,9 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_materials` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_materials` (
   `material_id` INT NOT NULL ,
-  `data` SMALLINT(3) UNSIGNED NULL DEFAULT 0 ,
-  `tp_name` VARCHAR(45) NULL ,
-  PRIMARY KEY (`material_id`) ,
-  UNIQUE INDEX `tp_name_UNIQUE` (`tp_name` ASC) );
+  `data` SMALLINT(3) UNSIGNED NOT NULL DEFAULT 0 ,
+  `tp_name` VARCHAR(45) NULL DEFAULT 'none' ,
+  PRIMARY KEY (`material_id`, `data`) );
 
 
 -- -----------------------------------------------------
@@ -280,17 +279,6 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_settings` (
 
 
 -- -----------------------------------------------------
--- Table `$dbname`.`$prefix_server_statistics`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_server_statistics` ;
-
-CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_server_statistics` (
-  `key` VARCHAR(64) NOT NULL ,
-  `value` TEXT NOT NULL ,
-  PRIMARY KEY (`key`) );
-
-
--- -----------------------------------------------------
 -- Table `$dbname`.`$prefix_detailed_pve_kills`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pve_kills` ;
@@ -298,7 +286,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pve_kills` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pve_kills` (
   `detailed_pve_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `creature_id` INT NOT NULL ,
+  `entity_id` INT NOT NULL ,
   `player_id` INT NOT NULL ,
   `cause` VARCHAR(45) NULL ,
   `world` VARCHAR(255) NULL ,
@@ -306,11 +294,11 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pve_kills` (
   `y` INT NULL ,
   `z` INT NULL ,
   `time` INT(11) NULL ,
-  `player_killed` TINYINT(1) NULL DEFAULT false ,
-  PRIMARY KEY (`detailed_pve_id`, `material_id`, `creature_id`, `player_id`) ,
+  `player_killed` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`detailed_pve_id`, `material_id`, `entity_id`, `player_id`) ,
   INDEX `fk_player_id16_idx` (`player_id` ASC) ,
   INDEX `fk_material_id10_idx` (`material_id` ASC) ,
-  INDEX `fk_creature_id2_idx` (`creature_id` ASC) ,
+  INDEX `fk_entity_id2_idx` (`entity_id` ASC) ,
   CONSTRAINT `fk_player_id16`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
@@ -321,9 +309,9 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pve_kills` (
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_creature_id2`
-    FOREIGN KEY (`creature_id` )
-    REFERENCES `$dbname`.`$prefix_creatures` (`creature_id` )
+  CONSTRAINT `fk_entity_id2`
+    FOREIGN KEY (`entity_id` )
+    REFERENCES `$dbname`.`$prefix_entities` (`entity_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION);
 
@@ -366,8 +354,8 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_items` (
   `dropped` INT UNSIGNED NULL DEFAULT 0 ,
   `picked_up` INT UNSIGNED NULL DEFAULT 0 ,
   `used` INT UNSIGNED NULL DEFAULT 0 ,
-  `crafted` INT UNSIGNED NULL DEFAULT 0 ,
-  `smelted` INT UNSIGNED NULL DEFAULT 0 ,
+  `crafted` INT NULL DEFAULT 0 ,
+  `smelted` INT NULL DEFAULT 0 ,
   PRIMARY KEY (`total_items_id`, `material_id`, `player_id`) ,
   INDEX `fk_player_id10_idx` (`player_id` ASC) ,
   INDEX `fk_material_id6_idx` (`material_id` ASC) ,
@@ -442,14 +430,14 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_total_pve_kills` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pve_kills` (
   `total_pve_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `creature_id` INT NOT NULL ,
+  `entity_id` INT NOT NULL ,
   `player_id` INT NOT NULL ,
   `player_killed` INT(10) NULL DEFAULT 0 ,
-  `creature_killd` INT(10) NULL DEFAULT 0 ,
-  PRIMARY KEY (`total_pve_id`, `material_id`, `creature_id`, `player_id`) ,
+  `creature_killed` INT(10) NULL DEFAULT 0 ,
+  PRIMARY KEY (`total_pve_id`, `material_id`, `entity_id`, `player_id`) ,
   INDEX `fk_player_id13_idx` (`player_id` ASC) ,
   INDEX `fk_material_id12_idx` (`material_id` ASC) ,
-  INDEX `fk_creature_id1_idx` (`creature_id` ASC) ,
+  INDEX `fk_entity_id1_idx` (`entity_id` ASC) ,
   CONSTRAINT `fk_player_id13`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
@@ -460,9 +448,9 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pve_kills` (
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_creature_id1`
-    FOREIGN KEY (`creature_id` )
-    REFERENCES `$dbname`.`$prefix_creatures` (`creature_id` )
+  CONSTRAINT `fk_entity_id1`
+    FOREIGN KEY (`entity_id` )
+    REFERENCES `$dbname`.`$prefix_entities` (`entity_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION);
 
@@ -494,6 +482,17 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_used_items` (
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_server_statistics`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_server_statistics` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_server_statistics` (
+  `key` VARCHAR(64) NOT NULL ,
+  `value` TEXT NOT NULL ,
+  PRIMARY KEY (`key`) );
 
 USE `$dbname` ;
 
