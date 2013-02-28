@@ -7,15 +7,14 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.detailed.DetailedPickedupItems;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPickedupItemsData implements _DetailedData {
 	
-	public DetailedPickedupItemsData(Player player, ItemStack itemStack) {
-		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
+	public DetailedPickedupItemsData(Player player, int playerId, ItemStack itemStack) {
+		this.playerId = playerId;
 		this.itemStack = itemStack;
 		this.itemStack.setAmount(1);
 		this.location = player.getLocation();

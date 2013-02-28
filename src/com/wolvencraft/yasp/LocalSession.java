@@ -22,7 +22,7 @@ public class LocalSession {
 	
 	public LocalSession(Player player) {
 		this.playerName = player.getPlayerListName();
-		this.playerId = DataCollector.getCachedPlayerId(playerName);
+		this.playerId = DataCollector.getPlayerId(player);
 		this.playerData = new PlayerData(player, playerName, playerId);
 		
 		this.playersDistances = new PlayerDistances(playerId);
@@ -153,7 +153,7 @@ public class LocalSession {
 	 */
 	public void blockBreak(MaterialData materialData) {
 		totalBlocks.get(playerId, materialData).addBroken();
-		detailedData.add(new DetailedDestroyerdBlocksData(getPlayer(), materialData));
+		detailedData.add(new DetailedDestroyerdBlocksData(getPlayer(), playerId, materialData));
 	}
 	
 	/**
@@ -162,7 +162,7 @@ public class LocalSession {
 	 */
 	public void blockPlace(MaterialData materialData) {
 		totalBlocks.get(playerId, materialData).addPlaced();
-		detailedData.add(new DetailedPlacedBlocksData(getPlayer(), materialData));
+		detailedData.add(new DetailedPlacedBlocksData(getPlayer(), playerId, materialData));
 	}
 	
 	/**
@@ -171,7 +171,7 @@ public class LocalSession {
 	 */
 	public void itemDrop(ItemStack itemStack) {
 		totalItems.get(playerId, itemStack).addDropped();
-		detailedData.add(new DetailedDroppedItemsData(getPlayer(), itemStack));
+		detailedData.add(new DetailedDroppedItemsData(getPlayer(), playerId, itemStack));
 	}
 	
 	/**
@@ -180,7 +180,7 @@ public class LocalSession {
 	 */
 	public void itemPickUp(ItemStack itemStack) {
 		totalItems.get(playerId, itemStack).addPickedUp();
-		detailedData.add(new DetailedPickedupItemsData(getPlayer(), itemStack));
+		detailedData.add(new DetailedPickedupItemsData(getPlayer(), playerId, itemStack));
 	}
 	
 	/**
@@ -189,7 +189,7 @@ public class LocalSession {
 	 */
 	public void itemUse(ItemStack itemStack) {
 		totalItems.get(playerId,  itemStack).addUsed();
-		detailedData.add(new DetailedUsedItemsData(getPlayer(), itemStack));
+		detailedData.add(new DetailedUsedItemsData(getPlayer(), playerId, itemStack));
 	}
 	
 	/**
@@ -214,10 +214,10 @@ public class LocalSession {
 	 * @param victim Player who was killed 
 	 * @param weapon Weapon used by killer
 	 */
-	public void playerKilledPlayer(Player killer, Player victim, ItemStack weapon) {
-		int victimId = DataCollector.getCachedPlayerId(victim.getPlayerListName());
+	public void playerKilledPlayer(Player victim, ItemStack weapon) {
+		int victimId = DataCollector.getPlayerId(victim);
 		totalPVP.get(playerId, victimId, weapon).addTimes();
-		detailedData.add(new DetailedPVPKillsData(killer, victim, weapon));
+		detailedData.add(new DetailedPVPKillsData(getPlayer(), playerId, victim, victimId, weapon));
 	}
 	
 	/**
@@ -226,9 +226,9 @@ public class LocalSession {
 	 * @param victim Creature killed
 	 * @param weapon Weapon used by killer
 	 */
-	public void playerKilledCreature(Player killer, Creature victim, ItemStack weapon) {
+	public void playerKilledCreature(Creature victim, ItemStack weapon) {
 		totalPVE.get(playerId, victim.getType(), weapon).addCreatureDeaths();
-		detailedData.add(new DetailedPVEKillsData(killer, victim.getType(), weapon, false));
+		detailedData.add(new DetailedPVEKillsData(getPlayer(), playerId, victim.getType(), weapon, false));
 	}
 	
 	/**
@@ -237,9 +237,9 @@ public class LocalSession {
 	 * @param victim Player killed
 	 * @param weapon Weapon used by killer
 	 */
-	public void creatureKilledPlayer(Creature killer, Player victim, ItemStack weapon) {
+	public void creatureKilledPlayer(Creature killer, ItemStack weapon) {
 		totalPVE.get(playerId, killer.getType(), weapon).addPlayerDeaths();
-		detailedData.add(new DetailedPVEKillsData(victim, killer.getType(), weapon, true));
+		detailedData.add(new DetailedPVEKillsData(getPlayer(), playerId, killer.getType(), weapon, true));
 	}
 	
 	/**
@@ -247,8 +247,8 @@ public class LocalSession {
 	 * @param player Player who died
 	 * @param cause Death cause
 	 */
-	public void playerDied(Player player, DamageCause cause) {
+	public void playerDied(DamageCause cause) {
 		totalDeaths.get(playerId, cause).addTimes();
-		detailedData.add(new DetailedDeathPlayersData(player, cause));
+		detailedData.add(new DetailedDeathPlayersData(getPlayer(), playerId, cause));
 	}
 }

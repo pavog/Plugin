@@ -6,15 +6,14 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 
-import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.detailed.DetailedDestroyedBlocks;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedDestroyerdBlocksData implements _DetailedData {
 	
-	public DetailedDestroyerdBlocksData(Player player, MaterialData materialData) {
-		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
+	public DetailedDestroyerdBlocksData(Player player, int playerId, MaterialData materialData) {
+		this.playerId = playerId;
 		this.materialData = materialData;
 		this.timestamp = Util.getCurrentTime().getTime();
 	}

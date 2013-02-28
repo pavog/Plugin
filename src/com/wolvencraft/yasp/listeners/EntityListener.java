@@ -46,30 +46,30 @@ public class EntityListener implements Listener {
 						if (arrow.getShooter() instanceof Player) {				// | | + Player shot Player
 							Player killer = (Player) arrow.getShooter();
 							if(Util.isExempt(killer)) return;
-							DataCollector.get(killer).playerKilledPlayer(killer, victim, new ItemStack(Material.ARROW));
+							DataCollector.get(killer).playerKilledPlayer(victim, new ItemStack(Material.ARROW));
 						} else if (arrow.getShooter() instanceof Creature) {	// | | + Creature shot Player
 							Creature killer = (Creature) arrow.getShooter();
-							DataCollector.get(victim).creatureKilledPlayer(killer, victim, new ItemStack(Material.ARROW));
+							DataCollector.get(victim).creatureKilledPlayer(killer, new ItemStack(Material.ARROW));
 						}
 				} else if (killerEntity instanceof Player) {					// | + Player killed Player
 					Player killer = (Player) killerEntity;
 					if(Util.isExempt(killer)) return;
-					DataCollector.get(killer).playerKilledPlayer(killer, victim, killer.getItemInHand());
+					DataCollector.get(killer).playerKilledPlayer(victim, killer.getItemInHand());
 				} else if (killerEntity instanceof Explosive) {					// | + Player exploded
-					DataCollector.get(victim).playerDied(victim, cause);
+					DataCollector.get(victim).playerDied(cause);
 				} else if (killerEntity instanceof Creature) {					// | + Creature killed Player
 					Creature killer = (Creature) killerEntity;
-					DataCollector.get(victim).creatureKilledPlayer(killer, victim, new ItemStack(Material.AIR));
+					DataCollector.get(victim).creatureKilledPlayer(killer, new ItemStack(Material.AIR));
 				} else if (killerEntity instanceof Slime) {						// | + Slime killed player
 					Creature killer = (Creature) killerEntity; //TODO Check if the Slime kill behavior is the same as the one with Creature
-					DataCollector.get(victim).creatureKilledPlayer(killer, victim, new ItemStack(Material.AIR));
+					DataCollector.get(victim).creatureKilledPlayer(killer, new ItemStack(Material.AIR));
 				} else {														// | + Player died
-					DataCollector.get(victim).playerDied(victim, cause);
+					DataCollector.get(victim).playerDied(cause);
 				}
 			} else if (lastDamageEvent instanceof EntityDamageByBlockEvent) {	// + Player killed by blocks
-				DataCollector.get(victim).playerDied(victim, cause);
+				DataCollector.get(victim).playerDied(cause);
 			} else {															// + Player died
-				DataCollector.get(victim).playerDied(victim, cause);
+				DataCollector.get(victim).playerDied(cause);
 			}
 		} else {
 			if (!(lastDamageEvent instanceof EntityDamageByEntityEvent)) return;
@@ -83,20 +83,20 @@ public class EntityListener implements Listener {
 				if(Util.isExempt(killer)) return;
 				if (victimEntity instanceof Creature) {							// | + Player shot Creature
 					Creature victim = (Creature) victimEntity;
-					DataCollector.get(killer).playerKilledCreature(killer, victim, new ItemStack(Material.ARROW));
+					DataCollector.get(killer).playerKilledCreature(victim, new ItemStack(Material.ARROW));
 				} else if (victimEntity instanceof Slime) {						// | + Player shot Slime
 					Creature victim = (Creature) victimEntity;
-					DataCollector.get(killer).playerKilledCreature(killer, victim, new ItemStack(Material.ARROW));
+					DataCollector.get(killer).playerKilledCreature(victim, new ItemStack(Material.ARROW));
 				}
 			} else if (killerEntity instanceof Player) {						// + Player killed an entity
 				Player killer = (Player) killerEntity;
 				if(Util.isExempt(killer)) return;
 				if (victimEntity instanceof Creature) {							// | + Player killed Creature
 					Creature victim = (Creature) victimEntity;
-					DataCollector.get(killer).playerKilledCreature(killer, victim, killer.getItemInHand());
+					DataCollector.get(killer).playerKilledCreature(victim, killer.getItemInHand());
 				} else if (victimEntity instanceof Slime) {						// | + Player killed Slime
 					Creature victim = (Creature) victimEntity;
-					DataCollector.get(killer).playerKilledCreature(killer, victim, killer.getItemInHand());
+					DataCollector.get(killer).playerKilledCreature(victim, killer.getItemInHand());
 				}
 			}
 		}

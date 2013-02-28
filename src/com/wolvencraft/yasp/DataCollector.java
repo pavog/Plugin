@@ -111,6 +111,7 @@ public class DataCollector implements Runnable {
 	
 	/**
 	 * Returns the playerID of the specified player
+	 * @deprecated
 	 * @param username Player to look up
 	 * @return <b>int</b> playerID
 	 */
@@ -130,6 +131,37 @@ public class DataCollector implements Runnable {
 			playerId = newResults.get(0).getValueAsInteger(Players.PlayerId.toString());
 		} else playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
 		players.put(username, playerId);
+		Message.debug("User ID found: " + playerId);
+		return playerId;
+	}
+	
+	public static Integer getPlayerId(Player player) {
+		String username = player.getPlayerListName();
+		Message.debug("Retrieving a player ID for " + username);
+		int playerId = -1;
+		List<QueryResult> results;
+		
+		results = QueryUtils.select(
+			Players.TableName.toString(),
+			new String[] {Players.PlayerId.toString(), Players.Name.toString()},
+			new String[] {Players.Name.toString(), username}
+		);
+		
+		if(results.isEmpty()) {
+			QueryUtils.insert(
+				Players.TableName.toString(),
+				PlayerData.getDefaultValues(username)
+			);
+			results = QueryUtils.select(
+				Players.TableName.toString(),
+				new String[] {Players.PlayerId.toString(), Players.Name.toString()},
+				new String[] {Players.Name.toString(), username}
+			);
+			playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
+		} else {
+			playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
+		}
+		
 		Message.debug("User ID found: " + playerId);
 		return playerId;
 	}

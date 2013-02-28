@@ -7,16 +7,15 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.detailed.DetailedPVPKills;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPVPKillsData implements _DetailedData {
 	
-	public DetailedPVPKillsData(Player killer, Player victim, ItemStack weapon) {
-		this.killerId = DataCollector.getCachedPlayerId(killer.getPlayerListName());
-		this.victimId = DataCollector.getCachedPlayerId(victim.getPlayerListName());
+	public DetailedPVPKillsData(Player killer, int killerId, Player victim, int victimId, ItemStack weapon) {
+		this.killerId = killerId;
+		this.victimId = victimId;
 		this.weapon = weapon;
 		this.location = victim.getLocation();
 		this.timestamp = Util.getCurrentTime().getTime();

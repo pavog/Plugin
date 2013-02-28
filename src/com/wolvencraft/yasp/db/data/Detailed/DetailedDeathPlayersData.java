@@ -7,15 +7,14 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.detailed.DetailedDeathPlayers;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedDeathPlayersData implements _DetailedData {
 	
-	public DetailedDeathPlayersData(Player player, DamageCause deathCause) {
-		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
+	public DetailedDeathPlayersData(Player player, int playerId, DamageCause deathCause) {
+		this.playerId = playerId;
 		this.deathCause = deathCause.name();
 		this.location = player.getLocation();
 		this.timestamp = Util.getCurrentTime().getTime();

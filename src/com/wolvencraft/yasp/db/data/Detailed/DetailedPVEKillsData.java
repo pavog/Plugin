@@ -8,15 +8,14 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.detailed.DetailedPVEKills;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPVEKillsData implements _DetailedData {
 	
-	public DetailedPVEKillsData(Player player, EntityType creatureType, ItemStack weapon, boolean playerKilled) {
-		this.playerId = DataCollector.getCachedPlayerId(player.getPlayerListName());
+	public DetailedPVEKillsData(Player player, int playerId, EntityType creatureType, ItemStack weapon, boolean playerKilled) {
+		this.playerId = playerId;
 		this.creatureType = creatureType;
 		this.weapon = weapon;
 		this.location = player.getLocation();
