@@ -1,5 +1,6 @@
 package com.wolvencraft.yasp.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -28,6 +29,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		DataCollector.updateMaxPlayersOnline(Bukkit.getOfflinePlayers().length);
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).login();

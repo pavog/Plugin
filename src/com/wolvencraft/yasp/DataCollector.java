@@ -135,6 +135,13 @@ public class DataCollector implements Runnable {
 		return playerId;
 	}
 	
+	/**
+	 * Returns the PlayerID corresponding with the specified username.<br />
+	 * If the username is not in the database, a dummy entry is created, and an ID is assigned.<br />
+	 * Unlike <i>getCachedPlayerId(String username)</i>, does not save the username-id pairs locally.
+	 * @param player Player name to look up in the database
+	 * @return <b>Integer</b> PlayerID corresponding to the specified username
+	 */
 	public static Integer getPlayerId(Player player) {
 		String username = player.getPlayerListName();
 		Message.debug("Retrieving a player ID for " + username);
@@ -172,7 +179,7 @@ public class DataCollector implements Runnable {
 	 * @param players Maximum players online
 	 */
 	public static void updateMaxPlayersOnline(int players) {
-		serverStatistics.updateMaxPlayers(players);
+		serverStatistics.playerLogin(players);
 	}
 	
 	/**
