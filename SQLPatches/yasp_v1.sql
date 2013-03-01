@@ -13,14 +13,14 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_players` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_players` (
   `player_id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(16) NOT NULL ,
-  `online` INT(11) NOT NULL DEFAULT 0 ,
+  `online` TINYINT(1) NOT NULL DEFAULT 0 ,
   `exp_perc` INT(3) UNSIGNED NOT NULL DEFAULT 0 ,
   `exp_total` SMALLINT(5) UNSIGNED NULL DEFAULT 0 ,
-  `level` SMALLINT(5) UNSIGNED NULL DEFAULT 1 ,
-  `food_level` TINYINT(2) UNSIGNED NULL ,
-  `health` TINYINT(2) UNSIGNED NULL DEFAULT NULL ,
+  `level` SMALLINT(5) UNSIGNED NULL DEFAULT 0 ,
+  `food_level` TINYINT(2) UNSIGNED NULL DEFAULT 0 ,
+  `health` TINYINT(2) UNSIGNED NULL DEFAULT 0 ,
   `first_login` INT(11) NULL ,
-  `logins` INT(11) NULL ,
+  `logins` INT(11) NULL DEFAULT 0 ,
   PRIMARY KEY (`player_id`) );
 
 
@@ -74,7 +74,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_distance_players` (
 DROP TABLE IF EXISTS `$dbname`.`$prefix_entities` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_entities` (
-  `entity_id` INT NOT NULL AUTO_INCREMENT ,
+  `entity_id` INT NOT NULL ,
   `tp_name` VARCHAR(100) NULL ,
   PRIMARY KEY (`entity_id`) );
 
@@ -86,7 +86,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_materials` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_materials` (
   `material_id` INT NOT NULL ,
-  `data` SMALLINT(3) UNSIGNED NOT NULL DEFAULT 0 ,
+  `data` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
   `tp_name` VARCHAR(45) NULL DEFAULT 'none' ,
   PRIMARY KEY (`material_id`, `data`) );
 
@@ -99,7 +99,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pvp_kills` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pvp_kills` (
   `detailed_pvp_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `player_id` INT NOT NULL ,
   `victim_id` INT NOT NULL ,
   `cause` VARCHAR(45) NULL ,
@@ -160,7 +160,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_placed_blocks` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_placed_blocks` (
   `detailed_placed_blocks_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL ,
   `x` INT NULL ,
@@ -190,7 +190,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_destroyed_blocks` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_destroyed_blocks` (
   `detailed_destroyed_blocks_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL ,
   `x` INT NULL ,
@@ -220,7 +220,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_dropped_items` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_dropped_items` (
   `detailed_dropped_items_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL ,
   `x` INT NULL ,
@@ -250,7 +250,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pickedup_items` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pickedup_items` (
   `detailed_pickedup_items_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL ,
   `x` INT NULL ,
@@ -291,7 +291,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pve_kills` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pve_kills` (
   `detailed_pve_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `entity_id` INT NOT NULL ,
   `player_id` INT NOT NULL ,
   `cause` VARCHAR(45) NULL ,
@@ -330,7 +330,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_total_blocks` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_blocks` (
   `total_blocks_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `player_id` INT NOT NULL ,
   `destroyed` INT UNSIGNED NULL DEFAULT 0 ,
   `placed` INT UNSIGNED NULL DEFAULT 0 ,
@@ -357,7 +357,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_total_items` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_items` (
   `total_items_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `player_id` INT NOT NULL ,
   `dropped` INT UNSIGNED NULL DEFAULT 0 ,
   `picked_up` INT UNSIGNED NULL DEFAULT 0 ,
@@ -406,7 +406,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_total_pvp_kills` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pvp_kills` (
   `total_pvp_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `player_id` INT NOT NULL ,
   `victim_id` INT NOT NULL ,
   `times` INT(10) NULL ,
@@ -439,7 +439,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_total_pve_kills` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pve_kills` (
   `total_pve_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `entity_id` INT NOT NULL ,
   `player_id` INT NOT NULL ,
   `player_killed` INT(10) NULL DEFAULT 0 ,
@@ -471,14 +471,14 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pve_kills` (
 DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_used_items` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_used_items` (
-  `detailed_used_items_id` INT NOT NULL ,
+  `detailed_used_items_id` INT NOT NULL AUTO_INCREMENT ,
   `material_id` INT NOT NULL ,
-  `material_data` SMALLINT(3) UNSIGNED NOT NULL ,
+  `material_data` SMALLINT UNSIGNED NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL ,
-  `x` VARCHAR(45) NULL ,
-  `y` VARCHAR(45) NULL ,
-  `z` VARCHAR(45) NULL ,
+  `x` INT NULL ,
+  `y` INT NULL ,
+  `z` INT NULL ,
   `time` INT NULL ,
   PRIMARY KEY (`detailed_used_items_id`, `material_id`, `material_data`, `player_id`) ,
   INDEX `fk_player_id8_idx` (`player_id` ASC) ,
