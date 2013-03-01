@@ -160,25 +160,23 @@ public class QueryUtils {
 	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
 	 */
 	public static boolean update(String table, Map<String, Object> valueMap, String[]... condition) {
+		if(select(table, new String[] {"*"}).isEmpty()) return insert(table, valueMap);
+		
 		String query = "";
-		String fields = "";
-		String values = "";
+		String fieldValues = "";
 		String conditions = "";
 		Iterator<Entry<String, Object>> it = valueMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
-			if(!fields.equals("")) fields += ", ";
-			if(!values.equals("")) values += ", ";
-
-			fields += "`" + pairs.getKey() + "`";
-			values += "'" + pairs.getValue().toString() + "'";
+			if(!fieldValues.equals("")) fieldValues += ", ";
+			fieldValues += "`" + pairs.getKey() + "` = '" + pairs.getValue().toString() + "'";
 			it.remove();
 		}
 		for(String str[] : condition) {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "UPDATE `" + Settings.getTablePrefix() + table + "` (" + fields + ") SET (" + values + ") WHERE " + conditions;
+		query = "UPDATE `" + Settings.getTablePrefix() + table + "` SET " + fieldValues + " WHERE " + conditions;
 		return pushData(query);
 	}
 }
