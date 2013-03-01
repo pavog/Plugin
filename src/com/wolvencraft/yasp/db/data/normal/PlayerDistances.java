@@ -64,6 +64,7 @@ public class PlayerDistances implements _NormalData {
 	@Override
 	public Map<String, Object> getValues() {
 		Map<String, Object> valueMap = new HashMap<String, Object>();
+		valueMap.put(DistancePlayers.PlayerId.toString(), playerId);
 		valueMap.put(DistancePlayers.Foot.toString(), foot);
 		valueMap.put(DistancePlayers.Boat.toString(), boat);
 		valueMap.put(DistancePlayers.Minecart.toString(), minecart);

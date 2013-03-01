@@ -81,7 +81,6 @@ public class DataCollector implements Runnable {
 	public static LocalSession get(Player player) {
 		for(LocalSession session : sessions) {
 			if(session.getPlayerName().equals(player.getPlayerListName())) {
-				Message.debug("Retrieving a user session for " + player.getPlayerListName());
 				if(Settings.getWelcomeMessage() != null) Message.send(player, Settings.getWelcomeMessage());
 				return session;
 			}

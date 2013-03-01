@@ -88,14 +88,6 @@ public class PlayerData implements _NormalData {
 	public static Map<String, Object> getDefaultValues(String name) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(Players.Name.toString(), name);
-		map.put(Players.Online.toString(), 1);
-		map.put(Players.ExperiencePercent.toString(), 0);
-		map.put(Players.ExperienceTotal.toString(), 0);
-		map.put(Players.ExperienceLevel.toString(), 0);
-		map.put(Players.FoodLevel.toString(), 0);
-		map.put(Players.HealthLevel.toString(), 0);
-		map.put(Players.FirstLogin.toString(), Util.getTimestamp());
-		map.put(Players.Logins.toString(), 0);
 		return map;
 	}
 	
