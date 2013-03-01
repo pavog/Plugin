@@ -15,7 +15,7 @@ INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("total_uptime"
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online", "0");
 
 -- Materials
---- Updated on 01.03.2013 - 20:52:42--- 
+-- Updated on 01.03.2013 - 20:52:42--
 INSERT INTO `$prefix_materials` (`material_id` , `data` , `tp_name`) VALUES ("1", "0", "stone");
 INSERT INTO `$prefix_materials` (`material_id` , `data` , `tp_name`) VALUES ("2", "0", "grass");
 INSERT INTO `$prefix_materials` (`material_id` , `data` , `tp_name`) VALUES ("3", "0", "dirt");
