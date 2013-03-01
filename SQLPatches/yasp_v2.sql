@@ -16,6 +16,8 @@ INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_o
 
 -- Materials
 -- Updated on 01.03.2013 - 20:52:42--
+INSERT INTO `$prefix_materials` (`material_id` , `data` , `tp_name`) VALUES ("-1", "0", "none");
+INSERT INTO `$prefix_materials` (`material_id` , `data` , `tp_name`) VALUES ("0", "0", "hand");
 INSERT INTO `$prefix_materials` (`material_id` , `data` , `tp_name`) VALUES ("1", "0", "stone");
 INSERT INTO `$prefix_materials` (`material_id` , `data` , `tp_name`) VALUES ("2", "0", "grass");
 INSERT INTO `$prefix_materials` (`material_id` , `data` , `tp_name`) VALUES ("3", "0", "dirt");
