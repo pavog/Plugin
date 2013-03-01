@@ -13,7 +13,7 @@ public class ServerStatistics implements _NormalData {
 	
 	public ServerStatistics(StatsPlugin plugin) {
 		firstStartupTime = 0;
-		startupTime = Util.getCurrentTime().getTime();
+		startupTime = Util.getTimestamp();
 		currentUptime = 0;
 		totalUptime = 0;
 		maxPlayersOnline = 0;
@@ -36,12 +36,12 @@ public class ServerStatistics implements _NormalData {
 			else if(entry.getValue("key").equalsIgnoreCase("max_players_online")) maxPlayersOnline = entry.getValueAsInteger("value");
 		}
 		
-		if(firstStartupTime == 0) firstStartupTime = Util.getCurrentTime().getTime();
+		if(firstStartupTime == 0) firstStartupTime = Util.getTimestamp();
 	}
 
 	@Override
 	public boolean pushData() {
-		currentUptime = Util.getCurrentTime().getTime() - startupTime;
+		currentUptime = Util.getTimestamp() - startupTime;
 		totalUptime += currentUptime;
 		QueryUtils.update(
 			_ServerStatistics.TableName.toString(),
@@ -80,7 +80,7 @@ public class ServerStatistics implements _NormalData {
 	public void shutdown() {
 		QueryUtils.update(
 			_ServerStatistics.TableName.toString(),
-			"value", Util.getCurrentTime().getTime() + "",
+			"value", Util.getTimestamp() + "",
 			new String[] {"key", "last_shutdown"}
 		);
 	}

@@ -17,7 +17,7 @@ public class DetailedDroppedItemsData implements _DetailedData {
 		this.playerId = playerId;
 		this.itemStack = itemStack;
 		this.location = player.getLocation();
-		this.timestamp = Util.getCurrentTime().getTime();
+		this.timestamp = Util.getTimestamp();
 	}
 	
 	private int playerId;

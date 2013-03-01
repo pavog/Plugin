@@ -18,7 +18,7 @@ public class DetailedPVPKillsData implements _DetailedData {
 		this.victimId = victimId;
 		this.weapon = weapon;
 		this.location = victim.getLocation();
-		this.timestamp = Util.getCurrentTime().getTime();
+		this.timestamp = Util.getTimestamp();
 	}
 	
 	private int killerId;

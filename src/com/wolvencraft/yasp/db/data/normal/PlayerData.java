@@ -30,7 +30,7 @@ public class PlayerData implements _NormalData {
 		this.expLevel = player.getLevel();
 		this.foodLevel = player.getFoodLevel();
 		this.healthLevel = player.getHealth();
-		this.firstJoin = Util.getCurrentTime().getTime();
+		this.firstJoin = Util.getTimestamp();
 		this.logins = 0;
 	}
 	
@@ -94,7 +94,7 @@ public class PlayerData implements _NormalData {
 		map.put(Players.ExperienceLevel.toString(), 0);
 		map.put(Players.FoodLevel.toString(), 0);
 		map.put(Players.HealthLevel.toString(), 0);
-		map.put(Players.FirstLogin.toString(), Util.getCurrentTime().getTime());
+		map.put(Players.FirstLogin.toString(), Util.getTimestamp());
 		map.put(Players.Logins.toString(), 0);
 		return map;
 	}

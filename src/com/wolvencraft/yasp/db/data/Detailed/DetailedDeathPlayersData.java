@@ -17,7 +17,7 @@ public class DetailedDeathPlayersData implements _DetailedData {
 		this.playerId = playerId;
 		this.deathCause = deathCause.name();
 		this.location = player.getLocation();
-		this.timestamp = Util.getCurrentTime().getTime();
+		this.timestamp = Util.getTimestamp();
 	}
 	
 	private int playerId;

@@ -15,7 +15,7 @@ public class DetailedPlacedBlocksData implements _DetailedData {
 	public DetailedPlacedBlocksData(Player player, int playerId, MaterialData materialData) {
 		this.playerId = playerId;
 		this.materialData = materialData;
-		this.timestamp = Util.getCurrentTime().getTime();
+		this.timestamp = Util.getTimestamp();
 	}
 	
 	private int playerId;

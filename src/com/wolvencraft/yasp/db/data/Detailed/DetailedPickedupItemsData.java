@@ -18,7 +18,7 @@ public class DetailedPickedupItemsData implements _DetailedData {
 		this.itemStack = itemStack;
 		this.itemStack.setAmount(1);
 		this.location = player.getLocation();
-		this.timestamp = Util.getCurrentTime().getTime();
+		this.timestamp = Util.getTimestamp();
 	}
 	
 	private int playerId;

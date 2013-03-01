@@ -24,11 +24,21 @@ public class Util {
 	
 	/**
 	 * Returns the current time in a timestamp form
+	 * @deprecated
 	 * @return Current timestamp
 	 */
 	public static Timestamp getCurrentTime() {
 		java.util.Date date= new java.util.Date();
 		return new Timestamp(date.getTime());
+	}
+	
+	/**
+	 * Returns the current time in Unix timestamp form
+	 * @return Current time
+	 */
+	public static long getTimestamp() {
+		Timestamp timestamp = new Timestamp(new java.util.Date().getTime());
+		return timestamp.getTime() / 1000;
 	}
 	
 	/**

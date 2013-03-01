@@ -14,7 +14,7 @@ public class DetailedLogPlayersData implements _DetailedData {
 	
 	public DetailedLogPlayersData(Player player, int playerId, boolean isLogin) {
 		this.playerId = playerId;
-		this.time = Util.getCurrentTime().getTime();
+		this.time = Util.getTimestamp();
 		this.isLogin = isLogin;
 		this.location = player.getLocation();
 	}

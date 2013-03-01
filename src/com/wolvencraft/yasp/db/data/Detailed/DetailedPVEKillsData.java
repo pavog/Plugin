@@ -20,7 +20,7 @@ public class DetailedPVEKillsData implements _DetailedData {
 		this.weapon = weapon;
 		this.location = player.getLocation();
 		this.playerKilled = playerKilled;
-		this.timestamp = Util.getCurrentTime().getTime();
+		this.timestamp = Util.getTimestamp();
 	}
 	
 	private int playerId;
