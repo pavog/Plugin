@@ -25,6 +25,7 @@ public class PlayerData implements _NormalData {
 		this.playerName = playerName;
 		
 		this.online = true;
+		this.gamemode = 0;
 		this.expPercent = player.getExp();
 		this.expTotal = player.getTotalExperience();
 		this.expLevel = player.getLevel();
@@ -38,6 +39,7 @@ public class PlayerData implements _NormalData {
 	private String playerName;
 	
 	private boolean online;
+	private int gamemode;
 	private double expPercent;
 	private int expTotal;
 	private int expLevel;
@@ -82,6 +84,7 @@ public class PlayerData implements _NormalData {
 		map.put(Players.HealthLevel.toString(), healthLevel);
 		map.put(Players.FirstLogin.toString(), firstJoin);
 		map.put(Players.Logins.toString(), logins);
+		map.put(Players.Gamemode.toString(), gamemode);
 		return map;
 	}
 	
@@ -101,6 +104,7 @@ public class PlayerData implements _NormalData {
 		}
 		if(player == null) return;
 		
+		this.gamemode = player.getGameMode().getValue();
 		this.expPercent = player.getExp();
 		this.expTotal = player.getTotalExperience();
 		this.expLevel = player.getLevel();

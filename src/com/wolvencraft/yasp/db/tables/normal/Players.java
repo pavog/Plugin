@@ -7,6 +7,7 @@ public enum Players implements _NormalTable {
 	PlayerId("player_id"),
 	Name("name"),
 	Online("online"),
+	Gamemode("gamemode"),
 	ExperiencePercent("exp_perc"),
 	ExperienceTotal("exp_total"),
 	ExperienceLevel("level"),
