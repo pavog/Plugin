@@ -3,6 +3,8 @@ package com.wolvencraft.yasp;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
@@ -67,6 +69,34 @@ public class StatsPlugin extends JavaPlugin {
 			Bukkit.getScheduler().cancelAllTasks();
 			DataCollector.clear();
 		} catch (Exception e) { }
+	}
+	
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		CommandManager.setSender(sender);
+		if(!(command.getName().equalsIgnoreCase("yasp"))) return false;
+		
+		if(args.length == 0) {
+			CommandManager.HELP.run("");
+			CommandManager.resetSender();
+			return true;
+		}
+		for(CommandManager cmd : CommandManager.values()) {
+			if(cmd.isCommand(args[0])) {
+				
+				String argString = "/yasp";
+		        for (String arg : args) { argString = argString + " " + arg; }
+				Message.debug(sender.getName() + ": " + argString);
+				
+				boolean result = cmd.run(args);
+				CommandManager.resetSender();
+				return result;
+			}
+		}
+		
+		Message.sendFormattedError(sender, "Unknown command");
+		CommandManager.resetSender();
+		return false;
 	}
 	
 	public static StatsPlugin getInstance() 		{ return instance; }
