@@ -41,7 +41,7 @@ public class Database {
 		instance = this;
 		
 		connect();
-		patch();
+		patch(false);
 	}
 	
 	public static boolean testConnection() {
@@ -75,27 +75,10 @@ public class Database {
 	 * Patches the remote database to the latest version
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
-	private void patch() throws DatabaseConnectionException {
-		Message.log("Attempting to patch the database. This will take a while.");
-		int databaseVersion = Settings.getDatabaseVersion();
-		do {
-			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + (databaseVersion + 1) + ".sql");
-			if (is == null) break;
-			databaseVersion++;
-			Message.log("Executing database patch v." + databaseVersion);
-			ScriptRunner sr = new ScriptRunner(connection);
-			try {sr.runScript(new InputStreamReader(is)); }
-			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
-		} while (true);
-		
-		Settings.updateVersion(databaseVersion);
-		Message.log("Target database is up to date.");
-	}
-	
 	public void patch(boolean force) throws DatabaseConnectionException {
 		Message.log("Attempting to patch the database. This will take a while.");
 		int databaseVersion = 0;
-		if(! force) databaseVersion = Settings.getDatabaseVersion();
+		if(!force) databaseVersion = Settings.getDatabaseVersion();
 		do {
 			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + (databaseVersion + 1) + ".sql");
 			if (is == null) break;
