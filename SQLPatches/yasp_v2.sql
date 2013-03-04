@@ -13,6 +13,7 @@ INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("last_shutdown
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("current_uptime", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("total_uptime", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_online_players_time", "0");
 
 -- Materials
 -- Updated on 01.03.2013 - 20:52:42--
