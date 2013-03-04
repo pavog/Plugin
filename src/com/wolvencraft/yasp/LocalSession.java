@@ -59,19 +59,15 @@ public class LocalSession {
 	}
 	
 	/**
-	 * Returns the unique player name
+	 * Returns the unique player name.<br />
+	 * Wraps around a corresponding <b>PlayerData</b> method
 	 * @return <b>String</b> Player name
 	 */
 	public String getPlayerName() { return playerData.getName(); }
 	
 	/**
-	 * Returns the database ID of the player
-	 * @return <b>int</b> Player ID
-	 */
-	public int getPlayerId() { return playerId; }
-	
-	/**
 	 * Returns the Player object associated with the session, if it exists
+	 * @deprecated
 	 * @return <b>Player</b> object if it exists, <b>null</b> otherwise
 	 */
 	public Player getPlayer() { return Bukkit.getServer().getPlayer(playerData.getName()); }
@@ -81,7 +77,7 @@ public class LocalSession {
 	 * @return <b>Location</b> if the player is online, <b>null</b> otherwise
 	 */
 	public Location getLocation() {
-		Player player = getPlayer();
+		Player player = Bukkit.getServer().getPlayer(playerData.getName());
 		if(player == null) return null;
 		return player.getLocation();
 	}
