@@ -97,7 +97,7 @@ public class Database {
 	 * Attempts to reconnect to the remote server
 	 * @return <b>true</b> if the connection was present, or reconnect is successful. <b>false</b> otherwise.
 	 */
-	private boolean reconnect() {
+	public boolean reconnect() {
 		try {
 			if (connection.isValid(10)) {
 				Message.log("Connection is still present. Malformed query detected.");

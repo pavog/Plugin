@@ -11,9 +11,10 @@ import com.wolvencraft.yasp.cmd.*;
 import com.wolvencraft.yasp.util.Message;
 
 public enum CommandManager {
-	Sync (SyncCommand.class, "stats.cmd.sync", true, "sync", "forcesync"),
+	Sync (SyncCommand.class, "stats.cmd.sync", true, "sync"),
+	Reconnect (ReconnectCommand.class, "stats.cmd.reconnect", true, "reconnect"),
 	Repatch (RepatchCommand.class, "stats.cmd.repatch", true, "repatch"),
-	HELP (HelpCommand.class, null, true, "help");
+	HELP (HelpCommand.class, "stats.cmd.help", true, "help");
 	
 	CommandManager(Class<?> clazz, String permission, boolean allowConsole, String... args) {
 		try {
@@ -39,7 +40,6 @@ public enum CommandManager {
 	
 	public boolean isCommand(String arg) 	{ return alias.contains(arg); }
 	public void getHelp() 					{ clazz.getHelp(); }
-	public void getHelpLine() 				{ clazz.getHelpLine(); }
 	
 	public boolean run(String[] args) {
 		CommandSender sender = CommandManager.getSender();

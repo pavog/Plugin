@@ -25,15 +25,6 @@ public class SyncCommand implements BaseCommand {
 	}
 
 	@Override
-	public void getHelp() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getHelpLine() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void getHelp() { Message.formatHelp("sync", "", "Forces the plugin to push data to the remote database"); }
 
 }

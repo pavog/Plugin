@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.data.normal.Settings;
 
@@ -67,5 +68,25 @@ public class Message {
 	 */
 	public static void log(Level level, String message) {
 		logger.log(level, message);
+	}
+	
+	public static void formatHelp(String command, String arguments, String description, String node) {
+		CommandSender sender = CommandManager.getSender();
+		if(!arguments.equalsIgnoreCase("")) arguments = " " + arguments;
+		if(sender.hasPermission(node) || node.equals(""))
+			sender.sendMessage(ChatColor.GOLD + "/prison " + command + ChatColor.GRAY + arguments + ChatColor.WHITE + " " + description);
+		return;
+	}
+	
+	public static void formatHelp(String command, String arguments, String description) {
+		formatHelp(command, arguments, description, "");
+		return;
+	}
+	
+	public static void formatHeader(int padding, String name) {
+		CommandSender sender = CommandManager.getSender();
+		String spaces = "";
+		for(int i = 0; i < padding; i++) { spaces = spaces + " "; }
+		sender.sendMessage(spaces + "-=[ " + ChatColor.BLUE + name + ChatColor.WHITE + " ]=-");
 	}
 }

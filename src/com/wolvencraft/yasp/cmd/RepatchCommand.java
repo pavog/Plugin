@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.db.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.util.Message;
 
 public class RepatchCommand implements BaseCommand {
@@ -17,11 +16,8 @@ public class RepatchCommand implements BaseCommand {
 			@Override
 			public void run() {
 				Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database...");
-				try {
-					Database.getInstance().patch(true);
-				} catch (DatabaseConnectionException e) {
-					Message.sendFormattedError(CommandManager.getSender(), "Patch failed");
-				}
+				try { Database.getInstance().patch(true); }
+				catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed"); }
 				Message.sendFormattedSuccess(CommandManager.getSender(), "Patching complete");
 			}
 			
@@ -30,15 +26,6 @@ public class RepatchCommand implements BaseCommand {
 	}
 
 	@Override
-	public void getHelp() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getHelpLine() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void getHelp() { Message.formatHelp("repatch", "", "Attempts to re-patch the remote database"); }
 
 }
