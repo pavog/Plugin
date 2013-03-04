@@ -57,22 +57,19 @@ public class StatsPlugin extends JavaPlugin {
 			return;
 		}
 		
-		if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            Message.log(Level.SEVERE, "Vault dependency not found!");
-			this.setEnabled(false);
-			return;
-        }
+		if (getServer().getPluginManager().getPlugin("Vault") != null) {
+            Message.log("Vault found! Using it to track advanced player statistics");
 
-		try {
-	        economy = ((RegisteredServiceProvider<Economy>)(getServer().getServicesManager().getRegistration(Economy.class))).getProvider();
-	        permissions = ((RegisteredServiceProvider<Permission>)(getServer().getServicesManager().getRegistration(Permission.class))).getProvider();
-		} catch (NullPointerException npe) {
-			Message.log(Level.SEVERE, "An error occurred while setting up Vault dependency");
-			this.setEnabled(false);
-			return;
-		}
+    		try {
+    	        economy = ((RegisteredServiceProvider<Economy>)(getServer().getServicesManager().getRegistration(Economy.class))).getProvider();
+    	        permissions = ((RegisteredServiceProvider<Permission>)(getServer().getServicesManager().getRegistration(Permission.class))).getProvider();
+    		} catch (NullPointerException npe) {
+    			Message.log(Level.SEVERE, "An error occurred while setting up Vault dependency");
+    			Settings.setUsingVault(true);
+    		}
+        } else Settings.setUsingVault(false);
 		
-		Settings.retrieveData();
+		Settings.fetchSettings();
 		
 		new PlayerListener(this);
 		new BlockListener(this);

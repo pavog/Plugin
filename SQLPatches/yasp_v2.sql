@@ -1,5 +1,6 @@
 -- Settings
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("version", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("vault", "0");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("ping", "120");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_welcome_messages", "1");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("welcome_message", "Welcome, <PLAYER>!");
