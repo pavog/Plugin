@@ -63,7 +63,6 @@ public class StatsPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		Message.log("Plugin shutting down");
 		try {
 			DataCollector.pluginShutdown();
 			Bukkit.getScheduler().cancelTask(databaseTaskId);
@@ -107,7 +106,7 @@ public class StatsPlugin extends JavaPlugin {
 	
 	/**
 	 * Returns a static plugin instance
-	 * @return <b>Promote</b> plugin instance
+	 * @return <b>YASP</b> plugin instance
 	 */
 	public static StatsPlugin getInstance() {
 		return instance;
