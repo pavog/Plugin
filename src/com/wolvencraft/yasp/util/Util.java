@@ -23,16 +23,6 @@ public class Util {
 	}
 	
 	/**
-	 * Returns the current time in a timestamp form
-	 * @deprecated
-	 * @return Current timestamp
-	 */
-	public static Timestamp getCurrentTime() {
-		java.util.Date date= new java.util.Date();
-		return new Timestamp(date.getTime());
-	}
-	
-	/**
 	 * Returns the current time in Unix timestamp form
 	 * @return Current time
 	 */
@@ -48,17 +38,5 @@ public class Util {
 	 */
 	public static boolean isExempt(Player player) {
 		return !(player.hasPermission("statistician.ignore") || player.hasPermission("stats.ignore"));
-	}
-	
-	/**
-	 * Checks if all players in the list are exempt from the statistics
-	 * @param players Players to check
-	 * @return <b>true</b> if the players' stats should not be registered, <b>false</b> otherwise
-	 */
-	public static boolean isExempt(Player... players) {
-		for(Player player : players) {
-			if(!(player.hasPermission("statistician.ignore") || player.hasPermission("stats.ignore"))) return false;
-		}
-		return true;
 	}
 }
