@@ -15,11 +15,11 @@ public interface _DetailedData {
 	 * If the data holder is marked as <i>on hold</i>, skips the holder
 	 * @return <b>true</b> if the holder has been synchronized and can be removed, <b>false</b> if it is on hold
 	 */
-	public boolean pushData();
+	public boolean pushData(int playerId);
 	
 	/**
 	 * Returns the data holder as a map of column names and corresponding values
 	 * @return Map of column names and values
 	 */
-	public Map<String, Object> getValues();
+	public Map<String, Object> getValues(int playerId);
 }

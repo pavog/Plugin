@@ -20,9 +20,8 @@ import com.wolvencraft.yasp.util.Util;
  */
 public class PlayerData implements _NormalData {
 	
-	public PlayerData (Player player, String playerName, int playerId) {
-		this.playerId = playerId;
-		this.playerName = playerName;
+	public PlayerData (Player player) {
+		this.playerName = player.getPlayerListName();
 		
 		this.online = true;
 		this.gamemode = 0;
@@ -35,7 +34,6 @@ public class PlayerData implements _NormalData {
 		this.logins = 0;
 	}
 	
-	private int playerId;
 	private String playerName;
 	
 	private boolean online;
@@ -49,31 +47,32 @@ public class PlayerData implements _NormalData {
 	private int logins;
 	
 	@Override
-	public void fetchData() {
+	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
 			Players.TableName.toString(),
 			new String[] {Players.PlayerId.toString(), Players.Logins.toString()},
 			new String[] { Players.PlayerId.toString(), playerId + ""}
 		);
-		if(results.isEmpty()) QueryUtils.insert(Players.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(Players.TableName.toString(), getValues(playerId));
 		else {
 			logins = results.get(0).getValueAsInteger(Players.Logins.toString());
 		}
 	}
 
 	@Override
-	public boolean pushData() {
+	public boolean pushData(int playerId) {
 		refreshPlayerData();
 		return QueryUtils.update(
 			Players.TableName.toString(),
-			getValues(), 
+			getValues(playerId), 
 			new String[] { Players.PlayerId.toString(), playerId + ""}
 		);
 	}
 
 	@Override
-	public Map<String, Object> getValues() {
+	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put(Players.PlayerId.toString(), playerId);
 		map.put(Players.Name.toString(), playerName);
 		if(online) map.put(Players.Online.toString(), 1);
 		else map.put(Players.Online.toString(), 0);
@@ -111,6 +110,12 @@ public class PlayerData implements _NormalData {
 		this.foodLevel = player.getFoodLevel();
 		this.healthLevel = player.getHealth();
 	}
+	
+	/**
+	 * Returns the player name
+	 * @return Player name
+	 */
+	public String getName() { return playerName; }
 	
 	/**
 	 * Changes the online status of the player

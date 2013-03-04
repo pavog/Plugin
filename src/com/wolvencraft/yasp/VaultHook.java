@@ -6,7 +6,7 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import com.wolvencraft.yasp.db.data.normal.Settings;
+import com.wolvencraft.yasp.db.data.Settings;
 import com.wolvencraft.yasp.db.exceptions.VaultDependencyException;
 
 public class VaultHook {

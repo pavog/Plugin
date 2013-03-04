@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.detailed.DetailedLogPlayers;
@@ -12,28 +11,26 @@ import com.wolvencraft.yasp.util.Util;
 
 public class DetailedLogPlayersData implements _DetailedData {
 	
-	public DetailedLogPlayersData(Player player, int playerId, boolean isLogin) {
-		this.playerId = playerId;
+	public DetailedLogPlayersData(Location location, boolean isLogin) {
 		this.time = Util.getTimestamp();
 		this.isLogin = isLogin;
-		this.location = player.getLocation();
+		this.location = location;
 	}
 	
-	private int playerId;
 	private long time;
 	private boolean isLogin;
 	private Location location;
 	
 	@Override
-	public boolean pushData() {
+	public boolean pushData(int playerId) {
 		return QueryUtils.insert(
 			DetailedLogPlayers.TableName.toString(),
-			getValues()
+			getValues(playerId)
 		);
 	}
 
 	@Override
-	public Map<String, Object> getValues() {
+	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedLogPlayers.PlayerId.toString(), playerId);
 		map.put(DetailedLogPlayers.Time.toString(), time);

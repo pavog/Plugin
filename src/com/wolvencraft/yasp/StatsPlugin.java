@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.db.data.normal.Settings;
+import com.wolvencraft.yasp.db.data.Settings;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.util.Message;
 

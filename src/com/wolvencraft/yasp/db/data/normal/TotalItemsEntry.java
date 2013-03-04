@@ -23,8 +23,7 @@ public class TotalItemsEntry implements _NormalData {
 	 * @param player <b>Player</b> tracked player
 	 * @param material <b>MaterialData</b> block data
 	 */
-	public TotalItemsEntry(int playerId, ItemStack itemStack) {
-		this.playerId = playerId;
+	public TotalItemsEntry(ItemStack itemStack) {
 		this.itemStack = itemStack;
 		this.itemStack.setAmount(1);
 		this.dropped = 0;
@@ -34,7 +33,6 @@ public class TotalItemsEntry implements _NormalData {
 		this.smelted = 0;
 	}
 	
-	private int playerId;
 	private ItemStack itemStack;
 	private int dropped;
 	private int pickedUp;
@@ -43,7 +41,7 @@ public class TotalItemsEntry implements _NormalData {
 	private int smelted;
 	
 	@Override
-	public void fetchData() {
+	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
 			TotalItems.TableName.toString(),
 			new String[] {"*"},
@@ -52,7 +50,7 @@ public class TotalItemsEntry implements _NormalData {
 			new String[] { TotalItems.MaterialData.toString(), itemStack.getData().getData() + ""}
 		);
 		
-		if(results.isEmpty()) QueryUtils.insert(TotalItems.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalItems.TableName.toString(), getValues(playerId));
 		else {
 			dropped = results.get(0).getValueAsInteger(TotalItems.Dropped.toString());
 			pickedUp = results.get(0).getValueAsInteger(TotalItems.PickedUp.toString());
@@ -63,10 +61,10 @@ public class TotalItemsEntry implements _NormalData {
 	}
 
 	@Override
-	public boolean pushData() {
+	public boolean pushData(int playerId) {
 		return QueryUtils.update(
 			TotalItems.TableName.toString(),
-			getValues(),
+			getValues(playerId),
 			new String[] { TotalItems.PlayerId.toString(), playerId + ""},
 			new String[] { TotalItems.MaterialId.toString(), itemStack.getTypeId() + ""},
 			new String[] { TotalItems.MaterialData.toString(), itemStack.getData().getData() + ""}
@@ -74,7 +72,7 @@ public class TotalItemsEntry implements _NormalData {
 	}
 	
 	@Override
-	public Map<String, Object> getValues() {
+	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalItems.PlayerId.toString(), playerId);
 		map.put(TotalItems.MaterialId.toString(), itemStack.getTypeId());

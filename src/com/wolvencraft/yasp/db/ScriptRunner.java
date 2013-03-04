@@ -32,7 +32,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.wolvencraft.yasp.db.data.normal.Settings;
+import com.wolvencraft.yasp.db.data.Settings;
 import com.wolvencraft.yasp.db.exceptions.RuntimeSQLException;
 
 public class ScriptRunner {

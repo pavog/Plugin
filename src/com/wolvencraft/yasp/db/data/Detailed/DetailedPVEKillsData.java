@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.QueryUtils;
@@ -14,16 +13,14 @@ import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPVEKillsData implements _DetailedData {
 	
-	public DetailedPVEKillsData(Player player, int playerId, EntityType creatureType, ItemStack weapon, boolean playerKilled) {
-		this.playerId = playerId;
+	public DetailedPVEKillsData(Location location, EntityType creatureType, ItemStack weapon, boolean playerKilled) {
 		this.creatureType = creatureType;
 		this.weapon = weapon;
-		this.location = player.getLocation();
+		this.location = location;
 		this.playerKilled = playerKilled;
 		this.timestamp = Util.getTimestamp();
 	}
 	
-	private int playerId;
 	private EntityType creatureType;
 	private ItemStack weapon;
 	private Location location;
@@ -31,15 +28,15 @@ public class DetailedPVEKillsData implements _DetailedData {
 	private long timestamp;
 	
 	@Override
-	public boolean pushData() {
+	public boolean pushData(int playerId) {
 		return QueryUtils.insert(
 			DetailedPVEKills.TableName.toString(),
-			getValues()
+			getValues(playerId)
 		);
 	}
 
 	@Override
-	public Map<String, Object> getValues() {
+	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedPVEKills.PlayerID.toString(), playerId);
 		map.put(DetailedPVEKills.CreatureId.toString(), creatureType.getTypeId());

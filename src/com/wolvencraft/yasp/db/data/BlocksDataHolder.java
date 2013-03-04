@@ -25,11 +25,11 @@ public class BlocksDataHolder {
 		return temp;
 	}
 	
-	public TotalBlocksEntry get(int playerId, MaterialData material) {
+	public TotalBlocksEntry get(MaterialData material) {
 		for(TotalBlocksEntry blocks : data) {
 			if(blocks.getMaterial().equals(material)) return blocks;
 		}
-		TotalBlocksEntry entry = new TotalBlocksEntry(playerId, material);
+		TotalBlocksEntry entry = new TotalBlocksEntry(material);
 		data.add(entry);
 		return entry;
 	}
@@ -38,8 +38,8 @@ public class BlocksDataHolder {
 		data.clear();
 	}
 	
-	public void sync() {
-		for(TotalBlocksEntry blocks : data) blocks.pushData();
+	public void sync(int playerId) {
+		for(TotalBlocksEntry entry : data) entry.pushData(playerId);
 	}
 	
 }

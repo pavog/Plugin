@@ -1,14 +1,13 @@
-package com.wolvencraft.yasp.db.data.normal;
+package com.wolvencraft.yasp.db.data;
 
 import java.util.List;
-import java.util.Map;
 
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal._Settings;
 
-public class Settings implements _NormalData {
+public class Settings {
 	
 	/**
 	 * Default constructor. Takes in the plugin instance as argument.
@@ -62,7 +61,6 @@ public class Settings implements _NormalData {
 	private boolean showFirstJoinMessages;
 	private String firstJoinMessage;
 	
-	@Override
 	public void fetchData() {
 		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
@@ -83,7 +81,6 @@ public class Settings implements _NormalData {
 		instance.fetchData();
 	}
 	
-	@Override
 	public boolean pushData() {
 		QueryUtils.update(_Settings.TableName.toString(), "value", databaseVersion + "", new String[] {"key", "version"});
 		if(usingVault) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "vault"});
@@ -99,9 +96,6 @@ public class Settings implements _NormalData {
 	public static boolean pushSettings() {
 		return instance.pushData();
 	}
-	
-	@Override
-	public Map<String, Object> getValues() { return null; }
 	
 	public static void setDatabaseVersion(int version) { 
 		instance.databaseVersion = version;

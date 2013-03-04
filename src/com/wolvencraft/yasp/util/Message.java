@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.data.normal.Settings;
+import com.wolvencraft.yasp.db.data.Settings;
 
 public class Message {
 	private static Logger logger = StatsPlugin.getInstance().getLogger();

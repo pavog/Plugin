@@ -18,18 +18,16 @@ import com.wolvencraft.yasp.db.tables.normal.TotalDeathPlayers;
  */
 public class TotalDeathsEntry implements _NormalData {
 	
-	public TotalDeathsEntry(int playerId, DamageCause cause) {
-		this.playerId = playerId;
+	public TotalDeathsEntry(DamageCause cause) {
 		this.cause = cause;
 		this.times = 0;
 	}
 	
-	private int playerId;
 	private DamageCause cause;
 	private int times;
 	
 	@Override
-	public void fetchData() {
+	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
 			TotalDeathPlayers.TableName.toString(),
 			new String[] {"*"},
@@ -37,24 +35,24 @@ public class TotalDeathsEntry implements _NormalData {
 			new String[] { TotalDeathPlayers.Cause.toString(), cause.name()}
 		);
 		
-		if(results.isEmpty()) QueryUtils.insert(TotalDeathPlayers.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalDeathPlayers.TableName.toString(), getValues(playerId));
 		else {
 			times = results.get(0).getValueAsInteger(TotalDeathPlayers.Times.toString());
 		}
 	}
 
 	@Override
-	public boolean pushData() {
+	public boolean pushData(int playerId) {
 		return QueryUtils.update(
 			TotalDeathPlayers.TableName.toString(),
-			getValues(),
+			getValues(playerId),
 			new String[] { TotalDeathPlayers.PlayerId.toString(), playerId + ""},
 			new String[] { TotalDeathPlayers.Cause.toString(), cause.name()}
 		);
 	}
 
 	@Override
-	public Map<String, Object> getValues() {
+	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalDeathPlayers.PlayerId.toString(), playerId);
 		map.put(TotalDeathPlayers.Cause.toString(), cause.name());
@@ -62,8 +60,8 @@ public class TotalDeathsEntry implements _NormalData {
 		return map;
 	}
 	
-	public boolean equals(int playerId, DamageCause cause) {
-		return this.playerId == playerId && this.cause.equals(cause);
+	public boolean equals(DamageCause cause) {
+		return this.cause.equals(cause);
 	}
 	
 	/**

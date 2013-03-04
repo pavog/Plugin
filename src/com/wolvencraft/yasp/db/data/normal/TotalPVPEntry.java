@@ -25,20 +25,18 @@ public class TotalPVPEntry implements _NormalData {
 	 * @param killer Player who killed the victim
 	 * @param victim Player who was killed
 	 */
-	public TotalPVPEntry(int killerId, int victimId, ItemStack weapon) {
-		this.killerId = killerId;
+	public TotalPVPEntry(int victimId, ItemStack weapon) {
 		this.victimId = victimId;
 		this.weapon = weapon;
 		this.times = 0;
 	}
 	
-	private int killerId;
 	private int victimId;
 	private ItemStack weapon;
 	private int times;
 	
 	@Override
-	public void fetchData() {
+	public void fetchData(int killerId) {
 		List<QueryResult> results = QueryUtils.select(
 			TotalPVPKills.TableName.toString(),
 			new String[] {"*"},
@@ -47,17 +45,17 @@ public class TotalPVPEntry implements _NormalData {
 			new String[] { TotalPVPKills.MaterialId.toString(), weapon.getTypeId() + ""},
 			new String[] { TotalPVPKills.MaterialData.toString(), weapon.getData().getData() + ""}
 		);
-		if(results.isEmpty()) QueryUtils.insert(TotalPVPKills.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalPVPKills.TableName.toString(), getValues(killerId));
 		else {
 			times = results.get(0).getValueAsInteger(TotalPVPKills.Times.toString());
 		}
 	}
 
 	@Override
-	public boolean pushData() {
+	public boolean pushData(int killerId) {
 		return QueryUtils.update(
 			TotalPVPKills.TableName.toString(),
-			getValues(), 
+			getValues(killerId), 
 			new String[] { TotalPVPKills.PlayerId.toString(), killerId + ""},
 			new String[] { TotalPVPKills.VictimId.toString(), victimId + ""},
 			new String[] { TotalPVPKills.MaterialId.toString(), weapon.getTypeId() + ""},
@@ -66,7 +64,7 @@ public class TotalPVPEntry implements _NormalData {
 	}
 
 	@Override
-	public Map<String, Object> getValues() {
+	public Map<String, Object> getValues(int killerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalPVPKills.PlayerId.toString(), killerId);
 		map.put(TotalPVPKills.VictimId.toString(), victimId);
@@ -76,8 +74,8 @@ public class TotalPVPEntry implements _NormalData {
 		return map;
 	}
 	
-	public boolean equals(int killerId, int victimId, ItemStack weapon) {
-		return this.killerId == killerId && this.victimId == victimId && this.weapon.equals(weapon);
+	public boolean equals(int victimId, ItemStack weapon) {
+		return this.victimId == victimId && this.weapon.equals(weapon);
 	}
 	
 	/**

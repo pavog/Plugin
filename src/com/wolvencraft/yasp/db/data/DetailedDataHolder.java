@@ -31,9 +31,9 @@ public class DetailedDataHolder {
 		data.remove(oldData);
 	}
 	
-	public void sync() {
+	public void sync(int playerId) {
 		for(_DetailedData entry : get()) {
-			if(entry.pushData()) remove(entry);
+			if(entry.pushData(playerId)) remove(entry);
 		}
 	}
 }

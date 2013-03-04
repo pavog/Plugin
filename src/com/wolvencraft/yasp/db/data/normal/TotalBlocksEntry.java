@@ -12,21 +12,19 @@ import com.wolvencraft.yasp.db.tables.normal.TotalBlocks;
 
 public class TotalBlocksEntry implements _NormalData {
 	
-	public TotalBlocksEntry(int playerId, MaterialData material) {
+	public TotalBlocksEntry(MaterialData material) {
 		
-		this.playerId = playerId;
 		this.material = material;
 		this.broken = 0;
 		this.placed = 0;
 	}
 	
-	private int playerId;
 	private MaterialData material;
 	private int broken;
 	private int placed;
 	
 	@Override
-	public void fetchData() {
+	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
 			TotalBlocks.TableName.toString(),
 			new String[] {"*"},
@@ -35,7 +33,7 @@ public class TotalBlocksEntry implements _NormalData {
 			new String[] { TotalBlocks.MaterialData.toString(), material.getData() + ""}
 		);
 		
-		if(results.isEmpty()) QueryUtils.insert(TotalBlocks.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalBlocks.TableName.toString(), getValues(playerId));
 		else {
 			broken = results.get(0).getValueAsInteger(TotalBlocks.Destroyed.toString());
 			placed = results.get(0).getValueAsInteger(TotalBlocks.Placed.toString());
@@ -43,10 +41,10 @@ public class TotalBlocksEntry implements _NormalData {
 	}
 
 	@Override
-	public boolean pushData() {
+	public boolean pushData(int playerId) {
 		return QueryUtils.update(
 			TotalBlocks.TableName.toString(),
-			getValues(),
+			getValues(playerId),
 			new String[] { TotalBlocks.PlayerId.toString(), playerId + ""},
 			new String[] { TotalBlocks.MaterialId.toString(), material.getItemTypeId() + ""},
 			new String[] { TotalBlocks.MaterialData.toString(), material.getData() + ""}
@@ -54,7 +52,7 @@ public class TotalBlocksEntry implements _NormalData {
 	}
 	
 	@Override
-	public Map<String, Object> getValues() {
+	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalBlocks.PlayerId.toString(), playerId);
 		map.put(TotalBlocks.MaterialId.toString(), material.getItemTypeId());

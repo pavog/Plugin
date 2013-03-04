@@ -26,11 +26,11 @@ public class PVEDataHolder {
 		return temp;
 	}
 	
-	public TotalPVEEntry get(int killerId, EntityType creatureType, ItemStack weapon) {
+	public TotalPVEEntry get(EntityType creatureType, ItemStack weapon) {
 		for(TotalPVEEntry entry : data) {
-			if(entry.equals(killerId, creatureType, weapon)) return entry;
+			if(entry.equals(creatureType, weapon)) return entry;
 		}
-		TotalPVEEntry entry = new TotalPVEEntry(killerId, creatureType, weapon);
+		TotalPVEEntry entry = new TotalPVEEntry(creatureType, weapon);
 		data.add(entry);
 		return entry;
 	}
@@ -39,8 +39,8 @@ public class PVEDataHolder {
 		data.clear();
 	}
 	
-	public void sync() {
-		for(TotalPVEEntry blocks : data) blocks.pushData();
+	public void sync(int killerId) {
+		for(TotalPVEEntry entry : data) entry.pushData(killerId);
 	}
 	
 }

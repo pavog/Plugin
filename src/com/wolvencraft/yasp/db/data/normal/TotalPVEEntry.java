@@ -25,22 +25,20 @@ public class TotalPVEEntry implements _NormalData {
 	 * @param player Player in question
 	 * @param creature Creature in question
 	 */
-	public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
-		this.playerId = playerId;
+	public TotalPVEEntry(EntityType creatureType, ItemStack weapon) {
 		this.creatureType = creatureType;
 		this.weapon = weapon;
 		this.playerDeaths = 0;
 		this.creatureDeaths = 0;
 	}
 	
-	private int playerId;
 	private EntityType creatureType;
 	private ItemStack weapon;
 	private int playerDeaths;
 	private int creatureDeaths;
 	
 	@Override
-	public void fetchData() {
+	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
 			TotalPVEKills.TableName.toString(),
 			new String[] {"*"},
@@ -49,7 +47,7 @@ public class TotalPVEEntry implements _NormalData {
 			new String[] { TotalPVEKills.MaterialId.toString(), weapon.getTypeId() + ""},
 			new String[] { TotalPVEKills.MaterialData.toString(), weapon.getData().getData() + ""}
 		);
-		if(results.isEmpty()) QueryUtils.insert(TotalPVEKills.TableName.toString(), getValues());
+		if(results.isEmpty()) QueryUtils.insert(TotalPVEKills.TableName.toString(), getValues(playerId));
 		else {
 			playerDeaths = results.get(0).getValueAsInteger(TotalPVEKills.PlayerKilled.toString());
 			creatureDeaths = results.get(0).getValueAsInteger(TotalPVEKills.CreatureKilled.toString());
@@ -57,10 +55,10 @@ public class TotalPVEEntry implements _NormalData {
 	}
 
 	@Override
-	public boolean pushData() {
+	public boolean pushData(int playerId) {
 		return QueryUtils.update(
 			TotalPVEKills.TableName.toString(),
-			getValues(),
+			getValues(playerId),
 			new String[] { TotalPVEKills.PlayerId.toString(), playerId + ""},
 			new String[] { TotalPVEKills.CreatureId.toString(), creatureType.getTypeId() + ""},
 			new String[] { TotalPVEKills.MaterialId.toString(), weapon.getTypeId() + ""},
@@ -69,7 +67,7 @@ public class TotalPVEEntry implements _NormalData {
 	}
 
 	@Override
-	public Map<String, Object> getValues() {
+	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalPVEKills.PlayerId.toString(), playerId);
 		map.put(TotalPVEKills.CreatureId.toString(), creatureType.getTypeId());
@@ -80,8 +78,8 @@ public class TotalPVEEntry implements _NormalData {
 		return map;
 	}
 	
-	public boolean equals(int playerId, EntityType creatureType, ItemStack weapon) {
-		return this.playerId == playerId && this.creatureType.equals(creatureType) && this.weapon.equals(weapon);
+	public boolean equals(EntityType creatureType, ItemStack weapon) {
+		return this.creatureType.equals(creatureType) && this.weapon.equals(weapon);
 	}
 	
 	/**

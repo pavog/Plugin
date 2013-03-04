@@ -25,12 +25,12 @@ public class ItemsDataHolder {
 		return temp;
 	}
 	
-	public TotalItemsEntry get(int playerId, ItemStack itemStack) {
+	public TotalItemsEntry get(ItemStack itemStack) {
 		itemStack.setAmount(1);
 		for(TotalItemsEntry blocks : data) {
 			if(blocks.getItemStack().equals(itemStack)) return blocks;
 		}
-		TotalItemsEntry entry = new TotalItemsEntry(playerId, itemStack);
+		TotalItemsEntry entry = new TotalItemsEntry(itemStack);
 		data.add(entry);
 		return entry;
 	}
@@ -39,8 +39,8 @@ public class ItemsDataHolder {
 		data.clear();
 	}
 	
-	public void sync() {
-		for(TotalItemsEntry blocks : data) blocks.pushData();
+	public void sync(int playerId) {
+		for(TotalItemsEntry entry : data) entry.pushData(playerId);
 	}
 	
 }

@@ -25,11 +25,11 @@ public class DeathsDataHolder {
 		return temp;
 	}
 	
-	public TotalDeathsEntry get(int playerId, DamageCause cause) {
+	public TotalDeathsEntry get(DamageCause cause) {
 		for(TotalDeathsEntry entry : data) {
-			if(entry.equals(playerId, cause)) return entry;
+			if(entry.equals(cause)) return entry;
 		}
-		TotalDeathsEntry entry = new TotalDeathsEntry(playerId, cause);
+		TotalDeathsEntry entry = new TotalDeathsEntry(cause);
 		data.add(entry);
 		return entry;
 	}
@@ -38,8 +38,8 @@ public class DeathsDataHolder {
 		data.clear();
 	}
 	
-	public void sync() {
-		for(TotalDeathsEntry blocks : data) blocks.pushData();
+	public void sync(int playerId) {
+		for(TotalDeathsEntry entry : data) entry.pushData(playerId);
 	}
 	
 }

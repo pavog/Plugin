@@ -1,7 +1,6 @@
-package com.wolvencraft.yasp.db.data.normal;
+package com.wolvencraft.yasp.db.data;
 
 import java.util.List;
-import java.util.Map;
 
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.QueryResult;
@@ -9,7 +8,7 @@ import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.normal._ServerStatistics;
 import com.wolvencraft.yasp.util.Util;
 
-public class ServerStatistics implements _NormalData {
+public class ServerStatistics {
 	
 	public ServerStatistics(StatsPlugin plugin) {
 		firstStartupTime = 0;
@@ -28,7 +27,6 @@ public class ServerStatistics implements _NormalData {
 	private int maxPlayersOnline;
 	private long maxPlayersOnlineTime;
 	
-	@Override
 	public void fetchData() {
 		List<QueryResult> entries = QueryUtils.select(_ServerStatistics.TableName.toString(), new String[] {"*"});
 		for(QueryResult entry : entries) {
@@ -40,7 +38,6 @@ public class ServerStatistics implements _NormalData {
 		if(firstStartupTime == 0) firstStartupTime = Util.getTimestamp();
 	}
 
-	@Override
 	public boolean pushData() {
 		currentUptime = Util.getTimestamp() - startupTime;
 		totalUptime += currentUptime;
@@ -76,9 +73,6 @@ public class ServerStatistics implements _NormalData {
 			);
 		return true;
 	}
-
-	@Override
-	public Map<String, Object> getValues() { return null; }
 	
 	/**
 	 * Indicates that the plugin is shutting down and registers the current shutdown time.

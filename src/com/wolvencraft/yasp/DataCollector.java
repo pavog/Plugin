@@ -8,9 +8,9 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.data.ServerStatistics;
+import com.wolvencraft.yasp.db.data.Settings;
 import com.wolvencraft.yasp.db.data.normal.PlayerData;
-import com.wolvencraft.yasp.db.data.normal.ServerStatistics;
-import com.wolvencraft.yasp.db.data.normal.Settings;
 import com.wolvencraft.yasp.db.tables.normal.Players;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;

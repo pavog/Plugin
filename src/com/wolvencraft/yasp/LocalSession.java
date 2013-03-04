@@ -1,6 +1,7 @@
 package com.wolvencraft.yasp;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -21,12 +22,10 @@ import com.wolvencraft.yasp.db.tables.normal.Players;
 public class LocalSession {
 	
 	public LocalSession(Player player) {
-		this.playerName = player.getPlayerListName();
 		this.playerId = DataCollector.getPlayerId(player);
-		this.playerData = new PlayerData(player, playerName, playerId);
 		
-		this.playersDistances = new PlayerDistances(playerId);
-		
+		this.playerData = new PlayerData(player);
+		this.playerDistances = new PlayerDistances();
 		this.totalBlocks = new BlocksDataHolder();
 		this.totalItems = new ItemsDataHolder();
 		this.totalDeaths = new DeathsDataHolder();
@@ -36,11 +35,10 @@ public class LocalSession {
 		this.detailedData = new DetailedDataHolder();
 	}
 	
-	private String playerName;
 	private int playerId;
 	
 	private PlayerData playerData;
-	private PlayerDistances playersDistances;
+	private PlayerDistances playerDistances;
 	private BlocksDataHolder totalBlocks;
 	private ItemsDataHolder totalItems;
 	private DeathsDataHolder totalDeaths;
@@ -50,21 +48,21 @@ public class LocalSession {
 	private DetailedDataHolder detailedData;
 	
 	public void pushData() {
-		playerData.pushData();
-		playersDistances.pushData();
-		totalBlocks.sync();
-		totalItems.sync();
-		totalDeaths.sync();
-		totalPVE.sync();
-		totalPVP.sync();
-		detailedData.sync();
+		playerData.pushData(playerId);
+		playerDistances.pushData(playerId);
+		totalBlocks.sync(playerId);
+		totalItems.sync(playerId);
+		totalDeaths.sync(playerId);
+		totalPVE.sync(playerId);
+		totalPVP.sync(playerId);
+		detailedData.sync(playerId);
 	}
 	
 	/**
 	 * Returns the unique player name
 	 * @return <b>String</b> Player name
 	 */
-	public String getPlayerName() { return playerName; }
+	public String getPlayerName() { return playerData.getName(); }
 	
 	/**
 	 * Returns the database ID of the player
@@ -76,7 +74,17 @@ public class LocalSession {
 	 * Returns the Player object associated with the session, if it exists
 	 * @return <b>Player</b> object if it exists, <b>null</b> otherwise
 	 */
-	public Player getPlayer() { return Bukkit.getServer().getPlayer(playerName); }
+	public Player getPlayer() { return Bukkit.getServer().getPlayer(playerData.getName()); }
+	
+	/**
+	 * Returns the location of the Player associated with the session, if it exists
+	 * @return <b>Location</b> if the player is online, <b>null</b> otherwise
+	 */
+	public Location getLocation() {
+		Player player = getPlayer();
+		if(player == null) return null;
+		return player.getLocation();
+	}
 	
 	/**
 	 * Returns the player's current online status.
@@ -84,7 +92,7 @@ public class LocalSession {
 	 */
 	public boolean isOnline() {
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-			if(player.getPlayerListName().equals(playerName)) return true;
+			if(player.getPlayerListName().equals(playerData.getName())) return true;
 		}
 		return false;
 	}
@@ -94,28 +102,28 @@ public class LocalSession {
 	 * Increments the distance traveled by foot.
 	 * @param distance Additional distance traveled by foot.
 	 */
-	public void addDistanceFoot(double distance) { playersDistances.addFootDistance(distance); }
+	public void addDistanceFoot(double distance) { playerDistances.addFootDistance(distance); }
 	
 	/**
 	 * <b>PlayersDistances</b> wrapper.<br />
 	 * Increments the distance traveled by boat.
 	 * @param distance Additional distance traveled by boat
 	 */
-	public void addDistanceBoat(double distance) { playersDistances.addBoatDistance(distance); }
+	public void addDistanceBoat(double distance) { playerDistances.addBoatDistance(distance); }
 	
 	/**
 	 * <b>PlayersDistances</b> wrapper.<br />
 	 * Increments the distance traveled by minecart.
 	 * @param distance Additional distance traveled by minecart
 	 */
-	public void addDistanceMinecart(double distance) { playersDistances.addMinecartDistance(distance); }
+	public void addDistanceMinecart(double distance) { playerDistances.addMinecartDistance(distance); }
 	
 	/**
 	 * <b>PlayersDistances</b> wrapper.<br />
 	 * Increments the distance traveled by pig.
 	 * @param distance Additional distance traveled by pig
 	 */
-	public void addDistancePig(double distance) { playersDistances.addPigDistance(distance); }
+	public void addDistancePig(double distance) { playerDistances.addPigDistance(distance); }
 	
 	/**
 	 * Registers player logging in with all corresponding statistics trackers.<br />
@@ -123,7 +131,7 @@ public class LocalSession {
 	 */
 	public void login() {
 		playerData.setOnline(true);
-		detailedData.add(new DetailedLogPlayersData(getPlayer(), playerId, true));
+		detailedData.add(new DetailedLogPlayersData(getLocation(), true));
 		QueryUtils.update(
 			Players.TableName.toString(),
 			Players.Online.toString(),
@@ -138,7 +146,7 @@ public class LocalSession {
 	 */
 	public void logout() {
 		playerData.setOnline(false);
-		detailedData.add(new DetailedLogPlayersData(getPlayer(), playerId, false));
+		detailedData.add(new DetailedLogPlayersData(getLocation(), false));
 		QueryUtils.update(
 				Players.TableName.toString(),
 				Players.Online.toString(),
@@ -152,8 +160,8 @@ public class LocalSession {
 	 * @param materialData Data of the block in question
 	 */
 	public void blockBreak(MaterialData materialData) {
-		totalBlocks.get(playerId, materialData).addBroken();
-		detailedData.add(new DetailedDestroyerdBlocksData(getPlayer(), playerId, materialData));
+		totalBlocks.get(materialData).addBroken();
+		detailedData.add(new DetailedDestroyerdBlocksData(getLocation(), materialData));
 	}
 	
 	/**
@@ -161,8 +169,8 @@ public class LocalSession {
 	 * @param materialData Data of the block in question
 	 */
 	public void blockPlace(MaterialData materialData) {
-		totalBlocks.get(playerId, materialData).addPlaced();
-		detailedData.add(new DetailedPlacedBlocksData(getPlayer(), playerId, materialData));
+		totalBlocks.get(materialData).addPlaced();
+		detailedData.add(new DetailedPlacedBlocksData(getLocation(), materialData));
 	}
 	
 	/**
@@ -170,8 +178,8 @@ public class LocalSession {
 	 * @param itemStack Stack of items in question
 	 */
 	public void itemDrop(ItemStack itemStack) {
-		totalItems.get(playerId, itemStack).addDropped();
-		detailedData.add(new DetailedDroppedItemsData(getPlayer(), playerId, itemStack));
+		totalItems.get(itemStack).addDropped();
+		detailedData.add(new DetailedDroppedItemsData(getLocation(), itemStack));
 	}
 	
 	/**
@@ -179,8 +187,8 @@ public class LocalSession {
 	 * @param itemStack Stack of items in question
 	 */
 	public void itemPickUp(ItemStack itemStack) {
-		totalItems.get(playerId, itemStack).addPickedUp();
-		detailedData.add(new DetailedPickedupItemsData(getPlayer(), playerId, itemStack));
+		totalItems.get(itemStack).addPickedUp();
+		detailedData.add(new DetailedPickedupItemsData(getLocation(), itemStack));
 	}
 	
 	/**
@@ -188,8 +196,8 @@ public class LocalSession {
 	 * @param itemStack Stack of items in question
 	 */
 	public void itemUse(ItemStack itemStack) {
-		totalItems.get(playerId,  itemStack).addUsed();
-		detailedData.add(new DetailedUsedItemsData(getPlayer(), playerId, itemStack));
+		totalItems.get(itemStack).addUsed();
+		detailedData.add(new DetailedUsedItemsData(getLocation(), itemStack));
 	}
 	
 	/**
@@ -197,7 +205,7 @@ public class LocalSession {
 	 * @param itemStack Stack of items in question
 	 */
 	public void itemCraft(ItemStack itemStack) {
-		totalItems.get(playerId, itemStack).addCrafted();
+		totalItems.get(itemStack).addCrafted();
 	}
 	
 	/**
@@ -205,7 +213,7 @@ public class LocalSession {
 	 * @param itemStack Stack of items in question
 	 */
 	public void itemSmelt(ItemStack itemStack) {
-		totalItems.get(playerId, itemStack).addSmelted();
+		totalItems.get(itemStack).addSmelted();
 	}
 	
 	/**
@@ -216,8 +224,8 @@ public class LocalSession {
 	 */
 	public void playerKilledPlayer(Player victim, ItemStack weapon) {
 		int victimId = DataCollector.getPlayerId(victim);
-		totalPVP.get(playerId, victimId, weapon).addTimes();
-		detailedData.add(new DetailedPVPKillsData(getPlayer(), playerId, victim, victimId, weapon));
+		totalPVP.get(victimId, weapon).addTimes();
+		detailedData.add(new DetailedPVPKillsData(victim.getLocation(), victimId, weapon));
 	}
 	
 	/**
@@ -227,8 +235,8 @@ public class LocalSession {
 	 * @param weapon Weapon used by killer
 	 */
 	public void playerKilledCreature(Creature victim, ItemStack weapon) {
-		totalPVE.get(playerId, victim.getType(), weapon).addCreatureDeaths();
-		detailedData.add(new DetailedPVEKillsData(getPlayer(), playerId, victim.getType(), weapon, false));
+		totalPVE.get(victim.getType(), weapon).addCreatureDeaths();
+		detailedData.add(new DetailedPVEKillsData(getLocation(), victim.getType(), weapon, false));
 	}
 	
 	/**
@@ -238,8 +246,8 @@ public class LocalSession {
 	 * @param weapon Weapon used by killer
 	 */
 	public void creatureKilledPlayer(Creature killer, ItemStack weapon) {
-		totalPVE.get(playerId, killer.getType(), weapon).addPlayerDeaths();
-		detailedData.add(new DetailedPVEKillsData(getPlayer(), playerId, killer.getType(), weapon, true));
+		totalPVE.get(killer.getType(), weapon).addPlayerDeaths();
+		detailedData.add(new DetailedPVEKillsData(getLocation(), killer.getType(), weapon, true));
 	}
 	
 	/**
@@ -248,7 +256,7 @@ public class LocalSession {
 	 * @param cause Death cause
 	 */
 	public void playerDied(DamageCause cause) {
-		totalDeaths.get(playerId, cause).addTimes();
-		detailedData.add(new DetailedDeathPlayersData(getPlayer(), playerId, cause));
+		totalDeaths.get(cause).addTimes();
+		detailedData.add(new DetailedDeathPlayersData(getLocation(), cause));
 	}
 }

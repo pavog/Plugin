@@ -25,11 +25,11 @@ public class PVPDataHolder {
 		return temp;
 	}
 	
-	public TotalPVPEntry get(int killerId, int victimId, ItemStack weapon) {
+	public TotalPVPEntry get(int victimId, ItemStack weapon) {
 		for(TotalPVPEntry entry : data) {
-			if(entry.equals(killerId, victimId, weapon)) return entry;
+			if(entry.equals(victimId, weapon)) return entry;
 		}
-		TotalPVPEntry entry = new TotalPVPEntry(killerId, victimId, weapon);
+		TotalPVPEntry entry = new TotalPVPEntry(victimId, weapon);
 		data.add(entry);
 		return entry;
 	}
@@ -38,8 +38,8 @@ public class PVPDataHolder {
 		data.clear();
 	}
 	
-	public void sync() {
-		for(TotalPVPEntry blocks : data) blocks.pushData();
+	public void sync(int killerId) {
+		for(TotalPVPEntry entry : data) entry.pushData(killerId);
 	}
 	
 }
