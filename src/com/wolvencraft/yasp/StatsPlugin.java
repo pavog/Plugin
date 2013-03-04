@@ -2,9 +2,13 @@ package com.wolvencraft.yasp;
 
 import java.util.logging.Level;
 
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
@@ -16,6 +20,9 @@ import com.wolvencraft.yasp.util.Message;
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;
 	private Database database;
+	
+	private static Economy economy;
+	private static Permission permissions;
 	
 	@Override
 	public void onEnable() {
@@ -49,7 +56,22 @@ public class StatsPlugin extends JavaPlugin {
 			this.setEnabled(false);
 			return;
 		}
+		
+		if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            Message.log(Level.SEVERE, "Vault dependency not found!");
+			this.setEnabled(false);
+			return;
+        }
 
+		try {
+	        economy = ((RegisteredServiceProvider<Economy>)(getServer().getServicesManager().getRegistration(Economy.class))).getProvider();
+	        permissions = ((RegisteredServiceProvider<Permission>)(getServer().getServicesManager().getRegistration(Permission.class))).getProvider();
+		} catch (NullPointerException npe) {
+			Message.log(Level.SEVERE, "An error occurred while setting up Vault dependency");
+			this.setEnabled(false);
+			return;
+		}
+		
 		Settings.retrieveData();
 		
 		new PlayerListener(this);
@@ -99,5 +121,29 @@ public class StatsPlugin extends JavaPlugin {
 		return false;
 	}
 	
-	public static StatsPlugin getInstance() 		{ return instance; }
+	/**
+	 * Returns a static plugin instance
+	 * @return <b>Promote</b> plugin instance
+	 */
+	public static StatsPlugin getInstance() {
+		return instance;
+	}
+	
+	/**
+	 * Returns the current economy instance.<br />
+	 * The <b>EconomyHook</b> should generally be used instead of this.
+	 * @return <b>Economy</b> Economy instance
+	 */
+	public static Economy getEconomy() {
+		return economy;
+	}
+	
+	/**
+	 * Returns the current permissions instance.<br />
+	 * The <b>PermissionsHook</b> should generally be used instead of this.
+	 * @return <b>Permission</b> Economy instance
+	 */
+	public static Permission getPermissions() {
+		return permissions;
+	}
 }
