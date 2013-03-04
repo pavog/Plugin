@@ -26,6 +26,7 @@ public class ServerStatistics implements _NormalData {
 	private long currentUptime;
 	private long totalUptime;
 	private int maxPlayersOnline;
+	private long maxPlayersOnlineTime;
 	
 	@Override
 	public void fetchData() {
@@ -68,6 +69,11 @@ public class ServerStatistics implements _NormalData {
 			"value", maxPlayersOnline + "",
 			new String[] {"key", "max_players_online"}
 		);
+		QueryUtils.update(
+				_ServerStatistics.TableName.toString(),
+				"value", maxPlayersOnlineTime + "",
+				new String[] {"key", "max_players_online_time"}
+			);
 		return true;
 	}
 
@@ -90,7 +96,9 @@ public class ServerStatistics implements _NormalData {
 	 * @param players Maximum players online
 	 */
 	public void playerLogin(int playersOnline) {
-		if(playersOnline > maxPlayersOnline)
-		this.maxPlayersOnline = playersOnline;
+		if(playersOnline > maxPlayersOnline) {
+			this.maxPlayersOnline = playersOnline;
+			this.maxPlayersOnlineTime = Util.getTimestamp();
+		}
 	}
 }
