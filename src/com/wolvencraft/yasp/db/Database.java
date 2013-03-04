@@ -203,4 +203,15 @@ public class Database {
 		if(instance == null) throw new DatabaseConnectionException("Could not find an active connection to the database");
 		return instance;
 	}
+	
+	/**
+	 * Returns the current running instance of the database
+	 * @param silent If <b>true</b>, will not check if a database instance exists.
+	 * @return Database instance
+	 * @throws DatabaseConnectionException Thrown if there is no active connection to the database
+	 */
+	public static Database getInstance(boolean silent) throws DatabaseConnectionException {
+		if(!silent && instance == null) throw new DatabaseConnectionException("Could not find an active connection to the database");
+		return instance;
+	}
 }

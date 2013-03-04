@@ -53,6 +53,11 @@ public enum CommandManager {
 		return run(args);
 	}
 	
+	public boolean run() {
+		String[] args = {"", ""};
+		return run(args);
+	}
+	
 	public static CommandSender getSender() 	{ return sender; }
 	public static void setSender(CommandSender sender) { CommandManager.sender = sender; }
 	public static void resetSender() { sender = null; }

@@ -1,11 +1,7 @@
 package com.wolvencraft.yasp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -41,7 +37,6 @@ public class DataCollector implements Runnable {
 	
 	private static List<LocalSession> sessions;
 	private static ServerStatistics serverStatistics;
-	private static Map<String, Integer> players = new HashMap<String, Integer>();
 
 	@Override
 	public void run() {
@@ -109,32 +104,6 @@ public class DataCollector implements Runnable {
 	}
 	
 	/**
-	 * Returns the playerID of the specified player
-	 * @deprecated
-	 * @param username Player to look up
-	 * @return <b>int</b> playerID
-	 */
-	public static Integer getCachedPlayerId(String username) {
-		Message.debug("Retriving a player ID for " + username);
-		Iterator<Entry<String, Integer>> it = players.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<String, Integer> pairs = (Map.Entry<String, Integer>) it.next();
-			if(pairs.getKey().equals(username)) return pairs.getValue();
-			it.remove();
-		}
-		int playerId = -1;
-		List<QueryResult> results = QueryUtils.select(Players.TableName.toString(), new String[] {Players.Name.toString(), Players.PlayerId.toString()}, new String[] {"name", username} );
-		if(results.isEmpty()) {
-			QueryUtils.insert(Players.TableName.toString(), PlayerData.getDefaultValues(username));
-			List<QueryResult> newResults = QueryUtils.select(Players.TableName.toString(), new String[] {Players.Name.toString(), Players.PlayerId.toString()}, new String[] {"name", username} );
-			playerId = newResults.get(0).getValueAsInteger(Players.PlayerId.toString());
-		} else playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
-		players.put(username, playerId);
-		Message.debug("User ID found: " + playerId);
-		return playerId;
-	}
-	
-	/**
 	 * Returns the PlayerID corresponding with the specified username.<br />
 	 * If the username is not in the database, a dummy entry is created, and an ID is assigned.<br />
 	 * Unlike <i>getCachedPlayerId(String username)</i>, does not save the username-id pairs locally.
@@ -187,5 +156,6 @@ public class DataCollector implements Runnable {
 	 */
 	public static void pluginShutdown() {
 		serverStatistics.shutdown();
+		pushAllData();
 	}
 }
