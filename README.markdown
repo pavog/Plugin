@@ -1,73 +1,57 @@
 ![YASP](http://stats.wolvencraft.com/src/img/plugin_logo.png)
 
-**YASP** is an unofficial fork of a popular Minecraft Plugin called **[Statistician](http://dev.bukkit.org/server-mods/statisticianv2/)**, first made by ChaseHQ and continued by Coryf88, Crimsonfoxy, and Dazzel_.
-While Statistican does a decent job logging many aspects of Minecraft gameplay and produces a working webpage with statistics, the default web portal that goes with the plugin is just outright ugly.
-YASP strives to correct that, replacing the interface that would better suit a website in the 90-s with a more modern design.
-
+**Y**et **A**nother **S**tatistics **P**plugin is the ground-up rewrite of a popular Minecraft Plugin called **[Statistician](http://dev.bukkit.org/server-mods/statisticianv2/)**, first made by ChaseHQ and continued by Coryf88, Crimsonfoxy, and Dazzel_.
+Starting up as an unofficial fork of the original project, YASP grew to the point where it contains almost no traces of the original code, both in Bukkit plugin and in web portal.
+While Statistician does a decent job of logging some player and server statistics, YASP takes it a step further and completely overhauls the stats tracking, bringing the amount of information collected to a staggering amount, in addition to featuring a brand new modern web portal.
+YASP was made to be highly customizable; it will do only what you tell it to do.
 
 ## Features ##
 
 ### Store various types of statistics ###
 
 - Server statistics
-    - Last startup
-    - Last shutdown
-    - Current uptime
-    - Current status (on-line / off-line)
-    - Current number of players online
-    - Maximum number of players
+    - Server startup and shutdown times, in log and graph forms
+    - Current status (online / offline), current and total uptime
+    - Players that are currently online
+    - Maximum number of players and the time when that maximum was reached
+
+- World statistics
+    - PVP, PVE, and Natural deaths
+    - Blocks placed and destroyed
+    - Items picked up and dropped, used and crafted
 
 - Player statistics
-    - PvP and PvE Kills
-    - Natural Deaths
-    - Blocks placed / destroyed
-    - Distance traveled
-    - Items picked up / dropped
-    - Total time online
+    - Player information (health, hunger, experience, gamemode)
+    - Current status (online / offline), login and logout times
+    - Player permissions group _(requires Vault)_
+    - Player economy data: balance and transactions _(requires Vault)_
+    - Detailed participation information
+    - PVP, PVE, and Natural deaths
+    - Blocks placed and destroyed
+    - Items picked up and dropped, used and crafted
+    - Distance traveled through various means
 
 ### Built-in Web Portal###
-The plugin goes with the modern-looking web portal that is easy to install and pleasurable to use. Let the whole great world know of your server's achievements!
+A fully functional portal is included with the plugin, featuring a sleek modern design and an incredible level of customization. The web portal will look the way you want it to look and do what you want it to do, nothing more, nothing less.
 
 ### Permissions Integration ###
 The plugin will automatically integrate with any permissions plugin that you have installed. Add `stats.exempt` permission to people who you do not want to track.
 
-
 ## Requirements ##
-
 In order to track statistics, you will need a web-server that fulfills the following requirements:
 
 - MySQL v.5 or higher
 - PHP 5.4.x
 
+The Bukkit plugin was designed to work regardless of the Bukkit version, however, due to the sheer complexity of the code, it is only guaranteed to work with the version it was built with.
+
 ## Installation ##
-Please, note that, while YASP is compatible with [Statistician 2](http://dev.bukkit.org/server-mods/statisticianv2/)'s bukkit plugin, some of the block images will be broken, and some of the features will be unavailable. You will need to manually correct the block names in the `resource-desc` table of the database. Take a look at [this commit](https://github.com/bitWolfy/YetAnotherStatisticsPlugin/commit/ee27fbb6aade35b8dd6465908d77e32e50837052) to see the potential problems.
+Before you begin the installation process, you need to have full access to a MySQL database. It can be an existing database, or you can create a new one; the later is preferable, but not required.
 
-### Minecraft Server ###
-1. Create a new database, associate a user with it, and give that user all permissions. If you are hosting the webserver on your own machine, then you probably know how to do it, otherwise, you can probably learn how to perform these actions in your hoster's help docs.
-2. Drop the plugin `.jar` file into the `/plugins/` folder. It will generate a configuration file. If you are running Statistician 2, you will see errors in the server log - ignore them for now.
-3. Edit `config.yml` of the plugin to match the details of your database. Reload the plugins if it is safe to do so, restart the server otherwise.
-4. The plugin should connect to the remote database and update it to the latest version (which might take a bit).
-5. The plugin setup is complete
-
-### Web Server ###
-1. Copy the contents of the `web` folder to the desired directory on the web server. For example, `/home/public_html/stats`.
-2. Go to the URL associated with that directory. For example `http://wolvencraft.com/stats/`.
-3. Fill out the form on the screen with the database information, portal settings, and create an admin account for the portal
-4. Web portal setup is complete
-
-
-### Frequently Asked Questions ###
-**[Q]** What are the differences between the `.jar` files provided by YASP and Statistician?
-
-**[A]** The only difference you are likely to notice is that YASP does not send any notifications to users. Other than that, all changes are purely technical.
-
--------------
-
-**[Q]** What are the table names?
-
-**[A]** blocks, config, creatures,kill_types, kills, pickup_drop, players, projectiles, resource_desc, server
-
--------------
-
-**[Q]** I am getting this error: `[SEVERE] Error occurred while enabling Statistician v1.3 (Is it up to date?): java.lang.Integer cannot be cast to java.lang.String`
-**[A]** Port and Update time should never have quotes around them, as they are ALWAYS numbers. You don't always need quotes around the database's name and pass, but if they are made of just numbers, you MUST put them in quotes.
+1. Copy the contents of the `web` archive to the desired directory on your web server. For example, `/home/public_html/stats`.
+2. Proceed to the URL associated with that directory and follow the instructions on screen. For example `http://wolvencraft.com/stats/`.
+3. After you finish the web portal installation, the web page should be reporting the lack of connection to the server. This is normal, since the reporting plugin itself was not installed yet.
+4. Copy the plugin `.jar` file into the Minecraft server's `/plugins/` folder and restart / reload the server. The plugin should generate a configuration file and report the lack of connection to the database.
+5. Edit plugin's `config.yml` to match the details of your database. Reload the plugins if it is safe to do so, restart the server otherwise.
+6. If the connection details in the configuration file are correct, the plugin should connect to the database and begin tracking data. Feel free to proceed to the web portal and edit what data you want to track; everything is enabled by default.
+7. The plugin setup is complete.
