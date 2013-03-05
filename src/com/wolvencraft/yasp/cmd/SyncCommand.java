@@ -15,12 +15,11 @@ public class SyncCommand implements BaseCommand {
 
 			@Override
 			public void run() {
-				Message.sendFormattedSuccess(CommandManager.getSender(), "Sending data to the remote database");
 				DataCollector.pushAllData();
-				Message.sendFormattedSuccess(CommandManager.getSender(), "Synchronization complete");
 			}
 			
 		});
+		Message.sendFormattedSuccess(CommandManager.getSender(), "Synchronization complete");
 		return true;
 	}
 
