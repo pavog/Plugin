@@ -27,6 +27,10 @@ public class ServerStatistics {
 		serverPort = Bukkit.getPort();
 		serverMOTD = Bukkit.getMotd();
 		
+		Runtime runtime = Runtime.getRuntime();
+		totalMemory = runtime.totalMemory();
+		freeMemory = runtime.freeMemory();
+		
 		fetchData();
 		pushStaticData();
 	}
@@ -47,6 +51,9 @@ public class ServerStatistics {
 	private String serverMOTD;
 	
 	private int maxPlayersAllowed;
+	
+	private long totalMemory;
+	private long freeMemory;
 	
 	public void fetchData() {
 		List<QueryResult> entries = QueryUtils.select(_ServerStatistics.TableName.toString(), new String[] {"*"});
@@ -83,6 +90,16 @@ public class ServerStatistics {
 			_ServerStatistics.TableName.toString(),
 			"value", maxPlayersOnlineTime + "",
 			new String[] {"key", "max_players_online_time"}
+		);
+		QueryUtils.update(
+			_ServerStatistics.TableName.toString(),
+			"value", totalMemory + "",
+			new String[] {"key", "total_memory"}
+		);
+		QueryUtils.update(
+			_ServerStatistics.TableName.toString(),
+			"value", freeMemory + "",
+			new String[] {"key", "free_memory"}
 		);
 		return true;
 	}
