@@ -31,7 +31,6 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_players_misc` (
   `exp_level` SMALLINT(5) UNSIGNED NULL DEFAULT 0 ,
   `exp_perc` INT(3) UNSIGNED NOT NULL DEFAULT 0 ,
   `exp_total` SMALLINT(5) UNSIGNED NULL DEFAULT 0 ,
-  `exp_picked_up` INT(3) UNSIGNED NOT NULL DEFAULT 0 ,
   `food_level` TINYINT(2) UNSIGNED NULL DEFAULT 0 ,
   `health` TINYINT(2) UNSIGNED NULL DEFAULT 0 ,
   `fish_caught` INT(5) UNSIGNED NOT NULL DEFAULT 0 ,

@@ -43,6 +43,7 @@ public class ItemListener implements Listener {
 		Player player = (Player) event.getEntity();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).itemUse(player.getItemInHand());
+		DataCollector.get(player).misc().foodEaten();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

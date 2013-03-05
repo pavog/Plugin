@@ -9,7 +9,6 @@ public enum PlayersMisc implements _NormalTable {
 	ExperiencePercent("exp_perc"),
 	ExperienceTotal("exp_total"),
 	ExperienceLevel("exp_level"),
-	ExpOrbsPickedUp("exp_picked_up"),
 	FoodLevel("food_level"),
 	HealthLevel("health"),
 	FishCaught("fish_caught"),

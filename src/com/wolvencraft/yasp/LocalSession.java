@@ -243,6 +243,14 @@ public class LocalSession {
 	}
 	
 	/**
+	 * Allows for direct access to miscellaneous data collector
+	 * @return <b>PlayerDataMisc</b> miscellaneous data collector
+	 */
+	public PlayerDataMisc misc() {
+		return playerDataMisc;
+	}
+	
+	/**
 	 * Registers player death from other player with all corresponding statistics trackers
 	 * @param killer Player who killed the victim
 	 * @param victim Player who was killed 

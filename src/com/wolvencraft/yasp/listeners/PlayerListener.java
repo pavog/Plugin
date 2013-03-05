@@ -7,7 +7,14 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -56,5 +63,56 @@ public class PlayerListener implements Listener {
 		} else {
 			DataCollector.get(player).addDistanceFoot(distance);
 		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerFish(PlayerFishEvent event) {
+		Player player = event.getPlayer();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).misc().fishCaught();
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerKick(PlayerKickEvent event) {
+		Player player = event.getPlayer();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).misc().kicked();
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onEggThrow(PlayerEggThrowEvent event) {
+		Player player = event.getPlayer();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).misc().eggThrown();
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onArrowShoot(EntityShootBowEvent event) {
+		if(!(event.getEntity() instanceof Player)) return;
+		Player player = (Player) event.getEntity();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).misc().arrowShot();
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerDamage(EntityDamageEvent event) {
+		if(!(event.getEntity() instanceof Player)) return;
+		Player player = (Player) event.getEntity();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).misc().damageTaken(event.getDamage());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onChatMessage(AsyncPlayerChatEvent event) {
+		Player player = event.getPlayer();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).misc().chatMessageSent(event.getMessage().split(" ").length);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onChatCommand(PlayerCommandPreprocessEvent event) {
+		Player player = event.getPlayer();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).misc().commandSent();
 	}
 }
