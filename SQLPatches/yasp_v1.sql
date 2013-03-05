@@ -14,14 +14,36 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_players` (
   `player_id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(16) NOT NULL ,
   `online` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `login_time` INT(11) NULL ,
+  `first_login` INT(11) NULL ,
+  `logins` INT(11) NULL DEFAULT 0 ,
+  PRIMARY KEY (`player_id`) );
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_players_misc`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_players_misc` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_players_misc` (
+  `player_id` INT NOT NULL AUTO_INCREMENT ,
   `gamemode` TINYINT(2) UNSIGNED NULL DEFAULT 0 ,
+  `exp_level` SMALLINT(5) UNSIGNED NULL DEFAULT 0 ,
   `exp_perc` INT(3) UNSIGNED NOT NULL DEFAULT 0 ,
   `exp_total` SMALLINT(5) UNSIGNED NULL DEFAULT 0 ,
-  `level` SMALLINT(5) UNSIGNED NULL DEFAULT 0 ,
+  `exp_picked_up` INT(3) UNSIGNED NOT NULL DEFAULT 0 ,
   `food_level` TINYINT(2) UNSIGNED NULL DEFAULT 0 ,
   `health` TINYINT(2) UNSIGNED NULL DEFAULT 0 ,
   `first_login` INT(11) NULL ,
   `logins` INT(11) NULL DEFAULT 0 ,
+  `fish_caught` INT(5) UNSIGNED NOT NULL DEFAULT 0 ,
+  `times_kicked` INT(5) UNSIGNED NOT NULL DEFAULT 0 ,
+  `eggs_thrown` INT(5) UNSIGNED NOT NULL DEFAULT 0 ,
+  `food_eaten` INT(5) UNSIGNED NOT NULL DEFAULT 0 ,
+  `arrows_shot` INT(3) UNSIGNED NOT NULL DEFAULT 0 ,
+  `damage_taken` INT(5) UNSIGNED NOT NULL DEFAULT 0 ,
+  `words_said` INT(11) UNSIGNED NOT NULL DEFAULT 0 ,
+  `commands_sent` INT(5) UNSIGNED NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`player_id`) );
 
 
