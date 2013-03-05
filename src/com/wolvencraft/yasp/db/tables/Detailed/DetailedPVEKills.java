@@ -6,7 +6,7 @@ public enum DetailedPVEKills implements _DetailedTable {
 	
 	EntryId("detailed_pve_id"),
 	PlayerID("player_id"),
-	CreatureId("creature_id"),
+	CreatureId("entity_id"),
 	MaterialId("material_id"),
 	MaterialData("material_data"),
 	PlayerKilled("player_killed"),

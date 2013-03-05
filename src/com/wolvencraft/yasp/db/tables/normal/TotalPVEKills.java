@@ -8,7 +8,7 @@ public enum TotalPVEKills implements _NormalTable {
 	EntryId("total_pve_id"),
 	MaterialId("material_id"),
 	MaterialData("material_data"),
-	CreatureId("creature_id"),
+	CreatureId("entity_id"),
 	PlayerId("player_id"),
 	PlayerKilled("player_killed"),
 	CreatureKilled("creature_killed");
