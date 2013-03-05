@@ -9,6 +9,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,6 +59,13 @@ public class ItemListener implements Listener {
 		DataCollector.get(player).itemSmelt(new ItemStack(event.getItemType()));
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onToolBreak(PlayerItemBreakEvent event) {
+		Player player = event.getPlayer();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).toolBreak(event.getBrokenItem());
+	}
+	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onItemEnchant(EnchantItemEvent event) {
 		Player player = event.getEnchanter();

@@ -30,6 +30,7 @@ public class TotalItemsEntry implements _NormalData {
 		this.pickedUp = 0;
 		this.used = 0;
 		this.crafted = 0;
+		this.broken = 0;
 		this.smelted = 0;
 		this.enchanted = 0;
 	}
@@ -40,6 +41,7 @@ public class TotalItemsEntry implements _NormalData {
 	private int pickedUp;
 	private int used;
 	private int crafted;
+	private int broken;
 	private int smelted;
 	private int enchanted;
 	
@@ -59,6 +61,7 @@ public class TotalItemsEntry implements _NormalData {
 			pickedUp = results.get(0).getValueAsInteger(TotalItems.PickedUp.toString());
 			used = results.get(0).getValueAsInteger(TotalItems.Used.toString());
 			crafted = results.get(0).getValueAsInteger(TotalItems.Crafted.toString());
+			broken = results.get(0).getValueAsInteger(TotalItems.Broken.toString());
 			smelted = results.get(0).getValueAsInteger(TotalItems.Smelted.toString());
 			enchanted = results.get(0).getValueAsInteger(TotalItems.Enchanted.toString());
 		}
@@ -85,6 +88,7 @@ public class TotalItemsEntry implements _NormalData {
 		map.put(TotalItems.PickedUp.toString(), pickedUp);
 		map.put(TotalItems.Used.toString(), used);
 		map.put(TotalItems.Crafted.toString(), crafted);
+		map.put(TotalItems.Broken.toString(), broken);
 		map.put(TotalItems.Smelted.toString(), smelted);
 		map.put(TotalItems.Enchanted.toString(), enchanted);
 		return map;
@@ -122,7 +126,13 @@ public class TotalItemsEntry implements _NormalData {
 	 * @param blocks Items to add
 	 */
 	public void addCrafted() { crafted++; }
-
+	
+	/**
+	 * Adds the specified number of blocks to the total number of items broken
+	 * @param blocks Items to add
+	 */
+	public void addBroken() { broken++; }
+	
 	/**
 	 * Adds the specified number of blocks to the total number of items smelted
 	 * @param blocks Items to add

@@ -224,6 +224,14 @@ public class LocalSession {
 	}
 	
 	/**
+	 * Registers tool breaking with all corresponding statistics trackers
+	 * @param itemStack Stack of items in question
+	 */
+	public void toolBreak(ItemStack itemStack) {
+		totalItems.get(itemStack).addBroken();
+	}
+	
+	/**
 	 * Registers item enchantment with all corresponding statistics trackers
 	 * @param itemStack Stack of items in question
 	 */

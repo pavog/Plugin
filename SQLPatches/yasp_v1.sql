@@ -364,6 +364,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_items` (
   `picked_up` INT UNSIGNED NULL DEFAULT 0 ,
   `used` INT UNSIGNED NULL DEFAULT 0 ,
   `crafted` INT NULL DEFAULT 0 ,
+  `broken` INT NULL DEFAULT 0 ,
   `smelted` INT NULL DEFAULT 0 ,
   `enchanted` INT NULL DEFAULT 0 ,
   PRIMARY KEY (`total_items_id`, `material_id`, `material_data`, `player_id`) ,

@@ -14,6 +14,7 @@ public enum TotalItems implements _NormalTable {
 	Used("used"),
 	Crafted("crafted"),
 	Smelted("smelted"),
+	Broken("broken"),
 	Enchanted("enchanted");
 	
 	TotalItems(String columnName) {
