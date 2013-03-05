@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.normal.PlayersMisc;
+import com.wolvencraft.yasp.db.tables.Normal;
 
 public class PlayerDataMisc implements _NormalData {
 	
@@ -54,20 +54,20 @@ public class PlayerDataMisc implements _NormalData {
 	@Override
 	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
-			PlayersMisc.TableName.toString(),
+			Normal.PlayersMisc.TableName.toString(),
 			new String[] {"*"},
-			new String[] { PlayersMisc.PlayerId.toString(), playerId + ""}
+			new String[] { Normal.PlayersMisc.PlayerId.toString(), playerId + ""}
 		);
-		if(results.isEmpty()) QueryUtils.insert(PlayersMisc.TableName.toString(), getValues(playerId));
+		if(results.isEmpty()) QueryUtils.insert(Normal.PlayersMisc.TableName.toString(), getValues(playerId));
 		else {
-			fishCaught = results.get(0).getValueAsInteger(PlayersMisc.FishCaught.toString());
-			timesKicked = results.get(0).getValueAsInteger(PlayersMisc.TimesKicked.toString());
-			eggsThrown = results.get(0).getValueAsInteger(PlayersMisc.EggsThrown.toString());
-			foodEaten = results.get(0).getValueAsInteger(PlayersMisc.FoodEaten.toString());
-			arrowsShot = results.get(0).getValueAsInteger(PlayersMisc.ArrowsShot.toString());
-			damageTaken = results.get(0).getValueAsInteger(PlayersMisc.DamageTaken.toString());
-			wordsSaid = results.get(0).getValueAsInteger(PlayersMisc.WordsSaid.toString());
-			commandsSent = results.get(0).getValueAsInteger(PlayersMisc.CommandsSent.toString());
+			fishCaught = results.get(0).getValueAsInteger(Normal.PlayersMisc.FishCaught.toString());
+			timesKicked = results.get(0).getValueAsInteger(Normal.PlayersMisc.TimesKicked.toString());
+			eggsThrown = results.get(0).getValueAsInteger(Normal.PlayersMisc.EggsThrown.toString());
+			foodEaten = results.get(0).getValueAsInteger(Normal.PlayersMisc.FoodEaten.toString());
+			arrowsShot = results.get(0).getValueAsInteger(Normal.PlayersMisc.ArrowsShot.toString());
+			damageTaken = results.get(0).getValueAsInteger(Normal.PlayersMisc.DamageTaken.toString());
+			wordsSaid = results.get(0).getValueAsInteger(Normal.PlayersMisc.WordsSaid.toString());
+			commandsSent = results.get(0).getValueAsInteger(Normal.PlayersMisc.CommandsSent.toString());
 		}
 	}
 
@@ -75,31 +75,31 @@ public class PlayerDataMisc implements _NormalData {
 	public boolean pushData(int playerId) {
 		refreshPlayerData();
 		return QueryUtils.update(
-			PlayersMisc.TableName.toString(),
+			Normal.PlayersMisc.TableName.toString(),
 			getValues(playerId), 
-			new String[] { PlayersMisc.PlayerId.toString(), playerId + ""}
+			new String[] { Normal.PlayersMisc.PlayerId.toString(), playerId + ""}
 		);
 	}
 
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(PlayersMisc.PlayerId.toString(), playerId);
-		map.put(PlayersMisc.ExperiencePercent.toString(), expPercent);
-		map.put(PlayersMisc.ExperienceTotal.toString(), expTotal);
-		map.put(PlayersMisc.ExperienceLevel.toString(), expLevel);
-		map.put(PlayersMisc.FoodLevel.toString(), foodLevel);
-		map.put(PlayersMisc.HealthLevel.toString(), healthLevel);
-		map.put(PlayersMisc.Gamemode.toString(), gamemode);
+		map.put(Normal.PlayersMisc.PlayerId.toString(), playerId);
+		map.put(Normal.PlayersMisc.ExperiencePercent.toString(), expPercent);
+		map.put(Normal.PlayersMisc.ExperienceTotal.toString(), expTotal);
+		map.put(Normal.PlayersMisc.ExperienceLevel.toString(), expLevel);
+		map.put(Normal.PlayersMisc.FoodLevel.toString(), foodLevel);
+		map.put(Normal.PlayersMisc.HealthLevel.toString(), healthLevel);
+		map.put(Normal.PlayersMisc.Gamemode.toString(), gamemode);
 		
-		map.put(PlayersMisc.FishCaught.toString(), fishCaught);
-		map.put(PlayersMisc.TimesKicked.toString(), timesKicked);
-		map.put(PlayersMisc.EggsThrown.toString(), eggsThrown);
-		map.put(PlayersMisc.FoodEaten.toString(), foodEaten);
-		map.put(PlayersMisc.ArrowsShot.toString(), arrowsShot);
-		map.put(PlayersMisc.DamageTaken.toString(), damageTaken);
-		map.put(PlayersMisc.WordsSaid.toString(), wordsSaid);
-		map.put(PlayersMisc.CommandsSent.toString(), commandsSent);
+		map.put(Normal.PlayersMisc.FishCaught.toString(), fishCaught);
+		map.put(Normal.PlayersMisc.TimesKicked.toString(), timesKicked);
+		map.put(Normal.PlayersMisc.EggsThrown.toString(), eggsThrown);
+		map.put(Normal.PlayersMisc.FoodEaten.toString(), foodEaten);
+		map.put(Normal.PlayersMisc.ArrowsShot.toString(), arrowsShot);
+		map.put(Normal.PlayersMisc.DamageTaken.toString(), damageTaken);
+		map.put(Normal.PlayersMisc.WordsSaid.toString(), wordsSaid);
+		map.put(Normal.PlayersMisc.CommandsSent.toString(), commandsSent);
 		
 		return map;
 	}

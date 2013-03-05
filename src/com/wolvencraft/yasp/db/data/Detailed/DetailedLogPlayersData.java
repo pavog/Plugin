@@ -6,7 +6,7 @@ import java.util.Map;
 import org.bukkit.Location;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.detailed.DetailedLogPlayers;
+import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedLogPlayersData implements _DetailedData {
@@ -24,7 +24,7 @@ public class DetailedLogPlayersData implements _DetailedData {
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.insert(
-			DetailedLogPlayers.TableName.toString(),
+			Detailed.LogPlayers.TableName.toString(),
 			getValues(playerId)
 		);
 	}
@@ -32,14 +32,14 @@ public class DetailedLogPlayersData implements _DetailedData {
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(DetailedLogPlayers.PlayerId.toString(), playerId);
-		map.put(DetailedLogPlayers.Timestamp.toString(), time);
-		if(isLogin) map.put(DetailedLogPlayers.IsLogin.toString(), 1);
-		else map.put(DetailedLogPlayers.IsLogin.toString(), 0);
-		map.put(DetailedLogPlayers.World.toString(), location.getWorld().getName());
-		map.put(DetailedLogPlayers.XCoord.toString(), location.getBlockX());
-		map.put(DetailedLogPlayers.YCoord.toString(), location.getBlockY());
-		map.put(DetailedLogPlayers.ZCoord.toString(), location.getBlockZ());
+		map.put(Detailed.LogPlayers.PlayerId.toString(), playerId);
+		map.put(Detailed.LogPlayers.Timestamp.toString(), time);
+		if(isLogin) map.put(Detailed.LogPlayers.IsLogin.toString(), 1);
+		else map.put(Detailed.LogPlayers.IsLogin.toString(), 0);
+		map.put(Detailed.LogPlayers.World.toString(), location.getWorld().getName());
+		map.put(Detailed.LogPlayers.XCoord.toString(), location.getBlockX());
+		map.put(Detailed.LogPlayers.YCoord.toString(), location.getBlockY());
+		map.put(Detailed.LogPlayers.ZCoord.toString(), location.getBlockZ());
 		return map;
 	}
 

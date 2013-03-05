@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.normal.TotalPVEKills;
+import com.wolvencraft.yasp.db.tables.Normal;
 
 /**
  * Represents a logged event, in which either a player or a creature was killed.<br />
@@ -40,41 +40,41 @@ public class TotalPVEEntry implements _NormalData {
 	@Override
 	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
-			TotalPVEKills.TableName.toString(),
+			Normal.TotalPVEKills.TableName.toString(),
 			new String[] {"*"},
-			new String[] { TotalPVEKills.PlayerId.toString(), playerId + ""},
-			new String[] { TotalPVEKills.CreatureId.toString(), creatureType.getTypeId() + ""},
-			new String[] { TotalPVEKills.MaterialId.toString(), weapon.getTypeId() + ""},
-			new String[] { TotalPVEKills.MaterialData.toString(), weapon.getData().getData() + ""}
+			new String[] { Normal.TotalPVEKills.PlayerId.toString(), playerId + ""},
+			new String[] { Normal.TotalPVEKills.CreatureId.toString(), creatureType.getTypeId() + ""},
+			new String[] { Normal.TotalPVEKills.MaterialId.toString(), weapon.getTypeId() + ""},
+			new String[] { Normal.TotalPVEKills.MaterialData.toString(), weapon.getData().getData() + ""}
 		);
-		if(results.isEmpty()) QueryUtils.insert(TotalPVEKills.TableName.toString(), getValues(playerId));
+		if(results.isEmpty()) QueryUtils.insert(Normal.TotalPVEKills.TableName.toString(), getValues(playerId));
 		else {
-			playerDeaths = results.get(0).getValueAsInteger(TotalPVEKills.PlayerKilled.toString());
-			creatureDeaths = results.get(0).getValueAsInteger(TotalPVEKills.CreatureKilled.toString());
+			playerDeaths = results.get(0).getValueAsInteger(Normal.TotalPVEKills.PlayerKilled.toString());
+			creatureDeaths = results.get(0).getValueAsInteger(Normal.TotalPVEKills.CreatureKilled.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.update(
-			TotalPVEKills.TableName.toString(),
+			Normal.TotalPVEKills.TableName.toString(),
 			getValues(playerId),
-			new String[] { TotalPVEKills.PlayerId.toString(), playerId + ""},
-			new String[] { TotalPVEKills.CreatureId.toString(), creatureType.getTypeId() + ""},
-			new String[] { TotalPVEKills.MaterialId.toString(), weapon.getTypeId() + ""},
-			new String[] { TotalPVEKills.MaterialData.toString(), weapon.getData().getData() + ""}
+			new String[] { Normal.TotalPVEKills.PlayerId.toString(), playerId + ""},
+			new String[] { Normal.TotalPVEKills.CreatureId.toString(), creatureType.getTypeId() + ""},
+			new String[] { Normal.TotalPVEKills.MaterialId.toString(), weapon.getTypeId() + ""},
+			new String[] { Normal.TotalPVEKills.MaterialData.toString(), weapon.getData().getData() + ""}
 		);
 	}
 
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(TotalPVEKills.PlayerId.toString(), playerId);
-		map.put(TotalPVEKills.CreatureId.toString(), creatureType.getTypeId());
-		map.put(TotalPVEKills.MaterialId.toString(), weapon.getTypeId());
-		map.put(TotalPVEKills.MaterialData.toString(), weapon.getData().getData());
-		map.put(TotalPVEKills.PlayerKilled.toString(), playerDeaths);
-		map.put(TotalPVEKills.CreatureKilled.toString(), creatureDeaths);
+		map.put(Normal.TotalPVEKills.PlayerId.toString(), playerId);
+		map.put(Normal.TotalPVEKills.CreatureId.toString(), creatureType.getTypeId());
+		map.put(Normal.TotalPVEKills.MaterialId.toString(), weapon.getTypeId());
+		map.put(Normal.TotalPVEKills.MaterialData.toString(), weapon.getData().getData());
+		map.put(Normal.TotalPVEKills.PlayerKilled.toString(), playerDeaths);
+		map.put(Normal.TotalPVEKills.CreatureKilled.toString(), creatureDeaths);
 		return map;
 	}
 	

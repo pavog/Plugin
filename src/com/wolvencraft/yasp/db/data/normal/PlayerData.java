@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.normal.Players;
+import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -38,41 +38,41 @@ public class PlayerData implements _NormalData {
 	@Override
 	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
-			Players.TableName.toString(),
-			new String[] {Players.PlayerId.toString(), Players.Logins.toString()},
-			new String[] { Players.PlayerId.toString(), playerId + ""}
+			Normal.Players.TableName.toString(),
+			new String[] {Normal.Players.PlayerId.toString(), Normal.Players.Logins.toString()},
+			new String[] { Normal.Players.PlayerId.toString(), playerId + ""}
 		);
-		if(results.isEmpty()) QueryUtils.insert(Players.TableName.toString(), getValues(playerId));
+		if(results.isEmpty()) QueryUtils.insert(Normal.Players.TableName.toString(), getValues(playerId));
 		else {
-			logins = results.get(0).getValueAsInteger(Players.Logins.toString());
+			logins = results.get(0).getValueAsInteger(Normal.Players.Logins.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.update(
-			Players.TableName.toString(),
+			Normal.Players.TableName.toString(),
 			getValues(playerId), 
-			new String[] { Players.PlayerId.toString(), playerId + ""}
+			new String[] { Normal.Players.PlayerId.toString(), playerId + ""}
 		);
 	}
 
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(Players.PlayerId.toString(), playerId);
-		map.put(Players.Name.toString(), playerName);
-		if(online) map.put(Players.Online.toString(), 1);
-		else map.put(Players.Online.toString(), 0);
-		map.put(Players.SessionStart.toString(), sessionStart);
-		map.put(Players.FirstLogin.toString(), firstJoin);
-		map.put(Players.Logins.toString(), logins);
+		map.put(Normal.Players.PlayerId.toString(), playerId);
+		map.put(Normal.Players.Name.toString(), playerName);
+		if(online) map.put(Normal.Players.Online.toString(), 1);
+		else map.put(Normal.Players.Online.toString(), 0);
+		map.put(Normal.Players.SessionStart.toString(), sessionStart);
+		map.put(Normal.Players.FirstLogin.toString(), firstJoin);
+		map.put(Normal.Players.Logins.toString(), logins);
 		return map;
 	}
 	
 	public static Map<String, Object> getDefaultValues(String name) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(Players.Name.toString(), name);
+		map.put(Normal.Players.Name.toString(), name);
 		return map;
 	}
 	

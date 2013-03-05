@@ -8,7 +8,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.detailed.DetailedPVEKills;
+import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPVEKillsData implements _DetailedData {
@@ -30,7 +30,7 @@ public class DetailedPVEKillsData implements _DetailedData {
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.insert(
-			DetailedPVEKills.TableName.toString(),
+			Detailed.PVEKills.TableName.toString(),
 			getValues(playerId)
 		);
 	}
@@ -38,22 +38,22 @@ public class DetailedPVEKillsData implements _DetailedData {
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(DetailedPVEKills.PlayerID.toString(), playerId);
-		map.put(DetailedPVEKills.CreatureId.toString(), creatureType.getTypeId());
+		map.put(Detailed.PVEKills.PlayerID.toString(), playerId);
+		map.put(Detailed.PVEKills.CreatureId.toString(), creatureType.getTypeId());
 		if(playerKilled) {
-			map.put(DetailedPVEKills.PlayerKilled.toString(), 1);
-			map.put(DetailedPVEKills.MaterialId.toString(), -1);
-			map.put(DetailedPVEKills.MaterialData.toString(), 0);
+			map.put(Detailed.PVEKills.PlayerKilled.toString(), 1);
+			map.put(Detailed.PVEKills.MaterialId.toString(), -1);
+			map.put(Detailed.PVEKills.MaterialData.toString(), 0);
 		} else {
-			map.put(DetailedPVEKills.PlayerKilled.toString(), 0);
-			map.put(DetailedPVEKills.MaterialId.toString(), weapon.getTypeId());
-			map.put(DetailedPVEKills.MaterialData.toString(), weapon.getData().getData());
+			map.put(Detailed.PVEKills.PlayerKilled.toString(), 0);
+			map.put(Detailed.PVEKills.MaterialId.toString(), weapon.getTypeId());
+			map.put(Detailed.PVEKills.MaterialData.toString(), weapon.getData().getData());
 		}
-		map.put(DetailedPVEKills.World.toString(), location.getWorld().getName());
-		map.put(DetailedPVEKills.XCoord.toString(), location.getBlockX());
-		map.put(DetailedPVEKills.YCoord.toString(), location.getBlockY());
-		map.put(DetailedPVEKills.ZCoord.toString(), location.getBlockZ());
-		map.put(DetailedPVEKills.Timestamp.toString(), timestamp);
+		map.put(Detailed.PVEKills.World.toString(), location.getWorld().getName());
+		map.put(Detailed.PVEKills.XCoord.toString(), location.getBlockX());
+		map.put(Detailed.PVEKills.YCoord.toString(), location.getBlockY());
+		map.put(Detailed.PVEKills.ZCoord.toString(), location.getBlockZ());
+		map.put(Detailed.PVEKills.Timestamp.toString(), timestamp);
 		return map;
 	}
 

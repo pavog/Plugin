@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.normal.TotalItems;
+import com.wolvencraft.yasp.db.tables.Normal;
 
 /**
  * Represents the total number of items player dropped and picked up.<br />
@@ -48,49 +48,49 @@ public class TotalItemsEntry implements _NormalData {
 	@Override
 	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
-			TotalItems.TableName.toString(),
+			Normal.TotalItems.TableName.toString(),
 			new String[] {"*"},
-			new String[] { TotalItems.PlayerId.toString(), playerId + ""},
-			new String[] { TotalItems.MaterialId.toString(), type + ""},
-			new String[] { TotalItems.MaterialData.toString(), data + ""}
+			new String[] { Normal.TotalItems.PlayerId.toString(), playerId + ""},
+			new String[] { Normal.TotalItems.MaterialId.toString(), type + ""},
+			new String[] { Normal.TotalItems.MaterialData.toString(), data + ""}
 		);
 		
-		if(results.isEmpty()) QueryUtils.insert(TotalItems.TableName.toString(), getValues(playerId));
+		if(results.isEmpty()) QueryUtils.insert(Normal.TotalItems.TableName.toString(), getValues(playerId));
 		else {
-			dropped = results.get(0).getValueAsInteger(TotalItems.Dropped.toString());
-			pickedUp = results.get(0).getValueAsInteger(TotalItems.PickedUp.toString());
-			used = results.get(0).getValueAsInteger(TotalItems.Used.toString());
-			crafted = results.get(0).getValueAsInteger(TotalItems.Crafted.toString());
-			broken = results.get(0).getValueAsInteger(TotalItems.Broken.toString());
-			smelted = results.get(0).getValueAsInteger(TotalItems.Smelted.toString());
-			enchanted = results.get(0).getValueAsInteger(TotalItems.Enchanted.toString());
+			dropped = results.get(0).getValueAsInteger(Normal.TotalItems.Dropped.toString());
+			pickedUp = results.get(0).getValueAsInteger(Normal.TotalItems.PickedUp.toString());
+			used = results.get(0).getValueAsInteger(Normal.TotalItems.Used.toString());
+			crafted = results.get(0).getValueAsInteger(Normal.TotalItems.Crafted.toString());
+			broken = results.get(0).getValueAsInteger(Normal.TotalItems.Broken.toString());
+			smelted = results.get(0).getValueAsInteger(Normal.TotalItems.Smelted.toString());
+			enchanted = results.get(0).getValueAsInteger(Normal.TotalItems.Enchanted.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.update(
-			TotalItems.TableName.toString(),
+			Normal.TotalItems.TableName.toString(),
 			getValues(playerId),
-			new String[] { TotalItems.PlayerId.toString(), playerId + ""},
-			new String[] { TotalItems.MaterialId.toString(), type + ""},
-			new String[] { TotalItems.MaterialData.toString(), data + ""}
+			new String[] { Normal.TotalItems.PlayerId.toString(), playerId + ""},
+			new String[] { Normal.TotalItems.MaterialId.toString(), type + ""},
+			new String[] { Normal.TotalItems.MaterialData.toString(), data + ""}
 		);
 	}
 	
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(TotalItems.PlayerId.toString(), playerId);
-		map.put(TotalItems.MaterialId.toString(), type);
-		map.put(TotalItems.MaterialData.toString(), data);
-		map.put(TotalItems.Dropped.toString(), dropped);
-		map.put(TotalItems.PickedUp.toString(), pickedUp);
-		map.put(TotalItems.Used.toString(), used);
-		map.put(TotalItems.Crafted.toString(), crafted);
-		map.put(TotalItems.Broken.toString(), broken);
-		map.put(TotalItems.Smelted.toString(), smelted);
-		map.put(TotalItems.Enchanted.toString(), enchanted);
+		map.put(Normal.TotalItems.PlayerId.toString(), playerId);
+		map.put(Normal.TotalItems.MaterialId.toString(), type);
+		map.put(Normal.TotalItems.MaterialData.toString(), data);
+		map.put(Normal.TotalItems.Dropped.toString(), dropped);
+		map.put(Normal.TotalItems.PickedUp.toString(), pickedUp);
+		map.put(Normal.TotalItems.Used.toString(), used);
+		map.put(Normal.TotalItems.Crafted.toString(), crafted);
+		map.put(Normal.TotalItems.Broken.toString(), broken);
+		map.put(Normal.TotalItems.Smelted.toString(), smelted);
+		map.put(Normal.TotalItems.Enchanted.toString(), enchanted);
 		return map;
 	}
 	

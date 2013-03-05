@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.normal.TotalDeathPlayers;
+import com.wolvencraft.yasp.db.tables.Normal;
 
 /**
  * Represents the total number of times a player died of a particular cause.<br />
@@ -29,34 +29,34 @@ public class TotalDeathsEntry implements _NormalData {
 	@Override
 	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
-			TotalDeathPlayers.TableName.toString(),
+			Normal.TotalDeathPlayers.TableName.toString(),
 			new String[] {"*"},
-			new String[] { TotalDeathPlayers.PlayerId.toString(), playerId + ""},
-			new String[] { TotalDeathPlayers.Cause.toString(), cause.name()}
+			new String[] { Normal.TotalDeathPlayers.PlayerId.toString(), playerId + ""},
+			new String[] { Normal.TotalDeathPlayers.Cause.toString(), cause.name()}
 		);
 		
-		if(results.isEmpty()) QueryUtils.insert(TotalDeathPlayers.TableName.toString(), getValues(playerId));
+		if(results.isEmpty()) QueryUtils.insert(Normal.TotalDeathPlayers.TableName.toString(), getValues(playerId));
 		else {
-			times = results.get(0).getValueAsInteger(TotalDeathPlayers.Times.toString());
+			times = results.get(0).getValueAsInteger(Normal.TotalDeathPlayers.Times.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.update(
-			TotalDeathPlayers.TableName.toString(),
+			Normal.TotalDeathPlayers.TableName.toString(),
 			getValues(playerId),
-			new String[] { TotalDeathPlayers.PlayerId.toString(), playerId + ""},
-			new String[] { TotalDeathPlayers.Cause.toString(), cause.name()}
+			new String[] { Normal.TotalDeathPlayers.PlayerId.toString(), playerId + ""},
+			new String[] { Normal.TotalDeathPlayers.Cause.toString(), cause.name()}
 		);
 	}
 
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(TotalDeathPlayers.PlayerId.toString(), playerId);
-		map.put(TotalDeathPlayers.Cause.toString(), cause.name());
-		map.put(TotalDeathPlayers.Times.toString(), times);
+		map.put(Normal.TotalDeathPlayers.PlayerId.toString(), playerId);
+		map.put(Normal.TotalDeathPlayers.Cause.toString(), cause.name());
+		map.put(Normal.TotalDeathPlayers.Times.toString(), times);
 		return map;
 	}
 	

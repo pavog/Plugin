@@ -11,7 +11,7 @@ import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.data.Settings;
 import com.wolvencraft.yasp.db.data.normal.PlayerData;
-import com.wolvencraft.yasp.db.tables.normal.Players;
+import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
@@ -116,24 +116,24 @@ public class DataCollector implements Runnable {
 		List<QueryResult> results;
 		
 		results = QueryUtils.select(
-			Players.TableName.toString(),
-			new String[] {Players.PlayerId.toString(), Players.Name.toString()},
-			new String[] {Players.Name.toString(), username}
+			Normal.Players.TableName.toString(),
+			new String[] {Normal.Players.PlayerId.toString(), Normal.Players.Name.toString()},
+			new String[] {Normal.Players.Name.toString(), username}
 		);
 		
 		if(results.isEmpty()) {
 			QueryUtils.insert(
-				Players.TableName.toString(),
+				Normal.Players.TableName.toString(),
 				PlayerData.getDefaultValues(username)
 			);
 			results = QueryUtils.select(
-				Players.TableName.toString(),
-				new String[] {Players.PlayerId.toString(), Players.Name.toString()},
-				new String[] {Players.Name.toString(), username}
+				Normal.Players.TableName.toString(),
+				new String[] {Normal.Players.PlayerId.toString(), Normal.Players.Name.toString()},
+				new String[] {Normal.Players.Name.toString(), username}
 			);
-			playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
+			playerId = results.get(0).getValueAsInteger(Normal.Players.PlayerId.toString());
 		} else {
-			playerId = results.get(0).getValueAsInteger(Players.PlayerId.toString());
+			playerId = results.get(0).getValueAsInteger(Normal.Players.PlayerId.toString());
 		}
 		
 		Message.debug("User ID found: " + playerId);

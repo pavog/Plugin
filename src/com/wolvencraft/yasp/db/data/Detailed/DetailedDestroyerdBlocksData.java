@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.detailed.DetailedDestroyedBlocks;
+import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedDestroyerdBlocksData implements _DetailedData {
@@ -27,7 +27,7 @@ public class DetailedDestroyerdBlocksData implements _DetailedData {
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.insert(
-			DetailedDestroyedBlocks.TableName.toString(),
+			Detailed.DestroyedBlocks.TableName.toString(),
 			getValues(playerId)
 		);
 	}
@@ -35,14 +35,14 @@ public class DetailedDestroyerdBlocksData implements _DetailedData {
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(DetailedDestroyedBlocks.PlayerId.toString(), playerId);
-		map.put(DetailedDestroyedBlocks.MaterialId.toString(), type);
-		map.put(DetailedDestroyedBlocks.MaterialData.toString(), data);
-		map.put(DetailedDestroyedBlocks.World.toString(), location.getWorld().getName());
-		map.put(DetailedDestroyedBlocks.XCoord.toString(), location.getBlockX());
-		map.put(DetailedDestroyedBlocks.YCoord.toString(), location.getBlockY());
-		map.put(DetailedDestroyedBlocks.ZCoord.toString(), location.getBlockZ());
-		map.put(DetailedDestroyedBlocks.Timestamp.toString(), timestamp);
+		map.put(Detailed.DestroyedBlocks.PlayerId.toString(), playerId);
+		map.put(Detailed.DestroyedBlocks.MaterialId.toString(), type);
+		map.put(Detailed.DestroyedBlocks.MaterialData.toString(), data);
+		map.put(Detailed.DestroyedBlocks.World.toString(), location.getWorld().getName());
+		map.put(Detailed.DestroyedBlocks.XCoord.toString(), location.getBlockX());
+		map.put(Detailed.DestroyedBlocks.YCoord.toString(), location.getBlockY());
+		map.put(Detailed.DestroyedBlocks.ZCoord.toString(), location.getBlockZ());
+		map.put(Detailed.DestroyedBlocks.Timestamp.toString(), timestamp);
 		return map;
 	}
 

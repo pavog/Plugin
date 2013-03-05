@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.normal.DistancePlayers;
+import com.wolvencraft.yasp.db.tables.Normal;
 
 /**
  * Represents the distances a player traveled.
@@ -36,35 +36,35 @@ public class PlayerDistances implements _NormalData {
 	@Override
 	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
-			DistancePlayers.TableName.toString(),
+			Normal.DistancePlayers.TableName.toString(),
 			new String[] {"*"},
-			new String[] { DistancePlayers.PlayerId.toString(), playerId + ""}
+			new String[] { Normal.DistancePlayers.PlayerId.toString(), playerId + ""}
 		);
-		if(results.isEmpty()) QueryUtils.insert(DistancePlayers.TableName.toString(), getValues(playerId));
+		if(results.isEmpty()) QueryUtils.insert(Normal.DistancePlayers.TableName.toString(), getValues(playerId));
 		else {
-			foot = results.get(0).getValueAsInteger(DistancePlayers.Foot.toString());
-			boat = results.get(0).getValueAsInteger(DistancePlayers.Boat.toString());
-			minecart = results.get(0).getValueAsInteger(DistancePlayers.Minecart.toString());
-			pig = results.get(0).getValueAsInteger(DistancePlayers.Pig.toString());
+			foot = results.get(0).getValueAsInteger(Normal.DistancePlayers.Foot.toString());
+			boat = results.get(0).getValueAsInteger(Normal.DistancePlayers.Boat.toString());
+			minecart = results.get(0).getValueAsInteger(Normal.DistancePlayers.Minecart.toString());
+			pig = results.get(0).getValueAsInteger(Normal.DistancePlayers.Pig.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData(int playerId) {
-		return QueryUtils.update(DistancePlayers.TableName.toString(),
+		return QueryUtils.update(Normal.DistancePlayers.TableName.toString(),
 			getValues(playerId),
-			new String[] { DistancePlayers.PlayerId.toString(), playerId + ""}
+			new String[] { Normal.DistancePlayers.PlayerId.toString(), playerId + ""}
 		);
 	}
 	
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> valueMap = new HashMap<String, Object>();
-		valueMap.put(DistancePlayers.PlayerId.toString(), playerId);
-		valueMap.put(DistancePlayers.Foot.toString(), foot);
-		valueMap.put(DistancePlayers.Boat.toString(), boat);
-		valueMap.put(DistancePlayers.Minecart.toString(), minecart);
-		valueMap.put(DistancePlayers.Pig.toString(), pig);
+		valueMap.put(Normal.DistancePlayers.PlayerId.toString(), playerId);
+		valueMap.put(Normal.DistancePlayers.Foot.toString(), foot);
+		valueMap.put(Normal.DistancePlayers.Boat.toString(), boat);
+		valueMap.put(Normal.DistancePlayers.Minecart.toString(), minecart);
+		valueMap.put(Normal.DistancePlayers.Pig.toString(), pig);
 		return valueMap;
 	}
 	

@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.detailed.DetailedUsedItems;
+import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedUsedItemsData implements _DetailedData {
@@ -27,7 +27,7 @@ public class DetailedUsedItemsData implements _DetailedData {
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.insert(
-			DetailedUsedItems.TableName.toString(),
+			Detailed.UsedItems.TableName.toString(),
 			getValues(playerId)
 		);
 	}
@@ -35,14 +35,14 @@ public class DetailedUsedItemsData implements _DetailedData {
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(DetailedUsedItems.PlayerId.toString(), playerId);
-		map.put(DetailedUsedItems.MaterialId.toString(), type);
-		map.put(DetailedUsedItems.MaterialData.toString(), data);
-		map.put(DetailedUsedItems.World.toString(), location.getWorld().getName());
-		map.put(DetailedUsedItems.XCoord.toString(), location.getBlockX());
-		map.put(DetailedUsedItems.YCoord.toString(), location.getBlockY());
-		map.put(DetailedUsedItems.ZCoord.toString(), location.getBlockZ());
-		map.put(DetailedUsedItems.Timestamp.toString(), timestamp);
+		map.put(Detailed.UsedItems.PlayerId.toString(), playerId);
+		map.put(Detailed.UsedItems.MaterialId.toString(), type);
+		map.put(Detailed.UsedItems.MaterialData.toString(), data);
+		map.put(Detailed.UsedItems.World.toString(), location.getWorld().getName());
+		map.put(Detailed.UsedItems.XCoord.toString(), location.getBlockX());
+		map.put(Detailed.UsedItems.YCoord.toString(), location.getBlockY());
+		map.put(Detailed.UsedItems.ZCoord.toString(), location.getBlockZ());
+		map.put(Detailed.UsedItems.Timestamp.toString(), timestamp);
 		return map;
 	}
 

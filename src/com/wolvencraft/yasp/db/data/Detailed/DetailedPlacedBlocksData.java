@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.detailed.DetailedPlacedBlocks;
+import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPlacedBlocksData implements _DetailedData {
@@ -27,7 +27,7 @@ public class DetailedPlacedBlocksData implements _DetailedData {
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.insert(
-			DetailedPlacedBlocks.TableName.toString(),
+			Detailed.PlacedBlocks.TableName.toString(),
 			getValues(playerId)
 		);
 	}
@@ -35,14 +35,14 @@ public class DetailedPlacedBlocksData implements _DetailedData {
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(DetailedPlacedBlocks.PlayerId.toString(), playerId);
-		map.put(DetailedPlacedBlocks.MaterialId.toString(), type);
-		map.put(DetailedPlacedBlocks.MaterialData.toString(), data);
-		map.put(DetailedPlacedBlocks.World.toString(), location.getWorld().getName());
-		map.put(DetailedPlacedBlocks.XCoord.toString(), location.getBlockX());
-		map.put(DetailedPlacedBlocks.YCoord.toString(), location.getBlockY());
-		map.put(DetailedPlacedBlocks.ZCoord.toString(), location.getBlockZ());
-		map.put(DetailedPlacedBlocks.Timestamp.toString(), timestamp);
+		map.put(Detailed.PlacedBlocks.PlayerId.toString(), playerId);
+		map.put(Detailed.PlacedBlocks.MaterialId.toString(), type);
+		map.put(Detailed.PlacedBlocks.MaterialData.toString(), data);
+		map.put(Detailed.PlacedBlocks.World.toString(), location.getWorld().getName());
+		map.put(Detailed.PlacedBlocks.XCoord.toString(), location.getBlockX());
+		map.put(Detailed.PlacedBlocks.YCoord.toString(), location.getBlockY());
+		map.put(Detailed.PlacedBlocks.ZCoord.toString(), location.getBlockZ());
+		map.put(Detailed.PlacedBlocks.Timestamp.toString(), timestamp);
 		return map;
 	}
 	

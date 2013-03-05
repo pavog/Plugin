@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.detailed.DetailedPVPKills;
+import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedPVPKillsData implements _DetailedData {
@@ -27,7 +27,7 @@ public class DetailedPVPKillsData implements _DetailedData {
 	@Override
 	public boolean pushData(int killerId) {
 		return QueryUtils.insert(
-			DetailedPVPKills.TableName.toString(),
+			Detailed.PVPKills.TableName.toString(),
 			getValues(killerId)
 		);
 	}
@@ -35,15 +35,15 @@ public class DetailedPVPKillsData implements _DetailedData {
 	@Override
 	public Map<String, Object> getValues(int killerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(DetailedPVPKills.KillerID.toString(), killerId);
-		map.put(DetailedPVPKills.VictimID.toString(), victimId);
-		map.put(DetailedPVPKills.MaterialID.toString(), weapon.getTypeId());
-		map.put(DetailedPVPKills.MaterialData.toString(), weapon.getData().getData());
-		map.put(DetailedPVPKills.World.toString(), location.getWorld().getName());
-		map.put(DetailedPVPKills.XCoord.toString(), location.getBlockX());
-		map.put(DetailedPVPKills.YCoord.toString(), location.getBlockY());
-		map.put(DetailedPVPKills.ZCoord.toString(), location.getBlockZ());
-		map.put(DetailedPVPKills.Timestamp.toString(), timestamp);
+		map.put(Detailed.PVPKills.KillerID.toString(), killerId);
+		map.put(Detailed.PVPKills.VictimID.toString(), victimId);
+		map.put(Detailed.PVPKills.MaterialID.toString(), weapon.getTypeId());
+		map.put(Detailed.PVPKills.MaterialData.toString(), weapon.getData().getData());
+		map.put(Detailed.PVPKills.World.toString(), location.getWorld().getName());
+		map.put(Detailed.PVPKills.XCoord.toString(), location.getBlockX());
+		map.put(Detailed.PVPKills.YCoord.toString(), location.getBlockY());
+		map.put(Detailed.PVPKills.ZCoord.toString(), location.getBlockZ());
+		map.put(Detailed.PVPKills.Timestamp.toString(), timestamp);
 		return map;
 	}
 

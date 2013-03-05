@@ -17,7 +17,7 @@ import com.wolvencraft.yasp.db.data.PVEDataHolder;
 import com.wolvencraft.yasp.db.data.PVPDataHolder;
 import com.wolvencraft.yasp.db.data.detailed.*;
 import com.wolvencraft.yasp.db.data.normal.*;
-import com.wolvencraft.yasp.db.tables.normal.Players;
+import com.wolvencraft.yasp.db.tables.Normal;
 
 public class LocalSession {
 	
@@ -141,10 +141,10 @@ public class LocalSession {
 		playerData.setOnline(true);
 		detailedData.add(new DetailedLogPlayersData(getLocation(), true));
 		QueryUtils.update(
-			Players.TableName.toString(),
-			Players.Online.toString(),
+			Normal.Players.TableName.toString(),
+			Normal.Players.Online.toString(),
 			1 + "",
-			new String[] {Players.PlayerId.toString(), playerId + ""}
+			new String[] {Normal.Players.PlayerId.toString(), playerId + ""}
 		);
 	}
 	
@@ -156,10 +156,10 @@ public class LocalSession {
 		playerData.setOnline(false);
 		detailedData.add(new DetailedLogPlayersData(getLocation(), false));
 		QueryUtils.update(
-				Players.TableName.toString(),
-				Players.Online.toString(),
+				Normal.Players.TableName.toString(),
+				Normal.Players.Online.toString(),
 				0 + "",
-				new String[] {Players.PlayerId.toString(), playerId + ""}
+				new String[] {Normal.Players.PlayerId.toString(), playerId + ""}
 			);
 	}
 	

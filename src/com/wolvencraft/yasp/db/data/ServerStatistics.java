@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.normal._ServerStatistics;
+import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.util.Util;
 
 public class ServerStatistics {
@@ -56,7 +56,7 @@ public class ServerStatistics {
 	private long freeMemory;
 	
 	public void fetchData() {
-		List<QueryResult> entries = QueryUtils.select(_ServerStatistics.TableName.toString(), new String[] {"*"});
+		List<QueryResult> entries = QueryUtils.select(Normal.ServerStatistics.TableName.toString(), new String[] {"*"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("first_startup")) firstStartupTime = entry.getValueAsLong("value");
 			else if(entry.getValue("key").equalsIgnoreCase("total_uptime")) totalUptime = entry.getValueAsLong("value");
@@ -72,32 +72,32 @@ public class ServerStatistics {
 		totalUptime += (curTime - lastSyncTime);
 		lastSyncTime = curTime;
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", currentUptime + "",
 			new String[] {"key", "current_uptime"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", totalUptime + "",
 			new String[] {"key", "total_uptime"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", maxPlayersOnline + "",
 			new String[] {"key", "max_players_online"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", maxPlayersOnlineTime + "",
 			new String[] {"key", "max_players_online_time"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", totalMemory + "",
 			new String[] {"key", "total_memory"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", freeMemory + "",
 			new String[] {"key", "free_memory"}
 		);
@@ -106,37 +106,37 @@ public class ServerStatistics {
 	
 	public void pushStaticData() {
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", firstStartupTime + "",
 			new String[] {"key", "first_startup"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", startupTime + "",
 			new String[] {"key", "last_startup"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", plugins + "",
 			new String[] {"key", "plugins"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", bukkitVersion,
 			new String[] {"key", "bukkit_version"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", serverIP,
 			new String[] {"key", "server_ip"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", serverPort + "",
 			new String[] {"key", "server_port"}
 		);
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", serverMOTD,
 			new String[] {"key", "server_motd"}
 		);
@@ -147,7 +147,7 @@ public class ServerStatistics {
 	 */
 	public void shutdown() {
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", Util.getTimestamp() + "",
 			new String[] {"key", "last_shutdown"}
 		);
@@ -164,13 +164,13 @@ public class ServerStatistics {
 		}
 		
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", maxPlayersAllowed + "",
 			new String[] {"key", "players_allowed"}
 		);
 		
 		QueryUtils.update(
-			_ServerStatistics.TableName.toString(),
+			Normal.ServerStatistics.TableName.toString(),
 			"value", playersOnline + "",
 			new String[] {"key", "players_online"}
 		);

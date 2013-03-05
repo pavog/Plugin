@@ -8,7 +8,7 @@ import org.bukkit.Material;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.normal.TotalBlocks;
+import com.wolvencraft.yasp.db.tables.Normal;
 
 public class TotalBlocksEntry implements _NormalData {
 	
@@ -28,39 +28,39 @@ public class TotalBlocksEntry implements _NormalData {
 	@Override
 	public void fetchData(int playerId) {
 		List<QueryResult> results = QueryUtils.select(
-			TotalBlocks.TableName.toString(),
+			Normal.TotalBlocks.TableName.toString(),
 			new String[] {"*"},
-			new String[] { TotalBlocks.PlayerId.toString(), playerId + ""},
-			new String[] { TotalBlocks.MaterialId.toString(), type + ""},
-			new String[] { TotalBlocks.MaterialData.toString(), data + ""}
+			new String[] { Normal.TotalBlocks.PlayerId.toString(), playerId + ""},
+			new String[] { Normal.TotalBlocks.MaterialId.toString(), type + ""},
+			new String[] { Normal.TotalBlocks.MaterialData.toString(), data + ""}
 		);
 		
-		if(results.isEmpty()) QueryUtils.insert(TotalBlocks.TableName.toString(), getValues(playerId));
+		if(results.isEmpty()) QueryUtils.insert(Normal.TotalBlocks.TableName.toString(), getValues(playerId));
 		else {
-			broken = results.get(0).getValueAsInteger(TotalBlocks.Destroyed.toString());
-			placed = results.get(0).getValueAsInteger(TotalBlocks.Placed.toString());
+			broken = results.get(0).getValueAsInteger(Normal.TotalBlocks.Destroyed.toString());
+			placed = results.get(0).getValueAsInteger(Normal.TotalBlocks.Placed.toString());
 		}
 	}
 
 	@Override
 	public boolean pushData(int playerId) {
 		return QueryUtils.update(
-			TotalBlocks.TableName.toString(),
+			Normal.TotalBlocks.TableName.toString(),
 			getValues(playerId),
-			new String[] { TotalBlocks.PlayerId.toString(), playerId + ""},
-			new String[] { TotalBlocks.MaterialId.toString(), type + ""},
-			new String[] { TotalBlocks.MaterialData.toString(), data + ""}
+			new String[] { Normal.TotalBlocks.PlayerId.toString(), playerId + ""},
+			new String[] { Normal.TotalBlocks.MaterialId.toString(), type + ""},
+			new String[] { Normal.TotalBlocks.MaterialData.toString(), data + ""}
 		);
 	}
 	
 	@Override
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(TotalBlocks.PlayerId.toString(), playerId);
-		map.put(TotalBlocks.MaterialId.toString(), type);
-		map.put(TotalBlocks.MaterialData.toString(), data);
-		map.put(TotalBlocks.Destroyed.toString(), broken);
-		map.put(TotalBlocks.Placed.toString(), placed);
+		map.put(Normal.TotalBlocks.PlayerId.toString(), playerId);
+		map.put(Normal.TotalBlocks.MaterialId.toString(), type);
+		map.put(Normal.TotalBlocks.MaterialData.toString(), data);
+		map.put(Normal.TotalBlocks.Destroyed.toString(), broken);
+		map.put(Normal.TotalBlocks.Placed.toString(), placed);
 		return map;
 	}
 	

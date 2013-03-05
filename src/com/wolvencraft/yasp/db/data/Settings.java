@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.normal._Settings;
+import com.wolvencraft.yasp.db.tables.Normal;
 
 public class Settings {
 	
@@ -66,7 +66,7 @@ public class Settings {
 	private String firstJoinMessage;
 	
 	public void fetchData() {
-		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("version")) databaseVersion = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value") * 20;
@@ -86,13 +86,13 @@ public class Settings {
 	}
 	
 	public boolean pushData() {
-		QueryUtils.update(_Settings.TableName.toString(), "value", databaseVersion + "", new String[] {"key", "version"});
+		QueryUtils.update(Normal.Settings.TableName.toString(), "value", databaseVersion + "", new String[] {"key", "version"});
 		
-		if(usingVault) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
-		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
+		if(usingVault) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
+		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
 
-		if(usingDynmap) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
-		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
+		if(usingDynmap) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
+		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
 		return true;
 	}
 
@@ -107,11 +107,11 @@ public class Settings {
 	
 	public static void setDatabaseVersion(int version) { 
 		instance.databaseVersion = version;
-		QueryUtils.update(_Settings.TableName.toString(), "value", version + "", new String[] {"key", "version"});
+		QueryUtils.update(Normal.Settings.TableName.toString(), "value", version + "", new String[] {"key", "version"});
 	}
 	
 	public static int getDatabaseVersion() { 
-		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("version")) instance.databaseVersion = entry.getValueAsInteger("value");
 		}
@@ -120,12 +120,12 @@ public class Settings {
 	
 	public static void setUsingVault(boolean usingVault) {
 		instance.usingVault = usingVault;
-		if(usingVault) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
-		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
+		if(usingVault) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
+		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
 	}
 	
 	public static boolean getUsingVault() {
-		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("hook_vault")) instance.usingVault = entry.getValueAsBoolean("value");
 		}
@@ -134,12 +134,12 @@ public class Settings {
 	
 	public static void setUsingDynmap(boolean usingDynmap) {
 		instance.usingDynmap = usingDynmap;
-		if(usingDynmap) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
-		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
+		if(usingDynmap) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
+		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
 	}
 	
 	public static boolean getUsingDynmap() {
-		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("hook_dynmap")) instance.usingDynmap = entry.getValueAsBoolean("value");
 		}
