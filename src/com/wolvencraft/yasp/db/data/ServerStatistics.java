@@ -11,6 +11,8 @@ import com.wolvencraft.yasp.util.Util;
 public class ServerStatistics {
 	
 	public ServerStatistics(StatsPlugin plugin) {
+		lastSyncTime = Util.getTimestamp();
+		
 		firstStartupTime = 0;
 		startupTime = Util.getTimestamp();
 		currentUptime = 0;
@@ -19,6 +21,8 @@ public class ServerStatistics {
 		
 		fetchData();
 	}
+	
+	private long lastSyncTime;
 	
 	private long firstStartupTime;
 	private long startupTime;
@@ -39,8 +43,10 @@ public class ServerStatistics {
 	}
 
 	public boolean pushData() {
-		currentUptime = Util.getTimestamp() - startupTime;
-		totalUptime += currentUptime;
+		long curTime = Util.getTimestamp();
+		currentUptime = curTime - startupTime;
+		totalUptime += (curTime - lastSyncTime);
+		lastSyncTime = curTime;
 		QueryUtils.update(
 			_ServerStatistics.TableName.toString(),
 			"value", firstStartupTime + "",
