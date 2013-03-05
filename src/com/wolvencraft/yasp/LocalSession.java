@@ -25,6 +25,7 @@ public class LocalSession {
 		this.playerId = DataCollector.getPlayerId(player);
 		
 		this.playerData = new PlayerData(player);
+		this.playerDataMisc = new PlayerDataMisc(player);
 		this.playerDistances = new PlayerDistances();
 		this.totalBlocks = new BlocksDataHolder();
 		this.totalItems = new ItemsDataHolder();
@@ -38,6 +39,7 @@ public class LocalSession {
 	private int playerId;
 	
 	private PlayerData playerData;
+	private PlayerDataMisc playerDataMisc;
 	private PlayerDistances playerDistances;
 	private BlocksDataHolder totalBlocks;
 	private ItemsDataHolder totalItems;
@@ -49,6 +51,7 @@ public class LocalSession {
 	
 	public void pushData() {
 		playerData.pushData(playerId);
+		playerDataMisc.pushData(playerId);
 		playerDistances.pushData(playerId);
 		totalBlocks.sync(playerId);
 		totalItems.sync(playerId);

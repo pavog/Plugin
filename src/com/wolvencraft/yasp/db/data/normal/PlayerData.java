@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryResult;
@@ -24,12 +23,7 @@ public class PlayerData implements _NormalData {
 		this.playerName = player.getPlayerListName();
 		
 		this.online = true;
-		this.gamemode = 0;
-		this.expPercent = player.getExp();
-		this.expTotal = player.getTotalExperience();
-		this.expLevel = player.getLevel();
-		this.foodLevel = player.getFoodLevel();
-		this.healthLevel = player.getHealth();
+		this.sessionStart = Util.getTimestamp();
 		this.firstJoin = Util.getTimestamp();
 		this.logins = 0;
 	}
@@ -37,12 +31,7 @@ public class PlayerData implements _NormalData {
 	private String playerName;
 	
 	private boolean online;
-	private int gamemode;
-	private double expPercent;
-	private int expTotal;
-	private int expLevel;
-	private int foodLevel;
-	private int healthLevel;
+	private long sessionStart;
 	private long firstJoin;
 	private int logins;
 	
@@ -61,7 +50,6 @@ public class PlayerData implements _NormalData {
 
 	@Override
 	public boolean pushData(int playerId) {
-		refreshPlayerData();
 		return QueryUtils.update(
 			Players.TableName.toString(),
 			getValues(playerId), 
@@ -76,14 +64,9 @@ public class PlayerData implements _NormalData {
 		map.put(Players.Name.toString(), playerName);
 		if(online) map.put(Players.Online.toString(), 1);
 		else map.put(Players.Online.toString(), 0);
-		map.put(Players.ExperiencePercent.toString(), expPercent);
-		map.put(Players.ExperienceTotal.toString(), expTotal);
-		map.put(Players.ExperienceLevel.toString(), expLevel);
-		map.put(Players.FoodLevel.toString(), foodLevel);
-		map.put(Players.HealthLevel.toString(), healthLevel);
+		map.put(Players.SessionStart.toString(), sessionStart);
 		map.put(Players.FirstLogin.toString(), firstJoin);
 		map.put(Players.Logins.toString(), logins);
-		map.put(Players.Gamemode.toString(), gamemode);
 		return map;
 	}
 	
@@ -91,24 +74,6 @@ public class PlayerData implements _NormalData {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(Players.Name.toString(), name);
 		return map;
-	}
-	
-	/**
-	 * Fetches the player data from the player, if he is online
-	 */
-	public void refreshPlayerData() {
-		Player player = null;
-		for(Player pl : Bukkit.getServer().getOnlinePlayers()) {
-			if(pl.getPlayerListName().equals(playerName)) player = pl;
-		}
-		if(player == null) return;
-		
-		this.gamemode = player.getGameMode().getValue();
-		this.expPercent = player.getExp();
-		this.expTotal = player.getTotalExperience();
-		this.expLevel = player.getLevel();
-		this.foodLevel = player.getFoodLevel();
-		this.healthLevel = player.getHealth();
 	}
 	
 	/**
