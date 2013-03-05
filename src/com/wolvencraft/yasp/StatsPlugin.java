@@ -54,8 +54,10 @@ public class StatsPlugin extends JavaPlugin {
 		
 		Settings.fetchSettings();
 		
+		new ServerListener(this);
 		new PlayerListener(this);
 		new BlockListener(this);
+		new ItemListener(this);
 		new EntityListener(this);
 		
 		databaseTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing()).getTaskId();
