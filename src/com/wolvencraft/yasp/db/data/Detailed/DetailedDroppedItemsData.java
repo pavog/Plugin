@@ -13,12 +13,14 @@ import com.wolvencraft.yasp.util.Util;
 public class DetailedDroppedItemsData implements _DetailedData {
 	
 	public DetailedDroppedItemsData(Location location, ItemStack itemStack) {
-		this.itemStack = itemStack;
+		this.type = itemStack.getTypeId();
+		this.data = itemStack.getData().getData();
 		this.location = location;
 		this.timestamp = Util.getTimestamp();
 	}
 	
-	private ItemStack itemStack;
+	private int type;
+	private byte data;
 	private Location location;
 	private long timestamp;
 	
@@ -34,8 +36,8 @@ public class DetailedDroppedItemsData implements _DetailedData {
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedDroppedItems.PlayerId.toString(), playerId);
-		map.put(DetailedDroppedItems.MaterialId.toString(), itemStack.getTypeId());
-		map.put(DetailedDroppedItems.MaterialData.toString(), itemStack.getData().getData());
+		map.put(DetailedDroppedItems.MaterialId.toString(), type);
+		map.put(DetailedDroppedItems.MaterialData.toString(), data);
 		map.put(DetailedDroppedItems.World.toString(), location.getWorld().getName());
 		map.put(DetailedDroppedItems.XCoord.toString(), location.getBlockX());
 		map.put(DetailedDroppedItems.YCoord.toString(), location.getBlockY());

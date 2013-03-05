@@ -24,8 +24,8 @@ public class TotalItemsEntry implements _NormalData {
 	 * @param material <b>MaterialData</b> block data
 	 */
 	public TotalItemsEntry(ItemStack itemStack) {
-		this.itemStack = itemStack;
-		this.itemStack.setAmount(1);
+		this.type = itemStack.getTypeId();
+		this.data = itemStack.getData().getData();
 		this.dropped = 0;
 		this.pickedUp = 0;
 		this.used = 0;
@@ -34,7 +34,8 @@ public class TotalItemsEntry implements _NormalData {
 		this.enchanted = 0;
 	}
 	
-	private ItemStack itemStack;
+	private int type;
+	private byte data;
 	private int dropped;
 	private int pickedUp;
 	private int used;
@@ -48,8 +49,8 @@ public class TotalItemsEntry implements _NormalData {
 			TotalItems.TableName.toString(),
 			new String[] {"*"},
 			new String[] { TotalItems.PlayerId.toString(), playerId + ""},
-			new String[] { TotalItems.MaterialId.toString(), itemStack.getTypeId() + ""},
-			new String[] { TotalItems.MaterialData.toString(), itemStack.getData().getData() + ""}
+			new String[] { TotalItems.MaterialId.toString(), type + ""},
+			new String[] { TotalItems.MaterialData.toString(), data + ""}
 		);
 		
 		if(results.isEmpty()) QueryUtils.insert(TotalItems.TableName.toString(), getValues(playerId));
@@ -69,8 +70,8 @@ public class TotalItemsEntry implements _NormalData {
 			TotalItems.TableName.toString(),
 			getValues(playerId),
 			new String[] { TotalItems.PlayerId.toString(), playerId + ""},
-			new String[] { TotalItems.MaterialId.toString(), itemStack.getTypeId() + ""},
-			new String[] { TotalItems.MaterialData.toString(), itemStack.getData().getData() + ""}
+			new String[] { TotalItems.MaterialId.toString(), type + ""},
+			new String[] { TotalItems.MaterialData.toString(), data + ""}
 		);
 	}
 	
@@ -78,8 +79,8 @@ public class TotalItemsEntry implements _NormalData {
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalItems.PlayerId.toString(), playerId);
-		map.put(TotalItems.MaterialId.toString(), itemStack.getTypeId());
-		map.put(TotalItems.MaterialData.toString(), itemStack.getData().getData());
+		map.put(TotalItems.MaterialId.toString(), type);
+		map.put(TotalItems.MaterialData.toString(), data);
 		map.put(TotalItems.Dropped.toString(), dropped);
 		map.put(TotalItems.PickedUp.toString(), pickedUp);
 		map.put(TotalItems.Used.toString(), used);
@@ -90,10 +91,13 @@ public class TotalItemsEntry implements _NormalData {
 	}
 	
 	/**
-	 * Returns the item stack
-	 * @return <b>ItemStack</b> material
+	 * Checks if the ItemStack corresponds to this entry 
+	 * @param itemStack ItemStack to check
+	 * @return <b>boolean</b>
 	 */
-	public ItemStack getItemStack() { return itemStack; }
+	public boolean equals(ItemStack itemStack) {
+		return this.type == itemStack.getTypeId() && this.data == itemStack.getData().getData();
+	}
 	
 	/**
 	 * Adds the specified number of blocks to the total number of items dropped

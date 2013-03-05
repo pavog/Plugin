@@ -13,13 +13,14 @@ import com.wolvencraft.yasp.util.Util;
 public class DetailedPickedupItemsData implements _DetailedData {
 	
 	public DetailedPickedupItemsData(Location location, ItemStack itemStack) {
-		this.itemStack = itemStack;
-		this.itemStack.setAmount(1);
+		this.type = itemStack.getTypeId();
+		this.data = itemStack.getData().getData();
 		this.location = location;
 		this.timestamp = Util.getTimestamp();
 	}
 	
-	private ItemStack itemStack;
+	private int type;
+	private int data;
 	private Location location;
 	private long timestamp;
 	
@@ -35,8 +36,8 @@ public class DetailedPickedupItemsData implements _DetailedData {
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedPickedupItems.PlayerId.toString(), playerId);
-		map.put(DetailedPickedupItems.MaterialId.toString(), itemStack.getTypeId());
-		map.put(DetailedPickedupItems.MaterialData.toString(), itemStack.getData().getData());
+		map.put(DetailedPickedupItems.MaterialId.toString(), type);
+		map.put(DetailedPickedupItems.MaterialData.toString(), data);
 		map.put(DetailedPickedupItems.World.toString(), location.getWorld().getName());
 		map.put(DetailedPickedupItems.XCoord.toString(), location.getBlockX());
 		map.put(DetailedPickedupItems.YCoord.toString(), location.getBlockY());

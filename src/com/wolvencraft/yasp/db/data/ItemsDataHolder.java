@@ -27,8 +27,8 @@ public class ItemsDataHolder {
 	
 	public TotalItemsEntry get(ItemStack itemStack) {
 		itemStack.setAmount(1);
-		for(TotalItemsEntry blocks : data) {
-			if(blocks.getItemStack().equals(itemStack)) return blocks;
+		for(TotalItemsEntry entry : data) {
+			if(entry.equals(itemStack)) return entry;
 		}
 		TotalItemsEntry entry = new TotalItemsEntry(itemStack);
 		data.add(entry);
