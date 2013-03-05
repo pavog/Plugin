@@ -24,6 +24,6 @@ public class SyncCommand implements BaseCommand {
 	}
 
 	@Override
-	public void getHelp() { Message.formatHelp("sync", "", "Forces the plugin to push data to the remote database"); }
+	public void getHelp() { Message.formatHelp("sync", "", "Forces the plugin to push data to the database"); }
 
 }

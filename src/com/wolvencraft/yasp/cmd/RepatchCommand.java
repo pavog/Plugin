@@ -26,6 +26,6 @@ public class RepatchCommand implements BaseCommand {
 	}
 
 	@Override
-	public void getHelp() { Message.formatHelp("repatch", "", "Attempts to re-patch the remote database"); }
+	public void getHelp() { Message.formatHelp("repatch", "", "Attempts to re-patch the database"); }
 
 }

@@ -19,6 +19,6 @@ public class ReconnectCommand implements BaseCommand {
 	}
 
 	@Override
-	public void getHelp() { Message.formatHelp("reconnect", "", "Attempts to reconnect to the remote database"); }
+	public void getHelp() { Message.formatHelp("reconnect", "", "Attempts to reconnect to the database"); }
 
 }
