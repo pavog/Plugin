@@ -5,22 +5,21 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.command.ConsoleCommandSender;
 
 import com.wolvencraft.yasp.cmd.*;
 import com.wolvencraft.yasp.util.Message;
 
 public enum CommandManager {
-	Sync (SyncCommand.class, "stats.cmd.sync", true, "sync"),
-	Reconnect (ReconnectCommand.class, "stats.cmd.reconnect", true, "reconnect"),
-	Repatch (RepatchCommand.class, "stats.cmd.repatch", true, "repatch"),
-	HELP (HelpCommand.class, "stats.cmd.help", true, "help");
+	Dump (DumpCommand.class, "dump"),
+	Sync (SyncCommand.class, "sync"),
+	Reconnect (ReconnectCommand.class, "reconnect"),
+	Repatch (RepatchCommand.class, "repatch"),
+	HELP (HelpCommand.class,  "help");
 	
-	CommandManager(Class<?> clazz, String permission, boolean allowConsole, String... args) {
+	CommandManager(Class<?> clazz, String... args) {
 		try {
 			this.clazz = (BaseCommand) clazz.newInstance();
-			this.permission = permission;
-			this.allowConsole = allowConsole;
 			alias = new ArrayList<String>();
 			for(String arg : args) {
 				alias.add(arg);
@@ -34,18 +33,15 @@ public enum CommandManager {
 	private static CommandSender sender = null;
 	
 	private BaseCommand clazz;
-	private String permission;
-	private boolean allowConsole;
 	private List<String> alias;
 	
 	public boolean isCommand(String arg) 	{ return alias.contains(arg); }
 	public void getHelp() 					{ clazz.getHelp(); }
 	
 	public boolean run(String[] args) {
-		CommandSender sender = CommandManager.getSender();
-		if(!allowConsole && !(sender instanceof Player)) { Message.sendFormattedError(sender, "This command can only be executed by a living player"); return false; }
-		if(permission != null && (sender instanceof Player) && !sender.hasPermission(permission)) { Message.sendFormattedError(sender, "You do not have permission to use this command"); return false; }
-		return clazz.run(args);
+		if(sender instanceof ConsoleCommandSender || sender.isOp()) return clazz.run(args);
+		Message.sendFormattedError(sender, "You are not allowed to perform this task");
+		return false;
 	}
 
 	public boolean run(String arg) {
