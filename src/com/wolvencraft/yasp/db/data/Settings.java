@@ -2,6 +2,8 @@ package com.wolvencraft.yasp.db.data;
 
 import java.util.List;
 
+import org.bukkit.entity.Player;
+
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
@@ -134,7 +136,14 @@ public class Settings {
 	
 	public static long getPing() { return instance.ping; }
 	
-	public static String getWelcomeMessage() { if(instance.showWelcomeMessages) return instance.welcomeMessage; else return null; }
-	public static String getFirstJoinMessage() { if(instance.showFirstJoinMessages) return instance.firstJoinMessage; else return null; }
+	public static String getWelcomeMessage(Player player) {
+		if(instance.showWelcomeMessages) return instance.welcomeMessage.replace("<PLAYER>", player.getPlayerListName());
+		else return null;
+	}
+	
+	public static String getFirstJoinMessage(Player player) {
+		if(instance.showFirstJoinMessages) return instance.firstJoinMessage.replace("<PLAYER>", player.getPlayerListName());
+		else return null;
+	}
 	
 }

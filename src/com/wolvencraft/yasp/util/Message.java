@@ -17,13 +17,14 @@ public class Message {
 	
 	public static void send(CommandSender sender, String message) {
 		if(sender == null) sender = Bukkit.getServer().getConsoleSender();
-		if(message == null) message = "";
+		if(message == null) return;
 		message = Util.parseChatColors(message);
 		sender.sendMessage(message);
 	}
 	
 	public static void sendFormatted(CommandSender sender, String title, String message) {
-		message = title + " " + ChatColor.WHITE + message;
+		if(message == null) return;
+		message = "[" + title + "] " + ChatColor.WHITE + message;
 		send(sender, message);
 	}
 	

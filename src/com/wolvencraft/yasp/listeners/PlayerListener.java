@@ -35,7 +35,7 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).login();
-		if(Settings.getWelcomeMessage() != null) Message.send(player, Settings.getWelcomeMessage().replace("<PLAYER>", player.getPlayerListName()));
+		Message.send(player, Settings.getWelcomeMessage(player));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

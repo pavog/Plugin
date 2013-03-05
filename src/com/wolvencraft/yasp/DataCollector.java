@@ -82,7 +82,7 @@ public class DataCollector implements Runnable {
 		Message.debug("Creating a new user session for " + player.getPlayerListName());
 		LocalSession newSession = new LocalSession(player);
 		sessions.add(newSession);
-		if(Settings.getFirstJoinMessage() != null) Message.send(player, Settings.getFirstJoinMessage().replace("<PLAYER>", player.getPlayerListName()));
+		Message.send(player, Settings.getFirstJoinMessage(player));
 		return newSession;
 	}
 	
