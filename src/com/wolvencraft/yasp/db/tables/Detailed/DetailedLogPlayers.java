@@ -4,14 +4,14 @@ public enum DetailedLogPlayers implements _DetailedTable {
 	
 	TableName("detailed_log_players"),
 	
-	EntryId("logID"),
+	EntryId("detailed_log_players_id"),
 	PlayerId("player_id"),
-	Time("time"),
-	IsLogin("is_login"),
+	Timestamp("time"),
 	World("world"),
 	XCoord("x"),
 	YCoord("y"),
-	ZCoord("z");
+	ZCoord("z"),
+	IsLogin("is_login");
 	
 	DetailedLogPlayers(String columnName) {
 		this.columnName = columnName;

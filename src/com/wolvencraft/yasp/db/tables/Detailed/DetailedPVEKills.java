@@ -5,16 +5,16 @@ public enum DetailedPVEKills implements _DetailedTable {
 	TableName("detailed_pve_kills"),
 	
 	EntryId("detailed_pve_id"),
-	PlayerID("player_id"),
-	CreatureId("entity_id"),
 	MaterialId("material_id"),
 	MaterialData("material_data"),
-	PlayerKilled("player_killed"),
+	CreatureId("entity_id"),
+	PlayerID("player_id"),
 	World("world"),
 	XCoord("x"),
 	YCoord("y"),
 	ZCoord("z"),
-	Timestamp("time");
+	Timestamp("time"),
+	PlayerKilled("player_killed");
 	
 	DetailedPVEKills (String columnName) {
 		this.columnName = columnName;

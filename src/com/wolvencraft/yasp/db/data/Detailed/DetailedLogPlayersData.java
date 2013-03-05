@@ -33,7 +33,7 @@ public class DetailedLogPlayersData implements _DetailedData {
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedLogPlayers.PlayerId.toString(), playerId);
-		map.put(DetailedLogPlayers.Time.toString(), time);
+		map.put(DetailedLogPlayers.Timestamp.toString(), time);
 		if(isLogin) map.put(DetailedLogPlayers.IsLogin.toString(), 1);
 		else map.put(DetailedLogPlayers.IsLogin.toString(), 0);
 		map.put(DetailedLogPlayers.World.toString(), location.getWorld().getName());

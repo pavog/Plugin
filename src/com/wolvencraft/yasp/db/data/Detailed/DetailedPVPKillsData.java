@@ -35,7 +35,7 @@ public class DetailedPVPKillsData implements _DetailedData {
 	@Override
 	public Map<String, Object> getValues(int killerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(DetailedPVPKills.PlayerID.toString(), killerId);
+		map.put(DetailedPVPKills.KillerID.toString(), killerId);
 		map.put(DetailedPVPKills.VictimID.toString(), victimId);
 		map.put(DetailedPVPKills.MaterialID.toString(), weapon.getTypeId());
 		map.put(DetailedPVPKills.MaterialData.toString(), weapon.getData().getData());
