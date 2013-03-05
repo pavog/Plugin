@@ -38,7 +38,7 @@ public class QueryResult {
 	 * @return <b>boolean</b> The value of the specified column, or <b>null</b> if there isn't one.
 	 */
 	public boolean getValueAsBoolean(String column) {
-		return fields.get(column).equalsIgnoreCase("y");
+		return fields.get(column).equalsIgnoreCase("1");
 	}
 	
 	

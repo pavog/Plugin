@@ -76,14 +76,13 @@ public class DataCollector implements Runnable {
 	public static LocalSession get(Player player) {
 		for(LocalSession session : sessions) {
 			if(session.getPlayerName().equals(player.getPlayerListName())) {
-				if(Settings.getWelcomeMessage() != null) Message.send(player, Settings.getWelcomeMessage());
 				return session;
 			}
 		}
 		Message.debug("Creating a new user session for " + player.getPlayerListName());
 		LocalSession newSession = new LocalSession(player);
 		sessions.add(newSession);
-		if(Settings.getFirstJoinMessage() != null) Message.send(player, Settings.getFirstJoinMessage());
+		if(Settings.getFirstJoinMessage() != null) Message.send(player, Settings.getFirstJoinMessage().replace("<PLAYER>", player.getPlayerListName()));
 		return newSession;
 	}
 	

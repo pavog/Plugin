@@ -19,6 +19,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.db.data.Settings;
+import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
 public class PlayerListener implements Listener {
@@ -33,6 +35,7 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).login();
+		if(Settings.getWelcomeMessage() != null) Message.send(player, Settings.getWelcomeMessage().replace("<PLAYER>", player.getPlayerListName()));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
