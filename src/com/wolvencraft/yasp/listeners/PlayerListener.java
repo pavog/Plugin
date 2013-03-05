@@ -94,7 +94,7 @@ public class PlayerListener implements Listener {
 		DataCollector.get(player).itemCraft(event.getCurrentItem());
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerSmelt(FurnaceExtractEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
