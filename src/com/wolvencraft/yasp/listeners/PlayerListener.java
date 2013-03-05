@@ -7,6 +7,7 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
@@ -98,5 +99,12 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).itemSmelt(new ItemStack(event.getItemType()));
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerEnchant(EnchantItemEvent event) {
+		Player player = event.getEnchanter();
+		if(Util.isExempt(player)) return;
+		DataCollector.get(player).itemEnchant(new ItemStack(event.getItem().getType()));
 	}
 }

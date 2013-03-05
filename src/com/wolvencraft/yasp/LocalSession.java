@@ -224,6 +224,14 @@ public class LocalSession {
 	}
 	
 	/**
+	 * Registers item enchantment with all corresponding statistics trackers
+	 * @param itemStack Stack of items in question
+	 */
+	public void itemEnchant(ItemStack itemStack) {
+		totalItems.get(itemStack).addEnchanted();
+	}
+	
+	/**
 	 * Registers player death from other player with all corresponding statistics trackers
 	 * @param killer Player who killed the victim
 	 * @param victim Player who was killed 

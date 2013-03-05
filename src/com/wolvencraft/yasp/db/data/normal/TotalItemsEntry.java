@@ -31,6 +31,7 @@ public class TotalItemsEntry implements _NormalData {
 		this.used = 0;
 		this.crafted = 0;
 		this.smelted = 0;
+		this.enchanted = 0;
 	}
 	
 	private ItemStack itemStack;
@@ -39,6 +40,7 @@ public class TotalItemsEntry implements _NormalData {
 	private int used;
 	private int crafted;
 	private int smelted;
+	private int enchanted;
 	
 	@Override
 	public void fetchData(int playerId) {
@@ -57,6 +59,7 @@ public class TotalItemsEntry implements _NormalData {
 			used = results.get(0).getValueAsInteger(TotalItems.Used.toString());
 			crafted = results.get(0).getValueAsInteger(TotalItems.Crafted.toString());
 			smelted = results.get(0).getValueAsInteger(TotalItems.Smelted.toString());
+			enchanted = results.get(0).getValueAsInteger(TotalItems.Enchanted.toString());
 		}
 	}
 
@@ -82,6 +85,7 @@ public class TotalItemsEntry implements _NormalData {
 		map.put(TotalItems.Used.toString(), used);
 		map.put(TotalItems.Crafted.toString(), crafted);
 		map.put(TotalItems.Smelted.toString(), smelted);
+		map.put(TotalItems.Enchanted.toString(), enchanted);
 		return map;
 	}
 	
@@ -120,4 +124,10 @@ public class TotalItemsEntry implements _NormalData {
 	 * @param blocks Items to add
 	 */
 	public void addSmelted() { smelted++; }
+	
+	/**
+	 * Adds the specified number of blocks to the total number of items enchanted
+	 * @param blocks Items to add
+	 */
+	public void addEnchanted() { enchanted++; }
 }
