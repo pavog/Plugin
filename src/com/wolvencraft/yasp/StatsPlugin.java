@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.data.Settings;
+import com.wolvencraft.yasp.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.util.Message;
 
@@ -41,16 +42,10 @@ public class StatsPlugin extends JavaPlugin {
 		
 		Message.log("Database connection established");
 		
-		if (getServer().getPluginManager().getPlugin("Vault") != null) {
+		if (Settings.getUsingVault() && getServer().getPluginManager().getPlugin("Vault") != null) {
             Message.log("Vault found! Advanced player statistics are available.");
-            
-            try { new VaultHook(this); }
-            catch (Exception ex) {
-    			Message.log(Level.SEVERE, ex.getMessage());
-    			if(Settings.getDebug()) ex.printStackTrace();
-    			Settings.setUsingVault(false);
-            }
-        } else Settings.setUsingVault(false);
+            new VaultHook(this);
+        }
 		
 		Settings.fetchSettings();
 		

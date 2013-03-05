@@ -32,6 +32,7 @@ public class Settings {
 		
 		databaseVersion = 0;
 		usingVault = false;
+		usingDynmap = false;
 		
 		ping = 2400;
 		showWelcomeMessages = false;
@@ -56,6 +57,7 @@ public class Settings {
 	
 	private int databaseVersion;
 	private boolean usingVault;
+	private boolean usingDynmap;
 	
 	private long ping;
 	private boolean showWelcomeMessages;
@@ -85,8 +87,12 @@ public class Settings {
 	
 	public boolean pushData() {
 		QueryUtils.update(_Settings.TableName.toString(), "value", databaseVersion + "", new String[] {"key", "version"});
-		if(usingVault) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "vault"});
-		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "vault"});
+		
+		if(usingVault) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
+		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
+
+		if(usingDynmap) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
+		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
 		return true;
 	}
 
@@ -114,16 +120,30 @@ public class Settings {
 	
 	public static void setUsingVault(boolean usingVault) {
 		instance.usingVault = usingVault;
-		if(usingVault) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "vault"});
-		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "vault"});
+		if(usingVault) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
+		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
 	}
 	
 	public static boolean getUsingVault() {
 		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("vault")) instance.usingVault = entry.getValueAsBoolean("value");
+			if(entry.getValue("key").equalsIgnoreCase("hook_vault")) instance.usingVault = entry.getValueAsBoolean("value");
 		}
 		return instance.usingVault;
+	}
+	
+	public static void setUsingDynmap(boolean usingDynmap) {
+		instance.usingDynmap = usingDynmap;
+		if(usingDynmap) QueryUtils.update(_Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
+		else QueryUtils.update(_Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
+	}
+	
+	public static boolean getUsingDynmap() {
+		List<QueryResult> entries = QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});
+		for(QueryResult entry : entries) {
+			if(entry.getValue("key").equalsIgnoreCase("hook_dynmap")) instance.usingDynmap = entry.getValueAsBoolean("value");
+		}
+		return instance.usingDynmap;
 	}
 	
 	public static boolean getDebug() { return instance.debug; }
