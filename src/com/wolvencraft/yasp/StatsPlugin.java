@@ -67,6 +67,7 @@ public class StatsPlugin extends JavaPlugin {
 			DataCollector.pluginShutdown();
 			Bukkit.getScheduler().cancelTask(databaseTaskId);
 			DataCollector.clear();
+			VaultHook.disable();
 			instance = null;
 		} catch (Exception ex) { 
 			Message.log(Level.SEVERE, ex.getMessage());
