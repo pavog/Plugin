@@ -2,11 +2,11 @@ package com.wolvencraft.yasp;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.data.DetailedDataHolder;
@@ -153,20 +153,22 @@ public class LocalSession {
 	
 	/**
 	 * Registers block breaking with all corresponding statistics trackers
-	 * @param materialData Data of the block in question
+	 * @param type Material type
+	 * @param data Damage value
 	 */
-	public void blockBreak(MaterialData materialData) {
-		totalBlocks.get(materialData).addBroken();
-		detailedData.add(new DetailedDestroyerdBlocksData(getLocation(), materialData));
+	public void blockBreak(Material type, byte data) {
+		totalBlocks.get(type, data).addBroken();
+		detailedData.add(new DetailedDestroyerdBlocksData(getLocation(), type, data));
 	}
 	
 	/**
 	 * Registers block placement with all corresponding statistics trackers
-	 * @param materialData Data of the block in question
+	 * @param type Material type
+	 * @param data Damage value
 	 */
-	public void blockPlace(MaterialData materialData) {
-		totalBlocks.get(materialData).addPlaced();
-		detailedData.add(new DetailedPlacedBlocksData(getLocation(), materialData));
+	public void blockPlace(Material type, byte data) {
+		totalBlocks.get(type, data).addPlaced();
+		detailedData.add(new DetailedPlacedBlocksData(getLocation(), type, data));
 	}
 	
 	/**

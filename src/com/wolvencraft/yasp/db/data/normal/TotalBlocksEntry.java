@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.material.MaterialData;
+import org.bukkit.Material;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
@@ -12,14 +12,16 @@ import com.wolvencraft.yasp.db.tables.normal.TotalBlocks;
 
 public class TotalBlocksEntry implements _NormalData {
 	
-	public TotalBlocksEntry(MaterialData material) {
+	public TotalBlocksEntry(Material materialType, byte data) {
 		
-		this.material = material;
+		this.type = materialType.getId();
+		this.data = data;
 		this.broken = 0;
 		this.placed = 0;
 	}
 	
-	private MaterialData material;
+	private int type;
+	private int data;
 	private int broken;
 	private int placed;
 	
@@ -29,8 +31,8 @@ public class TotalBlocksEntry implements _NormalData {
 			TotalBlocks.TableName.toString(),
 			new String[] {"*"},
 			new String[] { TotalBlocks.PlayerId.toString(), playerId + ""},
-			new String[] { TotalBlocks.MaterialId.toString(), material.getItemTypeId() + ""},
-			new String[] { TotalBlocks.MaterialData.toString(), material.getData() + ""}
+			new String[] { TotalBlocks.MaterialId.toString(), type + ""},
+			new String[] { TotalBlocks.MaterialData.toString(), data + ""}
 		);
 		
 		if(results.isEmpty()) QueryUtils.insert(TotalBlocks.TableName.toString(), getValues(playerId));
@@ -46,8 +48,8 @@ public class TotalBlocksEntry implements _NormalData {
 			TotalBlocks.TableName.toString(),
 			getValues(playerId),
 			new String[] { TotalBlocks.PlayerId.toString(), playerId + ""},
-			new String[] { TotalBlocks.MaterialId.toString(), material.getItemTypeId() + ""},
-			new String[] { TotalBlocks.MaterialData.toString(), material.getData() + ""}
+			new String[] { TotalBlocks.MaterialId.toString(), type + ""},
+			new String[] { TotalBlocks.MaterialData.toString(), data + ""}
 		);
 	}
 	
@@ -55,18 +57,12 @@ public class TotalBlocksEntry implements _NormalData {
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TotalBlocks.PlayerId.toString(), playerId);
-		map.put(TotalBlocks.MaterialId.toString(), material.getItemTypeId());
-		map.put(TotalBlocks.MaterialData.toString(), material.getData());
+		map.put(TotalBlocks.MaterialId.toString(), type);
+		map.put(TotalBlocks.MaterialData.toString(), data);
 		map.put(TotalBlocks.Destroyed.toString(), broken);
 		map.put(TotalBlocks.Placed.toString(), placed);
 		return map;
 	}
-	
-	/**
-	 * Returns the material data
-	 * @return <b>MaterialData</b> material
-	 */
-	public MaterialData getMaterial() { return material; }
 	
 	/**
 	 * Adds the specified number of blocks to the total number of blocks destroyed
@@ -85,7 +81,7 @@ public class TotalBlocksEntry implements _NormalData {
 	 * @param testMaterial MaterialData object
 	 * @return <b>true</b> if the conditions are met, <b>false</b> otherwise
 	 */
-	public boolean equals(MaterialData testMaterial) {
-		return material.equals(testMaterial);
+	public boolean equals(Material materialType, byte data) {
+		return this.type == materialType.getId() && this.data == data;
 	}
 }

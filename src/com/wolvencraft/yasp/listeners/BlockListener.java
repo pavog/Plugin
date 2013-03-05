@@ -1,11 +1,11 @@
 package com.wolvencraft.yasp.listeners;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
@@ -19,17 +19,19 @@ public class BlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if(!Util.isExempt(event.getPlayer())) return;
+		Player player = event.getPlayer();
+		if(Util.isExempt(player)) return;
 		DataCollector
-			.get(event.getPlayer())
-			.blockBreak(new MaterialData(event.getBlock().getType(), event.getBlock().getData()));
+			.get(player)
+			.blockBreak(event.getBlock().getType(), event.getBlock().getData());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if(!Util.isExempt(event.getPlayer())) return;
+		Player player = event.getPlayer();
+		if(Util.isExempt(player)) return;
 		DataCollector
-			.get(event.getPlayer())
-			.blockPlace(new MaterialData(event.getBlock().getType(), event.getBlock().getData()));
+			.get(player)
+			.blockPlace(event.getBlock().getType(), event.getBlock().getData());
 	}
 }

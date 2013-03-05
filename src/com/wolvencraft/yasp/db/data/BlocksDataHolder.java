@@ -3,7 +3,7 @@ package com.wolvencraft.yasp.db.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.material.MaterialData;
+import org.bukkit.Material;
 
 import com.wolvencraft.yasp.db.data.normal.TotalBlocksEntry;
 
@@ -25,11 +25,11 @@ public class BlocksDataHolder {
 		return temp;
 	}
 	
-	public TotalBlocksEntry get(MaterialData material) {
-		for(TotalBlocksEntry blocks : data) {
-			if(blocks.getMaterial().equals(material)) return blocks;
+	public TotalBlocksEntry get(Material type, byte blockData) {
+		for(TotalBlocksEntry entry : data) {
+			if(entry.equals(type, blockData)) return entry;
 		}
-		TotalBlocksEntry entry = new TotalBlocksEntry(material);
+		TotalBlocksEntry entry = new TotalBlocksEntry(type, blockData);
 		data.add(entry);
 		return entry;
 	}

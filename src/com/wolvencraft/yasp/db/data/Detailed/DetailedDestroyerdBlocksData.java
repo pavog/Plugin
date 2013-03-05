@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
-import org.bukkit.material.MaterialData;
+import org.bukkit.Material;
 
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.detailed.DetailedDestroyedBlocks;
@@ -12,13 +12,15 @@ import com.wolvencraft.yasp.util.Util;
 
 public class DetailedDestroyerdBlocksData implements _DetailedData {
 	
-	public DetailedDestroyerdBlocksData(Location location, MaterialData materialData) {
-		this.materialData = materialData;
+	public DetailedDestroyerdBlocksData(Location location, Material materialType, byte data) {
+		this.type = materialType.getId();
+		this.data = data;
 		this.location = location;
 		this.timestamp = Util.getTimestamp();
 	}
 	
-	private MaterialData materialData;
+	private int type;
+	private byte data;
 	private Location location;
 	private long timestamp;
 
@@ -34,8 +36,8 @@ public class DetailedDestroyerdBlocksData implements _DetailedData {
 	public Map<String, Object> getValues(int playerId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(DetailedDestroyedBlocks.PlayerId.toString(), playerId);
-		map.put(DetailedDestroyedBlocks.MaterialId.toString(), materialData.getItemTypeId());
-		map.put(DetailedDestroyedBlocks.MaterialData.toString(), materialData.getData());
+		map.put(DetailedDestroyedBlocks.MaterialId.toString(), type);
+		map.put(DetailedDestroyedBlocks.MaterialData.toString(), data);
 		map.put(DetailedDestroyedBlocks.World.toString(), location.getWorld().getName());
 		map.put(DetailedDestroyedBlocks.XCoord.toString(), location.getBlockX());
 		map.put(DetailedDestroyedBlocks.YCoord.toString(), location.getBlockY());
