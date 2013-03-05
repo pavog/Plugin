@@ -58,6 +58,15 @@ public class LocalSession {
 		detailedData.sync(playerId);
 	}
 	
+	public void dump() {
+		totalBlocks.clear();
+		totalItems.clear();
+		totalDeaths.clear();
+		totalPVE.clear();
+		totalPVP.clear();
+		detailedData.clear();
+	}
+	
 	/**
 	 * Returns the unique player name.<br />
 	 * Wraps around a corresponding <b>PlayerData</b> method
