@@ -22,10 +22,10 @@ public class ServerStatistics {
 		maxPlayersOnline = 0;
 		plugins = Bukkit.getServer().getPluginManager().getPlugins().length;
 		maxPlayersAllowed = Bukkit.getMaxPlayers();
-		bukkitVersion = Bukkit.getServer().getBukkitVersion();
-		serverIP = Bukkit.getServer().getIp();
-		serverPort = Bukkit.getServer().getPort();
-		serverMOTD = Bukkit.getServer().getMotd();
+		bukkitVersion = Bukkit.getBukkitVersion();
+		serverIP = Bukkit.getIp();
+		serverPort = Bukkit.getPort();
+		serverMOTD = Bukkit.getMotd();
 		
 		fetchData();
 		pushStaticData();
