@@ -61,7 +61,7 @@ public class StatsPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		try {
-			DataCollector.pluginShutdown();
+			DataCollector.global().pluginShutdown();
 			Bukkit.getScheduler().cancelTask(databaseTaskId);
 			DataCollector.clear();
 			VaultHook.disable();

@@ -140,9 +140,14 @@ public class DataCollector implements Runnable {
 		return playerId;
 	}
 	
+	public static ServerStatistics global() {
+		return serverStatistics;
+	}
+	
 	/**
 	 * Updates the maximum online players count.<br />
 	 * Wraps around the corresponding <b>ServerStatistics</b> method.
+	 * @deprecated
 	 * @param players Maximum players online
 	 */
 	public static void updateMaxPlayersOnline(int players) {
@@ -152,9 +157,10 @@ public class DataCollector implements Runnable {
 	/**
 	 * Indicates that the plugin is shutting down and registers the current shutdown time.<br />
 	 * Wraps around the corresponding <b>ServerStatistics</b> method.
+	 * @deprecated
 	 */
 	public static void pluginShutdown() {
-		serverStatistics.shutdown();
+		serverStatistics.pluginShutdown();
 		pushAllData();
 	}
 }

@@ -32,7 +32,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		DataCollector.updateMaxPlayersOnline(Bukkit.getOnlinePlayers().length);
+		DataCollector.global().playerLogin(Bukkit.getOnlinePlayers().length);
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).login();
