@@ -48,6 +48,7 @@ public class Normal {
 		EntryId("distance_player_id"),
 		PlayerId("player_id"),
 		Foot("foot"),
+		Swimmed("swimmed"),
 		Boat("boat"),
 		Minecart("minecart"),
 		Pig("pig");

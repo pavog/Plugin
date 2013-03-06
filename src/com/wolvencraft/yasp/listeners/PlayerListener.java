@@ -1,6 +1,8 @@
 package com.wolvencraft.yasp.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -50,7 +52,8 @@ public class PlayerListener implements Listener {
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "move")) return;
-		double distance = player.getLocation().distance(event.getTo());
+		Location playerLocation = player.getLocation();
+		double distance = playerLocation.distance(event.getTo());
 		if(player.isInsideVehicle()) {
 			Vehicle vehicle = (Vehicle) player.getVehicle();
 			if(vehicle.getType().equals(EntityType.MINECART)) {
@@ -60,6 +63,8 @@ public class PlayerListener implements Listener {
 			} else if(vehicle.getType().equals(EntityType.PIG)) {
 				DataCollector.get(player).addDistancePig(distance);
 			}
+		} else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
+			DataCollector.get(player).addDistanceSwimmed(distance);
 		} else {
 			DataCollector.get(player).addDistanceFoot(distance);
 		}

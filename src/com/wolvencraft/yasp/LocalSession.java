@@ -114,6 +114,13 @@ public class LocalSession {
 	
 	/**
 	 * <b>PlayersDistances</b> wrapper.<br />
+	 * Increments the distance swimmed.
+	 * @param distance Additional distance swimmed.
+	 */
+	public void addDistanceSwimmed(double distance) { playerDistances.addSwimmedDistance(distance); }
+	
+	/**
+	 * <b>PlayersDistances</b> wrapper.<br />
 	 * Increments the distance traveled by boat.
 	 * @param distance Additional distance traveled by boat
 	 */
