@@ -505,11 +505,11 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_server_statistics` (
 
 
 -- -----------------------------------------------------
--- Table `$dbname`.`$preifx_misc_info_players`
+-- Table `$dbname`.`$prefix_misc_info_players`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$preifx_misc_info_players` ;
+DROP TABLE IF EXISTS `$dbname`.`$prefix_misc_info_players` ;
 
-CREATE  TABLE IF NOT EXISTS `$dbname`.`$preifx_misc_info_players` (
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
   `player_id` INT NOT NULL ,
   `gamemode` TINYINT(2) NOT NULL DEFAULT 0 ,
   `exp_level` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
