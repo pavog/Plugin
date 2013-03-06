@@ -37,6 +37,21 @@ public class Util {
 	 * @return <b>true</b> if the player's stats should not be registered, <b>false</b> otherwise
 	 */
 	public static boolean isExempt(Player player) {
-		return !(player.hasPermission("statistician.ignore") || player.hasPermission("stats.ignore"));
+		return
+			!player.hasPermission("stats.ignore") &&
+			!player.hasPermission("statistician.ignore");
+	}
+	
+	/**
+	 * Checks if the player is exempt from the statistics
+	 * @param player Player in question
+	 * @param statsType Permission modifier
+	 * @return <b>true</b> if the player's stats should not be registered, <b>false</b> otherwise
+	 */
+	public static boolean isExempt(Player player, String statsType) {
+		return
+			!player.hasPermission("stats.ignore") &&
+			!player.hasPermission("statistician.ignore") &&
+			!player.hasPermission("stats.ignore." + statsType);
 	}
 }

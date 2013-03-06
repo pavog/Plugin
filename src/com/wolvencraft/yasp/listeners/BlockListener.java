@@ -20,7 +20,7 @@ public class BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
-		if(Util.isExempt(player)) return;
+		if(Util.isExempt(player, "block.break")) return;
 		DataCollector
 			.get(player)
 			.blockBreak(event.getBlock().getType(), event.getBlock().getData());
@@ -29,7 +29,7 @@ public class BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
-		if(Util.isExempt(player)) return;
+		if(Util.isExempt(player, "block.place")) return;
 		DataCollector
 			.get(player)
 			.blockPlace(event.getBlock().getType(), event.getBlock().getData());
