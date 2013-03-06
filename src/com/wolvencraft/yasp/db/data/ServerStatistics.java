@@ -134,4 +134,9 @@ public class ServerStatistics {
 		QueryUtils.update( Normal.ServerStatistics.TableName.toString(), "value", weather + "", new String[] {"key", "weather"} );
 		QueryUtils.update( Normal.ServerStatistics.TableName.toString(), "value", weatherDuration + "", new String[] {"key", "weather_duration"} );
 	}
+	
+	public void pluginNumberChange() {
+		plugins = Bukkit.getServer().getPluginManager().getPlugins().length;
+		QueryUtils.update( Normal.ServerStatistics.TableName.toString(), "value", plugins + "", new String[] {"key", "plugins"} );
+	}
 }
