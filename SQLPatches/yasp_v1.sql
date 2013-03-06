@@ -524,6 +524,8 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
   `food_eaten` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `arrows_shot` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `damage_taken` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `beds_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `portals_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `words_said` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `commands_sent` INT UNSIGNED NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`player_id`) ,

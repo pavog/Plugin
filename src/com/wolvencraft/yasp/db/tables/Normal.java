@@ -103,6 +103,8 @@ public class Normal {
 		FoodEaten("food_eaten"),
 		ArrowsShot("arrows_shot"),
 		DamageTaken("damage_taken"),
+		BedsEntered("beds_entered"),
+		PortalsEntered("portals_entered"),
 		WordsSaid("words_said"),
 		CommandsSent("commands_sent");
 		

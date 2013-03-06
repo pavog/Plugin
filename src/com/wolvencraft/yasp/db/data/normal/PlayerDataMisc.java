@@ -48,6 +48,9 @@ public class PlayerDataMisc implements _NormalData {
 	private int foodEaten;
 	private int arrowsShot;
 	private int damageTaken;
+	private int bedsEntered;
+	private int portalsEntered;
+	
 	private int wordsSaid;
 	private int commandsSent;
 	
@@ -66,6 +69,8 @@ public class PlayerDataMisc implements _NormalData {
 			foodEaten = results.get(0).getValueAsInteger(Normal.PlayersMisc.FoodEaten.toString());
 			arrowsShot = results.get(0).getValueAsInteger(Normal.PlayersMisc.ArrowsShot.toString());
 			damageTaken = results.get(0).getValueAsInteger(Normal.PlayersMisc.DamageTaken.toString());
+			bedsEntered = results.get(0).getValueAsInteger(Normal.PlayersMisc.BedsEntered.toString());
+			portalsEntered = results.get(0).getValueAsInteger(Normal.PlayersMisc.PortalsEntered.toString());
 			wordsSaid = results.get(0).getValueAsInteger(Normal.PlayersMisc.WordsSaid.toString());
 			commandsSent = results.get(0).getValueAsInteger(Normal.PlayersMisc.CommandsSent.toString());
 		}
@@ -98,6 +103,9 @@ public class PlayerDataMisc implements _NormalData {
 		map.put(Normal.PlayersMisc.FoodEaten.toString(), foodEaten);
 		map.put(Normal.PlayersMisc.ArrowsShot.toString(), arrowsShot);
 		map.put(Normal.PlayersMisc.DamageTaken.toString(), damageTaken);
+		map.put(Normal.PlayersMisc.BedsEntered.toString(), bedsEntered);
+		map.put(Normal.PlayersMisc.PortalsEntered.toString(), portalsEntered);
+		
 		map.put(Normal.PlayersMisc.WordsSaid.toString(), wordsSaid);
 		map.put(Normal.PlayersMisc.CommandsSent.toString(), commandsSent);
 		
@@ -144,6 +152,14 @@ public class PlayerDataMisc implements _NormalData {
 	
 	public void damageTaken(int damage) {
 		damageTaken += damage;
+	}
+	
+	public void bedEntered() {
+		bedsEntered++;
+	}
+	
+	public void portalEntered() {
+		portalsEntered++;
 	}
 	
 	public void chatMessageSent(int words) {
