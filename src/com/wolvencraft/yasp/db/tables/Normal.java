@@ -88,7 +88,7 @@ public class Normal {
 	 *
 	 */
 	public enum PlayersMisc {
-		TableName("players_misc"),
+		TableName("misc_info_players"),
 		PlayerId("player_id"),
 		Gamemode("gamemode"),
 		ExperiencePercent("exp_perc"),
