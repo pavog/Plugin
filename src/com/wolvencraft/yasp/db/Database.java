@@ -45,14 +45,12 @@ public class Database {
 	}
 	
 	public static boolean testConnection() {
-		Connection testConnection = null;
 		try {
-			testConnection = DriverManager.getConnection(
+			DriverManager.getConnection(
 				Settings.getConnectionPath(),
 				Settings.getDatabaseUsername(),
 				Settings.getDatabasePassword()
-			);
-			testConnection.close();
+			).close();
 		} catch (Exception e) { return false; }
 		return true;
 	}
