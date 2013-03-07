@@ -33,6 +33,7 @@ public class Settings {
 		databaseVersion = 0;
 		usingVault = false;
 		usingDynmap = false;
+		usingMcMMO = false;
 		
 		ping = 2400;
 		showWelcomeMessages = false;
@@ -58,6 +59,7 @@ public class Settings {
 	private int databaseVersion;
 	private boolean usingVault;
 	private boolean usingDynmap;
+	private boolean usingMcMMO;
 	
 	private long ping;
 	private boolean showWelcomeMessages;
@@ -93,6 +95,9 @@ public class Settings {
 
 		if(usingDynmap) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
 		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
+		
+		if(usingMcMMO) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_mcmmo"});
+		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_mcmmo"});
 		return true;
 	}
 
@@ -144,6 +149,20 @@ public class Settings {
 			if(entry.getValue("key").equalsIgnoreCase("hook_dynmap")) instance.usingDynmap = entry.getValueAsBoolean("value");
 		}
 		return instance.usingDynmap;
+	}
+	
+	public static void setUsingMcMMO(boolean usingMcMMO) {
+		instance.usingMcMMO = usingMcMMO;
+		if(usingMcMMO) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_mcmmo"});
+		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_mcmmo"});
+	}
+	
+	public static boolean getUsingMcMMO() {
+		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
+		for(QueryResult entry : entries) {
+			if(entry.getValue("key").equalsIgnoreCase("hook_mcmmo")) instance.usingVault = entry.getValueAsBoolean("value");
+		}
+		return instance.usingVault;
 	}
 	
 	public static boolean getDebug() { return instance.debug; }

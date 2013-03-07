@@ -18,6 +18,10 @@ import com.wolvencraft.yasp.util.Message;
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;
 	
+	private static VaultEconomyHook vaultEco;
+	private static VaultPermissionsHook vaultPerms;
+	private static McMMOHook mcmmo;
+	
 	private int databaseTaskId;
 	private int signTaskId;
 	
@@ -45,10 +49,16 @@ public class StatsPlugin extends JavaPlugin {
 		
 		Message.log("Database connection established");
 		
-		if (Settings.getUsingVault() && getServer().getPluginManager().getPlugin("Vault") != null) {
-            Message.log("Vault found! Advanced player statistics are available.");
-            new VaultHook(this);
-        }
+		if (getServer().getPluginManager().getPlugin("Vault") != null) {
+			Message.log("Vault found! Advanced player statistics are available.");
+			vaultEco = new VaultEconomyHook();
+			vaultPerms = new VaultPermissionsHook();
+		}
+		
+		if (getServer().getPluginManager().getPlugin("McMMO") != null) {
+			Message.log("McMMO found! Skill information is available");
+			mcmmo = new McMMOHook();
+		}
 		
 		Settings.fetchSettings();
 		
@@ -72,7 +82,9 @@ public class StatsPlugin extends JavaPlugin {
 			Bukkit.getScheduler().cancelTask(databaseTaskId);
 			Bukkit.getScheduler().cancelTask(signTaskId);
 			DataCollector.clear();
-			VaultHook.disable();
+			vaultEco.disable();
+			vaultPerms.disable();
+			mcmmo.disable();
 			instance = null;
 		} catch (Exception ex) { 
 			Message.log(Level.SEVERE, ex.getMessage());
@@ -95,7 +107,7 @@ public class StatsPlugin extends JavaPlugin {
 			if(cmd.isCommand(args[0])) {
 				if(Settings.getDebug()) {
 					String argString = "/yasp";
-			        for (String arg : args) { argString = argString + " " + arg; }
+					for (String arg : args) { argString = argString + " " + arg; }
 					Message.log(sender.getName() + ": " + argString);
 				}
 				
