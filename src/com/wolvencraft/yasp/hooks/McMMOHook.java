@@ -3,11 +3,13 @@ package com.wolvencraft.yasp.hooks;
 import org.bukkit.entity.Player;
 
 import com.gmail.nossr50.api.ExperienceAPI;
+import com.wolvencraft.yasp.db.data.Settings;
 
 public class McMMOHook implements PluginHook {
 	
 	public McMMOHook() {
 		// Thanks to an awesome API, there is nothing to register here.
+		Settings.setUsingMcMMO(true);
 	}
 	
 	/**
