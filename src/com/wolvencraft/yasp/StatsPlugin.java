@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.data.Settings;
-import com.wolvencraft.yasp.db.exceptions.MetricsConnectionException;
+import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
 import com.wolvencraft.yasp.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.metrics.Statistics;
@@ -19,6 +19,7 @@ public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;
 	
 	private int databaseTaskId;
+	private int signTaskId;
 	
 	@Override
 	public void onEnable() {
@@ -61,6 +62,7 @@ public class StatsPlugin extends JavaPlugin {
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
 		
 		databaseTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing()).getTaskId();
+		signTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DisplaySignFactory(), (Settings.getPing() / 2), Settings.getPing()).getTaskId();
 	}
 
 	@Override
@@ -68,6 +70,7 @@ public class StatsPlugin extends JavaPlugin {
 		try {
 			DataCollector.global().pluginShutdown();
 			Bukkit.getScheduler().cancelTask(databaseTaskId);
+			Bukkit.getScheduler().cancelTask(signTaskId);
 			DataCollector.clear();
 			VaultHook.disable();
 			instance = null;

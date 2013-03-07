@@ -3,7 +3,7 @@ package com.wolvencraft.yasp.metrics;
 import java.io.IOException;
 
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.exceptions.MetricsConnectionException;
+import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
  
 public class Statistics {
 	 

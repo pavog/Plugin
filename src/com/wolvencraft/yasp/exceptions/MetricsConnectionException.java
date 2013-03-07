@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.exceptions;
+package com.wolvencraft.yasp.exceptions;
 
 public class MetricsConnectionException extends Exception {
 	private static final long serialVersionUID = 1325478012737090439L;

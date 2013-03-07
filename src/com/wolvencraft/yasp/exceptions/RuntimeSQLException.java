@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.exceptions;
+package com.wolvencraft.yasp.exceptions;
 
 public class RuntimeSQLException extends RuntimeException {
 	private static final long serialVersionUID = 5224696788505678598L;

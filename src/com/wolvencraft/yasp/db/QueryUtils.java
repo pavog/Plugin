@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import com.wolvencraft.yasp.db.data.Settings;
-import com.wolvencraft.yasp.db.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.util.Message;
 
 /**

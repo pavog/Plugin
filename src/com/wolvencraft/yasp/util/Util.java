@@ -6,7 +6,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class Util {
- 		
+ 	
+	/**
+	 * Replaces variables in the string with corresponding values
+	 * @param str String to parse
+	 * @return Resulting string
+	 */
+	public static String parseVars(String str) {
+		
+		return str;
+	}
+	
 	/**
 	 * Replaces the color codes with colors
 	 * @param msg String to be parsed
