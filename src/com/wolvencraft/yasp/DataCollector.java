@@ -10,6 +10,7 @@ import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.data.Settings;
+import com.wolvencraft.yasp.db.data.normal.DisplaySignData;
 import com.wolvencraft.yasp.db.data.normal.PlayerData;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.util.Message;
@@ -29,6 +30,7 @@ public class DataCollector implements Runnable {
 	public DataCollector() {
 		sessions = new ArrayList<LocalSession>();
 		serverStatistics = new ServerStatistics(StatsPlugin.getInstance());
+		displaySignData = new DisplaySignData();
 		
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if(!Util.isExempt(player)) get(player);
@@ -37,10 +39,12 @@ public class DataCollector implements Runnable {
 	
 	private static List<LocalSession> sessions;
 	private static ServerStatistics serverStatistics;
+	private static DisplaySignData displaySignData;
 
 	@Override
 	public void run() {
 		pushAllData();
+		displaySignData.fetchData();
 	}
 	
 	/**
@@ -142,6 +146,10 @@ public class DataCollector implements Runnable {
 	
 	public static ServerStatistics global() {
 		return serverStatistics;
+	}
+	
+	public static DisplaySignData displaySignData() {
+		return displaySignData;
 	}
 	
 	/**

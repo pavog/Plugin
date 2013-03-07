@@ -1,9 +1,14 @@
 package com.wolvencraft.yasp.util;
 
 import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import com.wolvencraft.yasp.DataCollector;
 
 public class Util {
  	
@@ -13,7 +18,13 @@ public class Util {
 	 * @return Resulting string
 	 */
 	public static String parseVars(String str) {
-		
+		Map<String, Object> values = DataCollector.displaySignData().getValues();
+		Iterator<Entry<String, Object>> it = values.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();
+	        str = str.replace("<" + pairs.getKey() + ">", pairs.getValue() + "");
+	        it.remove();
+	    }
 		return str;
 	}
 	

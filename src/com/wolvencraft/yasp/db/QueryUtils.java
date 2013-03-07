@@ -90,7 +90,7 @@ public class QueryUtils {
 	
 	/**
 	 * Builds and runs a SELECT query based on arguments provided.<br />
-	 * <b>Example:</b> QueryUtils.select(_Settings.TableName.toString(), new String[] {"key", "value"});<br />
+	 * <b>Example:</b> QueryUtils.select(Settings.TableName.toString(), new String[] {"key", "value"});<br />
 	 * <b>Becomes:</b> SELECT `yasp_settings`.`key`, `yasp_settings`.`value` FROM `yasp_settings`
 	 * @param table Database table to select from (without prefix)
 	 * @param subject The columns that should be selected from the table
@@ -106,6 +106,19 @@ public class QueryUtils {
 		}
 		String query = "SELECT " + subjects + " FROM " + table;
 		return fetchData(query);
+	}
+	
+	/**
+	 * Builds and runs a SELECT query that returns the sum of the specified column.<br />
+	 * Quite obviously, the column should only contain numeric values and should fit in a double
+	 * @param table Database table to select from (without prefix)
+	 * @param column Column to sum up
+	 * @return Sum of the selected column
+	 */
+	public static double sum(String table, String column) {
+		table = "`" + Settings.getTablePrefix() + table + "`";
+		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table;
+		return fetchData(query).get(0).getValueAsInteger("temp");
 	}
 	
 	/**
