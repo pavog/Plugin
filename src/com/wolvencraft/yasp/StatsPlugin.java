@@ -21,6 +21,7 @@ public class StatsPlugin extends JavaPlugin {
 	private static VaultEconomyHook vaultEco;
 	private static VaultPermissionsHook vaultPerms;
 	private static McMMOHook mcmmo;
+	private static JobsHook jobs;
 	
 	private int databaseTaskId;
 	private int signTaskId;
@@ -53,12 +54,17 @@ public class StatsPlugin extends JavaPlugin {
 			Message.log("Vault found! Advanced player statistics are available.");
 			vaultEco = new VaultEconomyHook();
 			vaultPerms = new VaultPermissionsHook();
-		}
+		} else Settings.setUsingVault(false);
 		
 		if (getServer().getPluginManager().getPlugin("McMMO") != null) {
 			Message.log("McMMO found! Skill information is available");
 			mcmmo = new McMMOHook();
-		}
+		} else Settings.setUsingMcMMO(false);
+		
+		if (getServer().getPluginManager().getPlugin("Jobs") != null) {
+			Message.log("Jobs found! Job information is available");
+			jobs = new JobsHook();
+		} else Settings.setUsingMcMMO(false);
 		
 		Settings.fetchSettings();
 		
@@ -82,9 +88,12 @@ public class StatsPlugin extends JavaPlugin {
 			Bukkit.getScheduler().cancelTask(databaseTaskId);
 			Bukkit.getScheduler().cancelTask(signTaskId);
 			DataCollector.clear();
+			
 			vaultEco.disable();
 			vaultPerms.disable();
 			mcmmo.disable();
+			jobs.disable();
+			
 			instance = null;
 		} catch (Exception ex) { 
 			Message.log(Level.SEVERE, ex.getMessage());
