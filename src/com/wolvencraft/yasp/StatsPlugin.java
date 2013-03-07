@@ -9,8 +9,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.data.Settings;
+import com.wolvencraft.yasp.db.exceptions.MetricsConnectionException;
 import com.wolvencraft.yasp.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
+import com.wolvencraft.yasp.metrics.Statistics;
 import com.wolvencraft.yasp.util.Message;
 
 public class StatsPlugin extends JavaPlugin {
@@ -54,6 +56,9 @@ public class StatsPlugin extends JavaPlugin {
 		new BlockListener(this);
 		new ItemListener(this);
 		new EntityListener(this);
+		
+		try { new Statistics(this); }
+		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
 		
 		databaseTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing()).getTaskId();
 	}
