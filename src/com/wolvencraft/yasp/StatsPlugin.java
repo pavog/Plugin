@@ -18,10 +18,10 @@ import com.wolvencraft.yasp.util.Message;
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;
 	
-	private static VaultEconomyHook vaultEco;
-	private static VaultPermissionsHook vaultPerms;
-	private static McMMOHook mcmmo;
-	private static JobsHook jobs;
+	private static VaultHook vaultHook;
+	private static WorldGuardHook worldGuardHook;
+//	private static McMMOHook mcmmoHook;
+//	private static JobsHook jobsHook;
 	
 	private int databaseTaskId;
 	private int signTaskId;
@@ -52,19 +52,23 @@ public class StatsPlugin extends JavaPlugin {
 		
 		if (getServer().getPluginManager().getPlugin("Vault") != null) {
 			Message.log("Vault found! Advanced player statistics are available.");
-			vaultEco = new VaultEconomyHook();
-			vaultPerms = new VaultPermissionsHook();
+			vaultHook = new VaultHook();
 		} else Settings.setUsingVault(false);
 		
-		if (getServer().getPluginManager().getPlugin("McMMO") != null) {
-			Message.log("McMMO found! Skill information is available");
-			mcmmo = new McMMOHook();
-		} else Settings.setUsingMcMMO(false);
+		if (getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+			Message.log("WorldGuard found! Using it to track player's location.");
+			worldGuardHook = new WorldGuardHook();
+		} else Settings.setUsingWorldGuard(false);
 		
-		if (getServer().getPluginManager().getPlugin("Jobs") != null) {
-			Message.log("Jobs found! Job information is available");
-			jobs = new JobsHook();
-		} else Settings.setUsingMcMMO(false);
+//		if (getServer().getPluginManager().getPlugin("McMMO") != null) {
+//			Message.log("McMMO found! Skill information is available");
+//			mcmmoHook = new McMMOHook();
+//		} else Settings.setUsingMcMMO(false);
+		
+//		if (getServer().getPluginManager().getPlugin("Jobs") != null) {
+//			Message.log("Jobs found! Job information is available");
+//			jobsHook = new JobsHook();
+//		} else Settings.setUsingMcMMO(false);
 		
 		Settings.fetchSettings();
 		
@@ -89,10 +93,10 @@ public class StatsPlugin extends JavaPlugin {
 			Bukkit.getScheduler().cancelTask(signTaskId);
 			DataCollector.clear();
 			
-			vaultEco.disable();
-			vaultPerms.disable();
-			mcmmo.disable();
-			jobs.disable();
+			vaultHook.cleanup();
+			worldGuardHook.cleanup();
+//			mcmmoHook.cleanup();
+//			jobsHook.cleanup();
 			
 			instance = null;
 		} catch (Exception ex) { 

@@ -32,6 +32,7 @@ public class Settings {
 		
 		databaseVersion = 0;
 		usingVault = false;
+		usingWorldGuard = false;
 		usingDynmap = false;
 		usingMcMMO = false;
 		
@@ -58,6 +59,7 @@ public class Settings {
 	
 	private int databaseVersion;
 	private boolean usingVault;
+	private boolean usingWorldGuard;
 	private boolean usingDynmap;
 	private boolean usingMcMMO;
 	
@@ -92,6 +94,9 @@ public class Settings {
 		
 		if(usingVault) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
 		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
+		
+		if(usingWorldGuard) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_worldguard"});
+		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_orldguard"});
 
 		if(usingDynmap) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
 		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
@@ -137,6 +142,20 @@ public class Settings {
 		return instance.usingVault;
 	}
 	
+	public static void setUsingWorldGuard(boolean usingWorldGuard) {
+		instance.usingWorldGuard = usingWorldGuard;
+		if(usingWorldGuard) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_worldguard"});
+		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_worldguard"});
+	}
+	
+	public static boolean getUsingWorldGuard() {
+		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
+		for(QueryResult entry : entries) {
+			if(entry.getValue("key").equalsIgnoreCase("hook_worldguard")) instance.usingWorldGuard = entry.getValueAsBoolean("value");
+		}
+		return instance.usingVault;
+	}
+	
 	public static void setUsingDynmap(boolean usingDynmap) {
 		instance.usingDynmap = usingDynmap;
 		if(usingDynmap) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
@@ -160,7 +179,7 @@ public class Settings {
 	public static boolean getUsingMcMMO() {
 		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("hook_mcmmo")) instance.usingVault = entry.getValueAsBoolean("value");
+			if(entry.getValue("key").equalsIgnoreCase("hook_mcmmo")) instance.usingMcMMO = entry.getValueAsBoolean("value");
 		}
 		return instance.usingVault;
 	}
