@@ -75,4 +75,14 @@ public class Util {
 			!player.hasPermission("statistician.ignore") &&
 			!player.hasPermission("stats.ignore." + statsType);
 	}
+	
+	/**
+	 * Creates an array of pages with player's statistical information
+	 * @param player
+	 * @return
+	 */
+	public static String[] getBookPages(Player player) {
+		
+		return null;
+	}
 }

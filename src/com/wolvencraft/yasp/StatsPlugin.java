@@ -111,11 +111,11 @@ public class StatsPlugin extends JavaPlugin {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(!(command.getName().equalsIgnoreCase("yasp"))) return false;
+		if(!(command.getName().equalsIgnoreCase("stats"))) return false;
 		CommandManager.setSender(sender);
 		
 		if(args.length == 0) {
-			CommandManager.HELP.run();
+			CommandManager.Help.run();
 			CommandManager.resetSender();
 			return true;
 		}
@@ -123,7 +123,7 @@ public class StatsPlugin extends JavaPlugin {
 		for(CommandManager cmd : CommandManager.values()) {
 			if(cmd.isCommand(args[0])) {
 				if(Settings.getDebug()) {
-					String argString = "/yasp";
+					String argString = "/stat";
 					for (String arg : args) { argString = argString + " " + arg; }
 					Message.log(sender.getName() + ": " + argString);
 				}

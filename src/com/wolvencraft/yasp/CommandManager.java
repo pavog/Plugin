@@ -11,15 +11,17 @@ import com.wolvencraft.yasp.cmd.*;
 import com.wolvencraft.yasp.util.Message;
 
 public enum CommandManager {
-	Dump (DumpCommand.class, "dump"),
-	Sync (SyncCommand.class, "sync"),
-	Reconnect (ReconnectCommand.class, "reconnect"),
-	Repatch (RepatchCommand.class, "repatch"),
-	HELP (HelpCommand.class,  "help");
+	Book (BookCommand.class, "stats.cmd.book", "book"),
+	Dump (DumpCommand.class, null, "dump"),
+	Sync (SyncCommand.class, null, "sync"),
+	Reconnect (ReconnectCommand.class, null, "reconnect"),
+	Repatch (RepatchCommand.class, null, "repatch"),
+	Help (HelpCommand.class, null, "help");
 	
-	CommandManager(Class<?> clazz, String... args) {
+	CommandManager(Class<?> clazz, String permission, String... args) {
 		try {
 			this.clazz = (BaseCommand) clazz.newInstance();
+			this.permission = permission;
 			alias = new ArrayList<String>();
 			for(String arg : args) {
 				alias.add(arg);
@@ -33,14 +35,20 @@ public enum CommandManager {
 	private static CommandSender sender = null;
 	
 	private BaseCommand clazz;
+	private String permission;
 	private List<String> alias;
 	
 	public boolean isCommand(String arg) 	{ return alias.contains(arg); }
 	public void getHelp() 					{ clazz.getHelp(); }
 	
 	public boolean run(String[] args) {
-		if(sender instanceof ConsoleCommandSender || sender.isOp()) return clazz.run(args);
-		Message.sendFormattedError(sender, "You are not allowed to perform this task");
+		if(permission == null) {
+			if(sender instanceof ConsoleCommandSender || sender.isOp()) return clazz.run(args);
+			Message.sendFormattedError(sender, "You are not allowed to perform this task");
+		} else {
+			if(sender instanceof ConsoleCommandSender || sender.hasPermission(permission)) return clazz.run(args);
+			Message.sendFormattedError(sender, "You are not allowed to perform this task");
+		}
 		return false;
 	}
 

@@ -5,9 +5,14 @@ description: Extremely detailed player/server statistic tracking with web portal
 authors: [bitWolfy, Dazzel_]
 softdepend: [Vault, mcMMO]
 commands:
-  yasp:
-    description: Client-side administration commands
+  stats:
+    description: YASP commands
 permissions:
   stats.exempt:
     description: Don't record statistics of the player.
     default: false
+  stats.cmd:
+    description: Access to all statistics commands
+    default: op
+    children:
+      stats.cmd.book: true
