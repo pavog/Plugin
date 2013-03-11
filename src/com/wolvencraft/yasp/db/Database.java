@@ -91,6 +91,15 @@ public class Database {
 		Message.log("Target database is up to date.");
 	}
 	
+	public void patch(String patchId) throws DatabaseConnectionException {
+		InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patchId + ".sql");
+		if (is == null) return;
+		Message.log("Executing database patch: " + patchId + ".sql");
+		ScriptRunner sr = new ScriptRunner(connection);
+		try {sr.runScript(new InputStreamReader(is)); }
+		catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + patchId + ".sql", e); }
+	}
+	
 	/**
 	 * Attempts to reconnect to the remote server
 	 * @return <b>true</b> if the connection was present, or reconnect is successful. <b>false</b> otherwise.

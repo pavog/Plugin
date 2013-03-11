@@ -1,5 +1,7 @@
 package com.wolvencraft.yasp.hooks;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import net.milkbowl.vault.economy.Economy;
@@ -10,10 +12,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.db.Database;
+import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.data.Settings;
+import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.hooks._HookTables.VaultTable;
 import com.wolvencraft.yasp.util.Message;
 
-public class VaultHook implements PluginHook {
+public class VaultHook implements _PluginHook {
 	
 	public VaultHook() {
 		ServicesManager svm = StatsPlugin.getInstance().getServer().getServicesManager();
@@ -32,30 +38,51 @@ public class VaultHook implements PluginHook {
 	private static Permission permissions;
 	
 	public class VaultHookEntry implements PluginHookEntry {
-
-		@Override
-		public void fetchData(Player player) {
-			if(permissions != null) groupName = permissions.getPrimaryGroup(player);
-			else groupName = null;
-			if(economy != null) balance = economy.getBalance(player.getPlayerListName());
-			else balance = -1;
+		
+		public VaultHookEntry(Player player) {
+			fetchData(player);
 		}
 		
 		private String groupName;
 		private double balance;
 		
 		@Override
-		public boolean pushData(Player player) {
-			// TODO Auto-generated method stub
+		public void fetchData(Player player) { 
+			if(permissions != null) groupName = permissions.getPrimaryGroup(player);
+			else groupName = null;
+			if(economy != null) balance = economy.getBalance(player.getPlayerListName());
+			else balance = -1;
+		}
+		
+		@Override
+		public boolean pushData(int playerId) {
+			QueryUtils.update(
+				VaultTable.TableName.toString(),
+				getValues(playerId),
+				new String[] { VaultTable.PlayerId.toString(), playerId + ""}
+			);
 			return false;
+		}
+
+		@Override
+		public Map<String, Object> getValues(int playerId) {
+			Map<String, Object> values = new HashMap<String, Object>();
+			values.put(VaultTable.PlayerId.toString(), playerId);
+			values.put(VaultTable.Balance.toString(), balance);
+			values.put(VaultTable.GroupName.toString(), groupName);
+			return values;
 		}
 		
 	}
 	
 	@Override
 	public boolean patch() {
-		// TODO Auto-generated method stub
-		return false;
+		try { Database.getInstance().patch("vault_v1"); }
+		catch (DatabaseConnectionException ex) {
+			Message.log(Level.SEVERE, ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
