@@ -81,10 +81,9 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_entities` (
 DROP TABLE IF EXISTS `$dbname`.`$prefix_materials` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_materials` (
-  `material_id` INT NOT NULL ,
-  `data` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `tp_name` VARCHAR(45) NULL DEFAULT 'none' ,
-  PRIMARY KEY (`material_id`, `data`) );
+  PRIMARY KEY (`material_id`) );
 
 
 -- -----------------------------------------------------
@@ -94,8 +93,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pvp_kills` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pvp_kills` (
   `detailed_pvp_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `player_id` INT NOT NULL ,
   `victim_id` INT NOT NULL ,
   `cause` VARCHAR(45) NULL ,
@@ -107,7 +105,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pvp_kills` (
   PRIMARY KEY (`detailed_pvp_id`) ,
   INDEX `fk_player_id17_idx` (`player_id` ASC) ,
   INDEX `fk_player_id18_idx` (`victim_id` ASC) ,
-  INDEX `fk_material_id3_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id7_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id17`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
@@ -118,7 +116,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pvp_kills` (
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id3`
+  CONSTRAINT `fk_material_id7`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -155,8 +153,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_placed_blocks` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_placed_blocks` (
   `detailed_placed_blocks_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL DEFAULT NULL ,
   `x` INT NULL DEFAULT NULL ,
@@ -165,13 +162,13 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_placed_blocks` (
   `time` INT(11) NULL DEFAULT NULL ,
   PRIMARY KEY (`detailed_placed_blocks_id`) ,
   INDEX `fk_player_id7_idx` (`player_id` ASC) ,
-  INDEX `fk_material_id9_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id3_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id7`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id9`
+  CONSTRAINT `fk_material_id3`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -185,8 +182,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_destroyed_blocks` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_destroyed_blocks` (
   `detailed_destroyed_blocks_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL ,
   `x` INT NULL ,
@@ -195,13 +191,13 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_destroyed_blocks` (
   `time` INT(11) NULL ,
   PRIMARY KEY (`detailed_destroyed_blocks_id`) ,
   INDEX `fk_player_id6_idx` (`player_id` ASC) ,
-  INDEX `fk_material_id10_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id8_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id6`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id10`
+  CONSTRAINT `fk_material_id8`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -215,8 +211,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_dropped_items` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_dropped_items` (
   `detailed_dropped_items_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL ,
   `x` INT NULL DEFAULT NULL ,
@@ -225,13 +220,13 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_dropped_items` (
   `time` INT(11) NULL DEFAULT NULL ,
   PRIMARY KEY (`detailed_dropped_items_id`) ,
   INDEX `fk_player_id11_idx` (`player_id` ASC) ,
-  INDEX `fk_material_id7_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id4_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id11`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id7`
+  CONSTRAINT `fk_material_id4`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -245,8 +240,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pickedup_items` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pickedup_items` (
   `detailed_pickedup_items_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL DEFAULT NULL ,
   `x` INT NULL DEFAULT NULL ,
@@ -255,13 +249,13 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pickedup_items` (
   `time` INT(11) NULL DEFAULT NULL ,
   PRIMARY KEY (`detailed_pickedup_items_id`) ,
   INDEX `fk_player_id12_idx` (`player_id` ASC) ,
-  INDEX `fk_material_id6_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id10_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id12`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id6`
+  CONSTRAINT `fk_material_id10`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -286,11 +280,10 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pve_kills` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pve_kills` (
   `detailed_pve_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `entity_id` INT NOT NULL ,
   `player_id` INT NOT NULL ,
-  `cause` VARCHAR(45) NULL DEFAULT NULL ,
+  `cause` VARCHAR(45) NULL ,
   `world` VARCHAR(255) NULL DEFAULT NULL ,
   `x` INT NULL DEFAULT NULL ,
   `y` INT NULL DEFAULT NULL ,
@@ -300,7 +293,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pve_kills` (
   PRIMARY KEY (`detailed_pve_id`) ,
   INDEX `fk_player_id16_idx` (`player_id` ASC) ,
   INDEX `fk_entity_id2_idx` (`entity_id` ASC) ,
-  INDEX `fk_material_id2_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id11_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id16`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
@@ -311,7 +304,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pve_kills` (
     REFERENCES `$dbname`.`$prefix_entities` (`entity_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id2`
+  CONSTRAINT `fk_material_id11`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -325,20 +318,19 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_total_blocks` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_blocks` (
   `total_blocks_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `player_id` INT NOT NULL ,
   `destroyed` INT UNSIGNED NULL DEFAULT 0 ,
   `placed` INT UNSIGNED NULL DEFAULT 0 ,
   PRIMARY KEY (`total_blocks_id`) ,
   INDEX `fk_player_id5_idx` (`player_id` ASC) ,
-  INDEX `fk_material_id11_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id1_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id5`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id11`
+  CONSTRAINT `fk_material_id1`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -352,8 +344,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_total_items` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_items` (
   `total_items_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `player_id` INT NOT NULL ,
   `dropped` INT UNSIGNED NULL DEFAULT 0 ,
   `picked_up` INT UNSIGNED NULL DEFAULT 0 ,
@@ -364,13 +355,13 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_items` (
   `enchanted` INT UNSIGNED NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`total_items_id`) ,
   INDEX `fk_player_id10_idx` (`player_id` ASC) ,
-  INDEX `fk_material_id4_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id6_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id10`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id4`
+  CONSTRAINT `fk_material_id6`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -403,15 +394,14 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_total_pvp_kills` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pvp_kills` (
   `total_pvp_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `player_id` INT NOT NULL ,
   `victim_id` INT NOT NULL ,
   `times` INT(10) NULL DEFAULT NULL ,
   PRIMARY KEY (`total_pvp_id`) ,
   INDEX `fk_player_id14_idx` (`player_id` ASC) ,
   INDEX `fk_player_id15_idx` (`victim_id` ASC) ,
-  INDEX `fk_material_id1_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id2_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id14`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
@@ -422,7 +412,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pvp_kills` (
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id1`
+  CONSTRAINT `fk_material_id2`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -436,8 +426,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_total_pve_kills` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pve_kills` (
   `total_pve_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `entity_id` INT NOT NULL ,
   `player_id` INT NOT NULL ,
   `player_killed` INT(10) NULL DEFAULT 0 ,
@@ -445,7 +434,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pve_kills` (
   PRIMARY KEY (`total_pve_id`) ,
   INDEX `fk_player_id13_idx` (`player_id` ASC) ,
   INDEX `fk_entity_id1_idx` (`entity_id` ASC) ,
-  INDEX `fk_material_id5_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id9_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id13`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
@@ -456,7 +445,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pve_kills` (
     REFERENCES `$dbname`.`$prefix_entities` (`entity_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id5`
+  CONSTRAINT `fk_material_id9`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
@@ -470,8 +459,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_used_items` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_used_items` (
   `detailed_used_items_id` INT NOT NULL AUTO_INCREMENT ,
-  `material_id` INT NOT NULL ,
-  `material_data` SMALLINT UNSIGNED NOT NULL ,
+  `material_id` VARCHAR(16) NOT NULL ,
   `player_id` INT NOT NULL ,
   `world` VARCHAR(255) NULL DEFAULT NULL ,
   `x` INT NULL DEFAULT NULL ,
@@ -480,13 +468,13 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_used_items` (
   `time` INT NULL DEFAULT NULL ,
   PRIMARY KEY (`detailed_used_items_id`) ,
   INDEX `fk_player_id8_idx` (`player_id` ASC) ,
-  INDEX `fk_material_id8_idx` (`material_id` ASC) ,
+  INDEX `fk_material_id5_idx` (`material_id` ASC) ,
   CONSTRAINT `fk_player_id8`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_material_id8`
+  CONSTRAINT `fk_material_id5`
     FOREIGN KEY (`material_id` )
     REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
     ON DELETE CASCADE
