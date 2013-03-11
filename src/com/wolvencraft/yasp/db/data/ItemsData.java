@@ -111,8 +111,7 @@ public class ItemsData {
 				TotalItemsTable.TableName.toString(),
 				new String[] {"*"},
 				new String[] { TotalItemsTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalItemsTable.MaterialId.toString(), type + ""},
-				new String[] { TotalItemsTable.MaterialData.toString(), data + ""}
+				new String[] { TotalItemsTable.Material.toString(), type + ":" + data}
 			);
 			
 			if(results.isEmpty()) QueryUtils.insert(TotalItemsTable.TableName.toString(), getValues(playerId));
@@ -133,8 +132,7 @@ public class ItemsData {
 				TotalItemsTable.TableName.toString(),
 				getValues(playerId),
 				new String[] { TotalItemsTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalItemsTable.MaterialId.toString(), type + ""},
-				new String[] { TotalItemsTable.MaterialData.toString(), data + ""}
+				new String[] { TotalItemsTable.Material.toString(), type + ":" + data}
 			);
 		}
 		
@@ -142,8 +140,7 @@ public class ItemsData {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalItemsTable.PlayerId.toString(), playerId);
-			map.put(TotalItemsTable.MaterialId.toString(), type);
-			map.put(TotalItemsTable.MaterialData.toString(), data);
+			map.put(TotalItemsTable.Material.toString(), type + ":" + data);
 			map.put(TotalItemsTable.Dropped.toString(), dropped);
 			map.put(TotalItemsTable.PickedUp.toString(), pickedUp);
 			map.put(TotalItemsTable.Used.toString(), used);
@@ -244,8 +241,7 @@ public class ItemsData {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.DroppedItems.PlayerId.toString(), playerId);
-			map.put(Detailed.DroppedItems.MaterialId.toString(), type);
-			map.put(Detailed.DroppedItems.MaterialData.toString(), data);
+			map.put(Detailed.DroppedItems.Material.toString(), type + ":" + data);
 			map.put(Detailed.DroppedItems.World.toString(), location.getWorld().getName());
 			map.put(Detailed.DroppedItems.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.DroppedItems.YCoord.toString(), location.getBlockY());
@@ -294,8 +290,7 @@ public class ItemsData {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.PickedupItems.PlayerId.toString(), playerId);
-			map.put(Detailed.PickedupItems.MaterialId.toString(), type);
-			map.put(Detailed.PickedupItems.MaterialData.toString(), data);
+			map.put(Detailed.PickedupItems.Material.toString(), type + ":" + data);
 			map.put(Detailed.PickedupItems.World.toString(), location.getWorld().getName());
 			map.put(Detailed.PickedupItems.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.PickedupItems.YCoord.toString(), location.getBlockY());
@@ -344,8 +339,7 @@ public class ItemsData {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.UsedItems.PlayerId.toString(), playerId);
-			map.put(Detailed.UsedItems.MaterialId.toString(), type);
-			map.put(Detailed.UsedItems.MaterialData.toString(), data);
+			map.put(Detailed.UsedItems.Material.toString(), type + ":" + data);
 			map.put(Detailed.UsedItems.World.toString(), location.getWorld().getName());
 			map.put(Detailed.UsedItems.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.UsedItems.YCoord.toString(), location.getBlockY());

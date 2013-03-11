@@ -97,8 +97,7 @@ public class PVEData {
 				new String[] {"*"},
 				new String[] { TotalPVEKillsTable.PlayerId.toString(), playerId + ""},
 				new String[] { TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + ""},
-				new String[] { TotalPVEKillsTable.MaterialId.toString(), weapon.getTypeId() + ""},
-				new String[] { TotalPVEKillsTable.MaterialData.toString(), weapon.getData().getData() + ""}
+				new String[] { TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData()}
 			);
 			if(results.isEmpty()) QueryUtils.insert(TotalPVEKillsTable.TableName.toString(), getValues(playerId));
 			else {
@@ -114,8 +113,7 @@ public class PVEData {
 				getValues(playerId),
 				new String[] { TotalPVEKillsTable.PlayerId.toString(), playerId + ""},
 				new String[] { TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + ""},
-				new String[] { TotalPVEKillsTable.MaterialId.toString(), weapon.getTypeId() + ""},
-				new String[] { TotalPVEKillsTable.MaterialData.toString(), weapon.getData().getData() + ""}
+				new String[] { TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData()}
 			);
 		}
 
@@ -124,8 +122,7 @@ public class PVEData {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalPVEKillsTable.PlayerId.toString(), playerId);
 			map.put(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId());
-			map.put(TotalPVEKillsTable.MaterialId.toString(), weapon.getTypeId());
-			map.put(TotalPVEKillsTable.MaterialData.toString(), weapon.getData().getData());
+			map.put(TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData());
 			map.put(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths);
 			map.put(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths);
 			return map;
@@ -193,16 +190,14 @@ public class PVEData {
 		@Override
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put(Detailed.PVEKills.PlayerID.toString(), playerId);
+			map.put(Detailed.PVEKills.PlayerId.toString(), playerId);
 			map.put(Detailed.PVEKills.CreatureId.toString(), creatureType.getTypeId());
 			if(playerKilled) {
 				map.put(Detailed.PVEKills.PlayerKilled.toString(), 1);
-				map.put(Detailed.PVEKills.MaterialId.toString(), -1);
-				map.put(Detailed.PVEKills.MaterialData.toString(), 0);
+				map.put(Detailed.PVEKills.Material.toString(), "-1:0");
 			} else {
 				map.put(Detailed.PVEKills.PlayerKilled.toString(), 0);
-				map.put(Detailed.PVEKills.MaterialId.toString(), weapon.getTypeId());
-				map.put(Detailed.PVEKills.MaterialData.toString(), weapon.getData().getData());
+				map.put(Detailed.PVEKills.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData());
 			}
 			map.put(Detailed.PVEKills.World.toString(), location.getWorld().getName());
 			map.put(Detailed.PVEKills.XCoord.toString(), location.getBlockX());

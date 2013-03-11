@@ -124,8 +124,7 @@ public class Normal {
 	public enum TotalBlocksTable {
 		TableName("total_blocks"),
 		EntryId("total_blocks_id"),
-		MaterialId("material_id"),
-		MaterialData("material_data"),
+		Material("material_id"),
 		PlayerId("player_id"),
 		Destroyed("destroyed"),
 		Placed("placed");
@@ -146,8 +145,7 @@ public class Normal {
 	public enum TotalItemsTable {
 		TableName("total_items"),
 		EntryId("total_items_id"),
-		MaterialId("material_id"),
-		MaterialData("material_data"),
+		Material("material_id"),
 		PlayerId("player_id"),
 		Dropped("dropped"),
 		PickedUp("picked_up"),
@@ -193,8 +191,7 @@ public class Normal {
 	public enum TotalPVEKillsTable {
 		TableName("total_pve_kills"),
 		EntryId("total_pve_id"),
-		MaterialId("material_id"),
-		MaterialData("material_data"),
+		Material("material_id"),
 		CreatureId("entity_id"),
 		PlayerId("player_id"),
 		PlayerKilled("player_killed"),
@@ -216,8 +213,7 @@ public class Normal {
 	public enum TotalPVPKillsTable {
 		TableName("total_pvp_kills"),
 		EntryId("total_pvp_id"),
-		MaterialId("material_id"),
-		MaterialData("material_data"),
+		Material("material_id"),
 		PlayerId("player_id"),
 		VictimId("victim_id"),
 		Times("times");

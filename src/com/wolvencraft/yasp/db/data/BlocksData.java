@@ -102,8 +102,7 @@ public class BlocksData {
 				TotalBlocksTable.TableName.toString(),
 				new String[] {"*"},
 				new String[] { TotalBlocksTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalBlocksTable.MaterialId.toString(), type + ""},
-				new String[] { TotalBlocksTable.MaterialData.toString(), data + ""}
+				new String[] { TotalBlocksTable.Material.toString(), type + ":" + data}
 			);
 			
 			if(results.isEmpty()) QueryUtils.insert(TotalBlocksTable.TableName.toString(), getValues(playerId));
@@ -119,8 +118,7 @@ public class BlocksData {
 				TotalBlocksTable.TableName.toString(),
 				getValues(playerId),
 				new String[] { TotalBlocksTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalBlocksTable.MaterialId.toString(), type + ""},
-				new String[] { TotalBlocksTable.MaterialData.toString(), data + ""}
+				new String[] { TotalBlocksTable.Material.toString(), type + ":" + data}
 			);
 		}
 		
@@ -128,8 +126,7 @@ public class BlocksData {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalBlocksTable.PlayerId.toString(), playerId);
-			map.put(TotalBlocksTable.MaterialId.toString(), type);
-			map.put(TotalBlocksTable.MaterialData.toString(), data);
+			map.put(TotalBlocksTable.Material.toString(), type + ":" + data);
 			map.put(TotalBlocksTable.Destroyed.toString(), broken);
 			map.put(TotalBlocksTable.Placed.toString(), placed);
 			return map;
@@ -197,8 +194,7 @@ public class BlocksData {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.DestroyedBlocks.PlayerId.toString(), playerId);
-			map.put(Detailed.DestroyedBlocks.MaterialId.toString(), type);
-			map.put(Detailed.DestroyedBlocks.MaterialData.toString(), data);
+			map.put(Detailed.DestroyedBlocks.Material.toString(), type + ":" + data);
 			map.put(Detailed.DestroyedBlocks.World.toString(), location.getWorld().getName());
 			map.put(Detailed.DestroyedBlocks.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.DestroyedBlocks.YCoord.toString(), location.getBlockY());
@@ -248,8 +244,7 @@ public class BlocksData {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.PlacedBlocks.PlayerId.toString(), playerId);
-			map.put(Detailed.PlacedBlocks.MaterialId.toString(), type);
-			map.put(Detailed.PlacedBlocks.MaterialData.toString(), data);
+			map.put(Detailed.PlacedBlocks.Material.toString(), type + ":" + data);
 			map.put(Detailed.PlacedBlocks.World.toString(), location.getWorld().getName());
 			map.put(Detailed.PlacedBlocks.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.PlacedBlocks.YCoord.toString(), location.getBlockY());
