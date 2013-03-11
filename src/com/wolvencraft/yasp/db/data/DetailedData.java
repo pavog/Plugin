@@ -3,13 +3,12 @@ package com.wolvencraft.yasp.db.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wolvencraft.yasp.db.data.detailed._DetailedData;
 
-public class DetailedDataHolder {
+public class DetailedData {
 	
 	public List<_DetailedData> data;
 	
-	public DetailedDataHolder() {
+	public DetailedData() {
 		data = new ArrayList<_DetailedData>();
 	}
 	

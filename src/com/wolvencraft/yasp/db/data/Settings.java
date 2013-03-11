@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Normal;
+import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 
 public class Settings {
 	
@@ -70,7 +70,7 @@ public class Settings {
 	private String firstJoinMessage;
 	
 	public void fetchData() {
-		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("version")) databaseVersion = entry.getValueAsInteger("value");
 			else if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value") * 20;
@@ -90,19 +90,19 @@ public class Settings {
 	}
 	
 	public boolean pushData() {
-		QueryUtils.update(Normal.Settings.TableName.toString(), "value", databaseVersion + "", new String[] {"key", "version"});
+		QueryUtils.update(SettingsTable.TableName.toString(), "value", databaseVersion + "", new String[] {"key", "version"});
 		
-		if(usingVault) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
-		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
+		if(usingVault) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
+		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
 		
-		if(usingWorldGuard) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_worldguard"});
-		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_orldguard"});
+		if(usingWorldGuard) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_worldguard"});
+		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_orldguard"});
 
-		if(usingDynmap) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
-		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
+		if(usingDynmap) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
+		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
 		
-		if(usingMcMMO) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_mcmmo"});
-		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_mcmmo"});
+		if(usingMcMMO) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_mcmmo"});
+		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_mcmmo"});
 		return true;
 	}
 
@@ -117,11 +117,11 @@ public class Settings {
 	
 	public static void setDatabaseVersion(int version) { 
 		instance.databaseVersion = version;
-		QueryUtils.update(Normal.Settings.TableName.toString(), "value", version + "", new String[] {"key", "version"});
+		QueryUtils.update(SettingsTable.TableName.toString(), "value", version + "", new String[] {"key", "version"});
 	}
 	
 	public static int getDatabaseVersion() { 
-		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("version")) instance.databaseVersion = entry.getValueAsInteger("value");
 		}
@@ -130,12 +130,12 @@ public class Settings {
 	
 	public static void setUsingVault(boolean usingVault) {
 		instance.usingVault = usingVault;
-		if(usingVault) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
-		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
+		if(usingVault) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
+		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
 	}
 	
 	public static boolean getUsingVault() {
-		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("hook_vault")) instance.usingVault = entry.getValueAsBoolean("value");
 		}
@@ -144,12 +144,12 @@ public class Settings {
 	
 	public static void setUsingWorldGuard(boolean usingWorldGuard) {
 		instance.usingWorldGuard = usingWorldGuard;
-		if(usingWorldGuard) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_worldguard"});
-		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_worldguard"});
+		if(usingWorldGuard) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_worldguard"});
+		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_worldguard"});
 	}
 	
 	public static boolean getUsingWorldGuard() {
-		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("hook_worldguard")) instance.usingWorldGuard = entry.getValueAsBoolean("value");
 		}
@@ -158,12 +158,12 @@ public class Settings {
 	
 	public static void setUsingDynmap(boolean usingDynmap) {
 		instance.usingDynmap = usingDynmap;
-		if(usingDynmap) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
-		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
+		if(usingDynmap) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
+		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
 	}
 	
 	public static boolean getUsingDynmap() {
-		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("hook_dynmap")) instance.usingDynmap = entry.getValueAsBoolean("value");
 		}
@@ -172,12 +172,12 @@ public class Settings {
 	
 	public static void setUsingMcMMO(boolean usingMcMMO) {
 		instance.usingMcMMO = usingMcMMO;
-		if(usingMcMMO) QueryUtils.update(Normal.Settings.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_mcmmo"});
-		else QueryUtils.update(Normal.Settings.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_mcmmo"});
+		if(usingMcMMO) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_mcmmo"});
+		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_mcmmo"});
 	}
 	
 	public static boolean getUsingMcMMO() {
-		List<QueryResult> entries = QueryUtils.select(Normal.Settings.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"});
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("hook_mcmmo")) instance.usingMcMMO = entry.getValueAsBoolean("value");
 		}

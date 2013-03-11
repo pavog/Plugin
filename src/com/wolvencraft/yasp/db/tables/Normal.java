@@ -7,12 +7,12 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum Settings {
+	public enum SettingsTable {
 		TableName("settings"),
 		Key("key"),
 		Value("value");
 		
-		Settings(String columnName) { this.columnName = columnName; }
+		SettingsTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		
@@ -25,12 +25,12 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum ServerStatistics {
+	public enum ServerStatisticsTable {
 		TableName("server_statistics"),
 		Key("key"),
 		Value("value");
 		
-		ServerStatistics(String columnName) { this.columnName = columnName; }
+		ServerStatisticsTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		
@@ -43,7 +43,7 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum DistancePlayers {
+	public enum DistancePlayersTable {
 		TableName("distance_players"),
 		EntryId("distance_player_id"),
 		PlayerId("player_id"),
@@ -53,7 +53,7 @@ public class Normal {
 		Minecart("minecart"),
 		Pig("pig");
 		
-		DistancePlayers(String columnName) { this.columnName = columnName; }
+		DistancePlayersTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		
@@ -66,7 +66,7 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum Players{
+	public enum PlayersTable{
 		TableName("players"),
 		PlayerId("player_id"),
 		Name("name"),
@@ -75,7 +75,7 @@ public class Normal {
 		FirstLogin("first_login"),
 		Logins("logins");
 		
-		Players(String columnName) { this.columnName = columnName; }
+		PlayersTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		
@@ -88,7 +88,7 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum PlayersMisc {
+	public enum MiscInfoPlayersTable {
 		TableName("misc_info_players"),
 		PlayerId("player_id"),
 		Gamemode("gamemode"),
@@ -108,7 +108,7 @@ public class Normal {
 		WordsSaid("words_said"),
 		CommandsSent("commands_sent");
 		
-		PlayersMisc (String columnName) { this.columnName = columnName; }
+		MiscInfoPlayersTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		
@@ -121,7 +121,7 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum TotalBlocks {
+	public enum TotalBlocksTable {
 		TableName("total_blocks"),
 		EntryId("total_blocks_id"),
 		MaterialId("material_id"),
@@ -130,7 +130,7 @@ public class Normal {
 		Destroyed("destroyed"),
 		Placed("placed");
 		
-		TotalBlocks(String columnName) { this.columnName = columnName; }
+		TotalBlocksTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		
@@ -143,7 +143,7 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum TotalItems {
+	public enum TotalItemsTable {
 		TableName("total_items"),
 		EntryId("total_items_id"),
 		MaterialId("material_id"),
@@ -157,7 +157,7 @@ public class Normal {
 		Broken("broken"),
 		Enchanted("enchanted");
 		
-		TotalItems(String columnName) { this.columnName = columnName;}
+		TotalItemsTable (String columnName) { this.columnName = columnName;}
 		
 		private String columnName;
 		
@@ -170,14 +170,14 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum TotalDeathPlayers {
+	public enum TotalDeathPlayersTable {
 		TableName("total_death_players"),
 		EntryId("total_death_players_id"),
 		PlayerId("player_id"),
 		Cause("cause"),
 		Times("times");
 		
-		TotalDeathPlayers(String columnName) { this.columnName = columnName; }
+		TotalDeathPlayersTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		
@@ -190,7 +190,7 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum TotalPVEKills {
+	public enum TotalPVEKillsTable {
 		TableName("total_pve_kills"),
 		EntryId("total_pve_id"),
 		MaterialId("material_id"),
@@ -200,7 +200,7 @@ public class Normal {
 		PlayerKilled("player_killed"),
 		CreatureKilled("creature_killed");
 		
-		TotalPVEKills(String columnName) { this.columnName = columnName; }
+		TotalPVEKillsTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		
@@ -213,7 +213,7 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum TotalPVPKills {
+	public enum TotalPVPKillsTable {
 		TableName("total_pvp_kills"),
 		EntryId("total_pvp_id"),
 		MaterialId("material_id"),
@@ -222,7 +222,7 @@ public class Normal {
 		VictimId("victim_id"),
 		Times("times");
 		
-		TotalPVPKills(String columnName) { this.columnName = columnName; }
+		TotalPVPKillsTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		

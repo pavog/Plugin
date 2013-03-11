@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.data.DisplaySignData;
+import com.wolvencraft.yasp.db.data.PlayersData;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.data.Settings;
-import com.wolvencraft.yasp.db.data.normal.DisplaySignData;
-import com.wolvencraft.yasp.db.data.normal.PlayerData;
-import com.wolvencraft.yasp.db.tables.Normal;
+import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
@@ -120,24 +120,24 @@ public class DataCollector implements Runnable {
 		List<QueryResult> results;
 		
 		results = QueryUtils.select(
-			Normal.Players.TableName.toString(),
-			new String[] {Normal.Players.PlayerId.toString(), Normal.Players.Name.toString()},
-			new String[] {Normal.Players.Name.toString(), username}
+			PlayersTable.TableName.toString(),
+			new String[] {PlayersTable.PlayerId.toString(), PlayersTable.Name.toString()},
+			new String[] {PlayersTable.Name.toString(), username}
 		);
 		
 		if(results.isEmpty()) {
 			QueryUtils.insert(
-				Normal.Players.TableName.toString(),
-				PlayerData.getDefaultValues(username)
+				PlayersTable.TableName.toString(),
+				PlayersData.getDefaultValues(username)
 			);
 			results = QueryUtils.select(
-				Normal.Players.TableName.toString(),
-				new String[] {Normal.Players.PlayerId.toString(), Normal.Players.Name.toString()},
-				new String[] {Normal.Players.Name.toString(), username}
+				PlayersTable.TableName.toString(),
+				new String[] {PlayersTable.PlayerId.toString(), PlayersTable.Name.toString()},
+				new String[] {PlayersTable.Name.toString(), username}
 			);
-			playerId = results.get(0).getValueAsInteger(Normal.Players.PlayerId.toString());
+			playerId = results.get(0).getValueAsInteger(PlayersTable.PlayerId.toString());
 		} else {
-			playerId = results.get(0).getValueAsInteger(Normal.Players.PlayerId.toString());
+			playerId = results.get(0).getValueAsInteger(PlayersTable.PlayerId.toString());
 		}
 		
 		Message.debug("User ID found: " + playerId);
