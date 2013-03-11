@@ -56,12 +56,11 @@ public class VaultHook implements _PluginHook {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			QueryUtils.update(
+			return QueryUtils.update(
 				VaultTable.TableName.toString(),
 				getValues(playerId),
 				new String[] { VaultTable.PlayerId.toString(), playerId + ""}
 			);
-			return false;
 		}
 
 		@Override
