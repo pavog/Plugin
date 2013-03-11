@@ -37,7 +37,12 @@ public class ServerStatistics {
 		weather = mainWorld.hasStorm();
 		weatherDuration = mainWorld.getWeatherDuration();
 		serverTime = mainWorld.getFullTime();
-				
+		
+		entities = 0;
+		for(World world : Bukkit.getServer().getWorlds()) {
+			entities += world.getEntities().size();
+		}
+		
 		fetchData();
 		pushStaticData();
 	}
@@ -66,6 +71,8 @@ public class ServerStatistics {
 	private int weatherDuration;
 	private long serverTime;
 	
+	private int entities;
+	
 	public void fetchData() {
 		List<QueryResult> entries = QueryUtils.select(ServerStatisticsTable.TableName.toString(), new String[] {"*"});
 		for(QueryResult entry : entries) {
@@ -83,6 +90,10 @@ public class ServerStatistics {
 		totalUptime += (curTime - lastSyncTime);
 		lastSyncTime = curTime;
 		serverTime = Bukkit.getWorlds().get(0).getFullTime();
+		entities = 0;
+		for(World world : Bukkit.getServer().getWorlds()) {
+			entities += world.getEntities().size();
+		}
 		
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", currentUptime + "", new String[] {"key", "current_uptime"} );
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", totalUptime + "", new String[] {"key", "total_uptime"} );
@@ -93,6 +104,7 @@ public class ServerStatistics {
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", serverTime + "", new String[] {"key", "server_time"} );
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", weather + "", new String[] {"key", "weather"} );
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", weatherDuration + "", new String[] {"key", "weather_duration"} );
+		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", entities + "", new String[] {"key", "entities_count"} );
 		return true;
 	}
 	
