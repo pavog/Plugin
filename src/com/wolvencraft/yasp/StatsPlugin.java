@@ -14,6 +14,7 @@ import com.wolvencraft.yasp.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.metrics.Statistics;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.TPSTracker;
 
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;
@@ -25,6 +26,7 @@ public class StatsPlugin extends JavaPlugin {
 	
 	private int databaseTaskId;
 	private int signTaskId;
+	private int tpsTaskId;
 	
 	@Override
 	public void onEnable() {
@@ -83,14 +85,16 @@ public class StatsPlugin extends JavaPlugin {
 		
 		databaseTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing()).getTaskId();
 		signTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DisplaySignFactory(), (Settings.getPing() / 2), Settings.getPing()).getTaskId();
+		tpsTaskId = Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1).getTaskId();
 	}
 
 	@Override
 	public void onDisable() {
+		Bukkit.getScheduler().cancelTask(databaseTaskId);
+		Bukkit.getScheduler().cancelTask(signTaskId);
+		Bukkit.getScheduler().cancelTask(tpsTaskId);
 		try {
 			DataCollector.global().pluginShutdown();
-			Bukkit.getScheduler().cancelTask(databaseTaskId);
-			Bukkit.getScheduler().cancelTask(signTaskId);
 			DataCollector.clear();
 			
 			vaultHook.cleanup();

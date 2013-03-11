@@ -9,6 +9,7 @@ import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.Normal.ServerStatisticsTable;
+import com.wolvencraft.yasp.util.TPSTracker;
 import com.wolvencraft.yasp.util.Util;
 
 public class ServerStatistics {
@@ -20,9 +21,11 @@ public class ServerStatistics {
 		startupTime = Util.getTimestamp();
 		currentUptime = 0;
 		totalUptime = 0;
+		
 		maxPlayersOnline = 0;
-		plugins = Bukkit.getServer().getPluginManager().getPlugins().length;
 		maxPlayersAllowed = Bukkit.getMaxPlayers();
+		
+		plugins = Bukkit.getServer().getPluginManager().getPlugins().length;
 		bukkitVersion = Bukkit.getBukkitVersion();
 		serverIP = Bukkit.getIp();
 		serverPort = Bukkit.getPort();
@@ -31,6 +34,7 @@ public class ServerStatistics {
 		Runtime runtime = Runtime.getRuntime();
 		totalMemory = runtime.totalMemory();
 		freeMemory = runtime.freeMemory();
+		tickrate = TPSTracker.getTicksPerSecond();
 		
 		World mainWorld = Bukkit.getWorlds().get(0);
 		
@@ -66,6 +70,7 @@ public class ServerStatistics {
 	
 	private long totalMemory;
 	private long freeMemory;
+	private int tickrate;
 	
 	private boolean weather;
 	private int weatherDuration;
@@ -91,9 +96,11 @@ public class ServerStatistics {
 		lastSyncTime = curTime;
 		serverTime = Bukkit.getWorlds().get(0).getFullTime();
 		entities = 0;
-		for(World world : Bukkit.getServer().getWorlds()) {
-			entities += world.getEntities().size();
-		}
+		for(World world : Bukkit.getServer().getWorlds()) entities += world.getEntities().size();
+		Runtime runtime = Runtime.getRuntime();
+		totalMemory = runtime.totalMemory();
+		freeMemory = runtime.freeMemory();
+		tickrate = TPSTracker.getTicksPerSecond();
 		
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", currentUptime + "", new String[] {"key", "current_uptime"} );
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", totalUptime + "", new String[] {"key", "total_uptime"} );
@@ -101,6 +108,7 @@ public class ServerStatistics {
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", maxPlayersOnlineTime + "", new String[] {"key", "max_players_online_time"} );
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", totalMemory + "", new String[] {"key", "total_memory"} );
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", freeMemory + "", new String[] {"key", "free_memory"} );
+		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", tickrate + "", new String[] {"key", "ticks_per_second"} );
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", serverTime + "", new String[] {"key", "server_time"} );
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", weather + "", new String[] {"key", "weather"} );
 		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", weatherDuration + "", new String[] {"key", "weather_duration"} );
