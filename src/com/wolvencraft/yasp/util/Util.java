@@ -82,7 +82,17 @@ public class Util {
 	 * @return
 	 */
 	public static String[] getBookPages(Player player) {
-		
-		return null;
+		Map<String, Object> stats = DataCollector.displaySignData().getValues();
+		return new String[] {
+				ChatColor.BOLD + " + " + player.getPlayerListName() + " + ",
+				"- Blocks",
+				" Broken: " + stats.get("blocksBroken"),
+				" Placed: " + stats.get("blocksPlaced"),
+				ChatColor.WHITE + ".",
+				"- Items",
+				" Crafted: " + stats.get("itemsCrafted"),
+				" Broken: " + stats.get("toolsBroken"),
+				" Eaten: " + stats.get("snacksEaten")
+		};
 	}
 }
