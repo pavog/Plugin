@@ -151,24 +151,4 @@ public class DataCollector implements Runnable {
 	public static ServerTotals displaySignData() {
 		return displaySignData;
 	}
-	
-	/**
-	 * Updates the maximum online players count.<br />
-	 * Wraps around the corresponding <b>ServerStatistics</b> method.
-	 * @deprecated
-	 * @param players Maximum players online
-	 */
-	public static void updateMaxPlayersOnline(int players) {
-		serverStatistics.playerLogin(players);
-	}
-	
-	/**
-	 * Indicates that the plugin is shutting down and registers the current shutdown time.<br />
-	 * Wraps around the corresponding <b>ServerStatistics</b> method.
-	 * @deprecated
-	 */
-	public static void pluginShutdown() {
-		serverStatistics.pluginShutdown();
-		pushAllData();
-	}
 }
