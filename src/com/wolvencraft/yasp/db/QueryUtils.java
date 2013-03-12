@@ -121,6 +121,17 @@ public class QueryUtils {
 		return fetchData(query).get(0).getValueAsInteger("temp");
 	}
 	
+	public static double sum(String table, String column, String[]... condition) {
+		table = "`" + Settings.getTablePrefix() + table + "`";
+		String conditions = "";
+		for(String[] str : condition) {
+			if(!conditions.equals("")) conditions += " AND ";
+			conditions += "`" + str[0] + "`='" + str[1] + "'";
+		}
+		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table + " WHERE " + conditions;
+		return fetchData(query).get(0).getValueAsInteger("temp");
+	}
+	
 	/**
 	 * Builds and runs an INSERT query based on arguments provided
 	 * @param table Database table to insert into (without prefix)
