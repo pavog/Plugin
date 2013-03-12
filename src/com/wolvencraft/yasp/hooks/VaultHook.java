@@ -14,7 +14,7 @@ import org.bukkit.plugin.ServicesManager;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.data.Settings;
+import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.hooks._HookTables.VaultTable;
 import com.wolvencraft.yasp.util.Message;

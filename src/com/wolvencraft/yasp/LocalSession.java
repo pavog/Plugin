@@ -4,7 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.db.data.*;
+import com.wolvencraft.yasp.db.data.receive.*;
+import com.wolvencraft.yasp.db.data.sync.BlocksData;
+import com.wolvencraft.yasp.db.data.sync.DeathsData;
+import com.wolvencraft.yasp.db.data.sync.ItemsData;
+import com.wolvencraft.yasp.db.data.sync.PVEData;
+import com.wolvencraft.yasp.db.data.sync.PVPData;
+import com.wolvencraft.yasp.db.data.sync.PlayersData;
 
 public class LocalSession {
 	

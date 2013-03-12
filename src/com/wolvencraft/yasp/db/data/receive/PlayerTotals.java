@@ -1,24 +1,28 @@
-package com.wolvencraft.yasp.db.data;
+package com.wolvencraft.yasp.db.data.receive;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Normal.*;
+import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
 
 /**
- * Stores generic statistical data to be used on display signs.<br />
- * Does not implement NormalData because it does not synch data back to the database.
+ * Generic Player information used on DisplaySigns and books.
  * @author bitWolfy
  *
  */
-public class DisplaySignData {
+public class PlayerTotals {
 	
 	/**
 	 * <b>Default Constructor</b><br />
 	 * Sets up the default values for the data holder.
 	 */
-	public DisplaySignData() {
+	public PlayerTotals() {
 		blocksBroken = 0;
 		blocksPlaced = 0;
 		distance = 0;
@@ -79,5 +83,4 @@ public class DisplaySignData {
 		values.put("otherKills", otherKills);
 		return values;
 	}
-	
 }

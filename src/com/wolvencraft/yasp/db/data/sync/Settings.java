@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.db.data;
+package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
 package com.wolvencraft.yasp.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -24,7 +23,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.data.Settings;
+import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
@@ -36,7 +35,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		DataCollector.global().playerLogin(Bukkit.getOnlinePlayers().length);
+		DataCollector.global().playerLogin();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).player().login(player.getLocation());
@@ -45,6 +44,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
+		DataCollector.global().playerLogout();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).player().logout(player.getLocation());

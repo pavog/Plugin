@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.data.DisplaySignData;
-import com.wolvencraft.yasp.db.data.PlayersData;
-import com.wolvencraft.yasp.db.data.ServerStatistics;
-import com.wolvencraft.yasp.db.data.Settings;
+import com.wolvencraft.yasp.db.data.receive.ServerTotals;
+import com.wolvencraft.yasp.db.data.sync.PlayersData;
+import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
+import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
@@ -30,7 +30,7 @@ public class DataCollector implements Runnable {
 	public DataCollector() {
 		sessions = new ArrayList<LocalSession>();
 		serverStatistics = new ServerStatistics(StatsPlugin.getInstance());
-		displaySignData = new DisplaySignData();
+		displaySignData = new ServerTotals();
 		
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if(!Util.isExempt(player)) get(player);
@@ -39,7 +39,7 @@ public class DataCollector implements Runnable {
 	
 	private static List<LocalSession> sessions;
 	private static ServerStatistics serverStatistics;
-	private static DisplaySignData displaySignData;
+	private static ServerTotals displaySignData;
 
 	@Override
 	public void run() {
@@ -148,7 +148,7 @@ public class DataCollector implements Runnable {
 		return serverStatistics;
 	}
 	
-	public static DisplaySignData displaySignData() {
+	public static ServerTotals displaySignData() {
 		return displaySignData;
 	}
 	

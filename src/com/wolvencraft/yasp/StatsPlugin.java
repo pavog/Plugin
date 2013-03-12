@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.db.data.Settings;
+import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
 import com.wolvencraft.yasp.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
