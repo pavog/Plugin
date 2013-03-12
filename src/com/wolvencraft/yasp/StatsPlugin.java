@@ -97,10 +97,10 @@ public class StatsPlugin extends JavaPlugin {
 			DataCollector.global().pluginShutdown();
 			DataCollector.clear();
 			
-			vaultHook.cleanup();
-			worldGuardHook.cleanup();
-//			mcmmoHook.cleanup();
-//			jobsHook.cleanup();
+			if(Settings.getUsingVault()) vaultHook.cleanup();
+			if(Settings.getUsingWorldGuard()) worldGuardHook.cleanup();
+//			if(Settings.getUsingMcMMO()) mcmmoHook.cleanup();
+//			if(Settings.getUsingJobs()) jobsHook.cleanup();
 			
 			instance = null;
 		} catch (Exception ex) { 
