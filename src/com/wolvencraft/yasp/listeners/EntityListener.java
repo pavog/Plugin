@@ -46,38 +46,38 @@ public class EntityListener implements Listener {
 						if (arrow.getShooter() instanceof Player) {				// | | + Player shot Player
 							Player killer = (Player) arrow.getShooter();
 							if(Util.isExempt(victim, "death.pvp") || Util.isExempt(killer, "death.pvp")) return;
-							DataCollector.get(killer).playerKilledPlayer(victim, new ItemStack(Material.ARROW));
+							DataCollector.get(killer).PVP().playerKilledPlayer(victim, new ItemStack(Material.ARROW));
 						} else if (arrow.getShooter() instanceof Creature) {	// | | + Creature shot Player
 							if(Util.isExempt(victim, "death.pve")) return;
 							Creature killer = (Creature) arrow.getShooter();
-							DataCollector.get(victim).creatureKilledPlayer(killer, new ItemStack(Material.ARROW));
+							DataCollector.get(victim).PVE().creatureKilledPlayer(killer, new ItemStack(Material.ARROW));
 						}
 				} else if (killerEntity instanceof Player) {					// | + Player killed Player
 					Player killer = (Player) killerEntity;
 					if(Util.isExempt(victim, "death.pvp") || Util.isExempt(killer, "death.pvp")) return;
-					DataCollector.get(killer).playerKilledPlayer(victim, killer.getItemInHand());
+					DataCollector.get(killer).PVP().playerKilledPlayer(victim, killer.getItemInHand());
 				} else if (killerEntity instanceof Explosive) {					// | + Player exploded
 					if(Util.isExempt(victim, "death.other")) return;
-					DataCollector.get(victim).playerDied(cause);
+					DataCollector.get(victim).deaths().playerDied(victim.getLocation(), cause);
 				} else if (killerEntity instanceof Creature) {					// | + Creature killed Player
 					if(Util.isExempt(victim, "death.pve")) return;
 					Creature killer = (Creature) killerEntity;
-					DataCollector.get(victim).creatureKilledPlayer(killer, new ItemStack(Material.AIR));
+					DataCollector.get(victim).PVE().creatureKilledPlayer(killer, new ItemStack(Material.AIR));
 				} else if (killerEntity instanceof Slime) {						// | + Slime killed player
 					if(Util.isExempt(victim, "death.pve")) return;
 					Creature killer = (Creature) killerEntity;
 					//TODO Check if the Slime kill behavior is the same as the one with Creature
-					DataCollector.get(victim).creatureKilledPlayer(killer, new ItemStack(Material.AIR));
+					DataCollector.get(victim).PVE().creatureKilledPlayer(killer, new ItemStack(Material.AIR));
 				} else {														// | + Player died
 					if(Util.isExempt(victim, "death.other")) return;
-					DataCollector.get(victim).playerDied(cause);
+					DataCollector.get(victim).deaths().playerDied(victim.getLocation(), cause);
 				}
 			} else if (lastDamageEvent instanceof EntityDamageByBlockEvent) {	// + Player killed by blocks
 				if(Util.isExempt(victim, "death.other")) return;
-				DataCollector.get(victim).playerDied(cause);
+				DataCollector.get(victim).deaths().playerDied(victim.getLocation(), cause);
 			} else {															// + Player died
 				if(Util.isExempt(victim, "death.other")) return;
-				DataCollector.get(victim).playerDied(cause);
+				DataCollector.get(victim).deaths().playerDied(victim.getLocation(), cause);
 			}
 		} else {
 			if (!(lastDamageEvent instanceof EntityDamageByEntityEvent)) return;
@@ -91,20 +91,20 @@ public class EntityListener implements Listener {
 				if(Util.isExempt(killer, "death.pve")) return;
 				if (victimEntity instanceof Creature) {							// | + Player shot Creature
 					Creature victim = (Creature) victimEntity;
-					DataCollector.get(killer).playerKilledCreature(victim, new ItemStack(Material.ARROW));
+					DataCollector.get(killer).PVE().playerKilledCreature(victim, new ItemStack(Material.ARROW));
 				} else if (victimEntity instanceof Slime) {						// | + Player shot Slime
 					Creature victim = (Creature) victimEntity;
-					DataCollector.get(killer).playerKilledCreature(victim, new ItemStack(Material.ARROW));
+					DataCollector.get(killer).PVE().playerKilledCreature(victim, new ItemStack(Material.ARROW));
 				}
 			} else if (killerEntity instanceof Player) {						// + Player killed an entity
 				Player killer = (Player) killerEntity;
 				if(Util.isExempt(killer, "death.pve")) return;
 				if (victimEntity instanceof Creature) {							// | + Player killed Creature
 					Creature victim = (Creature) victimEntity;
-					DataCollector.get(killer).playerKilledCreature(victim, killer.getItemInHand());
+					DataCollector.get(killer).PVE().playerKilledCreature(victim, killer.getItemInHand());
 				} else if (victimEntity instanceof Slime) {						// | + Player killed Slime
 					Creature victim = (Creature) victimEntity;
-					DataCollector.get(killer).playerKilledCreature(victim, killer.getItemInHand());
+					DataCollector.get(killer).PVE().playerKilledCreature(victim, killer.getItemInHand());
 				}
 			}
 		}

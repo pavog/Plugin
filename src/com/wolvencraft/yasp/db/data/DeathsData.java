@@ -19,7 +19,11 @@ import com.wolvencraft.yasp.util.Util;
  * @author bitWolfy
  *
  */
-public class DeathsData {
+public class DeathsData implements _DataStore {
+	
+	private int playerId;
+	private List<TotalDeathsEntry> normalData;
+	private List<DetailedData> detailedData;
 
 	/**
 	 * <b>Default constructor</b><br />
@@ -27,21 +31,44 @@ public class DeathsData {
 	 */
 	public DeathsData(int playerId) {
 		this.playerId = playerId;
-		detailedData = new ArrayList<TotalDeathsEntry>();
+		normalData = new ArrayList<TotalDeathsEntry>();
+		detailedData = new ArrayList<DetailedData>();
 	}
 	
-	private int playerId;
-	private List<TotalDeathsEntry> detailedData;
-	
-	/**
-	 * Returns the contents of the data store.<br />
-	 * Asynchronous method; changes to the returned List will not affect the data store.
-	 * @return Contents of the data store
-	 */
-	public List<TotalDeathsEntry> get() {
-		List<TotalDeathsEntry> temp = new ArrayList<TotalDeathsEntry>();
-		for(TotalDeathsEntry value : detailedData) temp.add(value);
+	@Override
+	public List<NormalData> getNormalData() {
+		List<NormalData> temp = new ArrayList<NormalData>();
+		for(NormalData value : normalData) temp.add(value);
 		return temp;
+	}
+	
+	@Override
+	public List<DetailedData> getDetailedData() {
+		List<DetailedData> temp = new ArrayList<DetailedData>();
+		for(DetailedData value : detailedData) temp.add(value);
+		return temp;
+	}
+	
+	@Override
+	public void sync() {
+		for(NormalData entry : getNormalData()) {
+			if(entry.pushData(playerId)) normalData.remove(entry);
+		}
+		
+		for(DetailedData entry : getDetailedData()) {
+			if(entry.pushData(playerId)) detailedData.remove(entry);
+		}
+	}
+	
+	@Override
+	public void dump() {
+		for(NormalData entry : getNormalData()) {
+			normalData.remove(entry);
+		}
+		
+		for(DetailedData entry : getDetailedData()) {
+			detailedData.remove(entry);
+		}
 	}
 
 	/**
@@ -50,24 +77,25 @@ public class DeathsData {
 	 * @param cause
 	 * @return Corresponding entry
 	 */
-	public TotalDeathsEntry get(DamageCause cause) {
-		for(TotalDeathsEntry entry : detailedData) {
+	public TotalDeathsEntry getNormalData(DamageCause cause) {
+		for(TotalDeathsEntry entry : normalData) {
 			if(entry.equals(cause)) return entry;
 		}
 		TotalDeathsEntry entry = new TotalDeathsEntry(cause);
-		detailedData.add(entry);
+		normalData.add(entry);
 		return entry;
 	}
 	
 	/**
-	 * Synchronizes the data from the data store to the database, then removes it.<br />
-	 * If an entry was not synchronized, it will not be removed.
+	 * Registers the player death in the data store
+	 * @param location Location of the event
+	 * @param cause Death cause
 	 */
-	public void sync() {
-		for(TotalDeathsEntry entry : get()) {
-			if(entry.pushData(playerId)) detailedData.remove(entry);
-		}
+	public void playerDied(Location location, DamageCause cause) {
+		getNormalData(cause).addTimes();
+		detailedData.add(new DetailedDeathEntry(location, cause));
 	}
+	
 	
 	/**
 	 * Represents the total number of times a player died of a particular cause.<br />
@@ -75,7 +103,7 @@ public class DeathsData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class TotalDeathsEntry implements _NormalData {
+	public class TotalDeathsEntry implements NormalData {
 		
 		public TotalDeathsEntry(DamageCause cause) {
 			this.cause = cause;
@@ -141,13 +169,14 @@ public class DeathsData {
 		
 	}
 	
+	
 	/**
 	 * Represents an entry in the Detailed data store.
 	 * It is static, i.e. it cannot be edited once it has been created.
 	 * @author bitWolfy
 	 *
 	 */
-	public class DetailedDeathEntry implements _DetailedData {
+	public class DetailedDeathEntry implements DetailedData {
 		
 		/**
 		 * <b>Default constructor</b><br />

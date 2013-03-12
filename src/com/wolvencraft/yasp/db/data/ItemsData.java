@@ -15,11 +15,15 @@ import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
 import com.wolvencraft.yasp.util.Util;
 
 /**
- * Data collector that records all item statistics on the server for a specific player.
+ * Data store that records all item interactions on the server.
  * @author bitWolfy
  *
  */
-public class ItemsData {
+public class ItemsData implements _DataStore {
+	
+	private int playerId;
+	private List<TotalItemsEntry> normalData;
+	private List<DetailedData> detailedData;
 
 	/**
 	 * <b>Default constructor</b><br />
@@ -27,21 +31,44 @@ public class ItemsData {
 	 */
 	public ItemsData(int playerId) {
 		this.playerId = playerId;
-		dynamicData = new ArrayList<TotalItemsEntry>();
+		normalData = new ArrayList<TotalItemsEntry>();
+		detailedData = new ArrayList<DetailedData>();
+	}
+
+	@Override
+	public List<NormalData> getNormalData() {
+		List<NormalData> temp = new ArrayList<NormalData>();
+		for(NormalData value : normalData) temp.add(value);
+		return temp;
 	}
 	
-	private int playerId;
-	private List<TotalItemsEntry> dynamicData;
-
-	/**
-	 * Returns the contents of the data store.<br />
-	 * Asynchronous method; changes to the returned List will not affect the data store.
-	 * @return Contents of the data store
-	 */
-	public List<TotalItemsEntry> get() {
-		List<TotalItemsEntry> temp = new ArrayList<TotalItemsEntry>();
-		for(TotalItemsEntry value : dynamicData) temp.add(value);
+	@Override
+	public List<DetailedData> getDetailedData() {
+		List<DetailedData> temp = new ArrayList<DetailedData>();
+		for(DetailedData value : detailedData) temp.add(value);
 		return temp;
+	}
+	
+	@Override
+	public void sync() {
+		for(NormalData entry : getNormalData()) {
+			if(entry.pushData(playerId)) normalData.remove(entry);
+		}
+		
+		for(DetailedData entry : getDetailedData()) {
+			if(entry.pushData(playerId)) detailedData.remove(entry);
+		}
+	}
+	
+	@Override
+	public void dump() {
+		for(NormalData entry : getNormalData()) {
+			normalData.remove(entry);
+		}
+		
+		for(DetailedData entry : getDetailedData()) {
+			detailedData.remove(entry);
+		}
 	}
 
 	/**
@@ -50,25 +77,82 @@ public class ItemsData {
 	 * @param itemStack
 	 * @return Corresponding entry
 	 */
-	public TotalItemsEntry get(ItemStack itemStack) {
+	public TotalItemsEntry getNormalData(ItemStack itemStack) {
 		itemStack.setAmount(1);
-		for(TotalItemsEntry entry : dynamicData) {
+		for(TotalItemsEntry entry : normalData) {
 			if(entry.equals(itemStack)) return entry;
 		}
 		TotalItemsEntry entry = new TotalItemsEntry(itemStack);
-		dynamicData.add(entry);
+		normalData.add(entry);
 		return entry;
 	}
 	
 	/**
-	 * Synchronizes the data from the data store to the database, then removes it.<br />
-	 * If an entry was not synchronized, it will not be removed.
+	 * Registers the dropped item in the data stores
+	 * @param location Location of the event
+	 * @param itemStack Stack of items in question
 	 */
-	public void sync() {
-		for(TotalItemsEntry entry : get()) {
-			if(entry.pushData(playerId)) dynamicData.remove(entry);
-		}
+	public void itemDrop(Location location, ItemStack itemStack) {
+		getNormalData(itemStack).addDropped();
+		detailedData.add(new DetailedDroppedItemsEntry(location, itemStack));
 	}
+	
+	/**
+	 * Registers the picked up item in the data stores
+	 * @param location Location of the event
+	 * @param itemStack Stack of items in question
+	 */
+	public void itemPickUp(Location location, ItemStack itemStack) {
+		getNormalData(itemStack).addPickedUp();
+		detailedData.add(new DetailedPickedupItemsEntry(location, itemStack));
+	}
+	
+	/**
+	 * Registers the used item in the data stores
+	 * @param location Location of the event
+	 * @param itemStack Stack of items in question
+	 */
+	public void itemUse(Location location, ItemStack itemStack) {
+		getNormalData(itemStack).addUsed();
+		detailedData.add(new DetailedUsedItemsEntry(location, itemStack));
+	}
+	
+	/**
+	 * Registers the crafted item in the data stores
+	 * @param location Location of the event
+	 * @param itemStack Stack of items in question
+	 */
+	public void itemCraft(Location location, ItemStack itemStack) {
+		getNormalData(itemStack).addCrafted();
+	}
+	
+	/**
+	 * Registers the smelted item in the data stores
+	 * @param location Location of the event
+	 * @param itemStack Stack of items in question
+	 */
+	public void itemSmelt(Location location, ItemStack itemStack) {
+		getNormalData(itemStack).addSmelted();
+	}
+	
+	/**
+	 * Registers the broken item in the data stores
+	 * @param location Location of the event
+	 * @param itemStack Stack of items in question
+	 */
+	public void itemBreak(Location location, ItemStack itemStack) {
+		getNormalData(itemStack).addBroken();
+	}
+	
+	/**
+	 * Registers the enchanted item in the data stores
+	 * @param location Location of the event
+	 * @param itemStack Stack of items in question
+	 */
+	public void itemEnchant(Location location, ItemStack itemStack) {
+		getNormalData(itemStack).addEnchanted();
+	}
+	
 	
 	/**
 	 * Represents the total number of items player dropped and picked up.<br />
@@ -76,7 +160,7 @@ public class ItemsData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class TotalItemsEntry implements _NormalData {
+	public class TotalItemsEntry implements NormalData {
 		
 		/**
 		 * <b>Default constructor</b><br />
@@ -160,48 +244,15 @@ public class ItemsData {
 			return this.type == itemStack.getTypeId() && this.data == itemStack.getData().getData();
 		}
 		
-		/**
-		 * Adds the specified number of blocks to the total number of items dropped
-		 * @param blocks Items to add
-		 */
 		public void addDropped() { dropped++; }
-		
-		/**
-		 * Adds the specified number of blocks to the total number of items picked up
-		 * @param blocks Items to add
-		 */
 		public void addPickedUp() { pickedUp++; }
-		
-		/**
-		 * Adds the specified number of blocks to the total number of items used
-		 * @param blocks Items to add
-		 */
 		public void addUsed() { used++; }
-
-		/**
-		 * Adds the specified number of blocks to the total number of items crafted
-		 * @param blocks Items to add
-		 */
 		public void addCrafted() { crafted++; }
-		
-		/**
-		 * Adds the specified number of blocks to the total number of items broken
-		 * @param blocks Items to add
-		 */
 		public void addBroken() { broken++; }
-		
-		/**
-		 * Adds the specified number of blocks to the total number of items smelted
-		 * @param blocks Items to add
-		 */
 		public void addSmelted() { smelted++; }
-		
-		/**
-		 * Adds the specified number of blocks to the total number of items enchanted
-		 * @param blocks Items to add
-		 */
 		public void addEnchanted() { enchanted++; }
 	}
+	
 	
 	/**
 	 * Represents an entry in the Detailed data store.
@@ -209,7 +260,7 @@ public class ItemsData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class DetailedDroppedItemsEntry implements _DetailedData {
+	public class DetailedDroppedItemsEntry implements DetailedData {
 
 		/**
 		 * <b>Default constructor</b><br />
@@ -252,13 +303,14 @@ public class ItemsData {
 
 	}
 	
+	
 	/**
 	 * Represents an entry in the Detailed data store.
 	 * It is static, i.e. it cannot be edited once it has been created.
 	 * @author bitWolfy
 	 *
 	 */
-	public class DetailedPickedupItemsEntry implements _DetailedData {
+	public class DetailedPickedupItemsEntry implements DetailedData {
 		
 		/**
 		 * <b>Default constructor</b><br />
@@ -301,13 +353,14 @@ public class ItemsData {
 
 	}
 	
+	
 	/**
 	 * Represents an entry in the Detailed data store.
 	 * It is static, i.e. it cannot be edited once it has been created.
 	 * @author bitWolfy
 	 *
 	 */
-	public class DetailedUsedItemsEntry implements _DetailedData {
+	public class DetailedUsedItemsEntry implements DetailedData {
 		
 		/**
 		 * <b>Default constructor</b><br />

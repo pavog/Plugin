@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,7 +21,11 @@ import com.wolvencraft.yasp.util.Util;
  * @author bitWolfy
  *
  */
-public class PVEData {
+public class PVEData implements _DataStore{
+
+	private int playerId;
+	private List<TotalPVEEntry> normalData;
+	private List<DetailedData> detailedData;
 	
 	/**
 	 * <b>Default constructor</b><br />
@@ -28,41 +33,84 @@ public class PVEData {
 	 */
 	public PVEData(int playerId) {
 		this.playerId = playerId;
-		dynamicData = new ArrayList<TotalPVEEntry>();
+		normalData = new ArrayList<TotalPVEEntry>();
+		detailedData = new ArrayList<DetailedData>();
 	}
-
-	private int playerId;
-	private List<TotalPVEEntry> dynamicData;
 	
-	/**
-	 * Returns the contents of the data store.<br />
-	 * Asynchronous method; changes to the returned List will not affect the data store.
-	 * @return Contents of the data store
-	 */
-	public List<TotalPVEEntry> get() {
-		List<TotalPVEEntry> temp = new ArrayList<TotalPVEEntry>();
-		for(TotalPVEEntry value : dynamicData) temp.add(value);
+	@Override
+	public List<NormalData> getNormalData() {
+		List<NormalData> temp = new ArrayList<NormalData>();
+		for(NormalData value : normalData) temp.add(value);
 		return temp;
 	}
 	
-	public TotalPVEEntry get(EntityType creatureType, ItemStack weapon) {
-		for(TotalPVEEntry entry : dynamicData) {
-			if(entry.equals(creatureType, weapon)) return entry;
+	@Override
+	public List<DetailedData> getDetailedData() {
+		List<DetailedData> temp = new ArrayList<DetailedData>();
+		for(DetailedData value : detailedData) temp.add(value);
+		return temp;
+	}
+	
+	@Override
+	public void sync() {
+		for(NormalData entry : getNormalData()) {
+			if(entry.pushData(playerId)) normalData.remove(entry);
 		}
-		TotalPVEEntry entry = new TotalPVEEntry(creatureType, weapon);
-		dynamicData.add(entry);
+		
+		for(DetailedData entry : getDetailedData()) {
+			if(entry.pushData(playerId)) detailedData.remove(entry);
+		}
+	}
+	
+	@Override
+	public void dump() {
+		for(NormalData entry : getNormalData()) {
+			normalData.remove(entry);
+		}
+		
+		for(DetailedData entry : getDetailedData()) {
+			detailedData.remove(entry);
+		}
+	}
+	
+	/**
+	 * Returns a specific entry from the data store.<br />
+	 * If an entry does not exist, it will be created.
+	 * @param type Entity type of the creature
+	 * @param weapon Weapon used in the event
+	 * @return Corresponding entry
+	 */
+	public TotalPVEEntry getNormalData(EntityType type, ItemStack weapon) {
+		for(TotalPVEEntry entry : normalData) {
+			if(entry.equals(type, weapon)) return entry;
+		}
+		TotalPVEEntry entry = new TotalPVEEntry(type, weapon);
+		normalData.add(entry);
 		return entry;
 	}
 	
 	/**
-	 * Synchronizes the data from the data store to the database, then removes it.<br />
-	 * If an entry was not synchronized, it will not be removed.
+	 * Registers the creature death in the data store
+	 * @param location Location of the event
+	 * @param victim Creature killed
+	 * @param weapon Weapon used by killer
 	 */
-	public void sync() {
-		for(TotalPVEEntry entry : get()) {
-			if(entry.pushData(playerId)) dynamicData.remove(entry);
-		}
+	public void playerKilledCreature(Creature victim, ItemStack weapon) {
+		getNormalData(victim.getType(), weapon).addCreatureDeaths();
+		detailedData.add(new DetailedPVEEntry(victim.getLocation(), victim.getType(), weapon, false));
 	}
+	
+	/**
+	 * Registers the player death in the data store
+	 * @param location Location of the event
+	 * @param killer Creature that killed the player
+	 * @param weapon Weapon used by killer
+	 */
+	public void creatureKilledPlayer(Creature killer, ItemStack weapon) {
+		getNormalData(killer.getType(), weapon).addPlayerDeaths();
+		detailedData.add(new DetailedPVEEntry(killer.getLocation(), killer.getType(), weapon, true));
+	}
+	
 	
 	/**
 	 * Represents an entry in the PVE data store.
@@ -70,7 +118,7 @@ public class PVEData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class TotalPVEEntry implements _NormalData {
+	public class TotalPVEEntry implements NormalData {
 		
 		/**
 		 * <b>Default constructor</b><br />
@@ -138,16 +186,10 @@ public class PVEData {
 			return this.creatureType.equals(creatureType) && this.weapon.equals(weapon);
 		}
 		
-		/**
-		 * Increments the number of time a player died
-		 */
 		public void addPlayerDeaths() { playerDeaths++; }
-		
-		/**
-		 * Increments the number of times a creature died
-		 */
 		public void addCreatureDeaths() { creatureDeaths++; }
 	}
+	
 	
 	/**
 	 * Represents an entry in the Detailed data store.
@@ -155,7 +197,7 @@ public class PVEData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class DetailedPVEEntry implements _DetailedData {
+	public class DetailedPVEEntry implements DetailedData {
 
 		/**
 		 * <b>Default constructor</b><br />

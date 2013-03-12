@@ -23,7 +23,8 @@ public class BlockListener implements Listener {
 		if(Util.isExempt(player, "block.break")) return;
 		DataCollector
 			.get(player)
-			.blockBreak(event.getBlock().getType(), event.getBlock().getData());
+			.blocks()
+			.blockBreak(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -32,6 +33,7 @@ public class BlockListener implements Listener {
 		if(Util.isExempt(player, "block.place")) return;
 		DataCollector
 			.get(player)
-			.blockPlace(event.getBlock().getType(), event.getBlock().getData());
+			.blocks()
+			.blockPlace(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
 	}
 }

@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.tables.Detailed;
@@ -19,7 +21,11 @@ import com.wolvencraft.yasp.util.Util;
  * @author bitWolfy
  *
  */
-public class PVPData {
+public class PVPData implements _DataStore {
+
+	private int playerId;
+	private List<TotalPVPEntry> normalData;
+	private List<DetailedData> detailedData;
 	
 	/**
 	 * <b>Default constructor</b><br />
@@ -27,21 +33,44 @@ public class PVPData {
 	 */
 	public PVPData(int playerId) {
 		this.playerId = playerId;
-		dynamicData = new ArrayList<TotalPVPEntry>();
+		normalData = new ArrayList<TotalPVPEntry>();
+		detailedData = new ArrayList<DetailedData>();
 	}
-
-	private int playerId;
-	private List<TotalPVPEntry> dynamicData;
 	
-	/**
-	 * Returns the contents of the data store.<br />
-	 * Asynchronous method; changes to the returned List will not affect the data store.
-	 * @return Contents of the data store
-	 */
-	public List<TotalPVPEntry> get() {
-		List<TotalPVPEntry> temp = new ArrayList<TotalPVPEntry>();
-		for(TotalPVPEntry value : dynamicData) temp.add(value);
+	@Override
+	public List<NormalData> getNormalData() {
+		List<NormalData> temp = new ArrayList<NormalData>();
+		for(NormalData value : normalData) temp.add(value);
 		return temp;
+	}
+	
+	@Override
+	public List<DetailedData> getDetailedData() {
+		List<DetailedData> temp = new ArrayList<DetailedData>();
+		for(DetailedData value : detailedData) temp.add(value);
+		return temp;
+	}
+	
+	@Override
+	public void sync() {
+		for(NormalData entry : getNormalData()) {
+			if(entry.pushData(playerId)) normalData.remove(entry);
+		}
+		
+		for(DetailedData entry : getDetailedData()) {
+			if(entry.pushData(playerId)) detailedData.remove(entry);
+		}
+	}
+	
+	@Override
+	public void dump() {
+		for(NormalData entry : getNormalData()) {
+			normalData.remove(entry);
+		}
+		
+		for(DetailedData entry : getDetailedData()) {
+			detailedData.remove(entry);
+		}
 	}
 	
 	/**
@@ -51,24 +80,26 @@ public class PVPData {
 	 * @param weapon Weapon used in the event
 	 * @return Corresponding entry
 	 */
-	public TotalPVPEntry get(int victimId, ItemStack weapon) {
-		for(TotalPVPEntry entry : dynamicData) {
+	public TotalPVPEntry getNormalData(int victimId, ItemStack weapon) {
+		for(TotalPVPEntry entry : normalData) {
 			if(entry.equals(victimId, weapon)) return entry;
 		}
 		TotalPVPEntry entry = new TotalPVPEntry(victimId, weapon);
-		dynamicData.add(entry);
+		normalData.add(entry);
 		return entry;
 	}
 	
 	/**
-	 * Synchronizes the data from the data store to the database, then removes it.<br />
-	 * If an entry was not synchronized, it will not be removed.
+	 * Registers the player death in the data store
+	 * @param victim Player who was killed 
+	 * @param weapon Weapon used by killer
 	 */
-	public void sync() {
-		for(TotalPVPEntry entry : get()) {
-			if(entry.pushData(playerId)) dynamicData.remove(entry);
-		}
+	public void playerKilledPlayer(Player victim, ItemStack weapon) {
+		int victimId = DataCollector.getPlayerId(victim);
+		getNormalData(victimId, weapon).addTimes();
+		detailedData.add(new DetailedPVPEntry(victim.getLocation(), victimId, weapon));
 	}
+	
 	
 	/**
 	 * Represents an entry in the PVP data store.
@@ -76,7 +107,7 @@ public class PVPData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class TotalPVPEntry implements _NormalData {
+	public class TotalPVPEntry implements NormalData {
 		
 		/**
 		 * <b>Default constructor</b><br />
@@ -153,7 +184,7 @@ public class PVPData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class DetailedPVPEntry implements _DetailedData {
+	public class DetailedPVPEntry implements DetailedData {
 		
 		/**
 		 * <b>Default constructor</b><br />

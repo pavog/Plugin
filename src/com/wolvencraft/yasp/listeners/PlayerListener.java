@@ -39,7 +39,7 @@ public class PlayerListener implements Listener {
 		DataCollector.global().playerLogin(Bukkit.getOnlinePlayers().length);
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
-		DataCollector.get(player).login();
+		DataCollector.get(player).player().login(player.getLocation());
 		Message.send(player, Settings.getWelcomeMessage(player));
 	}
 	
@@ -47,7 +47,7 @@ public class PlayerListener implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
-		DataCollector.get(player).logout();
+		DataCollector.get(player).player().logout(player.getLocation());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -59,16 +59,16 @@ public class PlayerListener implements Listener {
 		if(player.isInsideVehicle()) {
 			Vehicle vehicle = (Vehicle) player.getVehicle();
 			if(vehicle.getType().equals(EntityType.MINECART)) {
-				DataCollector.get(player).addDistanceMinecart(distance);
+				DataCollector.get(player).player().distance().addDistanceMinecart(distance);
 			} else if(vehicle.getType().equals(EntityType.BOAT)) {
-				DataCollector.get(player).addDistanceBoat(distance);
+				DataCollector.get(player).player().distance().addDistanceBoat(distance);
 			} else if(vehicle.getType().equals(EntityType.PIG)) {
-				DataCollector.get(player).addDistancePig(distance);
+				DataCollector.get(player).player().distance().addDistancePig(distance);
 			}
 		} else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
-			DataCollector.get(player).addDistanceSwimmed(distance);
+			DataCollector.get(player).player().distance().addDistanceSwimmed(distance);
 		} else {
-			DataCollector.get(player).addDistanceFoot(distance);
+			DataCollector.get(player).player().distance().addDistanceFoot(distance);
 		}
 	}
 	
@@ -76,21 +76,21 @@ public class PlayerListener implements Listener {
 	public void onPlayerFish(PlayerFishEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.fish")) return;
-		DataCollector.get(player).misc().fishCaught();
+		DataCollector.get(player).player().misc().fishCaught();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerKick(PlayerKickEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.kick")) return;
-		DataCollector.get(player).misc().kicked();
+		DataCollector.get(player).player().misc().kicked();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEggThrow(PlayerEggThrowEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.eggThrow")) return;
-		DataCollector.get(player).misc().eggThrown();
+		DataCollector.get(player).player().misc().eggThrown();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -98,7 +98,7 @@ public class PlayerListener implements Listener {
 		if(!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		if(Util.isExempt(player, "misc.arrowShoot")) return;
-		DataCollector.get(player).misc().arrowShot();
+		DataCollector.get(player).player().misc().arrowShot();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -106,34 +106,34 @@ public class PlayerListener implements Listener {
 		if(!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		if(Util.isExempt(player, "misc.takeDamage")) return;
-		DataCollector.get(player).misc().damageTaken(event.getDamage());
+		DataCollector.get(player).player().misc().damageTaken(event.getDamage());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBedEnter(PlayerBedEnterEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.bedEnter")) return;
-		DataCollector.get(player).misc().bedEntered();
+		DataCollector.get(player).player().misc().bedEntered();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPortalEnter(PlayerPortalEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.portalEnter")) return;
-		DataCollector.get(player).misc().portalEntered();
+		DataCollector.get(player).player().misc().portalEntered();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onChatMessage(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.chat")) return;
-		DataCollector.get(player).misc().chatMessageSent(event.getMessage().split(" ").length);
+		DataCollector.get(player).player().misc().chatMessageSent(event.getMessage().split(" ").length);
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onChatCommand(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.command")) return;
-		DataCollector.get(player).misc().commandSent();
+		DataCollector.get(player).player().misc().commandSent();
 	}
 }

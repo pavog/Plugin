@@ -15,11 +15,15 @@ import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
 import com.wolvencraft.yasp.util.Util;
 
 /**
- * Data collector that records all block statistics on the server for a specific player.
+ * Data store that records all block interactions on the server.
  * @author bitWolfy
  *
  */
-public class BlocksData {
+public class BlocksData implements _DataStore {
+	
+	private int playerId;
+	private List<TotalBlocksEntry> normalData;
+	private List<DetailedData> detailedData;
 	
 	/**
 	 * <b>Default constructor</b><br />
@@ -27,21 +31,44 @@ public class BlocksData {
 	 */
 	public BlocksData(int playerId) {
 		this.playerId = playerId;
-		dynamicData = new ArrayList<TotalBlocksEntry>();
+		normalData = new ArrayList<TotalBlocksEntry>();
+		detailedData = new ArrayList<DetailedData>();
 	}
 	
-	private int playerId;
-	private List<TotalBlocksEntry> dynamicData;
-	
-	/**
-	 * Returns the contents of the data store.<br />
-	 * Asynchronous method; changes to the returned List will not affect the data store.
-	 * @return Contents of the data store
-	 */
-	public List<TotalBlocksEntry> get() {
-		List<TotalBlocksEntry> temp = new ArrayList<TotalBlocksEntry>();
-		for(TotalBlocksEntry value : dynamicData) temp.add(value);
+	@Override
+	public List<NormalData> getNormalData() {
+		List<NormalData> temp = new ArrayList<NormalData>();
+		for(TotalBlocksEntry value : normalData) temp.add(value);
 		return temp;
+	}
+	
+	@Override
+	public List<DetailedData> getDetailedData() {
+		List<DetailedData> temp = new ArrayList<DetailedData>();
+		for(DetailedData value : detailedData) temp.add(value);
+		return temp;
+	}
+	
+	@Override
+	public void sync() {
+		for(NormalData entry : getNormalData()) {
+			if(entry.pushData(playerId)) normalData.remove(entry);
+		}
+		
+		for(DetailedData entry : getDetailedData()) {
+			if(entry.pushData(playerId)) detailedData.remove(entry);
+		}
+	}
+	
+	@Override
+	public void dump() {
+		for(NormalData entry : getNormalData()) {
+			normalData.remove(entry);
+		}
+		
+		for(DetailedData entry : getDetailedData()) {
+			detailedData.remove(entry);
+		}
 	}
 
 	/**
@@ -51,24 +78,37 @@ public class BlocksData {
 	 * @param blockData Damage value of the item
 	 * @return Corresponding entry
 	 */
-	public TotalBlocksEntry get(Material type, byte blockData) {
-		for(TotalBlocksEntry entry : dynamicData) {
+	public TotalBlocksEntry getNormalData(Material type, byte blockData) {
+		for(TotalBlocksEntry entry : normalData) {
 			if(entry.equals(type, blockData)) return entry;
 		}
 		TotalBlocksEntry entry = new TotalBlocksEntry(type, blockData);
-		dynamicData.add(entry);
+		normalData.add(entry);
 		return entry;
 	}
 	
 	/**
-	 * Synchronizes the data from the data store to the database, then removes it.<br />
-	 * If an entry was not synchronized, it will not be removed.
+	 * Registers the broken block in the data stores
+	 * @param location Location of the block
+	 * @param type Material of the block
+	 * @param data Damage value of the material
 	 */
-	public void sync() {
-		for(TotalBlocksEntry entry : get()) {
-			if(entry.pushData(playerId)) dynamicData.remove(entry);
-		}
+	public void blockBreak(Location location, Material type, byte data) {
+		getNormalData(type, data).addBroken();
+		detailedData.add(new DetailedDestroyerdBlocksEntry(location, type, data));
 	}
+	
+	/**
+	 * Registers the placed block in the data stores
+	 * @param location Location of the block
+	 * @param type Material of the block
+	 * @param data Damage value of the material
+	 */
+	public void blockPlace(Location location, Material type, byte data) {
+		getNormalData(type, data).addPlaced();
+		detailedData.add(new DetailedPlacedBlocksEntry(location, type, data));
+	}
+	
 	
 	/**
 	 * Represents an entry in the PVP data store.
@@ -76,7 +116,7 @@ public class BlocksData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class TotalBlocksEntry implements _NormalData {
+	public class TotalBlocksEntry implements NormalData {
 
 		/**
 		 * <b>Default constructor</b><br />
@@ -155,13 +195,14 @@ public class BlocksData {
 		public void addPlaced() { placed ++; }
 	}
 	
+	
 	/**
 	 * Represents an entry in the Detailed data store.
 	 * It is static, i.e. it cannot be edited once it has been created.
 	 * @author bitWolfy
 	 *
 	 */
-	public class DetailedDestroyerdBlocksEntry implements _DetailedData {
+	public class DetailedDestroyerdBlocksEntry implements DetailedData {
 		
 		/**
 		 * <b>Default constructor</b><br />
@@ -205,13 +246,14 @@ public class BlocksData {
 
 	}
 	
+	
 	/**
 	 * Represents an entry in the Detailed data store.
 	 * It is static, i.e. it cannot be edited once it has been created.
 	 * @author bitWolfy
 	 *
 	 */
-	public class DetailedPlacedBlocksEntry implements _DetailedData {
+	public class DetailedPlacedBlocksEntry implements DetailedData {
 
 		/**
 		 * <b>Default constructor</b><br />

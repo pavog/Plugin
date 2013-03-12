@@ -1,5 +1,6 @@
 package com.wolvencraft.yasp.db.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,34 +17,94 @@ import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.util.Util;
 
-public class PlayersData {
+public class PlayersData implements _DataStore {
+	
+	private int playerId;
+	private Players generalData;
+	private DistancePlayers distanceData;
+	private MiscInfoPlayers miscData;
+	private List<DetailedData> detailedData;
 	
 	public PlayersData(Player player, int playerId) {
 		this.playerId = playerId;
-		playerData = new Players(player);
-		distance = new DistancePlayers();
-		misc = new MiscInfoPlayers(player);
+		generalData = new Players(player);
+		distanceData = new DistancePlayers();
+		miscData = new MiscInfoPlayers(player);
+		
+		detailedData = new ArrayList<DetailedData>();
 	}
 	
-	private int playerId;
-	private Players playerData;
-	private DistancePlayers distance;
-	private MiscInfoPlayers misc;
+	@Override
+	public List<NormalData> getNormalData() { return null; }
 	
+	@Override
+	public List<DetailedData> getDetailedData() {
+		List<DetailedData> temp = new ArrayList<DetailedData>();
+		for(DetailedData value : detailedData) temp.add(value);
+		return temp;
+	}
+	
+	@Override
 	public void sync() {
-		playerData.pushData(playerId);
-		distance.pushData(playerId);
-		misc.pushData(playerId);
+		generalData.pushData(playerId);
+		distanceData.pushData(playerId);
+		miscData.pushData(playerId);
+		
+		for(DetailedData entry : getDetailedData()) {
+			if(entry.pushData(playerId)) detailedData.remove(entry);
+		}
 	}
 	
-	public Players general() { return playerData; }
-	public DistancePlayers distance() { return distance; }
-	public MiscInfoPlayers misc() { return misc; }
+	@Override
+	public void dump() {
+		for(DetailedData entry : getDetailedData()) {
+			detailedData.remove(entry);
+		}
+	}
 	
+	public Players general() { return generalData; }
+	public DistancePlayers distance() { return distanceData; }
+	public MiscInfoPlayers misc() { return miscData; }
+	
+	/**
+	 * Returns the default values to create a placeholder entry when initializing a new user.
+	 * @param name Name of the new player
+	 * @return Map with placeholder data
+	 */
 	public static Map<String, Object> getDefaultValues(String name) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(PlayersTable.Name.toString(), name);
 		return map;
+	}
+	
+	/**
+	 * Registers player logging in with all corresponding statistics trackers.<br />
+	 * Player's online status is updated in the database instantly.
+	 */
+	public void login(Location location) {
+		generalData.setOnline(true);
+		detailedData.add(new DetailedLogPlayersEntry(location, true));
+		QueryUtils.update(
+			PlayersTable.TableName.toString(),
+			PlayersTable.Online.toString(),
+			1 + "",
+			new String[] {PlayersTable.PlayerId.toString(), playerId + ""}
+		);
+	}
+	
+	/**
+	 * Registers player logging out with all corresponding statistics trackers.<br />
+	 * Player's online status is updated in the database instantly.
+	 */
+	public void logout(Location location) {
+		generalData.setOnline(false);
+		detailedData.add(new DetailedLogPlayersEntry(location, false));
+		QueryUtils.update(
+				PlayersTable.TableName.toString(),
+				PlayersTable.Online.toString(),
+				0 + "",
+				new String[] {PlayersTable.PlayerId.toString(), playerId + ""}
+			);
 	}
 	
 	/**
@@ -52,7 +113,7 @@ public class PlayersData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class Players implements _NormalData {
+	public class Players implements NormalData {
 		
 		public Players (Player player) {
 			this.playerName = player.getPlayerListName();
@@ -124,7 +185,7 @@ public class PlayersData {
 	 * @author bitWolfy
 	 *
 	 */
-	public class DistancePlayers implements _NormalData {
+	public class DistancePlayers implements NormalData {
 		
 		/**
 		 * Default constructor. Takes in the Player object and pulls corresponding values from the remote database.<br />
@@ -183,38 +244,38 @@ public class PlayersData {
 		}
 		
 		/**
-		 * Increments the distance traveled by foot by the specified amount.
-		 * @param distance Distance to add to the statistics
+		 * Increments the distance traveled by foot.
+		 * @param distance Additional distance traveled by foot.
 		 */
-		public void addFootDistance(double distance) { foot += distance; }
+		public void addDistanceFoot(double distance) { foot += distance; }
 		
 		/**
-		 * Increments the distance swimmed by the specified amount.
-		 * @param distance Distance to add to the statistics
+		 * Increments the distance swimmed.
+		 * @param distance Additional distance swimmed.
 		 */
-		public void addSwimmedDistance(double distance) { swimmed += distance; }
+		public void addDistanceSwimmed(double distance) { swimmed += distance; }
 		
 		/**
-		 * Increments the distance traveled by boat by the specified amount.
-		 * @param distance Distance to add to the statistics
+		 * Increments the distance traveled by boat.
+		 * @param distance Additional distance traveled by boat
 		 */
-		public void addBoatDistance(double distance) { boat += distance; }
+		public void addDistanceBoat(double distance) { boat += distance; }
 		
 		/**
-		 * Increments the distance traveled by minecart by the specified amount.
-		 * @param distance Distance to add to the statistics
+		 * Increments the distance traveled by minecart.
+		 * @param distance Additional distance traveled by minecart
 		 */
-		public void addMinecartDistance(double distance) { minecart += distance; }
+		public void addDistanceMinecart(double distance) { minecart += distance; }
 		
 		/**
-		 * Increments the distance traveled by pig by the specified amount.
-		 * @param distance Distance to add to the statistics
+		 * Increments the distance traveled by pig.
+		 * @param distance Additional distance traveled by pig
 		 */
-		public void addPigDistance (double distance) { pig += distance; }
+		public void addDistancePig(double distance) { pig += distance; }
 		
 	}
 	
-	public class MiscInfoPlayers implements _NormalData {
+	public class MiscInfoPlayers implements NormalData {
 		
 		public MiscInfoPlayers(Player player) {
 			this.playerName = player.getPlayerListName();
@@ -374,7 +435,7 @@ public class PlayersData {
 		}
 	}
 	
-	public class DetailedLogPlayersEntry implements _DetailedData {
+	public class DetailedLogPlayersEntry implements DetailedData {
 	     
 	    public DetailedLogPlayersEntry(Location location, boolean isLogin) {
 	        this.time = Util.getTimestamp();
