@@ -13,6 +13,10 @@ public class BookCommand implements BaseCommand {
 
 	@Override
 	public boolean run(String[] args) {
+		if(!(CommandManager.getSender() instanceof Player)) {
+			Message.sendFormattedError(CommandManager.getSender(), "This command can only be executed by a living player");
+			return false;
+		}
 		Player player = (Player) CommandManager.getSender();
 		BookAPI ermagherdBerks = new BookAPI(new ItemStack(Material.WRITTEN_BOOK));
 		ermagherdBerks.addPages(Util.getBookPages(player));
