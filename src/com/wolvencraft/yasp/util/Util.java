@@ -59,8 +59,8 @@ public class Util {
 	 */
 	public static boolean isExempt(Player player) {
 		return
-			!player.hasPermission("stats.ignore") &&
-			!player.hasPermission("statistician.ignore");
+			player.hasPermission("stats.exempt") ||
+			player.hasPermission("statistician.ignore");
 	}
 	
 	/**
@@ -71,9 +71,9 @@ public class Util {
 	 */
 	public static boolean isExempt(Player player, String statsType) {
 		return
-			!player.hasPermission("stats.ignore") &&
-			!player.hasPermission("statistician.ignore") &&
-			!player.hasPermission("stats.ignore." + statsType);
+			player.hasPermission("stats.exempt") ||
+			player.hasPermission("statistician.ignore") || 
+			player.hasPermission("stats.exempt." + statsType);
 	}
 	
 	/**
