@@ -18,6 +18,7 @@ import com.wolvencraft.yasp.util.TPSTracker;
 
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;
+	private static boolean paused;
 	
 	private static VaultHook vaultHook;
 	private static WorldGuardHook worldGuardHook;
@@ -31,6 +32,7 @@ public class StatsPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
+		paused = true;
 		
 		getConfig().options().copyDefaults(true);
 		saveConfig();
@@ -145,5 +147,21 @@ public class StatsPlugin extends JavaPlugin {
 	 */
 	public static StatsPlugin getInstance() {
 		return instance;
+	}
+	
+	/**
+	 * Checks if the database synchronization is paused or not
+	 * @return <b>true</b> if the database synchronization is paused, <b>false</b> otherwise
+	 */
+	public static boolean getPaused() {
+		return paused;
+	}
+	
+	/**
+	 * Sets the synchronization status
+	 * @param paused <b>true</b> to pause the database synchronization, <b>false</b> to unpause it.
+	 */
+	public static void setPaused(boolean paused) {
+		StatsPlugin.paused = paused;
 	}
 }

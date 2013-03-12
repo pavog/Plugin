@@ -13,6 +13,7 @@ import com.wolvencraft.yasp.util.Message;
 public enum CommandManager {
 	Book (BookCommand.class, "stats.cmd.book", "book"),
 	Dump (DumpCommand.class, null, "dump"),
+	Pause(PauseCommand.class, null, "pause"),
 	Sync (SyncCommand.class, null, "sync"),
 	Reconnect (ReconnectCommand.class, null, "reconnect"),
 	Repatch (RepatchCommand.class, null, "repatch"),

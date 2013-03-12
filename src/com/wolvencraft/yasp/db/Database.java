@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
@@ -88,6 +89,7 @@ public class Database {
 		} while (true);
 		
 		Settings.setDatabaseVersion(databaseVersion);
+		StatsPlugin.setPaused(false);
 		Message.log("Target database is up to date.");
 	}
 	

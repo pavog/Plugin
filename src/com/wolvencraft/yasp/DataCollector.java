@@ -43,8 +43,10 @@ public class DataCollector implements Runnable {
 
 	@Override
 	public void run() {
-		pushAllData();
-		displaySignData.fetchData();
+		if(!StatsPlugin.getPaused()) {
+			pushAllData();
+			displaySignData.fetchData();
+		}
 	}
 	
 	/**

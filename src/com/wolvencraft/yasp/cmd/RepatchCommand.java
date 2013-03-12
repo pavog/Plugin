@@ -12,16 +12,17 @@ public class RepatchCommand implements BaseCommand {
 	@Override
 	public boolean run(String[] args) {
 		Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database...");
+		StatsPlugin.setPaused(true);
 		Bukkit.getScheduler().runTaskAsynchronously(StatsPlugin.getInstance(), new Runnable() {
 
 			@Override
 			public void run() {
 				try { Database.getInstance().patch(true); }
 				catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed"); }
+				finally { Message.sendFormattedSuccess(CommandManager.getSender(), "Patching complete"); StatsPlugin.setPaused(false); }
 			}
 			
 		});
-		Message.sendFormattedSuccess(CommandManager.getSender(), "Patching complete");
 		return true;
 	}
 
