@@ -123,7 +123,7 @@ public class StatsPlugin extends JavaPlugin {
 		for(CommandManager cmd : CommandManager.values()) {
 			if(cmd.isCommand(args[0])) {
 				if(Settings.getDebug()) {
-					String argString = "/stat";
+					String argString = "/stats";
 					for (String arg : args) { argString = argString + " " + arg; }
 					Message.log(sender.getName() + ": " + argString);
 				}

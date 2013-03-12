@@ -75,7 +75,7 @@ public class Message {
 		CommandSender sender = CommandManager.getSender();
 		if(!arguments.equalsIgnoreCase("")) arguments = " " + arguments;
 		if(sender.hasPermission(node) || node.equals(""))
-			sender.sendMessage(ChatColor.GOLD + "/yasp " + command + ChatColor.GRAY + arguments + ChatColor.WHITE + " " + description);
+			sender.sendMessage(ChatColor.GOLD + "/stats " + command + ChatColor.GRAY + arguments + ChatColor.WHITE + " " + description);
 		return;
 	}
 	
