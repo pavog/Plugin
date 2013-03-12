@@ -18,7 +18,7 @@ public class Util {
 	 * @return Resulting string
 	 */
 	public static String parseVars(String str) {
-		Map<String, Object> values = DataCollector.displaySignData().getValues();
+		Map<String, Object> values = DataCollector.serverTotals().getValues();
 		Iterator<Entry<String, Object>> it = values.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();
@@ -82,7 +82,7 @@ public class Util {
 	 * @return
 	 */
 	public static String[] getBookPages(Player player) {
-		Map<String, Object> stats = DataCollector.displaySignData().getValues();
+		Map<String, Object> stats = DataCollector.get(player).playerTotals().getValues();
 		return new String[] {
 				ChatColor.BOLD + " + " + player.getPlayerListName() + " + ",
 				"- Blocks",

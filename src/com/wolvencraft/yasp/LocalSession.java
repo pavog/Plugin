@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.wolvencraft.yasp.db.data.receive.PlayerTotals;
 import com.wolvencraft.yasp.db.data.sync.*;
 
 public class LocalSession {
@@ -27,6 +28,8 @@ public class LocalSession {
 	private DeathsData deathsData;
 	private PVEData PVEData;
 	private PVPData PVPData;
+	
+	private PlayerTotals playerTotals;
 	
 	public void pushData() {
 		playersData.sync();
@@ -123,4 +126,10 @@ public class LocalSession {
 	 * @return <b>PVPData</b> data store
 	 */
 	public PVPData PVP() { return PVPData; }
+	
+	/**
+	 * Returns the player statistics fetched from the database.
+	 * @return <b>PlayerTotals</b> data store
+	 */
+	public PlayerTotals playerTotals() { return playerTotals; }
 }

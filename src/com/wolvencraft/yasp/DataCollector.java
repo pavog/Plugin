@@ -30,7 +30,7 @@ public class DataCollector implements Runnable {
 	public DataCollector() {
 		sessions = new ArrayList<LocalSession>();
 		serverStatistics = new ServerStatistics(StatsPlugin.getInstance());
-		displaySignData = new ServerTotals();
+		serverTotals = new ServerTotals();
 		
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if(!Util.isExempt(player)) get(player);
@@ -39,13 +39,13 @@ public class DataCollector implements Runnable {
 	
 	private static List<LocalSession> sessions;
 	private static ServerStatistics serverStatistics;
-	private static ServerTotals displaySignData;
+	private static ServerTotals serverTotals;
 
 	@Override
 	public void run() {
 		if(!StatsPlugin.getPaused()) {
 			pushAllData();
-			displaySignData.fetchData();
+			serverTotals.fetchData();
 		}
 	}
 	
@@ -150,7 +150,7 @@ public class DataCollector implements Runnable {
 		return serverStatistics;
 	}
 	
-	public static ServerTotals displaySignData() {
-		return displaySignData;
+	public static ServerTotals serverTotals() {
+		return serverTotals;
 	}
 }
