@@ -84,7 +84,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "SELECT " + subjects + " FROM " + table + " WHERE " + conditions;
+		query = "SELECT " + subjects + " FROM " + table + " WHERE " + conditions + ";";
 		return fetchData(query);
 	}
 	
@@ -103,7 +103,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "SELECT * FROM " + table + " WHERE " + conditions;
+		query = "SELECT * FROM " + table + " WHERE " + conditions + ";";
 		return !fetchData(query).isEmpty();
 	}
 	
@@ -123,7 +123,7 @@ public class QueryUtils {
 			if(str.equals("*")) subjects += "*";
 			else subjects += "`" + str + "`";
 		}
-		String query = "SELECT " + subjects + " FROM " + table;
+		String query = "SELECT " + subjects + " FROM " + table + ";";
 		return fetchData(query);
 	}
 	
@@ -136,7 +136,7 @@ public class QueryUtils {
 	 */
 	public static double sum(String table, String column) {
 		table = "`" + Settings.getTablePrefix() + table + "`";
-		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table;
+		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table + ";";
 		return fetchData(query).get(0).getValueAsInteger("temp");
 	}
 	
@@ -155,7 +155,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table + " WHERE " + conditions;
+		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table + " WHERE " + conditions + ";";
 		return fetchData(query).get(0).getValueAsInteger("temp");
 	}
 	
@@ -179,7 +179,7 @@ public class QueryUtils {
 			values += "'" + pairs.getValue().toString() + "'";
 			it.remove();
 		}
-		query = "INSERT INTO `" + Settings.getTablePrefix() + table + "` (" + fields + ")  VALUES (" + values + ")";
+		query = "INSERT INTO `" + Settings.getTablePrefix() + table + "` (" + fields + ")  VALUES (" + values + ");";
 		return pushData(query);
 	}
 	
@@ -194,7 +194,7 @@ public class QueryUtils {
 		field = "`" + field + "`";
 		value = "'" + value + "'";
 		
-		String query = "INSERT INTO `" + Settings.getTablePrefix() + table + "` (" + field + ")  VALUES (" + value + ")";
+		String query = "INSERT INTO `" + Settings.getTablePrefix() + table + "` (" + field + ")  VALUES (" + value + ");";
 		return pushData(query);
 	}
 	
@@ -208,7 +208,7 @@ public class QueryUtils {
 	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
 	 */
 	public static boolean update(String table, String field, String value, String[]... condition) {
-		if(!exists(table, condition)) return insert(table, field, value);
+//		if(!exists(table, condition)) return insert(table, field, value);
 		
 		String query = "";
 		String conditions = "";
@@ -216,7 +216,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "UPDATE `" + Settings.getTablePrefix() + table + "` SET `" + field + "`='" + value + "' WHERE " + conditions;
+		query = "UPDATE `" + Settings.getTablePrefix() + table + "` SET `" + field + "`='" + value + "' WHERE " + conditions + ";";
 		return pushData(query);
 	}
 	
@@ -244,7 +244,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "UPDATE `" + Settings.getTablePrefix() + table + "` SET " + fieldValues + " WHERE " + conditions;
+		query = "UPDATE `" + Settings.getTablePrefix() + table + "` SET " + fieldValues + " WHERE " + conditions + ";";
 		return pushData(query);
 	}
 }
