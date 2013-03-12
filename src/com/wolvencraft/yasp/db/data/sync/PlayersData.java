@@ -140,7 +140,7 @@ public class PlayersData implements _DataStore {
 			);
 			if(results.isEmpty()) QueryUtils.insert(PlayersTable.TableName.toString(), getValues(playerId));
 			else {
-				logins = results.get(0).getValueAsInteger(PlayersTable.Logins.toString());
+				logins = results.get(0).getValueAsInteger(PlayersTable.Logins.toString()) + 1;
 			}
 		}
 
