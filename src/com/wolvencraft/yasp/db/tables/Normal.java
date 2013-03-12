@@ -90,6 +90,7 @@ public class Normal {
 	 */
 	public enum MiscInfoPlayersTable {
 		TableName("misc_info_players"),
+		EntryId("misc_info_players_id"),
 		PlayerId("player_id"),
 		Gamemode("gamemode"),
 		ExperiencePercent("exp_perc"),

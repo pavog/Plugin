@@ -499,6 +499,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_server_statistics` (
 DROP TABLE IF EXISTS `$dbname`.`$prefix_misc_info_players` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
+  `misc_info_players_id` INT NOT NULL AUTO_INCREMENT ,
   `player_id` INT NOT NULL ,
   `gamemode` TINYINT(2) NOT NULL DEFAULT 0 ,
   `exp_level` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
@@ -516,12 +517,14 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
   `commands_sent` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `beds_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `portals_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
-  PRIMARY KEY (`player_id`) ,
+  PRIMARY KEY (`misc_info_players_id`) ,
+  INDEX `fk_player_id9_idx` (`player_id` ASC) ,
   CONSTRAINT `fk_player_id9`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION);
+
 ENGINE = InnoDB;
 
 USE `$dbname` ;
