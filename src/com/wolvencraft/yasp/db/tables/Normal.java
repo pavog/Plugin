@@ -45,7 +45,6 @@ public class Normal {
 	 */
 	public enum DistancePlayersTable {
 		TableName("distance_players"),
-		EntryId("distance_player_id"),
 		PlayerId("player_id"),
 		Foot("foot"),
 		Swimmed("swimmed"),
