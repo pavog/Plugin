@@ -89,6 +89,25 @@ public class QueryUtils {
 	}
 	
 	/**
+	 * Checks if the specified query returns any results
+	 * @param table Database table to select from (without prefix)
+	 * @param condition Conditions that should apply to columns
+	 * @return <b>true</b> if the row exists, <b>false</b> otherwise
+	 */
+	public static boolean exists(String table, String[][] condition) {
+		String query = "";
+		table = "`" + Settings.getTablePrefix() + table + "`";
+		
+		String conditions = "";
+		for(String[] str : condition) {
+			if(!conditions.equals("")) conditions += " AND ";
+			conditions += "`" + str[0] + "`='" + str[1] + "'";
+		}
+		query = "SELECT * FROM " + table + " WHERE " + conditions;
+		return !fetchData(query).isEmpty();
+	}
+	
+	/**
 	 * Builds and runs a SELECT query based on arguments provided.<br />
 	 * <b>Example:</b> QueryUtils.select(Settings.TableName.toString(), new String[] {"key", "value"});<br />
 	 * <b>Becomes:</b> SELECT `yasp_settings`.`key`, `yasp_settings`.`value` FROM `yasp_settings`
@@ -121,6 +140,14 @@ public class QueryUtils {
 		return fetchData(query).get(0).getValueAsInteger("temp");
 	}
 	
+	/**
+	 * Builds and runs a SELECT query that returns the sum of the specified column.<br />
+	 * Quite obviously, the column should only contain numeric values and should fit in a double
+	 * @param table Database table to select from (without prefix)
+	 * @param column Column to sum up
+	 * @param condition Conditions that should apply to columns
+	 * @return Sum of the selected column
+	 */
 	public static double sum(String table, String column, String[]... condition) {
 		table = "`" + Settings.getTablePrefix() + table + "`";
 		String conditions = "";
@@ -157,6 +184,21 @@ public class QueryUtils {
 	}
 	
 	/**
+	 * Builds and runs an INSERT query based on arguments provided
+	 * @param table Database table to insert into (without prefix)
+	 * @param field Name of the target column
+	 * @param value Value of the field
+	 * @return <b>true</b> if the insertion was successful, <b>false</b> if an error occurred
+	 */
+	public static boolean insert(String table, String field, String value) {
+		field = "`" + field + "`";
+		value = "'" + value + "'";
+		
+		String query = "INSERT INTO `" + Settings.getTablePrefix() + table + "` (" + field + ")  VALUES (" + value + ")";
+		return pushData(query);
+	}
+	
+	/**
 	 * 
 	 * Builds and runs an UPDATE query based on arguments provided
 	 * @param table Database table to update (without prefix)
@@ -166,6 +208,8 @@ public class QueryUtils {
 	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
 	 */
 	public static boolean update(String table, String field, String value, String[]... condition) {
+		if(!exists(table, condition)) return insert(table, field, value);
+		
 		String query = "";
 		String conditions = "";
 		for(String[] str : condition) {
@@ -184,7 +228,7 @@ public class QueryUtils {
 	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
 	 */
 	public static boolean update(String table, Map<String, Object> valueMap, String[]... condition) {
-		if(select(table, new String[] {"*"}).isEmpty()) return insert(table, valueMap);
+		if(!exists(table, condition)) return insert(table, valueMap);
 		
 		String query = "";
 		String fieldValues = "";
