@@ -551,7 +551,7 @@ INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("48", "mob");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("49", "monster");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("50", "creeper");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("51", "skeleton");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("52", "skeleton_wither");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("52", "spider");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("53", "giant");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("54", "zombie");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("55", "slime");
