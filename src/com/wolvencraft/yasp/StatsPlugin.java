@@ -5,8 +5,10 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.wolvencraft.yasp.DisplaySignFactory.DisplaySign;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
@@ -53,6 +55,8 @@ public class StatsPlugin extends JavaPlugin {
 		}
 		
 		Message.log("Database connection established");
+
+		ConfigurationSerialization.registerClass(DisplaySign.class, "DisplaySign");
 		
 		dataCollector = new DataCollector();
 		displaySignFactory = new DisplaySignFactory();

@@ -2,24 +2,60 @@ package com.wolvencraft.yasp;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.util.Vector;
 
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.Util;
 
 public class DisplaySignFactory implements Runnable {
 	
-	public DisplaySignFactory() {
-		signs = loadAll();
-	}
-	
 	private static List<DisplaySign> signs;
+	private static DisplaySignFactory instance;
+	
+	/**
+	 * <b>Default constructor</b><br />
+	 * Creates a list of active signs and loads stored sign information from file
+	 */
+	public DisplaySignFactory() {
+		instance = this;
+		signs = new ArrayList<DisplaySign>();
+		File signFolder = new File(StatsPlugin.getInstance().getDataFolder(), "signs");
+		if (!signFolder.exists() || !signFolder.isDirectory()) signFolder.mkdir();
+		else {
+			File[] signFiles;
+				signFiles = signFolder.listFiles(new FileFilter() {
+				   public boolean accept(File file) { return file.getName().contains(".sign.yml"); }
+				});
+			for (File signFile : signFiles) {
+				try {
+					FileConfiguration mineConf = YamlConfiguration.loadConfiguration(signFile);
+					Object sign = mineConf.get("displaysign");
+					if (sign instanceof DisplaySign) signs.add((DisplaySign) sign);
+				} catch (IllegalArgumentException ex) {
+					Message.log(Level.SEVERE, ex.getMessage());
+					continue;
+				}
+			}
+		}
+	}
 	
 	@Override
 	public void run() {
@@ -27,120 +63,203 @@ public class DisplaySignFactory implements Runnable {
 	}
 	
 	/**
-	 * Saves all the sign data to disc
+	 * Saves all sign information to file
+	 * @return <b>true</b> if all data was saved, <b>false</b> if an error occurred
 	 */
-	public static void saveAll() {
-		for (DisplaySign sign : signs) sign.saveFile();
+	public static boolean saveAll() {
+		boolean result = true;
+		for (DisplaySign sign : signs) {
+			if(!sign.saveFile()) result = false;
+		}
+		return result;
 	}
 	
 	/**
-	 * Loads the sign data from disc
-	 * @return Loaded list of signs
+	 * Updates all signs with the valid variable information
+	 * @return <b>true</b> if all signs were updated, <b>false</b> if an error occurred
 	 */
-	public static List<DisplaySign> loadAll() {
-		List<DisplaySign> signs = new ArrayList<DisplaySign>();
-		File signFolder = new File(StatsPlugin.getInstance().getDataFolder(), "signs");
-		if (!signFolder.exists() || !signFolder.isDirectory()) {
-			signFolder.mkdir();
-			return signs;
+	public static boolean updateAll() {
+		boolean result = true;
+		for(DisplaySign sign : signs) {
+			if(!sign.update()) result = false;
 		}
-		File[] signFiles;
-			signFiles = signFolder.listFiles(new FileFilter() {
-			   public boolean accept(File file) { return file.getName().contains(".sign.yml"); }
-			});
-		
-		for (File signFile : signFiles) {
-			try {
-				FileConfiguration mineConf = YamlConfiguration.loadConfiguration(signFile);
-				Object sign = mineConf.get("displaysign");
-				if (sign instanceof DisplaySign) signs.add((DisplaySign) sign);
-			} catch (IllegalArgumentException ex) {
-				Message.log(Level.SEVERE, ex.getMessage());
-				continue;
+		return result;
+	}
+	
+	/**
+	 * Adds a new sign to the DisplaySign update query
+	 * @param sign Sign to add
+	 * @return <b>true</b> if the sign was added successfully, <b>false</b> if an error occurred
+	 */
+	public static boolean add(Sign sign) {
+		return signs.add(instance.new DisplaySign(sign));
+	}
+	
+	/**
+	 * Removes the Sign from the DisplaySign update query
+	 * @param sign Sign to remove
+	 * @return <b>true</b> if the sign was removed successfully, <b>false</b> if an error occurred
+	 */
+	public static boolean remove(Sign sign) {
+		Location loc = sign.getLocation();
+		List<DisplaySign> temp = new ArrayList<DisplaySign>();
+		for(DisplaySign displaySign : signs) temp.add(displaySign);
+		for(DisplaySign displaySign : temp) {
+			if(displaySign.getLocation().equals(loc)) {
+				displaySign.deleteFile();
+				return signs.remove(displaySign);
 			}
 		}
-		return signs;
-	}
-	
-	/**
-	 * Returns the list of signs in the query
-	 * @return List of DisplaySigns
-	 */
-	public static List<DisplaySign> getSigns() {
-		List<DisplaySign> temp = new ArrayList<DisplaySign>();
-		for(DisplaySign sign : signs) temp.add(sign);
-		return temp;
-	}
-	
-	/**
-	 * Adds a display sign to the refresh query
-	 * @param sign Sign to add
-	 * @return <b>true</b> if the sign was added, <b>false</b> if an error occurred
-	 */
-	public static boolean addSign(DisplaySign sign) {
-		return signs.add(sign);
-	}
-	
-	/**
-	 * Removes a diplay sign from the refresh query
-	 * @param sign Sign to remove
-	 * @return <b>true</b> if the sign was removed, <b>false</b> if an error occurred
-	 */
-	public static boolean removeSign(DisplaySign sign) {
-		return signs.remove(sign);
-	}
-	
-	/**
-	 * Checks if a DisplaySign exists at the specified location
-	 * @param loc Location to check
-	 * @return <b>true</b> if there is an initialized DisplaySign at the location, <b>false</b> otherwise
-	 */
-	public static boolean exists(Location loc) {
-		for(DisplaySign sign : signs) { if(sign.getLocation().equals(loc)) return true; }
 		return false;
 	}
 	
 	/**
-	 * Checks if a DisplaySign with the specified ID exists
-	 * @param id ID to check
-	 * @return <b>true</b> if there is a DisplaySign with the specified, <b>false</b> otherwise
-	 */
-	public static boolean exists(String id) {
-		for(DisplaySign sign : signs) { if(sign.getId().equals(id)) return true; }
-		return false;
-	}
-	
-	/**
-	 * Returns the DisplaySign at the following location, if it exists
-	 * @param loc Location to check
-	 * @return <b>DisplaySign</b>, if there is one at the specified location, <b>null</b> otherwise
-	 */
-	public static DisplaySign get(Location loc) {
-		for(DisplaySign sign : signs) { if(sign.getLocation().equals(loc)) return sign; }
-		return null;
-	}
-	
-	/**
-	 * Returns the DisplaySign associated with the specified Sign object
+	 * Checks if a certain Sign is in the DisplaySign update query
 	 * @param sign Sign to check
-	 * @return <b>DisplaySign</b>, if one is associated with the specified Sign, <b>null</b> otherwise
+	 * @return <b>true</b> if the sign is in the update query, <b>false</b> otherwise
 	 */
-	public static DisplaySign get(Sign sign) { return get(sign.getLocation()); }
-	
-	/**
-	 * Returns the DisplaySign with the specified ID, if there is one
-	 * @param id ID to check
-	 * @return <b>DisplaySign</b>, if there is one with the specified ID, <b>null</b> otherwise
-	 */
-	public static DisplaySign get(String id) { 
-		for(DisplaySign sign : signs) { if(sign.getId().equals(id)) return sign; }
-		return null;
+	public static boolean isValid(Sign sign) {
+		Location loc = sign.getLocation();
+		for(DisplaySign displaySign : signs) {
+			if(displaySign.getLocation().equals(loc)) return true;
+		}
+		return false;
 	}
 	
 	/**
-	 * Updates all the DisplaySigns with appropriate variables
+	 * Checks if the specified ID is unique
+	 * @param id ID to check
+	 * @return <b>true</b> if the ID is unique, <b>false</b> if there is a duplicate
 	 */
-	public static void updateAll() {
-		for(DisplaySign sign : signs) sign.update();
+	private static boolean isUnique(String id) {
+		for(DisplaySign displaySign : signs) {
+			if(displaySign.getId().equals(id)) return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Generates a random unique 8-bit unique ID for signs.<br />
+	 * The IDs are checked to be unique.
+	 * @return
+	 */
+	private static String generateId() {
+		String id = "";
+		do { id = Long.toString(Math.abs(new Random().nextLong()), 8); }
+		while (!isUnique(id));
+		return id;
+	}
+	
+	@SerializableAs("DisplaySign")
+	public class DisplaySign implements ConfigurationSerializable  {
+		private String signId;
+		private Sign sign;
+		private List<String> originalText;
+		
+		/**
+		 * <b>Default constructor</b><br />
+		 * Creates a new DisplaySign instance from the Sign object
+		 * @param sign Sign to base the DisplaySign on
+		 */
+		public DisplaySign(Sign sign) {
+			this.signId = generateId();
+			this.sign = sign;
+			
+			originalText = new ArrayList<String>();
+			for(String line : sign.getLines()) { originalText.add(line); }
+			
+			saveFile();
+		}
+		
+		/**
+		 * Constructor for deserialization from a map
+		 * @param map Map to deserialize from
+		 * @throws Exception 
+		 */
+		@SuppressWarnings("unchecked")
+		public DisplaySign(Map<String, Object> me) throws Exception {
+			signId = (String) me.get("id");
+			
+			World world = Bukkit.getWorld((String) me.get("world"));
+			Block signBlock = world.getBlockAt(((Vector) me.get("loc")).toLocation(world));
+			if(!(signBlock.getState() instanceof Sign)) {
+				deleteFile();
+				throw new Exception("No sign found at the stored location");
+			}
+			sign = (Sign) signBlock.getState();
+			originalText = (List<String>) me.get("lines");
+		}
+		
+		/**
+		 * Serialization method for sign data storage
+		 * @return Serialization map
+		 */
+		public Map<String, Object> serialize() {
+			Map<String, Object> me = new HashMap<String, Object>();
+			me.put("id", signId);
+			me.put("loc", sign.getLocation().toVector());
+			me.put("world", sign.getLocation().getWorld().getName());
+			me.put("lines", originalText);
+			return me;
+		}
+
+		public String getId() 			{ return signId; }
+		public Location getLocation() 	{ return sign.getLocation(); }
+		public List<String> getLines() 	{ return originalText; }
+		
+		/**
+		 * Updates the DisplaySign's lines with the appropriate variables
+		 * @return <b>true</b> if the update was successful, <b>false</b> otherwise
+		 */
+		public boolean update() {
+			BlockState b = sign.getBlock().getState();
+			if(b instanceof Sign) {
+				Sign signBlock = (Sign) b;
+				for(int i = 0; i < originalText.size(); i++) { signBlock.setLine(i, Util.parseVars(originalText.get(i))); }
+				signBlock.update();
+				return true;
+			}
+			return false;
+		}
+		
+		/**
+		 * Saves the sign data to file.
+		 * @return <b>true</b> if the save was successful, <b>false</b> if an error occurred
+		 */
+		public boolean saveFile() {
+			File signFile = new File(new File(StatsPlugin.getInstance().getDataFolder(), "signs"), signId + ".sign.yml");
+			FileConfiguration signConf =  YamlConfiguration.loadConfiguration(signFile);
+			signConf.set("displaysign", this);
+			try {
+				signConf.save(signFile);
+			} catch (IOException e) {
+				Message.log(Level.SEVERE, "Unable to serialize sign '" + signId + "'!");
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		}
+		
+		/**
+		 * Deletes the sign data file.<br />
+		 * <b>Warning:</b> invoking this method will not remove the sign from the list of active signs
+		 * @return <b>true</b> if the deletion was successful, <b>false</b> if an error occurred
+		 */
+		public boolean deleteFile() {
+			File signFolder = new File(StatsPlugin.getInstance().getDataFolder(), "signs");
+			if(!signFolder.exists() || !signFolder.isDirectory()) return false;
+			
+			File[] signFiles = signFolder.listFiles(new FileFilter() {
+				public boolean accept(File file) { return file.getName().contains(".sign.yml"); }
+			});
+			
+			for(File signFile : signFiles) {
+				if(signFile.getName().equals(signId + ".sign.yml")) {
+					DisplaySignFactory.remove(sign);
+					return signFile.delete();
+				}
+			}
+			return false;
+		}
 	}
 }

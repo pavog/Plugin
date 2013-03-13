@@ -18,7 +18,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DisplaySign;
 import com.wolvencraft.yasp.DisplaySignFactory;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.util.Message;
@@ -33,47 +32,27 @@ public class FeedbackListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onDisplaySignInit(PlayerInteractEvent event) {
 		if(!event.getPlayer().isOp()) return;
+		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
 		
-		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			Block block = event.getClickedBlock();
-			
-			if(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) {
-				Message.debug("SignClickEvent passed");
-				
-			 	DisplaySign sign = DisplaySignFactory.get(block.getLocation());
-				if(sign == null) {
-					Message.debug("No registered sign found at this location");
-					if(block.getState() instanceof Sign) {
-						Message.debug("Checking to see if the sign is valid");
-						Sign s = (Sign) block.getState();
-						for(String line : s.getLines()) {
-							if(line.startsWith("<Y>")) {
-								Message.debug("Registering a new DisplaySign");
-								DisplaySignFactory.addSign(new DisplaySign(s));
-								return;
-							}
-						}
-					}
-				}
-			}
-			return;
-		}
-		else return;
+		Block block = event.getClickedBlock();
+		if(!(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) return;
+		if(!(block.getState() instanceof Sign)) return;
+		
+		Sign sign = (Sign) block.getState();
+		if(DisplaySignFactory.isValid(sign)) return;
+		
+		if(!sign.getLines()[0].startsWith("<Y>")) return;
+		DisplaySignFactory.add(sign);
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onDisplaySignBreak(BlockBreakEvent event) {
-		BlockState b = event.getBlock().getState();
-		if(b instanceof Sign) {
-			Message.debug("Checking for defined signs...");
-			DisplaySign sign = DisplaySignFactory.get((Sign) b);
-			if(sign == null) return;
-			sign.deleteFile();
-			DisplaySignFactory.removeSign(sign);
-			Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
-			return;
-		}
-		else return;
+		BlockState blockState = event.getBlock().getState();
+		if(!(blockState instanceof Sign)) return;
+		Sign sign = (Sign) blockState;
+		if(DisplaySignFactory.isValid(sign)) return;
+		DisplaySignFactory.remove(sign);
+		Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
