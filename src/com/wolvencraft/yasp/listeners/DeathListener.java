@@ -21,9 +21,9 @@ import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.util.Util;
 
-public class EntityListener implements Listener {
+public class DeathListener implements Listener {
 
-	public EntityListener(StatsPlugin plugin) {
+	public DeathListener(StatsPlugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 

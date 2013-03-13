@@ -76,7 +76,7 @@ public class StatsPlugin extends JavaPlugin {
 		new PlayerListener(this);
 		new BlockListener(this);
 		new ItemListener(this);
-		new EntityListener(this);
+		new DeathListener(this);
 		
 		try { new Statistics(this); }
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }

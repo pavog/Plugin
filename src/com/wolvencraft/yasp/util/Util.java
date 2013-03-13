@@ -96,32 +96,8 @@ public class Util {
     	tags.setString("title", player.getPlayerListName() + " Statistics");
     	tags.setString("author", "YASP");
     	
-    	Map<String, Object> stats = DataCollector.get(player).playerTotals().getValues();
     	NBTTagList pages = new NBTTagList("pages");
-    	String[] newPages = new String[] {
-				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + player.getPlayerListName() + ChatColor.RESET + " + \n" + 
-				ChatColor.WHITE + "." + "\n" + 
-				ChatColor.BLACK + ChatColor.BOLD + "  Blocks and items \n" + 
-				ChatColor.RED + ChatColor.BOLD + " - Blocks\n" + ChatColor.RESET + 
-				ChatColor.BLACK + " Broken: " + stats.get("blocksBroken") + "\n" + 
-				ChatColor.BLACK + " Placed: " + stats.get("blocksPlaced") + "\n" + 
-				ChatColor.WHITE + "." + "\n" + 
-				ChatColor.RED + ChatColor.BOLD + "- Items" + "\n" + ChatColor.RESET + 
-				ChatColor.BLACK + " Crafted: " + stats.get("itemsCrafted") + "\n" + 
-				ChatColor.BLACK + " Broken: " + stats.get("toolsBroken") + "\n" + 
-				ChatColor.BLACK + " Eaten: " + stats.get("snacksEaten"),
-				
-				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + player.getPlayerListName() + ChatColor.RESET + " + \n" + 
-				ChatColor.WHITE + "." + "\n" + 
-				ChatColor.BLACK + ChatColor.BOLD + "  Kills and Deaths \n" + 
-				ChatColor.RED + ChatColor.BOLD + " - PvP\n" + ChatColor.RESET + "\n" + 
-				ChatColor.BLACK + " Kills: " + stats.get("pvpKills") + "\n" + 
-				ChatColor.BLACK + " Deaths: " + stats.get("pvpDeaths") + "\n" + 
-				ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n" + 
-				ChatColor.WHITE + "." + "\n" + 
-				ChatColor.RED + ChatColor.BOLD + " - Other \n" + ChatColor.RESET +
-				ChatColor.BLACK + " Mob kills: " + stats.get("pveKills")
-		};
+    	String[] newPages = getBookPages(player.getPlayerListName());
     	
         for(int i = 0; i < newPages.length; i++) {
         	pages.add(new NBTTagString("" + i + "", newPages[i]));
@@ -129,5 +105,33 @@ public class Util {
     	tags.set("pages", pages);
     	item.setTag(tags);
 		return CraftItemStack.asBukkitCopy(item);
+	}
+	
+	public static String[] getBookPages(String playerName) {
+        Map<String, Object> stats = DataCollector.get(playerName).playerTotals().getValues();
+    	return new String[] {
+				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n" + 
+				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.BLACK + ChatColor.BOLD + "  Blocks and items \n" + 
+				ChatColor.RED + ChatColor.BOLD + " - Blocks " + ChatColor.RESET + "\n" + 
+				ChatColor.BLACK + " Broken: " + stats.get("blocksBroken") + "\n" + 
+				ChatColor.BLACK + " Placed: " + stats.get("blocksPlaced") + "\n" + 
+				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.RED + ChatColor.BOLD + "- Items" + ChatColor.RESET + "\n" +
+				ChatColor.BLACK + " Crafted: " + stats.get("itemsCrafted") + "\n" + 
+				ChatColor.BLACK + " Broken: " + stats.get("toolsBroken") + "\n" + 
+				ChatColor.BLACK + " Eaten: " + stats.get("snacksEaten"),
+				
+				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n" + 
+				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.BLACK + ChatColor.BOLD + "  Kills and Deaths \n" + 
+				ChatColor.RED + ChatColor.BOLD + " - PvP" + ChatColor.RESET + "\n" + 
+				ChatColor.BLACK + " Kills: " + stats.get("pvpKills") + "\n" + 
+				ChatColor.BLACK + " Deaths: " + stats.get("pvpDeaths") + "\n" + 
+				ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n" + 
+				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.RED + ChatColor.BOLD + " - Other \n" + ChatColor.RESET +
+				ChatColor.BLACK + " Mob kills: " + stats.get("pveKills")
+		};
 	}
 }
