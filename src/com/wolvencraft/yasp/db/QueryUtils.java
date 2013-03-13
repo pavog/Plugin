@@ -139,7 +139,9 @@ public class QueryUtils {
 	public static double sum(String table, String column) {
 		table = "`" + Settings.getTablePrefix() + table + "`";
 		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table + ";";
-		return fetchData(query).get(0).getValueAsInteger("temp");
+		QueryResult result = fetchData(query).get(0);
+		if(result.getValue("temp") == null) return 0;
+		else return result.getValueAsInteger("temp");
 	}
 	
 	/**
@@ -158,7 +160,9 @@ public class QueryUtils {
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
 		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table + " WHERE " + conditions + ";";
-		return fetchData(query).get(0).getValueAsInteger("temp");
+		QueryResult result = fetchData(query).get(0);
+		if(result.getValue("temp") == null) return 0;
+		else return result.getValueAsInteger("temp");
 	}
 	
 	/**
