@@ -92,6 +92,11 @@ public class DataCollector implements Runnable {
 		return newSession;
 	}
 	
+	public static OfflineSession get(String playerName) {
+		Message.debug("Fetching an offline session for " + playerName);
+		return new OfflineSession(playerName);
+	}
+	
 	/**
 	 * Purges the stored sessions list of all data
 	 */
