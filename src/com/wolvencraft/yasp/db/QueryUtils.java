@@ -27,9 +27,10 @@ public class QueryUtils {
 	 */
 	private static boolean pushData(String sql) {
 		try {
+			if(Settings.getDebug()) Message.log(Level.FINEST, sql);
 			return Database.getInstance().pushData(sql);
 		} catch (DatabaseConnectionException ex) {
-			Message.log(Level.SEVERE, ex.getMessage());
+			if(Settings.getDebug()) Message.log(Level.SEVERE, ex.getMessage());
 			return false;
 		} catch (Exception e) {
 			Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
@@ -49,6 +50,7 @@ public class QueryUtils {
 	 */
 	private static List<QueryResult> fetchData(String sql) {
 		try {
+			Message.log(Level.FINEST, sql);
 			return Database.getInstance().fetchData(sql);
 		} catch (DatabaseConnectionException ex) {
 			Message.log(Level.SEVERE, ex.getMessage());
