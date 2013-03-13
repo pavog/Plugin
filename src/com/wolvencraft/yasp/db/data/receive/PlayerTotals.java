@@ -70,7 +70,8 @@ public class PlayerTotals {
 		
 		pvpKills = (int) QueryUtils.sum(TotalPVPKillsTable.TableName.toString(), TotalPVPKillsTable.Times.toString(), new String[] {TotalPVPKillsTable.PlayerId.toString(), playerId + ""});
 		pvpDeaths = (int) QueryUtils.sum(TotalPVPKillsTable.TableName.toString(), TotalPVPKillsTable.Times.toString(), new String[] {TotalPVPKillsTable.VictimId.toString(), playerId + ""});
-		kdr = (double) Math.round((pvpKills / pvpDeaths) * 100000) / 100000;
+		if(pvpDeaths != 0) kdr = (double) Math.round((pvpKills / pvpDeaths) * 100000) / 100000;
+		else kdr = pvpKills;
 		
 		pveKills = (int) QueryUtils.sum(TotalPVEKillsTable.TableName.toString(), TotalPVEKillsTable.CreatureKilled.toString(), new String[] {TotalPVEKillsTable.PlayerId.toString(), playerId + ""});
 		otherKills = (int) QueryUtils.sum(TotalDeathPlayersTable.TableName.toString(), TotalDeathPlayersTable.Times.toString(), new String[] {TotalDeathPlayersTable.PlayerId.toString(), playerId + ""});
