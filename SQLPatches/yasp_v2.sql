@@ -1,11 +1,14 @@
 -- Settings
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("version", "0");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("vault", "0");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("ping", "120");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_welcome_messages", "1");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("welcome_message", "Welcome, <PLAYER>!");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_first_join_message", "1");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("first_join_message", "Welcome, <PLAYER>! Your statistics on this server are now being tracked.");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_vault", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_mcmmo", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_jobs", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_worldguard", "0");
 
 -- Server Statistics
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("first_startup", "0");
@@ -13,8 +16,22 @@ INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("last_startup"
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("last_shutdown", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("current_uptime", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("total_uptime", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("total_memory", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("free_memory", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("ticks_per_second", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_ip", "localhost");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_port", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_motd", "A Minecraft Server");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("bukkit_version", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("plugins", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_time", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("weather", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("weather_duration", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online_time", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_allowed", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("players_online", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("entities_count", "0");
 
 -- Materials
 -- Update on 11.03.2013 - 19:42:06-- 
