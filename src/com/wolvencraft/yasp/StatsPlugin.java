@@ -20,6 +20,10 @@ public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;
 	private static boolean paused;
 	
+	private DataCollector dataCollector;
+	private DisplaySignFactory displaySignFactory;
+	private TPSTracker tpsTracker;
+	
 	private static VaultHook vaultHook;
 	private static WorldGuardHook worldGuardHook;
 //	private static McMMOHook mcmmoHook;
@@ -50,6 +54,10 @@ public class StatsPlugin extends JavaPlugin {
 		
 		Message.log("Database connection established");
 		
+		dataCollector = new DataCollector();
+		displaySignFactory = new DisplaySignFactory();
+		tpsTracker = new TPSTracker();
+		
 		if (getServer().getPluginManager().getPlugin("Vault") != null) {
 			Message.log("Vault found! Advanced player statistics are available.");
 			vaultHook = new VaultHook();
@@ -77,13 +85,14 @@ public class StatsPlugin extends JavaPlugin {
 		new BlockListener(this);
 		new ItemListener(this);
 		new DeathListener(this);
+		new FeedbackListener(this);
 		
 		try { new Statistics(this); }
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing());
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DisplaySignFactory(), (Settings.getPing() / 2), Settings.getPing());
-		Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, dataCollector, 0L, Settings.getPing());
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, displaySignFactory, (Settings.getPing() / 2), Settings.getPing());
+		Bukkit.getScheduler().runTaskTimer(this, tpsTracker, 0, 1);
 	}
 
 	@Override
