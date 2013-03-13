@@ -54,13 +54,20 @@ public class DataCollector implements Runnable {
 	 * This method is run periodically, as well as on plugin shutdown.
 	 */
 	public static void pushAllData() {
-		Message.debug("Data is being sent to the remote database");
+		Message.debug("Database synchronization in progress");
 		for(LocalSession session : get()) {
 			session.pushData();
 			if(!session.isOnline()) remove(session);
 		}
 		
 		serverStatistics.pushData();
+	}
+	
+	public static void dumpAll() {
+		for(LocalSession session : get()) {
+			session.dump();
+			remove(session);
+		}
 	}
 	
 	/**

@@ -93,7 +93,7 @@ public class StatsPlugin extends JavaPlugin {
 		
 		try { new Statistics(this); }
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
-		
+		Message.debug("ping=" + Settings.getPing());
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, dataCollector, Settings.getPing(), Settings.getPing());
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, displaySignFactory, (Settings.getPing() / 2), Settings.getPing());
 		Bukkit.getScheduler().runTaskTimer(this, tpsTracker, 0, 1);
@@ -101,6 +101,7 @@ public class StatsPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		DataCollector.dumpAll();
 		Bukkit.getScheduler().cancelTasks(this);
 		
 		try {
