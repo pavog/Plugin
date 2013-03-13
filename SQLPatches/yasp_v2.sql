@@ -523,7 +523,6 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2266:0", "mu
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2267:0", "music_disk_wait");
 
 -- Entities
--- Entities
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("1", "item");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("2", "xporb");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("9", "painting");
@@ -577,4 +576,4 @@ INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("97", "snowman"
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("98", "ozelot");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("99", "villagergolem");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("120", "villager");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("200", "endercystal");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("200", "endercrystal");
