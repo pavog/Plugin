@@ -1,0 +1,6 @@
+<plugin>
+	<name>YASP</name>
+	<version>1.0</version>
+	<craftbukkit>CB 1.4.7-R1.0</craftbukkit>
+	<type>Development Build</type>
+</plugin>
