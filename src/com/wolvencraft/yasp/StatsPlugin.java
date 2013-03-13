@@ -94,7 +94,7 @@ public class StatsPlugin extends JavaPlugin {
 		try { new Statistics(this); }
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, dataCollector, 0L, Settings.getPing());
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, dataCollector, Settings.getPing(), Settings.getPing());
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, displaySignFactory, (Settings.getPing() / 2), Settings.getPing());
 		Bukkit.getScheduler().runTaskTimer(this, tpsTracker, 0, 1);
 	}
