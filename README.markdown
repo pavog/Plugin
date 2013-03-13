@@ -46,12 +46,12 @@ In order to track statistics, you will need a web-server that fulfills the follo
 The Bukkit plugin was designed to work regardless of the Bukkit version, however, due to the sheer complexity of the code, it is only guaranteed to work with the version it was built with.
 
 ## Installation ##
-Before you begin the installation process, you need to have full access to a MySQL database. It can be an existing database, or you can create a new one; the later is preferable, but not required.
+Before you begin the installation process, you need to have full access to a MySQL database. It can be an existing database, or you can create a new one; the later is preferable, but not required. Additionally, you have to have a web server to host the YASP portal.
 
-1. Copy the contents of the `web` archive to the desired directory on your web server. For example, `/home/public_html/stats`.
-2. Proceed to the URL associated with that directory and follow the instructions on screen. For example `http://wolvencraft.com/stats/`.
-3. After you finish the web portal installation, the web page should be reporting the lack of connection to the server. This is normal, since the reporting plugin itself was not installed yet.
-4. Copy the plugin `.jar` file into the Minecraft server's `/plugins/` folder and restart / reload the server. The plugin should generate a configuration file and report the lack of connection to the database.
-5. Edit plugin's `config.yml` to match the details of your database. Reload the plugins if it is safe to do so, restart the server otherwise.
-6. If the connection details in the configuration file are correct, the plugin should connect to the database and begin tracking data. Feel free to proceed to the web portal and edit what data you want to track; everything is enabled by default.
-7. The plugin setup is complete.
+1. Copy the `YASP.jar` to the `/plugins/` directory of your Minecraft server. Reload the plugins if it is safe to do so, otherwise, restart the server. The plugin will complain about the lack of connection to the database - this is normal and expected.
+2. Open `/plugins/YASP/config.yml` and fill in the necessary MySQL database details. Restart or reload the server again.
+3. The plugin will complete the initial set up of the database tables. You will see the patch notification - please, be patient and wait until the plugin says that the database is up to date.
+4. The plugin installation is complete.
+5. Copy the contents of the web archive to the desired directory on your web server. For example, `/home/public_html/stats`.
+6. Proceed to the URL associated with that directory and follow the instructions on screen. For example `http://wolvencraft.com/stats/`.
+7. Portal installation is complete.
