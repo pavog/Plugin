@@ -523,6 +523,7 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2266:0", "mu
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2267:0", "music_disk_wait");
 
 -- Entities
+-- Entities
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("1", "item");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("2", "xporb");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("9", "painting");
@@ -559,11 +560,11 @@ INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("57", "pigzombi
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("58", "enderman");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("59", "cavespider");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("60", "silverfish");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("61", "fire");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("62", "lava");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("63", "enderdragon-ender");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("64", "wither");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("66", "villager-witch");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("61", "blaze");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("62", "lavalslime");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("63", "enderdragon");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("64", "witherboss");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("66", "witch");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("65", "bat");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("90", "pig");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("91", "sheep");
@@ -571,9 +572,9 @@ INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("92", "cow");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("93", "chicken");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("94", "squid");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("95", "wolf");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("96", "redcow");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("96", "mushroomcow");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("97", "snowman");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("98", "ozelot");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("99", "villager_golem");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("120", "villager-villager");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("99", "villagergolem");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("120", "villager");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("200", "endercystal");
