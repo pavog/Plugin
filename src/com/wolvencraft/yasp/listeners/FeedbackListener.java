@@ -76,10 +76,11 @@ public class FeedbackListener implements Listener {
 		else return;
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBookOpen(PlayerInteractEvent event) {
+		if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))) return;
 		ItemStack craftItem = event.getItem();
-		if(craftItem.getTypeId() != 387) return;
+		if(craftItem == null || craftItem.getTypeId() != 387) return;
 		
 		net.minecraft.server.v1_4_R1.ItemStack item = CraftItemStack.asNMSCopy(craftItem);
 		
@@ -92,9 +93,9 @@ public class FeedbackListener implements Listener {
         String author = tags.getString("author");
         String title = tags.getString("title");
         Player player = event.getPlayer();
-        Message.debug("Player " + player.getPlayerListName() + " read the book '" + title + "' by " + author);
         
         if(!(author.equals("YASP"))) return;
+        Message.debug("Player " + player.getPlayerListName() + " read the book '" + title + "' by " + author);
         String playerName = title.split(" ")[0];
         
     	NBTTagList pages = new NBTTagList("pages");
@@ -107,6 +108,8 @@ public class FeedbackListener implements Listener {
     	item.setTag(tags);
     	
     	player.getInventory().remove(player.getItemInHand());
-    	player.getInventory().setItemInHand(CraftItemStack.asBukkitCopy(item));
+    	ItemStack newItem = CraftItemStack.asBukkitCopy(item);
+    	player.getInventory().setItemInHand(newItem);
+    	Message.debug("Refreshed the book contents");
 	}
 }
