@@ -1,7 +1,5 @@
 package com.wolvencraft.yasp.cmd;
 
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
@@ -17,8 +15,7 @@ public class BookCommand implements BaseCommand {
 			return false;
 		}
 		Player player = (Player) CommandManager.getSender();
-		CraftItemStack stack = Util.compileBook(player.getPlayerListName() + " Statistics", Bukkit.getServerName(), Util.getBookPages(player));
-		player.getInventory().addItem(stack);
+		player.getInventory().addItem(Util.compileStatsBook(player));
 		return false;
 	}
 

@@ -83,46 +83,35 @@ public class Util {
 	 * @param newPages
 	 * @return
 	 */
-	public static CraftItemStack compileBook (String title, String author, String[] newPages) {
-
+	public static CraftItemStack compileStatsBook (Player player) {
 		CraftItemStack stack = CraftItemStack.asCraftCopy(new org.bukkit.inventory.ItemStack(387, 1));
 		net.minecraft.server.v1_4_R1.ItemStack item = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(387, 1));
-
+		
 		NBTTagCompound tags = item.tag;
         if (tags == null) tags = item.tag = new NBTTagCompound();
         
-    	if(title != null && !title.equals("")) tags.setString("title", title);
-    	if(author != null && !author.equals("")) tags.setString("author", author);
+    	tags.setString("title", player.getPlayerListName() + " Statistics");
+    	tags.setString("author", "YASP");
     	
+    	Map<String, Object> stats = DataCollector.get(player).playerTotals().getValues();
     	NBTTagList pages = new NBTTagList("pages");
-    	if(newPages.length == 0) pages.add(new NBTTagString("1", ""));
-    	else {
-        	for(int i = 0; i < newPages.length; i++) {
-        		pages.add(new NBTTagString("" + i + "", newPages[i]));
-        	}
-    	}
+    	String[] newPages = new String[] {
+				ChatColor.BLACK + "" + ChatColor.BOLD + " + " + player.getPlayerListName() + " + \n" +
+				"- Blocks\n" +
+				" Broken: " + stats.get("blocksBroken") + "\n" + 
+				" Placed: " + stats.get("blocksPlaced") + "\n" + 
+				ChatColor.WHITE + "." + "\n" + 
+				"- Items" + "\n" + 
+				" Crafted: " + stats.get("itemsCrafted") + "\n" + 
+				" Broken: " + stats.get("toolsBroken") + "\n" + 
+				" Eaten: " + stats.get("snacksEaten")
+		};
+    	
+        for(int i = 0; i < newPages.length; i++) {
+        	pages.add(new NBTTagString("" + i + "", newPages[i]));
+        }
     	tags.set("pages", pages);
     	
 		return stack;
-	}
-	
-	/**
-	 * Creates an array of pages with player's statistical information
-	 * @param player
-	 * @return
-	 */
-	public static String[] getBookPages(Player player) {
-		Map<String, Object> stats = DataCollector.get(player).playerTotals().getValues();
-		return new String[] {
-				ChatColor.BLACK + "" + ChatColor.BOLD + " + " + player.getPlayerListName() + " + ",
-				"- Blocks",
-				" Broken: " + stats.get("blocksBroken"),
-				" Placed: " + stats.get("blocksPlaced"),
-				ChatColor.WHITE + ".",
-				"- Items",
-				" Crafted: " + stats.get("itemsCrafted"),
-				" Broken: " + stats.get("toolsBroken"),
-				" Eaten: " + stats.get("snacksEaten")
-		};
 	}
 }
