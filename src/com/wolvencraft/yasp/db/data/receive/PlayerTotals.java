@@ -33,8 +33,12 @@ public class PlayerTotals {
 		snacksEaten = 0;
 		
 		pvpKills = 0;
+		pvpDeaths = 0;
+		kdr = 1;
 		pveKills = 0;
 		otherKills = 0;
+		
+		fetchData();
 	}
 	
 	private int playerId;
@@ -47,8 +51,9 @@ public class PlayerTotals {
 	private int snacksEaten;
 	
 	private int pvpKills;
+	private int pvpDeaths;
+	private double kdr;
 	private int pveKills;
-	private int pveDeaths;
 	private int otherKills;
 	
 	/**
@@ -64,8 +69,10 @@ public class PlayerTotals {
 		snacksEaten = (int) QueryUtils.sum(TotalItemsTable.TableName.toString(), TotalItemsTable.Used.toString(), new String[] {TotalItemsTable.PlayerId.toString(), playerId + ""});
 		
 		pvpKills = (int) QueryUtils.sum(TotalPVPKillsTable.TableName.toString(), TotalPVPKillsTable.Times.toString(), new String[] {TotalPVPKillsTable.PlayerId.toString(), playerId + ""});
+		pvpDeaths = (int) QueryUtils.sum(TotalPVPKillsTable.TableName.toString(), TotalPVPKillsTable.Times.toString(), new String[] {TotalPVPKillsTable.VictimId.toString(), playerId + ""});
+		kdr = (double) Math.round((pvpKills / pvpDeaths) * 100000) / 100000;
+		
 		pveKills = (int) QueryUtils.sum(TotalPVEKillsTable.TableName.toString(), TotalPVEKillsTable.CreatureKilled.toString(), new String[] {TotalPVEKillsTable.PlayerId.toString(), playerId + ""});
-		pveDeaths = (int) QueryUtils.sum(TotalPVEKillsTable.TableName.toString(), TotalPVEKillsTable.PlayerKilled.toString(), new String[] {TotalPVEKillsTable.PlayerId.toString(), playerId + ""});
 		otherKills = (int) QueryUtils.sum(TotalDeathPlayersTable.TableName.toString(), TotalDeathPlayersTable.Times.toString(), new String[] {TotalDeathPlayersTable.PlayerId.toString(), playerId + ""});
 	}
 	
@@ -82,8 +89,9 @@ public class PlayerTotals {
 		values.put("itemsCrafted", itemsCrafted);
 		values.put("snacksEaten", snacksEaten);
 		values.put("pvpKills", pvpKills);
+		values.put("pvpDeaths", pvpDeaths);
+		values.put("kdr", kdr);
 		values.put("pveKills", pveKills);
-		values.put("pveDeaths", pveDeaths);
 		values.put("otherKills", otherKills);
 		return values;
 	}

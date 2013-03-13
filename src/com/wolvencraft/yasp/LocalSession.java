@@ -40,6 +40,8 @@ public class LocalSession {
 		deathsData.sync();
 		PVEData.sync();
 		PVPData.sync();
+		
+		playerTotals.fetchData();
 	}
 	
 	/**

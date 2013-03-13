@@ -12,6 +12,7 @@ import net.minecraft.server.v1_4_R1.NBTTagString;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 
@@ -83,12 +84,14 @@ public class Util {
 	 * @param newPages
 	 * @return
 	 */
-	public static CraftItemStack compileStatsBook (Player player) {
-		CraftItemStack stack = CraftItemStack.asCraftCopy(new org.bukkit.inventory.ItemStack(387, 1));
+	public static ItemStack compileStatsBook (Player player) {
 		net.minecraft.server.v1_4_R1.ItemStack item = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(387, 1));
 		
-		NBTTagCompound tags = item.tag;
-        if (tags == null) tags = item.tag = new NBTTagCompound();
+		NBTTagCompound tags = item.getTag();
+        if (tags == null) {
+        	tags = new NBTTagCompound();
+            item.setTag(tags);
+        }
         
     	tags.setString("title", player.getPlayerListName() + " Statistics");
     	tags.setString("author", "YASP");
@@ -96,22 +99,35 @@ public class Util {
     	Map<String, Object> stats = DataCollector.get(player).playerTotals().getValues();
     	NBTTagList pages = new NBTTagList("pages");
     	String[] newPages = new String[] {
-				ChatColor.BLACK + "" + ChatColor.BOLD + " + " + player.getPlayerListName() + " + \n" +
-				"- Blocks\n" +
-				" Broken: " + stats.get("blocksBroken") + "\n" + 
-				" Placed: " + stats.get("blocksPlaced") + "\n" + 
+				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + player.getPlayerListName() + ChatColor.RESET + " + \n" + 
 				ChatColor.WHITE + "." + "\n" + 
-				"- Items" + "\n" + 
-				" Crafted: " + stats.get("itemsCrafted") + "\n" + 
-				" Broken: " + stats.get("toolsBroken") + "\n" + 
-				" Eaten: " + stats.get("snacksEaten")
+				ChatColor.BLACK + ChatColor.BOLD + "  Blocks and items \n" + 
+				ChatColor.RED + ChatColor.BOLD + " - Blocks\n" + ChatColor.RESET + 
+				ChatColor.BLACK + " Broken: " + stats.get("blocksBroken") + "\n" + 
+				ChatColor.BLACK + " Placed: " + stats.get("blocksPlaced") + "\n" + 
+				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.RED + ChatColor.BOLD + "- Items" + "\n" + ChatColor.RESET + 
+				ChatColor.BLACK + " Crafted: " + stats.get("itemsCrafted") + "\n" + 
+				ChatColor.BLACK + " Broken: " + stats.get("toolsBroken") + "\n" + 
+				ChatColor.BLACK + " Eaten: " + stats.get("snacksEaten"),
+				
+				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + player.getPlayerListName() + ChatColor.RESET + " + \n" + 
+				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.BLACK + ChatColor.BOLD + "  Kills and Deaths \n" + 
+				ChatColor.RED + ChatColor.BOLD + " - PvP\n" + ChatColor.RESET + "\n" + 
+				ChatColor.BLACK + " Kills: " + stats.get("pvpKills") + "\n" + 
+				ChatColor.BLACK + " Deaths: " + stats.get("pvpDeaths") + "\n" + 
+				ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n" + 
+				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.RED + ChatColor.BOLD + " - Other \n" + ChatColor.RESET +
+				ChatColor.BLACK + " Mob kills: " + stats.get("pveKills")
 		};
     	
         for(int i = 0; i < newPages.length; i++) {
         	pages.add(new NBTTagString("" + i + "", newPages[i]));
         }
     	tags.set("pages", pages);
-    	
-		return stack;
+    	item.setTag(tags);
+		return CraftItemStack.asBukkitCopy(item);
 	}
 }
