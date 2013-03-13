@@ -18,6 +18,8 @@ public class LocalSession {
 		this.deathsData = new DeathsData(playerId);
 		this.PVEData = new PVEData(playerId);
 		this.PVPData = new PVPData(playerId);
+		
+		this.playerTotals = new PlayerTotals(playerId);
 	}
 	
 	private int playerId;
