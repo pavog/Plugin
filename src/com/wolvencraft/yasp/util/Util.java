@@ -58,9 +58,7 @@ public class Util {
 	 * @return <b>true</b> if the player's stats should not be registered, <b>false</b> otherwise
 	 */
 	public static boolean isExempt(Player player) {
-		return
-			player.hasPermission("stats.exempt") ||
-			player.hasPermission("statistician.ignore");
+		return !player.hasPermission("stats.track");
 	}
 	
 	/**
@@ -70,10 +68,7 @@ public class Util {
 	 * @return <b>true</b> if the player's stats should not be registered, <b>false</b> otherwise
 	 */
 	public static boolean isExempt(Player player, String statsType) {
-		return
-			player.hasPermission("stats.exempt") ||
-			player.hasPermission("statistician.ignore") || 
-			player.hasPermission("stats.exempt." + statsType);
+		return !player.hasPermission("stats.track") && !player.hasPermission("stats.track." + statsType);
 	}
 	
 	/**

@@ -8,9 +8,9 @@ commands:
   stats:
     description: YASP commands
 permissions:
-  stats.exempt:
-    description: Don't record statistics of the player.
-    default: false
+  stats.track:
+    description: Track the player statistics
+    default: true
   stats.cmd:
     description: Access to all statistics commands
     default: op

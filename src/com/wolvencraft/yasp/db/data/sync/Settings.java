@@ -96,7 +96,7 @@ public class Settings {
 		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
 		
 		if(usingWorldGuard) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_worldguard"});
-		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_orldguard"});
+		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_worldguard"});
 
 		if(usingDynmap) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
 		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
