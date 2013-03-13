@@ -76,7 +76,7 @@ public class VaultHook implements _PluginHook {
 	
 	@Override
 	public boolean patch() {
-		try { Database.getInstance().patch("vault_v1"); }
+		try { Database.getInstance().runSyncPatch("vault_v1"); }
 		catch (DatabaseConnectionException ex) {
 			Message.log(Level.SEVERE, ex.getMessage());
 			return false;

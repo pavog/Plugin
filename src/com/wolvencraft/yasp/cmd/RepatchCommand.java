@@ -17,7 +17,7 @@ public class RepatchCommand implements BaseCommand {
 
 			@Override
 			public void run() {
-				try { Database.getInstance().patch(true); }
+				try { Database.getInstance().runSyncPatch(true); }
 				catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed"); }
 				finally { Message.sendFormattedSuccess(CommandManager.getSender(), "Patching complete"); StatsPlugin.setPaused(false); }
 			}

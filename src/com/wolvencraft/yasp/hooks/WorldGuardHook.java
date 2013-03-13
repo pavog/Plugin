@@ -77,7 +77,7 @@ public class WorldGuardHook implements _PluginHook {
 	
 	@Override
 	public boolean patch() {
-		try { Database.getInstance().patch("worldguard_v1"); }
+		try { Database.getInstance().runSyncPatch("worldguard_v1"); }
 		catch (DatabaseConnectionException ex) {
 			Message.log(Level.SEVERE, ex.getMessage());
 			return false;

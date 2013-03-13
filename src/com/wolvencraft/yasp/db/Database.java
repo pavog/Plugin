@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
@@ -42,7 +44,7 @@ public class Database {
 		instance = this;
 		
 		connect();
-		patch(false);
+		runAsyncPatch();
 	}
 	
 	public static boolean testConnection() {
@@ -71,10 +73,11 @@ public class Database {
 	}
 	
 	/**
-	 * Patches the remote database to the latest version
+	 * Patches the remote database to the latest version.<br />
+	 * This method will run in the <b>main server thread</b> and therefore will freeze the server until the patch is complete.
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
-	public void patch(boolean force) throws DatabaseConnectionException {
+	public void runSyncPatch(boolean force) throws DatabaseConnectionException {
 		Message.log("Attempting to patch the database. This will take a while.");
 		int databaseVersion = 0;
 		if(!force) databaseVersion = Settings.getDatabaseVersion();
@@ -93,13 +96,49 @@ public class Database {
 		Message.log("Target database is up to date.");
 	}
 	
-	public void patch(String patchId) throws DatabaseConnectionException {
+	/**
+	 * Applies a custom patch to the remote database
+	 * @param patchId Unique ID of the desired patch
+	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
+	 */
+	public void runSyncPatch(String patchId) throws DatabaseConnectionException {
 		InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patchId + ".sql");
 		if (is == null) return;
 		Message.log("Executing database patch: " + patchId + ".sql");
 		ScriptRunner sr = new ScriptRunner(connection);
 		try {sr.runScript(new InputStreamReader(is)); }
 		catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + patchId + ".sql", e); }
+	}
+	
+	/**
+	 * Patches the remote database to the latest version.<br />
+	 * This method will run in an <b>async thread</b>.
+	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
+	 */
+	public void runAsyncPatch() throws DatabaseConnectionException {
+		StatsPlugin.setPaused(true);
+		Bukkit.getScheduler().runTaskAsynchronously(StatsPlugin.getInstance(), new Runnable() {
+
+			@Override
+			public void run() {
+				Message.log("Attempting to patch the database. This will take a while.");
+				int databaseVersion = Settings.getDatabaseVersion();
+				do {
+					InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + (databaseVersion + 1) + ".sql");
+					if (is == null) break;
+					databaseVersion++;
+					Message.log("Executing database patch v." + databaseVersion);
+					ScriptRunner sr = new ScriptRunner(connection);
+					try {sr.runScript(new InputStreamReader(is)); }
+					catch (RuntimeSQLException e) { Message.log(Level.SEVERE, "An error occured while patching the database to v." + databaseVersion); }
+				} while (true);
+				
+				Settings.setDatabaseVersion(databaseVersion);
+				StatsPlugin.setPaused(false);
+				Message.log("Target database is up to date.");
+			}
+			
+		});
 	}
 	
 	/**
