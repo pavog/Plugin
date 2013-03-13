@@ -1,11 +1,10 @@
 package com.wolvencraft.yasp.cmd;
 
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.util.BookAPI;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
@@ -18,9 +17,8 @@ public class BookCommand implements BaseCommand {
 			return false;
 		}
 		Player player = (Player) CommandManager.getSender();
-		BookAPI ermagherdBerks = new BookAPI(new ItemStack(Material.WRITTEN_BOOK));
-		ermagherdBerks.addPages(Util.getBookPages(player));
-		player.getInventory().addItem(ermagherdBerks.getItemStack());
+		CraftItemStack stack = Util.compileBook(player.getPlayerListName() + " Statistics", Bukkit.getServerName(), Util.getBookPages(player));
+		player.getInventory().addItem(stack);
 		return false;
 	}
 

@@ -5,7 +5,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.server.v1_4_R1.NBTTagCompound;
+import net.minecraft.server.v1_4_R1.NBTTagList;
+import net.minecraft.server.v1_4_R1.NBTTagString;
+
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.DataCollector;
@@ -72,6 +77,36 @@ public class Util {
 	}
 	
 	/**
+	 * Compiles a book based on the parameters provided
+	 * @param title
+	 * @param author
+	 * @param newPages
+	 * @return
+	 */
+	public static CraftItemStack compileBook (String title, String author, String[] newPages) {
+
+		CraftItemStack stack = CraftItemStack.asCraftCopy(new org.bukkit.inventory.ItemStack(387, 1));
+		net.minecraft.server.v1_4_R1.ItemStack item = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(387, 1));
+
+		NBTTagCompound tags = item.tag;
+        if (tags == null) tags = item.tag = new NBTTagCompound();
+        
+    	if(title != null && !title.equals("")) tags.setString("title", title);
+    	if(author != null && !author.equals("")) tags.setString("author", author);
+    	
+    	NBTTagList pages = new NBTTagList("pages");
+    	if(newPages.length == 0) pages.add(new NBTTagString("1", ""));
+    	else {
+        	for(int i = 0; i < newPages.length; i++) {
+        		pages.add(new NBTTagString("" + i + "", newPages[i]));
+        	}
+    	}
+    	tags.set("pages", pages);
+    	
+		return stack;
+	}
+	
+	/**
 	 * Creates an array of pages with player's statistical information
 	 * @param player
 	 * @return
@@ -79,7 +114,7 @@ public class Util {
 	public static String[] getBookPages(Player player) {
 		Map<String, Object> stats = DataCollector.get(player).playerTotals().getValues();
 		return new String[] {
-				ChatColor.BOLD + " + " + player.getPlayerListName() + " + ",
+				ChatColor.BLACK + "" + ChatColor.BOLD + " + " + player.getPlayerListName() + " + ",
 				"- Blocks",
 				" Broken: " + stats.get("blocksBroken"),
 				" Placed: " + stats.get("blocksPlaced"),
