@@ -25,10 +25,6 @@ public class StatsPlugin extends JavaPlugin {
 //	private static McMMOHook mcmmoHook;
 //	private static JobsHook jobsHook;
 	
-	private int databaseTaskId;
-	private int signTaskId;
-	private int tpsTaskId;
-	
 	@Override
 	public void onEnable() {
 		instance = this;
@@ -85,16 +81,15 @@ public class StatsPlugin extends JavaPlugin {
 		try { new Statistics(this); }
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
 		
-		databaseTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing()).getTaskId();
-		signTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DisplaySignFactory(), (Settings.getPing() / 2), Settings.getPing()).getTaskId();
-		tpsTaskId = Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1).getTaskId();
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing());
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DisplaySignFactory(), (Settings.getPing() / 2), Settings.getPing());
+		Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
 	}
 
 	@Override
 	public void onDisable() {
-		Bukkit.getScheduler().cancelTask(databaseTaskId);
-		Bukkit.getScheduler().cancelTask(signTaskId);
-		Bukkit.getScheduler().cancelTask(tpsTaskId);
+		Bukkit.getScheduler().cancelTasks(this);
+		
 		try {
 			DataCollector.global().pluginShutdown();
 			DataCollector.clear();
