@@ -82,7 +82,7 @@ public class ItemsData implements _DataStore {
 		for(TotalItemsEntry entry : normalData) {
 			if(entry.equals(itemStack)) return entry;
 		}
-		TotalItemsEntry entry = new TotalItemsEntry(itemStack);
+		TotalItemsEntry entry = new TotalItemsEntry(playerId, itemStack);
 		normalData.add(entry);
 		return entry;
 	}
@@ -167,7 +167,7 @@ public class ItemsData implements _DataStore {
 		 * Creates a new TotalItemsEntry based on the data provided
 		 * @param itemStack
 		 */
-		public TotalItemsEntry(ItemStack itemStack) {
+		public TotalItemsEntry(int playerId, ItemStack itemStack) {
 			this.type = itemStack.getTypeId();
 			this.data = itemStack.getData().getData();
 			this.dropped = 0;
@@ -177,6 +177,8 @@ public class ItemsData implements _DataStore {
 			this.broken = 0;
 			this.smelted = 0;
 			this.enchanted = 0;
+			
+			fetchData(playerId);
 		}
 		
 		private int type;
@@ -212,12 +214,14 @@ public class ItemsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.update(
+			boolean result = QueryUtils.update(
 				TotalItemsTable.TableName.toString(),
 				getValues(playerId),
 				new String[] { TotalItemsTable.PlayerId.toString(), playerId + ""},
 				new String[] { TotalItemsTable.Material.toString(), type + ":" + data}
 			);
+			fetchData(playerId);
+			return result;
 		}
 		
 		@Override

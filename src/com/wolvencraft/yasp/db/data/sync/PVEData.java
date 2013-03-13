@@ -84,7 +84,7 @@ public class PVEData implements _DataStore{
 		for(TotalPVEEntry entry : normalData) {
 			if(entry.equals(type, weapon)) return entry;
 		}
-		TotalPVEEntry entry = new TotalPVEEntry(type, weapon);
+		TotalPVEEntry entry = new TotalPVEEntry(playerId, type, weapon);
 		normalData.add(entry);
 		return entry;
 	}
@@ -126,11 +126,13 @@ public class PVEData implements _DataStore{
 		 * @param player Player in question
 		 * @param creature Creature in question
 		 */
-		public TotalPVEEntry(EntityType creatureType, ItemStack weapon) {
+		public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
 			this.creatureType = creatureType;
 			this.weapon = weapon;
 			this.playerDeaths = 0;
 			this.creatureDeaths = 0;
+			
+			fetchData(playerId);
 		}
 		
 		private EntityType creatureType;
@@ -156,13 +158,15 @@ public class PVEData implements _DataStore{
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.update(
+			boolean result = QueryUtils.update(
 				TotalPVEKillsTable.TableName.toString(),
 				getValues(playerId),
 				new String[] { TotalPVEKillsTable.PlayerId.toString(), playerId + ""},
 				new String[] { TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + ""},
 				new String[] { TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData()}
 			);
+			fetchData(playerId);
+			return result;
 		}
 
 		@Override

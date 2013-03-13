@@ -27,9 +27,9 @@ public class PlayersData implements _DataStore {
 	
 	public PlayersData(Player player, int playerId) {
 		this.playerId = playerId;
-		generalData = new Players(player);
-		distanceData = new DistancePlayers();
-		miscData = new MiscInfoPlayers(player);
+		generalData = new Players(playerId, player);
+		distanceData = new DistancePlayers(playerId);
+		miscData = new MiscInfoPlayers(playerId, player);
 		
 		detailedData = new ArrayList<DetailedData>();
 	}
@@ -115,13 +115,15 @@ public class PlayersData implements _DataStore {
 	 */
 	public class Players implements NormalData {
 		
-		public Players (Player player) {
+		public Players (int playerId, Player player) {
 			this.playerName = player.getPlayerListName();
 			
 			this.online = true;
 			this.sessionStart = Util.getTimestamp();
 			this.firstJoin = Util.getTimestamp();
 			this.logins = 0;
+			
+			fetchData(playerId);
 		}
 		
 		private String playerName;
@@ -146,11 +148,13 @@ public class PlayersData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.update(
+			boolean result = QueryUtils.update(
 				PlayersTable.TableName.toString(),
 				getValues(playerId), 
 				new String[] { PlayersTable.PlayerId.toString(), playerId + ""}
 			);
+			fetchData(playerId);
+			return result;
 		}
 
 		@Override
@@ -192,12 +196,14 @@ public class PlayersData implements _DataStore {
 		 * If no data is found in the database, the default values are inserted.
 		 * @param player <b>Player</b> tracked player
 		 */
-		public DistancePlayers() {
+		public DistancePlayers(int playerId) {
 			this.foot = 0;
 			this.swimmed = 0;
 			this.boat = 0;
 			this.minecart = 0;
 			this.pig = 0;
+			
+			fetchData(playerId);
 		}
 		
 		private double foot;
@@ -225,10 +231,12 @@ public class PlayersData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.update(DistancePlayersTable.TableName.toString(),
+			boolean result = QueryUtils.update(DistancePlayersTable.TableName.toString(),
 				getValues(playerId),
 				new String[] { DistancePlayersTable.PlayerId.toString(), playerId + ""}
 			);
+			fetchData(playerId);
+			return result;
 		}
 		
 		@Override
@@ -277,7 +285,7 @@ public class PlayersData implements _DataStore {
 	
 	public class MiscInfoPlayers implements NormalData {
 		
-		public MiscInfoPlayers(Player player) {
+		public MiscInfoPlayers(int playerId, Player player) {
 			this.playerName = player.getPlayerListName();
 			
 			this.gamemode = 0;
@@ -295,6 +303,8 @@ public class PlayersData implements _DataStore {
 			this.damageTaken = 0;
 			this.wordsSaid = 0;
 			this.commandsSent = 0;
+			
+			fetchData(playerId);
 		}
 		
 		private String playerName;
@@ -343,11 +353,13 @@ public class PlayersData implements _DataStore {
 		@Override
 		public boolean pushData(int playerId) {
 			refreshPlayerData();
-			return QueryUtils.update(
+			boolean result = QueryUtils.update(
 				MiscInfoPlayersTable.TableName.toString(),
 				getValues(playerId), 
 				new String[] { MiscInfoPlayersTable.PlayerId.toString(), playerId + ""}
 			);
+			fetchData(playerId);
+			return result;
 		}
 
 		@Override

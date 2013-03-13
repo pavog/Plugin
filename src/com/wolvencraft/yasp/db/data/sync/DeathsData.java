@@ -81,7 +81,7 @@ public class DeathsData implements _DataStore {
 		for(TotalDeathsEntry entry : normalData) {
 			if(entry.equals(cause)) return entry;
 		}
-		TotalDeathsEntry entry = new TotalDeathsEntry(cause);
+		TotalDeathsEntry entry = new TotalDeathsEntry(playerId, cause);
 		normalData.add(entry);
 		return entry;
 	}
@@ -105,9 +105,11 @@ public class DeathsData implements _DataStore {
 	 */
 	public class TotalDeathsEntry implements NormalData {
 		
-		public TotalDeathsEntry(DamageCause cause) {
+		public TotalDeathsEntry(int playerId, DamageCause cause) {
 			this.cause = cause;
 			this.times = 0;
+			
+			fetchData(playerId);
 		}
 		
 		private DamageCause cause;
@@ -130,12 +132,14 @@ public class DeathsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.update(
+			boolean result = QueryUtils.update(
 				TotalDeathPlayersTable.TableName.toString(),
 				getValues(playerId),
 				new String[] { TotalDeathPlayersTable.PlayerId.toString(), playerId + ""},
 				new String[] { TotalDeathPlayersTable.Cause.toString(), cause.name()}
 			);
+			fetchData(playerId);
+			return result;
 		}
 
 		@Override

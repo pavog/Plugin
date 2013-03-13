@@ -10,7 +10,7 @@ import com.wolvencraft.yasp.db.data.sync.*;
 public class LocalSession {
 	
 	public LocalSession(Player player) {
-		this.playerId = DataCollector.getPlayerId(player);
+		int playerId = DataCollector.getPlayerId(player);
 		
 		this.playersData = new PlayersData(player, playerId);
 		this.blocksData = new BlocksData(playerId);
@@ -21,8 +21,6 @@ public class LocalSession {
 		
 		this.playerTotals = new PlayerTotals(playerId);
 	}
-	
-	private int playerId;
 	
 	private PlayersData playersData;
 	private BlocksData blocksData;

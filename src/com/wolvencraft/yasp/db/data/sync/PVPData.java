@@ -84,7 +84,7 @@ public class PVPData implements _DataStore {
 		for(TotalPVPEntry entry : normalData) {
 			if(entry.equals(victimId, weapon)) return entry;
 		}
-		TotalPVPEntry entry = new TotalPVPEntry(victimId, weapon);
+		TotalPVPEntry entry = new TotalPVPEntry(playerId, victimId, weapon);
 		normalData.add(entry);
 		return entry;
 	}
@@ -115,10 +115,12 @@ public class PVPData implements _DataStore {
 		 * @param killer Player who killed the victim
 		 * @param victim Player who was killed
 		 */
-		public TotalPVPEntry(int victimId, ItemStack weapon) {
+		public TotalPVPEntry(int playerId, int victimId, ItemStack weapon) {
 			this.victimId = victimId;
 			this.weapon = weapon;
 			this.times = 0;
+			
+			fetchData(playerId);
 		}
 		
 		private int victimId;
@@ -142,13 +144,15 @@ public class PVPData implements _DataStore {
 
 		@Override
 		public boolean pushData(int killerId) {
-			return QueryUtils.update(
+			boolean result = QueryUtils.update(
 				TotalPVPKillsTable.TableName.toString(),
 				getValues(killerId), 
 				new String[] { TotalPVPKillsTable.PlayerId.toString(), killerId + ""},
 				new String[] { TotalPVPKillsTable.VictimId.toString(), victimId + ""},
 				new String[] { TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData()}
 			);
+			fetchData(killerId);
+			return result;
 		}
 
 		@Override

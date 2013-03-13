@@ -82,7 +82,7 @@ public class BlocksData implements _DataStore {
 		for(TotalBlocksEntry entry : normalData) {
 			if(entry.equals(type, blockData)) return entry;
 		}
-		TotalBlocksEntry entry = new TotalBlocksEntry(type, blockData);
+		TotalBlocksEntry entry = new TotalBlocksEntry(playerId, type, blockData);
 		normalData.add(entry);
 		return entry;
 	}
@@ -124,11 +124,13 @@ public class BlocksData implements _DataStore {
 		 * @param materialType
 		 * @param data
 		 */
-		public TotalBlocksEntry(Material materialType, byte data) {
+		public TotalBlocksEntry(int playerId, Material materialType, byte data) {
 			this.type = materialType.getId();
 			this.data = data;
 			this.broken = 0;
 			this.placed = 0;
+			
+			fetchData(playerId);
 		}
 		
 		private int type;
@@ -154,12 +156,14 @@ public class BlocksData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.update(
+			boolean result = QueryUtils.update(
 				TotalBlocksTable.TableName.toString(),
 				getValues(playerId),
 				new String[] { TotalBlocksTable.PlayerId.toString(), playerId + ""},
 				new String[] { TotalBlocksTable.Material.toString(), type + ":" + data}
 			);
+			fetchData(playerId);
+			return result;
 		}
 		
 		@Override
