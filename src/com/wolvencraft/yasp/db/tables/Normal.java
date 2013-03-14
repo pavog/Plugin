@@ -44,7 +44,7 @@ public class Normal {
 	 *
 	 */
 	public enum DistancePlayersTable {
-		TableName("distance_players"),
+		TableName("distances"),
 		PlayerId("player_id"),
 		Foot("foot"),
 		Swimmed("swimmed"),
@@ -170,7 +170,7 @@ public class Normal {
 	 *
 	 */
 	public enum TotalDeathPlayersTable {
-		TableName("total_death_players"),
+		TableName("total_deaths"),
 		EntryId("total_death_players_id"),
 		PlayerId("player_id"),
 		Cause("cause"),
