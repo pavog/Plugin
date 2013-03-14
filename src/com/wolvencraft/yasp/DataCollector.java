@@ -28,8 +28,8 @@ public class DataCollector implements Runnable {
 	 */
 	public DataCollector() {
 		sessions = new ArrayList<LocalSession>();
-		serverStatistics = new ServerStatistics(StatsPlugin.getInstance());
 		serverTotals = new ServerTotals();
+		serverStatistics = new ServerStatistics();
 		
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if(!Util.isExempt(player)) get(player);
@@ -44,8 +44,8 @@ public class DataCollector implements Runnable {
 	public void run() {
 		if(StatsPlugin.getPaused()) return;
 		pushAllData();
-		serverStatistics.fetchData();
 		serverTotals.fetchData();
+		serverStatistics.pushData();
 	}
 	
 	/**
@@ -56,17 +56,16 @@ public class DataCollector implements Runnable {
 		Message.debug("Database synchronization in progress");
 		for(LocalSession session : get()) {
 			session.pushData();
+			session.playerTotals().fetchData();
 			if(!session.isOnline()) remove(session);
 		}
-		
-		serverStatistics.pushData();
 	}
 	
 	public static void dumpAll() {
 		for(LocalSession session : get()) {
 			session.dump();
-			remove(session);
 		}
+		sessions.clear();
 	}
 	
 	/**
@@ -86,12 +85,14 @@ public class DataCollector implements Runnable {
 	 * @return LocalSession associated with the player.
 	 */
 	public static LocalSession get(Player player) {
+		String playerName = player.getPlayerListName();
 		for(LocalSession session : sessions) {
-			if(session.getPlayerName().equals(player.getPlayerListName())) {
+			if(session.getPlayerName().equals(playerName)) {
+				Message.debug("Fetching a user sesssion for " + playerName);
 				return session;
 			}
 		}
-		Message.debug("Creating a new user session for " + player.getPlayerListName());
+		Message.debug("Creating a new user session for " + playerName);
 		LocalSession newSession = new LocalSession(player);
 		sessions.add(newSession);
 		Message.send(player, Settings.getFirstJoinMessage(player));
@@ -101,13 +102,6 @@ public class DataCollector implements Runnable {
 	public static OfflineSession get(String playerName) {
 		Message.debug("Fetching an offline session for " + playerName);
 		return new OfflineSession(playerName);
-	}
-	
-	/**
-	 * Purges the stored sessions list of all data
-	 */
-	public static void clear() {
-		sessions.clear();
 	}
 	
 	/**
@@ -133,10 +127,10 @@ public class DataCollector implements Runnable {
 		List<QueryResult> results;
 		
 		results = QueryUtils.select(PlayersTable.TableName.toString())
-					.column(PlayersTable.PlayerId.toString())
-					.column(PlayersTable.Name.toString())
-					.condition(PlayersTable.Name.toString(), username)
-					.select();
+			.column(PlayersTable.PlayerId.toString())
+			.column(PlayersTable.Name.toString())
+			.condition(PlayersTable.Name.toString(), username)
+			.select();
 		
 		if(results.isEmpty()) {
 			QueryUtils.insert(PlayersTable.TableName.toString())
@@ -158,11 +152,11 @@ public class DataCollector implements Runnable {
 		return playerId;
 	}
 	
-	public static ServerStatistics global() {
+	public static ServerStatistics getServerStats() {
 		return serverStatistics;
 	}
 	
-	public static ServerTotals serverTotals() {
+	public static ServerTotals getServerTotals() {
 		return serverTotals;
 	}
 }

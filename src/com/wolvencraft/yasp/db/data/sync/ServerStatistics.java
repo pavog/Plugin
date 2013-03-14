@@ -7,7 +7,6 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
-import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.ServerStatsTable;
@@ -16,14 +15,16 @@ import com.wolvencraft.yasp.util.Util;
 
 public class ServerStatistics {
 	
-	public ServerStatistics(StatsPlugin plugin) {
-		lastSyncTime = Util.getTimestamp();
+	public ServerStatistics() {
+		long curTime = Util.getTimestamp();
 		
-		firstStartup = Util.getTimestamp();
-		lastStartup = Util.getTimestamp();
+		lastSyncTime = curTime;
+		
+		firstStartup = 0;
+		lastStartup = curTime;
 		currentUptime = 0;
 		totalUptime = 0;
-		lastShutdown = Util.getTimestamp();
+		lastShutdown = curTime;
 		
 		Runtime runtime = Runtime.getRuntime();
 		totalMemory = runtime.totalMemory();
@@ -48,6 +49,17 @@ public class ServerStatistics {
 		entitiesCount = 0;
 		for(World world : Bukkit.getServer().getWorlds()) entitiesCount += world.getEntities().size();
 		
+		List<QueryResult> entries = QueryUtils.select(ServerStatsTable.TableName.toString()).select();
+		for(QueryResult entry : entries) {
+			if(entry.getValue("key").equalsIgnoreCase("first_startup")) firstStartup = entry.getValueAsLong("value");
+			else if(entry.getValue("key").equalsIgnoreCase("total_uptime")) totalUptime = entry.getValueAsLong("value");
+			else if(entry.getValue("key").equalsIgnoreCase("last_shutdown")) lastShutdown = entry.getValueAsLong("value");
+			else if(entry.getValue("key").equalsIgnoreCase("max_players_online")) maxPlayersOnline = entry.getValueAsInteger("value");
+			else if(entry.getValue("key").equalsIgnoreCase("max_players_online_time")) maxPlayersOnlineTime = entry.getValueAsLong("value");
+		}
+		if(firstStartup == 0) firstStartup = curTime;
+		if(lastShutdown == 0) lastShutdown = curTime;
+				
 		pushStaticData();
 	}
 	
@@ -79,19 +91,6 @@ public class ServerStatistics {
 	private int maxPlayersAllowed;
 	private int playersOnline;
 	private int entitiesCount;
-	
-	public void fetchData() {
-		List<QueryResult> entries = QueryUtils.select(ServerStatsTable.TableName.toString()).select();
-		for(QueryResult entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("first_startup")) firstStartup = entry.getValueAsLong("value");
-			else if(entry.getValue("key").equalsIgnoreCase("total_uptime")) totalUptime = entry.getValueAsLong("value");
-			else if(entry.getValue("key").equalsIgnoreCase("last_shutdown")) lastShutdown = entry.getValueAsLong("value");
-			else if(entry.getValue("key").equalsIgnoreCase("max_players_online")) maxPlayersOnline = entry.getValueAsInteger("value");
-			else if(entry.getValue("key").equalsIgnoreCase("max_players_online_time")) maxPlayersOnlineTime = entry.getValueAsLong("value");
-		}
-		
-		if(firstStartup == 0) firstStartup = Util.getTimestamp();
-	}
 
 	public boolean pushData() {
 		long curTime = Util.getTimestamp();

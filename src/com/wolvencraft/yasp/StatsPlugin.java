@@ -16,7 +16,7 @@ import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
 import com.wolvencraft.yasp.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
-import com.wolvencraft.yasp.metrics.Statistics;
+import com.wolvencraft.yasp.metrics.PluginStatistics;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.TPSTracker;
 
@@ -24,15 +24,12 @@ public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;
 	private static boolean paused;
 	
-	private DataCollector dataCollector;
-	private StatsSignFactory displaySignFactory;
-	private TPSTracker tpsTracker;
-	
 	private static VaultHook vaultHook;
 	private static WorldGuardHook worldGuardHook;
 	
 	@Override
 	public void onEnable() {
+		
 		if(!new File(getDataFolder(), "config.yml").exists()) {
 			Message.log("Local configuration not found. Creating a default one for you.");
 			getConfig().options().copyDefaults(true);
@@ -41,11 +38,10 @@ public class StatsPlugin extends JavaPlugin {
 			return;
 		}
 		
-		instance = this;
 		paused = true;
+		instance = this;
 		
 		new QueryUtils();
-		new Settings(this);
 		
 		try { new Database(); }
 		catch (Exception e) {
@@ -56,22 +52,14 @@ public class StatsPlugin extends JavaPlugin {
 		}
 		
 		Message.log("Database connection established");
+		
+		if (getServer().getPluginManager().getPlugin("Vault") != null) vaultHook = new VaultHook();
+		else Settings.setUsingVault(false);
+		
+		if (getServer().getPluginManager().getPlugin("WorldGuard") != null) worldGuardHook = new WorldGuardHook();
+		else Settings.setUsingWorldGuard(false);
 
 		ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
-		
-		dataCollector = new DataCollector();
-		displaySignFactory = new StatsSignFactory();
-		tpsTracker = new TPSTracker();
-		
-		if (getServer().getPluginManager().getPlugin("Vault") != null) {
-			Message.log("Vault found! Advanced player statistics are available.");
-			vaultHook = new VaultHook();
-		} else Settings.setUsingVault(false);
-		
-		if (getServer().getPluginManager().getPlugin("WorldGuard") != null) {
-			Message.log("WorldGuard found! Using it to track player's location.");
-			worldGuardHook = new WorldGuardHook();
-		} else Settings.setUsingWorldGuard(false);
 		
 		new ServerListener(this);
 		new PlayerListener(this);
@@ -79,28 +67,27 @@ public class StatsPlugin extends JavaPlugin {
 		new ItemListener(this);
 		new DeathListener(this);
 		new FeedbackListener(this);
+
+		new Settings();
 		
-		Settings.fetchData();
-		
-		try { new Statistics(this); }
+		try { new PluginStatistics(this); }
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, dataCollector, Settings.getPing(), Settings.getPing());
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, displaySignFactory, (Settings.getPing() / 2), Settings.getPing());
-		Bukkit.getScheduler().runTaskTimer(this, tpsTracker, 0, 1);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), Settings.getPing(), Settings.getPing());
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new StatsSignFactory(), (Settings.getPing() / 2), Settings.getPing());
+		Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
 	}
 
 	@Override
 	public void onDisable() {
-		DataCollector.dumpAll();
-		Bukkit.getScheduler().cancelTasks(this);
-		
 		try {
-			DataCollector.global().pluginShutdown();
-			DataCollector.clear();
+			DataCollector.getServerStats().pluginShutdown();
+			DataCollector.dumpAll();
 			
-			if(Settings.getUsingVault()) { vaultHook.cleanup(); }
-			if(Settings.getUsingWorldGuard()) { worldGuardHook.cleanup(); }
+			Bukkit.getScheduler().cancelTasks(this);
+			
+			if(Settings.getUsingVault() && vaultHook != null) { vaultHook.cleanup(); }
+			if(Settings.getUsingWorldGuard() && worldGuardHook != null) { worldGuardHook.cleanup(); }
 
 			Database.cleanup();
 			instance = null;

@@ -24,7 +24,7 @@ public class Util {
 	 * @return Resulting string
 	 */
 	public static String parseVars(String str) {
-		Map<String, Object> values = DataCollector.serverTotals().getValues();
+		Map<String, Object> values = DataCollector.getServerTotals().getValues();
 		Iterator<Entry<String, Object>> it = values.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();

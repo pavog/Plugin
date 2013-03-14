@@ -21,18 +21,18 @@ public class ServerListener implements Listener {
 	public void onWeatherChange(WeatherChangeEvent event) {
 		if(StatsPlugin.getPaused()) return;
 		if(!Bukkit.getWorlds().get(0).equals(event.getWorld())) return;
-		DataCollector.global().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
+		DataCollector.getServerStats().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginEnable(PluginEnableEvent event) {
 		if(StatsPlugin.getPaused()) return;
-		DataCollector.global().pluginNumberChange();
+		DataCollector.getServerStats().pluginNumberChange();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginDisable(PluginDisableEvent event) {
 		if(StatsPlugin.getPaused()) return;
-		DataCollector.global().pluginNumberChange();
+		DataCollector.getServerStats().pluginNumberChange();
 	}
 }

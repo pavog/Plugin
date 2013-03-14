@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if(StatsPlugin.getPaused()) return;
-		DataCollector.global().playerLogin();
+		DataCollector.getServerStats().playerLogin();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).player().login(player.getLocation());
@@ -46,7 +46,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		if(StatsPlugin.getPaused()) return;
-		DataCollector.global().playerLogout();
+		DataCollector.getServerStats().playerLogout();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).player().logout(player.getLocation());

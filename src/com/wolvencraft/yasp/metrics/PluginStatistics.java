@@ -5,11 +5,11 @@ import java.io.IOException;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
  
-public class Statistics {
+public class PluginStatistics {
 	 
 	private Metrics metrics;
 	 
-	public Statistics(StatsPlugin plugin) throws MetricsConnectionException {
+	public PluginStatistics(StatsPlugin plugin) throws MetricsConnectionException {
 		try {
 			this.metrics = new Metrics(plugin);
 			if(metrics.isOptOut()) throw new MetricsConnectionException("Cannot connect to PluginMetrics :: opt out");

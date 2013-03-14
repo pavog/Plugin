@@ -43,21 +43,13 @@ public class Settings {
 	 * Default constructor. Takes in the plugin instance as argument.
 	 * @param plugin Plugin instance
 	 */
-	public Settings(StatsPlugin plugin) {		
+	public Settings() {		
 		ping = 2400;
 		showWelcomeMessages = false;
 		welcomeMessage = "Welcome, <PLAYER>!";
 		showFirstJoinMessages = false;
 		firstJoinMessage = "Welcome, <PLAYER>! Your statistics on this server are now being tracked.";
-	}
-	
-	private static long ping;
-	private static boolean showWelcomeMessages;
-	private static String welcomeMessage;
-	private static boolean showFirstJoinMessages;
-	private static String firstJoinMessage;
-	
-	public static void fetchData() {
+		
 		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString()).column("key", "value").select();
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value") * 20;
@@ -67,6 +59,12 @@ public class Settings {
 			else if(entry.getValue("key").equalsIgnoreCase("first_join_message")) firstJoinMessage = entry.getValue("value");
 		}
 	}
+	
+	private static long ping;
+	private static boolean showWelcomeMessages;
+	private static String welcomeMessage;
+	private static boolean showFirstJoinMessages;
+	private static String firstJoinMessage;
 	
 	public static void setDatabaseVersion(String version) {
 		QueryUtils.update(SettingsTable.TableName.toString())
