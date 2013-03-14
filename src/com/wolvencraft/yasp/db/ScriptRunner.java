@@ -31,9 +31,11 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
 
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
+import com.wolvencraft.yasp.util.Message;
 
 public class ScriptRunner {
 
@@ -53,6 +55,7 @@ public class ScriptRunner {
 	public void setFullLineDelimiter(boolean fullLineDelimiter) { this.fullLineDelimiter = fullLineDelimiter; }
 
 	public void runScript(Reader reader) throws RuntimeSQLException {
+		Message.log(Level.FINER, "Executing a database script");
 		try { if (this.connection.getAutoCommit()) this.connection.setAutoCommit(false); }
 		catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
 
@@ -61,8 +64,8 @@ public class ScriptRunner {
 			try {
 				BufferedReader lineReader = new BufferedReader(reader);
 				String line = "";
-				String dbName = Settings.getDatabaseName();
-				String dbPrefix = Settings.getTablePrefix();
+				String dbName = Settings.LocalConfiguration.DBName.asString();
+				String dbPrefix = Settings.LocalConfiguration.DBPrefix.asString();
 				while ((line = lineReader.readLine()) != null) {
 					line = line.replace("$dbname", dbName);
 					line = line.replace("$prefix_", dbPrefix);

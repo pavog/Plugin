@@ -48,7 +48,6 @@ public class ServerStatistics {
 		entitiesCount = 0;
 		for(World world : Bukkit.getServer().getWorlds()) entitiesCount += world.getEntities().size();
 		
-		fetchData();
 		pushStaticData();
 	}
 	

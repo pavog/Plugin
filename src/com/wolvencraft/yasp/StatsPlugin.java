@@ -1,5 +1,6 @@
 package com.wolvencraft.yasp;
 
+import java.io.File;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -28,28 +29,26 @@ public class StatsPlugin extends JavaPlugin {
 	
 	private static VaultHook vaultHook;
 	private static WorldGuardHook worldGuardHook;
-//	private static McMMOHook mcmmoHook;
-//	private static JobsHook jobsHook;
 	
 	@Override
 	public void onEnable() {
-		instance = this;
-		paused = true;
-		
-		getConfig().options().copyDefaults(true);
-		saveConfig();
-		new Settings(this);
-		
-		if(!Database.testConnection()) {
-			Message.log(Level.SEVERE, "Could not establish a connection to the database.");
+		if(!new File(getDataFolder(), "config.yml").exists()) {
+			Message.log("Local configuration not found. Creating a default one for you.");
+			getConfig().options().copyDefaults(true);
+			saveConfig();
 			this.setEnabled(false);
 			return;
 		}
 		
+		instance = this;
+		paused = true;
+		
+		new Settings(this);
+		
 		try { new Database(); }
 		catch (Exception e) {
-			Message.log(Level.SEVERE, e.getMessage());
-			if (Settings.getDebug()) e.printStackTrace();
+			Message.log(Level.SEVERE, "Cannot establish a connection with the target database!");
+			if (Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 			this.setEnabled(false);
 			return;
 		}
@@ -72,18 +71,6 @@ public class StatsPlugin extends JavaPlugin {
 			worldGuardHook = new WorldGuardHook();
 		} else Settings.setUsingWorldGuard(false);
 		
-//		if (getServer().getPluginManager().getPlugin("McMMO") != null) {
-//			Message.log("McMMO found! Skill information is available");
-//			mcmmoHook = new McMMOHook();
-//		} else Settings.setUsingMcMMO(false);
-		
-//		if (getServer().getPluginManager().getPlugin("Jobs") != null) {
-//			Message.log("Jobs found! Job information is available");
-//			jobsHook = new JobsHook();
-//		} else Settings.setUsingMcMMO(false);
-		
-		Settings.fetchSettings();
-		
 		new ServerListener(this);
 		new PlayerListener(this);
 		new BlockListener(this);
@@ -91,9 +78,11 @@ public class StatsPlugin extends JavaPlugin {
 		new DeathListener(this);
 		new FeedbackListener(this);
 		
+		Settings.fetchData();
+		
 		try { new Statistics(this); }
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
-		Message.debug("ping=" + Settings.getPing());
+		
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, dataCollector, Settings.getPing(), Settings.getPing());
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, displaySignFactory, (Settings.getPing() / 2), Settings.getPing());
 		Bukkit.getScheduler().runTaskTimer(this, tpsTracker, 0, 1);
@@ -108,15 +97,14 @@ public class StatsPlugin extends JavaPlugin {
 			DataCollector.global().pluginShutdown();
 			DataCollector.clear();
 			
-			if(Settings.getUsingVault()) vaultHook.cleanup();
-			if(Settings.getUsingWorldGuard()) worldGuardHook.cleanup();
-//			if(Settings.getUsingMcMMO()) mcmmoHook.cleanup();
-//			if(Settings.getUsingJobs()) jobsHook.cleanup();
-			
+			if(Settings.getUsingVault()) { vaultHook.cleanup(); }
+			if(Settings.getUsingWorldGuard()) { worldGuardHook.cleanup(); }
+
+			Database.cleanup();
 			instance = null;
-		} catch (Exception ex) { 
-			Message.log(Level.SEVERE, ex.getMessage());
-			if(Settings.getDebug()) ex.printStackTrace();
+		} catch (Exception e) { 
+			Message.log(Level.SEVERE, e.getMessage());
+			if(Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 		}
 	}
 	
@@ -133,7 +121,7 @@ public class StatsPlugin extends JavaPlugin {
 		
 		for(CommandManager cmd : CommandManager.values()) {
 			if(cmd.isCommand(args[0])) {
-				if(Settings.getDebug()) {
+				if(Settings.LocalConfiguration.Debug.asBoolean()) {
 					String argString = "/stats";
 					for (String arg : args) { argString = argString + " " + arg; }
 					Message.log(sender.getName() + ": " + argString);

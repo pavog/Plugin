@@ -29,11 +29,11 @@ public class Message {
 	}
 	
 	public static void sendFormattedSuccess(CommandSender sender, String message) {
-		sendFormatted(sender, ChatColor.DARK_GREEN + Settings.getLogPrefix(), message);
+		sendFormatted(sender, ChatColor.DARK_GREEN + Settings.LocalConfiguration.LogPrefix.asString(), message);
 	}
 
 	public static void sendFormattedError(CommandSender sender, String message) {
-		sendFormatted(sender, ChatColor.DARK_RED + Settings.getLogPrefix(), message);
+		sendFormatted(sender, ChatColor.DARK_RED + Settings.LocalConfiguration.LogPrefix.asString(), message);
 	}
 	
     /**
@@ -42,7 +42,7 @@ public class Message {
      */
     public static void broadcast(String message) {
         for (Player p : Bukkit.getServer().getOnlinePlayers())
-        	sendFormatted(p, ChatColor.DARK_GREEN + Settings.getLogPrefix(), message);
+        	sendFormatted(p, ChatColor.DARK_GREEN + Settings.LocalConfiguration.LogPrefix.asString(), message);
         log(Util.parseChatColors(message));
     }
     
@@ -51,7 +51,7 @@ public class Message {
      * @param message Message to be sent
      */
     public static void debug(String message) {
-        if (Settings.getDebug()) log(message);
+        if (Settings.LocalConfiguration.Debug.asBoolean()) log(message);
     }
     
 	/**

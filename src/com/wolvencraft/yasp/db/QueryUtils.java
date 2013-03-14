@@ -27,14 +27,14 @@ public class QueryUtils {
 	 */
 	private static boolean pushData(String sql) {
 		try {
-			if(Settings.getDebug()) Message.log(Level.FINEST, sql);
+			if(Settings.LocalConfiguration.Debug.asBoolean()) { Message.log(Level.FINEST, sql); }
 			return Database.getInstance().pushData(sql);
 		} catch (DatabaseConnectionException ex) {
-			if(Settings.getDebug()) Message.log(Level.SEVERE, ex.getMessage());
+			if(Settings.LocalConfiguration.Debug.asBoolean()) Message.log(Level.SEVERE, ex.getMessage());
 			return false;
 		} catch (Exception e) {
 			Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
-			if(Settings.getDebug()) {
+			if(Settings.LocalConfiguration.Debug.asBoolean()) {
 				e.printStackTrace();
 				Message.log(Level.SEVERE, "End of error log");
 			}
@@ -50,7 +50,7 @@ public class QueryUtils {
 	 */
 	private static List<QueryResult> fetchData(String sql) {
 		try {
-			Message.log(Level.FINEST, sql);
+			if(Settings.LocalConfiguration.Debug.asBoolean()) { Message.log(Level.FINEST, sql); }
 			return Database.getInstance().fetchData(sql);
 		} catch (DatabaseConnectionException ex) {
 			Message.log(Level.SEVERE, ex.getMessage());
@@ -72,7 +72,7 @@ public class QueryUtils {
 	 */
 	public static List<QueryResult> select(String table, String[] subject, String[]... condition) {
 		String query = "";
-		table = "`" + Settings.getTablePrefix() + table + "`";
+		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 		
 		String subjects = "";
 		for(String str : subject) {
@@ -98,7 +98,7 @@ public class QueryUtils {
 	 */
 	public static boolean exists(String table, String[][] condition) {
 		String query = "";
-		table = "`" + Settings.getTablePrefix() + table + "`";
+		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 		
 		String conditions = "";
 		for(String[] str : condition) {
@@ -118,7 +118,7 @@ public class QueryUtils {
 	 * @return Data from the remote database
 	 */
 	public static List<QueryResult> select(String table, String[] subject) {
-		table = "`" + Settings.getTablePrefix() + table + "`";
+		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 		String subjects = "";
 		for(String str : subject) {
 			if(!subjects.equals("")) subjects += ", ";
@@ -137,7 +137,7 @@ public class QueryUtils {
 	 * @return Sum of the selected column
 	 */
 	public static double sum(String table, String column) {
-		table = "`" + Settings.getTablePrefix() + table + "`";
+		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table + ";";
 		QueryResult result = fetchData(query).get(0);
 		if(result.getValue("temp") == null) return 0;
@@ -153,7 +153,7 @@ public class QueryUtils {
 	 * @return Sum of the selected column
 	 */
 	public static double sum(String table, String column, String[]... condition) {
-		table = "`" + Settings.getTablePrefix() + table + "`";
+		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 		String conditions = "";
 		for(String[] str : condition) {
 			if(!conditions.equals("")) conditions += " AND ";
@@ -185,7 +185,7 @@ public class QueryUtils {
 			values += "'" + pairs.getValue().toString() + "'";
 			it.remove();
 		}
-		query = "INSERT INTO `" + Settings.getTablePrefix() + table + "` (" + fields + ")  VALUES (" + values + ");";
+		query = "INSERT INTO `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` (" + fields + ")  VALUES (" + values + ");";
 		return pushData(query);
 	}
 	
@@ -200,7 +200,7 @@ public class QueryUtils {
 		field = "`" + field + "`";
 		value = "'" + value + "'";
 		
-		String query = "INSERT INTO `" + Settings.getTablePrefix() + table + "` (" + field + ")  VALUES (" + value + ");";
+		String query = "INSERT INTO `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` (" + field + ")  VALUES (" + value + ");";
 		return pushData(query);
 	}
 	
@@ -222,7 +222,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "UPDATE `" + Settings.getTablePrefix() + table + "` SET `" + field + "`='" + value + "' WHERE " + conditions + ";";
+		query = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` SET `" + field + "`='" + value + "' WHERE " + conditions + ";";
 		return pushData(query);
 	}
 	
@@ -250,7 +250,7 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "UPDATE `" + Settings.getTablePrefix() + table + "` SET " + fieldValues + " WHERE " + conditions + ";";
+		query = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` SET " + fieldValues + " WHERE " + conditions + ";";
 		return pushData(query);
 	}
 }

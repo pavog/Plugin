@@ -44,18 +44,7 @@ public class Database {
 		instance = this;
 		
 		connect();
-		runAsyncPatch();
-	}
-	
-	public static boolean testConnection() {
-		try {
-			DriverManager.getConnection(
-				Settings.getConnectionPath(),
-				Settings.getDatabaseUsername(),
-				Settings.getDatabasePassword()
-			).close();
-		} catch (Exception e) { return false; }
-		return true;
+		runPatch(false);
 	}
 	
 	/**
@@ -65,9 +54,9 @@ public class Database {
 	private void connect() throws DatabaseConnectionException {
 		try {
 			this.connection = DriverManager.getConnection(
-				Settings.getConnectionPath(),
-				Settings.getDatabaseUsername(),
-				Settings.getDatabasePassword()
+				Settings.LocalConfiguration.DBConnect.asString(),
+				Settings.LocalConfiguration.DBUser.asString(),
+				Settings.LocalConfiguration.DBPass.asString()
 			);
 		} catch (SQLException e) { throw new DatabaseConnectionException(e); }
 	}
@@ -77,7 +66,7 @@ public class Database {
 	 * This method will run in the <b>main server thread</b> and therefore will freeze the server until the patch is complete.
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
-	public void runSyncPatch(boolean force) throws DatabaseConnectionException {
+	public void runPatch(boolean force) throws DatabaseConnectionException {
 		Message.log("Attempting to patch the database. This will take a while.");
 		int databaseVersion = 0;
 		if(!force) databaseVersion = Settings.getDatabaseVersion();
@@ -92,8 +81,8 @@ public class Database {
 		} while (true);
 		
 		Settings.setDatabaseVersion(databaseVersion);
+		Message.log("Target database is up to date (version " + databaseVersion + ")");
 		StatsPlugin.setPaused(false);
-		Message.log("Target database is up to date.");
 	}
 	
 	/**
@@ -101,7 +90,7 @@ public class Database {
 	 * @param patchId Unique ID of the desired patch
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
-	public void runSyncPatch(String patchId) throws DatabaseConnectionException {
+	public void runCustomPatch(String patchId) throws DatabaseConnectionException {
 		InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patchId + ".sql");
 		if (is == null) return;
 		Message.log("Executing database patch: " + patchId + ".sql");
@@ -115,7 +104,7 @@ public class Database {
 	 * This method will run in an <b>async thread</b>.
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
-	public void runAsyncPatch() throws DatabaseConnectionException {
+	public void runPatchAsynchronously() throws DatabaseConnectionException {
 		StatsPlugin.setPaused(true);
 		Bukkit.getScheduler().runTaskAsynchronously(StatsPlugin.getInstance(), new Runnable() {
 
@@ -134,8 +123,8 @@ public class Database {
 				} while (true);
 				
 				Settings.setDatabaseVersion(databaseVersion);
+				Message.log("Target database is up to date (version " + databaseVersion + ")");
 				StatsPlugin.setPaused(false);
-				Message.log("Target database is up to date.");
 			}
 			
 		});
@@ -159,12 +148,12 @@ public class Database {
 					return true;
 				} catch (DatabaseConnectionException e) {
 					Message.log(Level.SEVERE, "Failed to re-connect to the database. Data is being stored locally.");
-					if (Settings.getDebug()) e.printStackTrace();
+					if (Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 					return false;
 				}
 			}
 		} catch (SQLException e) {
-			if (Settings.getDebug()) e.printStackTrace();
+			if (Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 			return false;
 		}
 	}
@@ -185,8 +174,10 @@ public class Database {
 			statement.close();
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, "Failed to push data to the remote database");
-			if(Settings.getDebug()) Message.log(Level.WARNING, sql);
-			if (Settings.getDebug()) e.printStackTrace();
+			if(Settings.LocalConfiguration.Debug.asBoolean()) {
+				Message.log(Level.WARNING, sql);
+				e.printStackTrace();
+			}
 			return reconnect();
 		} finally {
 			if (statement != null) {
@@ -221,7 +212,7 @@ public class Database {
 			}
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, "Error retrieving data from the database");
-			if(Settings.getDebug()) {
+			if(Settings.LocalConfiguration.Debug.asBoolean()) {
 				Message.log(Level.WARNING, e.getMessage());
 				Message.log(Level.WARNING, sql);
 			}
@@ -261,5 +252,13 @@ public class Database {
 	public static Database getInstance(boolean silent) throws DatabaseConnectionException {
 		if(!silent && instance == null) throw new DatabaseConnectionException("Could not find an active connection to the database");
 		return instance;
+	}
+	
+	/**
+	 * Cleans up the leftover database and connection instances to prevent memory leaks.
+	 */
+	public static void cleanup() {
+		instance.connection = null;
+		instance = null;
 	}
 }
