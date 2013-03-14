@@ -54,6 +54,15 @@ public class Message {
         if (Settings.LocalConfiguration.Debug.asBoolean()) log(message);
     }
     
+    /**
+     * Sends a message into the server log if debug is enabled
+	 * @param level Severity level
+     * @param message Message to be sent
+     */
+    public static void debug(Level level, String message) {
+        if (Settings.LocalConfiguration.Debug.asBoolean()) log(level, message);
+    }
+    
 	/**
 	 * Sends a message into the server log
 	 * @param message Message to be sent

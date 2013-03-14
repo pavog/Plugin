@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import com.wolvencraft.yasp.db.data.sync.Settings;
-import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.db.data.sync.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -27,17 +26,12 @@ public class QueryUtils {
 	 */
 	private static boolean pushData(String sql) {
 		try {
-			if(Settings.LocalConfiguration.Debug.asBoolean()) { Message.log(Level.FINEST, sql); }
+			Message.debug(Level.FINEST, sql);
 			return Database.getInstance().pushData(sql);
-		} catch (DatabaseConnectionException ex) {
-			if(Settings.LocalConfiguration.Debug.asBoolean()) Message.log(Level.SEVERE, ex.getMessage());
-			return false;
 		} catch (Exception e) {
 			Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
-			if(Settings.LocalConfiguration.Debug.asBoolean()) {
-				e.printStackTrace();
-				Message.log(Level.SEVERE, "End of error log");
-			}
+			Message.log(Level.SEVERE, e.getMessage());
+			if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 			return false;
 		}
 	}
@@ -50,15 +44,12 @@ public class QueryUtils {
 	 */
 	private static List<QueryResult> fetchData(String sql) {
 		try {
-			if(Settings.LocalConfiguration.Debug.asBoolean()) { Message.log(Level.FINEST, sql); }
+			Message.debug(Level.FINEST, sql);
 			return Database.getInstance().fetchData(sql);
-		} catch (DatabaseConnectionException ex) {
-			Message.log(Level.SEVERE, ex.getMessage());
-			return new ArrayList<QueryResult>();
 		} catch (Exception e) {
 			Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
-			e.printStackTrace();
-			Message.log(Level.SEVERE, "End of error log");
+			Message.log(Level.SEVERE, e.getMessage());
+			if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 			return new ArrayList<QueryResult>();
 		}
 	}
@@ -66,19 +57,18 @@ public class QueryUtils {
 	/**
 	 * Builds and runs a SELECT query based on arguments provided
 	 * @param table Database table to select from (without prefix)
-	 * @param subject The columns that should be selected from the table
+	 * @param column The columns that should be selected from the table
 	 * @param condition Conditions that should apply to columns
 	 * @return Data from the remote database
 	 */
-	public static List<QueryResult> select(String table, String[] subject, String[]... condition) {
-		String query = "";
-		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
+	public static List<QueryResult> select(String table, String[] column, String[]... condition) {
+		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
 		
-		String subjects = "";
-		for(String str : subject) {
-			if(!subjects.equals("")) subjects += ", ";
-			if(str.equals("*")) subjects += "*";
-			else subjects += "`" + str + "`";
+		String columns = "";
+		for(String str : column) {
+			if(!columns.equals("")) columns += ", ";
+			if(str.equals("*")) columns += "*";
+			else columns += "`" + str + "`";
 		}
 		
 		String conditions = "";
@@ -86,8 +76,8 @@ public class QueryUtils {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "SELECT " + subjects + " FROM " + table + " WHERE " + conditions + ";";
-		return fetchData(query);
+		
+		return fetchData("SELECT " + columns + " FROM " + table + " WHERE " + conditions + ";");
 	}
 	
 	/**
@@ -97,36 +87,33 @@ public class QueryUtils {
 	 * @return <b>true</b> if the row exists, <b>false</b> otherwise
 	 */
 	public static boolean exists(String table, String[][] condition) {
-		String query = "";
-		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
+		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
 		
 		String conditions = "";
 		for(String[] str : condition) {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "SELECT * FROM " + table + " WHERE " + conditions + ";";
-		return !fetchData(query).isEmpty();
+		
+		return !fetchData("SELECT * FROM " + table + " WHERE " + conditions + ";").isEmpty();
 	}
 	
 	/**
-	 * Builds and runs a SELECT query based on arguments provided.<br />
-	 * <b>Example:</b> QueryUtils.select(Settings.TableName.toString(), new String[] {"key", "value"});<br />
-	 * <b>Becomes:</b> SELECT `yasp_settings`.`key`, `yasp_settings`.`value` FROM `yasp_settings`
+	 * Builds and runs a SELECT query based on arguments provided
 	 * @param table Database table to select from (without prefix)
-	 * @param subject The columns that should be selected from the table
+	 * @param column The columns that should be selected from the table
 	 * @return Data from the remote database
 	 */
-	public static List<QueryResult> select(String table, String[] subject) {
-		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
+	public static List<QueryResult> select(String table, String[] column) {
+		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+		
 		String subjects = "";
-		for(String str : subject) {
+		for(String str : column) {
 			if(!subjects.equals("")) subjects += ", ";
 			if(str.equals("*")) subjects += "*";
 			else subjects += "`" + str + "`";
 		}
-		String query = "SELECT " + subjects + " FROM " + table + ";";
-		return fetchData(query);
+		return fetchData("SELECT " + subjects + " FROM " + table + ";");
 	}
 	
 	/**
@@ -137,9 +124,8 @@ public class QueryUtils {
 	 * @return Sum of the selected column
 	 */
 	public static double sum(String table, String column) {
-		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
-		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table + ";";
-		QueryResult result = fetchData(query).get(0);
+		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+		QueryResult result = fetchData("SELECT sum(`" + column + "`) as `temp` FROM " + table + ";").get(0);
 		if(result.getValue("temp") == null) return 0;
 		else return result.getValueAsInteger("temp");
 	}
@@ -153,14 +139,15 @@ public class QueryUtils {
 	 * @return Sum of the selected column
 	 */
 	public static double sum(String table, String column, String[]... condition) {
-		table = "`" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
+		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+		
 		String conditions = "";
 		for(String[] str : condition) {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		String query = "SELECT sum(`" + column + "`) as `temp` FROM " + table + " WHERE " + conditions + ";";
-		QueryResult result = fetchData(query).get(0);
+		
+		QueryResult result = fetchData("SELECT sum(`" + column + "`) as `temp` FROM " + table + " WHERE " + conditions + ";").get(0);
 		if(result.getValue("temp") == null) return 0;
 		else return result.getValueAsInteger("temp");
 	}
@@ -172,7 +159,8 @@ public class QueryUtils {
 	 * @return <b>true</b> if the insertion was successful, <b>false</b> if an error occurred
 	 */
 	public static boolean insert(String table, Map<String, Object> valueMap) {
-		String query = "";
+		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+		
 		String fields = "";
 		String values = "";
 		Iterator<Entry<String, Object>> it = valueMap.entrySet().iterator();
@@ -185,45 +173,44 @@ public class QueryUtils {
 			values += "'" + pairs.getValue().toString() + "'";
 			it.remove();
 		}
-		query = "INSERT INTO `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` (" + fields + ")  VALUES (" + values + ");";
-		return pushData(query);
+		
+		return pushData("INSERT INTO `" + table + "` (" + fields + ")  VALUES (" + values + ");");
 	}
 	
 	/**
 	 * Builds and runs an INSERT query based on arguments provided
 	 * @param table Database table to insert into (without prefix)
-	 * @param field Name of the target column
+	 * @param column Name of the target column
 	 * @param value Value of the field
 	 * @return <b>true</b> if the insertion was successful, <b>false</b> if an error occurred
 	 */
-	public static boolean insert(String table, String field, String value) {
-		field = "`" + field + "`";
+	public static boolean insert(String table, String column, String value) {
+		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+		column = "`" + column + "`";
 		value = "'" + value + "'";
 		
-		String query = "INSERT INTO `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` (" + field + ")  VALUES (" + value + ");";
-		return pushData(query);
+		return pushData("INSERT INTO `" + table + "` (" + column + ")  VALUES (" + value + ");");
 	}
 	
 	/**
 	 * 
 	 * Builds and runs an UPDATE query based on arguments provided
 	 * @param table Database table to update (without prefix)
-	 * @param field Field to update
+	 * @param column Field to update
 	 * @param value The new value of a field
 	 * @param condition Conditions that should apply to columns
 	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
 	 */
-	public static boolean update(String table, String field, String value, String[]... condition) {
-//		if(!exists(table, condition)) return insert(table, field, value);
+	public static boolean update(String table, String column, String value, String[]... condition) {
+		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
 		
-		String query = "";
 		String conditions = "";
 		for(String[] str : condition) {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` SET `" + field + "`='" + value + "' WHERE " + conditions + ";";
-		return pushData(query);
+		
+		return pushData("UPDATE `" + table + "` SET `" + column + "`='" + value + "' WHERE " + conditions + ";");
 	}
 	
 	/**
@@ -235,10 +222,9 @@ public class QueryUtils {
 	 */
 	public static boolean update(String table, Map<String, Object> valueMap, String[]... condition) {
 		if(!exists(table, condition)) return insert(table, valueMap);
+		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
 		
-		String query = "";
 		String fieldValues = "";
-		String conditions = "";
 		Iterator<Entry<String, Object>> it = valueMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
@@ -246,11 +232,13 @@ public class QueryUtils {
 			fieldValues += "`" + pairs.getKey() + "` = '" + pairs.getValue().toString() + "'";
 			it.remove();
 		}
+
+		String conditions = "";
 		for(String str[] : condition) {
 			if(!conditions.equals("")) conditions += " AND ";
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
-		query = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` SET " + fieldValues + " WHERE " + conditions + ";";
-		return pushData(query);
+		
+		return pushData("UPDATE `" + table + "` SET " + fieldValues + " WHERE " + conditions + ";");
 	}
 }
