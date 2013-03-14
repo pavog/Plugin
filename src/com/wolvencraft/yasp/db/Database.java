@@ -89,7 +89,7 @@ public class Database {
 			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + patch + ".sql");
 			try {sr.runScript(new InputStreamReader(is)); }
 			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + patch, e); }
-
+			
 			Settings.setDatabaseVersion(patch);
 		}
 		Message.log("+----------------------------------+");
