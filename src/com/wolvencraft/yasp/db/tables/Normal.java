@@ -25,12 +25,12 @@ public class Normal {
 	 * @author bitWolfy
 	 *
 	 */
-	public enum ServerStatisticsTable {
+	public enum ServerStatsTable {
 		TableName("server_statistics"),
 		Key("key"),
 		Value("value");
 		
-		ServerStatisticsTable (String columnName) { this.columnName = columnName; }
+		ServerStatsTable (String columnName) { this.columnName = columnName; }
 		
 		private String columnName;
 		

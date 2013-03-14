@@ -8,8 +8,8 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
 import com.wolvencraft.yasp.util.Util;
@@ -117,14 +117,12 @@ public class DeathsData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(
-				TotalDeathPlayersTable.TableName.toString(),
-				new String[] {"*"},
-				new String[] { TotalDeathPlayersTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalDeathPlayersTable.Cause.toString(), cause.name()}
-			);
+			List<QueryResult> results = QueryUtils.select(TotalDeathPlayersTable.TableName.toString())
+				.condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
+				.condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
+				.select();
 			
-			if(results.isEmpty()) QueryUtils.insert(TotalDeathPlayersTable.TableName.toString(), getValues(playerId));
+			if(results.isEmpty()) QueryUtils.insert(TotalDeathPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				times = results.get(0).getValueAsInteger(TotalDeathPlayersTable.Times.toString());
 			}
@@ -132,12 +130,11 @@ public class DeathsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(
-				TotalDeathPlayersTable.TableName.toString(),
-				getValues(playerId),
-				new String[] { TotalDeathPlayersTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalDeathPlayersTable.Cause.toString(), cause.name()}
-			);
+			boolean result = QueryUtils.update(TotalDeathPlayersTable.TableName.toString())
+				.value(getValues(playerId))
+				.condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
+				.condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
+				.update(true);
 			fetchData(playerId);
 			return result;
 		}
@@ -200,10 +197,9 @@ public class DeathsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(
-				Detailed.DeathPlayers.TableName.toString(),
-				getValues(playerId)
-			);
+			return QueryUtils.insert(Detailed.DeathPlayers.TableName.toString())
+				.value(getValues(playerId))
+				.insert();
 		}
 
 		@Override

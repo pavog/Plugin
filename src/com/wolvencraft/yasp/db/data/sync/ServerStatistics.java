@@ -8,9 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.tables.Normal.ServerStatisticsTable;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
+import com.wolvencraft.yasp.db.tables.Normal.ServerStatsTable;
 import com.wolvencraft.yasp.util.TPSTracker;
 import com.wolvencraft.yasp.util.Util;
 
@@ -81,7 +81,7 @@ public class ServerStatistics {
 	private int entitiesCount;
 	
 	public void fetchData() {
-		List<QueryResult> entries = QueryUtils.select(ServerStatisticsTable.TableName.toString(), new String[] {"*"});
+		List<QueryResult> entries = QueryUtils.select(ServerStatsTable.TableName.toString()).select();
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("first_startup")) firstStartup = entry.getValueAsLong("value");
 			else if(entry.getValue("key").equalsIgnoreCase("total_uptime")) totalUptime = entry.getValueAsLong("value");
@@ -106,37 +106,37 @@ public class ServerStatistics {
 		freeMemory = runtime.freeMemory();
 		ticksPerSecond = TPSTracker.getTicksPerSecond();
 		
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", currentUptime + "", new String[] {"key", "current_uptime"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", totalUptime + "", new String[] {"key", "total_uptime"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", maxPlayersOnline + "", new String[] {"key", "max_players_online"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", maxPlayersOnlineTime + "", new String[] {"key", "max_players_online_time"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", totalMemory + "", new String[] {"key", "total_memory"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", freeMemory + "", new String[] {"key", "free_memory"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", ticksPerSecond + "", new String[] {"key", "ticks_per_second"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", serverTime + "", new String[] {"key", "server_time"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", weather + "", new String[] {"key", "weather"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", weatherDuration + "", new String[] {"key", "weather_duration"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", entitiesCount + "", new String[] {"key", "entities_count"} );
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", currentUptime).condition("key", "current_uptime").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", totalUptime).condition("key", "total_uptime").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", maxPlayersOnline).condition("key", "max_players_online").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", maxPlayersOnlineTime).condition("key", "max_players_online_time").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", totalMemory).condition("key", "total_memory").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", freeMemory).condition("key", "free_memory").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", ticksPerSecond).condition("key", "ticks_per_second").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", serverTime).condition("key", "server_time").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", weather).condition("key", "weather").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", weatherDuration).condition("key", "weather_duration").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", entitiesCount).condition("key", "entities_count").update(true);
 		return true;
 	}
 	
 	public void pushStaticData() {
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", firstStartup + "", new String[] {"key", "first_startup"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", lastStartup + "", new String[] {"key", "last_startup"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", plugins + "", new String[] {"key", "plugins"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", bukkitVersion, new String[] {"key", "bukkit_version"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", serverIP, new String[] {"key", "server_ip"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", serverPort + "", new String[] {"key", "server_port"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", serverMOTD, new String[] {"key", "server_motd"} );
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", firstStartup).condition("key", "first_startup").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", lastStartup).condition("key", "last_startup").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", plugins).condition("key", "plugins").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", bukkitVersion).condition("key", "bukkit_version").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", serverIP).condition("key", "server_ip").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", serverPort).condition("key", "server_port").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", serverMOTD).condition("key", "server_motd").update(true);
 
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", maxPlayersAllowed + "", new String[] {"key", "players_allowed"} );
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value",  maxPlayersAllowed).condition("key", "players_allowed").update(true);
 	}
 	
 	/**
 	 * Indicates that the plugin is shutting down and registers the current shutdown time.
 	 */
 	public void pluginShutdown() {
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", Util.getTimestamp() + "", new String[] {"key", "last_shutdown"} );
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", Util.getTimestamp()).condition("key", "last_shutdown").update(true);
 	}
 	
 	/**
@@ -150,25 +150,25 @@ public class ServerStatistics {
 			this.maxPlayersOnlineTime = Util.getTimestamp();
 		}
 		
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", playersOnline + "", new String[] {"key", "players_online"} );
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", playersOnline).condition("key", "players_online").update(true);
 	}
 	
 	public void playerLogout() {
 		playersOnline = Bukkit.getOnlinePlayers().length;
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", playersOnline + "", new String[] {"key", "players_online"} );
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", playersOnline).condition("key", "players_online").update(true);
 	}
 	
 	public void weatherChange(boolean isStorming, int duration) {
 		weather = isStorming;
 		weatherDuration = duration;
 		
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", weather + "", new String[] {"key", "weather"} );
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", weatherDuration + "", new String[] {"key", "weather_duration"} );
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", weather).condition("key", "weather").update(true);
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", weatherDuration).condition("key", "weather_duration").update(true);
 	}
 	
 	public void pluginNumberChange() {
 		plugins = Bukkit.getServer().getPluginManager().getPlugins().length;
-		QueryUtils.update( ServerStatisticsTable.TableName.toString(), "value", plugins + "", new String[] {"key", "plugins"} );
+		QueryUtils.update(ServerStatsTable.TableName.toString()).value("value", plugins).condition("key", "plugins").update(true);
 	}
 	
 	public Map<String, Object> getValueMap() {

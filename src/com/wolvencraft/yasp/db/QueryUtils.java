@@ -1,22 +1,60 @@
 package com.wolvencraft.yasp.db;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.db.data.sync.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Message;
 
-/**
- * Database object wrapper; provides additional methods for simpler fetching and pushing data.<br />
- * All methods are applied to the currently running instance of the Database
- * @author bitWolfy
- *
- */
 public class QueryUtils {
+	
+	private static QueryUtils instance;
+	
+	public QueryUtils() {
+		instance = this;
+	}
+	
+	/**
+	 * Safely casts a Map to QueryResult
+	 * @param map Map to apply the cast to
+	 * @return <b>QueryResult</b> desired result
+	 */
+	public static QueryResult toQueryResult(Map<String, String> map) {
+		return instance.new QueryResult(map);
+	}
+	
+	/**
+	 * Builds a SELECT query for the table provided.
+	 * @param table Table to send the query to
+	 * @return Database query
+	 */
+	public static SelectQuery select(String table) {
+		return instance.new SelectQuery(table);
+	}
+	
+	/**
+	 * Builds an INSERT query for the table provided.
+	 * @param table Table to send the query to
+	 * @return Database query
+	 */
+	public static InsertQuery insert(String table) {
+		return instance.new InsertQuery(table);
+	}
+	
+	/**
+	 * Builds an UPDATE query for the table provided.
+	 * @param table Table to send the query to
+	 * @return Database query
+	 */
+	public static UpdateQuery update(String table) {
+		return instance.new UpdateQuery(table);
+	}
 	
 	/**
 	 * Safely pushes data to the remote database. <br />
@@ -54,191 +92,518 @@ public class QueryUtils {
 		}
 	}
 	
-	/**
-	 * Builds and runs a SELECT query based on arguments provided
-	 * @param table Database table to select from (without prefix)
-	 * @param column The columns that should be selected from the table
-	 * @param condition Conditions that should apply to columns
-	 * @return Data from the remote database
-	 */
-	public static List<QueryResult> select(String table, String[] column, String[]... condition) {
-		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+	private interface DBQuery {
 		
-		String columns = "";
-		for(String str : column) {
-			if(!columns.equals("")) columns += ", ";
-			if(str.equals("*")) columns += "*";
-			else columns += "`" + str + "`";
-		}
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DBQuery condition(String key, String value);
 		
-		String conditions = "";
-		for(String[] str : condition) {
-			if(!conditions.equals("")) conditions += " AND ";
-			conditions += "`" + str[0] + "`='" + str[1] + "'";
-		}
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DBQuery condition(String key, Integer value);
 		
-		return fetchData("SELECT " + columns + " FROM " + table + " WHERE " + conditions + ";");
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DBQuery condition(String key, Double value);
+		
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DBQuery condition(String key, Long value);
+		
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DBQuery condition(String key, Boolean value);
+		
+		/**
+		 * Imports a list of conditions to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DBQuery condition(List<String> list);
 	}
 	
+	
+	
 	/**
-	 * Checks if the specified query returns any results
-	 * @param table Database table to select from (without prefix)
-	 * @param condition Conditions that should apply to columns
-	 * @return <b>true</b> if the row exists, <b>false</b> otherwise
+	 * Represents a SELECT query to the database.<br />
+	 * Complimentary methods can be used to refine the results.
+	 * @author bitWolfy
+	 *
 	 */
-	public static boolean exists(String table, String[][] condition) {
-		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
-		
-		String conditions = "";
-		for(String[] str : condition) {
-			if(!conditions.equals("")) conditions += " AND ";
-			conditions += "`" + str[0] + "`='" + str[1] + "'";
+	public class SelectQuery implements DBQuery {
+		public SelectQuery(String table) {
+			this.table = Settings.LocalConfiguration.DBPrefix.asString() + table;
+			columns = new ArrayList<String>();
+			conditions = new ArrayList<String>();
 		}
 		
-		return !fetchData("SELECT * FROM " + table + " WHERE " + conditions + ";").isEmpty();
-	}
-	
-	/**
-	 * Builds and runs a SELECT query based on arguments provided
-	 * @param table Database table to select from (without prefix)
-	 * @param column The columns that should be selected from the table
-	 * @return Data from the remote database
-	 */
-	public static List<QueryResult> select(String table, String[] column) {
-		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+		String table;
+		List<String> columns;
+		List<String> conditions;
 		
-		String subjects = "";
-		for(String str : column) {
-			if(!subjects.equals("")) subjects += ", ";
-			if(str.equals("*")) subjects += "*";
-			else subjects += "`" + str + "`";
-		}
-		return fetchData("SELECT " + subjects + " FROM " + table + ";");
-	}
-	
-	/**
-	 * Builds and runs a SELECT query that returns the sum of the specified column.<br />
-	 * Quite obviously, the column should only contain numeric values and should fit in a double
-	 * @param table Database table to select from (without prefix)
-	 * @param column Column to sum up
-	 * @return Sum of the selected column
-	 */
-	public static double sum(String table, String column) {
-		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
-		QueryResult result = fetchData("SELECT sum(`" + column + "`) as `temp` FROM " + table + ";").get(0);
-		if(result.getValue("temp") == null) return 0;
-		else return result.getValueAsInteger("temp");
-	}
-	
-	/**
-	 * Builds and runs a SELECT query that returns the sum of the specified column.<br />
-	 * Quite obviously, the column should only contain numeric values and should fit in a double
-	 * @param table Database table to select from (without prefix)
-	 * @param column Column to sum up
-	 * @param condition Conditions that should apply to columns
-	 * @return Sum of the selected column
-	 */
-	public static double sum(String table, String column, String[]... condition) {
-		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
-		
-		String conditions = "";
-		for(String[] str : condition) {
-			if(!conditions.equals("")) conditions += " AND ";
-			conditions += "`" + str[0] + "`='" + str[1] + "'";
+		/**
+		 * Defines which columns to return.<br />
+		 * If no columns are selected, returns everything
+		 * @param column Columns to include
+		 * @return Database query
+		 */
+		public SelectQuery column(String... column) {
+			for(String col : column) columns.add(col);
+			return this;
 		}
 		
-		QueryResult result = fetchData("SELECT sum(`" + column + "`) as `temp` FROM " + table + " WHERE " + conditions + ";").get(0);
-		if(result.getValue("temp") == null) return 0;
-		else return result.getValueAsInteger("temp");
-	}
-	
-	/**
-	 * Builds and runs an INSERT query based on arguments provided
-	 * @param table Database table to insert into (without prefix)
-	 * @param valueMap Map of column names and values that are to be inserted into the database
-	 * @return <b>true</b> if the insertion was successful, <b>false</b> if an error occurred
-	 */
-	public static boolean insert(String table, Map<String, Object> valueMap) {
-		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+		/**
+		 * Defines which columns to return.<br />
+		 * If no columns are selected, returns everything
+		 * @param column Columns to include
+		 * @return Database query
+		 */
+		public SelectQuery columns(String[] column) {
+			for(String col : column) columns.add(col);
+			return this;
+		}
 		
-		String fields = "";
-		String values = "";
-		Iterator<Entry<String, Object>> it = valueMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
-			if(!fields.equals("")) fields += ", ";
-			if(!values.equals("")) values += ", ";
+		@Override
+		public SelectQuery condition(String key, String value) {
+			conditions.add("`" + key + "`='" + value + "'");
+			return this;
+		}
+		
+		@Override
+		public SelectQuery condition(String key, Integer value) {
+			conditions.add("`" + key + "`=" + value);
+			return this;
+		}
+		
+		@Override
+		public SelectQuery condition(String key, Double value) {
+			conditions.add("`" + key + "`=" + value);
+			return this;
+		}
+		
+		@Override
+		public SelectQuery condition(String key, Long value) {
+			conditions.add("`" + key + "`=" + value);
+			return this;
+		}
+		
+		@Override
+		public SelectQuery condition(String key, Boolean value) {
+			if(value) conditions.add("`" + key + "`=1");
+			else  conditions.add("`" + key + "`=0");
+			return this;
+		}
+		
+		@Override
+		public SelectQuery condition(List<String> list) {
+			conditions.addAll(list);
+			return this;
+		}
+		
+		/**
+		 * Builds and runs the SELECT query
+		 * @return List of results. Might be empty.
+		 */
+		public List<QueryResult> select() {
+			String sql = "SELECT ";
 			
-			fields += "`" + pairs.getKey() + "`";
-			values += "'" + pairs.getValue().toString() + "'";
-			it.remove();
+			String columnString = "";
+			if(columns.isEmpty()) columnString = "*";
+			else {
+				for(String str : columns) {
+					if(!columnString.equals("")) columnString += ", ";
+					else columnString += "`" + str + "`";
+				}
+			}
+			sql += columnString + " FROM " + table;
+			
+			String conditionString = "";
+			for(String str : conditions) {
+				if(!conditionString.equals("")) conditionString += " AND ";
+				conditionString += str;
+			}
+			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
+			
+			return QueryUtils.fetchData(sql + ";");
 		}
 		
-		return pushData("INSERT INTO " + table + " (" + fields + ")  VALUES (" + values + ");");
+		/**
+		 * Checks if the query will yield any results
+		 * @return <b>true</b> if the query has any results, <b>false</b> if it is empty
+		 */
+		public boolean exists() {
+			return !select().isEmpty();
+		}
+		
+		/**
+		 * Calculates the sum of the rows in the specified column
+		 * @return <b>double</b> sum of rows in a specified column
+		 */
+		public double sum() {
+			String sql = "SELECT sum(";
+			
+			String columnString = "";
+			if(columns.isEmpty()) columnString = "*";
+			else {
+				for(String str : columns) {
+					if(!columnString.equals("")) columnString += ", ";
+					else columnString += "`" + str + "`";
+				}
+			}
+			sql += columnString + ") as `temp` FROM " + table;
+			
+			String conditionString = "";
+			for(String str : conditions) {
+				if(!conditionString.equals("")) conditionString += " AND ";
+				conditionString += str;
+			}
+			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
+			
+			return QueryUtils.fetchData(sql + ";").get(0).getValueAsDouble("temp");
+		}
 	}
 	
-	/**
-	 * Builds and runs an INSERT query based on arguments provided
-	 * @param table Database table to insert into (without prefix)
-	 * @param column Name of the target column
-	 * @param value Value of the field
-	 * @return <b>true</b> if the insertion was successful, <b>false</b> if an error occurred
-	 */
-	public static boolean insert(String table, String column, String value) {
-		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
-		column = "`" + column + "`";
-		value = "'" + value + "'";
-		
-		return pushData("INSERT INTO " + table + " (" + column + ")  VALUES (" + value + ");");
-	}
+	
 	
 	/**
-	 * 
-	 * Builds and runs an UPDATE query based on arguments provided
-	 * @param table Database table to update (without prefix)
-	 * @param column Field to update
-	 * @param value The new value of a field
-	 * @param condition Conditions that should apply to columns
-	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
+	 * Represents an INSERT query to the database.<br />
+	 * Complimentary methods can be used to refine the results.
+	 * @author bitWolfy
+	 *
 	 */
-	public static boolean update(String table, String column, String value, String[]... condition) {
-		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+	public class InsertQuery implements DBQuery {
 		
-		String conditions = "";
-		for(String[] str : condition) {
-			if(!conditions.equals("")) conditions += " AND ";
-			conditions += "`" + str[0] + "`='" + str[1] + "'";
+		public InsertQuery(String table) {
+			this.table = Settings.LocalConfiguration.DBPrefix.asString() + table;
+			values = new HashMap<String, Object>();
+			conditions = new ArrayList<String>();
 		}
 		
-		return pushData("UPDATE " + table + " SET `" + column + "`='" + value + "' WHERE " + conditions + ";");
+		String table;
+		Map<String, Object> values;
+		List<String> conditions;
+		
+		/**
+		 * Adds a value to be inserted into the database
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public InsertQuery value(String key, Object value) {
+			values.put(key, value);
+			return this;
+		}
+		
+		public InsertQuery value(String key, boolean value) {
+			if(value) values.put(key, 1);
+			else values.put(key, 0);
+			return this;
+		}
+		
+		/**
+		 * Adds values to be inserted into the database
+		 * @param values Map of values to be added to the database
+		 * @return Database query
+		 */
+		public InsertQuery value(Map<String, Object> values) {
+			this.values.putAll(values);
+			return this;
+		}
+		
+		@Override
+		public InsertQuery condition(String key, String value) {
+			conditions.add("`" + key + "`='" + value + "'");
+			return this;
+		}
+		
+		@Override
+		public InsertQuery condition(String key, Integer value) {
+			conditions.add("`" + key + "`=" + value);
+			return this;
+		}
+		
+		@Override
+		public InsertQuery condition(String key, Double value) {
+			conditions.add("`" + key + "`=" + value);
+			return this;
+		}
+		
+		@Override
+		public InsertQuery condition(String key, Long value) {
+			conditions.add("`" + key + "`=" + value);
+			return this;
+		}
+		
+		@Override
+		public InsertQuery condition(String key, Boolean value) {
+			if(value) conditions.add("`" + key + "`=1");
+			else  conditions.add("`" + key + "`=0");
+			return this;
+		}
+		
+		@Override
+		public InsertQuery condition(List<String> list) {
+			conditions.addAll(list);
+			return this;
+		}
+		
+		/**
+		 * Builds and runs the INSERT query
+		 * @return <b>true</b> if the value was successfully inserted, <b>false</b> if an error occurred
+		 */
+		public boolean insert() {
+			String sql = "INSERT INTO " + table + " (";
+			
+			String fieldString = "";
+			String valueString = "";
+			Iterator<Entry<String, Object>> it = values.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
+				if(!fieldString.equals("")) fieldString += ", ";
+				if(!valueString.equals("")) valueString += ", ";
+				
+				fieldString += "`" + pairs.getKey().toString() + "`";
+				valueString += "'" + pairs.getValue().toString() + "'";
+				it.remove();
+			}
+			sql += fieldString + ") VALUES (" + valueString + ")";
+			
+			String conditionString = "";
+			for(String str : conditions) {
+				if(!conditionString.equals("")) conditionString += " AND ";
+				conditionString += str;
+			}
+			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
+			
+			return pushData(sql + ";");
+		}
+		
 	}
 	
+	
+	
 	/**
-	 * Builds and runs an UPDATE query based on arguments provided
-	 * @param table Database table to update (without prefix)
-	 * @param valueMap  Map of column names and values that are to be updated in the database
-	 * @param condition Conditions that should apply to columns
-	 * @return <b>true</b> if the update was successful, <b>false</b> if an error occurred
+	 * Represents an UPDATE query to the database.<br />
+	 * Complimentary methods can be used to refine the results.
+	 * @author bitWolfy
+	 *
 	 */
-	public static boolean update(String table, Map<String, Object> valueMap, String[]... condition) {
-		if(!exists(table, condition)) return insert(table, valueMap);
-		table = "`" + LocalConfiguration.DBPrefix.asString() + table + "`";
+	public class UpdateQuery implements DBQuery {
 		
-		String fieldValues = "";
-		Iterator<Entry<String, Object>> it = valueMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
-			if(!fieldValues.equals("")) fieldValues += ", ";
-			fieldValues += "`" + pairs.getKey() + "` = '" + pairs.getValue().toString() + "'";
-			it.remove();
-		}
-
-		String conditions = "";
-		for(String str[] : condition) {
-			if(!conditions.equals("")) conditions += " AND ";
-			conditions += "`" + str[0] + "`='" + str[1] + "'";
+		public UpdateQuery(String table) {
+			this.table = table;
+			values = new HashMap<String, Object>();
+			conditions = new ArrayList<String>();
 		}
 		
-		return pushData("UPDATE " + table + " SET " + fieldValues + " WHERE " + conditions + ";");
+		String table;
+		Map<String, Object> values;
+		List<String> conditions;
+		
+		/**
+		 * Adds a value to be inserted into the database
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public UpdateQuery value(String key, Object value) {
+			values.put(key, value);
+			return this;
+		}
+		
+		/**
+		 * Bundles up the altered columns as an array
+		 * @return Array of columns
+		 */
+		private String[] columns() {
+			List<String> columns = new ArrayList<String>();
+			Iterator<Entry<String, Object>> it = values.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
+				columns.add(pairs.getKey());
+				it.remove();
+			}
+			return (String[]) columns.toArray();
+		}
+		
+		/**
+		 * Adds values to be inserted into the database
+		 * @param values Map of values to be added to the database
+		 * @return Database query
+		 */
+		public UpdateQuery value(Map<String, Object> values) {
+			this.values.putAll(values);
+			return this;
+		}
+		
+		@Override
+		public UpdateQuery condition(String key, String value) {
+			conditions.add("`" + key + "`='" + value + "'");
+			return this;
+		}
+		
+		@Override
+		public UpdateQuery condition(String key, Integer value) {
+			conditions.add("`" + key + "`=" + value);
+			return this;
+		}
+		
+		@Override
+		public UpdateQuery condition(String key, Double value) {
+			conditions.add("`" + key + "`=" + value);
+			return this;
+		}
+		
+		@Override
+		public UpdateQuery condition(String key, Long value) {
+			conditions.add("`" + key + "`=" + value);
+			return this;
+		}
+		
+		@Override
+		public UpdateQuery condition(String key, Boolean value) {
+			if(value) conditions.add("`" + key + "`=1");
+			else  conditions.add("`" + key + "`=0");
+			return this;
+		}
+		
+		@Override
+		public UpdateQuery condition(List<String> list) {
+			conditions.addAll(list);
+			return this;
+		}
+		
+		/**
+		 * Builds and runs the UPDATE query
+		 * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
+		 */
+		public boolean update() {
+			String sql = "UPDATE " + Settings.LocalConfiguration.DBPrefix.asString() + table + " ";
+			
+			String valueString = "";
+			Iterator<Entry<String, Object>> it = values.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
+				if(!valueString.equals("")) valueString += ", ";
+				
+				valueString += "`" + pairs.getKey().toString() + "`='" + pairs.getValue().toString() + "'";
+				it.remove();
+			}
+			sql += " SET " + valueString;
+			
+			String conditionString = "";
+			for(String str : conditions) {
+				if(!conditionString.equals("")) conditionString += " AND ";
+				conditionString += str;
+			}
+			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
+			
+			return pushData(sql + ";");
+		}
+		
+		/**
+		 * Checks if the row that is up for updating exists. If it does not, it is created.
+		 * @return  <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
+		 */
+		public boolean update(boolean force) {
+			if(!force) return update();
+			if(select(table).columns(columns()).condition(conditions).exists()) return update();
+			else return insert(table).value(values).insert();
+		}
 	}
+	
+	
+	
+	/**
+	 * Represents the result of a SQL query to the database.<br />
+	 * This class wraps around a Map&lt;String, String&gt;, in which the key represents the column name,
+	 * and the value represents the value corresponding to the specified column.<br />
+	 * This class exists to prevent extremely confusing lists of maps, which can be quite a handful.
+	 * @author bitWolfy
+	 *
+	 */
+	public class QueryResult {
+		private Map<String, String> fields;
+		
+		/**
+		 * <b>Default constructor.</b><br />
+		 * Creates a new QueryResult based on the specified column-value pairs
+		 * @param fields Column-value pairs
+		 */
+		public QueryResult(Map<String, String> fields) {
+			this.fields = fields;
+		}
+		
+		/**
+		 * Returns the value of the specified column.
+		 * @param column Column name
+		 * @return <b>String</b> The value of the specified column, or <b>null</b> if there isn't one.
+		 */
+		public String getValue(String column) {
+			return fields.get(column);
+		}
+		
+		
+		/**
+		 * Returns the value of the specified column.
+		 * @param column Column name
+		 * @return <b>boolean</b> The value of the specified column, or <b>null</b> if there isn't one.
+		 */
+		public boolean getValueAsBoolean(String column) {
+			return fields.get(column).equalsIgnoreCase("1");
+		}
+		
+		
+		/**
+		 * Returns the value of the specified column.
+		 * @param column Column name
+		 * @return <b>int</b> The value of the specified column, or <b>null</b> if there isn't one.
+		 */
+		public int getValueAsInteger(String column) {
+			try { return Integer.parseInt(fields.get(column)); }
+			catch (NumberFormatException e) { return -1; }
+		}
+		
+		/**
+		 * Returns the value of the specified column.
+		 * @param column Column name
+		 * @return <b>long</b> The value of the specified column, or <b>null</b> if there isn't one.
+		 */
+		public long getValueAsLong(String column) {
+			try { return Long.parseLong(fields.get(column)); }
+			catch (NumberFormatException e) { return -1; }
+		}
+		
+		/**
+		 * Returns the value of the specified column.
+		 * @param column Column name
+		 * @return <b>double</b> The value of the specified column, or <b>null</b> if there isn't one.
+		 */
+		public double getValueAsDouble(String column) {
+			try { return Double.parseDouble(fields.get(column)); }
+			catch (NumberFormatException e) { return -1; }
+		}
+	}
+	
 }

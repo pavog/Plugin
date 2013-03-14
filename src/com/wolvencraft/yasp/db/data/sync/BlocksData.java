@@ -8,8 +8,8 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
-import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
 import com.wolvencraft.yasp.util.Util;
@@ -140,14 +140,12 @@ public class BlocksData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(
-				TotalBlocksTable.TableName.toString(),
-				new String[] {"*"},
-				new String[] { TotalBlocksTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalBlocksTable.Material.toString(), type + ":" + data}
-			);
+			List<QueryResult> results = QueryUtils.select(TotalBlocksTable.TableName.toString())
+				.condition(TotalBlocksTable.PlayerId.toString(), playerId + "")
+				.condition(TotalBlocksTable.Material.toString(), type + ":" + data)
+				.select();
 			
-			if(results.isEmpty()) QueryUtils.insert(TotalBlocksTable.TableName.toString(), getValues(playerId));
+			if(results.isEmpty()) QueryUtils.insert(TotalBlocksTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				broken = results.get(0).getValueAsInteger(TotalBlocksTable.Destroyed.toString());
 				placed = results.get(0).getValueAsInteger(TotalBlocksTable.Placed.toString());
@@ -156,12 +154,11 @@ public class BlocksData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(
-				TotalBlocksTable.TableName.toString(),
-				getValues(playerId),
-				new String[] { TotalBlocksTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalBlocksTable.Material.toString(), type + ":" + data}
-			);
+			boolean result = QueryUtils.update(TotalBlocksTable.TableName.toString())
+				.value(getValues(playerId))
+				.condition(TotalBlocksTable.PlayerId.toString(), playerId + "")
+				.condition(TotalBlocksTable.Material.toString(), type + ":" + data)
+				.update(true);
 			fetchData(playerId);
 			return result;
 		}
@@ -229,10 +226,9 @@ public class BlocksData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(
-				Detailed.DestroyedBlocks.TableName.toString(),
-				getValues(playerId)
-			);
+			return QueryUtils.insert(Detailed.DestroyedBlocks.TableName.toString())
+				.value(getValues(playerId))
+				.insert();
 		}
 
 		@Override
@@ -280,10 +276,9 @@ public class BlocksData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(
-				Detailed.PlacedBlocks.TableName.toString(),
-				getValues(playerId)
-			);
+			return QueryUtils.insert(Detailed.PlacedBlocks.TableName.toString())
+				.value(getValues(playerId))
+				.insert();
 		}
 
 		@Override

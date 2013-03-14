@@ -9,8 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
@@ -67,29 +67,16 @@ public class PlayersData implements _DataStore {
 	public MiscInfoPlayers misc() { return miscData; }
 	
 	/**
-	 * Returns the default values to create a placeholder entry when initializing a new user.
-	 * @param name Name of the new player
-	 * @return Map with placeholder data
-	 */
-	public static Map<String, Object> getDefaultValues(String name) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(PlayersTable.Name.toString(), name);
-		return map;
-	}
-	
-	/**
 	 * Registers player logging in with all corresponding statistics trackers.<br />
 	 * Player's online status is updated in the database instantly.
 	 */
 	public void login(Location location) {
 		generalData.setOnline(true);
 		detailedData.add(new DetailedLogPlayersEntry(location, true));
-		QueryUtils.update(
-			PlayersTable.TableName.toString(),
-			PlayersTable.Online.toString(),
-			1 + "",
-			new String[] {PlayersTable.PlayerId.toString(), playerId + ""}
-		);
+		QueryUtils.update(PlayersTable.TableName.toString())
+			.value(PlayersTable.Online.toString(), true)
+			.condition(PlayersTable.PlayerId.toString(), playerId + "")
+			.update();
 	}
 	
 	/**
@@ -99,12 +86,10 @@ public class PlayersData implements _DataStore {
 	public void logout(Location location) {
 		generalData.setOnline(false);
 		detailedData.add(new DetailedLogPlayersEntry(location, false));
-		QueryUtils.update(
-				PlayersTable.TableName.toString(),
-				PlayersTable.Online.toString(),
-				0 + "",
-				new String[] {PlayersTable.PlayerId.toString(), playerId + ""}
-			);
+		QueryUtils.update(PlayersTable.TableName.toString())
+			.value(PlayersTable.Online.toString(), false)
+			.condition(PlayersTable.PlayerId.toString(), playerId + "")
+			.update();
 	}
 	
 	/**
@@ -135,12 +120,11 @@ public class PlayersData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(
-				PlayersTable.TableName.toString(),
-				new String[] {PlayersTable.PlayerId.toString(), PlayersTable.Logins.toString()},
-				new String[] { PlayersTable.PlayerId.toString(), playerId + ""}
-			);
-			if(results.isEmpty()) QueryUtils.insert(PlayersTable.TableName.toString(), getValues(playerId));
+			List<QueryResult> results = QueryUtils.select(PlayersTable.TableName.toString())
+				.condition(PlayersTable.PlayerId.toString(), PlayersTable.Logins.toString())
+				.condition(PlayersTable.PlayerId.toString(), playerId + "")
+				.select();
+			if(results.isEmpty()) QueryUtils.insert(PlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				logins = results.get(0).getValueAsInteger(PlayersTable.Logins.toString()) + 1;
 			}
@@ -148,11 +132,10 @@ public class PlayersData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(
-				PlayersTable.TableName.toString(),
-				getValues(playerId), 
-				new String[] { PlayersTable.PlayerId.toString(), playerId + ""}
-			);
+			boolean result = QueryUtils.update(PlayersTable.TableName.toString())
+				.value(getValues(playerId))
+				.condition(PlayersTable.PlayerId.toString(), playerId + "")
+				.update(true);
 			fetchData(playerId);
 			return result;
 		}
@@ -214,12 +197,10 @@ public class PlayersData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(
-				DistancePlayersTable.TableName.toString(),
-				new String[] {"*"},
-				new String[] { DistancePlayersTable.PlayerId.toString(), playerId + ""}
-			);
-			if(results.isEmpty()) QueryUtils.insert(DistancePlayersTable.TableName.toString(), getValues(playerId));
+			List<QueryResult> results = QueryUtils.select(DistancePlayersTable.TableName.toString())
+				.condition(DistancePlayersTable.PlayerId.toString(), playerId + "")
+				.select();
+			if(results.isEmpty()) QueryUtils.insert(DistancePlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				foot = results.get(0).getValueAsInteger(DistancePlayersTable.Foot.toString());
 				swimmed = results.get(0).getValueAsInteger(DistancePlayersTable.Swimmed.toString());
@@ -231,10 +212,10 @@ public class PlayersData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(DistancePlayersTable.TableName.toString(),
-				getValues(playerId),
-				new String[] { DistancePlayersTable.PlayerId.toString(), playerId + ""}
-			);
+			boolean result = QueryUtils.update(DistancePlayersTable.TableName.toString())
+				.value(getValues(playerId))
+				.condition(DistancePlayersTable.PlayerId.toString(), playerId + "")
+				.update(true);
 			fetchData(playerId);
 			return result;
 		}
@@ -330,12 +311,10 @@ public class PlayersData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(
-				MiscInfoPlayersTable.TableName.toString(),
-				new String[] {"*"},
-				new String[] { MiscInfoPlayersTable.PlayerId.toString(), playerId + ""}
-			);
-			if(results.isEmpty()) QueryUtils.insert(MiscInfoPlayersTable.TableName.toString(), getValues(playerId));
+			List<QueryResult> results = QueryUtils.select(MiscInfoPlayersTable.TableName.toString())
+				.condition(MiscInfoPlayersTable.PlayerId.toString(), playerId + "")
+				.select();
+			if(results.isEmpty()) QueryUtils.insert(MiscInfoPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				fishCaught = results.get(0).getValueAsInteger(MiscInfoPlayersTable.FishCaught.toString());
 				timesKicked = results.get(0).getValueAsInteger(MiscInfoPlayersTable.TimesKicked.toString());
@@ -353,11 +332,10 @@ public class PlayersData implements _DataStore {
 		@Override
 		public boolean pushData(int playerId) {
 			refreshPlayerData();
-			boolean result = QueryUtils.update(
-				MiscInfoPlayersTable.TableName.toString(),
-				getValues(playerId), 
-				new String[] { MiscInfoPlayersTable.PlayerId.toString(), playerId + ""}
-			);
+			boolean result = QueryUtils.update(MiscInfoPlayersTable.TableName.toString())
+				.value(getValues(playerId))
+				.condition(MiscInfoPlayersTable.PlayerId.toString(), playerId + "")
+				.update(true);
 			fetchData(playerId);
 			return result;
 		}
@@ -461,10 +439,9 @@ public class PlayersData implements _DataStore {
 	     
 	    @Override
 	    public boolean pushData(int playerId) {
-	        return QueryUtils.insert(
-	            Detailed.LogPlayers.TableName.toString(),
-	            getValues(playerId)
-	        );
+	        return QueryUtils.insert(Detailed.LogPlayers.TableName.toString())
+	            .value(getValues(playerId))
+	            .insert();
 	    }
 	 
 	    @Override

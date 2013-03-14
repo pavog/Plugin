@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.StatsSignFactory.StatsSign;
 import com.wolvencraft.yasp.db.Database;
+import com.wolvencraft.yasp.db.QueryUtils;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
 import com.wolvencraft.yasp.hooks.*;
@@ -43,6 +44,7 @@ public class StatsPlugin extends JavaPlugin {
 		instance = this;
 		paused = true;
 		
+		new QueryUtils();
 		new Settings(this);
 		
 		try { new Database(); }

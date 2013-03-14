@@ -6,10 +6,9 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.data.receive.ServerTotals;
-import com.wolvencraft.yasp.db.data.sync.PlayersData;
 import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
@@ -43,11 +42,10 @@ public class DataCollector implements Runnable {
 
 	@Override
 	public void run() {
-		if(!StatsPlugin.getPaused()) {
-			pushAllData();
-			serverStatistics.fetchData();
-			serverTotals.fetchData();
-		}
+		if(StatsPlugin.getPaused()) return;
+		pushAllData();
+		serverStatistics.fetchData();
+		serverTotals.fetchData();
 	}
 	
 	/**
@@ -134,22 +132,23 @@ public class DataCollector implements Runnable {
 		int playerId = -1;
 		List<QueryResult> results;
 		
-		results = QueryUtils.select(
-			PlayersTable.TableName.toString(),
-			new String[] {PlayersTable.PlayerId.toString(), PlayersTable.Name.toString()},
-			new String[] {PlayersTable.Name.toString(), username}
-		);
+		results = QueryUtils.select(PlayersTable.TableName.toString())
+					.column(PlayersTable.PlayerId.toString())
+					.column(PlayersTable.Name.toString())
+					.condition(PlayersTable.Name.toString(), username)
+					.select();
 		
 		if(results.isEmpty()) {
-			QueryUtils.insert(
-				PlayersTable.TableName.toString(),
-				PlayersData.getDefaultValues(username)
-			);
-			results = QueryUtils.select(
-				PlayersTable.TableName.toString(),
-				new String[] {PlayersTable.PlayerId.toString(), PlayersTable.Name.toString()},
-				new String[] {PlayersTable.Name.toString(), username}
-			);
+			QueryUtils.insert(PlayersTable.TableName.toString())
+				.value(PlayersTable.Name.toString(), username)
+				.insert();
+			
+			results = QueryUtils
+				.select(PlayersTable.TableName.toString())
+				.column(PlayersTable.PlayerId.toString())
+				.column(PlayersTable.Name.toString())
+				.condition(PlayersTable.Name.toString(), username)
+				.select();
 			playerId = results.get(0).getValueAsInteger(PlayersTable.PlayerId.toString());
 		} else {
 			playerId = results.get(0).getValueAsInteger(PlayersTable.PlayerId.toString());

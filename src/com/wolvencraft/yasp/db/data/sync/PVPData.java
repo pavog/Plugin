@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
-import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
 import com.wolvencraft.yasp.util.Util;
@@ -129,14 +129,12 @@ public class PVPData implements _DataStore {
 		
 		@Override
 		public void fetchData(int killerId) {
-			List<QueryResult> results = QueryUtils.select(
-				TotalPVPKillsTable.TableName.toString(),
-				new String[] {"*"},
-				new String[] { TotalPVPKillsTable.PlayerId.toString(), killerId + ""},
-				new String[] { TotalPVPKillsTable.VictimId.toString(), victimId + ""},
-				new String[] { TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData()}
-			);
-			if(results.isEmpty()) QueryUtils.insert(TotalPVPKillsTable.TableName.toString(), getValues(killerId));
+			List<QueryResult> results = QueryUtils.select(TotalPVPKillsTable.TableName.toString())
+				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
+				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
+				.condition(TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
+				.select();
+			if(results.isEmpty()) QueryUtils.insert(TotalPVPKillsTable.TableName.toString()).value(getValues(killerId));
 			else {
 				times = results.get(0).getValueAsInteger(TotalPVPKillsTable.Times.toString());
 			}
@@ -144,13 +142,12 @@ public class PVPData implements _DataStore {
 
 		@Override
 		public boolean pushData(int killerId) {
-			boolean result = QueryUtils.update(
-				TotalPVPKillsTable.TableName.toString(),
-				getValues(killerId), 
-				new String[] { TotalPVPKillsTable.PlayerId.toString(), killerId + ""},
-				new String[] { TotalPVPKillsTable.VictimId.toString(), victimId + ""},
-				new String[] { TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData()}
-			);
+			boolean result = QueryUtils.update(TotalPVPKillsTable.TableName.toString())
+				.value(getValues(killerId))
+				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
+				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
+				.condition(TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
+				.update(true);
 			fetchData(killerId);
 			return result;
 		}
@@ -211,10 +208,9 @@ public class PVPData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int killerId) {
-			return QueryUtils.insert(
-				Detailed.PVPKills.TableName.toString(),
-				getValues(killerId)
-			);
+			return QueryUtils.insert(Detailed.PVPKills.TableName.toString())
+				.value(getValues(killerId))
+				.insert();
 		}
 
 		@Override

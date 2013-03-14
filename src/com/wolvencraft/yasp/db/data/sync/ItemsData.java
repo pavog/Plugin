@@ -8,8 +8,8 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
 import com.wolvencraft.yasp.util.Util;
@@ -193,14 +193,12 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(
-				TotalItemsTable.TableName.toString(),
-				new String[] {"*"},
-				new String[] { TotalItemsTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalItemsTable.Material.toString(), type + ":" + data}
-			);
+			List<QueryResult> results = QueryUtils.select(TotalItemsTable.TableName.toString())
+				.condition(TotalItemsTable.PlayerId.toString(), playerId + "")
+				.condition(TotalItemsTable.Material.toString(), type + ":" + data)
+				.select();
 			
-			if(results.isEmpty()) QueryUtils.insert(TotalItemsTable.TableName.toString(), getValues(playerId));
+			if(results.isEmpty()) QueryUtils.insert(TotalItemsTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				dropped = results.get(0).getValueAsInteger(TotalItemsTable.Dropped.toString());
 				pickedUp = results.get(0).getValueAsInteger(TotalItemsTable.PickedUp.toString());
@@ -214,12 +212,11 @@ public class ItemsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(
-				TotalItemsTable.TableName.toString(),
-				getValues(playerId),
-				new String[] { TotalItemsTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalItemsTable.Material.toString(), type + ":" + data}
-			);
+			boolean result = QueryUtils.update(TotalItemsTable.TableName.toString())
+				.value(getValues(playerId))
+				.condition(TotalItemsTable.PlayerId.toString(), playerId + "")
+				.condition(TotalItemsTable.Material.toString(), type + ":" + data)
+				.update(true);
 			fetchData(playerId);
 			return result;
 		}
@@ -286,10 +283,9 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(
-				Detailed.DroppedItems.TableName.toString(),
-				getValues(playerId)
-			);
+			return QueryUtils.insert(Detailed.DroppedItems.TableName.toString())
+				.value(getValues(playerId))
+				.insert();
 		}
 
 		@Override
@@ -336,10 +332,9 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(
-				Detailed.PickedupItems.TableName.toString(),
-				getValues(playerId)
-			);
+			return QueryUtils.insert(Detailed.PickedupItems.TableName.toString())
+				.value(getValues(playerId))
+				.insert();
 		}
 
 		@Override
@@ -386,10 +381,9 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(
-				Detailed.UsedItems.TableName.toString(),
-				getValues(playerId)
-			);
+			return QueryUtils.insert(Detailed.UsedItems.TableName.toString())
+				.value(getValues(playerId))
+				.insert();
 		}
 
 		@Override

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.db.data.sync.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
@@ -189,7 +190,7 @@ public class Database {
 				for (int x = 1; x <= rs.getMetaData().getColumnCount(); ++x) {
 					rowToAdd.put(rs.getMetaData().getColumnName(x), rs.getString(x));
 				}
-				colData.add(new QueryResult(rowToAdd));
+				colData.add(QueryUtils.toQueryResult(rowToAdd));
 			}
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, "Error retrieving data from the database");

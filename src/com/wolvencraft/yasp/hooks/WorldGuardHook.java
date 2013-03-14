@@ -53,11 +53,10 @@ public class WorldGuardHook implements _PluginHook {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.update(
-				WorldGuardTable.TableName.toString(),
-				getValues(playerId),
-				new String[] {WorldGuardTable.PlayerId.toString(), playerId + ""}
-			);
+			return QueryUtils.update(WorldGuardTable.TableName.toString())
+				.value(getValues(playerId))
+				.condition(WorldGuardTable.PlayerId.toString(), playerId)
+				.update(true);
 		}
 
 		@Override

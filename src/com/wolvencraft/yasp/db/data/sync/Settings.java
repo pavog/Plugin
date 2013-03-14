@@ -5,10 +5,9 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
-import com.wolvencraft.yasp.util.Message;
 
 public class Settings {
 	
@@ -33,6 +32,8 @@ public class Settings {
 		
 		Object value;
 		
+		@Override
+		public String toString() { return (String) value; }
 		public String asString() { return (String) value; }
 		public Boolean asBoolean() { return (Boolean) value; }
 		public Integer asInteger() { return (Integer) value; }
@@ -57,7 +58,7 @@ public class Settings {
 	private static String firstJoinMessage;
 	
 	public static void fetchData() {
-		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"});
+		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString()).column("key", "value").select();
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value") * 20;
 			else if(entry.getValue("key").equalsIgnoreCase("show_welcome_messages")) showWelcomeMessages = entry.getValueAsBoolean("value");
@@ -67,69 +68,52 @@ public class Settings {
 		}
 	}
 	
-	public static void setDatabaseVersion(String version) { 
-		if(!QueryUtils.update(SettingsTable.TableName.toString(), "value", version, new String[] {"key", "version"}))
-		Message.log(java.util.logging.Level.SEVERE, "Failed to update the database version!");
+	public static void setDatabaseVersion(String version) {
+		QueryUtils.update(SettingsTable.TableName.toString())
+			.value("value", version)
+			.condition("key", "version")
+			.update(true);
 	}
 	
 	public static int getDatabaseVersion() { 
-		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"}, new String[] {"key", "version"});
-		for(QueryResult entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("version")) return entry.getValueAsInteger("value");
-		}
-		return 0;
+		return QueryUtils.select(SettingsTable.TableName.toString())
+			.column("value")
+			.condition("key", "version")
+			.select()
+			.get(0)
+			.getValueAsInteger("value");
 	}
 	
 	public static void setUsingVault(boolean usingVault) {
-		if(usingVault) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_vault"});
-		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_vault"});
+		QueryUtils.update(SettingsTable.TableName.toString())
+			.value("value", usingVault)
+			.condition("key", "hook_vault")
+			.update(true);
 	}
 	
 	public static boolean getUsingVault() {
-		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"}, new String[] {"key", "hook_vault"});
-		for(QueryResult entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("hook_vault")) return entry.getValueAsBoolean("value");
-		}
-		return false;
+		return QueryUtils.select(SettingsTable.TableName.toString())
+			.column("value")
+			.condition("key", "hook_vault")
+			.select()
+			.get(0)
+			.getValueAsBoolean("value");
 	}
 	
 	public static void setUsingWorldGuard(boolean usingWorldGuard) {
-		if(usingWorldGuard) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_worldguard"});
-		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_worldguard"});
+		QueryUtils.update(SettingsTable.TableName.toString())
+			.value("value", usingWorldGuard)
+			.condition("key", "hook_worldguard")
+			.update(true);
 	}
 	
 	public static boolean getUsingWorldGuard() {
-		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"}, new String[] {"key", "hook_worldguard"});
-		for(QueryResult entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("hook_worldguard")) return entry.getValueAsBoolean("value");
-		}
-		return false;
-	}
-	
-	public static void setUsingDynmap(boolean usingDynmap) {
-		if(usingDynmap) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_dynmap"});
-		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_dynmap"});
-	}
-	
-	public static boolean getUsingDynmap() {
-		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"});
-		for(QueryResult entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("hook_dynmap")) return entry.getValueAsBoolean("value");
-		}
-		return false;
-	}
-	
-	public static void setUsingMcMMO(boolean usingMcMMO) {
-		if(usingMcMMO) QueryUtils.update(SettingsTable.TableName.toString(), "value", 1 + "", new String[] {"key", "hook_mcmmo"});
-		else QueryUtils.update(SettingsTable.TableName.toString(), "value", 0 + "", new String[] {"key", "hook_mcmmo"});
-	}
-	
-	public static boolean getUsingMcMMO() {
-		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString(), new String[] {"key", "value"});
-		for(QueryResult entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("hook_mcmmo")) return entry.getValueAsBoolean("value");
-		}
-		return false;
+		return QueryUtils.select(SettingsTable.TableName.toString())
+			.column("value")
+			.condition("key", "hook_worldguard")
+			.select()
+			.get(0)
+			.getValueAsBoolean("value");
 	}
 	
 	public static long getPing() { return Settings.ping; }

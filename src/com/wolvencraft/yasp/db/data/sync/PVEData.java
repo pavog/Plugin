@@ -10,8 +10,8 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.db.QueryResult;
 import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.util.Util;
@@ -142,14 +142,12 @@ public class PVEData implements _DataStore{
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(
-				TotalPVEKillsTable.TableName.toString(),
-				new String[] {"*"},
-				new String[] { TotalPVEKillsTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + ""},
-				new String[] { TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData()}
-			);
-			if(results.isEmpty()) QueryUtils.insert(TotalPVEKillsTable.TableName.toString(), getValues(playerId));
+			List<QueryResult> results = QueryUtils.select(TotalPVEKillsTable.TableName.toString())
+				.condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
+				.condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
+				.condition(TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
+				.select();
+			if(results.isEmpty()) QueryUtils.insert(TotalPVEKillsTable.TableName.toString()).value(getValues(playerId));
 			else {
 				playerDeaths = results.get(0).getValueAsInteger(TotalPVEKillsTable.PlayerKilled.toString());
 				creatureDeaths = results.get(0).getValueAsInteger(TotalPVEKillsTable.CreatureKilled.toString());
@@ -158,13 +156,12 @@ public class PVEData implements _DataStore{
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(
-				TotalPVEKillsTable.TableName.toString(),
-				getValues(playerId),
-				new String[] { TotalPVEKillsTable.PlayerId.toString(), playerId + ""},
-				new String[] { TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + ""},
-				new String[] { TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData()}
-			);
+			boolean result = QueryUtils.update(TotalPVEKillsTable.TableName.toString())
+				.value(getValues(playerId))
+				.condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
+				.condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
+				.condition(TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
+				.update();
 			fetchData(playerId);
 			return result;
 		}
@@ -227,10 +224,9 @@ public class PVEData implements _DataStore{
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(
-				Detailed.PVEKills.TableName.toString(),
-				getValues(playerId)
-			);
+			return QueryUtils.insert(Detailed.PVEKills.TableName.toString())
+				.value(getValues(playerId))
+				.insert();
 		}
 
 		@Override
