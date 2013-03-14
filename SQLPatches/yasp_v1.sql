@@ -380,7 +380,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_deaths` (
   `total_death_players_id` INT NOT NULL AUTO_INCREMENT ,
   `player_id` INT NOT NULL ,
   `cause` VARCHAR(45) NOT NULL ,
-  `times` VARCHAR(45) NULL DEFAULT NULL ,
+  `times` INT NULL DEFAULT 0 ,
   PRIMARY KEY (`total_death_players_id`) ,
   INDEX `fk_player_id3_idx` (`player_id` ASC) ,
   CONSTRAINT `fk_player_id3`
