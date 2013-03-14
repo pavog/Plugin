@@ -236,7 +236,7 @@ public class QueryUtils {
 					else columnString += "`" + str + "`";
 				}
 			}
-			sql += columnString + " FROM " + table;
+			sql += columnString + " FROM `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 			
 			String conditionString = "";
 			for(String str : conditions) {
@@ -271,7 +271,7 @@ public class QueryUtils {
 					else columnString += "`" + str + "`";
 				}
 			}
-			sql += columnString + ") as `temp` FROM " + table;
+			sql += columnString + ") as `temp` FROM `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 			
 			String conditionString = "";
 			for(String str : conditions) {
@@ -295,7 +295,7 @@ public class QueryUtils {
 	public class InsertQuery implements DBQuery {
 		
 		public InsertQuery(String table) {
-			this.table = Settings.LocalConfiguration.DBPrefix.asString() + table;
+			this.table = table;
 			values = new HashMap<String, Object>();
 			conditions = new ArrayList<String>();
 		}
@@ -373,7 +373,7 @@ public class QueryUtils {
 		 * @return <b>true</b> if the value was successfully inserted, <b>false</b> if an error occurred
 		 */
 		public boolean insert() {
-			String sql = "INSERT INTO " + table + " (";
+			String sql = "INSERT INTO `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` (";
 			
 			String fieldString = "";
 			String valueString = "";
@@ -433,6 +433,16 @@ public class QueryUtils {
 		}
 		
 		/**
+		 * Adds values to be inserted into the database
+		 * @param values Map of values to be added to the database
+		 * @return Database query
+		 */
+		public UpdateQuery value(Map<String, Object> values) {
+			this.values.putAll(values);
+			return this;
+		}
+		
+		/**
 		 * Bundles up the altered columns as an array
 		 * @return Array of columns
 		 */
@@ -444,17 +454,10 @@ public class QueryUtils {
 				columns.add(pairs.getKey());
 				it.remove();
 			}
-			return (String[]) columns.toArray();
-		}
-		
-		/**
-		 * Adds values to be inserted into the database
-		 * @param values Map of values to be added to the database
-		 * @return Database query
-		 */
-		public UpdateQuery value(Map<String, Object> values) {
-			this.values.putAll(values);
-			return this;
+			String[] colArr = new String[columns.size()];
+			colArr = columns.toArray(colArr);
+			Message.debug(colArr.toString());
+			return colArr;
 		}
 		
 		@Override
@@ -499,7 +502,7 @@ public class QueryUtils {
 		 * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
 		 */
 		public boolean update() {
-			String sql = "UPDATE " + Settings.LocalConfiguration.DBPrefix.asString() + table + " ";
+			String sql = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` ";
 			
 			String valueString = "";
 			Iterator<Entry<String, Object>> it = values.entrySet().iterator();

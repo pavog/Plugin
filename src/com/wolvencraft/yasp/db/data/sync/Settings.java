@@ -74,12 +74,14 @@ public class Settings {
 	}
 	
 	public static int getDatabaseVersion() { 
-		return QueryUtils.select(SettingsTable.TableName.toString())
-			.column("value")
-			.condition("key", "version")
-			.select()
-			.get(0)
-			.getValueAsInteger("value");
+		try {
+			return QueryUtils.select(SettingsTable.TableName.toString())
+				.column("value")
+				.condition("key", "version")
+				.select()
+				.get(0)
+				.getValueAsInteger("value");
+		} catch (Exception ex) { return 0; }
 	}
 	
 	public static void setUsingVault(boolean usingVault) {
@@ -90,12 +92,14 @@ public class Settings {
 	}
 	
 	public static boolean getUsingVault() {
-		return QueryUtils.select(SettingsTable.TableName.toString())
-			.column("value")
-			.condition("key", "hook_vault")
-			.select()
-			.get(0)
-			.getValueAsBoolean("value");
+		try {
+			return QueryUtils.select(SettingsTable.TableName.toString())
+				.column("value")
+				.condition("key", "hook_vault")
+				.select()
+				.get(0)
+				.getValueAsBoolean("value");
+		} catch (Exception ex) { return false; }
 	}
 	
 	public static void setUsingWorldGuard(boolean usingWorldGuard) {
@@ -106,12 +110,14 @@ public class Settings {
 	}
 	
 	public static boolean getUsingWorldGuard() {
-		return QueryUtils.select(SettingsTable.TableName.toString())
-			.column("value")
-			.condition("key", "hook_worldguard")
-			.select()
-			.get(0)
-			.getValueAsBoolean("value");
+		try {
+			return QueryUtils.select(SettingsTable.TableName.toString())
+				.column("value")
+				.condition("key", "hook_worldguard")
+				.select()
+				.get(0)
+				.getValueAsBoolean("value");
+		} catch (Exception ex) { return false; }
 	}
 	
 	public static long getPing() { return Settings.ping; }

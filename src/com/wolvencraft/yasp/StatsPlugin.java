@@ -91,6 +91,8 @@ public class StatsPlugin extends JavaPlugin {
 
 			Database.cleanup();
 			instance = null;
+		} catch (NullPointerException npe) {
+			Message.log(Level.SEVERE, npe.getMessage());
 		} catch (Exception e) { 
 			Message.log(Level.SEVERE, e.getMessage());
 			if(Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
