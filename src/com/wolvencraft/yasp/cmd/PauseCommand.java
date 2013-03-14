@@ -10,17 +10,17 @@ public class PauseCommand implements BaseCommand {
 	public boolean run(String[] args) {
 		if(StatsPlugin.getPaused()) {
 			StatsPlugin.setPaused(false);
-			Message.send(CommandManager.getSender(), "Database synchronization unpaused");
+			Message.send(CommandManager.getSender(), "Data collection is unpaused");
 		} else {
 			StatsPlugin.setPaused(true);
-			Message.send(CommandManager.getSender(), "Database synchronization paused");
+			Message.send(CommandManager.getSender(), "Data collection is paused");
 		}
 		return true;
 	}
 
 	@Override
 	public void getHelp() {
-		Message.formatHelp("pause", "", "Toggles the database synchronization on and off");
+		Message.formatHelp("pause", "", "Toggles the data collection on and off");
 	}
 
 }
