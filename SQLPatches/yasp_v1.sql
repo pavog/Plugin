@@ -18,7 +18,8 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_players` (
   `online` TINYINT(1) NOT NULL DEFAULT 0 ,
   `first_login` INT(11) NULL DEFAULT NULL ,
   `logins` INT(11) NULL DEFAULT 0 ,
-  `login_time` INT(11) NULL ,
+  `login_time` INT(11) NULL DEFAULT 0 ,
+  `playtime` BIGINT(11) NULL DEFAULT 0 ,
   PRIMARY KEY (`player_id`) );
 
 
@@ -48,9 +49,9 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_log_players` (
 -- -----------------------------------------------------
 -- Table `$dbname`.`$prefix_distance_players`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_distance_players` ;
+DROP TABLE IF EXISTS `$dbname`.`$prefix_distances` ;
 
-CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_distance_players` (
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_distances` (
   `player_id` INT NOT NULL ,
   `foot` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
   `boat` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
@@ -373,9 +374,9 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_items` (
 -- -----------------------------------------------------
 -- Table `$dbname`.`$prefix_total_death_players`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_total_death_players` ;
+DROP TABLE IF EXISTS `$dbname`.`$prefix_total_deaths` ;
 
-CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_death_players` (
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_deaths` (
   `total_death_players_id` INT NOT NULL AUTO_INCREMENT ,
   `player_id` INT NOT NULL ,
   `cause` VARCHAR(45) NOT NULL ,
