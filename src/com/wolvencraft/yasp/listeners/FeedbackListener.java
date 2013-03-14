@@ -18,6 +18,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.StatsSignFactory;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.util.Message;
@@ -39,10 +40,14 @@ public class FeedbackListener implements Listener {
 		if(!(block.getState() instanceof Sign)) return;
 		
 		Sign sign = (Sign) block.getState();
-		if(StatsSignFactory.isValid(sign)) return;
+		if(StatsSignFactory.isValid(sign)) {
+			Message.debug("Stats sign found at the location!");
+			return;
+		}
 		
 		if(!sign.getLines()[0].startsWith("<Y>")) return;
 		StatsSignFactory.add(sign);
+		Message.sendFormattedSuccess(CommandManager.getSender(), "A new StatsSign has been added");
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -50,7 +55,8 @@ public class FeedbackListener implements Listener {
 		BlockState blockState = event.getBlock().getState();
 		if(!(blockState instanceof Sign)) return;
 		Sign sign = (Sign) blockState;
-		if(StatsSignFactory.isValid(sign)) return;
+		if(!StatsSignFactory.isValid(sign)) return;
+		Message.debug("Stats sign found at the location!");
 		StatsSignFactory.remove(sign);
 		Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
 	}

@@ -103,11 +103,11 @@ public class StatsSignFactory implements Runnable {
 	public static boolean remove(Sign sign) {
 		Location loc = sign.getLocation();
 		List<StatsSign> temp = new ArrayList<StatsSign>();
-		for(StatsSign displaySign : signs) temp.add(displaySign);
-		for(StatsSign displaySign : temp) {
-			if(displaySign.getLocation().equals(loc)) {
-				displaySign.deleteFile();
-				return signs.remove(displaySign);
+		for(StatsSign statsSign : signs) temp.add(statsSign);
+		for(StatsSign statsSign : temp) {
+			if(statsSign.getLocation().equals(loc)) {
+				statsSign.deleteFile();
+				return signs.remove(statsSign);
 			}
 		}
 		return false;
@@ -120,8 +120,8 @@ public class StatsSignFactory implements Runnable {
 	 */
 	public static boolean isValid(Sign sign) {
 		Location loc = sign.getLocation();
-		for(StatsSign displaySign : signs) {
-			if(displaySign.getLocation().equals(loc)) return true;
+		for(StatsSign statsSign : signs) {
+			if(loc.equals(statsSign.getLocation())) return true;
 		}
 		return false;
 	}
@@ -132,8 +132,8 @@ public class StatsSignFactory implements Runnable {
 	 * @return <b>true</b> if the ID is unique, <b>false</b> if there is a duplicate
 	 */
 	private static boolean isUnique(String id) {
-		for(StatsSign displaySign : signs) {
-			if(displaySign.getId().equals(id)) return false;
+		for(StatsSign statsSign : signs) {
+			if(statsSign.getId().equals(id)) return false;
 		}
 		return true;
 	}
@@ -255,7 +255,6 @@ public class StatsSignFactory implements Runnable {
 			
 			for(File signFile : signFiles) {
 				if(signFile.getName().equals(signId + ".sign.yml")) {
-					StatsSignFactory.remove(sign);
 					return signFile.delete();
 				}
 			}

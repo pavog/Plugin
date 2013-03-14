@@ -45,6 +45,7 @@ public class DataCollector implements Runnable {
 	public void run() {
 		if(!StatsPlugin.getPaused()) {
 			pushAllData();
+			serverStatistics.fetchData();
 			serverTotals.fetchData();
 		}
 	}

@@ -29,6 +29,8 @@ public class ServerTotals {
 		pvpKills = 0;
 		pveKills = 0;
 		otherKills = 0;
+		
+		fetchData();
 	}
 	
 	private int blocksBroken;
@@ -67,16 +69,16 @@ public class ServerTotals {
 	 */
 	public Map<String, Object> getValues() {
 		Map<String, Object> values = new HashMap<String, Object>();
-		values.put("blocksBroken", blocksBroken);
-		values.put("blocksPlaced", blocksPlaced);
+		values.put("blBroken", blocksBroken);
+		values.put("blPlaced", blocksPlaced);
 		values.put("distance", distance);
-		values.put("toolsBroken", toolsBroken);
-		values.put("itemsCrafted", itemsCrafted);
-		values.put("snacksEaten", snacksEaten);
+		values.put("itBroken", toolsBroken);
+		values.put("itCrafted", itemsCrafted);
+		values.put("itEaten", snacksEaten);
 		values.put("pvpKills", pvpKills);
 		values.put("pveKills", pveKills);
 		values.put("pveDeaths", pveDeaths);
-		values.put("otherKills", otherKills);
+		values.put("othKills", otherKills);
 		values.putAll(DataCollector.global().getValueMap());
 		return values;
 	}
