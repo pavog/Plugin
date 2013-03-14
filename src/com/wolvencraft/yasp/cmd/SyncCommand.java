@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.StatsSignFactory;
 import com.wolvencraft.yasp.util.Message;
 
 public class SyncCommand implements BaseCommand {
@@ -19,6 +20,7 @@ public class SyncCommand implements BaseCommand {
 			}
 			
 		});
+		StatsSignFactory.updateAll();
 		Message.sendFormattedSuccess(CommandManager.getSender(), "Synchronization complete");
 		return true;
 	}

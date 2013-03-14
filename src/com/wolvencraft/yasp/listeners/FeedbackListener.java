@@ -48,6 +48,7 @@ public class FeedbackListener implements Listener {
 		if(!sign.getLines()[0].startsWith("<Y>")) return;
 		StatsSignFactory.add(sign);
 		Message.sendFormattedSuccess(CommandManager.getSender(), "A new StatsSign has been added");
+		StatsSignFactory.updateAll();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
