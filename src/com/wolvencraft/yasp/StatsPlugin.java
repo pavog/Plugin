@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.wolvencraft.yasp.DisplaySignFactory.DisplaySign;
+import com.wolvencraft.yasp.StatsSignFactory.StatsSign;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
@@ -23,7 +23,7 @@ public class StatsPlugin extends JavaPlugin {
 	private static boolean paused;
 	
 	private DataCollector dataCollector;
-	private DisplaySignFactory displaySignFactory;
+	private StatsSignFactory displaySignFactory;
 	private TPSTracker tpsTracker;
 	
 	private static VaultHook vaultHook;
@@ -56,10 +56,10 @@ public class StatsPlugin extends JavaPlugin {
 		
 		Message.log("Database connection established");
 
-		ConfigurationSerialization.registerClass(DisplaySign.class, "DisplaySign");
+		ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
 		
 		dataCollector = new DataCollector();
-		displaySignFactory = new DisplaySignFactory();
+		displaySignFactory = new StatsSignFactory();
 		tpsTracker = new TPSTracker();
 		
 		if (getServer().getPluginManager().getPlugin("Vault") != null) {

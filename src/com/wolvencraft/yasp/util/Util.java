@@ -31,7 +31,8 @@ public class Util {
 	        str = str.replace("<" + pairs.getKey() + ">", pairs.getValue() + "");
 	        it.remove();
 	    }
-		return str;
+	    str = str.replace("<Y>", "");
+		return parseChatColors(str);
 	}
 	
 	/**

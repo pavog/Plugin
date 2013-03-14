@@ -25,18 +25,18 @@ import org.bukkit.util.Vector;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
-public class DisplaySignFactory implements Runnable {
+public class StatsSignFactory implements Runnable {
 	
-	private static List<DisplaySign> signs;
-	private static DisplaySignFactory instance;
+	private static List<StatsSign> signs;
+	private static StatsSignFactory instance;
 	
 	/**
 	 * <b>Default constructor</b><br />
 	 * Creates a list of active signs and loads stored sign information from file
 	 */
-	public DisplaySignFactory() {
+	public StatsSignFactory() {
 		instance = this;
-		signs = new ArrayList<DisplaySign>();
+		signs = new ArrayList<StatsSign>();
 		File signFolder = new File(StatsPlugin.getInstance().getDataFolder(), "signs");
 		if (!signFolder.exists() || !signFolder.isDirectory()) signFolder.mkdir();
 		else {
@@ -48,7 +48,7 @@ public class DisplaySignFactory implements Runnable {
 				try {
 					FileConfiguration mineConf = YamlConfiguration.loadConfiguration(signFile);
 					Object sign = mineConf.get("displaysign");
-					if (sign instanceof DisplaySign) signs.add((DisplaySign) sign);
+					if (sign instanceof StatsSign) signs.add((StatsSign) sign);
 				} catch (IllegalArgumentException ex) {
 					Message.log(Level.SEVERE, ex.getMessage());
 					continue;
@@ -68,7 +68,7 @@ public class DisplaySignFactory implements Runnable {
 	 */
 	public static boolean saveAll() {
 		boolean result = true;
-		for (DisplaySign sign : signs) {
+		for (StatsSign sign : signs) {
 			if(!sign.saveFile()) result = false;
 		}
 		return result;
@@ -80,31 +80,31 @@ public class DisplaySignFactory implements Runnable {
 	 */
 	public static boolean updateAll() {
 		boolean result = true;
-		for(DisplaySign sign : signs) {
+		for(StatsSign sign : signs) {
 			if(!sign.update()) result = false;
 		}
 		return result;
 	}
 	
 	/**
-	 * Adds a new sign to the DisplaySign update query
+	 * Adds a new sign to the StatsSign update query
 	 * @param sign Sign to add
 	 * @return <b>true</b> if the sign was added successfully, <b>false</b> if an error occurred
 	 */
 	public static boolean add(Sign sign) {
-		return signs.add(instance.new DisplaySign(sign));
+		return signs.add(instance.new StatsSign(sign));
 	}
 	
 	/**
-	 * Removes the Sign from the DisplaySign update query
+	 * Removes the Sign from the StatsSign update query
 	 * @param sign Sign to remove
 	 * @return <b>true</b> if the sign was removed successfully, <b>false</b> if an error occurred
 	 */
 	public static boolean remove(Sign sign) {
 		Location loc = sign.getLocation();
-		List<DisplaySign> temp = new ArrayList<DisplaySign>();
-		for(DisplaySign displaySign : signs) temp.add(displaySign);
-		for(DisplaySign displaySign : temp) {
+		List<StatsSign> temp = new ArrayList<StatsSign>();
+		for(StatsSign displaySign : signs) temp.add(displaySign);
+		for(StatsSign displaySign : temp) {
 			if(displaySign.getLocation().equals(loc)) {
 				displaySign.deleteFile();
 				return signs.remove(displaySign);
@@ -114,13 +114,13 @@ public class DisplaySignFactory implements Runnable {
 	}
 	
 	/**
-	 * Checks if a certain Sign is in the DisplaySign update query
+	 * Checks if a certain Sign is in the StatsSign update query
 	 * @param sign Sign to check
 	 * @return <b>true</b> if the sign is in the update query, <b>false</b> otherwise
 	 */
 	public static boolean isValid(Sign sign) {
 		Location loc = sign.getLocation();
-		for(DisplaySign displaySign : signs) {
+		for(StatsSign displaySign : signs) {
 			if(displaySign.getLocation().equals(loc)) return true;
 		}
 		return false;
@@ -132,7 +132,7 @@ public class DisplaySignFactory implements Runnable {
 	 * @return <b>true</b> if the ID is unique, <b>false</b> if there is a duplicate
 	 */
 	private static boolean isUnique(String id) {
-		for(DisplaySign displaySign : signs) {
+		for(StatsSign displaySign : signs) {
 			if(displaySign.getId().equals(id)) return false;
 		}
 		return true;
@@ -150,18 +150,18 @@ public class DisplaySignFactory implements Runnable {
 		return id;
 	}
 	
-	@SerializableAs("DisplaySign")
-	public class DisplaySign implements ConfigurationSerializable  {
+	@SerializableAs("StatsSign")
+	public class StatsSign implements ConfigurationSerializable  {
 		private String signId;
 		private Sign sign;
 		private List<String> originalText;
 		
 		/**
 		 * <b>Default constructor</b><br />
-		 * Creates a new DisplaySign instance from the Sign object
-		 * @param sign Sign to base the DisplaySign on
+		 * Creates a new StatsSign instance from the Sign object
+		 * @param sign Sign to base the StatsSign on
 		 */
-		public DisplaySign(Sign sign) {
+		public StatsSign(Sign sign) {
 			this.signId = generateId();
 			this.sign = sign;
 			
@@ -177,7 +177,7 @@ public class DisplaySignFactory implements Runnable {
 		 * @throws Exception 
 		 */
 		@SuppressWarnings("unchecked")
-		public DisplaySign(Map<String, Object> me) throws Exception {
+		public StatsSign(Map<String, Object> me) throws Exception {
 			signId = (String) me.get("id");
 			
 			World world = Bukkit.getWorld((String) me.get("world"));
@@ -208,7 +208,7 @@ public class DisplaySignFactory implements Runnable {
 		public List<String> getLines() 	{ return originalText; }
 		
 		/**
-		 * Updates the DisplaySign's lines with the appropriate variables
+		 * Updates the StatsSign's lines with the appropriate variables
 		 * @return <b>true</b> if the update was successful, <b>false</b> otherwise
 		 */
 		public boolean update() {
@@ -255,7 +255,7 @@ public class DisplaySignFactory implements Runnable {
 			
 			for(File signFile : signFiles) {
 				if(signFile.getName().equals(signId + ".sign.yml")) {
-					DisplaySignFactory.remove(sign);
+					StatsSignFactory.remove(sign);
 					return signFile.delete();
 				}
 			}

@@ -18,7 +18,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DisplaySignFactory;
+import com.wolvencraft.yasp.StatsSignFactory;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
@@ -30,7 +30,7 @@ public class FeedbackListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onDisplaySignInit(PlayerInteractEvent event) {
+	public void onStatsSignInit(PlayerInteractEvent event) {
 		if(!event.getPlayer().isOp()) return;
 		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
 		
@@ -39,19 +39,19 @@ public class FeedbackListener implements Listener {
 		if(!(block.getState() instanceof Sign)) return;
 		
 		Sign sign = (Sign) block.getState();
-		if(DisplaySignFactory.isValid(sign)) return;
+		if(StatsSignFactory.isValid(sign)) return;
 		
 		if(!sign.getLines()[0].startsWith("<Y>")) return;
-		DisplaySignFactory.add(sign);
+		StatsSignFactory.add(sign);
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onDisplaySignBreak(BlockBreakEvent event) {
+	public void onStatsSignBreak(BlockBreakEvent event) {
 		BlockState blockState = event.getBlock().getState();
 		if(!(blockState instanceof Sign)) return;
 		Sign sign = (Sign) blockState;
-		if(DisplaySignFactory.isValid(sign)) return;
-		DisplaySignFactory.remove(sign);
+		if(StatsSignFactory.isValid(sign)) return;
+		StatsSignFactory.remove(sign);
 		Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
 	}
 
