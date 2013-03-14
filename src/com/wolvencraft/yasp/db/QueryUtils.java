@@ -174,7 +174,7 @@ public class QueryUtils {
 			it.remove();
 		}
 		
-		return pushData("INSERT INTO `" + table + "` (" + fields + ")  VALUES (" + values + ");");
+		return pushData("INSERT INTO " + table + " (" + fields + ")  VALUES (" + values + ");");
 	}
 	
 	/**
@@ -189,7 +189,7 @@ public class QueryUtils {
 		column = "`" + column + "`";
 		value = "'" + value + "'";
 		
-		return pushData("INSERT INTO `" + table + "` (" + column + ")  VALUES (" + value + ");");
+		return pushData("INSERT INTO " + table + " (" + column + ")  VALUES (" + value + ");");
 	}
 	
 	/**
@@ -210,7 +210,7 @@ public class QueryUtils {
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
 		
-		return pushData("UPDATE `" + table + "` SET `" + column + "`='" + value + "' WHERE " + conditions + ";");
+		return pushData("UPDATE " + table + " SET `" + column + "`='" + value + "' WHERE " + conditions + ";");
 	}
 	
 	/**
@@ -239,6 +239,6 @@ public class QueryUtils {
 			conditions += "`" + str[0] + "`='" + str[1] + "'";
 		}
 		
-		return pushData("UPDATE `" + table + "` SET " + fieldValues + " WHERE " + conditions + ";");
+		return pushData("UPDATE " + table + " SET " + fieldValues + " WHERE " + conditions + ";");
 	}
 }

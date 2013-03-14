@@ -67,8 +67,8 @@ public class Settings {
 		}
 	}
 	
-	public static void setDatabaseVersion(int version) { 
-		if(!QueryUtils.update(SettingsTable.TableName.toString(), "value", version + "", new String[] {"key", "version"}))
+	public static void setDatabaseVersion(String version) { 
+		if(!QueryUtils.update(SettingsTable.TableName.toString(), "value", version, new String[] {"key", "version"}))
 		Message.log(java.util.logging.Level.SEVERE, "Failed to update the database version!");
 	}
 	

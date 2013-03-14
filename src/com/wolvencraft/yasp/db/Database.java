@@ -89,7 +89,7 @@ public class Database {
 			try {sr.runScript(new InputStreamReader(is)); }
 			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + patch, e); }
 
-			Settings.setDatabaseVersion(Integer.parseInt(patch));
+			Settings.setDatabaseVersion(patch);
 		}
 		Message.log("+----------------------------------+");
 		
@@ -165,6 +165,7 @@ public class Database {
 				catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
 			}
 		}
+		Message.log(Level.FINER, rowsChanged + " rows changed");
 		return rowsChanged > 0;
 	}
 	
