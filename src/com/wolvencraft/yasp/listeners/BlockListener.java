@@ -19,6 +19,7 @@ public class BlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "block.break")) return;
 		DataCollector
@@ -29,6 +30,7 @@ public class BlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "block.place")) return;
 		DataCollector

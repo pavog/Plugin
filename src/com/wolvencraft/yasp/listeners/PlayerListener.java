@@ -35,6 +35,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		DataCollector.global().playerLogin();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
@@ -44,6 +45,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		DataCollector.global().playerLogout();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
@@ -52,6 +54,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "move")) return;
 		Location playerLocation = player.getLocation();
@@ -74,6 +77,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerFish(PlayerFishEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.fish")) return;
 		DataCollector.get(player).player().misc().fishCaught();
@@ -81,6 +85,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerKick(PlayerKickEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.kick")) return;
 		DataCollector.get(player).player().misc().kicked();
@@ -88,6 +93,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEggThrow(PlayerEggThrowEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.eggThrow")) return;
 		DataCollector.get(player).player().misc().eggThrown();
@@ -95,6 +101,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onArrowShoot(EntityShootBowEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		if(!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		if(Util.isExempt(player, "misc.arrowShoot")) return;
@@ -103,6 +110,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerDamage(EntityDamageEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		if(!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		if(Util.isExempt(player, "misc.takeDamage")) return;
@@ -111,6 +119,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBedEnter(PlayerBedEnterEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.bedEnter")) return;
 		DataCollector.get(player).player().misc().bedEntered();
@@ -118,6 +127,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPortalEnter(PlayerPortalEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.portalEnter")) return;
 		DataCollector.get(player).player().misc().portalEntered();
@@ -125,6 +135,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onChatMessage(AsyncPlayerChatEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.chat")) return;
 		DataCollector.get(player).player().misc().chatMessageSent(event.getMessage().split(" ").length);
@@ -132,6 +143,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onChatCommand(PlayerCommandPreprocessEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.command")) return;
 		DataCollector.get(player).player().misc().commandSent();

@@ -25,6 +25,7 @@ public class ItemListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onItemPickup(PlayerPickupItemEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "item.pickup")) return;
 		DataCollector.get(player).items().itemPickUp(player.getLocation(), event.getItem().getItemStack());
@@ -32,6 +33,7 @@ public class ItemListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onItemDrop(PlayerDropItemEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "item.drop")) return;
 		DataCollector.get(player).items().itemDrop(player.getLocation(), event.getItemDrop().getItemStack());
@@ -39,6 +41,7 @@ public class ItemListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onFoodConsume(FoodLevelChangeEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		if(!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		if(Util.isExempt(player, "item.use")) return;
@@ -48,6 +51,7 @@ public class ItemListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onItemCraft(CraftItemEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = (Player) event.getWhoClicked();
 		if(Util.isExempt(player, "item.craft")) return;
 		DataCollector.get(player).items().itemCraft(player.getLocation(), event.getCurrentItem());
@@ -55,6 +59,7 @@ public class ItemListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onItemSmelt(FurnaceExtractEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "item.smelt")) return;
 		DataCollector.get(player).items().itemSmelt(player.getLocation(), new ItemStack(event.getItemType()));
@@ -62,6 +67,7 @@ public class ItemListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onToolBreak(PlayerItemBreakEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "item.break")) return;
 		DataCollector.get(player).items().itemBreak(player.getLocation(), event.getBrokenItem());
@@ -69,6 +75,7 @@ public class ItemListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onItemEnchant(EnchantItemEvent event) {
+		if(StatsPlugin.getPaused()) return;
 		Player player = event.getEnchanter();
 		if(Util.isExempt(player, "item.enchant")) return;
 		DataCollector.get(player).items().itemEnchant(player.getLocation(), new ItemStack(event.getItem().getType()));
