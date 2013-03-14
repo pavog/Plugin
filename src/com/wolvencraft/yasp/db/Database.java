@@ -12,10 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
-
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.data.sync.Settings;
+import com.wolvencraft.yasp.db.data.sync.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.util.Message;
@@ -29,7 +28,7 @@ import com.wolvencraft.yasp.util.Message;
 public class Database {
 	
 	private static Database instance = null;
-	private Connection connection = null;
+	private static Connection connection = null;
 
 	/**
 	 * Default constructor. Connects to the remote database, performs patches if necessary, and holds to the DB info.<br />
@@ -53,10 +52,10 @@ public class Database {
 	 */
 	private void connect() throws DatabaseConnectionException {
 		try {
-			this.connection = DriverManager.getConnection(
-				Settings.LocalConfiguration.DBConnect.asString(),
-				Settings.LocalConfiguration.DBUser.asString(),
-				Settings.LocalConfiguration.DBPass.asString()
+			connection = DriverManager.getConnection(
+				LocalConfiguration.DBConnect.asString(),
+				LocalConfiguration.DBUser.asString(),
+				LocalConfiguration.DBPass.asString()
 			);
 		} catch (SQLException e) { throw new DatabaseConnectionException(e); }
 	}
@@ -67,21 +66,33 @@ public class Database {
 	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
 	 */
 	public void runPatch(boolean force) throws DatabaseConnectionException {
-		Message.log("Attempting to patch the database. This will take a while.");
-		int databaseVersion = 0;
-		if(!force) databaseVersion = Settings.getDatabaseVersion();
+		int currentVersion = 0, latestVersion = 0;
+		if(!force) { currentVersion = latestVersion = Settings.getDatabaseVersion(); }
+		List<String> patches = new ArrayList<String>();
 		do {
-			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + (databaseVersion + 1) + ".sql");
-			if (is == null) break;
-			databaseVersion++;
-			Message.log("Executing database patch v." + databaseVersion);
-			ScriptRunner sr = new ScriptRunner(connection);
-			try {sr.runScript(new InputStreamReader(is)); }
-			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
+			String patch = (latestVersion + 1) + "";
+			if(this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + patch + ".sql") == null) break;
+			patches.add(patch);
+			latestVersion++;
 		} while (true);
 		
-		Settings.setDatabaseVersion(databaseVersion);
-		Message.log("Target database is up to date (version " + databaseVersion + ")");
+		if(currentVersion >= latestVersion) {
+			Message.log("Target database is up to date");
+			return;
+		}
+
+		ScriptRunner sr = new ScriptRunner(connection);
+		Message.log("+-------] Database Patcher [-------+");
+		for(String patch : patches) {
+			Message.log("|       Applying patch " + patch + " / " + patches.size() + "       |");
+			InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + patch + ".sql");
+			try {sr.runScript(new InputStreamReader(is)); }
+			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + patch, e); }
+
+			Settings.setDatabaseVersion(Integer.parseInt(patch));
+		}
+		Message.log("+----------------------------------+");
+		
 		StatsPlugin.setPaused(false);
 	}
 	
@@ -97,37 +108,6 @@ public class Database {
 		ScriptRunner sr = new ScriptRunner(connection);
 		try {sr.runScript(new InputStreamReader(is)); }
 		catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + patchId + ".sql", e); }
-	}
-	
-	/**
-	 * Patches the remote database to the latest version.<br />
-	 * This method will run in an <b>async thread</b>.
-	 * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
-	 */
-	public void runPatchAsynchronously() throws DatabaseConnectionException {
-		StatsPlugin.setPaused(true);
-		Bukkit.getScheduler().runTaskAsynchronously(StatsPlugin.getInstance(), new Runnable() {
-
-			@Override
-			public void run() {
-				Message.log("Attempting to patch the database. This will take a while.");
-				int databaseVersion = Settings.getDatabaseVersion();
-				do {
-					InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + (databaseVersion + 1) + ".sql");
-					if (is == null) break;
-					databaseVersion++;
-					Message.log("Executing database patch v." + databaseVersion);
-					ScriptRunner sr = new ScriptRunner(connection);
-					try {sr.runScript(new InputStreamReader(is)); }
-					catch (RuntimeSQLException e) { Message.log(Level.SEVERE, "An error occured while patching the database to v." + databaseVersion); }
-				} while (true);
-				
-				Settings.setDatabaseVersion(databaseVersion);
-				Message.log("Target database is up to date (version " + databaseVersion + ")");
-				StatsPlugin.setPaused(false);
-			}
-			
-		});
 	}
 	
 	/**
@@ -148,12 +128,12 @@ public class Database {
 					return true;
 				} catch (DatabaseConnectionException e) {
 					Message.log(Level.SEVERE, "Failed to re-connect to the database. Data is being stored locally.");
-					if (Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+					if (LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 					return false;
 				}
 			}
 		} catch (SQLException e) {
-			if (Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+			if (LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 			return false;
 		}
 	}
@@ -174,7 +154,7 @@ public class Database {
 			statement.close();
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, "Failed to push data to the remote database");
-			if(Settings.LocalConfiguration.Debug.asBoolean()) {
+			if(LocalConfiguration.Debug.asBoolean()) {
 				Message.log(Level.WARNING, sql);
 				e.printStackTrace();
 			}
@@ -201,7 +181,7 @@ public class Database {
 		Statement statement = null;
 		ResultSet rs = null;
 		try {
-			statement = this.connection.createStatement();
+			statement = connection.createStatement();
 			rs = statement.executeQuery(sql);
 			while (rs.next()) {
 				HashMap<String, String> rowToAdd = new HashMap<String, String>();
@@ -212,7 +192,7 @@ public class Database {
 			}
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, "Error retrieving data from the database");
-			if(Settings.LocalConfiguration.Debug.asBoolean()) {
+			if(LocalConfiguration.Debug.asBoolean()) {
 				Message.log(Level.WARNING, e.getMessage());
 				Message.log(Level.WARNING, sql);
 			}
@@ -258,7 +238,7 @@ public class Database {
 	 * Cleans up the leftover database and connection instances to prevent memory leaks.
 	 */
 	public static void cleanup() {
-		instance.connection = null;
+		connection = null;
 		instance = null;
 	}
 }
