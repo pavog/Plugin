@@ -71,6 +71,7 @@ public class Normal {
 		Name("name"),
 		Online("online"),
 		SessionStart("login_time"),
+		TotalPlaytime("playtime"),
 		FirstLogin("first_login"),
 		Logins("logins");
 		

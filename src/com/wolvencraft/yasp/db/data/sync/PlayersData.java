@@ -105,16 +105,20 @@ public class PlayersData implements _DataStore {
 			
 			this.online = true;
 			this.sessionStart = Util.getTimestamp();
+			this.totalPlaytime = 0;
 			this.firstJoin = Util.getTimestamp();
 			this.logins = 0;
 			
 			fetchData(playerId);
+			
+			logins++;
 		}
 		
 		private String playerName;
 		
 		private boolean online;
 		private long sessionStart;
+		private long totalPlaytime;
 		private long firstJoin;
 		private int logins;
 		
@@ -126,7 +130,8 @@ public class PlayersData implements _DataStore {
 				.select();
 			if(results.isEmpty()) QueryUtils.insert(PlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
-				logins = results.get(0).getValueAsInteger(PlayersTable.Logins.toString()) + 1;
+				logins = results.get(0).getValueAsInteger(PlayersTable.Logins.toString());
+				totalPlaytime = results.get(0).getValueAsLong(PlayersTable.TotalPlaytime.toString());
 			}
 		}
 
@@ -150,6 +155,7 @@ public class PlayersData implements _DataStore {
 			map.put(PlayersTable.SessionStart.toString(), sessionStart);
 			map.put(PlayersTable.FirstLogin.toString(), firstJoin);
 			map.put(PlayersTable.Logins.toString(), logins);
+			map.put(PlayersTable.TotalPlaytime.toString(), totalPlaytime);
 			return map;
 		}
 		
@@ -163,7 +169,10 @@ public class PlayersData implements _DataStore {
 		 * Changes the online status of the player
 		 * @param online New online status
 		 */
-		public void setOnline(boolean online) { this.online = online; }
+		public void setOnline(boolean online) { 
+			this.online = online;
+			if(!online) totalPlaytime += Util.getTimestamp() - sessionStart;
+		}
 	}
 	
 	/**
