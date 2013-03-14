@@ -47,7 +47,7 @@ public class StatsSignFactory implements Runnable {
 			for (File signFile : signFiles) {
 				try {
 					FileConfiguration mineConf = YamlConfiguration.loadConfiguration(signFile);
-					Object sign = mineConf.get("displaysign");
+					Object sign = mineConf.get("StatsSign");
 					if (sign instanceof StatsSign) signs.add((StatsSign) sign);
 				} catch (IllegalArgumentException ex) {
 					Message.log(Level.SEVERE, ex.getMessage());
@@ -229,7 +229,7 @@ public class StatsSignFactory implements Runnable {
 		public boolean saveFile() {
 			File signFile = new File(new File(StatsPlugin.getInstance().getDataFolder(), "signs"), signId + ".sign.yml");
 			FileConfiguration signConf =  YamlConfiguration.loadConfiguration(signFile);
-			signConf.set("displaysign", this);
+			signConf.set("StatsSign", this);
 			try {
 				signConf.save(signFile);
 			} catch (IOException e) {
