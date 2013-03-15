@@ -193,12 +193,12 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(TotalItemsTable.TableName.toString())
+			List<QueryResult> results = QueryUtils.table(TotalItemsTable.TableName.toString())
 				.condition(TotalItemsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalItemsTable.Material.toString(), type + ":" + data)
 				.select();
 			
-			if(results.isEmpty()) QueryUtils.insert(TotalItemsTable.TableName.toString()).value(getValues(playerId)).insert();
+			if(results.isEmpty()) QueryUtils.table(TotalItemsTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				dropped = results.get(0).getValueAsInteger(TotalItemsTable.Dropped.toString());
 				pickedUp = results.get(0).getValueAsInteger(TotalItemsTable.PickedUp.toString());
@@ -212,7 +212,7 @@ public class ItemsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(TotalItemsTable.TableName.toString())
+			boolean result = QueryUtils.table(TotalItemsTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(TotalItemsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalItemsTable.Material.toString(), type + ":" + data)
@@ -283,7 +283,7 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(Detailed.DroppedItems.TableName.toString())
+			return QueryUtils.table(Detailed.DroppedItems.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}
@@ -332,7 +332,7 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(Detailed.PickedupItems.TableName.toString())
+			return QueryUtils.table(Detailed.PickedupItems.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}
@@ -381,7 +381,7 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(Detailed.UsedItems.TableName.toString())
+			return QueryUtils.table(Detailed.UsedItems.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}

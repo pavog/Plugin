@@ -61,20 +61,20 @@ public class PlayerTotals {
 	 * Automatically calculates values from the contents of corresponding tables.
 	 */
 	public void fetchData() {
-		blocksBroken = (int) QueryUtils.select(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Destroyed.toString()).condition(TotalBlocksTable.PlayerId.toString(), playerId + "").sum();
-		blocksPlaced = (int) QueryUtils.select(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Placed.toString()).condition(TotalBlocksTable.PlayerId.toString(), playerId + "").sum();
-		distance = QueryUtils.select(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Foot.toString()).condition(DistancePlayersTable.PlayerId.toString(), playerId + "").sum();
-		toolsBroken = (int) QueryUtils.select(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Broken.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
-		itemsCrafted = (int) QueryUtils.select(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Crafted.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
-		snacksEaten = (int) QueryUtils.select(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Used.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
+		blocksBroken = (int) QueryUtils.table(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Destroyed.toString()).condition(TotalBlocksTable.PlayerId.toString(), playerId + "").sum();
+		blocksPlaced = (int) QueryUtils.table(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Placed.toString()).condition(TotalBlocksTable.PlayerId.toString(), playerId + "").sum();
+		distance = QueryUtils.table(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Foot.toString()).condition(DistancePlayersTable.PlayerId.toString(), playerId + "").sum();
+		toolsBroken = (int) QueryUtils.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Broken.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
+		itemsCrafted = (int) QueryUtils.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Crafted.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
+		snacksEaten = (int) QueryUtils.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Used.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
 		
-		pvpKills = (int) QueryUtils.select(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).condition(TotalPVPKillsTable.PlayerId.toString(), playerId + "").sum();
-		pvpDeaths = (int) QueryUtils.select(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).condition(TotalPVPKillsTable.VictimId.toString(), playerId + "").sum();
+		pvpKills = (int) QueryUtils.table(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).condition(TotalPVPKillsTable.PlayerId.toString(), playerId + "").sum();
+		pvpDeaths = (int) QueryUtils.table(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).condition(TotalPVPKillsTable.VictimId.toString(), playerId + "").sum();
 		if(pvpDeaths != 0) kdr = (double) Math.round((pvpKills / pvpDeaths) * 100000) / 100000;
 		else kdr = pvpKills;
 		
-		pveKills = (int) QueryUtils.select(TotalPVEKillsTable.TableName.toString()).column(TotalPVEKillsTable.CreatureKilled.toString()).condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "").sum();
-		otherKills = (int) QueryUtils.select(TotalDeathPlayersTable.TableName.toString()).column(TotalDeathPlayersTable.Times.toString()).condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "").sum();
+		pveKills = (int) QueryUtils.table(TotalPVEKillsTable.TableName.toString()).column(TotalPVEKillsTable.CreatureKilled.toString()).condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "").sum();
+		otherKills = (int) QueryUtils.table(TotalDeathPlayersTable.TableName.toString()).column(TotalDeathPlayersTable.Times.toString()).condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "").sum();
 	}
 	
 	/**

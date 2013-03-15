@@ -30,30 +30,12 @@ public class QueryUtils {
 	}
 	
 	/**
-	 * Builds a SELECT query for the table provided.
-	 * @param table Table to send the query to
+	 * Returns a database query based on the table name provided
+	 * @param table Name of the table to query
 	 * @return Database query
 	 */
-	public static SelectQuery select(String table) {
-		return instance.new SelectQuery(table);
-	}
-	
-	/**
-	 * Builds an INSERT query for the table provided.
-	 * @param table Table to send the query to
-	 * @return Database query
-	 */
-	public static InsertQuery insert(String table) {
-		return instance.new InsertQuery(table);
-	}
-	
-	/**
-	 * Builds an UPDATE query for the table provided.
-	 * @param table Table to send the query to
-	 * @return Database query
-	 */
-	public static UpdateQuery update(String table) {
-		return instance.new UpdateQuery(table);
+	public static DatabaseQuery table(String table) {
+		return instance.new DatabaseQuery(table);
 	}
 	
 	/**
@@ -90,76 +72,20 @@ public class QueryUtils {
 			if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 			return new ArrayList<QueryResult>();
 		}
-	}
+	}	
 	
-	private interface DBQuery {
+	public class DatabaseQuery {
 		
-		/**
-		 * Applies a condition to the query
-		 * @param key Column name
-		 * @param value Column value
-		 * @return Database query
-		 */
-		public DBQuery condition(String key, String value);
-		
-		/**
-		 * Applies a condition to the query
-		 * @param key Column name
-		 * @param value Column value
-		 * @return Database query
-		 */
-		public DBQuery condition(String key, Integer value);
-		
-		/**
-		 * Applies a condition to the query
-		 * @param key Column name
-		 * @param value Column value
-		 * @return Database query
-		 */
-		public DBQuery condition(String key, Double value);
-		
-		/**
-		 * Applies a condition to the query
-		 * @param key Column name
-		 * @param value Column value
-		 * @return Database query
-		 */
-		public DBQuery condition(String key, Long value);
-		
-		/**
-		 * Applies a condition to the query
-		 * @param key Column name
-		 * @param value Column value
-		 * @return Database query
-		 */
-		public DBQuery condition(String key, Boolean value);
-		
-		/**
-		 * Imports a list of conditions to the query
-		 * @param key Column name
-		 * @param value Column value
-		 * @return Database query
-		 */
-		public DBQuery condition(List<String> list);
-	}
-	
-	
-	
-	/**
-	 * Represents a SELECT query to the database.<br />
-	 * Complimentary methods can be used to refine the results.
-	 * @author bitWolfy
-	 *
-	 */
-	public class SelectQuery implements DBQuery {
-		public SelectQuery(String table) {
-			this.table = Settings.LocalConfiguration.DBPrefix.asString() + table;
+		public DatabaseQuery(String table) {
+			this.table = table;
 			columns = new ArrayList<String>();
+			values = new HashMap<String, Object>();
 			conditions = new ArrayList<String>();
 		}
 		
 		String table;
 		List<String> columns;
+		Map<String, Object> values;
 		List<String> conditions;
 		
 		/**
@@ -168,7 +94,7 @@ public class QueryUtils {
 		 * @param column Columns to include
 		 * @return Database query
 		 */
-		public SelectQuery column(String... column) {
+		public DatabaseQuery column(String... column) {
 			for(String col : column) columns.add(col);
 			return this;
 		}
@@ -179,46 +105,127 @@ public class QueryUtils {
 		 * @param column Columns to include
 		 * @return Database query
 		 */
-		public SelectQuery columns(String[] column) {
+		public DatabaseQuery columns(String[] column) {
 			for(String col : column) columns.add(col);
 			return this;
 		}
 		
-		@Override
-		public SelectQuery condition(String key, String value) {
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DatabaseQuery condition(String key, String value) {
 			conditions.add("`" + key + "`='" + value + "'");
 			return this;
 		}
-		
-		@Override
-		public SelectQuery condition(String key, Integer value) {
+
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DatabaseQuery condition(String key, Integer value) {
 			conditions.add("`" + key + "`=" + value);
 			return this;
 		}
-		
-		@Override
-		public SelectQuery condition(String key, Double value) {
+
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DatabaseQuery condition(String key, Double value) {
 			conditions.add("`" + key + "`=" + value);
 			return this;
 		}
-		
-		@Override
-		public SelectQuery condition(String key, Long value) {
+
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DatabaseQuery condition(String key, Long value) {
 			conditions.add("`" + key + "`=" + value);
 			return this;
 		}
-		
-		@Override
-		public SelectQuery condition(String key, Boolean value) {
+
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DatabaseQuery condition(String key, Boolean value) {
 			if(value) conditions.add("`" + key + "`=1");
 			else  conditions.add("`" + key + "`=0");
 			return this;
 		}
-		
-		@Override
-		public SelectQuery condition(List<String> list) {
+
+		/**
+		 * Applies a condition to the query
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DatabaseQuery condition(List<String> list) {
 			conditions.addAll(list);
 			return this;
+		}
+		
+		/**
+		 * Adds a value to be inserted into the database
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DatabaseQuery value(String key, Object value) {
+			values.put(key, value);
+			return this;
+		}
+		
+		/**
+		 * Adds a value to be inserted into the database
+		 * @param key Column name
+		 * @param value Column value
+		 * @return Database query
+		 */
+		public DatabaseQuery value(String key, boolean value) {
+			if(value) values.put(key, 1);
+			else values.put(key, 0);
+			return this;
+		}
+		
+		/**
+		 * Adds values to be inserted into the database
+		 * @param values Map of values to be added to the database
+		 * @return Database query
+		 */
+		public DatabaseQuery value(Map<String, Object> values) {
+			this.values.putAll(values);
+			return this;
+		}
+
+		/**
+		 * Bundles up the altered columns as an array
+		 * @return Array of columns
+		 */
+		private String[] getColumnsFromValues() {
+			List<String> columns = new ArrayList<String>();
+			Iterator<Entry<String, Object>> it = values.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
+				columns.add(pairs.getKey());
+				it.remove();
+			}
+			String[] colArr = new String[columns.size()];
+			colArr = columns.toArray(colArr);
+			Message.debug(colArr.toString());
+			return colArr;
 		}
 		
 		/**
@@ -282,91 +289,6 @@ public class QueryUtils {
 			
 			return QueryUtils.fetchData(sql + ";").get(0).getValueAsDouble("temp");
 		}
-	}
-	
-	
-	
-	/**
-	 * Represents an INSERT query to the database.<br />
-	 * Complimentary methods can be used to refine the results.
-	 * @author bitWolfy
-	 *
-	 */
-	public class InsertQuery implements DBQuery {
-		
-		public InsertQuery(String table) {
-			this.table = table;
-			values = new HashMap<String, Object>();
-			conditions = new ArrayList<String>();
-		}
-		
-		String table;
-		Map<String, Object> values;
-		List<String> conditions;
-		
-		/**
-		 * Adds a value to be inserted into the database
-		 * @param key Column name
-		 * @param value Column value
-		 * @return Database query
-		 */
-		public InsertQuery value(String key, Object value) {
-			values.put(key, value);
-			return this;
-		}
-		
-		public InsertQuery value(String key, boolean value) {
-			if(value) values.put(key, 1);
-			else values.put(key, 0);
-			return this;
-		}
-		
-		/**
-		 * Adds values to be inserted into the database
-		 * @param values Map of values to be added to the database
-		 * @return Database query
-		 */
-		public InsertQuery value(Map<String, Object> values) {
-			this.values.putAll(values);
-			return this;
-		}
-		
-		@Override
-		public InsertQuery condition(String key, String value) {
-			conditions.add("`" + key + "`='" + value + "'");
-			return this;
-		}
-		
-		@Override
-		public InsertQuery condition(String key, Integer value) {
-			conditions.add("`" + key + "`=" + value);
-			return this;
-		}
-		
-		@Override
-		public InsertQuery condition(String key, Double value) {
-			conditions.add("`" + key + "`=" + value);
-			return this;
-		}
-		
-		@Override
-		public InsertQuery condition(String key, Long value) {
-			conditions.add("`" + key + "`=" + value);
-			return this;
-		}
-		
-		@Override
-		public InsertQuery condition(String key, Boolean value) {
-			if(value) conditions.add("`" + key + "`=1");
-			else  conditions.add("`" + key + "`=0");
-			return this;
-		}
-		
-		@Override
-		public InsertQuery condition(List<String> list) {
-			conditions.addAll(list);
-			return this;
-		}
 		
 		/**
 		 * Builds and runs the INSERT query
@@ -397,104 +319,6 @@ public class QueryUtils {
 			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
 			
 			return pushData(sql + ";");
-		}
-		
-	}
-	
-	
-	
-	/**
-	 * Represents an UPDATE query to the database.<br />
-	 * Complimentary methods can be used to refine the results.
-	 * @author bitWolfy
-	 *
-	 */
-	public class UpdateQuery implements DBQuery {
-		
-		public UpdateQuery(String table) {
-			this.table = table;
-			values = new HashMap<String, Object>();
-			conditions = new ArrayList<String>();
-		}
-		
-		String table;
-		Map<String, Object> values;
-		List<String> conditions;
-		
-		/**
-		 * Adds a value to be inserted into the database
-		 * @param key Column name
-		 * @param value Column value
-		 * @return Database query
-		 */
-		public UpdateQuery value(String key, Object value) {
-			values.put(key, value);
-			return this;
-		}
-		
-		/**
-		 * Adds values to be inserted into the database
-		 * @param values Map of values to be added to the database
-		 * @return Database query
-		 */
-		public UpdateQuery value(Map<String, Object> values) {
-			this.values.putAll(values);
-			return this;
-		}
-		
-		/**
-		 * Bundles up the altered columns as an array
-		 * @return Array of columns
-		 */
-		private String[] columns() {
-			List<String> columns = new ArrayList<String>();
-			Iterator<Entry<String, Object>> it = values.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
-				columns.add(pairs.getKey());
-				it.remove();
-			}
-			String[] colArr = new String[columns.size()];
-			colArr = columns.toArray(colArr);
-			Message.debug(colArr.toString());
-			return colArr;
-		}
-		
-		@Override
-		public UpdateQuery condition(String key, String value) {
-			conditions.add("`" + key + "`='" + value + "'");
-			return this;
-		}
-		
-		@Override
-		public UpdateQuery condition(String key, Integer value) {
-			conditions.add("`" + key + "`=" + value);
-			return this;
-		}
-		
-		@Override
-		public UpdateQuery condition(String key, Double value) {
-			conditions.add("`" + key + "`=" + value);
-			return this;
-		}
-		
-		@Override
-		public UpdateQuery condition(String key, Long value) {
-			conditions.add("`" + key + "`=" + value);
-			return this;
-		}
-		
-		@Override
-		public UpdateQuery condition(String key, Boolean value) {
-			if(value) conditions.add("`" + key + "`=1");
-			else  conditions.add("`" + key + "`=0");
-			return this;
-		}
-		
-		@Override
-		public UpdateQuery condition(List<String> list) {
-			conditions.addAll(list);
-			return this;
 		}
 		
 		/**
@@ -531,11 +355,11 @@ public class QueryUtils {
 		 */
 		public boolean update(boolean force) {
 			if(!force) return update();
-			if(select(table).columns(columns()).condition(conditions).exists()) return update();
-			else return insert(table).value(values).insert();
+			if(table(table).columns(getColumnsFromValues()).condition(conditions).exists()) return update();
+			else return table(table).value(values).insert();
 		}
+		
 	}
-	
 	
 	
 	/**

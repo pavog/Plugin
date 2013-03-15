@@ -50,7 +50,7 @@ public class Settings {
 		showFirstJoinMessages = false;
 		firstJoinMessage = "Welcome, <PLAYER>! Your statistics on this server are now being tracked.";
 		
-		List<QueryResult> entries = QueryUtils.select(SettingsTable.TableName.toString()).column("key", "value").select();
+		List<QueryResult> entries = QueryUtils.table(SettingsTable.TableName.toString()).column("key", "value").select();
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value") * 20;
 			else if(entry.getValue("key").equalsIgnoreCase("show_welcome_messages")) showWelcomeMessages = entry.getValueAsBoolean("value");
@@ -67,7 +67,7 @@ public class Settings {
 	private static String firstJoinMessage;
 	
 	public static void setDatabaseVersion(String version) {
-		QueryUtils.update(SettingsTable.TableName.toString())
+		QueryUtils.table(SettingsTable.TableName.toString())
 			.value("value", version)
 			.condition("key", "version")
 			.update(true);
@@ -75,7 +75,7 @@ public class Settings {
 	
 	public static int getDatabaseVersion() { 
 		try {
-			return QueryUtils.select(SettingsTable.TableName.toString())
+			return QueryUtils.table(SettingsTable.TableName.toString())
 				.column("value")
 				.condition("key", "version")
 				.select()
@@ -85,7 +85,7 @@ public class Settings {
 	}
 	
 	public static void setUsingVault(boolean usingVault) {
-		QueryUtils.update(SettingsTable.TableName.toString())
+		QueryUtils.table(SettingsTable.TableName.toString())
 			.value("value", usingVault)
 			.condition("key", "hook_vault")
 			.update(true);
@@ -93,7 +93,7 @@ public class Settings {
 	
 	public static boolean getUsingVault() {
 		try {
-			return QueryUtils.select(SettingsTable.TableName.toString())
+			return QueryUtils.table(SettingsTable.TableName.toString())
 				.column("value")
 				.condition("key", "hook_vault")
 				.select()
@@ -103,7 +103,7 @@ public class Settings {
 	}
 	
 	public static void setUsingWorldGuard(boolean usingWorldGuard) {
-		QueryUtils.update(SettingsTable.TableName.toString())
+		QueryUtils.table(SettingsTable.TableName.toString())
 			.value("value", usingWorldGuard)
 			.condition("key", "hook_worldguard")
 			.update(true);
@@ -111,7 +111,7 @@ public class Settings {
 	
 	public static boolean getUsingWorldGuard() {
 		try {
-			return QueryUtils.select(SettingsTable.TableName.toString())
+			return QueryUtils.table(SettingsTable.TableName.toString())
 				.column("value")
 				.condition("key", "hook_worldguard")
 				.select()

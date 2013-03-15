@@ -117,12 +117,12 @@ public class DeathsData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(TotalDeathPlayersTable.TableName.toString())
+			List<QueryResult> results = QueryUtils.table(TotalDeathPlayersTable.TableName.toString())
 				.condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
 				.condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
 				.select();
 			
-			if(results.isEmpty()) QueryUtils.insert(TotalDeathPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
+			if(results.isEmpty()) QueryUtils.table(TotalDeathPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				times = results.get(0).getValueAsInteger(TotalDeathPlayersTable.Times.toString());
 			}
@@ -130,7 +130,7 @@ public class DeathsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(TotalDeathPlayersTable.TableName.toString())
+			boolean result = QueryUtils.table(TotalDeathPlayersTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
 				.condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
@@ -197,7 +197,7 @@ public class DeathsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(Detailed.DeathPlayers.TableName.toString())
+			return QueryUtils.table(Detailed.DeathPlayers.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}

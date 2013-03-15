@@ -140,12 +140,12 @@ public class BlocksData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(TotalBlocksTable.TableName.toString())
+			List<QueryResult> results = QueryUtils.table(TotalBlocksTable.TableName.toString())
 				.condition(TotalBlocksTable.PlayerId.toString(), playerId + "")
 				.condition(TotalBlocksTable.Material.toString(), type + ":" + data)
 				.select();
 			
-			if(results.isEmpty()) QueryUtils.insert(TotalBlocksTable.TableName.toString()).value(getValues(playerId)).insert();
+			if(results.isEmpty()) QueryUtils.table(TotalBlocksTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				broken = results.get(0).getValueAsInteger(TotalBlocksTable.Destroyed.toString());
 				placed = results.get(0).getValueAsInteger(TotalBlocksTable.Placed.toString());
@@ -154,7 +154,7 @@ public class BlocksData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(TotalBlocksTable.TableName.toString())
+			boolean result = QueryUtils.table(TotalBlocksTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(TotalBlocksTable.PlayerId.toString(), playerId + "")
 				.condition(TotalBlocksTable.Material.toString(), type + ":" + data)
@@ -226,7 +226,7 @@ public class BlocksData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(Detailed.DestroyedBlocks.TableName.toString())
+			return QueryUtils.table(Detailed.DestroyedBlocks.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}
@@ -276,7 +276,7 @@ public class BlocksData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.insert(Detailed.PlacedBlocks.TableName.toString())
+			return QueryUtils.table(Detailed.PlacedBlocks.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}

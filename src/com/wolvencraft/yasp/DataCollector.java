@@ -126,19 +126,19 @@ public class DataCollector implements Runnable {
 		int playerId = -1;
 		List<QueryResult> results;
 		
-		results = QueryUtils.select(PlayersTable.TableName.toString())
+		results = QueryUtils.table(PlayersTable.TableName.toString())
 			.column(PlayersTable.PlayerId.toString())
 			.column(PlayersTable.Name.toString())
 			.condition(PlayersTable.Name.toString(), username)
 			.select();
 		
 		if(results.isEmpty()) {
-			QueryUtils.insert(PlayersTable.TableName.toString())
+			QueryUtils.table(PlayersTable.TableName.toString())
 				.value(PlayersTable.Name.toString(), username)
 				.insert();
 			
 			results = QueryUtils
-				.select(PlayersTable.TableName.toString())
+				.table(PlayersTable.TableName.toString())
 				.column(PlayersTable.PlayerId.toString())
 				.column(PlayersTable.Name.toString())
 				.condition(PlayersTable.Name.toString(), username)

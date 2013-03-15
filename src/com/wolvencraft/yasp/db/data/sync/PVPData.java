@@ -129,12 +129,12 @@ public class PVPData implements _DataStore {
 		
 		@Override
 		public void fetchData(int killerId) {
-			List<QueryResult> results = QueryUtils.select(TotalPVPKillsTable.TableName.toString())
+			List<QueryResult> results = QueryUtils.table(TotalPVPKillsTable.TableName.toString())
 				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
 				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
 				.condition(TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
 				.select();
-			if(results.isEmpty()) QueryUtils.insert(TotalPVPKillsTable.TableName.toString()).value(getValues(killerId));
+			if(results.isEmpty()) QueryUtils.table(TotalPVPKillsTable.TableName.toString()).value(getValues(killerId));
 			else {
 				times = results.get(0).getValueAsInteger(TotalPVPKillsTable.Times.toString());
 			}
@@ -142,7 +142,7 @@ public class PVPData implements _DataStore {
 
 		@Override
 		public boolean pushData(int killerId) {
-			boolean result = QueryUtils.update(TotalPVPKillsTable.TableName.toString())
+			boolean result = QueryUtils.table(TotalPVPKillsTable.TableName.toString())
 				.value(getValues(killerId))
 				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
 				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
@@ -208,7 +208,7 @@ public class PVPData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int killerId) {
-			return QueryUtils.insert(Detailed.PVPKills.TableName.toString())
+			return QueryUtils.table(Detailed.PVPKills.TableName.toString())
 				.value(getValues(killerId))
 				.insert();
 		}

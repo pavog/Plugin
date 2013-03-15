@@ -50,17 +50,17 @@ public class ServerTotals {
 	 * Automatically calculates values from the contents of corresponding tables.
 	 */
 	public void fetchData() {
-		blocksBroken = (int) QueryUtils.select(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Destroyed.toString()).sum();
-		blocksPlaced = (int) QueryUtils.select(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Placed.toString()).sum();
-		distance = QueryUtils.select(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Foot.toString()).sum();
-		toolsBroken = (int) QueryUtils.select(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Broken.toString()).sum();
-		itemsCrafted = (int) QueryUtils.select(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Crafted.toString()).sum();
-		snacksEaten = (int) QueryUtils.select(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Used.toString()).sum();
+		blocksBroken = (int) QueryUtils.table(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Destroyed.toString()).sum();
+		blocksPlaced = (int) QueryUtils.table(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Placed.toString()).sum();
+		distance = QueryUtils.table(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Foot.toString()).sum();
+		toolsBroken = (int) QueryUtils.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Broken.toString()).sum();
+		itemsCrafted = (int) QueryUtils.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Crafted.toString()).sum();
+		snacksEaten = (int) QueryUtils.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Used.toString()).sum();
 		
-		pvpKills = (int) QueryUtils.select(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).sum();
-		pveKills = (int) QueryUtils.select(TotalPVEKillsTable.TableName.toString()).column(TotalPVEKillsTable.CreatureKilled.toString()).sum();
-		pveDeaths = (int) QueryUtils.select(TotalPVEKillsTable.TableName.toString()).column(TotalPVEKillsTable.PlayerKilled.toString()).sum();
-		otherKills = (int) QueryUtils.select(TotalDeathPlayersTable.TableName.toString()).column(TotalDeathPlayersTable.Times.toString()).sum();
+		pvpKills = (int) QueryUtils.table(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).sum();
+		pveKills = (int) QueryUtils.table(TotalPVEKillsTable.TableName.toString()).column(TotalPVEKillsTable.CreatureKilled.toString()).sum();
+		pveDeaths = (int) QueryUtils.table(TotalPVEKillsTable.TableName.toString()).column(TotalPVEKillsTable.PlayerKilled.toString()).sum();
+		otherKills = (int) QueryUtils.table(TotalDeathPlayersTable.TableName.toString()).column(TotalDeathPlayersTable.Times.toString()).sum();
 	}
 	
 	/**

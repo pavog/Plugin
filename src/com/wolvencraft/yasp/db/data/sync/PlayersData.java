@@ -73,7 +73,7 @@ public class PlayersData implements _DataStore {
 	public void login(Location location) {
 		generalData.setOnline(true);
 		detailedData.add(new DetailedLogPlayersEntry(location, true));
-		QueryUtils.update(PlayersTable.TableName.toString())
+		QueryUtils.table(PlayersTable.TableName.toString())
 			.value(PlayersTable.Online.toString(), true)
 			.condition(PlayersTable.PlayerId.toString(), playerId + "")
 			.update();
@@ -86,7 +86,7 @@ public class PlayersData implements _DataStore {
 	public void logout(Location location) {
 		generalData.setOnline(false);
 		detailedData.add(new DetailedLogPlayersEntry(location, false));
-		QueryUtils.update(PlayersTable.TableName.toString())
+		QueryUtils.table(PlayersTable.TableName.toString())
 			.value(PlayersTable.Online.toString(), false)
 			.condition(PlayersTable.PlayerId.toString(), playerId + "")
 			.update();
@@ -124,11 +124,11 @@ public class PlayersData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(PlayersTable.TableName.toString())
+			List<QueryResult> results = QueryUtils.table(PlayersTable.TableName.toString())
 				.condition(PlayersTable.PlayerId.toString(), PlayersTable.Logins.toString())
 				.condition(PlayersTable.PlayerId.toString(), playerId + "")
 				.select();
-			if(results.isEmpty()) QueryUtils.insert(PlayersTable.TableName.toString()).value(getValues(playerId)).insert();
+			if(results.isEmpty()) QueryUtils.table(PlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				logins = results.get(0).getValueAsInteger(PlayersTable.Logins.toString());
 				totalPlaytime = results.get(0).getValueAsLong(PlayersTable.TotalPlaytime.toString());
@@ -137,7 +137,7 @@ public class PlayersData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(PlayersTable.TableName.toString())
+			boolean result = QueryUtils.table(PlayersTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(PlayersTable.PlayerId.toString(), playerId + "")
 				.update(true);
@@ -206,10 +206,10 @@ public class PlayersData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(DistancePlayersTable.TableName.toString())
+			List<QueryResult> results = QueryUtils.table(DistancePlayersTable.TableName.toString())
 				.condition(DistancePlayersTable.PlayerId.toString(), playerId + "")
 				.select();
-			if(results.isEmpty()) QueryUtils.insert(DistancePlayersTable.TableName.toString()).value(getValues(playerId)).insert();
+			if(results.isEmpty()) QueryUtils.table(DistancePlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				foot = results.get(0).getValueAsInteger(DistancePlayersTable.Foot.toString());
 				swimmed = results.get(0).getValueAsInteger(DistancePlayersTable.Swimmed.toString());
@@ -221,7 +221,7 @@ public class PlayersData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.update(DistancePlayersTable.TableName.toString())
+			boolean result = QueryUtils.table(DistancePlayersTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(DistancePlayersTable.PlayerId.toString(), playerId + "")
 				.update(true);
@@ -320,10 +320,10 @@ public class PlayersData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.select(MiscInfoPlayersTable.TableName.toString())
+			List<QueryResult> results = QueryUtils.table(MiscInfoPlayersTable.TableName.toString())
 				.condition(MiscInfoPlayersTable.PlayerId.toString(), playerId + "")
 				.select();
-			if(results.isEmpty()) QueryUtils.insert(MiscInfoPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
+			if(results.isEmpty()) QueryUtils.table(MiscInfoPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				fishCaught = results.get(0).getValueAsInteger(MiscInfoPlayersTable.FishCaught.toString());
 				timesKicked = results.get(0).getValueAsInteger(MiscInfoPlayersTable.TimesKicked.toString());
@@ -341,7 +341,7 @@ public class PlayersData implements _DataStore {
 		@Override
 		public boolean pushData(int playerId) {
 			refreshPlayerData();
-			boolean result = QueryUtils.update(MiscInfoPlayersTable.TableName.toString())
+			boolean result = QueryUtils.table(MiscInfoPlayersTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(MiscInfoPlayersTable.PlayerId.toString(), playerId + "")
 				.update(true);
@@ -448,7 +448,7 @@ public class PlayersData implements _DataStore {
 	     
 	    @Override
 	    public boolean pushData(int playerId) {
-	        return QueryUtils.insert(Detailed.LogPlayers.TableName.toString())
+	        return QueryUtils.table(Detailed.LogPlayers.TableName.toString())
 	            .value(getValues(playerId))
 	            .insert();
 	    }
