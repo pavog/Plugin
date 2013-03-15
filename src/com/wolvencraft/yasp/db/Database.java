@@ -30,7 +30,7 @@ public class Database {
 	
 	private static Database instance = null;
 	private static Connection connection = null;
-
+	
 	/**
 	 * Default constructor. Connects to the remote database, performs patches if necessary, and holds to the DB info.<br />
 	 * @throws DatabaseConnectionException Thrown if the plugin could not connect to the database

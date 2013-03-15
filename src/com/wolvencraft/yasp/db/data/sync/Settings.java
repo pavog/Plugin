@@ -70,7 +70,7 @@ public class Settings {
 		Query.table(SettingsTable.TableName.toString())
 			.value("value", version)
 			.condition("key", "version")
-			.update(true);
+			.update();
 	}
 	
 	public static int getDatabaseVersion() { 

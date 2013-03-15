@@ -90,10 +90,11 @@ public class Query {
 	 */
 	public class DatabaseQuery {
 		
-		String table;
-		List<String> columns;
-		Map<String, Object> values;
-		List<String> conditions;
+		private DatabaseQuery instance;
+		private String table;
+		private List<String> columns;
+		private Map<String, Object> values;
+		private List<String> conditions;
 		
 		/**
 		 * <b>Default constructor</b><br />
@@ -102,10 +103,11 @@ public class Query {
 		 * @param table
 		 */
 		public DatabaseQuery(String table) {
+			this.instance = this;
 			this.table = table;
-			columns = new ArrayList<String>();
-			values = new HashMap<String, Object>();
-			conditions = new ArrayList<String>();
+			this.columns = new ArrayList<String>();
+			this.values = new HashMap<String, Object>();
+			this.conditions = new ArrayList<String>();
 		}
 		
 		/**
@@ -115,8 +117,8 @@ public class Query {
 		 * @return Database query
 		 */
 		public DatabaseQuery column(String... column) {
-			for(String col : column) columns.add(col);
-			return this;
+			for(String col : column) this.columns.add(col);
+			return instance;
 		}
 		
 		/**
@@ -126,8 +128,8 @@ public class Query {
 		 * @return Database query
 		 */
 		public DatabaseQuery columns(String[] column) {
-			for(String col : column) columns.add(col);
-			return this;
+			for(String col : column) this.columns.add(col);
+			return instance;
 		}
 		
 		/**
@@ -137,8 +139,8 @@ public class Query {
 		 * @return Database query
 		 */
 		public DatabaseQuery condition(String key, String value) {
-			conditions.add("`" + key + "`='" + value + "'");
-			return this;
+			this.conditions.add("`" + key + "`='" + value + "'");
+			return instance;
 		}
 
 		/**
@@ -148,8 +150,8 @@ public class Query {
 		 * @return Database query
 		 */
 		public DatabaseQuery condition(String key, Integer value) {
-			conditions.add("`" + key + "`=" + value);
-			return this;
+			this.conditions.add("`" + key + "`=" + value);
+			return instance;
 		}
 
 		/**
@@ -159,8 +161,8 @@ public class Query {
 		 * @return Database query
 		 */
 		public DatabaseQuery condition(String key, Double value) {
-			conditions.add("`" + key + "`=" + value);
-			return this;
+			this.conditions.add("`" + key + "`=" + value);
+			return instance;
 		}
 
 		/**
@@ -170,8 +172,8 @@ public class Query {
 		 * @return Database query
 		 */
 		public DatabaseQuery condition(String key, Long value) {
-			conditions.add("`" + key + "`=" + value);
-			return this;
+			this.conditions.add("`" + key + "`=" + value);
+			return instance;
 		}
 
 		/**
@@ -181,9 +183,9 @@ public class Query {
 		 * @return Database query
 		 */
 		public DatabaseQuery condition(String key, Boolean value) {
-			if(value) conditions.add("`" + key + "`=1");
-			else  conditions.add("`" + key + "`=0");
-			return this;
+			if(value) this.conditions.add("`" + key + "`=1");
+			else this.conditions.add("`" + key + "`=0");
+			return instance;
 		}
 
 		/**
@@ -193,8 +195,8 @@ public class Query {
 		 * @return Database query
 		 */
 		public DatabaseQuery condition(List<String> list) {
-			conditions.addAll(list);
-			return this;
+			this.conditions.addAll(list);
+			return instance;
 		}
 		
 		/**
@@ -204,8 +206,8 @@ public class Query {
 		 * @return Database query
 		 */
 		public DatabaseQuery value(String key, Object value) {
-			values.put(key, value);
-			return this;
+			this.values.put(key, value);
+			return instance;
 		}
 		
 		/**
@@ -217,7 +219,7 @@ public class Query {
 		public DatabaseQuery value(String key, boolean value) {
 			if(value) values.put(key, 1);
 			else values.put(key, 0);
-			return this;
+			return instance;
 		}
 		
 		/**
@@ -227,7 +229,7 @@ public class Query {
 		 */
 		public DatabaseQuery value(Map<String, Object> values) {
 			this.values.putAll(values);
-			return this;
+			return instance;
 		}
 
 		/**
@@ -236,7 +238,7 @@ public class Query {
 		 */
 		private String[] getColumnsFromValues() {
 			List<String> columns = new ArrayList<String>();
-			Iterator<Entry<String, Object>> it = values.entrySet().iterator();
+			Iterator<Entry<String, Object>> it = this.values.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
 				columns.add(pairs.getKey());
@@ -256,9 +258,9 @@ public class Query {
 			String sql = "SELECT ";
 			
 			String columnString = "";
-			if(columns.isEmpty()) columnString = "*";
+			if(this.columns.isEmpty()) columnString = "*";
 			else {
-				for(String str : columns) {
+				for(String str : this.columns) {
 					if(!columnString.equals("")) columnString += ", ";
 					else columnString += "`" + str + "`";
 				}
@@ -266,7 +268,7 @@ public class Query {
 			sql += columnString + " FROM `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 			
 			String conditionString = "";
-			for(String str : conditions) {
+			for(String str : this.conditions) {
 				if(!conditionString.equals("")) conditionString += " AND ";
 				conditionString += str;
 			}
@@ -291,9 +293,9 @@ public class Query {
 			String sql = "SELECT sum(";
 			
 			String columnString = "";
-			if(columns.isEmpty()) columnString = "*";
+			if(this.columns.isEmpty()) columnString = "*";
 			else {
-				for(String str : columns) {
+				for(String str : this.columns) {
 					if(!columnString.equals("")) columnString += ", ";
 					else columnString += "`" + str + "`";
 				}
@@ -301,7 +303,7 @@ public class Query {
 			sql += columnString + ") as `temp` FROM `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 			
 			String conditionString = "";
-			for(String str : conditions) {
+			for(String str : this.conditions) {
 				if(!conditionString.equals("")) conditionString += " AND ";
 				conditionString += str;
 			}
@@ -319,7 +321,7 @@ public class Query {
 			
 			String fieldString = "";
 			String valueString = "";
-			Iterator<Entry<String, Object>> it = values.entrySet().iterator();
+			Iterator<Entry<String, Object>> it = this.values.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
 				if(!fieldString.equals("")) fieldString += ", ";
@@ -332,7 +334,7 @@ public class Query {
 			sql += fieldString + ") VALUES (" + valueString + ")";
 			
 			String conditionString = "";
-			for(String str : conditions) {
+			for(String str : this.conditions) {
 				if(!conditionString.equals("")) conditionString += " AND ";
 				conditionString += str;
 			}
@@ -346,10 +348,10 @@ public class Query {
 		 * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
 		 */
 		public boolean update() {
-			String sql = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "` ";
+			String sql = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 			
 			String valueString = "";
-			Iterator<Entry<String, Object>> it = values.entrySet().iterator();
+			Iterator<Entry<String, Object>> it = this.values.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
 				if(!valueString.equals("")) valueString += ", ";
@@ -360,7 +362,7 @@ public class Query {
 			sql += " SET " + valueString;
 			
 			String conditionString = "";
-			for(String str : conditions) {
+			for(String str : this.conditions) {
 				if(!conditionString.equals("")) conditionString += " AND ";
 				conditionString += str;
 			}
@@ -375,8 +377,8 @@ public class Query {
 		 */
 		public boolean update(boolean force) {
 			if(!force) return update();
-			if(table(table).columns(getColumnsFromValues()).condition(conditions).exists()) return update();
-			else return table(table).value(values).insert();
+			if(table(this.table).columns(getColumnsFromValues()).condition(this.conditions).exists()) return update();
+			else return table(this.table).value(this.values).insert();
 		}
 		
 	}
