@@ -15,7 +15,7 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.hooks._HookTables.WorldGuardTable;
 import com.wolvencraft.yasp.util.Message;
@@ -53,7 +53,7 @@ public class WorldGuardHook implements _PluginHook {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.table(WorldGuardTable.TableName.toString())
+			return Query.table(WorldGuardTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(WorldGuardTable.PlayerId.toString(), playerId)
 				.update(true);

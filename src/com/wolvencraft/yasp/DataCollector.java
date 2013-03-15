@@ -6,8 +6,8 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.receive.ServerTotals;
 import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
 import com.wolvencraft.yasp.db.data.sync.Settings;
@@ -126,18 +126,18 @@ public class DataCollector implements Runnable {
 		int playerId = -1;
 		List<QueryResult> results;
 		
-		results = QueryUtils.table(PlayersTable.TableName.toString())
+		results = Query.table(PlayersTable.TableName.toString())
 			.column(PlayersTable.PlayerId.toString())
 			.column(PlayersTable.Name.toString())
 			.condition(PlayersTable.Name.toString(), username)
 			.select();
 		
 		if(results.isEmpty()) {
-			QueryUtils.table(PlayersTable.TableName.toString())
+			Query.table(PlayersTable.TableName.toString())
 				.value(PlayersTable.Name.toString(), username)
 				.insert();
 			
-			results = QueryUtils
+			results = Query
 				.table(PlayersTable.TableName.toString())
 				.column(PlayersTable.PlayerId.toString())
 				.column(PlayersTable.Name.toString())

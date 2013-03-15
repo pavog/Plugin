@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
-import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
 import com.wolvencraft.yasp.util.Util;
@@ -129,12 +129,12 @@ public class PVPData implements _DataStore {
 		
 		@Override
 		public void fetchData(int killerId) {
-			List<QueryResult> results = QueryUtils.table(TotalPVPKillsTable.TableName.toString())
+			List<QueryResult> results = Query.table(TotalPVPKillsTable.TableName.toString())
 				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
 				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
 				.condition(TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
 				.select();
-			if(results.isEmpty()) QueryUtils.table(TotalPVPKillsTable.TableName.toString()).value(getValues(killerId));
+			if(results.isEmpty()) Query.table(TotalPVPKillsTable.TableName.toString()).value(getValues(killerId));
 			else {
 				times = results.get(0).getValueAsInteger(TotalPVPKillsTable.Times.toString());
 			}
@@ -142,7 +142,7 @@ public class PVPData implements _DataStore {
 
 		@Override
 		public boolean pushData(int killerId) {
-			boolean result = QueryUtils.table(TotalPVPKillsTable.TableName.toString())
+			boolean result = Query.table(TotalPVPKillsTable.TableName.toString())
 				.value(getValues(killerId))
 				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
 				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
@@ -208,7 +208,7 @@ public class PVPData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int killerId) {
-			return QueryUtils.table(Detailed.PVPKills.TableName.toString())
+			return Query.table(Detailed.PVPKills.TableName.toString())
 				.value(getValues(killerId))
 				.insert();
 		}

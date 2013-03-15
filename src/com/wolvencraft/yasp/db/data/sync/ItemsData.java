@@ -8,8 +8,8 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
 import com.wolvencraft.yasp.util.Util;
@@ -193,12 +193,12 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.table(TotalItemsTable.TableName.toString())
+			List<QueryResult> results = Query.table(TotalItemsTable.TableName.toString())
 				.condition(TotalItemsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalItemsTable.Material.toString(), type + ":" + data)
 				.select();
 			
-			if(results.isEmpty()) QueryUtils.table(TotalItemsTable.TableName.toString()).value(getValues(playerId)).insert();
+			if(results.isEmpty()) Query.table(TotalItemsTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				dropped = results.get(0).getValueAsInteger(TotalItemsTable.Dropped.toString());
 				pickedUp = results.get(0).getValueAsInteger(TotalItemsTable.PickedUp.toString());
@@ -212,7 +212,7 @@ public class ItemsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.table(TotalItemsTable.TableName.toString())
+			boolean result = Query.table(TotalItemsTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(TotalItemsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalItemsTable.Material.toString(), type + ":" + data)
@@ -283,7 +283,7 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.table(Detailed.DroppedItems.TableName.toString())
+			return Query.table(Detailed.DroppedItems.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}
@@ -332,7 +332,7 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.table(Detailed.PickedupItems.TableName.toString())
+			return Query.table(Detailed.PickedupItems.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}
@@ -381,7 +381,7 @@ public class ItemsData implements _DataStore {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.table(Detailed.UsedItems.TableName.toString())
+			return Query.table(Detailed.UsedItems.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}

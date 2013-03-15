@@ -12,21 +12,20 @@ import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.db.data.sync.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Message;
 
-public class QueryUtils {
+/**
+ * Modular database query factory. Used to build and run SELECT, INSERT, and UPDATE queries.
+ * @author bitWolfy
+ *
+ */
+public class Query {
 	
-	private static QueryUtils instance;
-	
-	public QueryUtils() {
-		instance = this;
-	}
+	private static Query instance;
 	
 	/**
-	 * Safely casts a Map to QueryResult
-	 * @param map Map to apply the cast to
-	 * @return <b>QueryResult</b> desired result
+	 * Creates a new QueryFactory instance. Should be used once, on plugin startup
 	 */
-	public static QueryResult toQueryResult(Map<String, String> map) {
-		return instance.new QueryResult(map);
+	public Query() {
+		instance = this;
 	}
 	
 	/**
@@ -36,6 +35,15 @@ public class QueryUtils {
 	 */
 	public static DatabaseQuery table(String table) {
 		return instance.new DatabaseQuery(table);
+	}
+	
+	/**
+	 * Safely casts a Map to QueryResult
+	 * @param map Map to apply the cast to
+	 * @return <b>QueryResult</b> desired result
+	 */
+	public static QueryResult toQueryResult(Map<String, String> map) {
+		return instance.new QueryResult(map);
 	}
 	
 	/**
@@ -74,19 +82,31 @@ public class QueryUtils {
 		}
 	}	
 	
+	
+	/**
+	 * Represents a standard database query
+	 * @author bitWolfy
+	 *
+	 */
 	public class DatabaseQuery {
 		
+		String table;
+		List<String> columns;
+		Map<String, Object> values;
+		List<String> conditions;
+		
+		/**
+		 * <b>Default constructor</b><br />
+		 * Creates a new DatabaseQuery instance with the specified table name.<br />
+		 * While it is possible to create an instance of this class manually, it is recommended to use the table(String table) method in the Query class.
+		 * @param table
+		 */
 		public DatabaseQuery(String table) {
 			this.table = table;
 			columns = new ArrayList<String>();
 			values = new HashMap<String, Object>();
 			conditions = new ArrayList<String>();
 		}
-		
-		String table;
-		List<String> columns;
-		Map<String, Object> values;
-		List<String> conditions;
 		
 		/**
 		 * Defines which columns to return.<br />
@@ -252,7 +272,7 @@ public class QueryUtils {
 			}
 			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
 			
-			return QueryUtils.fetchData(sql + ";");
+			return Query.fetchData(sql + ";");
 		}
 		
 		/**
@@ -287,7 +307,7 @@ public class QueryUtils {
 			}
 			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
 			
-			return QueryUtils.fetchData(sql + ";").get(0).getValueAsDouble("temp");
+			return Query.fetchData(sql + ";").get(0).getValueAsDouble("temp");
 		}
 		
 		/**

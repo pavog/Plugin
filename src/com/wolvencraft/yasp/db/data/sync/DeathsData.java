@@ -8,8 +8,8 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
 import com.wolvencraft.yasp.util.Util;
@@ -117,12 +117,12 @@ public class DeathsData implements _DataStore {
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.table(TotalDeathPlayersTable.TableName.toString())
+			List<QueryResult> results = Query.table(TotalDeathPlayersTable.TableName.toString())
 				.condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
 				.condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
 				.select();
 			
-			if(results.isEmpty()) QueryUtils.table(TotalDeathPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
+			if(results.isEmpty()) Query.table(TotalDeathPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				times = results.get(0).getValueAsInteger(TotalDeathPlayersTable.Times.toString());
 			}
@@ -130,7 +130,7 @@ public class DeathsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.table(TotalDeathPlayersTable.TableName.toString())
+			boolean result = Query.table(TotalDeathPlayersTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
 				.condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
@@ -197,7 +197,7 @@ public class DeathsData implements _DataStore {
 
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.table(Detailed.DeathPlayers.TableName.toString())
+			return Query.table(Detailed.DeathPlayers.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}

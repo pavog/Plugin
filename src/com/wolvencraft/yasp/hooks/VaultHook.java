@@ -13,7 +13,7 @@ import org.bukkit.plugin.ServicesManager;
 
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.db.QueryUtils;
+import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.hooks._HookTables.VaultTable;
@@ -56,7 +56,7 @@ public class VaultHook implements _PluginHook {
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.table(VaultTable.TableName.toString())
+			return Query.table(VaultTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(VaultTable.PlayerId.toString(), playerId)
 				.update(true);

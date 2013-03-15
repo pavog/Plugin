@@ -10,8 +10,8 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.db.QueryUtils;
-import com.wolvencraft.yasp.db.QueryUtils.QueryResult;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.util.Util;
@@ -142,12 +142,12 @@ public class PVEData implements _DataStore{
 		
 		@Override
 		public void fetchData(int playerId) {
-			List<QueryResult> results = QueryUtils.table(TotalPVEKillsTable.TableName.toString())
+			List<QueryResult> results = Query.table(TotalPVEKillsTable.TableName.toString())
 				.condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
 				.condition(TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
 				.select();
-			if(results.isEmpty()) QueryUtils.table(TotalPVEKillsTable.TableName.toString()).value(getValues(playerId));
+			if(results.isEmpty()) Query.table(TotalPVEKillsTable.TableName.toString()).value(getValues(playerId));
 			else {
 				playerDeaths = results.get(0).getValueAsInteger(TotalPVEKillsTable.PlayerKilled.toString());
 				creatureDeaths = results.get(0).getValueAsInteger(TotalPVEKillsTable.CreatureKilled.toString());
@@ -156,7 +156,7 @@ public class PVEData implements _DataStore{
 
 		@Override
 		public boolean pushData(int playerId) {
-			boolean result = QueryUtils.table(TotalPVEKillsTable.TableName.toString())
+			boolean result = Query.table(TotalPVEKillsTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
@@ -224,7 +224,7 @@ public class PVEData implements _DataStore{
 		
 		@Override
 		public boolean pushData(int playerId) {
-			return QueryUtils.table(Detailed.PVEKills.TableName.toString())
+			return Query.table(Detailed.PVEKills.TableName.toString())
 				.value(getValues(playerId))
 				.insert();
 		}
