@@ -300,7 +300,7 @@ public class PlayersData implements _DataStore {
 		private String playerName;
 		
 		private int gamemode;
-		private double expPercent;
+		private float expPercent;
 		private int expTotal;
 		private int expLevel;
 		private int foodLevel;
