@@ -33,6 +33,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.util.Message;
@@ -63,13 +65,17 @@ public class ScriptRunner {
 			StringBuilder command = new StringBuilder();
 			try {
 				BufferedReader lineReader = new BufferedReader(reader);
+				int i = 0;
 				String line = "";
 				String dbName = Settings.LocalConfiguration.DBName.asString();
 				String dbPrefix = Settings.LocalConfiguration.DBPrefix.asString();
+				boolean debug = Settings.LocalConfiguration.Debug.asBoolean();
 				while ((line = lineReader.readLine()) != null) {
-					line = line.replace("$dbname", dbName);
-					line = line.replace("$prefix_", dbPrefix);
+					line = StringUtils.replace(line, "$dbname", dbName);
+					line = StringUtils.replace(line, "$prefix_", dbPrefix);
 					command = this.handleLine(command, line);
+					i++;
+					if(i % 50 == 0 && debug) Message.log(Level.FINEST, "Executing line " + i);
 				}
 				this.commitConnection();
 				this.checkForMissingLineTerminator(command);

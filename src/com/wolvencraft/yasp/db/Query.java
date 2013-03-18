@@ -238,15 +238,13 @@ public class Query {
 		 */
 		private String[] getColumnsFromValues() {
 			List<String> columns = new ArrayList<String>();
-			Iterator<Entry<String, Object>> it = this.values.entrySet().iterator();
+			Iterator<Entry<String, Object>> it = instance.values.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
 				columns.add(pairs.getKey());
-				it.remove();
 			}
 			String[] colArr = new String[columns.size()];
 			colArr = columns.toArray(colArr);
-			Message.debug(colArr.toString());
 			return colArr;
 		}
 		
@@ -258,17 +256,17 @@ public class Query {
 			String sql = "SELECT ";
 			
 			String columnString = "";
-			if(this.columns.isEmpty()) columnString = "*";
+			if(instance.columns.isEmpty()) columnString = "*";
 			else {
-				for(String str : this.columns) {
+				for(String str : instance.columns) {
 					if(!columnString.equals("")) columnString += ", ";
-					else columnString += "`" + str + "`";
+					columnString += "`" + str + "`";
 				}
 			}
 			sql += columnString + " FROM `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 			
 			String conditionString = "";
-			for(String str : this.conditions) {
+			for(String str : instance.conditions) {
 				if(!conditionString.equals("")) conditionString += " AND ";
 				conditionString += str;
 			}
@@ -293,9 +291,9 @@ public class Query {
 			String sql = "SELECT sum(";
 			
 			String columnString = "";
-			if(this.columns.isEmpty()) columnString = "*";
+			if(instance.columns.isEmpty()) columnString = "*";
 			else {
-				for(String str : this.columns) {
+				for(String str : instance.columns) {
 					if(!columnString.equals("")) columnString += ", ";
 					else columnString += "`" + str + "`";
 				}
@@ -303,13 +301,14 @@ public class Query {
 			sql += columnString + ") as `temp` FROM `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 			
 			String conditionString = "";
-			for(String str : this.conditions) {
+			for(String str : instance.conditions) {
 				if(!conditionString.equals("")) conditionString += " AND ";
 				conditionString += str;
 			}
 			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
 			
-			return Query.fetchData(sql + ";").get(0).getValueAsDouble("temp");
+			try { return Query.fetchData(sql + ";").get(0).getValueAsDouble("temp"); }
+			catch (Exception e) { return 0; }
 		}
 		
 		/**
@@ -321,7 +320,7 @@ public class Query {
 			
 			String fieldString = "";
 			String valueString = "";
-			Iterator<Entry<String, Object>> it = this.values.entrySet().iterator();
+			Iterator<Entry<String, Object>> it = instance.values.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
 				if(!fieldString.equals("")) fieldString += ", ";
@@ -334,7 +333,7 @@ public class Query {
 			sql += fieldString + ") VALUES (" + valueString + ")";
 			
 			String conditionString = "";
-			for(String str : this.conditions) {
+			for(String str : instance.conditions) {
 				if(!conditionString.equals("")) conditionString += " AND ";
 				conditionString += str;
 			}
@@ -351,7 +350,7 @@ public class Query {
 			String sql = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
 			
 			String valueString = "";
-			Iterator<Entry<String, Object>> it = this.values.entrySet().iterator();
+			Iterator<Entry<String, Object>> it = instance.values.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
 				if(!valueString.equals("")) valueString += ", ";
@@ -362,7 +361,7 @@ public class Query {
 			sql += " SET " + valueString;
 			
 			String conditionString = "";
-			for(String str : this.conditions) {
+			for(String str : instance.conditions) {
 				if(!conditionString.equals("")) conditionString += " AND ";
 				conditionString += str;
 			}
@@ -376,9 +375,9 @@ public class Query {
 		 * @return  <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
 		 */
 		public boolean update(boolean force) {
-			if(!force) return update();
-			if(table(this.table).columns(getColumnsFromValues()).condition(this.conditions).exists()) return update();
-			else return table(this.table).value(this.values).insert();
+			if(!force) return instance.update();
+			if(instance.columns(getColumnsFromValues()).exists()) return instance.update();
+			else return instance.insert();
 		}
 		
 	}

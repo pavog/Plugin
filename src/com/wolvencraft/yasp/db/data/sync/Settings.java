@@ -88,7 +88,7 @@ public class Settings {
 		Query.table(SettingsTable.TableName.toString())
 			.value("value", usingVault)
 			.condition("key", "hook_vault")
-			.update(true);
+			.update();
 	}
 	
 	public static boolean getUsingVault() {
@@ -106,7 +106,7 @@ public class Settings {
 		Query.table(SettingsTable.TableName.toString())
 			.value("value", usingWorldGuard)
 			.condition("key", "hook_worldguard")
-			.update(true);
+			.update();
 	}
 	
 	public static boolean getUsingWorldGuard() {

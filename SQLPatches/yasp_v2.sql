@@ -13,23 +13,27 @@ INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_worldguard", "0")
 -- Server Statistics
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("first_startup", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("last_startup", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("last_shutdown", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("current_uptime", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("total_uptime", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("last_shutdown", "0");
+
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("total_memory", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("free_memory", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("ticks_per_second", "0");
+
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_ip", "localhost");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_port", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_motd", "A Minecraft Server");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("bukkit_version", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("plugins", "0");
+
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_time", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("weather", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("weather_duration", "0");
+
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online_time", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_allowed", "0");
+INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("players_allowed", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("players_online", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("entities_count", "0");
 
