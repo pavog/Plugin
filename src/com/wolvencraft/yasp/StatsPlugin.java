@@ -69,11 +69,13 @@ public class StatsPlugin extends JavaPlugin {
 		new FeedbackListener(this);
 
 		new Settings();
+		Message.debug("ping=" + Settings.getPing());
+		Message.debug("paused=" + paused);
 		
 		try { new PluginStatistics(this); }
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), Settings.getPing(), Settings.getPing());
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing());
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new StatsSignFactory(), (Settings.getPing() / 2), Settings.getPing());
 		Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
 	}

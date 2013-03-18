@@ -44,6 +44,10 @@ public class Database {
 		instance = this;
 		
 		connect();
+		
+		try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
+		catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
+		
 		runPatch(false);
 	}
 	
@@ -79,6 +83,7 @@ public class Database {
 		
 		if(currentVersion >= latestVersion) {
 			Message.log("Target database is up to date");
+			StatsPlugin.setPaused(false);
 			return;
 		}
 

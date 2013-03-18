@@ -58,8 +58,6 @@ public class ScriptRunner {
 
 	public void runScript(Reader reader) throws RuntimeSQLException {
 		Message.log(Level.FINER, "Executing a database script");
-		try { if (this.connection.getAutoCommit()) this.connection.setAutoCommit(false); }
-		catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
 
 		try {
 			StringBuilder command = new StringBuilder();
@@ -71,8 +69,7 @@ public class ScriptRunner {
 				String dbPrefix = Settings.LocalConfiguration.DBPrefix.asString();
 				boolean debug = Settings.LocalConfiguration.Debug.asBoolean();
 				while ((line = lineReader.readLine()) != null) {
-					line = StringUtils.replace(line, "$dbname", dbName);
-					line = StringUtils.replace(line, "$prefix_", dbPrefix);
+					line = StringUtils.replace(StringUtils.replace(line, "$dbname", dbName), "$prefix_", dbPrefix);
 					command = this.handleLine(command, line);
 					i++;
 					if(i % 50 == 0 && debug) Message.log(Level.FINEST, "Executing line " + i);
