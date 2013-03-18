@@ -22,18 +22,18 @@ public class Message {
 		sender.sendMessage(message);
 	}
 	
-	public static void sendFormatted(CommandSender sender, String title, String message) {
+	public static void sendFormatted(CommandSender sender, ChatColor titleColor, String title, String message) {
 		if(message == null) return;
-		message = "[" + title + "] " + ChatColor.WHITE + message;
+		message = titleColor + "[" + title + "] " + ChatColor.WHITE + message;
 		send(sender, message);
 	}
 	
 	public static void sendFormattedSuccess(CommandSender sender, String message) {
-		sendFormatted(sender, ChatColor.DARK_GREEN + Settings.LocalConfiguration.LogPrefix.asString(), message);
+		sendFormatted(sender, ChatColor.DARK_GREEN, Settings.LocalConfiguration.LogPrefix.asString(), message);
 	}
 
 	public static void sendFormattedError(CommandSender sender, String message) {
-		sendFormatted(sender, ChatColor.DARK_RED + Settings.LocalConfiguration.LogPrefix.asString(), message);
+		sendFormatted(sender, ChatColor.DARK_RED, Settings.LocalConfiguration.LogPrefix.asString(), message);
 	}
 	
     /**
@@ -42,7 +42,7 @@ public class Message {
      */
     public static void broadcast(String message) {
         for (Player p : Bukkit.getServer().getOnlinePlayers())
-        	sendFormatted(p, ChatColor.DARK_GREEN + Settings.LocalConfiguration.LogPrefix.asString(), message);
+        	sendFormatted(p, ChatColor.DARK_GREEN, Settings.LocalConfiguration.LogPrefix.asString(), message);
         log(Util.parseChatColors(message));
     }
     

@@ -15,7 +15,7 @@ public class Settings {
 		DBPass("database.pass"),
 		DBPrefix("database.prefix"),
 		DBConnect("", "jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
-		LogPrefix("", StatsPlugin.getInstance().getDescription().getPrefix());
+		LogPrefix("", "YASP");
 		
 		LocalConfiguration(String node) {
 			this.value = StatsPlugin.getInstance().getConfig().get(node);
