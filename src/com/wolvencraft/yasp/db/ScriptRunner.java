@@ -52,7 +52,7 @@ public class ScriptRunner {
 	public ScriptRunner(Connection connection) {
 		this.connection = connection;
 	}
-
+	
 	public void setDelimiter(String delimiter) { this.delimiter = delimiter; }
 	public void setFullLineDelimiter(boolean fullLineDelimiter) { this.fullLineDelimiter = fullLineDelimiter; }
 
@@ -69,7 +69,8 @@ public class ScriptRunner {
 				String dbPrefix = Settings.LocalConfiguration.DBPrefix.asString();
 				boolean debug = Settings.LocalConfiguration.Debug.asBoolean();
 				while ((line = lineReader.readLine()) != null) {
-					line = StringUtils.replace(StringUtils.replace(line, "$dbname", dbName), "$prefix_", dbPrefix);
+					line = StringUtils.replace(line, "$dbname", dbName);
+					line = StringUtils.replace(line, "$prefix_", dbPrefix);
 					command = this.handleLine(command, line);
 					i++;
 					if(i % 50 == 0 && debug) Message.log(Level.FINEST, "Executing line " + i);
