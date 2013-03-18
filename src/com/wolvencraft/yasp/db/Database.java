@@ -153,6 +153,7 @@ public class Database {
 			statement = connection.createStatement();
 			rowsChanged = statement.executeUpdate(sql);
 			statement.close();
+			connection.commit();
 		} catch (SQLException e) {
 			Message.log(Level.WARNING, "Failed to push data to the remote database");
 			if(LocalConfiguration.Debug.asBoolean()) {
