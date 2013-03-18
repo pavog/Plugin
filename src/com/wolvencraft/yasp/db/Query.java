@@ -403,6 +403,10 @@ public class Query {
 			this.fields = fields;
 		}
 		
+		public Object getRawValue(String column) {
+			return fields.get(column);
+		}
+		
 		/**
 		 * Returns the value of the specified column.
 		 * @param column Column name

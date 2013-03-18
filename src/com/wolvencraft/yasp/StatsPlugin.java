@@ -12,9 +12,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.wolvencraft.yasp.StatsSignFactory.StatsSign;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.data.hooks.*;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
-import com.wolvencraft.yasp.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.metrics.PluginStatistics;
 import com.wolvencraft.yasp.util.Message;
@@ -53,11 +53,15 @@ public class StatsPlugin extends JavaPlugin {
 		
 		Message.log("Database connection established");
 		
-		if (getServer().getPluginManager().getPlugin("Vault") != null) vaultHook = new VaultHook();
-		else Settings.setUsingVault(false);
+		if (getServer().getPluginManager().getPlugin("Vault") != null && Settings.RemoteConfiguration.HookVault.asBoolean()) {
+			vaultHook = new VaultHook();
+			vaultHook.patch();
+		}
 		
-		if (getServer().getPluginManager().getPlugin("WorldGuard") != null) worldGuardHook = new WorldGuardHook();
-		else Settings.setUsingWorldGuard(false);
+		if (getServer().getPluginManager().getPlugin("WorldGuard") != null && Settings.RemoteConfiguration.HookWorldGuard.asBoolean()) {
+			worldGuardHook = new WorldGuardHook();
+			worldGuardHook.patch();
+		}
 
 		ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
 		
@@ -69,14 +73,14 @@ public class StatsPlugin extends JavaPlugin {
 		new FeedbackListener(this);
 
 		new Settings();
-		Message.debug("ping=" + Settings.getPing());
-		Message.debug("paused=" + paused);
+		int ping = Settings.RemoteConfiguration.Ping.asInteger();
+		Message.debug("ping=" + ping);
 		
 		try { new PluginStatistics(this); }
 		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, Settings.getPing());
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new StatsSignFactory(), (Settings.getPing() / 2), Settings.getPing());
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, ping);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new StatsSignFactory(), (ping / 2), ping);
 		Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
 	}
 
@@ -88,8 +92,8 @@ public class StatsPlugin extends JavaPlugin {
 			
 			Bukkit.getScheduler().cancelTasks(this);
 			
-			if(Settings.getUsingVault() && vaultHook != null) { vaultHook.cleanup(); }
-			if(Settings.getUsingWorldGuard() && worldGuardHook != null) { worldGuardHook.cleanup(); }
+			if(vaultHook != null) { vaultHook.cleanup(); }
+			if(worldGuardHook != null) { worldGuardHook.cleanup(); }
 
 			Database.cleanup();
 			instance = null;

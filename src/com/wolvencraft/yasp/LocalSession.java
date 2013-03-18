@@ -4,6 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.wolvencraft.yasp.db.data.hooks.VaultHook;
+import com.wolvencraft.yasp.db.data.hooks.WorldGuardHook;
+import com.wolvencraft.yasp.db.data.hooks.VaultHook.VaultHookEntry;
+import com.wolvencraft.yasp.db.data.hooks.WorldGuardHook.WorldGuardHookEntry;
 import com.wolvencraft.yasp.db.data.receive.PlayerTotals;
 import com.wolvencraft.yasp.db.data.sync.*;
 
@@ -20,6 +24,11 @@ public class LocalSession {
 		this.PVPData = new PVPData(playerId);
 		
 		this.playerTotals = new PlayerTotals(playerId);
+		
+		if(Settings.RemoteConfiguration.HookVault.asBoolean() && Settings.Hooks.Vault.getActive())
+			vaultHookEntry = VaultHook.getInstance().new VaultHookEntry(player, playerId);
+		if(Settings.RemoteConfiguration.HookWorldGuard.asBoolean() && Settings.Hooks.WorldGuard.getActive())
+			worldGuardHookEntry = WorldGuardHook.getInstance().new WorldGuardHookEntry(player, playerId);
 	}
 	
 	private PlayersData playersData;
@@ -31,6 +40,9 @@ public class LocalSession {
 	
 	private PlayerTotals playerTotals;
 	
+	private VaultHookEntry vaultHookEntry;
+	private WorldGuardHookEntry worldGuardHookEntry;
+	
 	public void pushData() {
 		playersData.sync();
 		blocksData.sync();
@@ -40,6 +52,11 @@ public class LocalSession {
 		PVPData.sync();
 		
 		playerTotals.fetchData();
+		
+		if(Settings.RemoteConfiguration.HookVault.asBoolean() && Settings.Hooks.Vault.getActive())
+			vaultHookEntry.pushData();
+		if(Settings.RemoteConfiguration.HookWorldGuard.asBoolean() && Settings.Hooks.WorldGuard.getActive())
+			worldGuardHookEntry.pushData();
 	}
 	
 	/**

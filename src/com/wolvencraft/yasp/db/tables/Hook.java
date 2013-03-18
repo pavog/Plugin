@@ -1,6 +1,6 @@
-package com.wolvencraft.yasp.hooks;
+package com.wolvencraft.yasp.db.tables;
 
-public class _HookTables {
+public class Hook {
 	
 	public enum VaultTable {
 		TableName("hook_vault"),

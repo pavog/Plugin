@@ -40,7 +40,11 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		DataCollector.get(player).player().login(player.getLocation());
-		Message.send(player, Settings.getWelcomeMessage(player));
+		if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean())
+			Message.send(
+				player,
+				Settings.RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName())
+			);
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)

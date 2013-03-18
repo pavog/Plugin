@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.hooks;
+package com.wolvencraft.yasp.db.data.hooks;
 
 import java.util.Map;
 
@@ -31,7 +31,7 @@ public interface _PluginHook {
 		 * @param playerId Player ID
 		 * @return <b>true</b> if the data was sent successfully, <b>false</b> if an error occurred
 		 */
-		public boolean pushData(int playerId);
+		public boolean pushData();
 		
 
 		/**
@@ -39,6 +39,6 @@ public interface _PluginHook {
 		 * @param playerId Player ID
 		 * @return <b>Map</b> of column names and their corresponding values
 		 */
-		public Map<String, Object> getValues(int playerId);
+		public Map<String, Object> getValues();
 	}
 }

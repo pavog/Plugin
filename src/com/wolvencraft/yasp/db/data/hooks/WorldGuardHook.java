@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.hooks;
+package com.wolvencraft.yasp.db.data.hooks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,8 +16,9 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.data.sync.Settings;
+import com.wolvencraft.yasp.db.tables.Hook.WorldGuardTable;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
-import com.wolvencraft.yasp.hooks._HookTables.WorldGuardTable;
 import com.wolvencraft.yasp.util.Message;
 
 public class WorldGuardHook implements _PluginHook {
@@ -25,19 +26,26 @@ public class WorldGuardHook implements _PluginHook {
 	public WorldGuardHook() {
 		Plugin plugin = StatsPlugin.getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
 		if (plugin == null || !(plugin instanceof WorldGuardPlugin)) { worldGuard = null; }
-		else { worldGuard = (WorldGuardPlugin) plugin; }
+		else {
+			Settings.Hooks.Vault.setActive(true);
+			worldGuard = (WorldGuardPlugin) plugin;
+			instance = this;
+		}
 	}
 	
-	WorldGuardPlugin worldGuard;
+	private static WorldGuardHook instance;
+	private static WorldGuardPlugin worldGuard;
 	
 	public class WorldGuardHookEntry implements PluginHookEntry {
 		
-		public WorldGuardHookEntry(Player player) {
+		public WorldGuardHookEntry(Player player, int playerId) {
+			this.playerId = playerId;
 			regions = new ArrayList<String>();
 			fetchData(player);
 		}
 		
-		List<String> regions;
+		private int playerId;
+		private List<String> regions;
 		
 		@Override
 		public void fetchData(Player player) {
@@ -52,15 +60,15 @@ public class WorldGuardHook implements _PluginHook {
 		}
 
 		@Override
-		public boolean pushData(int playerId) {
+		public boolean pushData() {
 			return Query.table(WorldGuardTable.TableName.toString())
-				.value(getValues(playerId))
+				.value(getValues())
 				.condition(WorldGuardTable.PlayerId.toString(), playerId)
 				.update(true);
 		}
 
 		@Override
-		public Map<String, Object> getValues(int playerId) {
+		public Map<String, Object> getValues() {
 			Map<String, Object> values = new HashMap<String, Object>();
 			values.put(WorldGuardTable.PlayerId.toString(), playerId);
 			String regionString = "";
@@ -72,6 +80,14 @@ public class WorldGuardHook implements _PluginHook {
 			return values;
 		}
 		
+	}
+	
+	/**
+	 * Returns the hook instance
+	 * @return <b>WorldGuardHook</b> instance
+	 */
+	public static WorldGuardHook getInstance() {
+		return instance;
 	}
 	
 	@Override

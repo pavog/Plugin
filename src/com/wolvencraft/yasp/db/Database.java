@@ -72,7 +72,7 @@ public class Database {
 	 */
 	public void runPatch(boolean force) throws DatabaseConnectionException {
 		int currentVersion = 0, latestVersion = 0;
-		if(!force) { currentVersion = latestVersion = Settings.getDatabaseVersion(); }
+		if(!force) { currentVersion = latestVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
 		List<String> patches = new ArrayList<String>();
 		do {
 			String patch = (latestVersion + 1) + "";
@@ -95,7 +95,7 @@ public class Database {
 			try {sr.runScript(new InputStreamReader(is)); }
 			catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + patch, e); }
 			
-			Settings.setDatabaseVersion(patch);
+			Settings.RemoteConfiguration.DatabaseVersion.update(patch);
 		}
 		Message.log("+----------------------------------+");
 		

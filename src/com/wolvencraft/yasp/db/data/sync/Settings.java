@@ -1,12 +1,7 @@
 package com.wolvencraft.yasp.db.data.sync;
 
-import java.util.List;
-
-import org.bukkit.entity.Player;
-
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 
 public class Settings {
@@ -39,97 +34,64 @@ public class Settings {
 		public Integer asInteger() { return (Integer) value; }
 	}
 	
-	/**
-	 * Default constructor. Takes in the plugin instance as argument.
-	 * @param plugin Plugin instance
-	 */
-	public Settings() {		
-		ping = 2400;
-		showWelcomeMessages = false;
-		welcomeMessage = "Welcome, <PLAYER>!";
-		showFirstJoinMessages = false;
-		firstJoinMessage = "Welcome, <PLAYER>! Your statistics on this server are now being tracked.";
+	public enum Hooks {
+		Vault,
+		WorldGuard,
+		Jobs,
+		McMMO;
 		
-		List<QueryResult> entries = Query.table(SettingsTable.TableName.toString()).column("key", "value").select();
-		for(QueryResult entry : entries) {
-			if(entry.getValue("key").equalsIgnoreCase("ping")) ping = entry.getValueAsInteger("value") * 20;
-			else if(entry.getValue("key").equalsIgnoreCase("show_welcome_messages")) showWelcomeMessages = entry.getValueAsBoolean("value");
-			else if(entry.getValue("key").equalsIgnoreCase("welcome_message")) welcomeMessage = entry.getValue("value");
-			else if(entry.getValue("key").equalsIgnoreCase("show_first_join_messages")) showFirstJoinMessages = entry.getValueAsBoolean("value");
-			else if(entry.getValue("key").equalsIgnoreCase("first_join_message")) firstJoinMessage = entry.getValue("value");
+		Hooks() { active = false; }
+		
+		boolean active;
+		
+		public boolean getActive() { return active; }
+		public void setActive(boolean active) { this.active = active; }
+	}
+	
+	public enum RemoteConfiguration {
+		DatabaseVersion("version"),
+		
+		Ping("ping"),
+		ShowWelcomeMessages("show_welcome_messages"),
+		WelcomeMessage("welcome_message"),
+		ShowFirstJoinMessages("show_first_join_messages"),
+		FirstJoinMessage("first_join_message"),
+		
+		HookVault("hook_vault"),
+		HookWorldGuard("hook_worldguard"),
+		HookJobs("hook_jobs"),
+		HookMcMMO("hook_mcmmo");
+		
+		RemoteConfiguration(String row) {
+			this.row = row;
+			try {
+				value = Query.table(SettingsTable.TableName.toString())
+					.column("value")
+					.condition("key", row)
+					.select()
+					.get(0)
+					.getRawValue(row);
+			} catch (Exception ex) { value = 0; }
 		}
-	}
-	
-	private static long ping;
-	private static boolean showWelcomeMessages;
-	private static String welcomeMessage;
-	private static boolean showFirstJoinMessages;
-	private static String firstJoinMessage;
-	
-	public static void setDatabaseVersion(String version) {
-		Query.table(SettingsTable.TableName.toString())
-			.value("value", version)
-			.condition("key", "version")
-			.update();
-	}
-	
-	public static int getDatabaseVersion() { 
-		try {
+		
+		String row;
+		Object value;
+		
+		public String toString() { return (String) value; }
+		public String asString() { return (String) value; }
+		public Integer asInteger() { return (Integer) value; }
+		public Boolean asBoolean() { 
+			if(value.toString().equals(1)) return true;
+			return false;
+		}
+		
+		public boolean update(Object value) { 
+			this.value = value;
 			return Query.table(SettingsTable.TableName.toString())
-				.column("value")
-				.condition("key", "version")
-				.select()
-				.get(0)
-				.getValueAsInteger("value");
-		} catch (Exception ex) { return 0; }
-	}
-	
-	public static void setUsingVault(boolean usingVault) {
-		Query.table(SettingsTable.TableName.toString())
-			.value("value", usingVault)
-			.condition("key", "hook_vault")
-			.update();
-	}
-	
-	public static boolean getUsingVault() {
-		try {
-			return Query.table(SettingsTable.TableName.toString())
-				.column("value")
-				.condition("key", "hook_vault")
-				.select()
-				.get(0)
-				.getValueAsBoolean("value");
-		} catch (Exception ex) { return false; }
-	}
-	
-	public static void setUsingWorldGuard(boolean usingWorldGuard) {
-		Query.table(SettingsTable.TableName.toString())
-			.value("value", usingWorldGuard)
-			.condition("key", "hook_worldguard")
-			.update();
-	}
-	
-	public static boolean getUsingWorldGuard() {
-		try {
-			return Query.table(SettingsTable.TableName.toString())
-				.column("value")
-				.condition("key", "hook_worldguard")
-				.select()
-				.get(0)
-				.getValueAsBoolean("value");
-		} catch (Exception ex) { return false; }
-	}
-	
-	public static long getPing() { return Settings.ping; }
-	
-	public static String getWelcomeMessage(Player player) {
-		if(Settings.showWelcomeMessages) return Settings.welcomeMessage.replace("<PLAYER>", player.getPlayerListName());
-		else return null;
-	}
-	
-	public static String getFirstJoinMessage(Player player) {
-		if(Settings.showFirstJoinMessages) return Settings.firstJoinMessage.replace("<PLAYER>", player.getPlayerListName());
-		else return null;
+				.value(row, value)
+				.condition("key", row)
+				.update();
+		}
 	}
 	
 }

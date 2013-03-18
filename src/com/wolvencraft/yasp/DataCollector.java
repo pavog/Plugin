@@ -95,7 +95,11 @@ public class DataCollector implements Runnable {
 		Message.debug("Creating a new user session for " + playerName);
 		LocalSession newSession = new LocalSession(player);
 		sessions.add(newSession);
-		Message.send(player, Settings.getFirstJoinMessage(player));
+		if(Settings.RemoteConfiguration.ShowFirstJoinMessages.asBoolean())
+			Message.send(
+				player,
+				Settings.RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getPlayerListName())
+			);
 		return newSession;
 	}
 	

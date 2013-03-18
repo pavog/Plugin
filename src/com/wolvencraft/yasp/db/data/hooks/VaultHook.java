@@ -1,4 +1,4 @@
-package com.wolvencraft.yasp.hooks;
+package com.wolvencraft.yasp.db.data.hooks;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +15,8 @@ import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.sync.Settings;
+import com.wolvencraft.yasp.db.tables.Hook.VaultTable;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
-import com.wolvencraft.yasp.hooks._HookTables.VaultTable;
 import com.wolvencraft.yasp.util.Message;
 
 public class VaultHook implements _PluginHook {
@@ -31,18 +31,24 @@ public class VaultHook implements _PluginHook {
 		try { permissions = ((RegisteredServiceProvider<Permission>)(svm.getRegistration(Permission.class))).getProvider(); }
 		catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); broken = true; }
 		
-		if(!broken) Settings.setUsingVault(true);
+		if(!broken) {
+			Settings.Hooks.Vault.setActive(true);
+			instance = this;
+		}
 	}
-
+	
+	private static VaultHook instance;
 	private static Economy economy;
 	private static Permission permissions;
 	
 	public class VaultHookEntry implements PluginHookEntry {
 		
-		public VaultHookEntry(Player player) {
+		public VaultHookEntry(Player player, int playerId) {
+			this.playerId = playerId;
 			fetchData(player);
 		}
 		
+		private int playerId;
 		private String groupName;
 		private double balance;
 		
@@ -55,15 +61,15 @@ public class VaultHook implements _PluginHook {
 		}
 		
 		@Override
-		public boolean pushData(int playerId) {
+		public boolean pushData() {
 			return Query.table(VaultTable.TableName.toString())
-				.value(getValues(playerId))
+				.value(getValues())
 				.condition(VaultTable.PlayerId.toString(), playerId)
 				.update(true);
 		}
 
 		@Override
-		public Map<String, Object> getValues(int playerId) {
+		public Map<String, Object> getValues() {
 			Map<String, Object> values = new HashMap<String, Object>();
 			values.put(VaultTable.PlayerId.toString(), playerId);
 			values.put(VaultTable.Balance.toString(), balance);
@@ -71,6 +77,14 @@ public class VaultHook implements _PluginHook {
 			return values;
 		}
 		
+	}
+	
+	/**
+	 * Returns the hook instance
+	 * @return <b>VaultHook</b> instance
+	 */
+	public static VaultHook getInstance() {
+		return instance;
 	}
 	
 	@Override

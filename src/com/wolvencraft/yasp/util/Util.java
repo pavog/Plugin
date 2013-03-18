@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import com.wolvencraft.yasp.DataCollector;
 
 public class Util {
- 	
+	
 	/**
 	 * Replaces variables in the string with corresponding values
 	 * @param str String to parse
