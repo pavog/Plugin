@@ -64,31 +64,45 @@ public class Settings {
 		
 		RemoteConfiguration(String row) {
 			this.row = row;
+		}
+		
+		String row;
+		
+		public String toString() { return asString(); }
+		public String asString() {
 			try {
-				value = Query.table(SettingsTable.TableName.toString())
+				return Query.table(SettingsTable.TableName.toString())
 					.column("value")
 					.condition("key", row)
 					.select()
 					.get(0)
-					.getRawValue(row);
-			} catch (Exception ex) { value = 0; }
+					.getValue("value");
+			} catch (Exception ex) { return ""; }
+		}
+		public Integer asInteger() { 
+			try {
+				return Query.table(SettingsTable.TableName.toString())
+					.column("value")
+					.condition("key", row)
+					.select()
+					.get(0)
+					.getValueAsInteger("value");
+			} catch (Exception ex) { return 0; }
+		}
+		public Boolean asBoolean() {
+			try {
+				return Query.table(SettingsTable.TableName.toString())
+					.column("value")
+					.condition("key", row)
+					.select()
+					.get(0)
+					.getValueAsBoolean("value");
+			} catch (Exception ex) { return false; }
 		}
 		
-		String row;
-		Object value;
-		
-		public String toString() { return (String) value; }
-		public String asString() { return (String) value; }
-		public Integer asInteger() { return (Integer) value; }
-		public Boolean asBoolean() { 
-			if(value.toString().equals(1)) return true;
-			return false;
-		}
-		
-		public boolean update(Object value) { 
-			this.value = value;
+		public boolean update(Object value) {
 			return Query.table(SettingsTable.TableName.toString())
-				.value(row, value)
+				.value("value", value)
 				.condition("key", row)
 				.update();
 		}

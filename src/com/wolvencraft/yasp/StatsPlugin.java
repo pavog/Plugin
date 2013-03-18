@@ -73,7 +73,7 @@ public class StatsPlugin extends JavaPlugin {
 		new FeedbackListener(this);
 
 		new Settings();
-		int ping = Settings.RemoteConfiguration.Ping.asInteger();
+		long ping = Settings.RemoteConfiguration.Ping.asInteger() * 20;
 		Message.debug("ping=" + ping);
 		
 		try { new PluginStatistics(this); }
