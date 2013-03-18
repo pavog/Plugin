@@ -1,6 +1,7 @@
 package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
@@ -277,6 +279,9 @@ public class PlayersData implements _DataStore {
 		
 		public MiscInfoPlayers(int playerId, Player player) {
 			this.playerName = player.getPlayerListName();
+			this.playerIp = player.getAddress().toString();
+			
+			this.potionEffects = player.getActivePotionEffects();
 			
 			this.gamemode = 0;
 			this.expPercent = player.getExp();
@@ -298,6 +303,11 @@ public class PlayersData implements _DataStore {
 		}
 		
 		private String playerName;
+		@SuppressWarnings("unused")
+		private String playerIp;
+
+		@SuppressWarnings("unused")
+		private Collection<PotionEffect> potionEffects;
 		
 		private int gamemode;
 		private float expPercent;
