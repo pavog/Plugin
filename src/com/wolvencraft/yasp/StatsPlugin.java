@@ -42,6 +42,7 @@ public class StatsPlugin extends JavaPlugin {
 	private static PluginMetrics metrics;
 	
 	private static boolean paused;
+	private static boolean crashed;
 	
 	private static VaultHook vaultHook;
 	private static WorldGuardHook worldGuardHook;
@@ -51,11 +52,13 @@ public class StatsPlugin extends JavaPlugin {
 
 		instance = this;
 		paused = true;
+		crashed = false;
 		
 		if(!new File(getDataFolder(), "config.yml").exists()) {
-			Message.log("Local configuration not found. Creating a default one for you.");
+			Message.log("Config.yml not found. Creating a one for you.");
 			getConfig().options().copyDefaults(true);
 			saveConfig();
+			crashed = true;
 			this.setEnabled(false);
 			return;
 		}
@@ -64,13 +67,14 @@ public class StatsPlugin extends JavaPlugin {
 		
 		try { new Database(); }
 		catch (Exception e) {
-			Message.log(Level.SEVERE, "Cannot establish a connection with the target database!");
+			Message.log(Level.SEVERE, "Cannot establish a database connection!");
 			if (Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+			crashed = true;
 			this.setEnabled(false);
 			return;
 		}
 		
-		Message.log("Database connection established");
+		Message.log("Database connection established.");
 		
 		if (getServer().getPluginManager().getPlugin("Vault") != null && Settings.RemoteConfiguration.HookVault.asBoolean()) {
 			vaultHook = new VaultHook();
@@ -108,6 +112,8 @@ public class StatsPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		Message.log("Plugin shutting down.");
+		if(crashed) return;
 		try {
 			DataCollector.getServerStats().pluginShutdown();
 			DataCollector.dumpAll();
