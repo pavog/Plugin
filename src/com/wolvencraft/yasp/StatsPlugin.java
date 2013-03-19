@@ -48,6 +48,9 @@ public class StatsPlugin extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
+
+		instance = this;
+		paused = true;
 		
 		if(!new File(getDataFolder(), "config.yml").exists()) {
 			Message.log("Local configuration not found. Creating a default one for you.");
@@ -56,9 +59,6 @@ public class StatsPlugin extends JavaPlugin {
 			this.setEnabled(false);
 			return;
 		}
-		
-		paused = true;
-		instance = this;
 		
 		new Query();
 		
