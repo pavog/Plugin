@@ -145,7 +145,7 @@ public class PlayersData implements _DataStore {
 		@Override
 		public void fetchData(int playerId) {
 			List<QueryResult> results = Query.table(PlayersTable.TableName.toString())
-				.condition(PlayersTable.PlayerId.toString(), PlayersTable.Logins.toString())
+				.column(PlayersTable.PlayerId.toString(), PlayersTable.Logins.toString())
 				.condition(PlayersTable.PlayerId.toString(), playerId + "")
 				.select();
 			if(results.isEmpty()) Query.table(PlayersTable.TableName.toString()).value(getValues(playerId)).insert();
