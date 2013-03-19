@@ -1,12 +1,35 @@
+/*
+ * Statistics
+ * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.wolvencraft.yasp.util;
 
 /**
- * Measures the tick rate of the server.
+ * Measures the tick rate of the server.<br />
+ * There can only be one instance of this method running in the plugin.
  * @author bitWolfy
  *
  */
 public class TPSTracker implements Runnable {
 	
+	/**
+	 * <b>Default constructor.</b><br />
+	 * Creates a new tracker to record ticks per second.
+	 */
 	public TPSTracker() {
 		ticksPerSecond = 0;
 	}
@@ -29,6 +52,12 @@ public class TPSTracker implements Runnable {
 		}
 	}
 	
-	public static int getTicksPerSecond() { return ticksPerSecond; }
+	/**
+	 * Returns the server's current tickrate.
+	 * @return Ticks per second
+	 */
+	public static int getTicksPerSecond() {
+		return ticksPerSecond;
+	}
 	
 }
