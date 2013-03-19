@@ -1,4 +1,5 @@
 debug: false
+log-prefix: 'Stats'
 database:
   host: 'localhost'
   port: 3306
