@@ -105,7 +105,7 @@ public class StatsPlugin extends JavaPlugin {
 		}
 		catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, ping);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), ping, ping);
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new StatsSignFactory(), (ping / 2), ping);
 		Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
 	}
