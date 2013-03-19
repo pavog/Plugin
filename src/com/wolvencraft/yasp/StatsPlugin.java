@@ -68,6 +68,7 @@ public class StatsPlugin extends JavaPlugin {
 		try { new Database(); }
 		catch (Exception e) {
 			Message.log(Level.SEVERE, "Cannot establish a database connection!");
+			Message.log(Level.SEVERE, "Is the plugin set up correctly?");
 			if (Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 			crashed = true;
 			this.setEnabled(false);
@@ -95,7 +96,6 @@ public class StatsPlugin extends JavaPlugin {
 		new DeathListener(this);
 		new FeedbackListener(this);
 
-		new Settings();
 		long ping = Settings.RemoteConfiguration.Ping.asInteger() * 20;
 		Message.debug("ping=" + ping);
 		
