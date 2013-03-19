@@ -26,7 +26,7 @@
  * either expressed or implied, of anybody else.
  */
  
-package com.wolvencraft.yasp.metrics;
+package com.wolvencraft.yasp;
  
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -66,7 +66,7 @@ import java.util.logging.Level;
  * void start(); <br/>
  * </code>
  */
-public class Metrics {
+public class PluginMetrics {
  
     /**
      * The current revision number
@@ -139,7 +139,7 @@ public class Metrics {
      */
     private volatile BukkitTask task = null;
  
-    public Metrics(final Plugin plugin) throws IOException {
+    public PluginMetrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }

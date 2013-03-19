@@ -1,6 +1,7 @@
 package com.wolvencraft.yasp;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -14,14 +15,14 @@ import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.hooks.*;
 import com.wolvencraft.yasp.db.data.sync.Settings;
-import com.wolvencraft.yasp.exceptions.MetricsConnectionException;
 import com.wolvencraft.yasp.listeners.*;
-import com.wolvencraft.yasp.metrics.PluginStatistics;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.TPSTracker;
 
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;
+	private static PluginMetrics metrics;
+	
 	private static boolean paused;
 	
 	private static VaultHook vaultHook;
@@ -76,8 +77,11 @@ public class StatsPlugin extends JavaPlugin {
 		long ping = Settings.RemoteConfiguration.Ping.asInteger() * 20;
 		Message.debug("ping=" + ping);
 		
-		try { new PluginStatistics(this); }
-		catch (MetricsConnectionException e) { Message.log(e.getMessage()); }
+		try {
+			metrics = new PluginMetrics(this);
+			if(!metrics.isOptOut()) metrics.start();
+		}
+		catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
 		
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 0L, ping);
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new StatsSignFactory(), (ping / 2), ping);
