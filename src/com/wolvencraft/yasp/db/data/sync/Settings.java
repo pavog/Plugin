@@ -63,17 +63,17 @@ public class Settings {
 	}
 	
 	/**
-	 * Represents plugin hooks that are currently active.
+	 * Represents modules that are currently active.
 	 * @author bitWolfy
 	 *
 	 */
-	public enum Hooks {
-		Vault,
-		WorldGuard,
-		Jobs,
-		McMMO;
+	public enum Modules {
+		HookVault,
+		HookWorldGuard,
+		HookJobs,
+		HookMcMMO;
 		
-		Hooks() { active = false; }
+		Modules() { active = false; }
 		
 		boolean active;
 		

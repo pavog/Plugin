@@ -45,7 +45,7 @@ public class WorldGuardHook implements _PluginHook {
 		Plugin plugin = StatsPlugin.getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
 		if (plugin == null || !(plugin instanceof WorldGuardPlugin)) { worldGuard = null; }
 		else {
-			Settings.Hooks.Vault.setActive(true);
+			Settings.Modules.HookVault.setActive(true);
 			worldGuard = (WorldGuardPlugin) plugin;
 			instance = this;
 		}

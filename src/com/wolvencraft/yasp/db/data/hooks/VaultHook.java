@@ -50,7 +50,7 @@ public class VaultHook implements _PluginHook {
 		catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); broken = true; }
 		
 		if(!broken) {
-			Settings.Hooks.Vault.setActive(true);
+			Settings.Modules.HookVault.setActive(true);
 			instance = this;
 		}
 	}
