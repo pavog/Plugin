@@ -1,6 +1,6 @@
 <plugin>
-	<name>YASP</name>
+	<name>Statistics</name>
 	<version>1.0</version>
-	<craftbukkit>CB 1.4.7-R1.0</craftbukkit>
+	<craftbukkit>CB 1.5.0-R1.0</craftbukkit>
 	<type>Development Build</type>
 </plugin>
