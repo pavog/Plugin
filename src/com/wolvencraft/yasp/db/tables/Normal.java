@@ -1,9 +1,33 @@
+/*
+ * Statistics
+ * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.wolvencraft.yasp.db.tables;
 
+/**
+ * Represents any non-detailed tables in the database.<br >
+ * Stores table and column names, so that they can be safely used from the plugin
+ * @author bitWolfy
+ *
+ */
 public class Normal {
 	
 	/**
-	 * Represents the $prefix_settings table in the database.
+	 * Represents the <i>settings</i> table.
 	 * @author bitWolfy
 	 *
 	 */
@@ -21,7 +45,7 @@ public class Normal {
 	}
 	
 	/**
-	 * Represents the $prefix_server_statistics table in the database.
+	 * Represents the <i>server_statistics</i> table.
 	 * @author bitWolfy
 	 *
 	 */
@@ -39,7 +63,7 @@ public class Normal {
 	}
 	
 	/**
-	 * Represents the $prefix_distance_players table in the database.
+	 * Represents the <i>distances</i> table.
 	 * @author bitWolfy
 	 *
 	 */
@@ -61,7 +85,7 @@ public class Normal {
 	}
 	
 	/**
-	 * Represents the $prefix_players table in the database.
+	 * Represents the <i>players</i> table.
 	 * @author bitWolfy
 	 *
 	 */
@@ -84,7 +108,7 @@ public class Normal {
 	}
 	
 	/**
-	 * Represents the $prefix_players_misc table in the database.
+	 * Represents the <i>misc_info_players</i> table.
 	 * @author bitWolfy
 	 *
 	 */
@@ -118,7 +142,7 @@ public class Normal {
 	}
 	
 	/**
-	 * Represents the $prefix_total_blocks table in the database.
+	 * Represents the <i>total_blocks</i> table.
 	 * @author bitWolfy
 	 *
 	 */
@@ -139,7 +163,7 @@ public class Normal {
 	}
 	
 	/**
-	 * Represents the $prefix_total_items table in the database.
+	 * Represents the <i>total_items</i> table.
 	 * @author bitWolfy
 	 *
 	 */
@@ -165,7 +189,7 @@ public class Normal {
 	}
 	
 	/**
-	 * Represents the $prefix_total_death_players table in the database.
+	 * Represents the <i>total_deaths</i> table.
 	 * @author bitWolfy
 	 *
 	 */
@@ -185,7 +209,7 @@ public class Normal {
 	}
 	
 	/**
-	 * Represents the $prefix_total_pve_kills table in the database.
+	 * Represents the <i>total_pve_kills</i> table.
 	 * @author bitWolfy
 	 *
 	 */
@@ -207,7 +231,7 @@ public class Normal {
 	}
 	
 	/**
-	 * Represents the $prefix_total_pvp_kills table in the database.
+	 * Represents the <i>total_pvp_kills</i> table.
 	 * @author bitWolfy
 	 *
 	 */
