@@ -1,3 +1,21 @@
+/*
+ * Statistics
+ * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.HashMap;
@@ -13,8 +31,17 @@ import com.wolvencraft.yasp.db.tables.Normal.ServerStatsTable;
 import com.wolvencraft.yasp.util.TPSTracker;
 import com.wolvencraft.yasp.util.Util;
 
+/**
+ * Data collector that stores server-specific information.
+ * @author bitWolfy
+ *
+ */
 public class ServerStatistics {
 	
+	/**
+	 * <b>Default constructor</b><br />
+	 * Creates an empty data store to save the statistics until database synchronization.
+	 */
 	public ServerStatistics() {
 		long curTime = Util.getTimestamp();
 		
@@ -91,7 +118,11 @@ public class ServerStatistics {
 	private int maxPlayersAllowed;
 	private int playersOnline;
 	private int entitiesCount;
-
+	
+	/**
+	 * Performs a database operation to push the local data to the remote database.
+	 * @return <b>true</b> if the insertion was successful, <b>false</b> otherwise
+	 */
 	public boolean pushData() {
 		long curTime = Util.getTimestamp();
 		currentUptime = curTime - lastStartup;
@@ -119,6 +150,10 @@ public class ServerStatistics {
 		return true;
 	}
 	
+	/**
+	 * Performs a one-time database operation to push the local data to the remote database.<br /.
+	 * Only performed on plugin startup.
+	 */
 	public void pushStaticData() {
 		Query.table(ServerStatsTable.TableName.toString()).value("value", firstStartup).condition("key", "first_startup").update();
 		Query.table(ServerStatsTable.TableName.toString()).value("value", lastStartup).condition("key", "last_startup").update();
@@ -138,8 +173,7 @@ public class ServerStatistics {
 	}
 	
 	/**
-	 * Updates the maximum online players count.
-	 * @param players Maximum players online
+	 * Registers the player login in the server statistics
 	 */
 	public void playerLogin() {
 		playersOnline = Bukkit.getOnlinePlayers().length;
@@ -151,11 +185,17 @@ public class ServerStatistics {
 		Query.table(ServerStatsTable.TableName.toString()).value("value", playersOnline).condition("key", "players_online").update();
 	}
 	
+	/**
+	 * Registers the player logout in the server statistics
+	 */
 	public void playerLogout() {
 		playersOnline = Bukkit.getOnlinePlayers().length;
 		Query.table(ServerStatsTable.TableName.toString()).value("value", playersOnline).condition("key", "players_online").update();
 	}
 	
+	/**
+	 * Registers the weather change in the server statistics
+	 */
 	public void weatherChange(boolean isStorming, int duration) {
 		weather = isStorming;
 		weatherDuration = duration;
@@ -164,11 +204,18 @@ public class ServerStatistics {
 		Query.table(ServerStatsTable.TableName.toString()).value("value", weatherDuration).condition("key", "weather_duration").update();
 	}
 	
+	/**
+	 * Registers the change in number of plugins in the server statistics
+	 */
 	public void pluginNumberChange() {
 		plugins = Bukkit.getServer().getPluginManager().getPlugins().length;
 		Query.table(ServerStatsTable.TableName.toString()).value("value", plugins).condition("key", "plugins").update();
 	}
 	
+	/**
+	 * Returns a map of variables and their values to replace variables on signs.
+	 * @return Map of statistical variables
+	 */
 	public Map<String, Object> getValueMap() {
 		Map<String, Object> values = new HashMap<String, Object>();
 		values.put("lastSyncTime", lastSyncTime);
