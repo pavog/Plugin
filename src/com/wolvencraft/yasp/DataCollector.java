@@ -106,7 +106,6 @@ public class DataCollector implements Runnable {
 		String playerName = player.getPlayerListName();
 		for(LocalSession session : sessions) {
 			if(session.getPlayerName().equals(playerName)) {
-				Message.debug("Fetching a user sesssion for " + playerName);
 				return session;
 			}
 		}
