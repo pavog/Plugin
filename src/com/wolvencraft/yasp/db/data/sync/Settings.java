@@ -46,20 +46,23 @@ public class Settings {
 		LogPrefix("", StatsPlugin.getInstance().getDescription().getName());
 		
 		LocalConfiguration(String node) {
-			this.value = StatsPlugin.getInstance().getConfig().get(node);
+			this.node = node;
+			this.value = null;
 		}
 		
 		LocalConfiguration(String node, Object value) {
+			this.node = node;
 			this.value = value;
 		}
 		
+		String node;
 		Object value;
 		
 		@Override
-		public String toString() { return (String) value; }
-		public String asString() { return (String) value; }
-		public Boolean asBoolean() { return (Boolean) value; }
-		public Integer asInteger() { return (Integer) value; }
+		public String toString() { return value == null ? StatsPlugin.getInstance().getConfig().getString(node) : (String) value; }
+		public String asString() { return value == null ? StatsPlugin.getInstance().getConfig().getString(node) : (String) value; }
+		public Boolean asBoolean() { return value == null ? StatsPlugin.getInstance().getConfig().getBoolean(node) : (Boolean) value; }
+		public Integer asInteger() { return value == null ? StatsPlugin.getInstance().getConfig().getInt(node) : (Integer) value; }
 	}
 	
 	/**
