@@ -1,3 +1,28 @@
+/* 
+ *    Copyright 2009-2011 The MyBatis Team
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *    
+ *    Changelog:
+ *    
+ *    Cut down on unused code and generally optimized for desired tasks.
+ *    - bitWolfy
+ *    
+ *    Added the ability to change the delimiter so you can run scripts that 
+ *    contain stored procedures.
+ *    - ChaseHQ
+ */
+
 package com.wolvencraft.yasp;
 
 import java.util.ArrayList;
@@ -10,6 +35,11 @@ import org.bukkit.command.ConsoleCommandSender;
 import com.wolvencraft.yasp.cmd.*;
 import com.wolvencraft.yasp.util.Message;
 
+/**
+ * Manages commands and command senders in the plugin
+ * @author bitWolfy
+ *
+ */
 public enum CommandManager {
 	Book (BookCommand.class, "stats.cmd.book", "book"),
 	Dump (DumpCommand.class, null, "dump"),
@@ -39,9 +69,27 @@ public enum CommandManager {
 	private String permission;
 	private List<String> alias;
 	
-	public boolean isCommand(String arg) 	{ return alias.contains(arg); }
-	public void getHelp() 					{ clazz.getHelp(); }
+	/**
+	 * Checks if the command contains the specified alias
+	 * @param arg Alias to search for
+	 * @return <b>true</b> if the command contains the alias, <b>false</b> otherwise.
+	 */
+	public boolean isCommand(String arg) {
+		return alias.contains(arg);
+	}
 	
+	/**
+	 * Returns the help message for the command
+	 */
+	public void getHelp() {
+		clazz.getHelp();
+	}
+	
+	/**
+	 * Performs permissions checks and runs the command.
+	 * @param args Arguments to be passed on to the command
+	 * @return Command result
+	 */
 	public boolean run(String[] args) {
 		if(permission == null) {
 			if(sender instanceof ConsoleCommandSender || sender.isOp()) return clazz.run(args);
@@ -52,18 +100,49 @@ public enum CommandManager {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Wraps around <i>run(String[] args)<i> to accommodate for commands with a single argument.<br />
+	 * Performs permissions checks and runs the command.
+	 * @param arg Argument to be passed on to the command
+	 * @return Command result
+	 */
 	public boolean run(String arg) {
 		String[] args = {"", arg};
 		return run(args);
 	}
 	
+	/**
+	 * Wraps around <i>run(String[] args)<i> to accommodate for commands without arguments.<br />
+	 * Performs permissions checks and runs the command.
+	 * @return Command result
+	 */
 	public boolean run() {
 		String[] args = {"", ""};
 		return run(args);
 	}
 	
-	public static CommandSender getSender() 	{ return sender; }
-	public static void setSender(CommandSender sender) { CommandManager.sender = sender; }
-	public static void resetSender() { sender = null; }
+	/**
+	 * Returns the CommandSender for the current command.<br />
+	 * Unsafe; should only be used inside command classes.
+	 * @return CommandSender
+	 */
+	public static CommandSender getSender() {
+		return sender;
+	}
+	
+	/**
+	 * Sets the CommandSender to the one specified.
+	 * @param sender CommandSender to be set as the current one
+	 */
+	public static void setSender(CommandSender sender) { 
+		CommandManager.sender = sender;
+	}
+	
+	/**
+	 * Resets the CommandSender to null to prevent memory leaks
+	 */
+	public static void resetSender() {
+		sender = null;
+	}
 }
