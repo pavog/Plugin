@@ -1,5 +1,3 @@
-package com.wolvencraft.yasp.db;
-
 /* 
  *    Copyright 2009-2011 The MyBatis Team
  *
@@ -23,7 +21,12 @@ package com.wolvencraft.yasp.db;
  *    Added the ability to change the delimiter so you can run scripts that 
  *    contain stored procedures.
  *    - ChaseHQ
+ *    
+ *    Original release
+ *    - The MyBatis Team
  */
+
+package com.wolvencraft.yasp.db;
 
 import java.io.BufferedReader;
 import java.io.Reader;
