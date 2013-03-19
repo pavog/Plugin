@@ -20,7 +20,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_players` (
   `logins` INT(11) NULL DEFAULT 0 ,
   `login_time` INT(11) NULL DEFAULT 0 ,
   `playtime` BIGINT(11) NULL DEFAULT 0 ,
-  PRIMARY KEY (`player_id`)
+  PRIMARY KEY (`player_id`),
   UNIQUE KEY `name` (`name`) );
 
 
