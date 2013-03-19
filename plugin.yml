@@ -1,12 +1,12 @@
-name: YASP
+name: Statistics
 main: com.wolvencraft.yasp.StatsPlugin
-version: 2.1
+version: 1.0
 description: Extremely detailed player/server statistic tracking with web portal
 authors: [bitWolfy, Dazzel_]
 softdepend: [Vault, mcMMO]
 commands:
   stats:
-    description: YASP commands
+    description: Statistics commands
 permissions:
   stats.track:
     description: Track the player statistics
