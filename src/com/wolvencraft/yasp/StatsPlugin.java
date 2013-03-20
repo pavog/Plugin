@@ -26,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.StatsSignFactory.StatsSign;
@@ -115,6 +116,8 @@ public class StatsPlugin extends JavaPlugin {
 		Message.log("Plugin shutting down.");
 		if(crashed) { instance = null; return; }
 		try {
+			for(Player player : Bukkit.getOnlinePlayers())
+				DataCollector.get(player).player().logout(player.getLocation());
 			DataCollector.pushAllData();
 			DataCollector.getServerStats().pluginShutdown();
 			DataCollector.dumpAll();
