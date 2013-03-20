@@ -34,12 +34,13 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.data.hooks._HookFactory.*;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.db.tables.Hook.WorldGuardTable;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.util.Message;
 
-public class WorldGuardHook implements _PluginHook {
+public class WorldGuardHook implements PluginHook {
 	
 	public WorldGuardHook() {
 		Plugin plugin = StatsPlugin.getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
@@ -55,9 +56,9 @@ public class WorldGuardHook implements _PluginHook {
 	private static WorldGuardHook instance;
 	private static WorldGuardPlugin worldGuard;
 	
-	public class WorldGuardHookEntry implements PluginHookEntry {
+	public class WorldGuardHookData implements PluginHookData {
 		
-		public WorldGuardHookEntry(Player player, int playerId) {
+		public WorldGuardHookData(Player player, int playerId) {
 			this.playerId = playerId;
 			regions = new ArrayList<String>();
 			fetchData(player);

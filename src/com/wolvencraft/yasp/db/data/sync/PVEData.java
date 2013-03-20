@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.data.sync._DataStoreFactory.*;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.util.Util;
@@ -127,6 +128,11 @@ public class PVEData implements _DataStore{
 	public void creatureKilledPlayer(Creature killer, ItemStack weapon) {
 		getNormalData(killer.getType(), weapon).addPlayerDeaths();
 		detailedData.add(new DetailedPVEEntry(killer.getLocation(), killer.getType(), weapon, true));
+	}
+	
+	@Override
+	public DataStoreType getType() {
+		return DataStoreType.PVE;
 	}
 	
 	

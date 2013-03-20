@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.data.sync._DataStoreFactory.*;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
 import com.wolvencraft.yasp.util.Util;
@@ -116,6 +117,11 @@ public class PVPData implements _DataStore {
 		int victimId = DataCollector.getPlayerId(victim);
 		getNormalData(victimId, weapon).addTimes();
 		detailedData.add(new DetailedPVPEntry(victim.getLocation(), victimId, weapon));
+	}
+	
+	@Override
+	public DataStoreType getType() {
+		return DataStoreType.PVP;
 	}
 	
 	

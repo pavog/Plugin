@@ -28,6 +28,7 @@ import org.bukkit.Material;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.data.sync._DataStoreFactory.*;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
 import com.wolvencraft.yasp.util.Util;
@@ -87,6 +88,11 @@ public class BlocksData implements _DataStore {
 		for(DetailedData entry : getDetailedData()) {
 			detailedData.remove(entry);
 		}
+	}
+	
+	@Override
+	public DataStoreType getType() {
+		return DataStoreType.Blocks;
 	}
 
 	/**

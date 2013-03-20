@@ -31,6 +31,7 @@ import org.bukkit.potion.PotionEffect;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.data.sync._DataStoreFactory.*;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
@@ -110,6 +111,11 @@ public class PlayersData implements _DataStore {
 			.value(PlayersTable.Online.toString(), false)
 			.condition(PlayersTable.PlayerId.toString(), playerId + "")
 			.update();
+	}
+	
+	@Override
+	public DataStoreType getType() {
+		return DataStoreType.Players;
 	}
 	
 	/**
