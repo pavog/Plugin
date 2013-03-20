@@ -59,7 +59,7 @@ public class Settings {
 		Object value;
 		
 		@Override
-		public String toString() { return value == null ? StatsPlugin.getInstance().getConfig().getString(node) : (String) value; }
+		public String toString() { return asString(); }
 		public String asString() { return value == null ? StatsPlugin.getInstance().getConfig().getString(node) : (String) value; }
 		public Boolean asBoolean() { return value == null ? StatsPlugin.getInstance().getConfig().getBoolean(node) : (Boolean) value; }
 		public Integer asInteger() { return value == null ? StatsPlugin.getInstance().getConfig().getInt(node) : (Integer) value; }
