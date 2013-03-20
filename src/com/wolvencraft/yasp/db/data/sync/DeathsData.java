@@ -28,7 +28,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.data.sync._DataStoreFactory.*;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
 import com.wolvencraft.yasp.util.Util;
@@ -88,11 +87,6 @@ public class DeathsData implements _DataStore {
 		for(DetailedData entry : getDetailedData()) {
 			detailedData.remove(entry);
 		}
-	}
-	
-	@Override
-	public DataStoreType getType() {
-		return DataStoreType.Deaths;
 	}
 
 	/**

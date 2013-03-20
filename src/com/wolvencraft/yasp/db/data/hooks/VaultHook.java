@@ -32,13 +32,12 @@ import org.bukkit.plugin.ServicesManager;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.data.hooks._HookFactory.*;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.db.tables.Hook.VaultTable;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.util.Message;
 
-public class VaultHook implements PluginHook {
+public class VaultHook implements _PluginHook {
 	
 	public VaultHook() {
 		ServicesManager svm = StatsPlugin.getInstance().getServer().getServicesManager();
@@ -61,9 +60,9 @@ public class VaultHook implements PluginHook {
 	private static Economy economy;
 	private static Permission permissions;
 	
-	public class VaultHookData implements PluginHookData {
+	public class VaultHookEntry implements PluginHookEntry {
 		
-		public VaultHookData(Player player, int playerId) {
+		public VaultHookEntry(Player player, int playerId) {
 			this.playerId = playerId;
 			fetchData(player);
 		}

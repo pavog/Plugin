@@ -1,73 +1,56 @@
+/*
+ * Statistics
+ * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.wolvencraft.yasp.db.data.sync;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class _DataStoreFactory {
-	
-	public static List<_DataStore> init(int playerId) {
-		List<_DataStore> stores = new ArrayList<_DataStore>();
-		stores.add((_DataStore) new BlocksData(playerId));
-		stores.add((_DataStore) new DeathsData(playerId));
-		stores.add((_DataStore) new ItemsData(playerId));
-		stores.add((_DataStore) new PVEData(playerId));
-		stores.add((_DataStore) new PVPData(playerId));
-		return stores;
-	}
+/**
+ * Common interface for all data stores
+ * @author bitWolfy
+ *
+ */
+public interface _DataStore {
 	
 	/**
-	 * Common interface for all data stores
-	 * @author bitWolfy
-	 *
+	 * Returns the dynamic entries in the data store.<br />
+	 * Asynchronous method; changes to the returned List will not affect the data store.
+	 * @return Dynamic entries in the data store
 	 */
-	public interface _DataStore {
-		
-		/**
-		 * Returns the dynamic entries in the data store.<br />
-		 * Asynchronous method; changes to the returned List will not affect the data store.
-		 * @return Dynamic entries in the data store
-		 */
-		public List<NormalData> getNormalData();
-		
-		/**
-		 * Returns the static entries in the data store.
-		 * @return Static entries in the data store
-		 */
-		public List<DetailedData> getDetailedData();
-		
-		/**
-		 * Synchronizes the data from the data store to the database, then removes it from local storage<br />
-		 * If an entry was not synchronized, it will not be removed.
-		 */
-		public void sync();
-		
-		/**
-		 * Clears the data store of all locally stored data.
-		 */
-		public void dump();
-		
-		/**
-		 * Returns the DataStoreType associated with the specified data store
-		 * @return Data store type
-		 */
-		public DataStoreType getType();
-
-	}
+	public List<NormalData> getNormalData();
 	
 	/**
-	 * Determines the type of data stored in a particular store
-	 * @author bitWolfy
-	 *
+	 * Returns the static entries in the data store.
+	 * @return Static entries in the data store
 	 */
-	public enum DataStoreType {
-		Blocks,
-		Deaths,
-		Items,
-		Players,
-		PVE,
-		PVP;
-	}
+	public List<DetailedData> getDetailedData();
+	
+	/**
+	 * Synchronizes the data from the data store to the database, then removes it from local storage<br />
+	 * If an entry was not synchronized, it will not be removed.
+	 */
+	public void sync();
+	
+	/**
+	 * Clears the data store of all locally stored data.
+	 */
+	public void dump();
 	
 	/**
 	 * Represents the "totals" of statistical data. These entries are changing every time their corresponding data type changes.<br />
@@ -97,6 +80,7 @@ public class _DataStoreFactory {
 		public Map<String, Object> getValues(int playerId);
 	}
 	
+	
 	/**
 	 * Represents data stored in a log format, i.e. new data is appended to the end of the table. No existing data can be changed.<br />
 	 * Multiple instances of this type could (and should) exist.
@@ -118,5 +102,5 @@ public class _DataStoreFactory {
 		 */
 		public Map<String, Object> getValues(int playerId);
 	}
-	
+
 }

@@ -28,7 +28,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.data.sync._DataStoreFactory.*;
 import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
 import com.wolvencraft.yasp.util.Util;
@@ -170,11 +169,6 @@ public class ItemsData implements _DataStore {
 	 */
 	public void itemEnchant(Location location, ItemStack itemStack) {
 		getNormalData(itemStack).addEnchanted();
-	}
-	
-	@Override
-	public DataStoreType getType() {
-		return DataStoreType.Items;
 	}
 	
 	
