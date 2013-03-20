@@ -190,7 +190,7 @@ public class ServerStatistics {
 	 * Registers the player logout in the server statistics
 	 */
 	public void playerLogout() {
-		playersOnline = Bukkit.getOnlinePlayers().length;
+		playersOnline = Bukkit.getOnlinePlayers().length - 1;
 		Query.table(ServerStatsTable.TableName.toString()).value("value", playersOnline).condition("key", "players_online").update();
 	}
 	
