@@ -105,7 +105,7 @@ public class StatsPlugin extends JavaPlugin {
 		}
 		catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), ping, ping);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 300L, ping);
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new StatsSignFactory(), (ping / 2), ping);
 		Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
 	}
@@ -113,7 +113,7 @@ public class StatsPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Message.log("Plugin shutting down.");
-		if(crashed) return;
+		if(crashed) { instance = null; return; }
 		try {
 			DataCollector.pushAllData();
 			DataCollector.getServerStats().pluginShutdown();
@@ -125,13 +125,13 @@ public class StatsPlugin extends JavaPlugin {
 			if(worldGuardHook != null) { worldGuardHook.cleanup(); }
 
 			Database.cleanup();
-			instance = null;
 		} catch (NullPointerException npe) {
 			Message.log(Level.SEVERE, npe.getMessage());
 		} catch (Exception e) { 
 			Message.log(Level.SEVERE, e.getMessage());
 			if(Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
 		}
+		instance = null;
 	}
 	
 	@Override
