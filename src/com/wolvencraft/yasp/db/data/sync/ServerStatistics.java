@@ -170,6 +170,7 @@ public class ServerStatistics {
 	 */
 	public void pluginShutdown() {
 		Query.table(ServerStatsTable.TableName.toString()).value("value", Util.getTimestamp()).condition("key", "last_shutdown").update();
+		Query.table(ServerStatsTable.TableName.toString()).value("value", 0).condition("key", "current_uptime").update();
 	}
 	
 	/**
