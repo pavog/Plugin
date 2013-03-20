@@ -47,8 +47,6 @@ public class ServerTotals {
 		pvpKills = 0;
 		pveKills = 0;
 		otherKills = 0;
-		
-		fetchData();
 	}
 	
 	private int blocksBroken;
