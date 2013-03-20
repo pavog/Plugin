@@ -167,6 +167,7 @@ public class PlayersData implements _DataStore {
 
 		@Override
 		public Map<String, Object> getValues(int playerId) {
+			totalPlaytime += Util.getTimestamp() - sessionStart;
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(PlayersTable.PlayerId.toString(), playerId);
 			map.put(PlayersTable.Name.toString(), playerName);
