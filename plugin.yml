@@ -1,4 +1,4 @@
-name: Statistics
+name: YASP
 main: com.wolvencraft.yasp.StatsPlugin
 version: 1.0
 description: Extremely detailed player/server statistic tracking with web portal
