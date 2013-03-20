@@ -115,6 +115,7 @@ public class StatsPlugin extends JavaPlugin {
 		Message.log("Plugin shutting down.");
 		if(crashed) return;
 		try {
+			DataCollector.pushAllData();
 			DataCollector.getServerStats().pluginShutdown();
 			DataCollector.dumpAll();
 			
