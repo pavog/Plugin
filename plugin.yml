@@ -3,7 +3,7 @@ main: com.wolvencraft.yasp.StatsPlugin
 version: 1.0
 description: Extremely detailed player/server statistic tracking with web portal
 authors: [bitWolfy, Dazzel_]
-softdepend: [Vault, mcMMO]
+softdepend: [Vault, WorldGuard, mcMMO]
 commands:
   stats:
     description: Statistics commands
