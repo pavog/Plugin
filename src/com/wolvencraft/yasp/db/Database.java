@@ -190,7 +190,6 @@ public class Database {
 				catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
 			}
 		}
-		Message.debug(Level.FINER, rowsChanged + " rows changed");
 		return rowsChanged > 0;
 	}
 	
