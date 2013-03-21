@@ -398,6 +398,23 @@ public class Query {
 			else return instance.insert();
 		}
 		
+		/**
+		 * Deletes a row from the database
+		 * @return <b>true</b> if the row was deleted, <b>false</b> if an error occurred
+		 */
+		public boolean delete() {
+			String sql = "DELETE FROM `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
+			
+			String conditionString = "";
+			for(String str : instance.conditions) {
+				if(!conditionString.equals("")) conditionString += " AND ";
+				conditionString += str;
+			}
+			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
+			
+			return pushData(sql + ";");
+		}
+		
 	}
 	
 	

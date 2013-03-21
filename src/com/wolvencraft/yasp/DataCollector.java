@@ -29,6 +29,7 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.receive.ServerTotals;
 import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
 import com.wolvencraft.yasp.db.data.sync.Settings;
+import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
@@ -75,7 +76,13 @@ public class DataCollector implements Runnable {
 		for(LocalSession session : get()) {
 			session.pushData();
 			session.playerTotals().fetchData();
-			if(!session.isOnline()) remove(session);
+			if(!session.isOnline()) {
+				remove(session);
+				if(!session.getConfirmed())
+					Query.table(Normal.PlayersTable.TableName.toString())
+					.condition(PlayersTable.Name.toString(), session.getPlayerName())
+					.delete();
+			}
 		}
 	}
 	
