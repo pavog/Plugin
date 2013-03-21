@@ -94,6 +94,7 @@ public class Settings {
 		DatabaseVersion("version"),
 		
 		Ping("ping"),
+		LogDelay("log_delay"),
 		ShowWelcomeMessages("show_welcome_messages"),
 		WelcomeMessage("welcome_message"),
 		ShowFirstJoinMessages("show_first_join_messages"),

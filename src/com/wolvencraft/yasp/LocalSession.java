@@ -42,6 +42,8 @@ public class LocalSession {
 	 * @param player Player to track
 	 */
 	public LocalSession(Player player) {
+		confirmed = true;
+		
 		int playerId = DataCollector.getPlayerId(player);
 		
 		this.playersData = new PlayersData(player, playerId);
@@ -59,6 +61,8 @@ public class LocalSession {
 			worldGuardHookEntry = WorldGuardHook.getInstance().new WorldGuardHookEntry(player, playerId);
 	}
 	
+	private boolean confirmed;
+	
 	private PlayersData playersData;
 	private BlocksData blocksData;
 	private ItemsData itemsData;
@@ -75,6 +79,7 @@ public class LocalSession {
 	 * Performs an operation to push the locally stored data to the database
 	 */
 	public void pushData() {
+		if(!confirmed) return;
 		playersData.sync();
 		blocksData.sync();
 		itemsData.sync();
@@ -88,6 +93,22 @@ public class LocalSession {
 			vaultHookEntry.pushData();
 		if(Settings.RemoteConfiguration.HookWorldGuard.asBoolean() && Settings.Modules.HookWorldGuard.getActive())
 			worldGuardHookEntry.pushData();
+	}
+	
+	/**
+	 * Returns the confirmation status
+	 * @return <b>true</b> if the player is confirmed, <b>false</b> if he is on hold
+	 */
+	public boolean getConfirmed() {
+		return confirmed;
+	}
+	
+	/**
+	 * Sets the confirmation status for the player
+	 * @param confirmed <b>true</b> if the player is confirmed, <b>false</b> if he is on hold
+	 */
+	public void setConfirmed(boolean confirmed) {
+		this.confirmed = confirmed;
 	}
 	
 	/**

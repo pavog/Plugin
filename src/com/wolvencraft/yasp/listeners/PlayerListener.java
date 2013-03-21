@@ -18,6 +18,7 @@
 
 package com.wolvencraft.yasp.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -39,7 +40,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.wolvencraft.yasp.ConfirmationTimer;
 import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.LocalSession;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.util.Message;
@@ -67,12 +70,19 @@ public class PlayerListener implements Listener {
 		DataCollector.getServerStats().playerLogin();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
-		DataCollector.get(player).player().login(player.getLocation());
-		if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean())
-			Message.send(
-				player,
-				Settings.RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName())
-			);
+		LocalSession session = DataCollector.get(player);
+		if(session.getConfirmed()) {
+			session.player().login(player.getLocation());
+			if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean())
+				Message.send(
+					player,
+					Settings.RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName())
+				);
+		} else {
+			long delay = Settings.RemoteConfiguration.LogDelay.asInteger() * 20;
+			if(delay == 0) session.setConfirmed(true);
+			else Bukkit.getScheduler().runTaskLater(StatsPlugin.getInstance(), new ConfirmationTimer(session), delay);
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
