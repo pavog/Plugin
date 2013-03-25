@@ -1,4 +1,4 @@
-<project name="YASP" default="build">
+<project name="Statistics" default="build">
     <target name="build">
         <mkdir dir="build"/>
         <javac srcdir="src" destdir="build" debug="on">
@@ -13,7 +13,7 @@
                 <include name="*.yml"/>
             </fileset>
         </copy>
-        <jar jarfile="YASP.jar" basedir="build"/>
+        <jar jarfile="Statistics.jar" basedir="build"/>
         <delete dir="build"/>
     </target>
 </project>
