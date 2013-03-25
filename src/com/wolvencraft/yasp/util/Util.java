@@ -23,14 +23,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.server.v1_5_R2.NBTTagCompound;
-import net.minecraft.server.v1_5_R2.NBTTagList;
-import net.minecraft.server.v1_5_R2.NBTTagString;
-
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_5_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
 
@@ -100,66 +94,4 @@ public class Util {
 		return !player.hasPermission("stats.track") && !player.hasPermission("stats.track." + statsType);
 	}
 	
-	/**
-	 * Creates a new statistics book based for the specified player.<br />
-	 * Version-specific method. Include methods to check for CraftBukkit version in the implementation.
-	 * @param player Player to use for statistics
-	 * @return Book with player's statistics
-	 */
-	public static ItemStack compileStatsBook (Player player) {
-		net.minecraft.server.v1_5_R2.ItemStack item = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(387, 1));
-		
-		NBTTagCompound tags = item.getTag();
-        if (tags == null) {
-        	tags = new NBTTagCompound();
-            item.setTag(tags);
-        }
-        
-    	tags.setString("title", player.getPlayerListName() + " Statistics");
-    	tags.setString("author", "YASP");
-    	
-    	NBTTagList pages = new NBTTagList("pages");
-    	String[] newPages = getBookPages(player.getPlayerListName());
-    	
-        for(int i = 0; i < newPages.length; i++) {
-        	pages.add(new NBTTagString("" + i + "", newPages[i]));
-        }
-    	tags.set("pages", pages);
-    	item.setTag(tags);
-		return CraftItemStack.asBukkitCopy(item);
-	}
-	
-	/**
-	 * Returns the pages for the book with player's statistics. Could be used for offline players.<br />
-	 * It is safe to use this method with any version of CraftBukkit.
-	 * @param playerName Player name to use for the statistics
-	 * @return Array of strings, each of them representing a new page in the book.
-	 */
-	public static String[] getBookPages(String playerName) {
-        Map<String, Object> stats = DataCollector.get(playerName).playerTotals().getValues();
-    	return new String[] {
-				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n" + 
-				ChatColor.WHITE + "." + "\n" + 
-				ChatColor.BLACK + ChatColor.BOLD + "  Blocks and items \n" + 
-				ChatColor.RED + ChatColor.BOLD + " - Blocks " + ChatColor.RESET + "\n" + 
-				ChatColor.BLACK + " Broken: " + stats.get("blocksBroken") + "\n" + 
-				ChatColor.BLACK + " Placed: " + stats.get("blocksPlaced") + "\n" + 
-				ChatColor.WHITE + "." + "\n" + 
-				ChatColor.RED + ChatColor.BOLD + "- Items" + ChatColor.RESET + "\n" +
-				ChatColor.BLACK + " Crafted: " + stats.get("itemsCrafted") + "\n" + 
-				ChatColor.BLACK + " Broken: " + stats.get("toolsBroken") + "\n" + 
-				ChatColor.BLACK + " Eaten: " + stats.get("snacksEaten"),
-				
-				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n" + 
-				ChatColor.WHITE + "." + "\n" + 
-				ChatColor.BLACK + ChatColor.BOLD + "  Kills and Deaths \n" + 
-				ChatColor.RED + ChatColor.BOLD + " - PvP" + ChatColor.RESET + "\n" + 
-				ChatColor.BLACK + " Kills: " + stats.get("pvpKills") + "\n" + 
-				ChatColor.BLACK + " Deaths: " + stats.get("pvpDeaths") + "\n" + 
-				ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n" + 
-				ChatColor.WHITE + "." + "\n" + 
-				ChatColor.RED + ChatColor.BOLD + " - Other \n" + ChatColor.RESET +
-				ChatColor.BLACK + " Mob kills: " + stats.get("pveKills")
-		};
-	}
 }

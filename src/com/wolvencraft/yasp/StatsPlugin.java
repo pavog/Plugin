@@ -95,7 +95,8 @@ public class StatsPlugin extends JavaPlugin {
 		new BlockListener(this);
 		new ItemListener(this);
 		new DeathListener(this);
-		new FeedbackListener(this);
+		new StatsSignListener(this);
+		if(isCraftBukkitCompatible()) new StatsBookListener(this);
 
 		long ping = Settings.RemoteConfiguration.Ping.asInteger() * 20;
 		Message.debug("ping=" + ping);
@@ -189,5 +190,16 @@ public class StatsPlugin extends JavaPlugin {
 	 */
 	public static void setPaused(boolean paused) {
 		StatsPlugin.paused = paused;
+	}
+	
+	/**
+	 * Wraps around a BookUtils method to check if the server's bukkit version differs from the one
+	 * the plugin was compiled with
+	 * @return <b>true</b> if it is safe to proceed, <b>false</b> otherwise
+	 */
+	public static boolean isCraftBukkitCompatible() {
+		try { com.wolvencraft.yasp.util.BookUtil.isBukkitCompatible(); }
+		catch (Throwable t) { return false; }
+		return true;
 	}
 }

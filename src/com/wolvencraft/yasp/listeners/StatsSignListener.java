@@ -18,43 +18,35 @@
 
 package com.wolvencraft.yasp.listeners;
 
-import net.minecraft.server.v1_5_R2.NBTTagCompound;
-import net.minecraft.server.v1_5_R2.NBTTagList;
-import net.minecraft.server.v1_5_R2.NBTTagString;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_5_R2.inventory.CraftItemStack;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.StatsSignFactory;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.Util;
 
 /**
- * Handles StatsSign and StatsBook events
+ * Handles StatsSign events
  * @author bitWolfy
  *
  */
-public class FeedbackListener implements Listener {
+public class StatsSignListener implements Listener {
 	
 	/**
 	 * <b>Default constructor</b><br />
 	 * Creates a new instance of the Listener and registers it with the PluginManager
 	 * @param plugin StatsPlugin instance
 	 */
-	public FeedbackListener(StatsPlugin plugin) {
+	public StatsSignListener(StatsPlugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
@@ -89,41 +81,5 @@ public class FeedbackListener implements Listener {
 		StatsSignFactory.remove(sign);
 		Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
 	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBookOpen(PlayerInteractEvent event) {
-		if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))) return;
-		ItemStack craftItem = event.getItem();
-		if(craftItem == null || craftItem.getTypeId() != 387) return;
-		
-		net.minecraft.server.v1_5_R2.ItemStack item = CraftItemStack.asNMSCopy(craftItem);
-		
-		NBTTagCompound tags = item.getTag();
-        if (tags == null) {
-        	tags = new NBTTagCompound();
-            item.setTag(tags);
-        }
-        
-        String author = tags.getString("author");
-        String title = tags.getString("title");
-        Player player = event.getPlayer();
-        
-        if(!(author.equals("YASP"))) return;
-        Message.debug("Player " + player.getPlayerListName() + " read the book '" + title + "' by " + author);
-        String playerName = title.split(" ")[0];
-        
-    	NBTTagList pages = new NBTTagList("pages");
-    	String[] newPages = Util.getBookPages(playerName);
-    	
-        for(int i = 0; i < newPages.length; i++) {
-        	pages.add(new NBTTagString("" + i + "", newPages[i]));
-        }
-    	tags.set("pages", pages);
-    	item.setTag(tags);
-    	
-    	player.getInventory().remove(player.getItemInHand());
-    	ItemStack newItem = CraftItemStack.asBukkitCopy(item);
-    	player.getInventory().setItemInHand(newItem);
-    	Message.debug("Refreshed the book contents");
-	}
+	
 }
