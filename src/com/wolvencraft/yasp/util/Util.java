@@ -23,12 +23,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.server.v1_5_R1.NBTTagCompound;
-import net.minecraft.server.v1_5_R1.NBTTagList;
-import net.minecraft.server.v1_5_R1.NBTTagString;
+import net.minecraft.server.v1_5_R2.NBTTagCompound;
+import net.minecraft.server.v1_5_R2.NBTTagList;
+import net.minecraft.server.v1_5_R2.NBTTagString;
 
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_5_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_5_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -107,7 +107,7 @@ public class Util {
 	 * @return Book with player's statistics
 	 */
 	public static ItemStack compileStatsBook (Player player) {
-		net.minecraft.server.v1_5_R1.ItemStack item = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(387, 1));
+		net.minecraft.server.v1_5_R2.ItemStack item = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(387, 1));
 		
 		NBTTagCompound tags = item.getTag();
         if (tags == null) {
