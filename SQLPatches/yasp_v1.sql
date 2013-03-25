@@ -59,7 +59,6 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_distances` (
   `minecart` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
   `pig` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
   `swimmed` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
-  INDEX `fk_player_id1_idx` (`player_id` ASC) ,
   PRIMARY KEY (`player_id`) ,
   CONSTRAINT `fk_player_id1`
     FOREIGN KEY (`player_id` )
