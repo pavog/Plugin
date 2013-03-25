@@ -29,6 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
@@ -318,6 +319,9 @@ public class PlayersData implements _DataStore {
 			this.wordsSaid = 0;
 			this.commandsSent = 0;
 			
+			this.curKillStreak = 0;
+			this.maxKillStreak = 0;
+			
 			fetchData(playerId);
 		}
 		
@@ -347,6 +351,9 @@ public class PlayersData implements _DataStore {
 		private int wordsSaid;
 		private int commandsSent;
 		
+		private int curKillStreak = 0;
+		private int maxKillStreak = 0;
+		
 		@Override
 		public void fetchData(int playerId) {
 			List<QueryResult> results = Query.table(MiscInfoPlayersTable.TableName.toString())
@@ -364,6 +371,7 @@ public class PlayersData implements _DataStore {
 				portalsEntered = results.get(0).getValueAsInteger(MiscInfoPlayersTable.PortalsEntered.toString());
 				wordsSaid = results.get(0).getValueAsInteger(MiscInfoPlayersTable.WordsSaid.toString());
 				commandsSent = results.get(0).getValueAsInteger(MiscInfoPlayersTable.CommandsSent.toString());
+				maxKillStreak = results.get(0).getValueAsInteger(MiscInfoPlayersTable.MaxKillStreak.toString());
 			}
 		}
 
@@ -401,6 +409,8 @@ public class PlayersData implements _DataStore {
 			map.put(MiscInfoPlayersTable.WordsSaid.toString(), wordsSaid);
 			map.put(MiscInfoPlayersTable.CommandsSent.toString(), commandsSent);
 			
+			map.put(MiscInfoPlayersTable.CurKillStreak.toString(), curKillStreak);
+			map.put(MiscInfoPlayersTable.MaxKillStreak.toString(), maxKillStreak);
 			return map;
 		}
 		
@@ -460,6 +470,23 @@ public class PlayersData implements _DataStore {
 		
 		public void commandSent() {
 			commandsSent++;
+		}
+		
+		/**
+		 * Logs player killing another player
+		 * @param player Player that was killed
+		 */
+		public void playerKilled(Player player) {
+			DataCollector.get(player).player().misc().died();
+			curKillStreak++;
+		}
+		
+		/**
+		 * Logs player being killed by mobs or natural causes
+		 */
+		public void died() {
+			if(maxKillStreak < curKillStreak) maxKillStreak = curKillStreak;
+			curKillStreak = 0;
 		}
 	}
 	

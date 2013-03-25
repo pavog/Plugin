@@ -519,6 +519,8 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
   `commands_sent` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `beds_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `portals_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `kill_streak` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `max_kill_streak` INT UNSIGNED NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`player_id`) ,
   CONSTRAINT `fk_player_id9`
     FOREIGN KEY (`player_id` )

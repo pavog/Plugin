@@ -131,7 +131,9 @@ public class Normal {
 		BedsEntered("beds_entered"),
 		PortalsEntered("portals_entered"),
 		WordsSaid("words_said"),
-		CommandsSent("commands_sent");
+		CommandsSent("commands_sent"),
+		CurKillStreak("kill_streak"),
+		MaxKillStreak("max_kill_streak");
 		
 		MiscInfoPlayersTable (String columnName) { this.columnName = columnName; }
 		
