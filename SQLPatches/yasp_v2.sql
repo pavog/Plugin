@@ -1,7 +1,7 @@
 -- Settings
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("version", "0");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("ping", "120");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("log_delay", "300");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("log_delay", "0");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_welcome_messages", "1");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("welcome_message", "Welcome, <PLAYER>!");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_first_join_message", "1");
