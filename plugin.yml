@@ -1,6 +1,6 @@
 name: YASP
 main: com.wolvencraft.yasp.StatsPlugin
-version: 1.0
+version: 1.0.0b
 description: Extremely detailed player/server statistic tracking with web portal
 authors: [bitWolfy, Dazzel_]
 softdepend: [Vault, WorldEdit, WorldGuard, mcMMO]
