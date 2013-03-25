@@ -13,6 +13,11 @@
                 <include name="*.yml"/>
             </fileset>
         </copy>
+    	<copy todir="build/SQLPatches">
+    		<fileset dir="SQLPatches">
+    			<include name="*.sql"/>
+    		</fileset>
+    	</copy>
         <jar jarfile="Statistics.jar" basedir="build"/>
         <delete dir="build"/>
     </target>

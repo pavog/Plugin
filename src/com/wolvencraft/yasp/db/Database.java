@@ -99,6 +99,8 @@ public class Database {
 			latestVersion++;
 		} while (true);
 		
+		Message.debug("Current version: " + currentVersion + ", latest version: " + latestVersion);
+		
 		if(currentVersion >= latestVersion) {
 			Message.log("Target database is up to date");
 			StatsPlugin.setPaused(false);
