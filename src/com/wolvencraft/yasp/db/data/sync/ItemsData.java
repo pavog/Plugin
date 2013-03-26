@@ -216,7 +216,7 @@ public class ItemsData implements _DataStore {
 			List<QueryResult> results = Query.table(TotalItemsTable.TableName.toString())
 				.condition(TotalItemsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalItemsTable.Material.toString(), type + ":" + data)
-				.select();
+				.selectAll();
 			
 			if(results.isEmpty()) Query.table(TotalItemsTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {

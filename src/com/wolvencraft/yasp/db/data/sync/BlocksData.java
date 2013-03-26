@@ -163,7 +163,7 @@ public class BlocksData implements _DataStore {
 			List<QueryResult> results = Query.table(TotalBlocksTable.TableName.toString())
 				.condition(TotalBlocksTable.PlayerId.toString(), playerId + "")
 				.condition(TotalBlocksTable.Material.toString(), type + ":" + data)
-				.select();
+				.selectAll();
 			
 			if(results.isEmpty()) Query.table(TotalBlocksTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {

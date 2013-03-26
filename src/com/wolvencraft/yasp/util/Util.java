@@ -75,6 +75,22 @@ public class Util {
 	}
 	
 	/**
+	 * Changes a timestamp into a user-friendly form
+	 * @param timestamp Timestamp to parse
+	 * @return User-friendly output
+	 */
+	public static String parseTimestamp(long timestamp) {
+		String result = "";
+		int minutes = (int) (timestamp / 60);
+		int seconds = (int) (timestamp - minutes);
+		int hours = (int) (timestamp / 3600);
+		int days = (int) (timestamp / 86400);
+		if(days != 0) result += days + " days, ";
+		result += hours + ":" + minutes + ":" + seconds;
+		return result;
+	}
+	
+	/**
 	 * Checks if the player is exempt from the statistics.<br />
 	 * Performs a simple permissions check with node <i>stats.track</i>.
 	 * @param player Player to check

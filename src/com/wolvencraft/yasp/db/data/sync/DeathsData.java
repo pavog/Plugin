@@ -138,7 +138,7 @@ public class DeathsData implements _DataStore {
 			List<QueryResult> results = Query.table(TotalDeathPlayersTable.TableName.toString())
 				.condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
 				.condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
-				.select();
+				.selectAll();
 			
 			if(results.isEmpty()) Query.table(TotalDeathPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {

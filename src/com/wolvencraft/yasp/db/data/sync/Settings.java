@@ -84,7 +84,7 @@ public class Settings {
 				return Query.table(SettingsTable.TableName.toString())
 					.column("value")
 					.condition("key", row)
-					.select()
+					.selectAll()
 					.get(0)
 					.getValueAsBoolean("value");
 			} catch (Exception ex) { return true; }
@@ -138,7 +138,7 @@ public class Settings {
 				return Query.table(SettingsTable.TableName.toString())
 					.column("value")
 					.condition("key", row)
-					.select()
+					.selectAll()
 					.get(0)
 					.getValue("value");
 			} catch (Exception ex) { return ""; }
@@ -148,7 +148,7 @@ public class Settings {
 				return Query.table(SettingsTable.TableName.toString())
 					.column("value")
 					.condition("key", row)
-					.select()
+					.selectAll()
 					.get(0)
 					.getValueAsInteger("value");
 			} catch (Exception ex) { return 0; }
@@ -158,7 +158,7 @@ public class Settings {
 				return Query.table(SettingsTable.TableName.toString())
 					.column("value")
 					.condition("key", row)
-					.select()
+					.selectAll()
 					.get(0)
 					.getValueAsBoolean("value");
 			} catch (Exception ex) { return false; }

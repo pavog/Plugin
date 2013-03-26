@@ -76,7 +76,8 @@ public class ItemListener implements Listener {
 		DataCollector.get(player).items().itemUse(player.getLocation(), player.getItemInHand());
 		DataCollector.get(player).player().misc().foodEaten();
 	}
-
+	
+	/*
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onItemCraft(CraftItemEvent event) {
 		if(StatsPlugin.getPaused()) return;
@@ -84,6 +85,7 @@ public class ItemListener implements Listener {
 		if(Util.isExempt(player, "item.craft")) return;
 		DataCollector.get(player).items().itemCraft(player.getLocation(), event.getCurrentItem());
 	}
+	*/
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onItemSmelt(FurnaceExtractEvent event) {

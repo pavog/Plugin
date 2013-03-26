@@ -168,7 +168,7 @@ public class PVEData implements _DataStore{
 				.condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
 				.condition(TotalPVEKillsTable.Material.toString(), weaponType + ":" + weaponData)
-				.select();
+				.selectAll();
 			if(results.isEmpty()) Query.table(TotalPVEKillsTable.TableName.toString()).value(getValues(playerId));
 			else {
 				playerDeaths = results.get(0).getValueAsInteger(TotalPVEKillsTable.PlayerKilled.toString());

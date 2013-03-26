@@ -159,7 +159,7 @@ public class DataCollector implements Runnable {
 			.column(PlayersTable.PlayerId.toString())
 			.column(PlayersTable.Name.toString())
 			.condition(PlayersTable.Name.toString(), username)
-			.select();
+			.selectAll();
 		
 		if(results.isEmpty()) {
 			Query.table(PlayersTable.TableName.toString())
@@ -171,7 +171,7 @@ public class DataCollector implements Runnable {
 				.column(PlayersTable.PlayerId.toString())
 				.column(PlayersTable.Name.toString())
 				.condition(PlayersTable.Name.toString(), username)
-				.select();
+				.selectAll();
 			playerId = results.get(0).getValueAsInteger(PlayersTable.PlayerId.toString());
 		} else {
 			playerId = results.get(0).getValueAsInteger(PlayersTable.PlayerId.toString());

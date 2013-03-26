@@ -148,7 +148,7 @@ public class PlayersData implements _DataStore {
 			List<QueryResult> results = Query.table(PlayersTable.TableName.toString())
 				.column(PlayersTable.PlayerId.toString(), PlayersTable.Logins.toString())
 				.condition(PlayersTable.PlayerId.toString(), playerId + "")
-				.select();
+				.selectAll();
 			if(results.isEmpty()) Query.table(PlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				logins = results.get(0).getValueAsInteger(PlayersTable.Logins.toString());
@@ -230,7 +230,7 @@ public class PlayersData implements _DataStore {
 		public void fetchData(int playerId) {
 			List<QueryResult> results = Query.table(DistancePlayersTable.TableName.toString())
 				.condition(DistancePlayersTable.PlayerId.toString(), playerId + "")
-				.select();
+				.selectAll();
 			if(results.isEmpty()) Query.table(DistancePlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				foot = results.get(0).getValueAsInteger(DistancePlayersTable.Foot.toString());
@@ -358,7 +358,7 @@ public class PlayersData implements _DataStore {
 		public void fetchData(int playerId) {
 			List<QueryResult> results = Query.table(MiscInfoPlayersTable.TableName.toString())
 				.condition(MiscInfoPlayersTable.PlayerId.toString(), playerId + "")
-				.select();
+				.selectAll();
 			if(results.isEmpty()) Query.table(MiscInfoPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				fishCaught = results.get(0).getValueAsInteger(MiscInfoPlayersTable.FishCaught.toString());

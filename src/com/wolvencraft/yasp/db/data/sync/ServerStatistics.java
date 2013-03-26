@@ -76,7 +76,7 @@ public class ServerStatistics {
 		entitiesCount = 0;
 		for(World world : Bukkit.getServer().getWorlds()) entitiesCount += world.getEntities().size();
 		
-		List<QueryResult> entries = Query.table(ServerStatsTable.TableName.toString()).select();
+		List<QueryResult> entries = Query.table(ServerStatsTable.TableName.toString()).selectAll();
 		for(QueryResult entry : entries) {
 			if(entry.getValue("key").equalsIgnoreCase("first_startup")) firstStartup = entry.getValueAsLong("value");
 			else if(entry.getValue("key").equalsIgnoreCase("total_uptime")) totalUptime = entry.getValueAsLong("value");

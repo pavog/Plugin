@@ -267,10 +267,48 @@ public class Query {
 		}
 		
 		/**
-		 * Builds and runs the SELECT query
+		 * Builds and runs the SELECT query that returns the first result found
+		 * @return <b>QueryResult</b> the first result found or <b>null</b> if there isn't one.
+		 */
+		public QueryResult select() {
+			return select(0);
+		}
+		
+		/**
+		 * Builds and runs the SELECT query that returns the result with the specified index
+		 * @param index Index to turn to
+		 * @return <b>QueryResult</b> the result found or <b>null</b> if there isn't one.
+		 */
+		public QueryResult select(int index) {
+			String sql = "SELECT ";
+			
+			String columnString = "";
+			if(instance.columns.isEmpty()) columnString = "*";
+			else {
+				for(String str : instance.columns) {
+					if(!columnString.equals("")) columnString += ", ";
+					columnString += "`" + str + "`";
+				}
+			}
+			sql += columnString + " FROM `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
+			
+			String conditionString = "";
+			for(String str : instance.conditions) {
+				if(!conditionString.equals("")) conditionString += " AND ";
+				conditionString += str;
+			}
+			if(!conditionString.equals("")) sql += " WHERE " + conditionString;
+			
+			try { return Query.fetchData(sql + ";").get(index); }
+			catch (NullPointerException ex) { return null; }
+			catch (ArrayIndexOutOfBoundsException aiex) { return null; }
+		}
+		
+		/**
+		 * Builds and runs the SELECT query that returns a list of results from the database
 		 * @return List of results. Might be empty.
 		 */
-		public List<QueryResult> select() {
+		public List<QueryResult> selectAll() {
 			String sql = "SELECT ";
 			
 			String columnString = "";
@@ -298,7 +336,7 @@ public class Query {
 		 * @return <b>true</b> if the query has any results, <b>false</b> if it is empty
 		 */
 		public boolean exists() {
-			return !select().isEmpty();
+			return !selectAll().isEmpty();
 		}
 		
 		/**

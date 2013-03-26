@@ -155,7 +155,7 @@ public class PVPData implements _DataStore {
 				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
 				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
 				.condition(TotalPVPKillsTable.Material.toString(), weaponType + ":" + weaponData)
-				.select();
+				.selectAll();
 			if(results.isEmpty()) Query.table(TotalPVPKillsTable.TableName.toString()).value(getValues(killerId));
 			else {
 				times = results.get(0).getValueAsInteger(TotalPVPKillsTable.Times.toString());
