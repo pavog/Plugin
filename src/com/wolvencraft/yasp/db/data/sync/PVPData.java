@@ -135,14 +135,18 @@ public class PVPData implements _DataStore {
 		 */
 		public TotalPVPEntry(int playerId, int victimId, ItemStack weapon) {
 			this.victimId = victimId;
-			this.weapon = weapon;
+			this.weaponType = weapon.getTypeId();
+			if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) this.weaponData = weapon.getData().getData();
+			else this.weaponData = 0;
+			
 			this.times = 0;
 			
 			fetchData(playerId);
 		}
 		
 		private int victimId;
-		private ItemStack weapon;
+		private int weaponType;
+		private int weaponData;
 		private int times;
 		
 		@Override
@@ -150,7 +154,7 @@ public class PVPData implements _DataStore {
 			List<QueryResult> results = Query.table(TotalPVPKillsTable.TableName.toString())
 				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
 				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
-				.condition(TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
+				.condition(TotalPVPKillsTable.Material.toString(), weaponType + ":" + weaponData)
 				.select();
 			if(results.isEmpty()) Query.table(TotalPVPKillsTable.TableName.toString()).value(getValues(killerId));
 			else {
@@ -164,7 +168,7 @@ public class PVPData implements _DataStore {
 				.value(getValues(killerId))
 				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
 				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
-				.condition(TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
+				.condition(TotalPVPKillsTable.Material.toString(), weaponType + ":" + weaponData)
 				.update(true);
 			fetchData(killerId);
 			return result;
@@ -175,7 +179,7 @@ public class PVPData implements _DataStore {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalPVPKillsTable.PlayerId.toString(), killerId);
 			map.put(TotalPVPKillsTable.VictimId.toString(), victimId);
-			map.put(TotalPVPKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData());
+			map.put(TotalPVPKillsTable.Material.toString(), weaponType + ":" + weaponData);
 			map.put(TotalPVPKillsTable.Times.toString(), times);
 			return map;
 		}
@@ -187,7 +191,11 @@ public class PVPData implements _DataStore {
 		 * @return <b>true</b> if the data matches, <b>false</b> otherwise.
 		 */
 		public boolean equals(int victimId, ItemStack weapon) {
-			return this.victimId == victimId && this.weapon.equals(weapon);
+			int weaponType = weapon.getTypeId();
+			int weaponData = weapon.getData().getData();
+			if(!Settings.ItemsWithMetadata.checkAgainst(weaponType)) weaponData = 0;
+			
+			return this.victimId == victimId && this.weaponType == weaponType && this.weaponData == weaponData;
 		}
 		
 		/**
@@ -214,13 +222,17 @@ public class PVPData implements _DataStore {
 		 */
 		public DetailedPVPEntry(Location location, int victimId, ItemStack weapon) {
 			this.victimId = victimId;
-			this.weapon = weapon;
+			this.weaponType = weapon.getTypeId();
+			if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) this.weaponData = weapon.getData().getData();
+			else this.weaponData = 0;
+			
 			this.location = location;
 			this.timestamp = Util.getTimestamp();
 		}
 		
 		private int victimId;
-		private ItemStack weapon;
+		private int weaponType;
+		private int weaponData;
 		private Location location;
 		private long timestamp;
 		
@@ -236,7 +248,7 @@ public class PVPData implements _DataStore {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.PVPKills.KillerId.toString(), killerId);
 			map.put(Detailed.PVPKills.VictimId.toString(), victimId);
-			map.put(Detailed.PVPKills.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData());
+			map.put(Detailed.PVPKills.Material.toString(), weaponType + ":" + weaponData);
 			map.put(Detailed.PVPKills.World.toString(), location.getWorld().getName());
 			map.put(Detailed.PVPKills.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.PVPKills.YCoord.toString(), location.getBlockY());

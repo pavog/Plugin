@@ -144,7 +144,9 @@ public class BlocksData implements _DataStore {
 		 */
 		public TotalBlocksEntry(int playerId, Material materialType, byte data) {
 			this.type = materialType.getId();
-			this.data = data;
+			if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = data;
+			else this.data = 0;
+			
 			this.broken = 0;
 			this.placed = 0;
 			
@@ -185,7 +187,7 @@ public class BlocksData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalBlocksTable.PlayerId.toString(), playerId);
-			map.put(TotalBlocksTable.Material.toString(), type + ":" + data);
+			map.put(Detailed.PlacedBlocks.Material.toString(), type + ":" + data);
 			map.put(TotalBlocksTable.Destroyed.toString(), broken);
 			map.put(TotalBlocksTable.Placed.toString(), placed);
 			return map;
@@ -198,6 +200,8 @@ public class BlocksData implements _DataStore {
 		 * @return <b>true</b> if the conditions are met, <b>false</b> otherwise
 		 */
 		public boolean equals(Material materialType, byte data) {
+			if(!Settings.ItemsWithMetadata.checkAgainst(type)) data = 0;
+			
 			return this.type == materialType.getId() && this.data == data;
 		}
 		
@@ -232,7 +236,9 @@ public class BlocksData implements _DataStore {
 		 */
 		public DetailedDestroyerdBlocksEntry(Location location, Material materialType, byte data) {
 			this.type = materialType.getId();
-			this.data = data;
+			if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = data;
+			else this.data = 0;
+			
 			this.location = location;
 			this.timestamp = Util.getTimestamp();
 		}
@@ -253,7 +259,7 @@ public class BlocksData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.DestroyedBlocks.PlayerId.toString(), playerId);
-			map.put(Detailed.DestroyedBlocks.Material.toString(), type + ":" + data);
+			map.put(Detailed.PlacedBlocks.Material.toString(), type + ":" + data);
 			map.put(Detailed.DestroyedBlocks.World.toString(), location.getWorld().getName());
 			map.put(Detailed.DestroyedBlocks.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.DestroyedBlocks.YCoord.toString(), location.getBlockY());
@@ -282,7 +288,9 @@ public class BlocksData implements _DataStore {
 		 */
 		public DetailedPlacedBlocksEntry(Location location, Material materialType, byte data) {
 			this.type = materialType.getId();
-			this.data = data;
+			if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = data;
+			else this.data = 0;
+			
 			this.location = location;
 			this.timestamp = Util.getTimestamp();
 		}

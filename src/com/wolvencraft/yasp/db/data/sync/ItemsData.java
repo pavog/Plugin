@@ -187,7 +187,9 @@ public class ItemsData implements _DataStore {
 		 */
 		public TotalItemsEntry(int playerId, ItemStack itemStack) {
 			this.type = itemStack.getTypeId();
-			this.data = itemStack.getData().getData();
+			if(Settings.ItemsWithMetadata.checkAgainst(this.type)) this.data = itemStack.getData().getData();
+			else this.data = 0;
+			
 			this.dropped = 0;
 			this.pickedUp = 0;
 			this.used = 0;
@@ -260,7 +262,11 @@ public class ItemsData implements _DataStore {
 		 * @return b>true</b> if the data matches, <b>false</b> otherwise.
 		 */
 		public boolean equals(ItemStack itemStack) {
-			return this.type == itemStack.getTypeId() && this.data == itemStack.getData().getData();
+			int type = itemStack.getTypeId();
+			int data = itemStack.getData().getData();
+			if(!Settings.ItemsWithMetadata.checkAgainst(type)) data = 0;
+			
+			return this.type == type && this.data == data;
 		}
 		
 		public void addDropped() { dropped++; }
@@ -289,7 +295,9 @@ public class ItemsData implements _DataStore {
 		 */
 		public DetailedDroppedItemsEntry(Location location, ItemStack itemStack) {
 			this.type = itemStack.getTypeId();
-			this.data = itemStack.getData().getData();
+			if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = itemStack.getData().getData();
+			else this.data = 0;
+			
 			this.location = location;
 			this.timestamp = Util.getTimestamp();
 		}
@@ -338,7 +346,9 @@ public class ItemsData implements _DataStore {
 		 */
 		public DetailedPickedupItemsEntry(Location location, ItemStack itemStack) {
 			this.type = itemStack.getTypeId();
-			this.data = itemStack.getData().getData();
+			if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = itemStack.getData().getData();
+			else this.data = 0;
+			
 			this.location = location;
 			this.timestamp = Util.getTimestamp();
 		}
@@ -387,7 +397,9 @@ public class ItemsData implements _DataStore {
 		 */
 		public DetailedUsedItemsEntry(Location location, ItemStack itemStack) {
 			this.type = itemStack.getTypeId();
-			this.data = itemStack.getData().getData();
+			if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = itemStack.getData().getData();
+			else this.data = 0;
+			
 			this.location = location;
 			this.timestamp = Util.getTimestamp();
 		}

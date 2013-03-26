@@ -146,7 +146,10 @@ public class PVEData implements _DataStore{
 		 */
 		public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
 			this.creatureType = creatureType;
-			this.weapon = weapon;
+			this.weaponType = weapon.getTypeId();
+			if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) this.weaponData = weapon.getData().getData();
+			else this.weaponData = 0;
+			
 			this.playerDeaths = 0;
 			this.creatureDeaths = 0;
 			
@@ -154,7 +157,8 @@ public class PVEData implements _DataStore{
 		}
 		
 		private EntityType creatureType;
-		private ItemStack weapon;
+		private int weaponType;
+		private int weaponData;
 		private int playerDeaths;
 		private int creatureDeaths;
 		
@@ -163,7 +167,7 @@ public class PVEData implements _DataStore{
 			List<QueryResult> results = Query.table(TotalPVEKillsTable.TableName.toString())
 				.condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-				.condition(TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
+				.condition(TotalPVEKillsTable.Material.toString(), weaponType + ":" + weaponData)
 				.select();
 			if(results.isEmpty()) Query.table(TotalPVEKillsTable.TableName.toString()).value(getValues(playerId));
 			else {
@@ -178,7 +182,7 @@ public class PVEData implements _DataStore{
 				.value(getValues(playerId))
 				.condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-				.condition(TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData())
+				.condition(TotalPVEKillsTable.Material.toString(), weaponType + ":" + weaponData)
 				.update();
 			fetchData(playerId);
 			return result;
@@ -189,7 +193,7 @@ public class PVEData implements _DataStore{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalPVEKillsTable.PlayerId.toString(), playerId);
 			map.put(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId());
-			map.put(TotalPVEKillsTable.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData());
+			map.put(TotalPVEKillsTable.Material.toString(), weaponType + ":" + weaponData);
 			map.put(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths);
 			map.put(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths);
 			return map;
@@ -202,7 +206,11 @@ public class PVEData implements _DataStore{
 		 * @return <b>true</b> if the data matches, <b>false</b> otherwise.
 		 */
 		public boolean equals(EntityType creatureType, ItemStack weapon) {
-			return this.creatureType.equals(creatureType) && this.weapon.equals(weapon);
+			int weaponType = weapon.getTypeId();
+			int weaponData = weapon.getData().getData();
+			if(!Settings.ItemsWithMetadata.checkAgainst(weaponType)) weaponData = 0;
+			
+			return this.creatureType.equals(creatureType) && this.weaponType == weaponType && this.weaponData == weaponData;
 		}
 		
 		public void addPlayerDeaths() { playerDeaths++; }
@@ -228,14 +236,18 @@ public class PVEData implements _DataStore{
 		 */
 		public DetailedPVEEntry (Location location, EntityType creatureType, ItemStack weapon, boolean playerKilled) {
 			this.creatureType = creatureType;
-			this.weapon = weapon;
+			this.weaponType = weapon.getTypeId();
+			if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) this.weaponData = weapon.getData().getData();
+			else this.weaponData = 0;
+			
 			this.location = location;
 			this.playerKilled = playerKilled;
 			this.timestamp = Util.getTimestamp();
 		}
 		
 		private EntityType creatureType;
-		private ItemStack weapon;
+		private int weaponType;
+		private int weaponData;
 		private Location location;
 		private boolean playerKilled;
 		private long timestamp;
@@ -257,7 +269,7 @@ public class PVEData implements _DataStore{
 				map.put(Detailed.PVEKills.Material.toString(), "-1:0");
 			} else {
 				map.put(Detailed.PVEKills.PlayerKilled.toString(), 0);
-				map.put(Detailed.PVEKills.Material.toString(), weapon.getTypeId() + ":" + weapon.getData().getData());
+				map.put(Detailed.PVEKills.Material.toString(), weaponType + ":" + weaponData);
 			}
 			map.put(Detailed.PVEKills.World.toString(), location.getWorld().getName());
 			map.put(Detailed.PVEKills.XCoord.toString(), location.getBlockX());

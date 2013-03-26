@@ -151,4 +151,50 @@ public class Settings {
 		}
 	}
 	
+	/**
+	 * A hard-coded list of items that have a metadata that should be tracked
+	 * @author bitWolfy
+	 *
+	 */
+	public enum ItemsWithMetadata {
+		Plank(5),
+		Sapling(6),
+		Log(17),
+		Leave(18),
+		Sandstone(24),
+		TallGrass(31),
+		Wool(35),
+		DoubleSlab(43),
+		Slab(44),
+		PlankDoubleSlab(125),
+		PlankSlab(126),
+		MobHeadBlock(144),
+		Quartz(155),
+		GoldenApple(322),
+		Dye(351),
+		Potion(373),
+		MobEgg(383),
+		MobHead(397);
+		
+		ItemsWithMetadata(int itemId){
+			this.itemId = itemId;
+		}
+		
+		int itemId;
+		
+		private int getId() { return itemId; }
+		
+		/**
+		 * Checks if the specified ID is in the list
+		 * @param id Item ID
+		 * @return <b>true</b> if the item is in the list, <b>false</b> otherwise
+		 */
+		public static boolean checkAgainst(int id) {
+			for(ItemsWithMetadata entry : ItemsWithMetadata.values()) {
+				if(entry.getId() == id) return true;
+			}
+			return false;
+		}
+	}
+	
 }
