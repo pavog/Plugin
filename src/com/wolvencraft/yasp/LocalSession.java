@@ -55,9 +55,9 @@ public class LocalSession {
 		
 		this.playerTotals = new PlayerTotals(playerId);
 		
-		if(Settings.RemoteConfiguration.HookVault.asBoolean() && Settings.Modules.HookVault.getActive())
+		if(Settings.Modules.HookVault.getEnabled() && Settings.ActiveHooks.HookVault.getActive())
 			vaultHookEntry = VaultHook.getInstance().new VaultHookEntry(player, playerId);
-		if(Settings.RemoteConfiguration.HookWorldGuard.asBoolean() && Settings.Modules.HookWorldGuard.getActive())
+		if(Settings.Modules.HookWorldGuard.getEnabled() && Settings.ActiveHooks.HookWorldGuard.getActive())
 			worldGuardHookEntry = WorldGuardHook.getInstance().new WorldGuardHookEntry(player, playerId);
 	}
 	
@@ -89,9 +89,9 @@ public class LocalSession {
 		
 		playerTotals.fetchData();
 		
-		if(Settings.RemoteConfiguration.HookVault.asBoolean() && Settings.Modules.HookVault.getActive())
+		if(Settings.Modules.HookVault.getEnabled() && Settings.ActiveHooks.HookVault.getActive())
 			vaultHookEntry.pushData();
-		if(Settings.RemoteConfiguration.HookWorldGuard.asBoolean() && Settings.Modules.HookWorldGuard.getActive())
+		if(Settings.Modules.HookWorldGuard.getEnabled() && Settings.ActiveHooks.HookWorldGuard.getActive())
 			worldGuardHookEntry.pushData();
 	}
 	

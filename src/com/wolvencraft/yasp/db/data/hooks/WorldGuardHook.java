@@ -46,7 +46,7 @@ public class WorldGuardHook implements _PluginHook {
 		if (plugin == null || !(plugin instanceof WorldGuardPlugin)) { worldGuard = null; }
 		else {
 			Message.log("WorldGuard hook enabled!");
-			Settings.Modules.HookVault.setActive(true);
+			Settings.ActiveHooks.HookVault.setActive(true);
 			worldGuard = (WorldGuardPlugin) plugin;
 			instance = this;
 		}

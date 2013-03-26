@@ -6,10 +6,13 @@ INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_welcome_messages"
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("welcome_message", "Welcome, <PLAYER>!");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_first_join_message", "1");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("first_join_message", "Welcome, <PLAYER>! Your statistics on this server are now being tracked.");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_vault", "0");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_mcmmo", "0");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_jobs", "0");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_worldguard", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("module.blocks", "1");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("module.items", "1");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("module.deaths", "1");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.vault", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.mcmmo", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.jobs", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.worldguard", "0");
 
 -- Server Statistics
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("first_startup", "0");

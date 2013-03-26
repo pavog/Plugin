@@ -65,18 +65,44 @@ public class Settings {
 		public Integer asInteger() { return value == null ? StatsPlugin.getInstance().getConfig().getInt(node) : (Integer) value; }
 	}
 	
+	public enum Modules {
+		Blocks("module.blocks"),
+		Items("module.items"),
+		Deaths("module.deaths"),
+		
+		HookVault("hook.vault"),
+		HookWorldGuard("hook.worldguard"),
+		HookJobs("hook.jobs"),
+		HookMcMMO("hook.mcmmo");;
+		
+		Modules(String row) { this.row = row;}
+		
+		String row;
+		
+		public boolean getEnabled() {
+			try {
+				return Query.table(SettingsTable.TableName.toString())
+					.column("value")
+					.condition("key", row)
+					.select()
+					.get(0)
+					.getValueAsBoolean("value");
+			} catch (Exception ex) { return true; }
+		}
+	}
+	
 	/**
 	 * Represents modules that are currently active.
 	 * @author bitWolfy
 	 *
 	 */
-	public enum Modules {
+	public enum ActiveHooks {
 		HookVault,
 		HookWorldGuard,
 		HookJobs,
 		HookMcMMO;
 		
-		Modules() { active = false; }
+		ActiveHooks() { active = false; }
 		
 		boolean active;
 		
@@ -98,12 +124,7 @@ public class Settings {
 		ShowWelcomeMessages("show_welcome_messages"),
 		WelcomeMessage("welcome_message"),
 		ShowFirstJoinMessages("show_first_join_messages"),
-		FirstJoinMessage("first_join_message"),
-		
-		HookVault("hook_vault"),
-		HookWorldGuard("hook_worldguard"),
-		HookJobs("hook_jobs"),
-		HookMcMMO("hook_mcmmo");
+		FirstJoinMessage("first_join_message");
 		
 		RemoteConfiguration(String row) {
 			this.row = row;

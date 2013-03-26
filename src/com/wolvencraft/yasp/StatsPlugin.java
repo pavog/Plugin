@@ -78,12 +78,12 @@ public class StatsPlugin extends JavaPlugin {
 		
 		Message.log("Database connection established.");
 		
-		if (getServer().getPluginManager().getPlugin("Vault") != null && Settings.RemoteConfiguration.HookVault.asBoolean()) {
+		if (getServer().getPluginManager().getPlugin("Vault") != null && Settings.Modules.HookVault.getEnabled()) {
 			vaultHook = new VaultHook();
 			vaultHook.patch();
 		}
 		
-		if (getServer().getPluginManager().getPlugin("WorldGuard") != null && Settings.RemoteConfiguration.HookWorldGuard.asBoolean()) {
+		if (getServer().getPluginManager().getPlugin("WorldGuard") != null && Settings.Modules.HookWorldGuard.getEnabled()) {
 			worldGuardHook = new WorldGuardHook();
 			worldGuardHook.patch();
 		}
@@ -92,9 +92,9 @@ public class StatsPlugin extends JavaPlugin {
 		
 		new ServerListener(this);
 		new PlayerListener(this);
-		new BlockListener(this);
-		new ItemListener(this);
-		new DeathListener(this);
+		if(Settings.Modules.Blocks.getEnabled()) new BlockListener(this);
+		if(Settings.Modules.Items.getEnabled()) new ItemListener(this);
+		if(Settings.Modules.Deaths.getEnabled()) new DeathListener(this);
 		new StatsSignListener(this);
 		if(isCraftBukkitCompatible()) new StatsBookListener(this);
 

@@ -51,7 +51,7 @@ public class VaultHook implements _PluginHook {
 		
 		if(!broken) {
 			Message.log("Vault hook enabled!");
-			Settings.Modules.HookVault.setActive(true);
+			Settings.ActiveHooks.HookVault.setActive(true);
 			instance = this;
 		}
 	}
