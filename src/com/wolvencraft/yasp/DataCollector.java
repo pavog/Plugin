@@ -110,20 +110,20 @@ public class DataCollector implements Runnable {
 	 * @return LocalSession associated with the player.
 	 */
 	public static LocalSession get(Player player) {
-		String playerName = player.getPlayerListName();
+		String username = player.getName();
 		for(LocalSession session : sessions) {
-			if(session.getPlayerName().equals(playerName)) {
+			if(session.getPlayerName().equals(username)) {
 				return session;
 			}
 		}
-		Message.debug("Creating a new user session for " + playerName);
+		Message.debug("Creating a new user session for " + username);
 		LocalSession newSession = new LocalSession(player);
 		newSession.setConfirmed(false);
 		sessions.add(newSession);
 		if(Settings.RemoteConfiguration.ShowFirstJoinMessages.asBoolean())
 			Message.send(
 				player,
-				Settings.RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getPlayerListName())
+				Settings.RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
 			);
 		return newSession;
 	}
@@ -150,7 +150,7 @@ public class DataCollector implements Runnable {
 	 * @return <b>Integer</b> PlayerID corresponding to the specified username
 	 */
 	public static Integer getPlayerId(Player player) {
-		String username = player.getPlayerListName();
+		String username = player.getName();
 		Message.debug("Retrieving a player ID for " + username);
 		int playerId = -1;
 		List<QueryResult> results;

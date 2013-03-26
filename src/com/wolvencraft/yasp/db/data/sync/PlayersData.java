@@ -122,7 +122,7 @@ public class PlayersData implements _DataStore {
 	public class Players implements NormalData {
 		
 		public Players (int playerId, Player player) {
-			this.playerName = player.getPlayerListName();
+			this.playerName = player.getName();
 			
 			this.online = true;
 			this.sessionStart = Util.getTimestamp();
