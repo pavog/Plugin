@@ -29,7 +29,7 @@ import org.bukkit.craftbukkit.v1_5_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.AsyncDataCollector;
 
 public class BookUtil {
 	
@@ -69,7 +69,7 @@ public class BookUtil {
 	 * @return Array of strings, each of them representing a new page in the book.
 	 */
 	public static String[] getBookPages(String playerName) {
-        Map<String, Object> stats = DataCollector.get(playerName).playerTotals().getValues();
+        Map<String, Object> stats = AsyncDataCollector.get(playerName).playerTotals().getValues();
     	return new String[] {
 				ChatColor.DARK_RED + "\n\n" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
 				ChatColor.BLACK + "Current session: \n\n" + stats.get("currentSession") + "\n\n" + 

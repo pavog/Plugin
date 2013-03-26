@@ -27,7 +27,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.AsyncDataCollector;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
@@ -113,7 +113,7 @@ public class PVPData implements _DataStore {
 	 * @param weapon Weapon used by killer
 	 */
 	public void playerKilledPlayer(Player victim, ItemStack weapon) {
-		int victimId = DataCollector.getPlayerId(victim);
+		int victimId = AsyncDataCollector.getPlayerId(victim);
 		getNormalData(victimId, weapon).addTimes();
 		detailedData.add(new DetailedPVPEntry(victim.getLocation(), victimId, weapon));
 	}

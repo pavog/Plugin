@@ -44,7 +44,7 @@ public class LocalSession {
 	public LocalSession(Player player) {
 		confirmed = true;
 		
-		int playerId = DataCollector.getPlayerId(player);
+		int playerId = AsyncDataCollector.getPlayerId(player);
 		
 		this.playersData = new PlayersData(player, playerId);
 		this.blocksData = new BlocksData(playerId);

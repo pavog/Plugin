@@ -106,9 +106,10 @@ public class StatsPlugin extends JavaPlugin {
 			if(!metrics.isOptOut()) metrics.start();
 		}
 		catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
-		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), 300L, ping);
-		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new StatsSignFactory(), (ping / 2), ping);
+
+		Bukkit.getScheduler().runTaskTimer(this, new SyncDataCollector(), 0L, ping);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new AsyncDataCollector(), (ping / 3), ping);
+		Bukkit.getScheduler().runTaskTimer(this, new StatsSignFactory(), 2 * (ping / 3), ping);
 		Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
 	}
 
@@ -118,10 +119,10 @@ public class StatsPlugin extends JavaPlugin {
 		if(crashed) { instance = null; return; }
 		try {
 			for(Player player : Bukkit.getOnlinePlayers())
-				DataCollector.get(player).player().logout(player.getLocation());
-			DataCollector.pushAllData();
-			DataCollector.getServerStats().pluginShutdown();
-			DataCollector.dumpAll();
+				AsyncDataCollector.get(player).player().logout(player.getLocation());
+			AsyncDataCollector.pushAllData();
+			SyncDataCollector.getServerStats().pluginShutdown();
+			AsyncDataCollector.dumpAll();
 			
 			Bukkit.getScheduler().cancelTasks(this);
 			

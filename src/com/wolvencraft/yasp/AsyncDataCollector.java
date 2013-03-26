@@ -27,7 +27,6 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.receive.ServerTotals;
-import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
@@ -35,20 +34,20 @@ import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
 /**
- * Stores collected statistical data until it can be processed and sent to the database
+ * Stores collected statistical data until it can be processed and sent to the database.<br />
+ * This class is intended to be run in an asynchronous thread; all components are thread-safe.
  * @author bitWolfy
  *
  */
-public class DataCollector implements Runnable {
+public class AsyncDataCollector implements Runnable {
 
 	/**
 	 * <b>Default constructor.</b><br />
 	 * Initializes an empty list of LocalSessions
 	 */
-	public DataCollector() {
+	public AsyncDataCollector() {
 		sessions = new ArrayList<LocalSession>();
 		serverTotals = new ServerTotals();
-		serverStatistics = new ServerStatistics();
 		
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if(!Util.isExempt(player)) get(player);
@@ -56,7 +55,6 @@ public class DataCollector implements Runnable {
 	}
 	
 	private static List<LocalSession> sessions;
-	private static ServerStatistics serverStatistics;
 	private static ServerTotals serverTotals;
 
 	@Override
@@ -64,7 +62,6 @@ public class DataCollector implements Runnable {
 		if(StatsPlugin.getPaused()) return;
 		pushAllData();
 		serverTotals.fetchData();
-		serverStatistics.pushData();
 	}
 	
 	/**
@@ -179,10 +176,6 @@ public class DataCollector implements Runnable {
 		
 		Message.debug("User ID found: " + playerId);
 		return playerId;
-	}
-	
-	public static ServerStatistics getServerStats() {
-		return serverStatistics;
 	}
 	
 	public static ServerTotals getServerTotals() {

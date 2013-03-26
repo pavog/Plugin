@@ -29,7 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.AsyncDataCollector;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
@@ -477,7 +477,7 @@ public class PlayersData implements _DataStore {
 		 * @param player Player that was killed
 		 */
 		public void playerKilled(Player player) {
-			DataCollector.get(player).player().misc().died();
+			AsyncDataCollector.get(player).player().misc().died();
 			curKillStreak++;
 		}
 		

@@ -26,7 +26,7 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.AsyncDataCollector;
 
 /**
  * Utility class containing assorted methods that do not fit other categories
@@ -43,7 +43,7 @@ public class Util {
 	 */
 	public static String parseVars(String str) {
 		if(str == null) return "";
-		Map<String, Object> values = DataCollector.getServerTotals().getValues();
+		Map<String, Object> values = AsyncDataCollector.getServerTotals().getValues();
 		Iterator<Entry<String, Object>> it = values.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();

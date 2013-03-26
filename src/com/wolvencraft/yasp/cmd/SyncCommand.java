@@ -21,7 +21,7 @@ package com.wolvencraft.yasp.cmd;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.AsyncDataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.StatsSignFactory;
 import com.wolvencraft.yasp.util.Message;
@@ -34,7 +34,7 @@ public class SyncCommand implements BaseCommand {
 
 			@Override
 			public void run() {
-				DataCollector.pushAllData();
+				AsyncDataCollector.pushAllData();
 			}
 			
 		});
