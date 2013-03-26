@@ -187,7 +187,7 @@ public class BlocksData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalBlocksTable.PlayerId.toString(), playerId);
-			map.put(Detailed.PlacedBlocks.Material.toString(), type + ":" + data);
+			map.put(TotalBlocksTable.Material.toString(), type + ":" + data);
 			map.put(TotalBlocksTable.Destroyed.toString(), broken);
 			map.put(TotalBlocksTable.Placed.toString(), placed);
 			return map;
@@ -259,7 +259,7 @@ public class BlocksData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.DestroyedBlocks.PlayerId.toString(), playerId);
-			map.put(Detailed.PlacedBlocks.Material.toString(), type + ":" + data);
+			map.put(Detailed.DestroyedBlocks.Material.toString(), type + ":" + data);
 			map.put(Detailed.DestroyedBlocks.World.toString(), location.getWorld().getName());
 			map.put(Detailed.DestroyedBlocks.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.DestroyedBlocks.YCoord.toString(), location.getBlockY());
