@@ -96,7 +96,6 @@ public class ItemsData implements _DataStore {
 	 * @return Corresponding entry
 	 */
 	public TotalItemsEntry getNormalData(ItemStack itemStack) {
-		itemStack.setAmount(1);
 		for(TotalItemsEntry entry : normalData) {
 			if(entry.equals(itemStack)) return entry;
 		}
