@@ -71,26 +71,35 @@ public class BookUtil {
 	public static String[] getBookPages(String playerName) {
         Map<String, Object> stats = DataCollector.get(playerName).playerTotals().getValues();
     	return new String[] {
-				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n" + 
-				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.DARK_RED + "\n\n" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
+				ChatColor.BLACK + "Current session: \n\n" + stats.get("currentSession") + "\n\n" + 
+				ChatColor.BLACK + "Total playtime: \n\n" + stats.get("totalPlaytime"),
+
+				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
 				ChatColor.BLACK + ChatColor.BOLD + "  Blocks and items \n" + 
 				ChatColor.RED + ChatColor.BOLD + " - Blocks " + ChatColor.RESET + "\n" + 
 				ChatColor.BLACK + " Broken: " + stats.get("blocksBroken") + "\n" + 
-				ChatColor.BLACK + " Placed: " + stats.get("blocksPlaced") + "\n" + 
-				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.BLACK + " Placed: " + stats.get("blocksPlaced") + "\n\n" +
 				ChatColor.RED + ChatColor.BOLD + "- Items" + ChatColor.RESET + "\n" +
 				ChatColor.BLACK + " Crafted: " + stats.get("itemsCrafted") + "\n" + 
 				ChatColor.BLACK + " Broken: " + stats.get("toolsBroken") + "\n" + 
 				ChatColor.BLACK + " Eaten: " + stats.get("snacksEaten"),
 				
-				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n" + 
-				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
+				ChatColor.RED + ChatColor.BOLD + "  Travel log \n" + 
+				ChatColor.BLACK + " Total: " + stats.get("distTotal") + "\n\n" + 
+				ChatColor.BLACK + " By foot: " + stats.get("distWalked") + "\n" +
+				ChatColor.BLACK + " Swimmed: " + stats.get("distSwam") + "\n" +
+				ChatColor.BLACK + " In minecart: " + stats.get("distMinecarted") + "\n" + 
+				ChatColor.BLACK + " In a boat: " + stats.get("distBoated") + "\n" + 
+				ChatColor.BLACK + " On a pig: " + stats.get("distPiggybacked"),
+				
+				ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
 				ChatColor.BLACK + ChatColor.BOLD + "  Kills and Deaths \n" + 
 				ChatColor.RED + ChatColor.BOLD + " - PvP" + ChatColor.RESET + "\n" + 
 				ChatColor.BLACK + " Kills: " + stats.get("pvpKills") + "\n" + 
 				ChatColor.BLACK + " Deaths: " + stats.get("pvpDeaths") + "\n" + 
-				ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n" + 
-				ChatColor.WHITE + "." + "\n" + 
+				ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n\n" + 
 				ChatColor.RED + ChatColor.BOLD + " - Other \n" + ChatColor.RESET +
 				ChatColor.BLACK + " Mob kills: " + stats.get("pveKills")
 		};

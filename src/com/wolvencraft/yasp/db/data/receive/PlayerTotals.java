@@ -23,11 +23,13 @@ import java.util.Map;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
+import com.wolvencraft.yasp.util.Util;
 
 /**
  * Generic Player information used on DisplaySigns and books.
@@ -42,10 +44,20 @@ public class PlayerTotals {
 	 */
 	public PlayerTotals(int playerId) {
 		this.playerId = playerId;
+
+		currentSession = 0;
+		totalPlaytime = 0;
 		
 		blocksBroken = 0;
 		blocksPlaced = 0;
-		distance = 0;
+		
+		distWalked = 0;
+		distBoated = 0;
+		distMinecarted = 0;
+		distPiggybacked = 0;
+		distSwam = 0;
+		distTotal = 0;
+		
 		toolsBroken = 0;
 		itemsCrafted = 0;
 		snacksEaten = 0;
@@ -60,10 +72,20 @@ public class PlayerTotals {
 	}
 	
 	private int playerId;
+
+	private long currentSession;
+	private long totalPlaytime;
 	
 	private int blocksBroken;
 	private int blocksPlaced;
-	private double distance;
+	
+	private double distWalked;
+	private double distBoated;
+	private double distMinecarted;
+	private double distPiggybacked;
+	private double distSwam;
+	private double distTotal;
+	
 	private int toolsBroken;
 	private int itemsCrafted;
 	private int snacksEaten;
@@ -79,9 +101,19 @@ public class PlayerTotals {
 	 * Automatically calculates values from the contents of corresponding tables.
 	 */
 	public void fetchData() {
-		blocksBroken = (int) Query.table(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Destroyed.toString()).condition(TotalBlocksTable.PlayerId.toString(), playerId + "").sum();
-		blocksPlaced = (int) Query.table(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Placed.toString()).condition(TotalBlocksTable.PlayerId.toString(), playerId + "").sum();
-		distance = Query.table(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Foot.toString()).condition(DistancePlayersTable.PlayerId.toString(), playerId + "").sum();
+		currentSession = Util.getTimestamp() - Query.table(PlayersTable.TableName.toString()).column(PlayersTable.SessionStart.toString()).condition(PlayersTable.PlayerId.toString(), playerId).select().getValueAsLong(PlayersTable.SessionStart.toString());
+		totalPlaytime = Query.table(PlayersTable.TableName.toString()).column(PlayersTable.TotalPlaytime.toString()).condition(PlayersTable.PlayerId.toString(), playerId).select().getValueAsLong(PlayersTable.TotalPlaytime.toString());
+		
+		blocksBroken = (int) Query.table(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Destroyed.toString()).condition(TotalBlocksTable.PlayerId.toString(), playerId).sum();
+		blocksPlaced = (int) Query.table(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Placed.toString()).condition(TotalBlocksTable.PlayerId.toString(), playerId).sum();
+		
+		distWalked = Query.table(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Foot.toString()).condition(DistancePlayersTable.PlayerId.toString(), playerId).sum();
+		distBoated = Query.table(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Boat.toString()).condition(DistancePlayersTable.PlayerId.toString(), playerId).sum();
+		distMinecarted = Query.table(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Minecart.toString()).condition(DistancePlayersTable.PlayerId.toString(), playerId).sum();
+		distPiggybacked = Query.table(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Pig.toString()).condition(DistancePlayersTable.PlayerId.toString(), playerId).sum();
+		distSwam = Query.table(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Swimmed.toString()).condition(DistancePlayersTable.PlayerId.toString(), playerId).sum();
+		distTotal = distWalked + distBoated + distMinecarted + distPiggybacked + distSwam;
+		
 		toolsBroken = (int) Query.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Broken.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
 		itemsCrafted = (int) Query.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Crafted.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
 		snacksEaten = (int) Query.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Used.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
@@ -101,12 +133,23 @@ public class PlayerTotals {
 	 */
 	public Map<String, Object> getValues() {
 		Map<String, Object> values = new HashMap<String, Object>();
+		values.put("currentSession", Util.parseTimestamp(currentSession));
+		values.put("totalPlaytime", Util.parseTimestamp(totalPlaytime));
+		
 		values.put("blocksBroken", blocksBroken);
 		values.put("blocksPlaced", blocksPlaced);
-		values.put("distance", distance);
+		
+		values.put("distWalked", distWalked);
+		values.put("distBoated", distBoated);
+		values.put("distMinecarted", distMinecarted);
+		values.put("distPiggybacked", distPiggybacked);
+		values.put("distSwam", distSwam);
+		values.put("distTotal", distTotal);
+		
 		values.put("toolsBroken", toolsBroken);
 		values.put("itemsCrafted", itemsCrafted);
 		values.put("snacksEaten", snacksEaten);
+		
 		values.put("pvpKills", pvpKills);
 		values.put("pvpDeaths", pvpDeaths);
 		values.put("kdr", kdr);
