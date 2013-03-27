@@ -100,6 +100,7 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "move")) return;
 		Location playerLocation = player.getLocation();
+		if(!playerLocation.getWorld().equals(event.getTo().getWorld())) return;
 		double distance = playerLocation.distance(event.getTo());
 		if(player.isInsideVehicle()) {
 			Vehicle vehicle = (Vehicle) player.getVehicle();
