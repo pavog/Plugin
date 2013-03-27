@@ -89,7 +89,6 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		if(StatsPlugin.getPaused()) return;
-		SyncDataCollector.getServerStats().playerLogout();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		AsyncDataCollector.get(player).player().logout(player.getLocation());

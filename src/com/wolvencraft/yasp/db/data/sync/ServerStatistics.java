@@ -72,7 +72,6 @@ public class ServerStatistics {
 		maxPlayersOnline = 0;
 		maxPlayersOnlineTime = 0;
 		maxPlayersAllowed = Bukkit.getMaxPlayers();
-		playersOnline = Bukkit.getServer().getOnlinePlayers().length;
 		entitiesCount = 0;
 		for(World world : Bukkit.getServer().getWorlds()) entitiesCount += world.getEntities().size();
 		
@@ -116,7 +115,6 @@ public class ServerStatistics {
 	private long maxPlayersOnlineTime;
 	
 	private int maxPlayersAllowed;
-	private int playersOnline;
 	private int entitiesCount;
 	
 	/**
@@ -177,21 +175,11 @@ public class ServerStatistics {
 	 * Registers the player login in the server statistics
 	 */
 	public void playerLogin() {
-		playersOnline = Bukkit.getOnlinePlayers().length;
+		int playersOnline = Bukkit.getOnlinePlayers().length;
 		if(playersOnline > maxPlayersOnline) {
 			this.maxPlayersOnline = playersOnline;
 			this.maxPlayersOnlineTime = Util.getTimestamp();
 		}
-		
-		Query.table(ServerStatsTable.TableName.toString()).value("value", playersOnline).condition("key", "players_online").update();
-	}
-	
-	/**
-	 * Registers the player logout in the server statistics
-	 */
-	public void playerLogout() {
-		playersOnline = Bukkit.getOnlinePlayers().length - 1;
-		Query.table(ServerStatsTable.TableName.toString()).value("value", playersOnline).condition("key", "players_online").update();
 	}
 	
 	/**
@@ -245,7 +233,6 @@ public class ServerStatistics {
 		values.put("maxPlayersOnlineTime", maxPlayersOnlineTime);
 		
 		values.put("maxPlayersAllowed", maxPlayersAllowed);
-		values.put("playersOnline", playersOnline);
 		values.put("entitiesCount", entitiesCount);
 		return values;
 	}

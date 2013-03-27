@@ -71,7 +71,8 @@ public class Normal {
 		TableName("distances"),
 		PlayerId("player_id"),
 		Foot("foot"),
-		Swimmed("swimmed"),
+		Swimmed("swum"),
+		Flight("flight"),
 		Boat("boat"),
 		Minecart("minecart"),
 		Pig("pig");
