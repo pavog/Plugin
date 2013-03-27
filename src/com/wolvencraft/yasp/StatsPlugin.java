@@ -35,6 +35,7 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.hooks.*;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.listeners.*;
+import com.wolvencraft.yasp.scoreboard.ScoreboardAPI;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.TPSTracker;
 
@@ -111,6 +112,7 @@ public class StatsPlugin extends JavaPlugin {
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new AsyncDataCollector(), (ping / 3), ping);
 		Bukkit.getScheduler().runTaskTimer(this, new StatsSignFactory(), 2 * (ping / 3), ping);
 		Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ScoreboardAPI(), 0L, 40L);
 	}
 
 	@Override

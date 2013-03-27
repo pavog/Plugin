@@ -29,9 +29,14 @@ import org.bukkit.entity.Player;
  * @author bitWolfy
  *
  */
-public class ScoreboardAPI {
+public class ScoreboardAPI implements Runnable {
 	
 	private static List<Scoreboard> boards = new ArrayList<Scoreboard>();
+	
+	@Override
+	public void run() {
+		refresh();
+	}
 	
 	/**
 	 * Returns all score boards stored in the plugin
@@ -64,6 +69,20 @@ public class ScoreboardAPI {
 			if (board.getId() == id) return null;
 		}
 		Scoreboard board = new Scoreboard(id, priority);
+		boards.add(board);
+		return board;
+	}
+	
+	/**
+	 * Adds a new score board
+	 * @param id Board name
+	 * @return Returns the new score board, or <b>null</b> if the score board with this name already exists
+	 */
+	public static Scoreboard add(String id) {
+		for (Scoreboard board : boards) {
+			if (board.getId() == id) return null;
+		}
+		Scoreboard board = new Scoreboard(id);
 		boards.add(board);
 		return board;
 	}

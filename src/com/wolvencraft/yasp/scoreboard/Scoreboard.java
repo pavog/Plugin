@@ -39,6 +39,26 @@ public class Scoreboard {
 	
 	/**
 	 * <b>Default constructor</b><br />
+	 * Creates a new score board with the specified ID
+	 * @param id Unique ID of the board
+	 */
+	Scoreboard(String id) {
+		this.id = id;
+	}
+	
+	/**
+	 * <b>Constructor</b><br />
+	 * Creates a new score board with the specified ID
+	 * @param id Unique ID of the board
+	 * @param Scoreboard type
+	 */
+	Scoreboard(String id, Type type) {
+		this.id = id;
+		this.type = type;
+	}
+	
+	/**
+	 * <b>Constructor</b><br />
 	 * Creates a new score board with the specified ID and priority
 	 * @param id Unique ID of the board
 	 * @param priority Board priority
@@ -46,6 +66,19 @@ public class Scoreboard {
 	Scoreboard(String id, int priority) {
 		this.id = id;
 		this.priority = priority;
+	}
+	
+	/**
+	 * <b>Constructor</b><br />
+	 * Creates a new score board with the specified ID and priority
+	 * @param id Unique ID of the board
+	 * @param priority Board priority
+	 * @param Scoreboard type
+	 */
+	Scoreboard(String id, int priority, Type type) {
+		this.id = id;
+		this.priority = priority;
+		this.type = type;
 	}
 	
 	private List<Player> players = new ArrayList<Player>();
@@ -144,33 +177,17 @@ public class Scoreboard {
 	 * @param player Player to search for
 	 * @return <b>true</b> if the player is in the list, <b>false</b> otherwise
 	 */
-	public boolean containsPlayer(Player player) {
+	public boolean isVisible(Player player) {
 		return players.contains(player);
-	}
-	
-	/**
-	 * Associates the specified player with the score board.
-	 * @param player Player to add
-	 */
-	public void addPlayer(Player player) {
-		if(!containsPlayer(player)) players.add(player);
-	}
-	
-	/**
-	 * Removes the association of the specified player with the score board
-	 * @param player Player to remove
-	 */
-	public void removePlayer(Player player) {
-		if(containsPlayer(player)) players.remove(player);
 	}
 	
 	/**
 	 * Sets the score board visibility for all players
 	 * @param show <b>true</b> if the board should be shown, <b>false</b> otherwise
 	 */
-	public void show(boolean show) {
+	public void setVisible(boolean show) {
 		for(Player player : players) {
-			show(player, false);
+			setVisible(player, false);
 		}
 	}
 	
@@ -179,7 +196,7 @@ public class Scoreboard {
 	 * @param player Player
 	 * @param show <b>true</b> if the board should be shown, <b>false</b> otherwise
 	 */
-	public void show(Player player, boolean show) {
+	public void setVisible(Player player, boolean show) {
 		if (show) {
 			if (!players.contains(player)) {
 				players.add(player);
@@ -256,7 +273,7 @@ public class Scoreboard {
 	private boolean isOnTop(Player player) {
 		for(Scoreboard board : ScoreboardAPI.get()) {
 			if(board == this) continue;
-			if(board.containsPlayer(player)
+			if(board.isVisible(player)
 				&& board.getType() == type
 				&& (board.getPriority() >= priority)) return false;
 		}
