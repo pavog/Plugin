@@ -117,6 +117,7 @@ public class Normal {
 		TableName("misc_info_players"),
 		EntryId("misc_info_players_id"),
 		PlayerId("player_id"),
+		PlayerIp("player_ip"),
 		Gamemode("gamemode"),
 		ExperiencePercent("exp_perc"),
 		ExperienceTotal("exp_total"),
@@ -134,7 +135,8 @@ public class Normal {
 		WordsSaid("words_said"),
 		CommandsSent("commands_sent"),
 		CurKillStreak("kill_streak"),
-		MaxKillStreak("max_kill_streak");
+		MaxKillStreak("max_kill_streak"),
+		PotionEffects("potion_effects");
 		
 		MiscInfoPlayersTable (String columnName) { this.columnName = columnName; }
 		

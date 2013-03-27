@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
@@ -36,6 +37,7 @@ import com.wolvencraft.yasp.db.tables.Detailed;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.util.SimplePotionEffect;
 import com.wolvencraft.yasp.util.Util;
 
 public class PlayersData implements _DataStore {
@@ -335,10 +337,8 @@ public class PlayersData implements _DataStore {
 		}
 		
 		private String playerName;
-		@SuppressWarnings("unused")
 		private String playerIp;
-
-		@SuppressWarnings("unused")
+		
 		private Collection<PotionEffect> potionEffects;
 		
 		private int gamemode;
@@ -399,6 +399,7 @@ public class PlayersData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(MiscInfoPlayersTable.PlayerId.toString(), playerId);
+			map.put(MiscInfoPlayersTable.PlayerIp.toString(), playerIp);
 			map.put(MiscInfoPlayersTable.ExperiencePercent.toString(), expPercent);
 			map.put(MiscInfoPlayersTable.ExperienceTotal.toString(), expTotal);
 			map.put(MiscInfoPlayersTable.ExperienceLevel.toString(), expLevel);
@@ -420,6 +421,13 @@ public class PlayersData implements _DataStore {
 			
 			map.put(MiscInfoPlayersTable.CurKillStreak.toString(), curKillStreak);
 			map.put(MiscInfoPlayersTable.MaxKillStreak.toString(), maxKillStreak);
+			
+			Gson gson = new Gson();
+			List<SimplePotionEffect> potEffects = new ArrayList<SimplePotionEffect>();
+			for(PotionEffect eff : potionEffects) potEffects.add(new SimplePotionEffect(eff));
+			String potEffectsString = gson.toJson(potEffects.toArray());
+			
+			map.put(MiscInfoPlayersTable.PotionEffects.toString(), potEffectsString);
 			return map;
 		}
 		
@@ -432,6 +440,8 @@ public class PlayersData implements _DataStore {
 				if(pl.getPlayerListName().equals(playerName)) player = pl;
 			}
 			if(player == null) return;
+			
+			this.potionEffects = player.getActivePotionEffects();
 			
 			this.gamemode = player.getGameMode().getValue();
 			this.expPercent = player.getExp();
