@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.AsyncDataCollector;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.scoreboard.Scoreboard;
@@ -24,7 +24,7 @@ public class ScoreboardCommand implements BaseCommand {
 			return false;
 		}
 		Player player = (Player) CommandManager.getSender();
-        Map<String, Object> stats = DataCollector.get(player.getName()).playerTotals().getValues();
+        Map<String, Object> stats = AsyncDataCollector.get(player.getName()).playerTotals().getValues();
         
 		Scoreboard board = ScoreboardAPI.get(player.getName());
 		if(board == null) {

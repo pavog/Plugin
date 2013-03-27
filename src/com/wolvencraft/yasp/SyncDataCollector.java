@@ -16,24 +16,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.cmd;
+package com.wolvencraft.yasp;
 
-import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.AsyncDataCollector;
-import com.wolvencraft.yasp.LocalSession;
-import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
 
-public class DumpCommand implements BaseCommand {
-
-	@Override
-	public boolean run(String[] args) {
-		for(LocalSession session : AsyncDataCollector.get())
-			session.dump();
-		Message.sendFormattedSuccess(CommandManager.getSender(), "The local data has been dumped");
-		return true;
+/**
+ * Stores collected statistical data until it can be processed and sent to the database.<br />
+ * This class is intended to be run in a synchronous thread; some components are not thread-safe.
+ * @author bitWolfy
+ *
+ */
+public class SyncDataCollector implements Runnable {
+	
+	public SyncDataCollector() {
+		serverStatistics = new ServerStatistics();
 	}
-
+	
+	private static ServerStatistics serverStatistics;
+	
 	@Override
-	public void getHelp() { Message.formatHelp("dump", "", "Dumps the locally stored data"); }
-
+	public void run() {
+		if(StatsPlugin.getPaused()) return;
+		serverStatistics.pushData();
+	}
+	
+	public static ServerStatistics getServerStats() {
+		return serverStatistics;
+	}
+	
 }

@@ -42,9 +42,10 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.wolvencraft.yasp.ConfirmationTimer;
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.AsyncDataCollector;
 import com.wolvencraft.yasp.LocalSession;
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.SyncDataCollector;
 import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
@@ -68,10 +69,10 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if(StatsPlugin.getPaused()) return;
-		DataCollector.getServerStats().playerLogin();
+		SyncDataCollector.getServerStats().playerLogin();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
-		LocalSession session = DataCollector.get(player);
+		LocalSession session = AsyncDataCollector.get(player);
 		if(session.getConfirmed()) {
 			session.player().login(player.getLocation());
 			if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean())
@@ -91,7 +92,7 @@ public class PlayerListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
-		DataCollector.get(player).player().logout(player.getLocation());
+		AsyncDataCollector.get(player).player().logout(player.getLocation());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -105,18 +106,18 @@ public class PlayerListener implements Listener {
 		if(player.isInsideVehicle()) {
 			Vehicle vehicle = (Vehicle) player.getVehicle();
 			if(vehicle.getType().equals(EntityType.MINECART)) {
-				DataCollector.get(player).player().distance().addDistanceMinecart(distance);
+				AsyncDataCollector.get(player).player().distance().addDistanceMinecart(distance);
 			} else if(vehicle.getType().equals(EntityType.BOAT)) {
-				DataCollector.get(player).player().distance().addDistanceBoat(distance);
+				AsyncDataCollector.get(player).player().distance().addDistanceBoat(distance);
 			} else if(vehicle.getType().equals(EntityType.PIG)) {
-				DataCollector.get(player).player().distance().addDistancePig(distance);
+				AsyncDataCollector.get(player).player().distance().addDistancePig(distance);
 			}
 		} else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
-			DataCollector.get(player).player().distance().addDistanceSwimmed(distance);
+			AsyncDataCollector.get(player).player().distance().addDistanceSwimmed(distance);
 		} else if (player.isFlying()) {
-			DataCollector.get(player).player().distance().addDistanceFlown(distance);
+			AsyncDataCollector.get(player).player().distance().addDistanceFlown(distance);
 		} else {
-			LocalSession session = DataCollector.get(player);
+			LocalSession session = AsyncDataCollector.get(player);
 			if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
 				session.player().misc().jumped();
 			session.player().distance().addDistanceFoot(distance);
@@ -128,7 +129,7 @@ public class PlayerListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.fish")) return;
-		DataCollector.get(player).player().misc().fishCaught();
+		AsyncDataCollector.get(player).player().misc().fishCaught();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -136,7 +137,7 @@ public class PlayerListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.kick")) return;
-		DataCollector.get(player).player().misc().kicked();
+		AsyncDataCollector.get(player).player().misc().kicked();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -144,7 +145,7 @@ public class PlayerListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.eggThrow")) return;
-		DataCollector.get(player).player().misc().eggThrown();
+		AsyncDataCollector.get(player).player().misc().eggThrown();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -153,7 +154,7 @@ public class PlayerListener implements Listener {
 		if(!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		if(Util.isExempt(player, "misc.arrowShoot")) return;
-		DataCollector.get(player).player().misc().arrowShot();
+		AsyncDataCollector.get(player).player().misc().arrowShot();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -162,7 +163,7 @@ public class PlayerListener implements Listener {
 		if(!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		if(Util.isExempt(player, "misc.takeDamage")) return;
-		DataCollector.get(player).player().misc().damageTaken(event.getDamage());
+		AsyncDataCollector.get(player).player().misc().damageTaken(event.getDamage());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -170,7 +171,7 @@ public class PlayerListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.bedEnter")) return;
-		DataCollector.get(player).player().misc().bedEntered();
+		AsyncDataCollector.get(player).player().misc().bedEntered();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -178,7 +179,7 @@ public class PlayerListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.portalEnter")) return;
-		DataCollector.get(player).player().misc().portalEntered();
+		AsyncDataCollector.get(player).player().misc().portalEntered();
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -186,7 +187,7 @@ public class PlayerListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.chat")) return;
-		DataCollector.get(player).player().misc().chatMessageSent(event.getMessage().split(" ").length);
+		AsyncDataCollector.get(player).player().misc().chatMessageSent(event.getMessage().split(" ").length);
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -194,6 +195,6 @@ public class PlayerListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "misc.command")) return;
-		DataCollector.get(player).player().misc().commandSent();
+		AsyncDataCollector.get(player).player().misc().commandSent();
 	}
 }

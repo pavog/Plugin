@@ -214,7 +214,7 @@ public class ItemsData implements _DataStore {
 		public void fetchData(int playerId) {
 			List<QueryResult> results = Query.table(TotalItemsTable.TableName.toString())
 				.condition(TotalItemsTable.PlayerId.toString(), playerId + "")
-				.condition(TotalItemsTable.Material.toString(), Util.getBlockString(type, data))
+				.condition(TotalItemsTable.Material.toString(), type + ":" + data)
 				.selectAll();
 			
 			if(results.isEmpty()) Query.table(TotalItemsTable.TableName.toString()).value(getValues(playerId)).insert();
@@ -234,7 +234,7 @@ public class ItemsData implements _DataStore {
 			boolean result = Query.table(TotalItemsTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(TotalItemsTable.PlayerId.toString(), playerId + "")
-				.condition(TotalItemsTable.Material.toString(), Util.getBlockString(type, data))
+				.condition(TotalItemsTable.Material.toString(), type + ":" + data)
 				.update(true);
 			fetchData(playerId);
 			return result;
@@ -244,7 +244,7 @@ public class ItemsData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalItemsTable.PlayerId.toString(), playerId);
-			map.put(TotalItemsTable.Material.toString(), Util.getBlockString(type, data));
+			map.put(TotalItemsTable.Material.toString(), type + ":" + data);
 			map.put(TotalItemsTable.Dropped.toString(), dropped);
 			map.put(TotalItemsTable.PickedUp.toString(), pickedUp);
 			map.put(TotalItemsTable.Used.toString(), used);
@@ -317,7 +317,7 @@ public class ItemsData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.DroppedItems.PlayerId.toString(), playerId);
-			map.put(Detailed.DroppedItems.Material.toString(), Util.getBlockString(type, data));
+			map.put(Detailed.DroppedItems.Material.toString(), type + ":" + data);
 			map.put(Detailed.DroppedItems.World.toString(), location.getWorld().getName());
 			map.put(Detailed.DroppedItems.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.DroppedItems.YCoord.toString(), location.getBlockY());
@@ -368,7 +368,7 @@ public class ItemsData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.PickedupItems.PlayerId.toString(), playerId);
-			map.put(Detailed.PickedupItems.Material.toString(), Util.getBlockString(type, data));
+			map.put(Detailed.PickedupItems.Material.toString(), type + ":" + data);
 			map.put(Detailed.PickedupItems.World.toString(), location.getWorld().getName());
 			map.put(Detailed.PickedupItems.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.PickedupItems.YCoord.toString(), location.getBlockY());
@@ -419,7 +419,7 @@ public class ItemsData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.UsedItems.PlayerId.toString(), playerId);
-			map.put(Detailed.UsedItems.Material.toString(), Util.getBlockString(type, data));
+			map.put(Detailed.UsedItems.Material.toString(), type + ":" + data);
 			map.put(Detailed.UsedItems.World.toString(), location.getWorld().getName());
 			map.put(Detailed.UsedItems.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.UsedItems.YCoord.toString(), location.getBlockY());

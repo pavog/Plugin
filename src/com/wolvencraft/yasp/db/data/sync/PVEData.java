@@ -167,7 +167,7 @@ public class PVEData implements _DataStore{
 			List<QueryResult> results = Query.table(TotalPVEKillsTable.TableName.toString())
 				.condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-				.condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
+				.condition(TotalPVEKillsTable.Material.toString(), weaponType + ":" + weaponData)
 				.selectAll();
 			if(results.isEmpty()) Query.table(TotalPVEKillsTable.TableName.toString()).value(getValues(playerId));
 			else {
@@ -182,7 +182,7 @@ public class PVEData implements _DataStore{
 				.value(getValues(playerId))
 				.condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
 				.condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-				.condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
+				.condition(TotalPVEKillsTable.Material.toString(), weaponType + ":" + weaponData)
 				.update();
 			fetchData(playerId);
 			return result;
@@ -193,7 +193,7 @@ public class PVEData implements _DataStore{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalPVEKillsTable.PlayerId.toString(), playerId);
 			map.put(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId());
-			map.put(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData));
+			map.put(TotalPVEKillsTable.Material.toString(), weaponType + ":" + weaponData);
 			map.put(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths);
 			map.put(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths);
 			return map;
@@ -269,7 +269,7 @@ public class PVEData implements _DataStore{
 				map.put(Detailed.PVEKills.Material.toString(), "-1:0");
 			} else {
 				map.put(Detailed.PVEKills.PlayerKilled.toString(), 0);
-				map.put(Detailed.PVEKills.Material.toString(), Util.getBlockString(weaponType, weaponData));
+				map.put(Detailed.PVEKills.Material.toString(), weaponType + ":" + weaponData);
 			}
 			map.put(Detailed.PVEKills.World.toString(), location.getWorld().getName());
 			map.put(Detailed.PVEKills.XCoord.toString(), location.getBlockX());
