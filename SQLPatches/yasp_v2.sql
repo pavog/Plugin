@@ -38,7 +38,6 @@ INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("weather_durat
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online_time", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("players_allowed", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("players_online", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("entities_count", "0");
 
 -- Materials
@@ -250,6 +249,7 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:1", "hea
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:2", "head_block_zombie");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:3", "head_block_steve");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:4", "head_block_creeper");
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:5", "head_block_player");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("145:0", "anvil");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("146:0", "trapped_chest");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("147:0", "weighted_pressure_plate_light");
@@ -506,6 +506,7 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:1", "hea
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:2", "head_zombie");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:3", "head_steve");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:4", "head_creeper");
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:5", "head_player");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("398:0", "carrot_on_a_stick");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("399:0", "nether_star");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("400:0", "pumpkin_pie");
