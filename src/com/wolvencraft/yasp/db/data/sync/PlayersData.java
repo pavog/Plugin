@@ -212,7 +212,8 @@ public class PlayersData implements _DataStore {
 		 */
 		public DistancePlayers(int playerId) {
 			this.foot = 0;
-			this.swimmed = 0;
+			this.swim = 0;
+			this.flight = 0;
 			this.boat = 0;
 			this.minecart = 0;
 			this.pig = 0;
@@ -221,7 +222,8 @@ public class PlayersData implements _DataStore {
 		}
 		
 		private double foot;
-		private double swimmed;
+		private double swim;
+		private double flight;
 		private double boat;
 		private double minecart;
 		private double pig;
@@ -234,7 +236,8 @@ public class PlayersData implements _DataStore {
 			if(results.isEmpty()) Query.table(DistancePlayersTable.TableName.toString()).value(getValues(playerId)).insert();
 			else {
 				foot = results.get(0).getValueAsInteger(DistancePlayersTable.Foot.toString());
-				swimmed = results.get(0).getValueAsInteger(DistancePlayersTable.Swimmed.toString());
+				swim = results.get(0).getValueAsInteger(DistancePlayersTable.Swimmed.toString());
+				flight = results.get(0).getValueAsInteger(DistancePlayersTable.Flight.toString());
 				boat = results.get(0).getValueAsInteger(DistancePlayersTable.Boat.toString());
 				minecart = results.get(0).getValueAsInteger(DistancePlayersTable.Minecart.toString());
 				pig = results.get(0).getValueAsInteger(DistancePlayersTable.Pig.toString());
@@ -256,7 +259,8 @@ public class PlayersData implements _DataStore {
 			Map<String, Object> valueMap = new HashMap<String, Object>();
 			valueMap.put(DistancePlayersTable.PlayerId.toString(), playerId);
 			valueMap.put(DistancePlayersTable.Foot.toString(), foot);
-			valueMap.put(DistancePlayersTable.Swimmed.toString(), swimmed);
+			valueMap.put(DistancePlayersTable.Swimmed.toString(), swim);
+			valueMap.put(DistancePlayersTable.Flight.toString(), flight);
 			valueMap.put(DistancePlayersTable.Boat.toString(), boat);
 			valueMap.put(DistancePlayersTable.Minecart.toString(), minecart);
 			valueMap.put(DistancePlayersTable.Pig.toString(), pig);
@@ -273,7 +277,7 @@ public class PlayersData implements _DataStore {
 		 * Increments the distance swimmed.
 		 * @param distance Additional distance swimmed.
 		 */
-		public void addDistanceSwimmed(double distance) { swimmed += distance; }
+		public void addDistanceSwimmed(double distance) { swim += distance; }
 		
 		/**
 		 * Increments the distance traveled by boat.
@@ -293,6 +297,11 @@ public class PlayersData implements _DataStore {
 		 */
 		public void addDistancePig(double distance) { pig += distance; }
 		
+		/**
+		 * Increments the distance flown.
+		 * @param distance Additional distance flown
+		 */
+		public void addDistanceFlown(double distance) { flight += distance; }
 	}
 	
 	public class MiscInfoPlayers implements NormalData {

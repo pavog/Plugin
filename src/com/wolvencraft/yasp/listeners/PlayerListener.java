@@ -112,6 +112,8 @@ public class PlayerListener implements Listener {
 			}
 		} else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
 			AsyncDataCollector.get(player).player().distance().addDistanceSwimmed(distance);
+		} else if (player.isFlying()) {
+			AsyncDataCollector.get(player).player().distance().addDistanceFlown(distance);
 		} else {
 			AsyncDataCollector.get(player).player().distance().addDistanceFoot(distance);
 		}
