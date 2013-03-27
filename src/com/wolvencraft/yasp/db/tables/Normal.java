@@ -130,6 +130,7 @@ public class Normal {
 		FoodEaten("food_eaten"),
 		ArrowsShot("arrows_shot"),
 		DamageTaken("damage_taken"),
+		TimesJumped("times_jumped"),
 		BedsEntered("beds_entered"),
 		PortalsEntered("portals_entered"),
 		WordsSaid("words_said"),

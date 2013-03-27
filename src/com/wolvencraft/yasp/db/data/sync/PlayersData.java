@@ -357,6 +357,8 @@ public class PlayersData implements _DataStore {
 		private int bedsEntered;
 		private int portalsEntered;
 		
+		private int jumps;
+		
 		private int wordsSaid;
 		private int commandsSent;
 		
@@ -416,6 +418,8 @@ public class PlayersData implements _DataStore {
 			map.put(MiscInfoPlayersTable.BedsEntered.toString(), bedsEntered);
 			map.put(MiscInfoPlayersTable.PortalsEntered.toString(), portalsEntered);
 			
+			map.put(MiscInfoPlayersTable.TimesJumped.toString(), jumps);
+			
 			map.put(MiscInfoPlayersTable.WordsSaid.toString(), wordsSaid);
 			map.put(MiscInfoPlayersTable.CommandsSent.toString(), commandsSent);
 			
@@ -469,6 +473,10 @@ public class PlayersData implements _DataStore {
 		
 		public void arrowShot() {
 			arrowsShot++;
+		}
+		
+		public void jumped() {
+			jumps++;
 		}
 		
 		public void damageTaken(int damage) {

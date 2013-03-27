@@ -21,6 +21,7 @@ package com.wolvencraft.yasp.listeners;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -116,7 +117,10 @@ public class PlayerListener implements Listener {
 		} else if (player.isFlying()) {
 			AsyncDataCollector.get(player).player().distance().addDistanceFlown(distance);
 		} else {
-			AsyncDataCollector.get(player).player().distance().addDistanceFoot(distance);
+			LocalSession session = AsyncDataCollector.get(player);
+			if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
+				session.player().misc().jumped();
+			session.player().distance().addDistanceFoot(distance);
 		}
 	}
 	
