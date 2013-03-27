@@ -25,7 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import com.wolvencraft.yasp.AsyncDataCollector;
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.util.Util;
 
@@ -50,7 +50,7 @@ public class BlockListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "block.break")) return;
-		AsyncDataCollector
+		DataCollector
 			.get(player)
 			.blocks()
 			.blockBreak(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
@@ -61,7 +61,7 @@ public class BlockListener implements Listener {
 		if(StatsPlugin.getPaused()) return;
 		Player player = event.getPlayer();
 		if(Util.isExempt(player, "block.place")) return;
-		AsyncDataCollector
+		DataCollector
 			.get(player)
 			.blocks()
 			.blockPlace(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());

@@ -26,7 +26,7 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-import com.wolvencraft.yasp.SyncDataCollector;
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
 
 /**
@@ -49,18 +49,18 @@ public class ServerListener implements Listener {
 	public void onWeatherChange(WeatherChangeEvent event) {
 		if(StatsPlugin.getPaused()) return;
 		if(!Bukkit.getWorlds().get(0).equals(event.getWorld())) return;
-		SyncDataCollector.getServerStats().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
+		DataCollector.getServerStats().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginEnable(PluginEnableEvent event) {
 		if(StatsPlugin.getPaused()) return;
-		SyncDataCollector.getServerStats().pluginNumberChange();
+		DataCollector.getServerStats().pluginNumberChange();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginDisable(PluginDisableEvent event) {
 		if(StatsPlugin.getPaused()) return;
-		SyncDataCollector.getServerStats().pluginNumberChange();
+		DataCollector.getServerStats().pluginNumberChange();
 	}
 }

@@ -35,7 +35,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.AsyncDataCollector;
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.LocalSession;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.util.Util;
@@ -76,54 +76,54 @@ public class DeathListener implements Listener {
 						if (arrow.getShooter() instanceof Player) {				// | | + Player shot Player
 							Player killer = (Player) arrow.getShooter();
 							if(Util.isExempt(victim, "death.pvp") || Util.isExempt(killer, "death.pvp")) return;
-							LocalSession session = AsyncDataCollector.get(killer);
+							LocalSession session = DataCollector.get(killer);
 							session.PVP().playerKilledPlayer(victim, new ItemStack(Material.ARROW));
 							session.player().misc().playerKilled(victim);
 						} else if (arrow.getShooter() instanceof Creature) {	// | | + Creature shot Player
 							if(Util.isExempt(victim, "death.pve")) return;
 							Creature killer = (Creature) arrow.getShooter();
-							LocalSession session = AsyncDataCollector.get(victim);
+							LocalSession session = DataCollector.get(victim);
 							session.PVE().creatureKilledPlayer(killer, new ItemStack(Material.ARROW));
 							session.player().misc().died();
 						}
 				} else if (killerEntity instanceof Player) {					// | + Player killed Player
 					Player killer = (Player) killerEntity;
 					if(Util.isExempt(victim, "death.pvp") || Util.isExempt(killer, "death.pvp")) return;
-					LocalSession session = AsyncDataCollector.get(killer);
+					LocalSession session = DataCollector.get(killer);
 					session.PVP().playerKilledPlayer(victim, killer.getItemInHand());
 					session.player().misc().playerKilled(victim);
 				} else if (killerEntity instanceof Explosive) {					// | + Player exploded
 					if(Util.isExempt(victim, "death.other")) return;
-					LocalSession session = AsyncDataCollector.get(victim);
+					LocalSession session = DataCollector.get(victim);
 					session.deaths().playerDied(victim.getLocation(), cause);
 					session.player().misc().died();
 				} else if (killerEntity instanceof Creature) {					// | + Creature killed Player
 					if(Util.isExempt(victim, "death.pve")) return;
 					Creature killer = (Creature) killerEntity;
-					LocalSession session = AsyncDataCollector.get(victim);
+					LocalSession session = DataCollector.get(victim);
 					session.PVE().creatureKilledPlayer(killer, new ItemStack(Material.AIR));
 					session.player().misc().died();
 				} else if (killerEntity instanceof Slime) {						// | + Slime killed player
 					if(Util.isExempt(victim, "death.pve")) return;
 					Creature killer = (Creature) killerEntity;
 					//TODO Check if the Slime kill behavior is the same as the one with Creature
-					LocalSession session = AsyncDataCollector.get(victim);
+					LocalSession session = DataCollector.get(victim);
 					session.PVE().creatureKilledPlayer(killer, new ItemStack(Material.AIR));
 					session.player().misc().died();
 				} else {														// | + Player died
 					if(Util.isExempt(victim, "death.other")) return;
-					LocalSession session = AsyncDataCollector.get(victim);
+					LocalSession session = DataCollector.get(victim);
 					session.deaths().playerDied(victim.getLocation(), cause);
 					session.player().misc().died();
 				}
 			} else if (lastDamageEvent instanceof EntityDamageByBlockEvent) {	// + Player killed by blocks
 				if(Util.isExempt(victim, "death.other")) return;
-				LocalSession session = AsyncDataCollector.get(victim);
+				LocalSession session = DataCollector.get(victim);
 				session.deaths().playerDied(victim.getLocation(), cause);
 				session.player().misc().died();
 			} else {															// + Player died
 				if(Util.isExempt(victim, "death.other")) return;
-				LocalSession session = AsyncDataCollector.get(victim);
+				LocalSession session = DataCollector.get(victim);
 				session.deaths().playerDied(victim.getLocation(), cause);
 				session.player().misc().died();
 			}
@@ -139,20 +139,20 @@ public class DeathListener implements Listener {
 				if(Util.isExempt(killer, "death.pve")) return;
 				if (victimEntity instanceof Creature) {							// | + Player shot Creature
 					Creature victim = (Creature) victimEntity;
-					AsyncDataCollector.get(killer).PVE().playerKilledCreature(victim, new ItemStack(Material.ARROW));
+					DataCollector.get(killer).PVE().playerKilledCreature(victim, new ItemStack(Material.ARROW));
 				} else if (victimEntity instanceof Slime) {						// | + Player shot Slime
 					Creature victim = (Creature) victimEntity;
-					AsyncDataCollector.get(killer).PVE().playerKilledCreature(victim, new ItemStack(Material.ARROW));
+					DataCollector.get(killer).PVE().playerKilledCreature(victim, new ItemStack(Material.ARROW));
 				}
 			} else if (killerEntity instanceof Player) {						// + Player killed an entity
 				Player killer = (Player) killerEntity;
 				if(Util.isExempt(killer, "death.pve")) return;
 				if (victimEntity instanceof Creature) {							// | + Player killed Creature
 					Creature victim = (Creature) victimEntity;
-					AsyncDataCollector.get(killer).PVE().playerKilledCreature(victim, killer.getItemInHand());
+					DataCollector.get(killer).PVE().playerKilledCreature(victim, killer.getItemInHand());
 				} else if (victimEntity instanceof Slime) {						// | + Player killed Slime
 					Creature victim = (Creature) victimEntity;
-					AsyncDataCollector.get(killer).PVE().playerKilledCreature(victim, killer.getItemInHand());
+					DataCollector.get(killer).PVE().playerKilledCreature(victim, killer.getItemInHand());
 				}
 			}
 		}

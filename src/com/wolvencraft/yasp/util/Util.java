@@ -24,9 +24,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
-import com.wolvencraft.yasp.AsyncDataCollector;
+import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.db.data.sync.Settings;
 
 /**
  * Utility class containing assorted methods that do not fit other categories
@@ -36,6 +40,38 @@ import com.wolvencraft.yasp.AsyncDataCollector;
 public class Util {
 	
 	/**
+	 * Parses the block and returns a database-safe string
+	 * @param type Block ID
+	 * @param data Block damage value
+	 * @return Database-safe string
+	 */
+	public static String getBlockString(int type, int data) {
+		if(Material.getMaterial(type) == null) return "0";
+		String result = "" + type;
+		if(!Settings.ItemsWithMetadata.checkAgainst(type)) return result;
+		if(data <= Material.getMaterial(type).getMaxDurability()) result += ":" + data;
+		return result;
+	}
+	
+	/**
+	 * Parses the block and returns a database-safe string
+	 * @param data Material data
+	 * @return Database-safe string
+	 */
+	public static String getBlockString(MaterialData data) {
+		return getBlockString(data.getItemTypeId(), data.getData());
+	}
+	
+	/**
+	 * Parses the block and returns a database-safe string
+	 * @param stack Item stack
+	 * @return Database-safe string
+	 */
+	public static String getBlockString(ItemStack stack) {
+		return getBlockString(stack.getTypeId(), stack.getData().getData());
+	}
+	
+	/**
 	 * Parses the specified string, replacing variables with corresponding values.<br />
 	 * Borrows the variables and values from ServerTotals.
 	 * @param str String to parse
@@ -43,7 +79,7 @@ public class Util {
 	 */
 	public static String parseVars(String str) {
 		if(str == null) return "";
-		Map<String, Object> values = AsyncDataCollector.getServerTotals().getValues();
+		Map<String, Object> values = DataCollector.getServerTotals().getValues();
 		Iterator<Entry<String, Object>> it = values.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();
