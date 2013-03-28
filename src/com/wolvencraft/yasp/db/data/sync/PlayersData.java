@@ -168,6 +168,7 @@ public class PlayersData implements DataStore {
 
         @Override
         public boolean pushData(int playerId) {
+            if(online) totalPlaytime += Util.getTimestamp() - sessionStart;
             boolean result = Query.table(PlayersTable.TableName.toString())
                 .value(PlayersTable.Name.toString(), playerName)
                 .value(PlayersTable.Online.toString(), online)
