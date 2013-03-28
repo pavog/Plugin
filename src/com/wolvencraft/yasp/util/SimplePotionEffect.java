@@ -1,4 +1,6 @@
 /*
+ * SimplePotionEffect.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -26,33 +28,33 @@ import org.bukkit.potion.PotionEffect;
  *
  */
 public class SimplePotionEffect {
-	
-	/**
-	 * <b>Default constructor</b><br />
-	 * Creates a new SimplePotionEffect based on a PotionEffect provided
-	 * @param effect
-	 */
-	public SimplePotionEffect(PotionEffect effect) {
-		this.id = effect.getType().getId();
-		this.time = effect.getDuration() / 20;
-	}
-	
-	private int id;
-	private int time;
-	
-	/**
-	 * Returns the ID of the effect
-	 * @return Effect ID
-	 */
-	public int getId() {
-		return id;
-	}
-	
-	/**
-	 * Returns the duration (in seconds) of the effect
-	 * @return Effect duration
-	 */
-	public int getDuration() {
-		return time;
-	}
+    
+    /**
+     * <b>Default constructor</b><br />
+     * Creates a new SimplePotionEffect based on a PotionEffect provided
+     * @param effect
+     */
+    public SimplePotionEffect(PotionEffect effect) {
+        this.id = effect.getType().getId();
+        this.time = effect.getDuration() / 20;
+    }
+    
+    private int id;
+    private int time;
+    
+    /**
+     * Returns the ID of the effect
+     * @return Effect ID
+     */
+    public int getId() {
+        return id;
+    }
+    
+    /**
+     * Returns the duration (in seconds) of the effect
+     * @return Effect duration
+     */
+    public int getDuration() {
+        return time;
+    }
 }

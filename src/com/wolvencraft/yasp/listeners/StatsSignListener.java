@@ -1,4 +1,6 @@
 /*
+ * StatsSignListener.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -30,7 +32,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.StatsSignFactory;
 
@@ -40,46 +42,46 @@ import com.wolvencraft.yasp.util.StatsSignFactory;
  *
  */
 public class StatsSignListener implements Listener {
-	
-	/**
-	 * <b>Default constructor</b><br />
-	 * Creates a new instance of the Listener and registers it with the PluginManager
-	 * @param plugin StatsPlugin instance
-	 */
-	public StatsSignListener(StatsPlugin plugin) {
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onStatsSignInit(PlayerInteractEvent event) {
-		if(!event.getPlayer().isOp()) return;
-		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
-		
-		Block block = event.getClickedBlock();
-		if(!(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) return;
-		if(!(block.getState() instanceof Sign)) return;
-		
-		Sign sign = (Sign) block.getState();
-		if(StatsSignFactory.isValid(sign)) {
-			Message.debug("Stats sign found at the location!");
-			return;
-		}
-		
-		if(!sign.getLines()[0].startsWith("<Y>")) return;
-		StatsSignFactory.add(sign);
-		Message.sendFormattedSuccess(CommandManager.getSender(), "A new StatsSign has been added");
-		StatsSignFactory.updateAll();
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onStatsSignBreak(BlockBreakEvent event) {
-		BlockState blockState = event.getBlock().getState();
-		if(!(blockState instanceof Sign)) return;
-		Sign sign = (Sign) blockState;
-		if(!StatsSignFactory.isValid(sign)) return;
-		Message.debug("Stats sign found at the location!");
-		StatsSignFactory.remove(sign);
-		Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
-	}
-	
+    
+    /**
+     * <b>Default constructor</b><br />
+     * Creates a new instance of the Listener and registers it with the PluginManager
+     * @param plugin StatsPlugin instance
+     */
+    public StatsSignListener(Statistics plugin) {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onStatsSignInit(PlayerInteractEvent event) {
+        if(!event.getPlayer().isOp()) return;
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+        
+        Block block = event.getClickedBlock();
+        if(!(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) return;
+        if(!(block.getState() instanceof Sign)) return;
+        
+        Sign sign = (Sign) block.getState();
+        if(StatsSignFactory.isValid(sign)) {
+            Message.debug("Stats sign found at the location!");
+            return;
+        }
+        
+        if(!sign.getLines()[0].startsWith("<Y>")) return;
+        StatsSignFactory.add(sign);
+        Message.sendFormattedSuccess(CommandManager.getSender(), "A new StatsSign has been added");
+        StatsSignFactory.updateAll();
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onStatsSignBreak(BlockBreakEvent event) {
+        BlockState blockState = event.getBlock().getState();
+        if(!(blockState instanceof Sign)) return;
+        Sign sign = (Sign) blockState;
+        if(!StatsSignFactory.isValid(sign)) return;
+        Message.debug("Stats sign found at the location!");
+        StatsSignFactory.remove(sign);
+        Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
+    }
+    
 }

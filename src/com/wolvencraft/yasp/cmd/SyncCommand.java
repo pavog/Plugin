@@ -1,4 +1,6 @@
 /*
+ * SyncCommand.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -22,28 +24,35 @@ import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.DataCollector;
-import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.StatsSignFactory;
 
+/**
+ * Synchronization command.<br />
+ * Forces an immediate database synchronization.
+ * @alias /stats sync
+ * @author admin
+ *
+ */
 public class SyncCommand implements BaseCommand {
 
-	@Override
-	public boolean run(String[] args) {
-		Bukkit.getScheduler().runTaskAsynchronously(StatsPlugin.getInstance(), new Runnable() {
+    @Override
+    public boolean run(String[] args) {
+        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
 
-			@Override
-			public void run() {
-				DataCollector.pushPlayerData();
-			}
-			
-		});
-		StatsSignFactory.updateAll();
-		Message.sendFormattedSuccess(CommandManager.getSender(), "Synchronization complete");
-		return true;
-	}
+            @Override
+            public void run() {
+                DataCollector.pushPlayerData();
+            }
+            
+        });
+        StatsSignFactory.updateAll();
+        Message.sendFormattedSuccess(CommandManager.getSender(), "Synchronization complete");
+        return true;
+    }
 
-	@Override
-	public void getHelp() { Message.formatHelp("sync", "", "Forces the plugin to push data to the database"); }
+    @Override
+    public void getHelp() { Message.formatHelp("sync", "", "Forces the plugin to push data to the database"); }
 
 }

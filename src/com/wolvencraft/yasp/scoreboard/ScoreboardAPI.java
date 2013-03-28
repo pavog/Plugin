@@ -1,4 +1,6 @@
 /*
+ * ScoreboardAPI.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -30,79 +32,79 @@ import org.bukkit.entity.Player;
  *
  */
 public class ScoreboardAPI implements Runnable {
-	
-	private static List<Scoreboard> boards = new ArrayList<Scoreboard>();
-	
-	@Override
-	public void run() {
-		refresh();
-	}
-	
-	/**
-	 * Returns all score boards stored in the plugin
-	 * @return List of score boards
-	 */
-	public static List<Scoreboard> get() {
-		return boards;
-	}
-	
-	/**
-	 * Returns the score board with the specified name
-	 * @param id Board name 
-	 * @return Returns the new score board, or <b>null</b> if the is no board with such name
-	 */
-	public static Scoreboard get(String id) {
-		for (Scoreboard s : boards) {
-			if (s.getId() == id) return s;
-		}
-		return null;
-	}
-	
-	/**
-	 * Adds a new score board
-	 * @param id Board name
-	 * @param priority Board priority
-	 * @return Returns the new score board, or <b>null</b> if the score board with this name already exists
-	 */
-	public static Scoreboard add(String id, int priority) {
-		for (Scoreboard board : boards) {
-			if (board.getId() == id) return null;
-		}
-		Scoreboard board = new Scoreboard(id, priority);
-		boards.add(board);
-		return board;
-	}
-	
-	/**
-	 * Adds a new score board
-	 * @param id Board name
-	 * @return Returns the new score board, or <b>null</b> if the score board with this name already exists
-	 */
-	public static Scoreboard add(String id) {
-		for (Scoreboard board : boards) {
-			if (board.getId() == id) return null;
-		}
-		Scoreboard board = new Scoreboard(id);
-		boards.add(board);
-		return board;
-	}
-	
-	/**
-	 * Refreshes all score boards for the player
-	 * @param player Player to refresh the board for
-	 */
-	public static void refresh(Player player) {
-		for (Scoreboard board : boards) {
-			board.checkVisibility(player);
-		}
-	}
-	
-	/**
-	 * Refreshes all score boards for all online players
-	 */
-	public static void refresh() {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			refresh(player);
-		}
-	}
+    
+    private static List<Scoreboard> boards = new ArrayList<Scoreboard>();
+    
+    @Override
+    public void run() {
+        refresh();
+    }
+    
+    /**
+     * Returns all score boards stored in the plugin
+     * @return List of score boards
+     */
+    public static List<Scoreboard> get() {
+        return boards;
+    }
+    
+    /**
+     * Returns the score board with the specified name
+     * @param id Board name 
+     * @return Returns the new score board, or <b>null</b> if the is no board with such name
+     */
+    public static Scoreboard get(String id) {
+        for (Scoreboard s : boards) {
+            if (s.getId() == id) return s;
+        }
+        return null;
+    }
+    
+    /**
+     * Adds a new score board
+     * @param id Board name
+     * @param priority Board priority
+     * @return Returns the new score board, or <b>null</b> if the score board with this name already exists
+     */
+    public static Scoreboard add(String id, int priority) {
+        for (Scoreboard board : boards) {
+            if (board.getId() == id) return null;
+        }
+        Scoreboard board = new Scoreboard(id, priority);
+        boards.add(board);
+        return board;
+    }
+    
+    /**
+     * Adds a new score board
+     * @param id Board name
+     * @return Returns the new score board, or <b>null</b> if the score board with this name already exists
+     */
+    public static Scoreboard add(String id) {
+        for (Scoreboard board : boards) {
+            if (board.getId() == id) return null;
+        }
+        Scoreboard board = new Scoreboard(id);
+        boards.add(board);
+        return board;
+    }
+    
+    /**
+     * Refreshes all score boards for the player
+     * @param player Player to refresh the board for
+     */
+    public static void refresh(Player player) {
+        for (Scoreboard board : boards) {
+            board.checkVisibility(player);
+        }
+    }
+    
+    /**
+     * Refreshes all score boards for all online players
+     */
+    public static void refresh() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            refresh(player);
+        }
+    }
 }

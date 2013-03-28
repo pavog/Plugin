@@ -1,4 +1,6 @@
 /*
+ * PauseCommand.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -19,26 +21,33 @@
 package com.wolvencraft.yasp.cmd;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
 
+/**
+ * Pause command.<br />
+ * Effectively pauses database synchronization. Does not pause data collection.
+ * @alias /stats pause
+ * @author bitWolfy
+ *
+ */
 public class PauseCommand implements BaseCommand {
 
-	@Override
-	public boolean run(String[] args) {
-		if(StatsPlugin.getPaused()) {
-			StatsPlugin.setPaused(false);
-			Message.send(CommandManager.getSender(), "Data collection is unpaused");
-		} else {
-			StatsPlugin.setPaused(true);
-			Message.send(CommandManager.getSender(), "Data collection is paused");
-		}
-		return true;
-	}
+    @Override
+    public boolean run(String[] args) {
+        if(Statistics.getPaused()) {
+            Statistics.setPaused(false);
+            Message.send(CommandManager.getSender(), "Data collection is unpaused");
+        } else {
+            Statistics.setPaused(true);
+            Message.send(CommandManager.getSender(), "Data collection is paused");
+        }
+        return true;
+    }
 
-	@Override
-	public void getHelp() {
-		Message.formatHelp("pause", "", "Toggles the data collection on and off");
-	}
+    @Override
+    public void getHelp() {
+        Message.formatHelp("pause", "", "Toggles the data collection on and off");
+    }
 
 }

@@ -1,4 +1,6 @@
 /*
+ * ConfirmationTrigger.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -26,20 +28,20 @@ import com.wolvencraft.yasp.LocalSession;
  *
  */
 public class ConfirmationTimer implements Runnable {
-	
-	/**
-	 * <b>Default constructor</b>
-	 * @param session Player session
-	 */
-	public ConfirmationTimer(LocalSession session) {
-		this.session = session;
-	}
-	
-	LocalSession session;
-	
-	@Override
-	public void run() {
-		if(session.isOnline()) session.setConfirmed(true);
-	}
+    
+    /**
+     * <b>Default constructor</b>
+     * @param session Player session
+     */
+    public ConfirmationTimer(LocalSession session) {
+        this.session = session;
+    }
+    
+    LocalSession session;
+    
+    @Override
+    public void run() {
+        if(session.isOnline()) session.setConfirmed(true);
+    }
 
 }

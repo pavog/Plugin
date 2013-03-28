@@ -1,4 +1,6 @@
 /* 
+ * DataCollector.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -40,177 +42,177 @@ import com.wolvencraft.yasp.util.Util;
  *
  */
 public class DataCollector implements Runnable {
-	
-	private static List<LocalSession> sessions;
-	private static ServerTotals serverTotals;
-	private static ServerStatistics serverStatistics;
+    
+    private static List<LocalSession> sessions;
+    private static ServerTotals serverTotals;
+    private static ServerStatistics serverStatistics;
 
-	/**
-	 * <b>Default constructor.</b><br />
-	 * Initializes an empty list of LocalSessions
-	 */
-	public DataCollector() {
-		sessions = new ArrayList<LocalSession>();
-		serverStatistics = new ServerStatistics();
-		serverTotals = new ServerTotals();
-		
-		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-			if(!Util.isExempt(player)) get(player);
-		}
-	}
-	
-	/**
-	 * Main database synchronization method.<br />
-	 * Performs actions in the following order:<br />
-	 * <ul>
-	 * <li>Confirm that the synchronization is not paused.</li>
-	 * <li>Push all player data to the database</li>
-	 * <li>Push generic server statistics to the database</li>
-	 * <li>Fetch server totals for signs and stat books</li>
-	 * </ul>
-	 * This method is likely to freeze the main server thread.
-	 * Asynchronous threading is strongly recommended.
-	 */
-	@Override
-	public void run() {
-		if(StatsPlugin.getPaused()) return;
-		pushPlayerData();
-		serverStatistics.pushData();
-		serverTotals.fetchData();
-	}
-	
-	/**
-	 * Forces the plugin to synchronize the player data to the database.<br />
-	 * If the player is not online, removes the session after the synchronization is complete.
-	 */
-	public static void pushPlayerData() {
-		Message.debug("Database synchronization in progress");
-		for(LocalSession session : get()) {
-			session.pushData();
-			session.playerTotals().fetchData();
-			
-			if(session.isOnline()) continue;
-			remove(session);
-			
-			if(session.getConfirmed()) continue;
-			Query.table(Normal.PlayersTable.TableName.toString())
-					.condition(PlayersTable.Name.toString(), session.getPlayerName())
-					.delete();
-		}
-	}
-	
-	/**
-	 * Cycles through all open player sessions and dumps their data.
-	 * After that, clears the session list.
-	 */
-	public static void dumpPlayerData() {
-		for(LocalSession session : get()) session.dump();
-		sessions.clear();
-	}
-	
-	/**
-	 * Returns all stored sessions.
-	 * @return List of stored player sessions
-	 */
-	private static List<LocalSession> get() {
-		List<LocalSession> tempList = new ArrayList<LocalSession>();
-		for(LocalSession session : sessions) tempList.add(session);
-		return tempList;
-	}
-	
-	/**
-	 * Returns the LocalSession associated with the specified player.<br />
-	 * If no session is found, it will be created.
-	 * @param player Tracked player
-	 * @return LocalSession associated with the player.
-	 */
-	public static LocalSession get(Player player) {
-		String username = player.getName();
-		for(LocalSession session : sessions) {
-			if(session.getPlayerName().equals(username)) {
-				return session;
-			}
-		}
-		Message.debug("Creating a new user session for " + username);
-		LocalSession newSession = new LocalSession(player);
-		newSession.setConfirmed(false);
-		sessions.add(newSession);
-		if(Settings.RemoteConfiguration.ShowFirstJoinMessages.asBoolean())
-			Message.send(
-				player,
-				Settings.RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
-			);
-		return newSession;
-	}
-	
-	/**
-	 * Attempts to find a player session by the name. The player might be offline.
-	 * @param playerName Name of the player
-	 * @return OfflineSession with the specified player name, even if there isn't one.
-	 */
-	public static OfflineSession get(String playerName) {
-		Message.debug("Fetching an offline session for " + playerName);
-		return new OfflineSession(playerName);
-	}
-	
-	/**
-	 * Removes the specified session
-	 * @param session Session to remove
-	 */
-	public static void remove(LocalSession session) {
-		Message.debug("Removing a user session for " + session.getPlayerName());
-		sessions.remove(session);
-	}
-	
-	/**
-	 * Returns the PlayerID corresponding with the specified username.<br />
-	 * If the username is not in the database, a dummy entry is created, and an ID is assigned.
-	 * @param player Player name to look up in the database
-	 * @return <b>Integer</b> PlayerID corresponding to the specified username
-	 */
-	public static Integer getPlayerId(Player player) {
-		String username = player.getName();
-		Message.debug("Retrieving a player ID for " + username);
-		
-		int playerId = -1;
-		QueryResult playerRow = Query.table(PlayersTable.TableName.toString())
-				.column(PlayersTable.PlayerId.toString())
-				.column(PlayersTable.Name.toString())
-				.condition(PlayersTable.Name.toString(), username)
-				.select();
-		
-		if(playerRow == null) {
-			Query.table(PlayersTable.TableName.toString())
-					.value(PlayersTable.Name.toString(), username)
-					.insert();
-			
-			playerRow = Query
-					.table(PlayersTable.TableName.toString())
-					.column(PlayersTable.PlayerId.toString())
-					.column(PlayersTable.Name.toString())
-					.condition(PlayersTable.Name.toString(), username)
-					.select();
-		}
-		
-		playerId = playerRow.getValueAsInteger(PlayersTable.PlayerId.toString());
-		
-		Message.debug("User ID found: " + playerId);
-		return playerId;
-	}
-	
-	/**
-	 * Returns the server totals for signs and books
-	 * @return Server totals
-	 */
-	public static ServerTotals getTotals() {
-		return serverTotals;
-	}
-	
-	/**
-	 * Returns the generic server statistics
-	 * @return ServerStatistics
-	 */
-	public static ServerStatistics getStats() {
-		return serverStatistics;
-	}
+    /**
+     * <b>Default constructor.</b><br />
+     * Initializes an empty list of LocalSessions
+     */
+    public DataCollector() {
+        sessions = new ArrayList<LocalSession>();
+        serverStatistics = new ServerStatistics();
+        serverTotals = new ServerTotals();
+        
+        for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+            if(!Util.isExempt(player)) get(player);
+        }
+    }
+    
+    /**
+     * Main database synchronization method.<br />
+     * Performs actions in the following order:<br />
+     * <ul>
+     * <li>Confirm that the synchronization is not paused.</li>
+     * <li>Push all player data to the database</li>
+     * <li>Push generic server statistics to the database</li>
+     * <li>Fetch server totals for signs and statistics books</li>
+     * </ul>
+     * This method is likely to freeze the main server thread.
+     * Asynchronous threading is strongly recommended.
+     */
+    @Override
+    public void run() {
+        if(Statistics.getPaused()) return;
+        pushPlayerData();
+        serverStatistics.pushData();
+        serverTotals.fetchData();
+    }
+    
+    /**
+     * Forces the plugin to synchronize the player data to the database.<br />
+     * If the player is not online, removes the session after the synchronization is complete.
+     */
+    public static void pushPlayerData() {
+        Message.debug("Database synchronization in progress");
+        for(LocalSession session : get()) {
+            session.pushData();
+            session.playerTotals().fetchData();
+            
+            if(session.isOnline()) continue;
+            remove(session);
+            
+            if(session.getConfirmed()) continue;
+            Query.table(Normal.PlayersTable.TableName.toString())
+                    .condition(PlayersTable.Name.toString(), session.getPlayerName())
+                    .delete();
+        }
+    }
+    
+    /**
+     * Cycles through all open player sessions and dumps their data.
+     * After that, clears the session list.
+     */
+    public static void dumpPlayerData() {
+        for(LocalSession session : get()) session.dump();
+        sessions.clear();
+    }
+    
+    /**
+     * Returns all stored sessions.
+     * @return List of stored player sessions
+     */
+    private static List<LocalSession> get() {
+        List<LocalSession> tempList = new ArrayList<LocalSession>();
+        for(LocalSession session : sessions) tempList.add(session);
+        return tempList;
+    }
+    
+    /**
+     * Returns the LocalSession associated with the specified player.<br />
+     * If no session is found, it will be created.
+     * @param player Tracked player
+     * @return LocalSession associated with the player.
+     */
+    public static LocalSession get(Player player) {
+        String username = player.getName();
+        for(LocalSession session : sessions) {
+            if(session.getPlayerName().equals(username)) {
+                return session;
+            }
+        }
+        Message.debug("Creating a new user session for " + username);
+        LocalSession newSession = new LocalSession(player);
+        newSession.setConfirmed(false);
+        sessions.add(newSession);
+        if(Settings.RemoteConfiguration.ShowFirstJoinMessages.asBoolean())
+            Message.send(
+                player,
+                Settings.RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
+            );
+        return newSession;
+    }
+    
+    /**
+     * Attempts to find a player session by the name. The player might be offline.
+     * @param playerName Name of the player
+     * @return OfflineSession with the specified player name, even if there isn't one.
+     */
+    public static OfflineSession get(String playerName) {
+        Message.debug("Fetching an offline session for " + playerName);
+        return new OfflineSession(playerName);
+    }
+    
+    /**
+     * Removes the specified session
+     * @param session Session to remove
+     */
+    public static void remove(LocalSession session) {
+        Message.debug("Removing a user session for " + session.getPlayerName());
+        sessions.remove(session);
+    }
+    
+    /**
+     * Returns the PlayerID corresponding with the specified username.<br />
+     * If the username is not in the database, a dummy entry is created, and an ID is assigned.
+     * @param player Player name to look up in the database
+     * @return <b>Integer</b> PlayerID corresponding to the specified username
+     */
+    public static Integer getPlayerId(Player player) {
+        String username = player.getName();
+        Message.debug("Retrieving a player ID for " + username);
+        
+        int playerId = -1;
+        QueryResult playerRow = Query.table(PlayersTable.TableName.toString())
+                .column(PlayersTable.PlayerId.toString())
+                .column(PlayersTable.Name.toString())
+                .condition(PlayersTable.Name.toString(), username)
+                .select();
+        
+        if(playerRow == null) {
+            Query.table(PlayersTable.TableName.toString())
+                    .value(PlayersTable.Name.toString(), username)
+                    .insert();
+            
+            playerRow = Query
+                    .table(PlayersTable.TableName.toString())
+                    .column(PlayersTable.PlayerId.toString())
+                    .column(PlayersTable.Name.toString())
+                    .condition(PlayersTable.Name.toString(), username)
+                    .select();
+        }
+        
+        playerId = playerRow.getValueAsInteger(PlayersTable.PlayerId.toString());
+        
+        Message.debug("User ID found: " + playerId);
+        return playerId;
+    }
+    
+    /**
+     * Returns the server totals for signs and books
+     * @return Server totals
+     */
+    public static ServerTotals getTotals() {
+        return serverTotals;
+    }
+    
+    /**
+     * Returns the generic server statistics
+     * @return ServerStatistics
+     */
+    public static ServerStatistics getStats() {
+        return serverStatistics;
+    }
 }

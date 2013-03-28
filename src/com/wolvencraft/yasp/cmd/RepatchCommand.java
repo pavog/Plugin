@@ -1,4 +1,6 @@
 /*
+ * RepatchCommand.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -23,37 +25,44 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.DataCollector;
-import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
+/**
+ * Repatch command.<br />
+ * Forces a database patch to be executed.
+ * @alias /stats repatch
+ * @author bitWolfy
+ *
+ */
 public class RepatchCommand implements BaseCommand {
 
-	@Override
-	public boolean run(String[] args) {
-		Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database...");
-		DataCollector.dumpPlayerData();
-		StatsPlugin.setPaused(true);
-		Bukkit.getScheduler().runTaskAsynchronously(StatsPlugin.getInstance(), new Runnable() {
+    @Override
+    public boolean run(String[] args) {
+        Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database...");
+        DataCollector.dumpPlayerData();
+        Statistics.setPaused(true);
+        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
 
-			@Override
-			public void run() {
-				try { Database.getInstance().runPatch(true); }
-				catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed!"); }
-				finally {
-					for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-						if(!Util.isExempt(player)) DataCollector.get(player);
-					}
-					Message.sendFormattedSuccess(CommandManager.getSender(), "Patching finished.");
-				}
-			}
-			
-		});
-		return true;
-	}
+            @Override
+            public void run() {
+                try { Database.getInstance().runPatch(true); }
+                catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed!"); }
+                finally {
+                    for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+                        if(!Util.isExempt(player)) DataCollector.get(player);
+                    }
+                    Message.sendFormattedSuccess(CommandManager.getSender(), "Patching finished.");
+                }
+            }
+            
+        });
+        return true;
+    }
 
-	@Override
-	public void getHelp() { Message.formatHelp("repatch", "", "Attempts to re-patch the database"); }
+    @Override
+    public void getHelp() { Message.formatHelp("repatch", "", "Attempts to re-patch the database"); }
 
 }

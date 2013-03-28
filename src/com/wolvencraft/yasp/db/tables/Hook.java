@@ -1,4 +1,6 @@
 /*
+ * Hook.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -25,42 +27,42 @@ package com.wolvencraft.yasp.db.tables;
  *
  */
 public class Hook {
-	
-	/**
-	 * Represents the <i>hook_vault</i> table.
-	 * @author bitWolfy
-	 *
-	 */
-	public enum VaultTable {
-		TableName("hook_vault"),
-		PlayerId("player_id"),
-		GroupName("group_name"),
-		Balance("balance");
-		
-		VaultTable (String columnName) { this.columnName = columnName; }
-		
-		private String columnName;
-		
-		@Override
-		public String toString() { return columnName; }
-	}
-	
-	/**
-	 * Represents the <i>hook_worldguard</i> table.
-	 * @author bitWolfy
-	 *
-	 */
-	public enum WorldGuardTable {
-		TableName("hook_worldguard"),
-		PlayerId("player_id"),
-		RegionName("region_name");
-		
-		WorldGuardTable (String columnName) { this.columnName = columnName; }
-		
-		private String columnName;
-		
-		@Override
-		public String toString() { return columnName; }
-	}
-	
+    
+    /**
+     * Represents the <i>hook_vault</i> table.
+     * @author bitWolfy
+     *
+     */
+    public enum VaultTable {
+        TableName("hook_vault"),
+        PlayerId("player_id"),
+        GroupName("group_name"),
+        Balance("balance");
+        
+        VaultTable (String columnName) { this.columnName = columnName; }
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
+     * Represents the <i>hook_worldguard</i> table.
+     * @author bitWolfy
+     *
+     */
+    public enum WorldGuardTable {
+        TableName("hook_worldguard"),
+        PlayerId("player_id"),
+        RegionName("region_name");
+        
+        WorldGuardTable (String columnName) { this.columnName = columnName; }
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
 }

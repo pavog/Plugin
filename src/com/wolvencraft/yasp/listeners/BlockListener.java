@@ -1,4 +1,6 @@
 /*
+ * BlockListener.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -26,7 +28,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.wolvencraft.yasp.DataCollector;
-import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -35,35 +37,35 @@ import com.wolvencraft.yasp.util.Util;
  *
  */
 public class BlockListener implements Listener {
-	
-	/**
-	 * <b>Default constructor</b><br />
-	 * Creates a new instance of the Listener and registers it with the PluginManager
-	 * @param plugin StatsPlugin instance
-	 */
-	public BlockListener(StatsPlugin plugin) {
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	}
+    
+    /**
+     * <b>Default constructor</b><br />
+     * Creates a new instance of the Listener and registers it with the PluginManager
+     * @param plugin StatsPlugin instance
+     */
+    public BlockListener(Statistics plugin) {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onBlockBreak(BlockBreakEvent event) {
-		if(StatsPlugin.getPaused()) return;
-		Player player = event.getPlayer();
-		if(Util.isExempt(player, "block.break")) return;
-		DataCollector
-			.get(player)
-			.blocks()
-			.blockBreak(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
-	}
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+        if(Statistics.getPaused()) return;
+        Player player = event.getPlayer();
+        if(Util.isExempt(player, "block.break")) return;
+        DataCollector
+            .get(player)
+            .blocks()
+            .blockBreak(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onBlockPlace(BlockPlaceEvent event) {
-		if(StatsPlugin.getPaused()) return;
-		Player player = event.getPlayer();
-		if(Util.isExempt(player, "block.place")) return;
-		DataCollector
-			.get(player)
-			.blocks()
-			.blockPlace(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
-	}
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if(Statistics.getPaused()) return;
+        Player player = event.getPlayer();
+        if(Util.isExempt(player, "block.place")) return;
+        DataCollector
+            .get(player)
+            .blocks()
+            .blockPlace(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
+    }
 }

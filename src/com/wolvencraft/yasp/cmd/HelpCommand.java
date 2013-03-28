@@ -1,4 +1,6 @@
 /*
+ * HelpCommand.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -21,15 +23,23 @@ package com.wolvencraft.yasp.cmd;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.util.Message;
 
+/**
+ * Help command.<br />
+ * Gathers the help messages from all commands registered in the <code>CommandManager</code>
+ * and combines them in a single list for readability.
+ * @alias /stats help
+ * @author bitWolfy
+ *
+ */
 public class HelpCommand implements BaseCommand {
 
-	@Override
-	public boolean run(String[] args) {
-		Message.formatHeader(20, "YASP Help");
-		for(CommandManager cmd : CommandManager.values()) { cmd.getHelp(); }
-		return true;
-	}
-	
-	@Override
-	public void getHelp() {}
+    @Override
+    public boolean run(String[] args) {
+        Message.formatHeader(20, "YASP Help");
+        for(CommandManager cmd : CommandManager.values()) { cmd.getHelp(); }
+        return true;
+    }
+    
+    @Override
+    public void getHelp() {}
 }

@@ -1,4 +1,6 @@
 /*
+ * BaseCommand.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -19,21 +21,22 @@
 package com.wolvencraft.yasp.cmd;
 
 /**
- * Common interface for command classes
+ * Common interface for command classes.<br />
+ * Commands <b>must</b> implement this interface in order to be used in the <code>CommandManager</code>.
  * @author bitWolfy
  *
  */
 public interface BaseCommand {
-	
-	/**
-	 * Executes the command according to the arguments in the parameters
-	 * @param args Command parameters
-	 * @return <b>true</b> if the command was executed successfully, <b>false</b> if an error occurred
-	 */
-	public boolean run(String[] args);
-	
-	/**
-	 * Returns the help line associated with the command.
-	 */
-	public void getHelp();
+    
+    /**
+     * Executes the command according to the arguments in the parameters
+     * @param args Command parameters
+     * @return <b>true</b> if the command was executed successfully, <b>false</b> if an error occurred
+     */
+    public boolean run(String[] args);
+    
+    /**
+     * Returns the help line associated with the command.
+     */
+    public void getHelp();
 }
