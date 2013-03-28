@@ -125,7 +125,9 @@ public class LocalSession {
      * Returns the unique player name.
      * @return <b>String</b> Player name
      */
-    public String getPlayerName() { return playersData.general().getName(); }
+    public String getPlayerName() {
+        return playersData.general().getName();
+    }
     
     /**
      * <b>PlayersData</b> wrapper<br />
@@ -133,10 +135,9 @@ public class LocalSession {
      * @return <b>true</b> if online, <b>false</b> otherwise
      */
     public boolean isOnline() {
-        for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-            if(player.getPlayerListName().equals(playersData.general().getName())) return true;
-        }
-        return false;
+        boolean online = Bukkit.getServer().getPlayer(playersData.general().getName()) != null;
+        playersData.general().setOnline(online);
+        return online;
     }
     
     /**

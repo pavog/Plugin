@@ -170,6 +170,7 @@ public class PlayersData implements DataStore {
 
         @Override
         public boolean pushData(int playerId) {
+            online = Bukkit.getServer().getPlayer(playerName) != null;
             if(online) totalPlaytime += Util.getTimestamp() - sessionStart;
             boolean result = Query.table(PlayersTable.TableName.toString())
                 .value(PlayersTable.Name.toString(), playerName)

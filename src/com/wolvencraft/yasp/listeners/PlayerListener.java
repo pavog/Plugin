@@ -74,8 +74,8 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!Util.isTracked(player)) return;
         LocalSession session = DataCollector.get(player);
+        session.player().login(player.getLocation());
         if(session.getConfirmed()) {
-            session.player().login(player.getLocation());
             if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean())
                 Message.send(
                     player,
