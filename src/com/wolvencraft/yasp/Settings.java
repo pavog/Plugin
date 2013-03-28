@@ -65,9 +65,11 @@ public class Settings {
 	}
 	
 	public enum Modules {
+		Server("module.server"),
 		Blocks("module.blocks"),
 		Items("module.items"),
 		Deaths("module.deaths"),
+		Inventory("module.inventory"),
 		
 		HookVault("hook.vault"),
 		HookWorldGuard("hook.worldguard"),
