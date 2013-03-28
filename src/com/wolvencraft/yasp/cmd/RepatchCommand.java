@@ -53,6 +53,7 @@ public class RepatchCommand implements BaseCommand {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
                         if(!Util.isExempt(player)) DataCollector.get(player);
                     }
+                    DataCollector.getStats().pushStaticData();
                     Message.sendFormattedSuccess(CommandManager.getSender(), "Patching finished.");
                 }
             }
