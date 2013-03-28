@@ -50,6 +50,7 @@ public class Util {
 		String result = "" + type;
 		if(!Settings.ItemsWithMetadata.checkAgainst(type)) return result;
 		if(data <= Material.getMaterial(type).getMaxDurability()) result += ":" + data;
+		else result += ":0";
 		return result;
 	}
 	
