@@ -58,7 +58,8 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_distances` (
   `boat` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
   `minecart` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
   `pig` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
-  `swimmed` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
+  `swim` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
+  `flight` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`player_id`) ,
   CONSTRAINT `fk_player_id1`
     FOREIGN KEY (`player_id` )
@@ -502,6 +503,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_misc_info_players` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
   `player_id` INT NOT NULL ,
+  `player_ip` VARCHAR(32) NOT NULL ,
   `gamemode` TINYINT(2) NOT NULL DEFAULT 0 ,
   `exp_level` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
   `exp_perc` FLOAT(3,2) UNSIGNED NOT NULL DEFAULT '0.00',
@@ -514,12 +516,14 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
   `food_eaten` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `arrows_shot` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `damage_taken` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `times_jumped` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `words_said` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `commands_sent` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `beds_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `portals_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `kill_streak` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `max_kill_streak` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `potion_effects` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`player_id`) ,
   CONSTRAINT `fk_player_id9`
     FOREIGN KEY (`player_id` )
