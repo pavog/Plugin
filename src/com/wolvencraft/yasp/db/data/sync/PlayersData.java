@@ -22,13 +22,10 @@ package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
@@ -125,6 +122,14 @@ public class PlayersData implements DataStore {
      */
     public class Players implements NormalData {
         
+        private String playerName;
+        
+        private boolean online;
+        private long sessionStart;
+        private long totalPlaytime;
+        private long firstJoin;
+        private int logins;
+        
         public Players (int playerId, Player player) {
             this.playerName = player.getName();
             
@@ -139,50 +144,41 @@ public class PlayersData implements DataStore {
             logins++;
         }
         
-        private String playerName;
-        
-        private boolean online;
-        private long sessionStart;
-        private long totalPlaytime;
-        private long firstJoin;
-        private int logins;
-        
         @Override
         public void fetchData(int playerId) {
-            List<QueryResult> results = Query.table(PlayersTable.TableName.toString())
+            QueryResult result = Query.table(PlayersTable.TableName.toString())
                 .column(PlayersTable.PlayerId.toString(), PlayersTable.Logins.toString())
                 .condition(PlayersTable.PlayerId.toString(), playerId + "")
-                .selectAll();
-            if(results.isEmpty()) Query.table(PlayersTable.TableName.toString()).value(getValues(playerId)).insert();
-            else {
-                logins = results.get(0).getValueAsInteger(PlayersTable.Logins.toString());
-                totalPlaytime = results.get(0).getValueAsLong(PlayersTable.TotalPlaytime.toString());
+                .select();
+            if(result == null) {
+                Query.table(PlayersTable.TableName.toString())
+                    .value(PlayersTable.PlayerId.toString(), playerId)
+                    .value(PlayersTable.Name.toString(), playerName)
+                    .value(PlayersTable.Online.toString(), online)
+                    .value(PlayersTable.SessionStart.toString(), sessionStart)
+                    .value(PlayersTable.FirstLogin.toString(), firstJoin)
+                    .value(PlayersTable.Logins.toString(), logins)
+                    .value(PlayersTable.TotalPlaytime.toString(), totalPlaytime)
+                    .insert();
+            } else {
+                logins = result.getValueAsInteger(PlayersTable.Logins.toString());
+                totalPlaytime = result.getValueAsLong(PlayersTable.TotalPlaytime.toString());
             }
         }
 
         @Override
         public boolean pushData(int playerId) {
             boolean result = Query.table(PlayersTable.TableName.toString())
-                .value(getValues(playerId))
+                .value(PlayersTable.Name.toString(), playerName)
+                .value(PlayersTable.Online.toString(), online)
+                .value(PlayersTable.SessionStart.toString(), sessionStart)
+                .value(PlayersTable.FirstLogin.toString(), firstJoin)
+                .value(PlayersTable.Logins.toString(), logins)
+                .value(PlayersTable.TotalPlaytime.toString(), totalPlaytime)
                 .condition(PlayersTable.PlayerId.toString(), playerId + "")
                 .update(true);
             fetchData(playerId);
             return result;
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            totalPlaytime += Util.getTimestamp() - sessionStart;
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(PlayersTable.PlayerId.toString(), playerId);
-            map.put(PlayersTable.Name.toString(), playerName);
-            if(online) map.put(PlayersTable.Online.toString(), 1);
-            else map.put(PlayersTable.Online.toString(), 0);
-            map.put(PlayersTable.SessionStart.toString(), sessionStart);
-            map.put(PlayersTable.FirstLogin.toString(), firstJoin);
-            map.put(PlayersTable.Logins.toString(), logins);
-            map.put(PlayersTable.TotalPlaytime.toString(), totalPlaytime);
-            return map;
         }
         
         /**
@@ -209,6 +205,13 @@ public class PlayersData implements DataStore {
      */
     public class DistancePlayers implements NormalData {
         
+        private double foot;
+        private double swim;
+        private double flight;
+        private double boat;
+        private double minecart;
+        private double pig;
+        
         /**
          * Default constructor. Takes in the Player object and pulls corresponding values from the remote database.<br />
          * If no data is found in the database, the default values are inserted.
@@ -225,118 +228,97 @@ public class PlayersData implements DataStore {
             fetchData(playerId);
         }
         
-        private double foot;
-        private double swim;
-        private double flight;
-        private double boat;
-        private double minecart;
-        private double pig;
-        
         @Override
         public void fetchData(int playerId) {
-            List<QueryResult> results = Query.table(DistancePlayersTable.TableName.toString())
+            QueryResult result = Query.table(DistancePlayersTable.TableName.toString())
                 .condition(DistancePlayersTable.PlayerId.toString(), playerId + "")
-                .selectAll();
-            if(results.isEmpty()) Query.table(DistancePlayersTable.TableName.toString()).value(getValues(playerId)).insert();
+                .select();
+            if(result == null) {
+                Query.table(DistancePlayersTable.TableName.toString())
+                    .value(DistancePlayersTable.PlayerId.toString(), playerId)
+                    .value(DistancePlayersTable.Foot.toString(), foot)
+                    .value(DistancePlayersTable.Swimmed.toString(), swim)
+                    .value(DistancePlayersTable.Flight.toString(), flight)
+                    .value(DistancePlayersTable.Boat.toString(), boat)
+                    .value(DistancePlayersTable.Minecart.toString(), minecart)
+                    .value(DistancePlayersTable.Pig.toString(), pig)
+                    .insert();
+            }
             else {
-                foot = results.get(0).getValueAsInteger(DistancePlayersTable.Foot.toString());
-                swim = results.get(0).getValueAsInteger(DistancePlayersTable.Swimmed.toString());
-                flight = results.get(0).getValueAsInteger(DistancePlayersTable.Flight.toString());
-                boat = results.get(0).getValueAsInteger(DistancePlayersTable.Boat.toString());
-                minecart = results.get(0).getValueAsInteger(DistancePlayersTable.Minecart.toString());
-                pig = results.get(0).getValueAsInteger(DistancePlayersTable.Pig.toString());
+                foot = result.getValueAsInteger(DistancePlayersTable.Foot.toString());
+                swim = result.getValueAsInteger(DistancePlayersTable.Swimmed.toString());
+                flight = result.getValueAsInteger(DistancePlayersTable.Flight.toString());
+                boat = result.getValueAsInteger(DistancePlayersTable.Boat.toString());
+                minecart = result.getValueAsInteger(DistancePlayersTable.Minecart.toString());
+                pig = result.getValueAsInteger(DistancePlayersTable.Pig.toString());
             }
         }
 
         @Override
         public boolean pushData(int playerId) {
             boolean result = Query.table(DistancePlayersTable.TableName.toString())
-                .value(getValues(playerId))
+                .value(DistancePlayersTable.Foot.toString(), foot)
+                .value(DistancePlayersTable.Swimmed.toString(), swim)
+                .value(DistancePlayersTable.Flight.toString(), flight)
+                .value(DistancePlayersTable.Boat.toString(), boat)
+                .value(DistancePlayersTable.Minecart.toString(), minecart)
+                .value(DistancePlayersTable.Pig.toString(), pig)
                 .condition(DistancePlayersTable.PlayerId.toString(), playerId + "")
                 .update(true);
             fetchData(playerId);
             return result;
         }
         
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> valueMap = new HashMap<String, Object>();
-            valueMap.put(DistancePlayersTable.PlayerId.toString(), playerId);
-            valueMap.put(DistancePlayersTable.Foot.toString(), foot);
-            valueMap.put(DistancePlayersTable.Swimmed.toString(), swim);
-            valueMap.put(DistancePlayersTable.Flight.toString(), flight);
-            valueMap.put(DistancePlayersTable.Boat.toString(), boat);
-            valueMap.put(DistancePlayersTable.Minecart.toString(), minecart);
-            valueMap.put(DistancePlayersTable.Pig.toString(), pig);
-            return valueMap;
-        }
-        
         /**
          * Increments the distance traveled by foot.
          * @param distance Additional distance traveled by foot.
          */
-        public void addDistanceFoot(double distance) { foot += distance; }
+        public void addDistanceFoot(double distance) {
+            foot += distance;
+        }
         
         /**
          * Increments the distance swimmed.
          * @param distance Additional distance swimmed.
          */
-        public void addDistanceSwimmed(double distance) { swim += distance; }
+        public void addDistanceSwimmed(double distance) {
+            swim += distance;
+        }
         
         /**
          * Increments the distance traveled by boat.
          * @param distance Additional distance traveled by boat
          */
-        public void addDistanceBoat(double distance) { boat += distance; }
+        public void addDistanceBoat(double distance) {
+            boat += distance;
+        }
         
         /**
          * Increments the distance traveled by minecart.
          * @param distance Additional distance traveled by minecart
          */
-        public void addDistanceMinecart(double distance) { minecart += distance; }
+        public void addDistanceMinecart(double distance) {
+            minecart += distance;
+        }
         
         /**
          * Increments the distance traveled by pig.
          * @param distance Additional distance traveled by pig
          */
-        public void addDistancePig(double distance) { pig += distance; }
+        public void addDistancePig(double distance) {
+            pig += distance;
+        }
         
         /**
          * Increments the distance flown.
          * @param distance Additional distance flown
          */
-        public void addDistanceFlown(double distance) { flight += distance; }
+        public void addDistanceFlown(double distance) {
+            flight += distance;
+        }
     }
     
     public class MiscInfoPlayers implements NormalData {
-        
-        public MiscInfoPlayers(int playerId, Player player) {
-            this.playerName = player.getPlayerListName();
-            this.playerIp = player.getAddress().toString();
-            
-            this.potionEffects = player.getActivePotionEffects();
-            
-            this.gamemode = 0;
-            this.expPercent = player.getExp();
-            this.expTotal = player.getTotalExperience();
-            this.expLevel = player.getLevel();
-            this.foodLevel = player.getFoodLevel();
-            this.healthLevel = player.getHealth();
-            
-            this.fishCaught = 0;
-            this.timesKicked = 0;
-            this.eggsThrown = 0;
-            this.foodEaten = 0;
-            this.arrowsShot = 0;
-            this.damageTaken = 0;
-            this.wordsSaid = 0;
-            this.commandsSent = 0;
-            
-            this.curKillStreak = 0;
-            this.maxKillStreak = 0;
-            
-            fetchData(playerId);
-        }
         
         private String playerName;
         private String playerIp;
@@ -367,24 +349,76 @@ public class PlayersData implements DataStore {
         private int curKillStreak = 0;
         private int maxKillStreak = 0;
         
+        public MiscInfoPlayers(int playerId, Player player) {
+            this.playerName = player.getPlayerListName();
+            this.playerIp = player.getAddress().toString();
+            
+            this.potionEffects = player.getActivePotionEffects();
+            
+            this.gamemode = 0;
+            this.expPercent = player.getExp();
+            this.expTotal = player.getTotalExperience();
+            this.expLevel = player.getLevel();
+            this.foodLevel = player.getFoodLevel();
+            this.healthLevel = player.getHealth();
+            
+            this.fishCaught = 0;
+            this.timesKicked = 0;
+            this.eggsThrown = 0;
+            this.foodEaten = 0;
+            this.arrowsShot = 0;
+            this.damageTaken = 0;
+            this.wordsSaid = 0;
+            this.commandsSent = 0;
+            
+            this.curKillStreak = 0;
+            this.maxKillStreak = 0;
+            
+            fetchData(playerId);
+        }
+        
         @Override
         public void fetchData(int playerId) {
-            List<QueryResult> results = Query.table(MiscInfoPlayersTable.TableName.toString())
+            QueryResult result = Query.table(MiscInfoPlayersTable.TableName.toString())
                 .condition(MiscInfoPlayersTable.PlayerId.toString(), playerId + "")
-                .selectAll();
-            if(results.isEmpty()) Query.table(MiscInfoPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
-            else {
-                fishCaught = results.get(0).getValueAsInteger(MiscInfoPlayersTable.FishCaught.toString());
-                timesKicked = results.get(0).getValueAsInteger(MiscInfoPlayersTable.TimesKicked.toString());
-                eggsThrown = results.get(0).getValueAsInteger(MiscInfoPlayersTable.EggsThrown.toString());
-                foodEaten = results.get(0).getValueAsInteger(MiscInfoPlayersTable.FoodEaten.toString());
-                arrowsShot = results.get(0).getValueAsInteger(MiscInfoPlayersTable.ArrowsShot.toString());
-                damageTaken = results.get(0).getValueAsInteger(MiscInfoPlayersTable.DamageTaken.toString());
-                bedsEntered = results.get(0).getValueAsInteger(MiscInfoPlayersTable.BedsEntered.toString());
-                portalsEntered = results.get(0).getValueAsInteger(MiscInfoPlayersTable.PortalsEntered.toString());
-                wordsSaid = results.get(0).getValueAsInteger(MiscInfoPlayersTable.WordsSaid.toString());
-                commandsSent = results.get(0).getValueAsInteger(MiscInfoPlayersTable.CommandsSent.toString());
-                maxKillStreak = results.get(0).getValueAsInteger(MiscInfoPlayersTable.MaxKillStreak.toString());
+                .select();
+            if(result == null) {
+                Query.table(MiscInfoPlayersTable.TableName.toString())
+                    .value(MiscInfoPlayersTable.PlayerId.toString(), playerId)
+                    .value(MiscInfoPlayersTable.PlayerIp.toString(), playerIp)
+                    .value(MiscInfoPlayersTable.ExperiencePercent.toString(), expPercent)
+                    .value(MiscInfoPlayersTable.ExperienceTotal.toString(), expTotal)
+                    .value(MiscInfoPlayersTable.ExperienceLevel.toString(), expLevel)
+                    .value(MiscInfoPlayersTable.FoodLevel.toString(), foodLevel)
+                    .value(MiscInfoPlayersTable.HealthLevel.toString(), healthLevel)
+                    .value(MiscInfoPlayersTable.Gamemode.toString(), gamemode)
+                    .value(MiscInfoPlayersTable.FishCaught.toString(), fishCaught)
+                    .value(MiscInfoPlayersTable.TimesKicked.toString(), timesKicked)
+                    .value(MiscInfoPlayersTable.EggsThrown.toString(), eggsThrown)
+                    .value(MiscInfoPlayersTable.FoodEaten.toString(), foodEaten)
+                    .value(MiscInfoPlayersTable.ArrowsShot.toString(), arrowsShot)
+                    .value(MiscInfoPlayersTable.DamageTaken.toString(), damageTaken)
+                    .value(MiscInfoPlayersTable.BedsEntered.toString(), bedsEntered)
+                    .value(MiscInfoPlayersTable.PortalsEntered.toString(), portalsEntered)
+                    .value(MiscInfoPlayersTable.TimesJumped.toString(), jumps)
+                    .value(MiscInfoPlayersTable.WordsSaid.toString(), wordsSaid)
+                    .value(MiscInfoPlayersTable.CommandsSent.toString(), commandsSent)
+                    .value(MiscInfoPlayersTable.CurKillStreak.toString(), curKillStreak)
+                    .value(MiscInfoPlayersTable.MaxKillStreak.toString(), maxKillStreak)
+                    .value(MiscInfoPlayersTable.PotionEffects.toString(), SimplePotionEffect.toGsonArray(potionEffects))
+                    .insert();
+            } else {
+                fishCaught = result.getValueAsInteger(MiscInfoPlayersTable.FishCaught.toString());
+                timesKicked = result.getValueAsInteger(MiscInfoPlayersTable.TimesKicked.toString());
+                eggsThrown = result.getValueAsInteger(MiscInfoPlayersTable.EggsThrown.toString());
+                foodEaten = result.getValueAsInteger(MiscInfoPlayersTable.FoodEaten.toString());
+                arrowsShot = result.getValueAsInteger(MiscInfoPlayersTable.ArrowsShot.toString());
+                damageTaken = result.getValueAsInteger(MiscInfoPlayersTable.DamageTaken.toString());
+                bedsEntered = result.getValueAsInteger(MiscInfoPlayersTable.BedsEntered.toString());
+                portalsEntered = result.getValueAsInteger(MiscInfoPlayersTable.PortalsEntered.toString());
+                wordsSaid = result.getValueAsInteger(MiscInfoPlayersTable.WordsSaid.toString());
+                commandsSent = result.getValueAsInteger(MiscInfoPlayersTable.CommandsSent.toString());
+                maxKillStreak = result.getValueAsInteger(MiscInfoPlayersTable.MaxKillStreak.toString());
             }
         }
 
@@ -392,49 +426,31 @@ public class PlayersData implements DataStore {
         public boolean pushData(int playerId) {
             refreshPlayerData();
             boolean result = Query.table(MiscInfoPlayersTable.TableName.toString())
-                .value(getValues(playerId))
-                .condition(MiscInfoPlayersTable.PlayerId.toString(), playerId + "")
+                .value(MiscInfoPlayersTable.PlayerIp.toString(), playerIp)
+                .value(MiscInfoPlayersTable.ExperiencePercent.toString(), expPercent)
+                .value(MiscInfoPlayersTable.ExperienceTotal.toString(), expTotal)
+                .value(MiscInfoPlayersTable.ExperienceLevel.toString(), expLevel)
+                .value(MiscInfoPlayersTable.FoodLevel.toString(), foodLevel)
+                .value(MiscInfoPlayersTable.HealthLevel.toString(), healthLevel)
+                .value(MiscInfoPlayersTable.Gamemode.toString(), gamemode)
+                .value(MiscInfoPlayersTable.FishCaught.toString(), fishCaught)
+                .value(MiscInfoPlayersTable.TimesKicked.toString(), timesKicked)
+                .value(MiscInfoPlayersTable.EggsThrown.toString(), eggsThrown)
+                .value(MiscInfoPlayersTable.FoodEaten.toString(), foodEaten)
+                .value(MiscInfoPlayersTable.ArrowsShot.toString(), arrowsShot)
+                .value(MiscInfoPlayersTable.DamageTaken.toString(), damageTaken)
+                .value(MiscInfoPlayersTable.BedsEntered.toString(), bedsEntered)
+                .value(MiscInfoPlayersTable.PortalsEntered.toString(), portalsEntered)
+                .value(MiscInfoPlayersTable.TimesJumped.toString(), jumps)
+                .value(MiscInfoPlayersTable.WordsSaid.toString(), wordsSaid)
+                .value(MiscInfoPlayersTable.CommandsSent.toString(), commandsSent)
+                .value(MiscInfoPlayersTable.CurKillStreak.toString(), curKillStreak)
+                .value(MiscInfoPlayersTable.MaxKillStreak.toString(), maxKillStreak)
+                .value(MiscInfoPlayersTable.PotionEffects.toString(), SimplePotionEffect.toGsonArray(potionEffects))
+                .condition(MiscInfoPlayersTable.PlayerId.toString(), playerId)
                 .update(true);
             fetchData(playerId);
             return result;
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(MiscInfoPlayersTable.PlayerId.toString(), playerId);
-            map.put(MiscInfoPlayersTable.PlayerIp.toString(), playerIp);
-            map.put(MiscInfoPlayersTable.ExperiencePercent.toString(), expPercent);
-            map.put(MiscInfoPlayersTable.ExperienceTotal.toString(), expTotal);
-            map.put(MiscInfoPlayersTable.ExperienceLevel.toString(), expLevel);
-            map.put(MiscInfoPlayersTable.FoodLevel.toString(), foodLevel);
-            map.put(MiscInfoPlayersTable.HealthLevel.toString(), healthLevel);
-            map.put(MiscInfoPlayersTable.Gamemode.toString(), gamemode);
-            
-            map.put(MiscInfoPlayersTable.FishCaught.toString(), fishCaught);
-            map.put(MiscInfoPlayersTable.TimesKicked.toString(), timesKicked);
-            map.put(MiscInfoPlayersTable.EggsThrown.toString(), eggsThrown);
-            map.put(MiscInfoPlayersTable.FoodEaten.toString(), foodEaten);
-            map.put(MiscInfoPlayersTable.ArrowsShot.toString(), arrowsShot);
-            map.put(MiscInfoPlayersTable.DamageTaken.toString(), damageTaken);
-            map.put(MiscInfoPlayersTable.BedsEntered.toString(), bedsEntered);
-            map.put(MiscInfoPlayersTable.PortalsEntered.toString(), portalsEntered);
-            
-            map.put(MiscInfoPlayersTable.TimesJumped.toString(), jumps);
-            
-            map.put(MiscInfoPlayersTable.WordsSaid.toString(), wordsSaid);
-            map.put(MiscInfoPlayersTable.CommandsSent.toString(), commandsSent);
-            
-            map.put(MiscInfoPlayersTable.CurKillStreak.toString(), curKillStreak);
-            map.put(MiscInfoPlayersTable.MaxKillStreak.toString(), maxKillStreak);
-            
-            Gson gson = new Gson();
-            List<SimplePotionEffect> potEffects = new ArrayList<SimplePotionEffect>();
-            for(PotionEffect eff : potionEffects) potEffects.add(new SimplePotionEffect(eff));
-            String potEffectsString = gson.toJson(potEffects.toArray());
-            
-            map.put(MiscInfoPlayersTable.PotionEffects.toString(), potEffectsString);
-            return map;
         }
         
         /**
@@ -534,22 +550,14 @@ public class PlayersData implements DataStore {
         @Override
         public boolean pushData(int playerId) {
             return Query.table(Detailed.LogPlayers.TableName.toString())
-                .value(getValues(playerId))
+                .value(Detailed.LogPlayers.PlayerId.toString(), playerId)
+                .value(Detailed.LogPlayers.Timestamp.toString(), time)
+                .value(Detailed.LogPlayers.IsLogin.toString(), isLogin)
+                .value(Detailed.LogPlayers.World.toString(), location.getWorld().getName())
+                .value(Detailed.LogPlayers.XCoord.toString(), location.getBlockX())
+                .value(Detailed.LogPlayers.YCoord.toString(), location.getBlockY())
+                .value(Detailed.LogPlayers.ZCoord.toString(), location.getBlockZ())
                 .insert();
-        }
-     
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Detailed.LogPlayers.PlayerId.toString(), playerId);
-            map.put(Detailed.LogPlayers.Timestamp.toString(), time);
-            if(isLogin) map.put(Detailed.LogPlayers.IsLogin.toString(), 1);
-            else map.put(Detailed.LogPlayers.IsLogin.toString(), 0);
-            map.put(Detailed.LogPlayers.World.toString(), location.getWorld().getName());
-            map.put(Detailed.LogPlayers.XCoord.toString(), location.getBlockX());
-            map.put(Detailed.LogPlayers.YCoord.toString(), location.getBlockY());
-            map.put(Detailed.LogPlayers.ZCoord.toString(), location.getBlockZ());
-            return map;
         }
      
     }

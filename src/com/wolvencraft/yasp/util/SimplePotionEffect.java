@@ -20,7 +20,13 @@
 
 package com.wolvencraft.yasp.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.bukkit.potion.PotionEffect;
+
+import com.wolvencraft.yasp.Statistics;
 
 /**
  * Simple class intended to temporarily store basic information about a potion effect
@@ -34,7 +40,7 @@ public class SimplePotionEffect {
      * Creates a new SimplePotionEffect based on a PotionEffect provided
      * @param effect
      */
-    public SimplePotionEffect(PotionEffect effect) {
+    private SimplePotionEffect(PotionEffect effect) {
         this.id = effect.getType().getId();
         this.time = effect.getDuration() / 20;
     }
@@ -56,5 +62,11 @@ public class SimplePotionEffect {
      */
     public int getDuration() {
         return time;
+    }
+    
+    public static String toGsonArray(Collection<PotionEffect> effects) {
+        List<SimplePotionEffect> potEffects = new ArrayList<SimplePotionEffect>();
+        for(PotionEffect eff : effects) potEffects.add(new SimplePotionEffect(eff));
+        return Statistics.getGson().toJson(potEffects.toArray());
     }
 }

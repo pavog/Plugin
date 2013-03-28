@@ -21,9 +21,7 @@
 package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -125,15 +123,15 @@ public class DeathsData implements DataStore {
      */
     public class TotalDeathsEntry implements NormalData {
         
+        private DamageCause cause;
+        private int times;
+        
         public TotalDeathsEntry(int playerId, DamageCause cause) {
             this.cause = cause;
             this.times = 0;
             
             fetchData(playerId);
         }
-        
-        private DamageCause cause;
-        private int times;
         
         @Override
         public void fetchData(int playerId) {
@@ -142,8 +140,13 @@ public class DeathsData implements DataStore {
                 .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
                 .selectAll();
             
-            if(results.isEmpty()) Query.table(TotalDeathPlayersTable.TableName.toString()).value(getValues(playerId)).insert();
-            else {
+            if(results.isEmpty()) {
+                Query.table(TotalDeathPlayersTable.TableName.toString())
+                    .value(TotalDeathPlayersTable.PlayerId.toString(), playerId)
+                    .value(TotalDeathPlayersTable.Cause.toString(), cause.name())
+                    .value(TotalDeathPlayersTable.Times.toString(), times)
+                    .insert();
+            } else {
                 times = results.get(0).getValueAsInteger(TotalDeathPlayersTable.Times.toString());
             }
         }
@@ -151,21 +154,12 @@ public class DeathsData implements DataStore {
         @Override
         public boolean pushData(int playerId) {
             boolean result = Query.table(TotalDeathPlayersTable.TableName.toString())
-                .value(getValues(playerId))
+                .value(TotalDeathPlayersTable.Times.toString(), times)
                 .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
                 .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
-                .update(true);
+                .update();
             fetchData(playerId);
             return result;
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(TotalDeathPlayersTable.PlayerId.toString(), playerId);
-            map.put(TotalDeathPlayersTable.Cause.toString(), cause.name());
-            map.put(TotalDeathPlayersTable.Times.toString(), times);
-            return map;
         }
 
         /**
@@ -218,21 +212,14 @@ public class DeathsData implements DataStore {
         @Override
         public boolean pushData(int playerId) {
             return Query.table(Detailed.DeathPlayers.TableName.toString())
-                .value(getValues(playerId))
+                .value(Detailed.DeathPlayers.PlayerId.toString(), playerId)
+                .value(Detailed.DeathPlayers.Cause.toString(), deathCause)
+                .value(Detailed.DeathPlayers.World.toString(), location.getWorld().getName())
+                .value(Detailed.DeathPlayers.XCoord.toString(), location.getBlockX())
+                .value(Detailed.DeathPlayers.YCoord.toString(), location.getBlockY())
+                .value(Detailed.DeathPlayers.ZCoord.toString(), location.getBlockZ())
+                .value(Detailed.DeathPlayers.Timestamp.toString(), timestamp)
                 .insert();
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Detailed.DeathPlayers.PlayerId.toString(), playerId);
-            map.put(Detailed.DeathPlayers.Cause.toString(), deathCause);
-            map.put(Detailed.DeathPlayers.World.toString(), location.getWorld().getName());
-            map.put(Detailed.DeathPlayers.XCoord.toString(), location.getBlockX());
-            map.put(Detailed.DeathPlayers.YCoord.toString(), location.getBlockY());
-            map.put(Detailed.DeathPlayers.ZCoord.toString(), location.getBlockZ());
-            map.put(Detailed.DeathPlayers.Timestamp.toString(), timestamp);
-            return map;
         }
 
     }

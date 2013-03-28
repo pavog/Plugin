@@ -21,9 +21,7 @@
 package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -138,6 +136,11 @@ public class BlocksData implements DataStore {
      *
      */
     public class TotalBlocksEntry implements NormalData {
+        
+        private int type;
+        private int data;
+        private int broken;
+        private int placed;
 
         /**
          * <b>Default constructor</b><br />
@@ -147,19 +150,13 @@ public class BlocksData implements DataStore {
          */
         public TotalBlocksEntry(int playerId, Material materialType, byte data) {
             this.type = materialType.getId();
-            if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = data;
-            else this.data = 0;
+            this.data = data;
             
             this.broken = 0;
             this.placed = 0;
             
             fetchData(playerId);
         }
-        
-        private int type;
-        private int data;
-        private int broken;
-        private int placed;
         
         @Override
         public void fetchData(int playerId) {
@@ -168,7 +165,14 @@ public class BlocksData implements DataStore {
                 .condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
                 .selectAll();
             
-            if(results.isEmpty()) Query.table(TotalBlocksTable.TableName.toString()).value(getValues(playerId)).insert();
+            if(results.isEmpty()) {
+                Query.table(TotalBlocksTable.TableName.toString())
+                    .value(TotalBlocksTable.PlayerId.toString(), playerId)
+                    .value(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
+                    .value(TotalBlocksTable.Destroyed.toString(), broken)
+                    .value(TotalBlocksTable.Placed.toString(), placed)
+                    .insert();
+            }
             else {
                 broken = results.get(0).getValueAsInteger(TotalBlocksTable.Destroyed.toString());
                 placed = results.get(0).getValueAsInteger(TotalBlocksTable.Placed.toString());
@@ -178,22 +182,13 @@ public class BlocksData implements DataStore {
         @Override
         public boolean pushData(int playerId) {
             boolean result = Query.table(TotalBlocksTable.TableName.toString())
-                .value(getValues(playerId))
-                .condition(TotalBlocksTable.PlayerId.toString(), playerId + "")
+                .value(TotalBlocksTable.Destroyed.toString(), broken)
+                .value(TotalBlocksTable.Placed.toString(), placed)
+                .condition(TotalBlocksTable.PlayerId.toString(), playerId)
                 .condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
                 .update(true);
             fetchData(playerId);
             return result;
-        }
-        
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(TotalBlocksTable.PlayerId.toString(), playerId);
-            map.put(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data));
-            map.put(TotalBlocksTable.Destroyed.toString(), broken);
-            map.put(TotalBlocksTable.Placed.toString(), placed);
-            return map;
         }
         
         /**
@@ -228,6 +223,11 @@ public class BlocksData implements DataStore {
      */
     public class DetailedDestroyerdBlocksEntry implements DetailedData {
         
+        private int type;
+        private byte data;
+        private Location location;
+        private long timestamp;
+        
         /**
          * <b>Default constructor</b><br />
          * Creates a new DetailedDestroyedBlocksEntry based on the data provided
@@ -243,30 +243,18 @@ public class BlocksData implements DataStore {
             this.location = location;
             this.timestamp = Util.getTimestamp();
         }
-        
-        private int type;
-        private byte data;
-        private Location location;
-        private long timestamp;
 
         @Override
         public boolean pushData(int playerId) {
             return Query.table(Detailed.DestroyedBlocks.TableName.toString())
-                .value(getValues(playerId))
+                .value(Detailed.DestroyedBlocks.PlayerId.toString(), playerId)
+                .value(Detailed.DestroyedBlocks.Material.toString(), Util.getBlockString(type, data))
+                .value(Detailed.DestroyedBlocks.World.toString(), location.getWorld().getName())
+                .value(Detailed.DestroyedBlocks.XCoord.toString(), location.getBlockX())
+                .value(Detailed.DestroyedBlocks.YCoord.toString(), location.getBlockY())
+                .value(Detailed.DestroyedBlocks.ZCoord.toString(), location.getBlockZ())
+                .value(Detailed.DestroyedBlocks.Timestamp.toString(), timestamp)
                 .insert();
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Detailed.DestroyedBlocks.PlayerId.toString(), playerId);
-            map.put(Detailed.DestroyedBlocks.Material.toString(), Util.getBlockString(type, data));
-            map.put(Detailed.DestroyedBlocks.World.toString(), location.getWorld().getName());
-            map.put(Detailed.DestroyedBlocks.XCoord.toString(), location.getBlockX());
-            map.put(Detailed.DestroyedBlocks.YCoord.toString(), location.getBlockY());
-            map.put(Detailed.DestroyedBlocks.ZCoord.toString(), location.getBlockZ());
-            map.put(Detailed.DestroyedBlocks.Timestamp.toString(), timestamp);
-            return map;
         }
 
     }
@@ -279,6 +267,11 @@ public class BlocksData implements DataStore {
      *
      */
     public class DetailedPlacedBlocksEntry implements DetailedData {
+        
+        private int type;
+        private int data;
+        private Location location;
+        private long timestamp;
 
         /**
          * <b>Default constructor</b><br />
@@ -295,30 +288,18 @@ public class BlocksData implements DataStore {
             this.location = location;
             this.timestamp = Util.getTimestamp();
         }
-        
-        private int type;
-        private int data;
-        private Location location;
-        private long timestamp;
 
         @Override
         public boolean pushData(int playerId) {
             return Query.table(Detailed.PlacedBlocks.TableName.toString())
-                .value(getValues(playerId))
+                .value(Detailed.PlacedBlocks.PlayerId.toString(), playerId)
+                .value(Detailed.PlacedBlocks.Material.toString(), Util.getBlockString(type, data))
+                .value(Detailed.PlacedBlocks.World.toString(), location.getWorld().getName())
+                .value(Detailed.PlacedBlocks.XCoord.toString(), location.getBlockX())
+                .value(Detailed.PlacedBlocks.YCoord.toString(), location.getBlockY())
+                .value(Detailed.PlacedBlocks.ZCoord.toString(), location.getBlockZ())
+                .value(Detailed.PlacedBlocks.Timestamp.toString(), timestamp)
                 .insert();
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Detailed.PlacedBlocks.PlayerId.toString(), playerId);
-            map.put(Detailed.PlacedBlocks.Material.toString(), Util.getBlockString(type, data));
-            map.put(Detailed.PlacedBlocks.World.toString(), location.getWorld().getName());
-            map.put(Detailed.PlacedBlocks.XCoord.toString(), location.getBlockX());
-            map.put(Detailed.PlacedBlocks.YCoord.toString(), location.getBlockY());
-            map.put(Detailed.PlacedBlocks.ZCoord.toString(), location.getBlockZ());
-            map.put(Detailed.PlacedBlocks.Timestamp.toString(), timestamp);
-            return map;
         }
         
     }

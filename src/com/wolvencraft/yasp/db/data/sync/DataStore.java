@@ -21,7 +21,6 @@
 package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Common interface for all data stores
@@ -74,12 +73,6 @@ public interface DataStore {
          * @return <b>true</b> if the insertion was successful, <b>false</b> otherwise
          */
         public boolean pushData(int playerId);
-        
-        /**
-         * Returns the data values of the DataHolder in a Map form
-         * @return <b>Map</b> of column names and their corresponding values
-         */
-        public Map<String, Object> getValues(int playerId);
     }
     
     
@@ -97,12 +90,6 @@ public interface DataStore {
          * @return <b>true</b> if the holder has been synchronized and can be removed, <b>false</b> if it is on hold
          */
         public boolean pushData(int playerId);
-        
-        /**
-         * Returns the data holder as a map of column names and corresponding values
-         * @return Map of column names and values
-         */
-        public Map<String, Object> getValues(int playerId);
     }
 
 }

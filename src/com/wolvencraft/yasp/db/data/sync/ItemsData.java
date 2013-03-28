@@ -21,9 +21,7 @@
 package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -182,6 +180,16 @@ public class ItemsData implements DataStore {
      */
     public class TotalItemsEntry implements NormalData {
         
+        private int type;
+        private byte data;
+        private int dropped;
+        private int pickedUp;
+        private int used;
+        private int crafted;
+        private int broken;
+        private int smelted;
+        private int enchanted;
+        
         /**
          * <b>Default constructor</b><br />
          * Creates a new TotalItemsEntry based on the data provided
@@ -189,8 +197,7 @@ public class ItemsData implements DataStore {
          */
         public TotalItemsEntry(int playerId, ItemStack itemStack) {
             this.type = itemStack.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) this.data = itemStack.getData().getData();
-            else this.data = 0;
+            this.data = itemStack.getData().getData();
             
             this.dropped = 0;
             this.pickedUp = 0;
@@ -203,16 +210,6 @@ public class ItemsData implements DataStore {
             fetchData(playerId);
         }
         
-        private int type;
-        private byte data;
-        private int dropped;
-        private int pickedUp;
-        private int used;
-        private int crafted;
-        private int broken;
-        private int smelted;
-        private int enchanted;
-        
         @Override
         public void fetchData(int playerId) {
             List<QueryResult> results = Query.table(TotalItemsTable.TableName.toString())
@@ -220,8 +217,19 @@ public class ItemsData implements DataStore {
                 .condition(TotalItemsTable.Material.toString(), Util.getBlockString(type, data))
                 .selectAll();
             
-            if(results.isEmpty()) Query.table(TotalItemsTable.TableName.toString()).value(getValues(playerId)).insert();
-            else {
+            if(results.isEmpty()) {
+                Query.table(TotalItemsTable.TableName.toString())
+                    .value(TotalItemsTable.PlayerId.toString(), playerId)
+                    .value(TotalItemsTable.Material.toString(), Util.getBlockString(type, data))
+                    .value(TotalItemsTable.Dropped.toString(), dropped)
+                    .value(TotalItemsTable.PickedUp.toString(), pickedUp)
+                    .value(TotalItemsTable.Used.toString(), used)
+                    .value(TotalItemsTable.Crafted.toString(), crafted)
+                    .value(TotalItemsTable.Broken.toString(), broken)
+                    .value(TotalItemsTable.Smelted.toString(), smelted)
+                    .value(TotalItemsTable.Enchanted.toString(), enchanted)
+                    .insert();
+            } else {
                 dropped = results.get(0).getValueAsInteger(TotalItemsTable.Dropped.toString());
                 pickedUp = results.get(0).getValueAsInteger(TotalItemsTable.PickedUp.toString());
                 used = results.get(0).getValueAsInteger(TotalItemsTable.Used.toString());
@@ -235,27 +243,18 @@ public class ItemsData implements DataStore {
         @Override
         public boolean pushData(int playerId) {
             boolean result = Query.table(TotalItemsTable.TableName.toString())
-                .value(getValues(playerId))
-                .condition(TotalItemsTable.PlayerId.toString(), playerId + "")
+                .value(TotalItemsTable.Dropped.toString(), dropped)
+                .value(TotalItemsTable.PickedUp.toString(), pickedUp)
+                .value(TotalItemsTable.Used.toString(), used)
+                .value(TotalItemsTable.Crafted.toString(), crafted)
+                .value(TotalItemsTable.Broken.toString(), broken)
+                .value(TotalItemsTable.Smelted.toString(), smelted)
+                .value(TotalItemsTable.Enchanted.toString(), enchanted)
+                .condition(TotalItemsTable.PlayerId.toString(), playerId)
                 .condition(TotalItemsTable.Material.toString(), Util.getBlockString(type, data))
                 .update(true);
             fetchData(playerId);
             return result;
-        }
-        
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(TotalItemsTable.PlayerId.toString(), playerId);
-            map.put(TotalItemsTable.Material.toString(), Util.getBlockString(type, data));
-            map.put(TotalItemsTable.Dropped.toString(), dropped);
-            map.put(TotalItemsTable.PickedUp.toString(), pickedUp);
-            map.put(TotalItemsTable.Used.toString(), used);
-            map.put(TotalItemsTable.Crafted.toString(), crafted);
-            map.put(TotalItemsTable.Broken.toString(), broken);
-            map.put(TotalItemsTable.Smelted.toString(), smelted);
-            map.put(TotalItemsTable.Enchanted.toString(), enchanted);
-            return map;
         }
         
         /**
@@ -288,6 +287,11 @@ public class ItemsData implements DataStore {
      *
      */
     public class DetailedDroppedItemsEntry implements DetailedData {
+        
+        private int type;
+        private byte data;
+        private Location location;
+        private long timestamp;
 
         /**
          * <b>Default constructor</b><br />
@@ -297,36 +301,23 @@ public class ItemsData implements DataStore {
          */
         public DetailedDroppedItemsEntry(Location location, ItemStack itemStack) {
             this.type = itemStack.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = itemStack.getData().getData();
-            else this.data = 0;
+            this.data = itemStack.getData().getData();
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
         }
         
-        private int type;
-        private byte data;
-        private Location location;
-        private long timestamp;
-        
         @Override
         public boolean pushData(int playerId) {
             return Query.table(Detailed.DroppedItems.TableName.toString())
-                .value(getValues(playerId))
+                .value(Detailed.DroppedItems.PlayerId.toString(), playerId)
+                .value(Detailed.DroppedItems.Material.toString(), Util.getBlockString(type, data))
+                .value(Detailed.DroppedItems.World.toString(), location.getWorld().getName())
+                .value(Detailed.DroppedItems.XCoord.toString(), location.getBlockX())
+                .value(Detailed.DroppedItems.YCoord.toString(), location.getBlockY())
+                .value(Detailed.DroppedItems.ZCoord.toString(), location.getBlockZ())
+                .value(Detailed.DroppedItems.Timestamp.toString(), timestamp)
                 .insert();
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Detailed.DroppedItems.PlayerId.toString(), playerId);
-            map.put(Detailed.DroppedItems.Material.toString(), Util.getBlockString(type, data));
-            map.put(Detailed.DroppedItems.World.toString(), location.getWorld().getName());
-            map.put(Detailed.DroppedItems.XCoord.toString(), location.getBlockX());
-            map.put(Detailed.DroppedItems.YCoord.toString(), location.getBlockY());
-            map.put(Detailed.DroppedItems.ZCoord.toString(), location.getBlockZ());
-            map.put(Detailed.DroppedItems.Timestamp.toString(), timestamp);
-            return map;
         }
 
     }
@@ -340,6 +331,11 @@ public class ItemsData implements DataStore {
      */
     public class DetailedPickedupItemsEntry implements DetailedData {
         
+        private int type;
+        private int data;
+        private Location location;
+        private long timestamp;
+        
         /**
          * <b>Default constructor</b><br />
          * Creates a new DetailedPickedupItemsEntry based on the data provided
@@ -348,36 +344,23 @@ public class ItemsData implements DataStore {
          */
         public DetailedPickedupItemsEntry(Location location, ItemStack itemStack) {
             this.type = itemStack.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = itemStack.getData().getData();
-            else this.data = 0;
+            this.data = itemStack.getData().getData();
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
         }
         
-        private int type;
-        private int data;
-        private Location location;
-        private long timestamp;
-        
         @Override
         public boolean pushData(int playerId) {
             return Query.table(Detailed.PickedupItems.TableName.toString())
-                .value(getValues(playerId))
+                .value(Detailed.PickedupItems.PlayerId.toString(), playerId)
+                .value(Detailed.PickedupItems.Material.toString(), Util.getBlockString(type, data))
+                .value(Detailed.PickedupItems.World.toString(), location.getWorld().getName())
+                .value(Detailed.PickedupItems.XCoord.toString(), location.getBlockX())
+                .value(Detailed.PickedupItems.YCoord.toString(), location.getBlockY())
+                .value(Detailed.PickedupItems.ZCoord.toString(), location.getBlockZ())
+                .value(Detailed.PickedupItems.Timestamp.toString(), timestamp)
                 .insert();
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Detailed.PickedupItems.PlayerId.toString(), playerId);
-            map.put(Detailed.PickedupItems.Material.toString(), Util.getBlockString(type, data));
-            map.put(Detailed.PickedupItems.World.toString(), location.getWorld().getName());
-            map.put(Detailed.PickedupItems.XCoord.toString(), location.getBlockX());
-            map.put(Detailed.PickedupItems.YCoord.toString(), location.getBlockY());
-            map.put(Detailed.PickedupItems.ZCoord.toString(), location.getBlockZ());
-            map.put(Detailed.PickedupItems.Timestamp.toString(), timestamp);
-            return map;
         }
 
     }
@@ -390,6 +373,11 @@ public class ItemsData implements DataStore {
      *
      */
     public class DetailedUsedItemsEntry implements DetailedData {
+
+        private int type;
+        private byte data;
+        private Location location;
+        private long timestamp;
         
         /**
          * <b>Default constructor</b><br />
@@ -399,36 +387,23 @@ public class ItemsData implements DataStore {
          */
         public DetailedUsedItemsEntry(Location location, ItemStack itemStack) {
             this.type = itemStack.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = itemStack.getData().getData();
-            else this.data = 0;
+            this.data = itemStack.getData().getData();
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
         }
-
-        private int type;
-        private byte data;
-        private Location location;
-        private long timestamp;
         
         @Override
         public boolean pushData(int playerId) {
             return Query.table(Detailed.UsedItems.TableName.toString())
-                .value(getValues(playerId))
+                .value(Detailed.UsedItems.PlayerId.toString(), playerId)
+                .value(Detailed.UsedItems.Material.toString(), Util.getBlockString(type, data))
+                .value(Detailed.UsedItems.World.toString(), location.getWorld().getName())
+                .value(Detailed.UsedItems.XCoord.toString(), location.getBlockX())
+                .value(Detailed.UsedItems.YCoord.toString(), location.getBlockY())
+                .value(Detailed.UsedItems.ZCoord.toString(), location.getBlockZ())
+                .value(Detailed.UsedItems.Timestamp.toString(), timestamp)
                 .insert();
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Detailed.UsedItems.PlayerId.toString(), playerId);
-            map.put(Detailed.UsedItems.Material.toString(), Util.getBlockString(type, data));
-            map.put(Detailed.UsedItems.World.toString(), location.getWorld().getName());
-            map.put(Detailed.UsedItems.XCoord.toString(), location.getBlockX());
-            map.put(Detailed.UsedItems.YCoord.toString(), location.getBlockY());
-            map.put(Detailed.UsedItems.ZCoord.toString(), location.getBlockZ());
-            map.put(Detailed.UsedItems.Timestamp.toString(), timestamp);
-            return map;
         }
 
     }

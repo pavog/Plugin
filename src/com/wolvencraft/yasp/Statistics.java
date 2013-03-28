@@ -28,6 +28,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -54,6 +55,8 @@ public class Statistics extends JavaPlugin {
     private static boolean paused;
     private static boolean crashed;
     
+    private static Gson gson;
+    
     private static VaultHook vaultHook;
     private static WorldGuardHook worldGuardHook;
     
@@ -65,6 +68,8 @@ public class Statistics extends JavaPlugin {
         instance = this;
         paused = true;
         crashed = false;
+        
+        gson = new Gson();
     }
     
     @Override
@@ -218,5 +223,13 @@ public class Statistics extends JavaPlugin {
         try { com.wolvencraft.yasp.util.BookUtil.isBukkitCompatible(); }
         catch (Throwable t) { return false; }
         return true;
+    }
+    
+    /**
+     * Returns the static instance of Gson
+     * @return Gson instance
+     */
+    public static Gson getGson() {
+        return gson;
     }
 }

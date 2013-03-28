@@ -21,9 +21,7 @@
 package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Creature;
@@ -117,7 +115,7 @@ public class PVEData implements DataStore{
      */
     public void playerKilledCreature(Creature victim, ItemStack weapon) {
         getNormalData(victim.getType(), weapon).addCreatureDeaths();
-        detailedData.add(new DetailedPVEEntry(victim.getLocation(), victim.getType(), weapon, false));
+        detailedData.add(new DetailedPVEEntry(victim.getType(), victim.getLocation(), weapon));
     }
     
     /**
@@ -127,7 +125,7 @@ public class PVEData implements DataStore{
      */
     public void creatureKilledPlayer(Creature killer, ItemStack weapon) {
         getNormalData(killer.getType(), weapon).addPlayerDeaths();
-        detailedData.add(new DetailedPVEEntry(killer.getLocation(), killer.getType(), weapon, true));
+        detailedData.add(new DetailedPVEEntry(killer.getType(), killer.getLocation()));
     }
     
     
@@ -139,6 +137,14 @@ public class PVEData implements DataStore{
      */
     public class TotalPVEEntry implements NormalData {
         
+        private EntityType creatureType;
+        
+        private int weaponType;
+        private int weaponData;
+        
+        private int playerDeaths;
+        private int creatureDeaths;
+        
         /**
          * <b>Default constructor</b><br />
          * Creates a new TotalPVE object based on the player and creature in question
@@ -149,8 +155,11 @@ public class PVEData implements DataStore{
         public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
             this.creatureType = creatureType;
             this.weaponType = weapon.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) this.weaponData = weapon.getData().getData();
-            else this.weaponData = 0;
+            if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) {
+                this.weaponData = weapon.getData().getData();
+            } else {
+                this.weaponData = 0;
+            }
             
             this.playerDeaths = 0;
             this.creatureDeaths = 0;
@@ -158,47 +167,38 @@ public class PVEData implements DataStore{
             fetchData(playerId);
         }
         
-        private EntityType creatureType;
-        private int weaponType;
-        private int weaponData;
-        private int playerDeaths;
-        private int creatureDeaths;
-        
         @Override
         public void fetchData(int playerId) {
-            List<QueryResult> results = Query.table(TotalPVEKillsTable.TableName.toString())
+            QueryResult result = Query.table(TotalPVEKillsTable.TableName.toString())
                 .condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
                 .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
                 .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
-                .selectAll();
-            if(results.isEmpty()) Query.table(TotalPVEKillsTable.TableName.toString()).value(getValues(playerId));
-            else {
-                playerDeaths = results.get(0).getValueAsInteger(TotalPVEKillsTable.PlayerKilled.toString());
-                creatureDeaths = results.get(0).getValueAsInteger(TotalPVEKillsTable.CreatureKilled.toString());
+                .select();
+            if(result == null) {
+                Query.table(TotalPVEKillsTable.TableName.toString())
+                    .value(TotalPVEKillsTable.PlayerId.toString(), playerId)
+                    .value(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId())
+                    .value(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
+                    .value(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths)
+                    .value(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths)
+                    .insert();
+            } else {
+                playerDeaths = result.getValueAsInteger(TotalPVEKillsTable.PlayerKilled.toString());
+                creatureDeaths = result.getValueAsInteger(TotalPVEKillsTable.CreatureKilled.toString());
             }
         }
 
         @Override
         public boolean pushData(int playerId) {
             boolean result = Query.table(TotalPVEKillsTable.TableName.toString())
-                .value(getValues(playerId))
+                .value(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths)
+                .value(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths)
                 .condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
                 .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
                 .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
                 .update();
             fetchData(playerId);
             return result;
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(TotalPVEKillsTable.PlayerId.toString(), playerId);
-            map.put(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId());
-            map.put(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData));
-            map.put(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths);
-            map.put(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths);
-            return map;
         }
 
         /**
@@ -210,15 +210,29 @@ public class PVEData implements DataStore{
         public boolean equals(EntityType creatureType, ItemStack weapon) {
             int weaponType = weapon.getTypeId();
             int weaponData = weapon.getData().getData();
-            if(!Settings.ItemsWithMetadata.checkAgainst(weaponType)) weaponData = 0;
+            if(!Settings.ItemsWithMetadata.checkAgainst(weaponType)) {
+                weaponData = 0;
+            }
             
-            return this.creatureType.equals(creatureType) && this.weaponType == weaponType && this.weaponData == weaponData;
+            return this.creatureType.equals(creatureType)
+                    && this.weaponType == weaponType
+                    && this.weaponData == weaponData;
         }
         
-        public void addPlayerDeaths() { playerDeaths++; }
-        public void addCreatureDeaths() { creatureDeaths++; }
+        /**
+         * Increments the number of times the player has died
+         */
+        public void addPlayerDeaths() {
+            playerDeaths++;
+        }
+        
+        /**
+         * Increments the number of times the creature has died
+         */
+        public void addCreatureDeaths() {
+            creatureDeaths++;
+        }
     }
-    
     
     /**
      * Represents an entry in the Detailed data store.
@@ -227,58 +241,61 @@ public class PVEData implements DataStore{
      *
      */
     public class DetailedPVEEntry implements DetailedData {
-
+        
+        private EntityType creatureType;
+        
+        private int weaponType;
+        private int weaponData;
+        
+        private Location location;
+        
+        private boolean playerKilled;
+        private long timestamp;
+        
         /**
-         * <b>Default constructor</b><br />
-         * Creates a new DetailedPVPEntry based on the data provided
-         * @param location
-         * @param creatureType
-         * @param weapon
-         * @param playerKilled
+         * <b>Player killed a creature</b><br />
+         * Creates a new DetailedPVEEntry where the player killed a creature.
+         * @param creatureType Type of the creature
+         * @param location Location of the event
+         * @param weapon Weapon used
          */
-        public DetailedPVEEntry (Location location, EntityType creatureType, ItemStack weapon, boolean playerKilled) {
+        public DetailedPVEEntry (EntityType creatureType, Location location, ItemStack weapon) {
             this.creatureType = creatureType;
             this.weaponType = weapon.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) this.weaponData = weapon.getData().getData();
-            else this.weaponData = 0;
-            
+            this.weaponData = weapon.getData().getData();
             this.location = location;
-            this.playerKilled = playerKilled;
+            this.playerKilled = false;
             this.timestamp = Util.getTimestamp();
         }
         
-        private EntityType creatureType;
-        private int weaponType;
-        private int weaponData;
-        private Location location;
-        private boolean playerKilled;
-        private long timestamp;
+        /**
+         * <b>Creature killed a player</b><br />
+         * Creates a new DetailedPVEEntry where the creature killed a player.
+         * @param creatureType Type of the creature
+         * @param location Location of the event
+         */
+        public DetailedPVEEntry (EntityType creatureType, Location location) {
+            this.creatureType = creatureType;
+            this.weaponType = -1;
+            this.weaponData = 0;
+            this.location = location;
+            this.playerKilled = true;
+            this.timestamp = Util.getTimestamp();
+        }
         
         @Override
         public boolean pushData(int playerId) {
             return Query.table(Detailed.PVEKills.TableName.toString())
-                .value(getValues(playerId))
+                .value(Detailed.PVEKills.PlayerId.toString(), playerId)
+                .value(Detailed.PVEKills.CreatureId.toString(), creatureType.getTypeId())
+                .value(Detailed.PVEKills.PlayerKilled.toString(), playerKilled)
+                .value(Detailed.PVEKills.Material.toString(), Util.getBlockString(weaponType, weaponData))
+                .value(Detailed.PVEKills.World.toString(), location.getWorld().getName())
+                .value(Detailed.PVEKills.XCoord.toString(), location.getBlockX())
+                .value(Detailed.PVEKills.YCoord.toString(), location.getBlockY())
+                .value(Detailed.PVEKills.ZCoord.toString(), location.getBlockZ())
+                .value(Detailed.PVEKills.Timestamp.toString(), timestamp)
                 .insert();
-        }
-
-        @Override
-        public Map<String, Object> getValues(int playerId) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Detailed.PVEKills.PlayerId.toString(), playerId);
-            map.put(Detailed.PVEKills.CreatureId.toString(), creatureType.getTypeId());
-            if(playerKilled) {
-                map.put(Detailed.PVEKills.PlayerKilled.toString(), 1);
-                map.put(Detailed.PVEKills.Material.toString(), "-1:0");
-            } else {
-                map.put(Detailed.PVEKills.PlayerKilled.toString(), 0);
-                map.put(Detailed.PVEKills.Material.toString(), Util.getBlockString(weaponType, weaponData));
-            }
-            map.put(Detailed.PVEKills.World.toString(), location.getWorld().getName());
-            map.put(Detailed.PVEKills.XCoord.toString(), location.getBlockX());
-            map.put(Detailed.PVEKills.YCoord.toString(), location.getBlockY());
-            map.put(Detailed.PVEKills.ZCoord.toString(), location.getBlockZ());
-            map.put(Detailed.PVEKills.Timestamp.toString(), timestamp);
-            return map;
         }
 
     }
