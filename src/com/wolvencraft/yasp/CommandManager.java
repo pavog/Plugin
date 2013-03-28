@@ -29,7 +29,8 @@ import com.wolvencraft.yasp.cmd.*;
 import com.wolvencraft.yasp.util.Message;
 
 /**
- * Manages commands and command senders in the plugin
+ * A very derpy implementation of CommandManager.<br />
+ * Handles subcommands and stores the CommandSender for the duration of the command execution
  * @author bitWolfy
  *
  */

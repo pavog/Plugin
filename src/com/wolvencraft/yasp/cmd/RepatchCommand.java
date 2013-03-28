@@ -33,7 +33,7 @@ public class RepatchCommand implements BaseCommand {
 	@Override
 	public boolean run(String[] args) {
 		Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database...");
-		DataCollector.dumpAll();
+		DataCollector.dumpPlayerData();
 		StatsPlugin.setPaused(true);
 		Bukkit.getScheduler().runTaskAsynchronously(StatsPlugin.getInstance(), new Runnable() {
 

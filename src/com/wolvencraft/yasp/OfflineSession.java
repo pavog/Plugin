@@ -22,7 +22,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Represents a user session for an offline player
+ * Represents a user session for a tracked player.<br />
+ * The player may be offline, or not exist at all.
  * @author bitWolfy
  *
  */

@@ -49,12 +49,18 @@ public class StatsPlugin extends JavaPlugin {
 	private static VaultHook vaultHook;
 	private static WorldGuardHook worldGuardHook;
 	
-	@Override
-	public void onEnable() {
-
+	/**
+	 * <b>Default constructor</b><br />
+	 * Creates a new instance of the StatsPlugin.
+	 */
+	public StatsPlugin() {
 		instance = this;
 		paused = true;
 		crashed = false;
+	}
+	
+	@Override
+	public void onEnable() {
 		
 		if(!new File(getDataFolder(), "config.yml").exists()) {
 			Message.log("Config.yml not found. Creating a one for you.");
@@ -118,12 +124,13 @@ public class StatsPlugin extends JavaPlugin {
 	public void onDisable() {
 		Message.log("Plugin shutting down.");
 		if(crashed) { instance = null; return; }
+		
 		try {
 			for(Player player : Bukkit.getOnlinePlayers())
 				DataCollector.get(player).player().logout(player.getLocation());
-			DataCollector.pushAllData();
-			DataCollector.getServerStats().pluginShutdown();
-			DataCollector.dumpAll();
+			DataCollector.pushPlayerData();
+			DataCollector.getStats().pluginShutdown();
+			DataCollector.dumpPlayerData();
 			
 			Bukkit.getScheduler().cancelTasks(this);
 			
@@ -172,7 +179,7 @@ public class StatsPlugin extends JavaPlugin {
 	
 	/**
 	 * Returns a static plugin instance
-	 * @return <b>YASP</b> plugin instance
+	 * @return <b>StatsPlugin</b> instance
 	 */
 	public static StatsPlugin getInstance() {
 		return instance;

@@ -19,7 +19,6 @@
 package com.wolvencraft.yasp;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.data.hooks.VaultHook;
@@ -30,7 +29,8 @@ import com.wolvencraft.yasp.db.data.receive.PlayerTotals;
 import com.wolvencraft.yasp.db.data.sync.*;
 
 /**
- * Represents a user session for an online tracked player
+ * Represents a user session for a tracked player.<br />
+ * This object is destroyed if the player is online after the database synchronization.
  * @author bitWolfy
  *
  */
@@ -76,39 +76,46 @@ public class LocalSession {
 	private WorldGuardHookEntry worldGuardHookEntry;
 	
 	/**
-	 * Performs an operation to push the locally stored data to the database
+	 * Performs an operation to push the locally stored data to the database.<br />
+	 * Synchronization is performed in the following order:
+	 * <ul>
+	 * <li>Generic player data</li>
+	 * <li>Blocks</li>
+	 * <li>Items</li>
+	 * <li>PVP deaths</li>
+	 * <li>PVE deaths</li>
+	 * <li>Other deaths</li>
+	 * <li>Any active hooks</li>
+	 * <li>Fetch player totals</li>
+	 * </ul>
 	 */
 	public void pushData() {
 		if(!confirmed) return;
 		playersData.sync();
 		blocksData.sync();
 		itemsData.sync();
-		deathsData.sync();
-		PVEData.sync();
 		PVPData.sync();
-		
-		playerTotals.fetchData();
+		PVEData.sync();
+		deathsData.sync();
 		
 		if(Settings.Modules.HookVault.getEnabled() && Settings.ActiveHooks.HookVault.getActive())
 			vaultHookEntry.pushData();
 		if(Settings.Modules.HookWorldGuard.getEnabled() && Settings.ActiveHooks.HookWorldGuard.getActive())
 			worldGuardHookEntry.pushData();
+		
+		playerTotals.fetchData();
 	}
 	
 	/**
-	 * Returns the confirmation status
-	 * @return <b>true</b> if the player is confirmed, <b>false</b> if he is on hold
+	 * Clears the data stores of all locally saved data.
 	 */
-	public boolean getConfirmed() {
-		return confirmed;
-	}
-	
-	/**
-	 * Sets the confirmation status for the player
-	 * @param confirmed <b>true</b> if the player is confirmed, <b>false</b> if he is on hold
-	 */
-	public void setConfirmed(boolean confirmed) {
-		this.confirmed = confirmed;
+	public void dump() {
+		playersData.dump();
+		blocksData.dump();
+		itemsData.dump();
+		PVPData.dump();
+		PVEData.dump();
+		deathsData.dump();
 	}
 	
 	/**
@@ -117,24 +124,6 @@ public class LocalSession {
 	 * @return <b>String</b> Player name
 	 */
 	public String getPlayerName() { return playersData.general().getName(); }
-	
-	/**
-	 * <b>PlayersData</b> wrapper<br />
-	 * Returns the Player object associated with the session, if it exists.
-	 * @return <b>Player</b> object if it exists, <b>null</b> otherwise
-	 */
-	public Player getPlayer() { return Bukkit.getServer().getPlayer(playersData.general().getName()); }
-	
-	/**
-	 * <b>PlayersData</b> wrapper<br />
-	 * Returns the location of the Player object associated with the session, if it exists.
-	 * @return <b>Location</b> if the player is online, <b>null</b> otherwise
-	 */
-	public Location getLocation() {
-		Player player = Bukkit.getServer().getPlayer(playersData.general().getName());
-		if(player == null) return null;
-		return player.getLocation();
-	}
 	
 	/**
 	 * <b>PlayersData</b> wrapper<br />
@@ -149,15 +138,19 @@ public class LocalSession {
 	}
 	
 	/**
-	 * Clears the data stores of all locally stored data.
+	 * Checks if the player has spent more then the <i>log_delay</i> on the server.
+	 * @return <b>true</b> if the player is confirmed, <b>false</b> if he is on hold
 	 */
-	public void dump() {
-		playersData.dump();
-		blocksData.dump();
-		itemsData.dump();
-		deathsData.dump();
-		PVEData.dump();
-		PVPData.dump();
+	public boolean getConfirmed() {
+		return confirmed;
+	}
+	
+	/**
+	 * Sets the confirmation status for the player
+	 * @param confirmed <b>true</b> if the player is confirmed, <b>false</b> if he is on hold
+	 */
+	public void setConfirmed(boolean confirmed) {
+		this.confirmed = confirmed;
 	}
 	
 	/**

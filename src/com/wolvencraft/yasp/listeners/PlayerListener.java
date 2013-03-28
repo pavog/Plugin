@@ -68,7 +68,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if(StatsPlugin.getPaused()) return;
-		DataCollector.getServerStats().playerLogin();
+		DataCollector.getStats().playerLogin();
 		Player player = event.getPlayer();
 		if(Util.isExempt(player)) return;
 		LocalSession session = DataCollector.get(player);

@@ -79,7 +79,7 @@ public class Util {
 	 */
 	public static String parseVars(String str) {
 		if(str == null) return "";
-		Map<String, Object> values = DataCollector.getServerTotals().getValues();
+		Map<String, Object> values = DataCollector.getTotals().getValues();
 		Iterator<Entry<String, Object>> it = values.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();

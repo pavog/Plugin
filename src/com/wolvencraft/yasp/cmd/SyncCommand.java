@@ -34,7 +34,7 @@ public class SyncCommand implements BaseCommand {
 
 			@Override
 			public void run() {
-				DataCollector.pushAllData();
+				DataCollector.pushPlayerData();
 			}
 			
 		});

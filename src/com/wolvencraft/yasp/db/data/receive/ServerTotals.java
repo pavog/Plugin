@@ -95,7 +95,7 @@ public class ServerTotals {
 		values.put("pveKills", pveKills);
 		values.put("pveDeaths", pveDeaths);
 		values.put("othKills", otherKills);
-		values.putAll(DataCollector.getServerStats().getValueMap());
+		values.putAll(DataCollector.getStats().getValueMap());
 		return values;
 	}
 	
