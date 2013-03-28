@@ -1,5 +1,5 @@
 name: Statistics
-main: com.wolvencraft.yasp.StatsPlugin
+main: com.wolvencraft.yasp.Statistics
 version: 1.0.0b
 description: Extremely detailed player/server statistic tracking with web portal
 authors: [bitWolfy, Dazzel_]
