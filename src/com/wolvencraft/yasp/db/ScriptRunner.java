@@ -38,7 +38,7 @@ import java.util.logging.Level;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.wolvencraft.yasp.db.data.sync.Settings;
+import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.util.Message;
 

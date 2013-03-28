@@ -41,11 +41,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.wolvencraft.yasp.ConfirmationTimer;
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.LocalSession;
+import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.data.sync.Settings;
+import com.wolvencraft.yasp.util.ConfirmationTimer;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 

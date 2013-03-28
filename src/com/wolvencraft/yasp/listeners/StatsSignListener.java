@@ -30,9 +30,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.StatsSignFactory;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.StatsSignFactory;
 
 /**
  * Handles StatsSign events

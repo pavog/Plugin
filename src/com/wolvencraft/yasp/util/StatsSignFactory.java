@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp;
+package com.wolvencraft.yasp.util;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -40,8 +40,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.util.Vector;
 
-import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.StatsPlugin;
 
 /**
  * Handles all StatsSign functionality.

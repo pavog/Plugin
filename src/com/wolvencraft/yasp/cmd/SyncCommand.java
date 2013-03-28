@@ -23,8 +23,8 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.StatsSignFactory;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.StatsSignFactory;
 
 public class SyncCommand implements BaseCommand {
 

@@ -26,6 +26,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;

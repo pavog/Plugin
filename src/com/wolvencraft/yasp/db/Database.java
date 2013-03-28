@@ -30,10 +30,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.data.sync.Settings;
-import com.wolvencraft.yasp.db.data.sync.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.util.Message;

@@ -16,7 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp;
+package com.wolvencraft.yasp.util;
+
+import com.wolvencraft.yasp.LocalSession;
 
 /**
  * A simple timed task that checks if the specified session's player is still online

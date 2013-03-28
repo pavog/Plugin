@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.sync;
+package com.wolvencraft.yasp;
 
-import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 

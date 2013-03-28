@@ -29,15 +29,15 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.wolvencraft.yasp.StatsSignFactory.StatsSign;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.hooks.*;
-import com.wolvencraft.yasp.db.data.sync.Settings;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.scoreboard.ScoreboardAPI;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.StatsSignFactory;
 import com.wolvencraft.yasp.util.TPSTracker;
+import com.wolvencraft.yasp.util.StatsSignFactory.StatsSign;
 
 public class StatsPlugin extends JavaPlugin {
 	private static StatsPlugin instance;

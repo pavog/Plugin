@@ -30,7 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.DataCollector;
-import com.wolvencraft.yasp.db.data.sync.Settings;
+import com.wolvencraft.yasp.Settings;
 
 /**
  * Utility class containing assorted methods that do not fit other categories

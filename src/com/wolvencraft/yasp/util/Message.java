@@ -27,8 +27,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
+import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.StatsPlugin;
-import com.wolvencraft.yasp.db.data.sync.Settings;
 
 /**
  * Utility class used for sending different types of messages to players.

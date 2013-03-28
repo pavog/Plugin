@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import com.wolvencraft.yasp.db.data.sync.Settings;
-import com.wolvencraft.yasp.db.data.sync.Settings.LocalConfiguration;
+import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Message;
 
 /**
