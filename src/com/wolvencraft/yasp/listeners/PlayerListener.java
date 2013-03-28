@@ -72,7 +72,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         DataCollector.getStats().playerLogin();
         Player player = event.getPlayer();
-        if(Util.isExempt(player)) return;
+        if(!Util.isTracked(player)) return;
         LocalSession session = DataCollector.get(player);
         if(session.getConfirmed()) {
             session.player().login(player.getLocation());
@@ -92,7 +92,7 @@ public class PlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player)) return;
+        if(!Util.isTracked(player)) return;
         DataCollector.get(player).player().logout(player.getLocation());
     }
     
@@ -100,7 +100,7 @@ public class PlayerListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "move")) return;
+        if(!Util.isTracked(player, "move")) return;
         Location playerLocation = player.getLocation();
         if(!playerLocation.getWorld().equals(event.getTo().getWorld())) return;
         double distance = playerLocation.distance(event.getTo());
@@ -129,7 +129,7 @@ public class PlayerListener implements Listener {
     public void onPlayerFish(PlayerFishEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "misc.fish")) return;
+        if(!Util.isTracked(player, "misc.fish")) return;
         DataCollector.get(player).player().misc().fishCaught();
     }
     
@@ -137,7 +137,7 @@ public class PlayerListener implements Listener {
     public void onPlayerKick(PlayerKickEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "misc.kick")) return;
+        if(!Util.isTracked(player, "misc.kick")) return;
         DataCollector.get(player).player().misc().kicked();
     }
     
@@ -145,7 +145,7 @@ public class PlayerListener implements Listener {
     public void onEggThrow(PlayerEggThrowEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "misc.eggThrow")) return;
+        if(!Util.isTracked(player, "misc.eggThrow")) return;
         DataCollector.get(player).player().misc().eggThrown();
     }
     
@@ -154,7 +154,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        if(Util.isExempt(player, "misc.arrowShoot")) return;
+        if(!Util.isTracked(player, "misc.arrowShoot")) return;
         DataCollector.get(player).player().misc().arrowShot();
     }
     
@@ -163,7 +163,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        if(Util.isExempt(player, "misc.takeDamage")) return;
+        if(!Util.isTracked(player, "misc.takeDamage")) return;
         DataCollector.get(player).player().misc().damageTaken(event.getDamage());
     }
 
@@ -171,7 +171,7 @@ public class PlayerListener implements Listener {
     public void onBedEnter(PlayerBedEnterEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "misc.bedEnter")) return;
+        if(!Util.isTracked(player, "misc.bedEnter")) return;
         DataCollector.get(player).player().misc().bedEntered();
     }
 
@@ -179,7 +179,7 @@ public class PlayerListener implements Listener {
     public void onPortalEnter(PlayerPortalEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "misc.portalEnter")) return;
+        if(!Util.isTracked(player, "misc.portalEnter")) return;
         DataCollector.get(player).player().misc().portalEntered();
     }
     
@@ -187,7 +187,7 @@ public class PlayerListener implements Listener {
     public void onChatMessage(AsyncPlayerChatEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "misc.chat")) return;
+        if(!Util.isTracked(player, "misc.chat")) return;
         DataCollector.get(player).player().misc().chatMessageSent(event.getMessage().split(" ").length);
     }
     
@@ -195,7 +195,7 @@ public class PlayerListener implements Listener {
     public void onChatCommand(PlayerCommandPreprocessEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "misc.command")) return;
+        if(!Util.isTracked(player, "misc.command")) return;
         DataCollector.get(player).player().misc().commandSent();
     }
 }

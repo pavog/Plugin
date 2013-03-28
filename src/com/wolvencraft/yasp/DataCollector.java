@@ -57,7 +57,7 @@ public class DataCollector implements Runnable {
         serverTotals = new ServerTotals();
         
         for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-            if(!Util.isExempt(player)) get(player);
+            if(Util.isTracked(player)) get(player);
         }
     }
     

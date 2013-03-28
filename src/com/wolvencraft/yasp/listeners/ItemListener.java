@@ -57,7 +57,7 @@ public class ItemListener implements Listener {
     public void onItemPickup(PlayerPickupItemEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "item.pickup")) return;
+        if(!Util.isTracked(player, "item.pickup")) return;
         DataCollector.get(player).items().itemPickUp(player.getLocation(), event.getItem().getItemStack());
     }
 
@@ -65,7 +65,7 @@ public class ItemListener implements Listener {
     public void onItemDrop(PlayerDropItemEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "item.drop")) return;
+        if(!Util.isTracked(player, "item.drop")) return;
         DataCollector.get(player).items().itemDrop(player.getLocation(), event.getItemDrop().getItemStack());
     }
     
@@ -74,7 +74,7 @@ public class ItemListener implements Listener {
         if(Statistics.getPaused()) return;
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        if(Util.isExempt(player, "item.use")) return;
+        if(!Util.isTracked(player, "item.use")) return;
         DataCollector.get(player).items().itemUse(player.getLocation(), player.getItemInHand());
         DataCollector.get(player).player().misc().foodEaten();
     }
@@ -83,7 +83,7 @@ public class ItemListener implements Listener {
     public void onItemCraft(CraftItemEvent event) {
         if(Statistics.getPaused()) return;
         Player player = (Player) event.getWhoClicked();
-        if(Util.isExempt(player, "item.craft")) return;
+        if(!Util.isTracked(player, "item.craft")) return;
         DataCollector.get(player).items().itemCraft(player.getLocation(), event.getCurrentItem());
     }
 
@@ -91,7 +91,7 @@ public class ItemListener implements Listener {
     public void onItemSmelt(FurnaceExtractEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "item.smelt")) return;
+        if(!Util.isTracked(player, "item.smelt")) return;
         DataCollector.get(player).items().itemSmelt(player.getLocation(), new ItemStack(event.getItemType()));
     }
 
@@ -99,7 +99,7 @@ public class ItemListener implements Listener {
     public void onToolBreak(PlayerItemBreakEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "item.break")) return;
+        if(!Util.isTracked(player, "item.break")) return;
         DataCollector.get(player).items().itemBreak(player.getLocation(), event.getBrokenItem());
     }
     
@@ -107,7 +107,7 @@ public class ItemListener implements Listener {
     public void onItemEnchant(EnchantItemEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getEnchanter();
-        if(Util.isExempt(player, "item.enchant")) return;
+        if(!Util.isTracked(player, "item.enchant")) return;
         DataCollector.get(player).items().itemEnchant(player.getLocation(), new ItemStack(event.getItem().getType()));
     }
 }

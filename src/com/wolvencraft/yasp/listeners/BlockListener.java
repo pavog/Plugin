@@ -51,7 +51,7 @@ public class BlockListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "block.break")) return;
+        if(!Util.isTracked(player, "block.break")) return;
         DataCollector
             .get(player)
             .blocks()
@@ -62,7 +62,7 @@ public class BlockListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(Util.isExempt(player, "block.place")) return;
+        if(!Util.isTracked(player, "block.place")) return;
         DataCollector
             .get(player)
             .blocks()

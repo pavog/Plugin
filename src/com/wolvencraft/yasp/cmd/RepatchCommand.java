@@ -51,7 +51,7 @@ public class RepatchCommand implements BaseCommand {
                 catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed!"); }
                 finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                        if(!Util.isExempt(player)) DataCollector.get(player);
+                        if(Util.isTracked(player)) DataCollector.get(player);
                     }
                     DataCollector.getStats().pushStaticData();
                     Message.sendFormattedSuccess(CommandManager.getSender(), "Patching finished.");

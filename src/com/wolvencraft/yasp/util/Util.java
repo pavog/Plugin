@@ -137,8 +137,8 @@ public class Util {
      * @param player Player to check
      * @return <b>true</b> if the player's statistics should not be registered, <b>false</b> otherwise.
      */
-    public static boolean isExempt(Player player) {
-        return !player.hasPermission("stats.track");
+    public static boolean isTracked(Player player) {
+        return player.isOp() || player.hasPermission("stats.track");
     }
     
     /**
@@ -147,8 +147,8 @@ public class Util {
      * @param statsType Permission modifier
      * @return <b>true</b> if the player's statistics should not be registered, <b>false</b> otherwise
      */
-    public static boolean isExempt(Player player, String statsType) {
-        return !player.hasPermission("stats.track") && !player.hasPermission("stats.track." + statsType);
+    public static boolean isTracked(Player player, String statsType) {
+        return player.isOp() || player.hasPermission("stats.track") || player.hasPermission("stats.track." + statsType);
     }
     
 }
