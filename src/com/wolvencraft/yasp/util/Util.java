@@ -31,6 +31,7 @@ import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
 
 /**
  * Utility class containing assorted methods that do not fit other categories
@@ -50,7 +51,7 @@ public class Util {
 		String result = "" + type;
 		if(!Settings.ItemsWithMetadata.checkAgainst(type)) return result + ":0";
 		if(data <= Material.getMaterial(type).getMaxDurability()) result += ":" + data;
-		else result += ":0";
+		else result += ":" + ItemsWithMetadata.get(type).getData();
 		return result;
 	}
 	

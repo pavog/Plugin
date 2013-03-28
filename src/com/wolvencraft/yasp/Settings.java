@@ -195,16 +195,24 @@ public class Settings {
 		GoldenApple(322),
 		Dye(351),
 		Potion(373),
-		MobEgg(383),
+		MobEgg(383, 50),
 		MobHead(397);
 		
 		ItemsWithMetadata(int itemId){
 			this.itemId = itemId;
+			this.data = 0;
+		}
+		
+		ItemsWithMetadata(int itemId, int data) {
+			this.itemId = itemId;
+			this.data = data;
 		}
 		
 		int itemId;
+		int data;
 		
 		private int getId() { return itemId; }
+		public int getData() { return data; }
 		
 		/**
 		 * Checks if the specified ID is in the list
@@ -216,6 +224,13 @@ public class Settings {
 				if(entry.getId() == id) return true;
 			}
 			return false;
+		}
+		
+		public static ItemsWithMetadata get(int id) {
+			for(ItemsWithMetadata entry : ItemsWithMetadata.values()) {
+				if(entry.getId() == id) return entry;
+			}
+			return null;
 		}
 	}
 	
