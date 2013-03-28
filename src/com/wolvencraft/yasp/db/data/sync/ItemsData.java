@@ -111,8 +111,11 @@ public class ItemsData implements DataStore {
      * @param itemStack Stack of items in question
      */
     public void itemDrop(Location location, ItemStack itemStack) {
-        getNormalData(itemStack).addDropped();
-        detailedData.add(new DetailedDroppedItemsEntry(location, itemStack));
+        int amount = itemStack.getAmount();
+        getNormalData(itemStack).addDropped(amount);
+        for(int i = 0; i < amount; i++) {
+            detailedData.add(new DetailedDroppedItemsEntry(location, itemStack));
+        }
     }
     
     /**
@@ -121,8 +124,11 @@ public class ItemsData implements DataStore {
      * @param itemStack Stack of items in question
      */
     public void itemPickUp(Location location, ItemStack itemStack) {
-        getNormalData(itemStack).addPickedUp();
-        detailedData.add(new DetailedPickedupItemsEntry(location, itemStack));
+        int amount = itemStack.getAmount();
+        getNormalData(itemStack).addPickedUp(amount);
+        for(int i = 0; i < amount; i++) {
+            detailedData.add(new DetailedPickedupItemsEntry(location, itemStack));
+        }
     }
     
     /**
@@ -131,8 +137,11 @@ public class ItemsData implements DataStore {
      * @param itemStack Stack of items in question
      */
     public void itemUse(Location location, ItemStack itemStack) {
-        getNormalData(itemStack).addUsed();
-        detailedData.add(new DetailedUsedItemsEntry(location, itemStack));
+        int amount = itemStack.getAmount();
+        getNormalData(itemStack).addUsed(amount);
+        for(int i = 0; i < amount; i++) {
+            detailedData.add(new DetailedUsedItemsEntry(location, itemStack));
+        }
     }
     
     /**
@@ -141,7 +150,7 @@ public class ItemsData implements DataStore {
      * @param itemStack Stack of items in question
      */
     public void itemCraft(Location location, ItemStack itemStack) {
-        getNormalData(itemStack).addCrafted();
+        getNormalData(itemStack).addCrafted(itemStack.getAmount());
     }
     
     /**
@@ -150,7 +159,7 @@ public class ItemsData implements DataStore {
      * @param itemStack Stack of items in question
      */
     public void itemSmelt(Location location, ItemStack itemStack) {
-        getNormalData(itemStack).addSmelted();
+        getNormalData(itemStack).addSmelted(itemStack.getAmount());
     }
     
     /**
@@ -159,7 +168,7 @@ public class ItemsData implements DataStore {
      * @param itemStack Stack of items in question
      */
     public void itemBreak(Location location, ItemStack itemStack) {
-        getNormalData(itemStack).addBroken();
+        getNormalData(itemStack).addBroken(itemStack.getAmount());
     }
     
     /**
@@ -168,7 +177,7 @@ public class ItemsData implements DataStore {
      * @param itemStack Stack of items in question
      */
     public void itemEnchant(Location location, ItemStack itemStack) {
-        getNormalData(itemStack).addEnchanted();
+        getNormalData(itemStack).addEnchanted(itemStack.getAmount());
     }
     
     
@@ -270,13 +279,13 @@ public class ItemsData implements DataStore {
             return this.type == type && this.data == data;
         }
         
-        public void addDropped() { dropped++; }
-        public void addPickedUp() { pickedUp++; }
-        public void addUsed() { used++; }
-        public void addCrafted() { crafted++; }
-        public void addBroken() { broken++; }
-        public void addSmelted() { smelted++; }
-        public void addEnchanted() { enchanted++; }
+        public void addDropped(int amount) { dropped += amount; }
+        public void addPickedUp(int amount) { pickedUp += amount; }
+        public void addUsed(int amount) { used += amount; }
+        public void addCrafted(int amount) { crafted += amount; }
+        public void addBroken(int amount) { broken += amount; }
+        public void addSmelted(int amount) { smelted += amount; }
+        public void addEnchanted(int amount) { enchanted += amount; }
     }
     
     
