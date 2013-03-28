@@ -1,4 +1,6 @@
 /*
+ * TPSTracker.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -25,39 +27,39 @@ package com.wolvencraft.yasp.util;
  *
  */
 public class TPSTracker implements Runnable {
-	
-	/**
-	 * <b>Default constructor.</b><br />
-	 * Creates a new tracker to record ticks per second.
-	 */
-	public TPSTracker() {
-		ticksPerSecond = 0;
-	}
-	
-	private static int ticksPerSecond;
-	private long sec;
-	private long currentSec;
-	private int ticks;
-	private int delay;
-	
-	@Override
-	public void run() {
-		sec = (System.currentTimeMillis() / 1000);
-		if(currentSec == sec) { ticks++; }
-		else {
-			currentSec = sec;
-			ticksPerSecond = (ticksPerSecond == 0 ? ticks : ((ticksPerSecond + ticks) / 2));
-			ticks = 0;
-			if((++delay % 300) == 0) { delay = 0; }
-		}
-	}
-	
-	/**
-	 * Returns the server's current tickrate.
-	 * @return Ticks per second
-	 */
-	public static int getTicksPerSecond() {
-		return ticksPerSecond;
-	}
-	
+    
+    /**
+     * <b>Default constructor.</b><br />
+     * Creates a new tracker to record ticks per second.
+     */
+    public TPSTracker() {
+        ticksPerSecond = 0;
+    }
+    
+    private static int ticksPerSecond;
+    private long sec;
+    private long currentSec;
+    private int ticks;
+    private int delay;
+    
+    @Override
+    public void run() {
+        sec = (System.currentTimeMillis() / 1000);
+        if(currentSec == sec) { ticks++; }
+        else {
+            currentSec = sec;
+            ticksPerSecond = (ticksPerSecond == 0 ? ticks : ((ticksPerSecond + ticks) / 2));
+            ticks = 0;
+            if((++delay % 300) == 0) { delay = 0; }
+        }
+    }
+    
+    /**
+     * Returns the server's current tickrate.
+     * @return Ticks per second
+     */
+    public static int getTicksPerSecond() {
+        return ticksPerSecond;
+    }
+    
 }

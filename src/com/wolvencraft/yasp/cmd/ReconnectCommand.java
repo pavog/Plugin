@@ -1,4 +1,6 @@
 /*
+ * ReconnectCommand.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -22,21 +24,27 @@ import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.util.Message;
 
+/**
+ * Reconnect command.<br />
+ * Attempts to reconnect to the database.
+ * @author bitWolfy
+ *
+ */
 public class ReconnectCommand implements BaseCommand {
 
-	@Override
-	public boolean run(String[] args) {
-		try {
-			Database.getInstance().reconnect();
-			Message.sendFormattedSuccess(CommandManager.getSender(), "Re-established the database connection");
-			return true;
-		} catch (Exception ex) {
-			Message.sendFormattedError(CommandManager.getSender(), "An error occurred while reconnecting to the database");
-			return false;
-		}
-	}
+    @Override
+    public boolean run(String[] args) {
+        try {
+            Database.getInstance().reconnect();
+            Message.sendFormattedSuccess(CommandManager.getSender(), "Re-established the database connection");
+            return true;
+        } catch (Exception ex) {
+            Message.sendFormattedError(CommandManager.getSender(), "An error occurred while reconnecting to the database");
+            return false;
+        }
+    }
 
-	@Override
-	public void getHelp() { Message.formatHelp("reconnect", "", "Attempts to reconnect to the database"); }
+    @Override
+    public void getHelp() { Message.formatHelp("reconnect", "", "Attempts to reconnect to the database"); }
 
 }

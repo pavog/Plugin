@@ -1,4 +1,8 @@
 /*
+ * PluginMetrics.java
+ * 
+ * Statistics
+ * 
  * Copyright 2011 Tyler Blair. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are
@@ -368,7 +372,7 @@ public class PluginMetrics {
     private void postPlugin(final boolean isPing) throws IOException {
         // Server software specific section
         PluginDescriptionFile description = plugin.getDescription();
-        String pluginName = description.getName();
+        String pluginName = "YASP";
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
         String pluginVersion = description.getVersion();
         String serverVersion = Bukkit.getVersion();

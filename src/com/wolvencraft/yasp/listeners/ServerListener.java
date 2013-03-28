@@ -1,4 +1,6 @@
 /*
+ * ServerListener.javas
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -27,7 +29,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 import com.wolvencraft.yasp.DataCollector;
-import com.wolvencraft.yasp.StatsPlugin;
+import com.wolvencraft.yasp.Statistics;
 
 /**
  * Listens to generic server events and reports them to the plugin.
@@ -35,32 +37,32 @@ import com.wolvencraft.yasp.StatsPlugin;
  *
  */
 public class ServerListener implements Listener {
-	
-	/**
-	 * <b>Default constructor</b><br />
-	 * Creates a new instance of the Listener and registers it with the PluginManager
-	 * @param plugin StatsPlugin instance
-	 */
-	public ServerListener(StatsPlugin plugin) {
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	}
+    
+    /**
+     * <b>Default constructor</b><br />
+     * Creates a new instance of the Listener and registers it with the PluginManager
+     * @param plugin StatsPlugin instance
+     */
+    public ServerListener(Statistics plugin) {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onWeatherChange(WeatherChangeEvent event) {
-		if(StatsPlugin.getPaused()) return;
-		if(!Bukkit.getWorlds().get(0).equals(event.getWorld())) return;
-		DataCollector.getServerStats().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
-	}
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onWeatherChange(WeatherChangeEvent event) {
+        if(Statistics.getPaused()) return;
+        if(!Bukkit.getWorlds().get(0).equals(event.getWorld())) return;
+        DataCollector.getStats().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPluginEnable(PluginEnableEvent event) {
-		if(StatsPlugin.getPaused()) return;
-		DataCollector.getServerStats().pluginNumberChange();
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPluginEnable(PluginEnableEvent event) {
+        if(Statistics.getPaused()) return;
+        DataCollector.getStats().pluginNumberChange();
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPluginDisable(PluginDisableEvent event) {
-		if(StatsPlugin.getPaused()) return;
-		DataCollector.getServerStats().pluginNumberChange();
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPluginDisable(PluginDisableEvent event) {
+        if(Statistics.getPaused()) return;
+        DataCollector.getStats().pluginNumberChange();
+    }
 }

@@ -1,4 +1,6 @@
 /*
+ * RuntimeSQLException.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -24,27 +26,27 @@ package com.wolvencraft.yasp.exceptions;
  *
  */
 public class RuntimeSQLException extends RuntimeException {
-	private static final long serialVersionUID = 5224696788505678598L;
+    private static final long serialVersionUID = 5224696788505678598L;
 
-	public RuntimeSQLException() {
-		super();
-	}
+    public RuntimeSQLException() {
+        super();
+    }
 
-	public RuntimeSQLException(String message) {
-		super(message);
-	}
+    public RuntimeSQLException(String message) {
+        super(message);
+    }
 
-	public RuntimeSQLException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public RuntimeSQLException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public RuntimeSQLException(Throwable cause) {
-		super(cause);
-	}
+    public RuntimeSQLException(Throwable cause) {
+        super(cause);
+    }
 
-	@Override
-	public String toString() {
-		String message = this.getLocalizedMessage();
-		return message != null ? message : "RuntimeSQLException thrown";
-	}
+    @Override
+    public String toString() {
+        String message = this.getLocalizedMessage();
+        return message != null ? message : "RuntimeSQLException thrown";
+    }
 }

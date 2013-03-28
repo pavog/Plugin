@@ -1,4 +1,6 @@
 /*
+ * BookCommand.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -21,25 +23,35 @@ package com.wolvencraft.yasp.cmd;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.Util;
 
+/**
+ * Book command.<br />
+ * Spawns a book with player's statistical information.
+ * @author bitWolfy
+ *
+ */
 public class BookCommand implements BaseCommand {
 
-	@Override
-	public boolean run(String[] args) {
-		if(!(CommandManager.getSender() instanceof Player)) {
-			Message.sendFormattedError(CommandManager.getSender(), "This command can only be executed by a living player");
-			return false;
-		}
-		Player player = (Player) CommandManager.getSender();
-		player.getInventory().addItem(Util.compileStatsBook(player));
-		return false;
-	}
+    @Override
+    public boolean run(String[] args) {
+        if(!Statistics.isCraftBukkitCompatible()) {
+            Message.sendFormattedError("This command is not compatible with the current version of CraftBukkit");
+            return false;
+        }
+        if(!(CommandManager.getSender() instanceof Player)) {
+            Message.sendFormattedError(CommandManager.getSender(), "This command can only be executed by a living player");
+            return false;
+        }
+        Player player = (Player) CommandManager.getSender();
+        player.getInventory().addItem(com.wolvencraft.yasp.util.BookUtil.compileStatsBook(player));
+        return false;
+    }
 
-	@Override
-	public void getHelp() {
-		Message.formatHelp("book", "", "Get a book with all your statistical information");
-	}
+    @Override
+    public void getHelp() {
+        Message.formatHelp("book", "", "Get a book with all your statistical information");
+    }
 
 }

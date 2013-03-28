@@ -1,0 +1,11 @@
+com.wolvencraft.yasp
+com.wolvencraft.yasp.cmd
+com.wolvencraft.yasp.db
+com.wolvencraft.yasp.db.data.hooks
+com.wolvencraft.yasp.db.data.receive
+com.wolvencraft.yasp.db.data.sync
+com.wolvencraft.yasp.db.tables
+com.wolvencraft.yasp.exceptions
+com.wolvencraft.yasp.listeners
+com.wolvencraft.yasp.scoreboard
+com.wolvencraft.yasp.util

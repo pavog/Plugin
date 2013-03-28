@@ -1,15 +1,18 @@
 -- Settings
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("version", "0");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("ping", "120");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("log_delay", "300");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("log_delay", "0");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_welcome_messages", "1");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("welcome_message", "Welcome, <PLAYER>!");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("show_first_join_message", "1");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("first_join_message", "Welcome, <PLAYER>! Your statistics on this server are now being tracked.");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_vault", "0");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_mcmmo", "0");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_jobs", "0");
-INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook_worldguard", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("module.blocks", "1");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("module.items", "1");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("module.deaths", "1");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.vault", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.mcmmo", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.jobs", "0");
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.worldguard", "0");
 
 -- Server Statistics
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("first_startup", "0");
@@ -35,8 +38,6 @@ INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("weather_durat
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online_time", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("players_allowed", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("players_online", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("entities_count", "0");
 
 -- Materials
 -- Update on 11.03.2013 - 19:42:06-- 
@@ -247,6 +248,7 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:1", "hea
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:2", "head_block_zombie");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:3", "head_block_steve");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:4", "head_block_creeper");
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:5", "head_block_player");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("145:0", "anvil");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("146:0", "trapped_chest");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("147:0", "weighted_pressure_plate_light");
@@ -503,6 +505,7 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:1", "hea
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:2", "head_zombie");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:3", "head_steve");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:4", "head_creeper");
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:5", "head_player");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("398:0", "carrot_on_a_stick");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("399:0", "nether_star");
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("400:0", "pumpkin_pie");

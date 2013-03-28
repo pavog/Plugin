@@ -1,4 +1,6 @@
 /*
+ * OfflineSession.java
+ * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
  *
@@ -22,19 +24,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Represents a user session for an offline player
+ * Represents a user session for a tracked player.<br />
+ * The player may be offline, or not exist at all.
  * @author bitWolfy
  *
  */
 public class OfflineSession extends LocalSession {
-	
-	/**
-	 * <b>Default constructor</b><br />
-	 * Attempts to create a new user session for the player with the specified name.
-	 * @param playerName Player name
-	 */
-	public OfflineSession(String playerName) {
-		super((Player) Bukkit.getServer().getOfflinePlayer(playerName));
-	}
+    
+    /**
+     * <b>Default constructor</b><br />
+     * Attempts to create a new user session for the player with the specified name.
+     * @param playerName Player name
+     */
+    public OfflineSession(String playerName) {
+        super((Player) Bukkit.getServer().getOfflinePlayer(playerName));
+    }
 
 }

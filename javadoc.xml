@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="lib/craftbukkit.jar:lib/mcMMO.jar:lib/worldedit.jar:lib/vault.jar:lib/worldguard.jar:lib/Jobs.jar" destdir="doc" doctitle="Statistics Documentation" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="com.wolvencraft.yasp,com.wolvencraft.yasp.listeners,com.wolvencraft.yasp.db.tables,com.wolvencraft.yasp.db.data.sync,com.wolvencraft.yasp.db.data.hooks,com.wolvencraft.yasp.util,com.wolvencraft.yasp.cmd,com.wolvencraft.yasp.db,com.wolvencraft.yasp.exceptions,com.wolvencraft.yasp.scoreboard,com.wolvencraft.yasp.db.data.receive" source="1.6" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>
