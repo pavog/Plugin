@@ -21,7 +21,7 @@ package com.wolvencraft.yasp.db.data.receive;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.wolvencraft.yasp.SyncDataCollector;
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal.*;
 
@@ -95,7 +95,7 @@ public class ServerTotals {
 		values.put("pveKills", pveKills);
 		values.put("pveDeaths", pveDeaths);
 		values.put("othKills", otherKills);
-		values.putAll(SyncDataCollector.getServerStats().getValueMap());
+		values.putAll(DataCollector.getServerStats().getValueMap());
 		return values;
 	}
 	

@@ -27,7 +27,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.AsyncDataCollector;
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed;
@@ -113,7 +113,7 @@ public class PVPData implements _DataStore {
 	 * @param weapon Weapon used by killer
 	 */
 	public void playerKilledPlayer(Player victim, ItemStack weapon) {
-		int victimId = AsyncDataCollector.getPlayerId(victim);
+		int victimId = DataCollector.getPlayerId(victim);
 		getNormalData(victimId, weapon).addTimes();
 		detailedData.add(new DetailedPVPEntry(victim.getLocation(), victimId, weapon));
 	}
@@ -154,7 +154,7 @@ public class PVPData implements _DataStore {
 			List<QueryResult> results = Query.table(TotalPVPKillsTable.TableName.toString())
 				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
 				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
-				.condition(TotalPVPKillsTable.Material.toString(), weaponType + ":" + weaponData)
+				.condition(TotalPVPKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
 				.selectAll();
 			if(results.isEmpty()) Query.table(TotalPVPKillsTable.TableName.toString()).value(getValues(killerId));
 			else {
@@ -168,7 +168,7 @@ public class PVPData implements _DataStore {
 				.value(getValues(killerId))
 				.condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
 				.condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
-				.condition(TotalPVPKillsTable.Material.toString(), weaponType + ":" + weaponData)
+				.condition(TotalPVPKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
 				.update(true);
 			fetchData(killerId);
 			return result;
@@ -179,7 +179,7 @@ public class PVPData implements _DataStore {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalPVPKillsTable.PlayerId.toString(), killerId);
 			map.put(TotalPVPKillsTable.VictimId.toString(), victimId);
-			map.put(TotalPVPKillsTable.Material.toString(), weaponType + ":" + weaponData);
+			map.put(TotalPVPKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData));
 			map.put(TotalPVPKillsTable.Times.toString(), times);
 			return map;
 		}
@@ -248,7 +248,7 @@ public class PVPData implements _DataStore {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.PVPKills.KillerId.toString(), killerId);
 			map.put(Detailed.PVPKills.VictimId.toString(), victimId);
-			map.put(Detailed.PVPKills.Material.toString(), weaponType + ":" + weaponData);
+			map.put(Detailed.PVPKills.Material.toString(), Util.getBlockString(weaponType, weaponData));
 			map.put(Detailed.PVPKills.World.toString(), location.getWorld().getName());
 			map.put(Detailed.PVPKills.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.PVPKills.YCoord.toString(), location.getBlockY());

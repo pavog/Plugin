@@ -22,7 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.AsyncDataCollector;
+import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.StatsPlugin;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.util.Message;
@@ -33,7 +33,7 @@ public class RepatchCommand implements BaseCommand {
 	@Override
 	public boolean run(String[] args) {
 		Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database...");
-		AsyncDataCollector.dumpAll();
+		DataCollector.dumpAll();
 		StatsPlugin.setPaused(true);
 		Bukkit.getScheduler().runTaskAsynchronously(StatsPlugin.getInstance(), new Runnable() {
 
@@ -43,7 +43,7 @@ public class RepatchCommand implements BaseCommand {
 				catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed!"); }
 				finally {
 					for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-						if(!Util.isExempt(player)) AsyncDataCollector.get(player);
+						if(!Util.isExempt(player)) DataCollector.get(player);
 					}
 					Message.sendFormattedSuccess(CommandManager.getSender(), "Patching finished.");
 				}

@@ -162,7 +162,7 @@ public class BlocksData implements _DataStore {
 		public void fetchData(int playerId) {
 			List<QueryResult> results = Query.table(TotalBlocksTable.TableName.toString())
 				.condition(TotalBlocksTable.PlayerId.toString(), playerId + "")
-				.condition(TotalBlocksTable.Material.toString(), type + ":" + data)
+				.condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
 				.selectAll();
 			
 			if(results.isEmpty()) Query.table(TotalBlocksTable.TableName.toString()).value(getValues(playerId)).insert();
@@ -177,7 +177,7 @@ public class BlocksData implements _DataStore {
 			boolean result = Query.table(TotalBlocksTable.TableName.toString())
 				.value(getValues(playerId))
 				.condition(TotalBlocksTable.PlayerId.toString(), playerId + "")
-				.condition(TotalBlocksTable.Material.toString(), type + ":" + data)
+				.condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
 				.update(true);
 			fetchData(playerId);
 			return result;
@@ -187,7 +187,7 @@ public class BlocksData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(TotalBlocksTable.PlayerId.toString(), playerId);
-			map.put(TotalBlocksTable.Material.toString(), type + ":" + data);
+			map.put(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data));
 			map.put(TotalBlocksTable.Destroyed.toString(), broken);
 			map.put(TotalBlocksTable.Placed.toString(), placed);
 			return map;
@@ -259,7 +259,7 @@ public class BlocksData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.DestroyedBlocks.PlayerId.toString(), playerId);
-			map.put(Detailed.DestroyedBlocks.Material.toString(), type + ":" + data);
+			map.put(Detailed.DestroyedBlocks.Material.toString(), Util.getBlockString(type, data));
 			map.put(Detailed.DestroyedBlocks.World.toString(), location.getWorld().getName());
 			map.put(Detailed.DestroyedBlocks.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.DestroyedBlocks.YCoord.toString(), location.getBlockY());
@@ -311,7 +311,7 @@ public class BlocksData implements _DataStore {
 		public Map<String, Object> getValues(int playerId) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(Detailed.PlacedBlocks.PlayerId.toString(), playerId);
-			map.put(Detailed.PlacedBlocks.Material.toString(), type + ":" + data);
+			map.put(Detailed.PlacedBlocks.Material.toString(), Util.getBlockString(type, data));
 			map.put(Detailed.PlacedBlocks.World.toString(), location.getWorld().getName());
 			map.put(Detailed.PlacedBlocks.XCoord.toString(), location.getBlockX());
 			map.put(Detailed.PlacedBlocks.YCoord.toString(), location.getBlockY());
