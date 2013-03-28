@@ -209,14 +209,12 @@ public class BlocksData implements DataStore {
         }
         
         /**
-         * Adds the specified number of blocks to the total number of blocks destroyed
-         * @param blocks Blocks to add
+         * Increments the number of blocks to the total number of blocks destroyed
          */
         public void addBroken() { broken ++; }
         
         /**
-         * Adds the specified number of blocks to the total number of blocks placed
-         * @param blocks Blocks to add
+         * Increments the number of blocks to the total number of blocks placed
          */
         public void addPlaced() { placed ++; }
     }

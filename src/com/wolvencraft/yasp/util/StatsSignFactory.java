@@ -165,7 +165,7 @@ public class StatsSignFactory implements Runnable {
     /**
      * Generates a random unique 8-bit unique ID for signs.<br />
      * The IDs are checked to be unique.
-     * @return
+     * @return Unique sign ID
      */
     private static String generateId() {
         String id = "";
@@ -196,22 +196,22 @@ public class StatsSignFactory implements Runnable {
         }
         
         /**
-         * Constructor for deserialization from a map
-         * @param map Map to deserialize from
+         * Constructor for de-serialization from a map
+         * @param map Map to de-serialize from
          * @throws Exception 
          */
         @SuppressWarnings("unchecked")
-        public StatsSign(Map<String, Object> me) throws Exception {
-            signId = (String) me.get("id");
+        public StatsSign(Map<String, Object> map) throws Exception {
+            signId = (String) map.get("id");
             
-            World world = Bukkit.getWorld((String) me.get("world"));
-            Block signBlock = world.getBlockAt(((Vector) me.get("loc")).toLocation(world));
+            World world = Bukkit.getWorld((String) map.get("world"));
+            Block signBlock = world.getBlockAt(((Vector) map.get("loc")).toLocation(world));
             if(!(signBlock.getState() instanceof Sign)) {
                 deleteFile();
                 throw new Exception("No sign found at the stored location");
             }
             sign = (Sign) signBlock.getState();
-            originalText = (List<String>) me.get("lines");
+            originalText = (List<String>) map.get("lines");
         }
         
         /**

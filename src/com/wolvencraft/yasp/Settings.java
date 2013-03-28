@@ -66,6 +66,11 @@ public class Settings {
         public Integer asInteger() { return value == null ? Statistics.getInstance().getConfig().getInt(node) : (Integer) value; }
     }
     
+    /**
+     * Checks for the modules activated via the portal admin interface.
+     * @author bitWolfy
+     *
+     */
     public enum Modules {
         Server("module.server"),
         Blocks("module.blocks"),

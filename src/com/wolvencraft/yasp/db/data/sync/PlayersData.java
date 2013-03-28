@@ -212,7 +212,7 @@ public class PlayersData implements DataStore {
         /**
          * Default constructor. Takes in the Player object and pulls corresponding values from the remote database.<br />
          * If no data is found in the database, the default values are inserted.
-         * @param player <b>Player</b> tracked player
+         * @param playerId ID of the tracked player
          */
         public DistancePlayers(int playerId) {
             this.foot = 0;

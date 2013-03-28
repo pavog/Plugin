@@ -112,7 +112,6 @@ public class PVEData implements DataStore{
     
     /**
      * Registers the creature death in the data store
-     * @param location Location of the event
      * @param victim Creature killed
      * @param weapon Weapon used by killer
      */
@@ -123,7 +122,6 @@ public class PVEData implements DataStore{
     
     /**
      * Registers the player death in the data store
-     * @param location Location of the event
      * @param killer Creature that killed the player
      * @param weapon Weapon used by killer
      */
@@ -144,8 +142,9 @@ public class PVEData implements DataStore{
         /**
          * <b>Default constructor</b><br />
          * Creates a new TotalPVE object based on the player and creature in question
-         * @param player Player in question
-         * @param creature Creature in question
+         * @param playerId Player in question
+         * @param creatureType Creature in question
+         * @param weapon Weapon used
          */
         public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
             this.creatureType = creatureType;

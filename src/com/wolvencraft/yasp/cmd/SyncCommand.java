@@ -31,8 +31,7 @@ import com.wolvencraft.yasp.util.StatsSignFactory;
 /**
  * Synchronization command.<br />
  * Forces an immediate database synchronization.
- * @alias /stats sync
- * @author admin
+ * @author bitWolfy
  *
  */
 public class SyncCommand implements BaseCommand {

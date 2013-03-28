@@ -34,7 +34,6 @@ import com.wolvencraft.yasp.util.Message;
 /**
  * Score board command.<br />
  * Displays a score board-style statistics for the player.
- * @alias /stats scoreboard
  * @author bitWolfy
  *
  */

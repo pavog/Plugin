@@ -53,7 +53,6 @@ public interface _PluginHook {
         
         /**
          * Pushes the data to the remote database.
-         * @param playerId Player ID
          * @return <b>true</b> if the data was sent successfully, <b>false</b> if an error occurred
          */
         public boolean pushData();
@@ -61,7 +60,6 @@ public interface _PluginHook {
 
         /**
          * Returns the data values of the DataHolder in a Map form
-         * @param playerId Player ID
          * @return <b>Map</b> of column names and their corresponding values
          */
         public Map<String, Object> getValues();

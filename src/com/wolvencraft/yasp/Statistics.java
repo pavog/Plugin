@@ -41,6 +41,12 @@ import com.wolvencraft.yasp.util.StatsSignFactory;
 import com.wolvencraft.yasp.util.TPSTracker;
 import com.wolvencraft.yasp.util.StatsSignFactory.StatsSign;
 
+/**
+ * <b>Main plugin class</b><br />
+ * Establishes a database connection and sets up the event listeners
+ * @author bitWolfy
+ *
+ */
 public class Statistics extends JavaPlugin {
     private static Statistics instance;
     private static PluginMetrics metrics;

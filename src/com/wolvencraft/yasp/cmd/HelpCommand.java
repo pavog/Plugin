@@ -27,7 +27,6 @@ import com.wolvencraft.yasp.util.Message;
  * Help command.<br />
  * Gathers the help messages from all commands registered in the <code>CommandManager</code>
  * and combines them in a single list for readability.
- * @alias /stats help
  * @author bitWolfy
  *
  */

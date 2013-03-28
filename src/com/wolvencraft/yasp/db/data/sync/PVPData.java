@@ -133,8 +133,9 @@ public class PVPData implements DataStore {
         /**
          * <b>Default constructor</b><br />
          * Creates a new TotalPVP object based on the killer and victim in question
-         * @param killer Player who killed the victim
-         * @param victim Player who was killed
+         * @param playerId Player who killed the victim
+         * @param victimId Player who was killed
+         * @param weapon Weapon used
          */
         public TotalPVPEntry(int playerId, int victimId, ItemStack weapon) {
             this.victimId = victimId;

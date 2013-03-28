@@ -27,7 +27,6 @@ import com.wolvencraft.yasp.util.Message;
 /**
  * Pause command.<br />
  * Effectively pauses database synchronization. Does not pause data collection.
- * @alias /stats pause
  * @author bitWolfy
  *
  */

@@ -162,7 +162,7 @@ public class ScriptRunner {
      * Handles the individual line
      * @param command
      * @param line
-     * @return
+     * @return Parsed string
      * @throws SQLException
      * @throws UnsupportedEncodingException
      */

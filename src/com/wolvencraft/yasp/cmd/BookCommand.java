@@ -29,7 +29,6 @@ import com.wolvencraft.yasp.util.Message;
 /**
  * Book command.<br />
  * Spawns a book with player's statistical information.
- * @alias /stats book
  * @author bitWolfy
  *
  */

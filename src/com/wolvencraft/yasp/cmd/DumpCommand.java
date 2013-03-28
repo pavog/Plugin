@@ -27,7 +27,6 @@ import com.wolvencraft.yasp.util.Message;
 /**
  * Dump command.<br />
  * Dumps all locally-stored data.
- * @alias /stats dump
  * @author bitWolfy
  *
  */

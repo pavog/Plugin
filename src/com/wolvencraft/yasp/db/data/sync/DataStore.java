@@ -84,7 +84,7 @@ public interface DataStore {
     
     
     /**
-     * Represents data stored in a log format, i.e. new data is appended to the end of the table. No existing data can be changed.<br />
+     * Represents data stored in a log format. New data is appended to the end of the table. No existing data can be changed.<br />
      * Multiple instances of this type could (and should) exist.
      * @author bitWolfy
      *

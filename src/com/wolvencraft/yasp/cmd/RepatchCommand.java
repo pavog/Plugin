@@ -33,7 +33,6 @@ import com.wolvencraft.yasp.util.Util;
 /**
  * Repatch command.<br />
  * Forces a database patch to be executed.
- * @alias /stats repatch
  * @author bitWolfy
  *
  */

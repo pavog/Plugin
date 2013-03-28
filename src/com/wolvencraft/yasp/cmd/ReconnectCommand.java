@@ -24,6 +24,12 @@ import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.util.Message;
 
+/**
+ * Reconnect command.<br />
+ * Attempts to reconnect to the database.
+ * @author bitWolfy
+ *
+ */
 public class ReconnectCommand implements BaseCommand {
 
     @Override

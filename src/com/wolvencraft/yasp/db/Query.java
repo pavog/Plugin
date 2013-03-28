@@ -209,9 +209,8 @@ public class Query {
         }
 
         /**
-         * Applies a condition to the query
-         * @param key Column name
-         * @param value Column value
+         * Applies a set of conditions to the query
+         * @param list List of conditions
          * @return Database query
          */
         public DatabaseQuery condition(List<String> list) {

@@ -124,7 +124,7 @@ public class Scoreboard {
     
     /**
      * Sets the board display name to the one specified
-     * @param displayName New display name
+     * @param name New display name
      */
     public void setName(String name) {
         this.name = name;
