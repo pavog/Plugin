@@ -48,7 +48,7 @@ public class Util {
 	public static String getBlockString(int type, int data) {
 		if(Material.getMaterial(type) == null) return "0";
 		String result = "" + type;
-		if(!Settings.ItemsWithMetadata.checkAgainst(type)) return result;
+		if(!Settings.ItemsWithMetadata.checkAgainst(type)) return result + ":0";
 		if(data <= Material.getMaterial(type).getMaxDurability()) result += ":" + data;
 		else result += ":0";
 		return result;
