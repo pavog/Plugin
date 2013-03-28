@@ -97,7 +97,7 @@ public class PlayersData implements DataStore {
         detailedData.add(new DetailedLogPlayersEntry(location, true));
         Query.table(PlayersTable.TableName.toString())
             .value(PlayersTable.Online.toString(), true)
-            .condition(PlayersTable.PlayerId.toString(), playerId + "")
+            .condition(PlayersTable.PlayerId.toString(), playerId)
             .update();
     }
     
@@ -110,7 +110,7 @@ public class PlayersData implements DataStore {
         detailedData.add(new DetailedLogPlayersEntry(location, false));
         Query.table(PlayersTable.TableName.toString())
             .value(PlayersTable.Online.toString(), false)
-            .condition(PlayersTable.PlayerId.toString(), playerId + "")
+            .condition(PlayersTable.PlayerId.toString(), playerId)
             .update();
     }
     
@@ -147,8 +147,10 @@ public class PlayersData implements DataStore {
         @Override
         public void fetchData(int playerId) {
             QueryResult result = Query.table(PlayersTable.TableName.toString())
-                .column(PlayersTable.PlayerId.toString(), PlayersTable.Logins.toString())
-                .condition(PlayersTable.PlayerId.toString(), playerId + "")
+                .column(PlayersTable.PlayerId.toString())
+                .column(PlayersTable.Logins.toString())
+                .column(PlayersTable.TotalPlaytime.toString())
+                .condition(PlayersTable.PlayerId.toString(), playerId)
                 .select();
             if(result == null) {
                 Query.table(PlayersTable.TableName.toString())
@@ -176,7 +178,7 @@ public class PlayersData implements DataStore {
                 .value(PlayersTable.FirstLogin.toString(), firstJoin)
                 .value(PlayersTable.Logins.toString(), logins)
                 .value(PlayersTable.TotalPlaytime.toString(), totalPlaytime)
-                .condition(PlayersTable.PlayerId.toString(), playerId + "")
+                .condition(PlayersTable.PlayerId.toString(), playerId)
                 .update(true);
             fetchData(playerId);
             return result;
@@ -232,7 +234,7 @@ public class PlayersData implements DataStore {
         @Override
         public void fetchData(int playerId) {
             QueryResult result = Query.table(DistancePlayersTable.TableName.toString())
-                .condition(DistancePlayersTable.PlayerId.toString(), playerId + "")
+                .condition(DistancePlayersTable.PlayerId.toString(), playerId)
                 .select();
             if(result == null) {
                 Query.table(DistancePlayersTable.TableName.toString())
@@ -264,7 +266,7 @@ public class PlayersData implements DataStore {
                 .value(DistancePlayersTable.Boat.toString(), boat)
                 .value(DistancePlayersTable.Minecart.toString(), minecart)
                 .value(DistancePlayersTable.Pig.toString(), pig)
-                .condition(DistancePlayersTable.PlayerId.toString(), playerId + "")
+                .condition(DistancePlayersTable.PlayerId.toString(), playerId)
                 .update(true);
             fetchData(playerId);
             return result;
@@ -381,7 +383,7 @@ public class PlayersData implements DataStore {
         @Override
         public void fetchData(int playerId) {
             QueryResult result = Query.table(MiscInfoPlayersTable.TableName.toString())
-                .condition(MiscInfoPlayersTable.PlayerId.toString(), playerId + "")
+                .condition(MiscInfoPlayersTable.PlayerId.toString(), playerId)
                 .select();
             if(result == null) {
                 Query.table(MiscInfoPlayersTable.TableName.toString())

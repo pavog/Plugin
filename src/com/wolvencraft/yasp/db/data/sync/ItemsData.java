@@ -222,7 +222,7 @@ public class ItemsData implements DataStore {
         @Override
         public void fetchData(int playerId) {
             List<QueryResult> results = Query.table(TotalItemsTable.TableName.toString())
-                .condition(TotalItemsTable.PlayerId.toString(), playerId + "")
+                .condition(TotalItemsTable.PlayerId.toString(), playerId)
                 .condition(TotalItemsTable.Material.toString(), Util.getBlockString(type, data))
                 .selectAll();
             

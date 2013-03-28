@@ -136,7 +136,7 @@ public class DeathsData implements DataStore {
         @Override
         public void fetchData(int playerId) {
             List<QueryResult> results = Query.table(TotalDeathPlayersTable.TableName.toString())
-                .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
+                .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId)
                 .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
                 .selectAll();
             
@@ -155,7 +155,7 @@ public class DeathsData implements DataStore {
         public boolean pushData(int playerId) {
             boolean result = Query.table(TotalDeathPlayersTable.TableName.toString())
                 .value(TotalDeathPlayersTable.Times.toString(), times)
-                .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "")
+                .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId)
                 .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
                 .update();
             fetchData(playerId);

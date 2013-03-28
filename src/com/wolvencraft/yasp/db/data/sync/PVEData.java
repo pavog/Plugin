@@ -170,7 +170,7 @@ public class PVEData implements DataStore{
         @Override
         public void fetchData(int playerId) {
             QueryResult result = Query.table(TotalPVEKillsTable.TableName.toString())
-                .condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
+                .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
                 .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
                 .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
                 .select();
@@ -193,7 +193,7 @@ public class PVEData implements DataStore{
             boolean result = Query.table(TotalPVEKillsTable.TableName.toString())
                 .value(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths)
                 .value(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths)
-                .condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "")
+                .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
                 .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
                 .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
                 .update();

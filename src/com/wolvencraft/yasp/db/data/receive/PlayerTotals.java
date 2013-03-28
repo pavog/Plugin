@@ -116,17 +116,17 @@ public class PlayerTotals {
         distSwam = Query.table(DistancePlayersTable.TableName.toString()).column(DistancePlayersTable.Swimmed.toString()).condition(DistancePlayersTable.PlayerId.toString(), playerId).sum();
         distTotal = distWalked + distBoated + distMinecarted + distPiggybacked + distSwam;
         
-        toolsBroken = (int) Query.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Broken.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
-        itemsCrafted = (int) Query.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Crafted.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
-        snacksEaten = (int) Query.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Used.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId + "").sum();
+        toolsBroken = (int) Query.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Broken.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId).sum();
+        itemsCrafted = (int) Query.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Crafted.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId).sum();
+        snacksEaten = (int) Query.table(TotalItemsTable.TableName.toString()).column(TotalItemsTable.Used.toString()).condition(TotalItemsTable.PlayerId.toString(), playerId).sum();
         
-        pvpKills = (int) Query.table(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).condition(TotalPVPKillsTable.PlayerId.toString(), playerId + "").sum();
-        pvpDeaths = (int) Query.table(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).condition(TotalPVPKillsTable.VictimId.toString(), playerId + "").sum();
+        pvpKills = (int) Query.table(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).condition(TotalPVPKillsTable.PlayerId.toString(), playerId).sum();
+        pvpDeaths = (int) Query.table(TotalPVPKillsTable.TableName.toString()).column(TotalPVPKillsTable.Times.toString()).condition(TotalPVPKillsTable.VictimId.toString(), playerId).sum();
         if(pvpDeaths != 0) kdr = (double) Math.round((pvpKills / pvpDeaths) * 100000) / 100000;
         else kdr = pvpKills;
         
-        pveKills = (int) Query.table(TotalPVEKillsTable.TableName.toString()).column(TotalPVEKillsTable.CreatureKilled.toString()).condition(TotalPVEKillsTable.PlayerId.toString(), playerId + "").sum();
-        otherKills = (int) Query.table(TotalDeathPlayersTable.TableName.toString()).column(TotalDeathPlayersTable.Times.toString()).condition(TotalDeathPlayersTable.PlayerId.toString(), playerId + "").sum();
+        pveKills = (int) Query.table(TotalPVEKillsTable.TableName.toString()).column(TotalPVEKillsTable.CreatureKilled.toString()).condition(TotalPVEKillsTable.PlayerId.toString(), playerId).sum();
+        otherKills = (int) Query.table(TotalDeathPlayersTable.TableName.toString()).column(TotalDeathPlayersTable.Times.toString()).condition(TotalDeathPlayersTable.PlayerId.toString(), playerId).sum();
     }
     
     /**

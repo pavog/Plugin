@@ -161,7 +161,7 @@ public class BlocksData implements DataStore {
         @Override
         public void fetchData(int playerId) {
             List<QueryResult> results = Query.table(TotalBlocksTable.TableName.toString())
-                .condition(TotalBlocksTable.PlayerId.toString(), playerId + "")
+                .condition(TotalBlocksTable.PlayerId.toString(), playerId)
                 .condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
                 .selectAll();
             
