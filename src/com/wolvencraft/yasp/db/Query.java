@@ -301,7 +301,7 @@ public class Query {
 			
 			try { return Query.fetchData(sql + ";").get(index); }
 			catch (NullPointerException ex) { return null; }
-			catch (ArrayIndexOutOfBoundsException aiex) { return null; }
+			catch (IndexOutOfBoundsException aiex) { return null; }
 		}
 		
 		/**
