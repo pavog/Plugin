@@ -39,6 +39,12 @@ import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.util.SimplePotionEffect;
 import com.wolvencraft.yasp.util.Util;
 
+/**
+ * Not a real data store, but a combination of three separate tables:
+ * Players, Distances, Miscellaneous
+ * @author bitWolfy
+ *
+ */
 public class PlayersData implements DataStore {
     
     private int playerId;
@@ -57,7 +63,9 @@ public class PlayersData implements DataStore {
     }
     
     @Override
-    public List<NormalData> getNormalData() { return null; }
+    public List<NormalData> getNormalData() {
+        return null;
+    }
     
     @Override
     public List<DetailedData> getDetailedData() {
@@ -84,9 +92,31 @@ public class PlayersData implements DataStore {
         }
     }
     
-    public Players general() { return generalData; }
-    public DistancePlayers distance() { return distanceData; }
-    public MiscInfoPlayers misc() { return miscData; }
+    /**
+     * Returns the generic player data from the Players table.<br />
+     * This information rarely changes
+     * @return Players data store
+     */
+    public Players general() {
+        return generalData;
+    }
+    
+    /**
+     * Returns the information from the Distances table.
+     * @return Distances data store
+     */
+    public DistancePlayers distance() {
+        return distanceData;
+    }
+    
+    /**
+     * Returns the information from the Miscellaneous table.<br />
+     * This information is likely to change rapidly.
+     * @return Miscellaneous data store
+     */
+    public MiscInfoPlayers misc() {
+        return miscData;
+    }
     
     /**
      * Registers player logging in with all corresponding statistics trackers.<br />
@@ -189,7 +219,9 @@ public class PlayersData implements DataStore {
          * Returns the player name
          * @return Player name
          */
-        public String getName() { return playerName; }
+        public String getName() {
+            return playerName;
+        }
         
         /**
          * Changes the online status of the player
@@ -540,16 +572,16 @@ public class PlayersData implements DataStore {
     }
     
     public class DetailedLogPlayersEntry implements DetailedData {
+        
+        private long time;
+        private boolean isLogin;
+        private Location location;
          
         public DetailedLogPlayersEntry(Location location, boolean isLogin) {
             this.time = Util.getTimestamp();
             this.isLogin = isLogin;
             this.location = location;
         }
-         
-        private long time;
-        private boolean isLogin;
-        private Location location;
          
         @Override
         public boolean pushData(int playerId) {
