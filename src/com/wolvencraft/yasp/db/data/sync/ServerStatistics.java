@@ -72,8 +72,6 @@ public class ServerStatistics {
 		maxPlayersOnline = 0;
 		maxPlayersOnlineTime = 0;
 		maxPlayersAllowed = Bukkit.getMaxPlayers();
-		entitiesCount = 0;
-		for(World world : Bukkit.getServer().getWorlds()) entitiesCount += world.getEntities().size();
 		
 		List<QueryResult> entries = Query.table(ServerStatsTable.TableName.toString()).selectAll();
 		for(QueryResult entry : entries) {
@@ -115,7 +113,6 @@ public class ServerStatistics {
 	private long maxPlayersOnlineTime;
 	
 	private int maxPlayersAllowed;
-	private int entitiesCount;
 	
 	/**
 	 * Performs a database operation to push the local data to the remote database.
@@ -127,8 +124,6 @@ public class ServerStatistics {
 		totalUptime += (curTime - lastSyncTime);
 		lastSyncTime = curTime;
 		serverTime = Bukkit.getWorlds().get(0).getFullTime();
-		entitiesCount = 0;
-		for(World world : Bukkit.getServer().getWorlds()) entitiesCount += world.getEntities().size();
 		Runtime runtime = Runtime.getRuntime();
 		totalMemory = runtime.totalMemory();
 		freeMemory = runtime.freeMemory();
@@ -144,7 +139,6 @@ public class ServerStatistics {
 		Query.table(ServerStatsTable.TableName.toString()).value("value", serverTime).condition("key", "server_time").update();
 		Query.table(ServerStatsTable.TableName.toString()).value("value", weather).condition("key", "weather").update();
 		Query.table(ServerStatsTable.TableName.toString()).value("value", weatherDuration).condition("key", "weather_duration").update();
-		Query.table(ServerStatsTable.TableName.toString()).value("value", entitiesCount).condition("key", "entities_count").update();
 		return true;
 	}
 	
@@ -233,7 +227,6 @@ public class ServerStatistics {
 		values.put("maxPlayersOnlineTime", maxPlayersOnlineTime);
 		
 		values.put("maxPlayersAllowed", maxPlayersAllowed);
-		values.put("entitiesCount", entitiesCount);
 		return values;
 	}
 }

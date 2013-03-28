@@ -38,7 +38,6 @@ INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("weather_durat
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online_time", "0");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("players_allowed", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("entities_count", "0");
 
 -- Materials
 -- Update on 11.03.2013 - 19:42:06-- 
