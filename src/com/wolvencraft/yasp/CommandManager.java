@@ -35,13 +35,14 @@ import com.wolvencraft.yasp.util.Message;
  */
 public enum CommandManager {
 	Book (BookCommand.class, "stats.cmd.book", "book"),
+	Help (HelpCommand.class, "stats.cmd.help", "help"),
+	Scoreboard(ScoreboardCommand.class, "stats.cmd.scoreboard", "scoreboard"),
+	
 	Dump (DumpCommand.class, null, "dump"),
 	Pause(PauseCommand.class, null, "pause"),
-	Scoreboard(ScoreboardCommand.class, "stats.cmd.scoreboard", "scoreboard"),
 	Sync (SyncCommand.class, null, "sync"),
 	Reconnect (ReconnectCommand.class, null, "reconnect"),
-	Repatch (RepatchCommand.class, null, "repatch"),
-	Help (HelpCommand.class, null, "help");
+	Repatch (RepatchCommand.class, null, "repatch");
 	
 	CommandManager(Class<?> clazz, String permission, String... args) {
 		try {
