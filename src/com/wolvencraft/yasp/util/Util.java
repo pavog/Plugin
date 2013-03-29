@@ -34,6 +34,9 @@ import org.bukkit.material.MaterialData;
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 
 /**
  * Utility class containing assorted methods that do not fit other categories
@@ -41,6 +44,42 @@ import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
  *
  */
 public class Util {
+    
+    /**
+     * Returns the PlayerID corresponding with the specified username.<br />
+     * If the username is not in the database, a dummy entry is created, and an ID is assigned.
+     * @param player Player name to look up in the database
+     * @return <b>Integer</b> PlayerID corresponding to the specified username
+     */
+    public static Integer getPlayerIdAsynchronously(Player player) {
+        String username = player.getName();
+        Message.debug("Retrieving a player ID for " + username);
+        
+        int playerId = -1;
+        QueryResult playerRow = Query.table(PlayersTable.TableName.toString())
+                .column(PlayersTable.PlayerId.toString())
+                .column(PlayersTable.Name.toString())
+                .condition(PlayersTable.Name.toString(), username)
+                .select();
+        
+        if(playerRow == null) {
+            Query.table(PlayersTable.TableName.toString())
+                    .value(PlayersTable.Name.toString(), username)
+                    .insert();
+            
+            playerRow = Query
+                    .table(PlayersTable.TableName.toString())
+                    .column(PlayersTable.PlayerId.toString())
+                    .column(PlayersTable.Name.toString())
+                    .condition(PlayersTable.Name.toString(), username)
+                    .select();
+        }
+        
+        playerId = playerRow.getValueAsInteger(PlayersTable.PlayerId.toString());
+        
+        Message.debug("User ID found: " + playerId);
+        return playerId;
+    }
     
     /**
      * Parses the block and returns a database-safe string
