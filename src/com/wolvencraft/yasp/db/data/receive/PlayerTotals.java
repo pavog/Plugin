@@ -46,7 +46,8 @@ public class PlayerTotals {
      */
     public PlayerTotals(int playerId) {
         this.playerId = playerId;
-
+        
+        sessionStart = Util.getTimestamp();
         currentSession = 0;
         totalPlaytime = 0;
         
@@ -74,7 +75,8 @@ public class PlayerTotals {
     }
     
     private int playerId;
-
+    
+    private long sessionStart;
     private long currentSession;
     private long totalPlaytime;
     
@@ -103,7 +105,10 @@ public class PlayerTotals {
      * Automatically calculates values from the contents of corresponding tables.
      */
     public void fetchData() {
-        currentSession = Util.getTimestamp() - Query.table(PlayersTable.TableName.toString()).column(PlayersTable.SessionStart.toString()).condition(PlayersTable.PlayerId.toString(), playerId).select().getValueAsLong(PlayersTable.SessionStart.toString());
+        try {   // XXX
+            sessionStart = Query.table(PlayersTable.TableName.toString()).column(PlayersTable.SessionStart.toString()).condition(PlayersTable.PlayerId.toString(), playerId).select().getValueAsLong(PlayersTable.SessionStart.toString());
+        } catch (NullPointerException ex) { sessionStart = Util.getTimestamp(); }
+        currentSession = Util.getTimestamp() - sessionStart;
         totalPlaytime = Query.table(PlayersTable.TableName.toString()).column(PlayersTable.TotalPlaytime.toString()).condition(PlayersTable.PlayerId.toString(), playerId).select().getValueAsLong(PlayersTable.TotalPlaytime.toString());
         
         blocksBroken = (int) Query.table(TotalBlocksTable.TableName.toString()).column(TotalBlocksTable.Destroyed.toString()).condition(TotalBlocksTable.PlayerId.toString(), playerId).sum();
