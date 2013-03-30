@@ -96,7 +96,7 @@ public class Settings {
                     .selectAll()
                     .get(0)
                     .getValueAsBoolean("value");
-            } catch (Exception ex) { return true; }
+            } catch (Throwable t) { return true; }
         }
     }
     
@@ -150,7 +150,7 @@ public class Settings {
                     .selectAll()
                     .get(0)
                     .getValue("value");
-            } catch (Exception ex) { return ""; }
+            } catch (Throwable t) { return ""; }
         }
         public Integer asInteger() { 
             try {
@@ -160,7 +160,7 @@ public class Settings {
                     .selectAll()
                     .get(0)
                     .getValueAsInteger("value");
-            } catch (Exception ex) { return 0; }
+            } catch (Throwable t) { return 0; }
         }
         public Boolean asBoolean() {
             try {
@@ -170,7 +170,7 @@ public class Settings {
                     .selectAll()
                     .get(0)
                     .getValueAsBoolean("value");
-            } catch (Exception ex) { return false; }
+            } catch (Throwable t) { return false; }
         }
         
         public boolean update(Object value) {
