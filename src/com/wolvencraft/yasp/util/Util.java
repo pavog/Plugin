@@ -56,27 +56,21 @@ public class Util {
         Message.debug("Retrieving a player ID for " + username);
         
         int playerId = -1;
-        QueryResult playerRow = Query.table(PlayersTable.TableName.toString())
-                .column(PlayersTable.PlayerId.toString())
-                .column(PlayersTable.Name.toString())
-                .condition(PlayersTable.Name.toString(), username)
-                .select();
-        
-        if(playerRow == null) {
-            Query.table(PlayersTable.TableName.toString())
-                    .value(PlayersTable.Name.toString(), username)
-                    .insert();
-            
-            playerRow = Query
-                    .table(PlayersTable.TableName.toString())
+        do {
+            QueryResult playerRow = Query.table(PlayersTable.TableName.toString())
                     .column(PlayersTable.PlayerId.toString())
                     .column(PlayersTable.Name.toString())
                     .condition(PlayersTable.Name.toString(), username)
                     .select();
-        }
-        
-        playerId = playerRow.getValueAsInteger(PlayersTable.PlayerId.toString());
-        
+            
+            if(playerRow == null) {
+                Query.table(PlayersTable.TableName.toString())
+                        .value(PlayersTable.Name.toString(), username)
+                        .insert();
+            } else {
+                playerId = playerRow.getValueAsInteger(PlayersTable.PlayerId.toString());
+            }
+        } while (playerId == -1);
         Message.debug("User ID found: " + playerId);
         return playerId;
     }
