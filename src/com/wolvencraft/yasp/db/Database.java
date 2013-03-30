@@ -96,7 +96,7 @@ public class Database {
         List<String> patches = new ArrayList<String>();
         do {
             String patch = (latestVersion + 1) + "";
-            if(this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + patch + ".sql") == null) break;
+            if(this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patch + ".yasp.sql") == null) break;
             patches.add(patch);
             latestVersion++;
         } while (true);
@@ -113,7 +113,7 @@ public class Database {
         Message.log("+-------] Database Patcher [-------+");
         for(String patch : patches) {
             Message.log("|       Applying patch " + patch + " / " + patches.size() + "       |");
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/yasp_v" + patch + ".sql");
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patch + ".yasp.sql");
             try {sr.runScript(new InputStreamReader(is)); }
             catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + patch, e); }
             
