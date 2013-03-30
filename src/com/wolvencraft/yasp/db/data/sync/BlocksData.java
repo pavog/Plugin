@@ -29,7 +29,8 @@ import org.bukkit.Material;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Detailed;
+import com.wolvencraft.yasp.db.tables.Detailed.PlacedBlocks;
+import com.wolvencraft.yasp.db.tables.Detailed.DestroyedBlocks;
 import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
 import com.wolvencraft.yasp.util.Util;
 
@@ -160,22 +161,23 @@ public class BlocksData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
-            List<QueryResult> results = Query.table(TotalBlocksTable.TableName.toString())
-                .condition(TotalBlocksTable.PlayerId.toString(), playerId)
-                .condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
-                .selectAll();
+            QueryResult result = Query.table(TotalBlocksTable.TableName.toString())
+                    .column(TotalBlocksTable.Destroyed.toString())
+                    .column(TotalBlocksTable.Placed.toString())
+                    .condition(TotalBlocksTable.PlayerId.toString(), playerId)
+                    .condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
+                    .select();
             
-            if(results.isEmpty()) {
+            if(result == null) {
                 Query.table(TotalBlocksTable.TableName.toString())
                     .value(TotalBlocksTable.PlayerId.toString(), playerId)
                     .value(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
                     .value(TotalBlocksTable.Destroyed.toString(), broken)
                     .value(TotalBlocksTable.Placed.toString(), placed)
                     .insert();
-            }
-            else {
-                broken = results.get(0).getValueAsInteger(TotalBlocksTable.Destroyed.toString());
-                placed = results.get(0).getValueAsInteger(TotalBlocksTable.Placed.toString());
+            } else {
+                broken = result.getValueAsInteger(TotalBlocksTable.Destroyed.toString());
+                placed = result.getValueAsInteger(TotalBlocksTable.Placed.toString());
             }
         }
 
@@ -187,7 +189,7 @@ public class BlocksData implements DataStore {
                 .condition(TotalBlocksTable.PlayerId.toString(), playerId)
                 .condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
                 .update(true);
-            fetchData(playerId);
+            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
         }
         
@@ -198,20 +200,25 @@ public class BlocksData implements DataStore {
          * @return <b>true</b> if the conditions are met, <b>false</b> otherwise
          */
         public boolean equals(Material materialType, byte data) {
-            if(!Settings.ItemsWithMetadata.checkAgainst(type)) data = 0;
-            
-            return this.type == materialType.getId() && this.data == data;
+            if(Settings.ItemsWithMetadata.checkAgainst(type)) {
+                return this.type == materialType.getId() && this.data == data;
+            }
+            return this.type == materialType.getId();
         }
         
         /**
          * Increments the number of blocks to the total number of blocks destroyed
          */
-        public void addBroken() { broken ++; }
+        public void addBroken() {
+            broken ++;
+        }
         
         /**
          * Increments the number of blocks to the total number of blocks placed
          */
-        public void addPlaced() { placed ++; }
+        public void addPlaced() {
+            placed ++;
+        }
     }
     
     
@@ -237,8 +244,7 @@ public class BlocksData implements DataStore {
          */
         public DetailedDestroyerdBlocksEntry(Location location, Material materialType, byte data) {
             this.type = materialType.getId();
-            if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = data;
-            else this.data = 0;
+            this.data = data;
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
@@ -246,14 +252,14 @@ public class BlocksData implements DataStore {
 
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(Detailed.DestroyedBlocks.TableName.toString())
-                .value(Detailed.DestroyedBlocks.PlayerId.toString(), playerId)
-                .value(Detailed.DestroyedBlocks.Material.toString(), Util.getBlockString(type, data))
-                .value(Detailed.DestroyedBlocks.World.toString(), location.getWorld().getName())
-                .value(Detailed.DestroyedBlocks.XCoord.toString(), location.getBlockX())
-                .value(Detailed.DestroyedBlocks.YCoord.toString(), location.getBlockY())
-                .value(Detailed.DestroyedBlocks.ZCoord.toString(), location.getBlockZ())
-                .value(Detailed.DestroyedBlocks.Timestamp.toString(), timestamp)
+            return Query.table(DestroyedBlocks.TableName.toString())
+                .value(DestroyedBlocks.PlayerId.toString(), playerId)
+                .value(DestroyedBlocks.Material.toString(), Util.getBlockString(type, data))
+                .value(DestroyedBlocks.World.toString(), location.getWorld().getName())
+                .value(DestroyedBlocks.XCoord.toString(), location.getBlockX())
+                .value(DestroyedBlocks.YCoord.toString(), location.getBlockY())
+                .value(DestroyedBlocks.ZCoord.toString(), location.getBlockZ())
+                .value(DestroyedBlocks.Timestamp.toString(), timestamp)
                 .insert();
         }
 
@@ -282,8 +288,7 @@ public class BlocksData implements DataStore {
          */
         public DetailedPlacedBlocksEntry(Location location, Material materialType, byte data) {
             this.type = materialType.getId();
-            if(Settings.ItemsWithMetadata.checkAgainst(type)) this.data = data;
-            else this.data = 0;
+            this.data = data;
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
@@ -291,14 +296,14 @@ public class BlocksData implements DataStore {
 
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(Detailed.PlacedBlocks.TableName.toString())
-                .value(Detailed.PlacedBlocks.PlayerId.toString(), playerId)
-                .value(Detailed.PlacedBlocks.Material.toString(), Util.getBlockString(type, data))
-                .value(Detailed.PlacedBlocks.World.toString(), location.getWorld().getName())
-                .value(Detailed.PlacedBlocks.XCoord.toString(), location.getBlockX())
-                .value(Detailed.PlacedBlocks.YCoord.toString(), location.getBlockY())
-                .value(Detailed.PlacedBlocks.ZCoord.toString(), location.getBlockZ())
-                .value(Detailed.PlacedBlocks.Timestamp.toString(), timestamp)
+            return Query.table(PlacedBlocks.TableName.toString())
+                .value(PlacedBlocks.PlayerId.toString(), playerId)
+                .value(PlacedBlocks.Material.toString(), Util.getBlockString(type, data))
+                .value(PlacedBlocks.World.toString(), location.getWorld().getName())
+                .value(PlacedBlocks.XCoord.toString(), location.getBlockX())
+                .value(PlacedBlocks.YCoord.toString(), location.getBlockY())
+                .value(PlacedBlocks.ZCoord.toString(), location.getBlockZ())
+                .value(PlacedBlocks.Timestamp.toString(), timestamp)
                 .insert();
         }
         

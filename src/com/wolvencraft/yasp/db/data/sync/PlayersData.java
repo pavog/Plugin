@@ -30,9 +30,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
 import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Detailed;
+import com.wolvencraft.yasp.db.tables.Detailed.LogPlayers;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
@@ -269,8 +270,14 @@ public class PlayersData implements DataStore {
         @Override
         public void fetchData(int playerId) {
             QueryResult result = Query.table(DistancePlayersTable.TableName.toString())
-                .condition(DistancePlayersTable.PlayerId.toString(), playerId)
-                .select();
+                    .column(DistancePlayersTable.Foot.toString())
+                    .column(DistancePlayersTable.Swimmed.toString())
+                    .column(DistancePlayersTable.Flight.toString())
+                    .column(DistancePlayersTable.Boat.toString())
+                    .column(DistancePlayersTable.Minecart.toString())
+                    .column(DistancePlayersTable.Pig.toString())
+                    .condition(DistancePlayersTable.PlayerId.toString(), playerId)
+                    .select();
             if(result == null) {
                 Query.table(DistancePlayersTable.TableName.toString())
                     .value(DistancePlayersTable.PlayerId.toString(), playerId)
@@ -303,7 +310,7 @@ public class PlayersData implements DataStore {
                 .value(DistancePlayersTable.Pig.toString(), pig)
                 .condition(DistancePlayersTable.PlayerId.toString(), playerId)
                 .update(true);
-            fetchData(playerId);
+            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
         }
         
@@ -487,7 +494,7 @@ public class PlayersData implements DataStore {
                 .value(MiscInfoPlayersTable.PotionEffects.toString(), SimplePotionEffect.toGsonArray(potionEffects))
                 .condition(MiscInfoPlayersTable.PlayerId.toString(), playerId)
                 .update(true);
-            fetchData(playerId);
+            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
         }
         
@@ -587,15 +594,15 @@ public class PlayersData implements DataStore {
          
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(Detailed.LogPlayers.TableName.toString())
-                .value(Detailed.LogPlayers.PlayerId.toString(), playerId)
-                .value(Detailed.LogPlayers.Timestamp.toString(), time)
-                .value(Detailed.LogPlayers.IsLogin.toString(), isLogin)
-                .value(Detailed.LogPlayers.World.toString(), location.getWorld().getName())
-                .value(Detailed.LogPlayers.XCoord.toString(), location.getBlockX())
-                .value(Detailed.LogPlayers.YCoord.toString(), location.getBlockY())
-                .value(Detailed.LogPlayers.ZCoord.toString(), location.getBlockZ())
-                .insert();
+            return Query.table(LogPlayers.TableName.toString())
+                    .value(LogPlayers.PlayerId.toString(), playerId)
+                    .value(LogPlayers.Timestamp.toString(), time)
+                    .value(LogPlayers.IsLogin.toString(), isLogin)
+                    .value(LogPlayers.World.toString(), location.getWorld().getName())
+                    .value(LogPlayers.XCoord.toString(), location.getBlockX())
+                    .value(LogPlayers.YCoord.toString(), location.getBlockY())
+                    .value(LogPlayers.ZCoord.toString(), location.getBlockZ())
+                    .insert();
         }
      
     }

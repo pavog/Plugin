@@ -31,7 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Detailed;
+import com.wolvencraft.yasp.db.tables.Detailed.PVEKills;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.util.Util;
 
@@ -155,11 +155,7 @@ public class PVEData implements DataStore{
         public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
             this.creatureType = creatureType;
             this.weaponType = weapon.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) {
-                this.weaponData = weapon.getData().getData();
-            } else {
-                this.weaponData = 0;
-            }
+            this.weaponData = weapon.getData().getData();
             
             this.playerDeaths = 0;
             this.creatureDeaths = 0;
@@ -170,10 +166,12 @@ public class PVEData implements DataStore{
         @Override
         public void fetchData(int playerId) {
             QueryResult result = Query.table(TotalPVEKillsTable.TableName.toString())
-                .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
-                .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-                .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
-                .select();
+                    .column(TotalPVEKillsTable.PlayerKilled.toString())
+                    .column(TotalPVEKillsTable.CreatureKilled.toString())
+                    .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
+                    .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
+                    .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
+                    .select();
             if(result == null) {
                 Query.table(TotalPVEKillsTable.TableName.toString())
                     .value(TotalPVEKillsTable.PlayerId.toString(), playerId)
@@ -191,12 +189,12 @@ public class PVEData implements DataStore{
         @Override
         public boolean pushData(int playerId) {
             boolean result = Query.table(TotalPVEKillsTable.TableName.toString())
-                .value(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths)
-                .value(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths)
-                .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
-                .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-                .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
-                .update();
+                    .value(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths)
+                    .value(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths)
+                    .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
+                    .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
+                    .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
+                    .update();
             fetchData(playerId);
             return result;
         }
@@ -209,14 +207,13 @@ public class PVEData implements DataStore{
          */
         public boolean equals(EntityType creatureType, ItemStack weapon) {
             int weaponType = weapon.getTypeId();
-            int weaponData = weapon.getData().getData();
-            if(!Settings.ItemsWithMetadata.checkAgainst(weaponType)) {
-                weaponData = 0;
+            if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) {
+                int weaponData = weapon.getData().getData();
+                return this.creatureType.equals(creatureType)
+                        && this.weaponType == weaponType
+                        && this.weaponData == weaponData;
             }
-            
-            return this.creatureType.equals(creatureType)
-                    && this.weaponType == weaponType
-                    && this.weaponData == weaponData;
+            return this.creatureType.equals(creatureType) && this.weaponType == weaponType;
         }
         
         /**
@@ -285,16 +282,16 @@ public class PVEData implements DataStore{
         
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(Detailed.PVEKills.TableName.toString())
-                .value(Detailed.PVEKills.PlayerId.toString(), playerId)
-                .value(Detailed.PVEKills.CreatureId.toString(), creatureType.getTypeId())
-                .value(Detailed.PVEKills.PlayerKilled.toString(), playerKilled)
-                .value(Detailed.PVEKills.Material.toString(), Util.getBlockString(weaponType, weaponData))
-                .value(Detailed.PVEKills.World.toString(), location.getWorld().getName())
-                .value(Detailed.PVEKills.XCoord.toString(), location.getBlockX())
-                .value(Detailed.PVEKills.YCoord.toString(), location.getBlockY())
-                .value(Detailed.PVEKills.ZCoord.toString(), location.getBlockZ())
-                .value(Detailed.PVEKills.Timestamp.toString(), timestamp)
+            return Query.table(PVEKills.TableName.toString())
+                .value(PVEKills.PlayerId.toString(), playerId)
+                .value(PVEKills.CreatureId.toString(), creatureType.getTypeId())
+                .value(PVEKills.PlayerKilled.toString(), playerKilled)
+                .value(PVEKills.Material.toString(), Util.getBlockString(weaponType, weaponData))
+                .value(PVEKills.World.toString(), location.getWorld().getName())
+                .value(PVEKills.XCoord.toString(), location.getBlockX())
+                .value(PVEKills.YCoord.toString(), location.getBlockY())
+                .value(PVEKills.ZCoord.toString(), location.getBlockZ())
+                .value(PVEKills.Timestamp.toString(), timestamp)
                 .insert();
         }
 

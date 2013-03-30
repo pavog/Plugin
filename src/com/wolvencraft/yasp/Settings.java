@@ -44,7 +44,8 @@ public class Settings {
         DBPass("database.pass"),
         DBPrefix("database.prefix"),
         DBConnect("", "jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
-        LogPrefix("log-prefix");
+        LogPrefix("log-prefix"),
+        Cloud("", true);
         
         LocalConfiguration(String node) {
             this.node = node;

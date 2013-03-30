@@ -26,9 +26,10 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Detailed;
+import com.wolvencraft.yasp.db.tables.Detailed.DeathPlayers;
 import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
 import com.wolvencraft.yasp.util.Util;
 
@@ -135,30 +136,31 @@ public class DeathsData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
-            List<QueryResult> results = Query.table(TotalDeathPlayersTable.TableName.toString())
-                .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId)
-                .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
-                .selectAll();
+           QueryResult result = Query.table(TotalDeathPlayersTable.TableName.toString())
+                    .column(TotalDeathPlayersTable.Times.toString())
+                    .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId)
+                    .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
+                    .select();
             
-            if(results.isEmpty()) {
+            if(result == null) {
                 Query.table(TotalDeathPlayersTable.TableName.toString())
                     .value(TotalDeathPlayersTable.PlayerId.toString(), playerId)
                     .value(TotalDeathPlayersTable.Cause.toString(), cause.name())
                     .value(TotalDeathPlayersTable.Times.toString(), times)
                     .insert();
             } else {
-                times = results.get(0).getValueAsInteger(TotalDeathPlayersTable.Times.toString());
+                times = result.getValueAsInteger(TotalDeathPlayersTable.Times.toString());
             }
         }
 
         @Override
         public boolean pushData(int playerId) {
             boolean result = Query.table(TotalDeathPlayersTable.TableName.toString())
-                .value(TotalDeathPlayersTable.Times.toString(), times)
-                .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId)
-                .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
-                .update();
-            fetchData(playerId);
+                    .value(TotalDeathPlayersTable.Times.toString(), times)
+                    .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId)
+                    .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
+                    .update();
+            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
         }
 
@@ -175,12 +177,16 @@ public class DeathsData implements DataStore {
          * Returns the death cause
          * @return <b>DamageCause</b> death cause
          */
-        public DamageCause getCause() { return cause; }
+        public DamageCause getCause() {
+            return cause;
+        }
         
         /**
          * Increments the number of times a player died from the specified cause.
          */
-        public void addTimes() { times++; }
+        public void addTimes() {
+            times++;
+        }
         
     }
     
@@ -211,15 +217,15 @@ public class DeathsData implements DataStore {
 
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(Detailed.DeathPlayers.TableName.toString())
-                .value(Detailed.DeathPlayers.PlayerId.toString(), playerId)
-                .value(Detailed.DeathPlayers.Cause.toString(), deathCause)
-                .value(Detailed.DeathPlayers.World.toString(), location.getWorld().getName())
-                .value(Detailed.DeathPlayers.XCoord.toString(), location.getBlockX())
-                .value(Detailed.DeathPlayers.YCoord.toString(), location.getBlockY())
-                .value(Detailed.DeathPlayers.ZCoord.toString(), location.getBlockZ())
-                .value(Detailed.DeathPlayers.Timestamp.toString(), timestamp)
-                .insert();
+            return Query.table(DeathPlayers.TableName.toString())
+                    .value(DeathPlayers.PlayerId.toString(), playerId)
+                    .value(DeathPlayers.Cause.toString(), deathCause)
+                    .value(DeathPlayers.World.toString(), location.getWorld().getName())
+                    .value(DeathPlayers.XCoord.toString(), location.getBlockX())
+                    .value(DeathPlayers.YCoord.toString(), location.getBlockY())
+                    .value(DeathPlayers.ZCoord.toString(), location.getBlockZ())
+                    .value(DeathPlayers.Timestamp.toString(), timestamp)
+                    .insert();
         }
 
     }
