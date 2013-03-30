@@ -177,8 +177,8 @@ public class PlayersData implements DataStore {
         @Override
         public void fetchData(int playerId) {
             QueryResult result = Query.table(PlayersTable.TableName.toString())
-                .column(PlayersTable.PlayerId.toString())
                 .column(PlayersTable.Logins.toString())
+                .column(PlayersTable.FirstLogin.toString())
                 .column(PlayersTable.TotalPlaytime.toString())
                 .condition(PlayersTable.PlayerId.toString(), playerId)
                 .select();
@@ -193,6 +193,8 @@ public class PlayersData implements DataStore {
                     .value(PlayersTable.TotalPlaytime.toString(), totalPlaytime)
                     .insert();
             } else {
+                firstJoin = result.getValueAsLong(PlayersTable.FirstLogin.toString());
+                if(firstJoin == 0) firstJoin = Util.getTimestamp();
                 logins = result.getValueAsInteger(PlayersTable.Logins.toString());
                 totalPlaytime = result.getValueAsLong(PlayersTable.TotalPlaytime.toString());
             }
