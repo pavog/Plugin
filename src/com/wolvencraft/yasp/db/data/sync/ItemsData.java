@@ -192,7 +192,7 @@ public class ItemsData implements DataStore {
     public class TotalItemsEntry implements NormalData {
         
         private int type;
-        private byte data;
+        private int data;
         private int dropped;
         private int pickedUp;
         private int used;
@@ -208,7 +208,9 @@ public class ItemsData implements DataStore {
          */
         public TotalItemsEntry(int playerId, ItemStack itemStack) {
             this.type = itemStack.getTypeId();
-            this.data = itemStack.getData().getData();
+            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) {
+                this.data = itemStack.getData().getData();
+            }
             
             this.dropped = 0;
             this.pickedUp = 0;
@@ -357,7 +359,7 @@ public class ItemsData implements DataStore {
     public class DetailedDroppedItemsEntry implements DetailedData {
         
         private int type;
-        private byte data;
+        private int data;
         private Location location;
         private long timestamp;
 
@@ -369,7 +371,9 @@ public class ItemsData implements DataStore {
          */
         public DetailedDroppedItemsEntry(Location location, ItemStack itemStack) {
             this.type = itemStack.getTypeId();
-            this.data = itemStack.getData().getData();
+            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) {
+                this.data = itemStack.getData().getData();
+            }
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
@@ -378,14 +382,14 @@ public class ItemsData implements DataStore {
         @Override
         public boolean pushData(int playerId) {
             return Query.table(DroppedItems.TableName.toString())
-                .value(DroppedItems.PlayerId.toString(), playerId)
-                .value(DroppedItems.Material.toString(), Util.getBlockString(type, data))
-                .value(DroppedItems.World.toString(), location.getWorld().getName())
-                .value(DroppedItems.XCoord.toString(), location.getBlockX())
-                .value(DroppedItems.YCoord.toString(), location.getBlockY())
-                .value(DroppedItems.ZCoord.toString(), location.getBlockZ())
-                .value(DroppedItems.Timestamp.toString(), timestamp)
-                .insert();
+                    .value(DroppedItems.PlayerId.toString(), playerId)
+                    .value(DroppedItems.Material.toString(), Util.getBlockString(type, data))
+                    .value(DroppedItems.World.toString(), location.getWorld().getName())
+                    .value(DroppedItems.XCoord.toString(), location.getBlockX())
+                    .value(DroppedItems.YCoord.toString(), location.getBlockY())
+                    .value(DroppedItems.ZCoord.toString(), location.getBlockZ())
+                    .value(DroppedItems.Timestamp.toString(), timestamp)
+                    .insert();
         }
 
     }

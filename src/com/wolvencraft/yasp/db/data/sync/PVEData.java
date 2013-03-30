@@ -139,8 +139,8 @@ public class PVEData implements DataStore{
         
         private EntityType creatureType;
         
-        private int weaponType;
-        private int weaponData;
+        private int type;
+        private int data;
         
         private int playerDeaths;
         private int creatureDeaths;
@@ -154,8 +154,10 @@ public class PVEData implements DataStore{
          */
         public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
             this.creatureType = creatureType;
-            this.weaponType = weapon.getTypeId();
-            this.weaponData = weapon.getData().getData();
+            this.type = weapon.getTypeId();
+            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) {
+                this.data = weapon.getData().getData();
+            }
             
             this.playerDeaths = 0;
             this.creatureDeaths = 0;
@@ -170,13 +172,13 @@ public class PVEData implements DataStore{
                     .column(TotalPVEKillsTable.CreatureKilled.toString())
                     .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
                     .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-                    .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
+                    .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(type, data))
                     .select();
             if(result == null) {
                 Query.table(TotalPVEKillsTable.TableName.toString())
                     .value(TotalPVEKillsTable.PlayerId.toString(), playerId)
                     .value(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId())
-                    .value(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
+                    .value(TotalPVEKillsTable.Material.toString(), Util.getBlockString(type, data))
                     .value(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths)
                     .value(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths)
                     .insert();
@@ -193,9 +195,9 @@ public class PVEData implements DataStore{
                     .value(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths)
                     .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
                     .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-                    .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(weaponType, weaponData))
+                    .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(type, data))
                     .update();
-            fetchData(playerId);
+            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
         }
 
@@ -210,10 +212,10 @@ public class PVEData implements DataStore{
             if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) {
                 int weaponData = weapon.getData().getData();
                 return this.creatureType.equals(creatureType)
-                        && this.weaponType == weaponType
-                        && this.weaponData == weaponData;
+                        && this.type == weaponType
+                        && this.data == weaponData;
             }
-            return this.creatureType.equals(creatureType) && this.weaponType == weaponType;
+            return this.creatureType.equals(creatureType) && this.type == weaponType;
         }
         
         /**
@@ -241,8 +243,8 @@ public class PVEData implements DataStore{
         
         private EntityType creatureType;
         
-        private int weaponType;
-        private int weaponData;
+        private int type;
+        private int data;
         
         private Location location;
         
@@ -258,8 +260,8 @@ public class PVEData implements DataStore{
          */
         public DetailedPVEEntry (EntityType creatureType, Location location, ItemStack weapon) {
             this.creatureType = creatureType;
-            this.weaponType = weapon.getTypeId();
-            this.weaponData = weapon.getData().getData();
+            this.type = weapon.getTypeId();
+            this.data = weapon.getData().getData();
             this.location = location;
             this.playerKilled = false;
             this.timestamp = Util.getTimestamp();
@@ -273,8 +275,8 @@ public class PVEData implements DataStore{
          */
         public DetailedPVEEntry (EntityType creatureType, Location location) {
             this.creatureType = creatureType;
-            this.weaponType = -1;
-            this.weaponData = 0;
+            this.type = -1;
+            this.data = 0;
             this.location = location;
             this.playerKilled = true;
             this.timestamp = Util.getTimestamp();
@@ -283,16 +285,16 @@ public class PVEData implements DataStore{
         @Override
         public boolean pushData(int playerId) {
             return Query.table(PVEKills.TableName.toString())
-                .value(PVEKills.PlayerId.toString(), playerId)
-                .value(PVEKills.CreatureId.toString(), creatureType.getTypeId())
-                .value(PVEKills.PlayerKilled.toString(), playerKilled)
-                .value(PVEKills.Material.toString(), Util.getBlockString(weaponType, weaponData))
-                .value(PVEKills.World.toString(), location.getWorld().getName())
-                .value(PVEKills.XCoord.toString(), location.getBlockX())
-                .value(PVEKills.YCoord.toString(), location.getBlockY())
-                .value(PVEKills.ZCoord.toString(), location.getBlockZ())
-                .value(PVEKills.Timestamp.toString(), timestamp)
-                .insert();
+                    .value(PVEKills.PlayerId.toString(), playerId)
+                    .value(PVEKills.CreatureId.toString(), creatureType.getTypeId())
+                    .value(PVEKills.PlayerKilled.toString(), playerKilled)
+                    .value(PVEKills.Material.toString(), Util.getBlockString(type, data))
+                    .value(PVEKills.World.toString(), location.getWorld().getName())
+                    .value(PVEKills.XCoord.toString(), location.getBlockX())
+                    .value(PVEKills.YCoord.toString(), location.getBlockY())
+                    .value(PVEKills.ZCoord.toString(), location.getBlockZ())
+                    .value(PVEKills.Timestamp.toString(), timestamp)
+                    .insert();
         }
 
     }

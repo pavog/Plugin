@@ -151,7 +151,7 @@ public class BlocksData implements DataStore {
          */
         public TotalBlocksEntry(int playerId, Material materialType, byte data) {
             this.type = materialType.getId();
-            this.data = data;
+            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) this.data = data;
             
             this.broken = 0;
             this.placed = 0;
@@ -231,7 +231,7 @@ public class BlocksData implements DataStore {
     public class DetailedDestroyerdBlocksEntry implements DetailedData {
         
         private int type;
-        private byte data;
+        private int data;
         private Location location;
         private long timestamp;
         
@@ -244,7 +244,7 @@ public class BlocksData implements DataStore {
          */
         public DetailedDestroyerdBlocksEntry(Location location, Material materialType, byte data) {
             this.type = materialType.getId();
-            this.data = data;
+            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) this.data = data;
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
