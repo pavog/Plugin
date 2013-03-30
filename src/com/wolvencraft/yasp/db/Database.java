@@ -91,27 +91,32 @@ public class Database {
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
     public void runPatch(boolean force) throws DatabaseConnectionException {
-        int currentVersion = 0, latestVersion = 0;
-        if(!force) { currentVersion = latestVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
-        List<String> patches = new ArrayList<String>();
+        int currentVersion, latestVersion;
+        if(!force) {
+            currentVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger();
+            latestVersion = currentVersion;
+        } else {
+            currentVersion = 1;
+            latestVersion = 0;
+        }
+        List<Integer> patches = new ArrayList<Integer>();
         do {
-            String patch = (latestVersion + 1) + "";
-            if(this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patch + ".yasp.sql") == null) break;
-            patches.add(patch);
+            if(this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + latestVersion + ".yasp.sql") == null) break;
+            patches.add(latestVersion);
             latestVersion++;
         } while (true);
-        
-        Message.debug("Current version: " + currentVersion + ", latest version: " + latestVersion);
         
         if(currentVersion >= latestVersion) {
             Message.log("Target database is up to date");
             Statistics.setPaused(false);
             return;
+        } else {
+            Message.debug("Current version: " + currentVersion + ", latest version: " + latestVersion);
         }
-
+        
         ScriptRunner sr = new ScriptRunner(connection);
         Message.log("+-------] Database Patcher [-------+");
-        for(String patch : patches) {
+        for(Integer patch : patches) {
             Message.log("|       Applying patch " + patch + " / " + patches.size() + "       |");
             InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patch + ".yasp.sql");
             try {sr.runScript(new InputStreamReader(is)); }

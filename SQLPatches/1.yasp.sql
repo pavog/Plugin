@@ -267,17 +267,6 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pickedup_items` (
 
 
 -- -----------------------------------------------------
--- Table `$dbname`.`$prefix_settings`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_settings` ;
-
-CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_settings` (
-  `key` VARCHAR(64) NOT NULL ,
-  `value` TEXT NOT NULL ,
-  PRIMARY KEY (`key`) );
-
-
--- -----------------------------------------------------
 -- Table `$dbname`.`$prefix_detailed_pve_kills`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pve_kills` ;
