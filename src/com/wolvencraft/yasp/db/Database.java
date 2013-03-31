@@ -92,19 +92,19 @@ public class Database {
      */
     public void runPatch(boolean force) throws DatabaseConnectionException {
         int databaseVersion;
-        if(force) { databaseVersion = 1; }
+        if(force) { databaseVersion = 0; }
         else { databaseVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
         int latestPatchVersion = databaseVersion;
         
-        while (this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + latestPatchVersion + ".yasp.sql") != null) {
+        do {
             latestPatchVersion++;
-        }
+        } while (this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + (latestPatchVersion + 1) + ".yasp.sql") != null);
         
         if(databaseVersion >= latestPatchVersion) {
             Message.log("Target database is up to date");
             Statistics.setPaused(false);
             return;
-        }
+        } else databaseVersion++;
         
         Message.debug("Current version: " + databaseVersion + ", latest version: " + latestPatchVersion);
         
