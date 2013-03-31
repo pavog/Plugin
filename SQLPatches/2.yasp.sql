@@ -492,6 +492,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_misc_info_players` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
   `player_id` INT NOT NULL ,
+  `is_op` TINYINT(1) NOT NULL DEFAULT 0 ,
   `player_ip` VARCHAR(32) NOT NULL ,
   `gamemode` TINYINT(2) NOT NULL DEFAULT 0 ,
   `exp_level` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
