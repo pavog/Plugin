@@ -207,7 +207,7 @@ public class PlayersData implements DataStore {
 
         @Override
         public boolean pushData(int playerId) {
-            online = Bukkit.getServer().getPlayer(playerName) != null;
+            online = Bukkit.getServer().getPlayerExact(playerName) != null;
             if(online) {
                 totalPlaytime += (lastSync - sessionStart);
                 lastSync = Util.getTimestamp();
