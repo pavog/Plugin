@@ -195,7 +195,7 @@ public class PlayersData implements DataStore {
                     .insert();
             } else {
                 firstJoin = result.getValueAsLong(PlayersTable.FirstLogin.toString());
-                if(firstJoin == 0) firstJoin = Util.getTimestamp();
+                if(firstJoin == -1) firstJoin = Util.getTimestamp();
                 logins = result.getValueAsInteger(PlayersTable.Logins.toString());
                 totalPlaytime = result.getValueAsLong(PlayersTable.TotalPlaytime.toString());
             }
