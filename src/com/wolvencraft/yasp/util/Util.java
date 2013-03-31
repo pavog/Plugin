@@ -171,7 +171,8 @@ public class Util {
      * @return <b>true</b> if the player's statistics should not be registered, <b>false</b> otherwise.
      */
     public static boolean isTracked(Player player) {
-        return player.isOp() || player.hasPermission("stats.track");
+        return player.isOp()
+            || player.hasPermission("stats.track");
     }
     
     /**
@@ -181,7 +182,9 @@ public class Util {
      * @return <b>true</b> if the player's statistics should not be registered, <b>false</b> otherwise
      */
     public static boolean isTracked(Player player, String statsType) {
-        return player.isOp() || player.hasPermission("stats.track") || player.hasPermission("stats.track." + statsType);
+        return player.isOp()
+            || player.hasPermission("stats.track")
+            || player.hasPermission("stats.track." + statsType);
     }
     
 }

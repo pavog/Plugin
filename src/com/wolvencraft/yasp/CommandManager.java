@@ -41,11 +41,11 @@ public enum CommandManager {
     Help(HelpCommand.class, "stats.cmd.help", "help"),
     Scoreboard(ScoreboardCommand.class, "stats.cmd.scoreboard", "scoreboard"),
     
-    Dump(DumpCommand.class, null, "dump"),
-    Pause(PauseCommand.class, null, "pause"),
-    Sync(SyncCommand.class, null, "sync"),
-    Reconnect(ReconnectCommand.class, null, "reconnect"),
-    Repatch(RepatchCommand.class, null, "repatch");
+    Dump(DumpCommand.class, "stats.cmd.debug", "dump"),
+    Pause(PauseCommand.class, "stats.cmd.debug", "pause"),
+    Sync(SyncCommand.class, "stats.cmd.debug", "sync"),
+    Reconnect(ReconnectCommand.class, "stats.cmd.debug", "reconnect"),
+    Repatch(RepatchCommand.class, "stats.cmd.debug", "repatch");
     
     private static CommandSender sender = null;
     

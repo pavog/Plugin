@@ -16,3 +16,5 @@ permissions:
     default: op
     children:
       stats.cmd.book: true
+      stats.cmd.scoreboard: true
+      stats.cmd.debug: true
