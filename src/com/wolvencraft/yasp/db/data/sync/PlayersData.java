@@ -152,6 +152,8 @@ public class PlayersData implements DataStore {
      *
      */
     public class Players implements NormalData {
+
+        private long lastSync;
         
         private String playerName;
         
@@ -162,12 +164,14 @@ public class PlayersData implements DataStore {
         private int logins;
         
         public Players (int playerId, Player player) {
+            this.lastSync = Util.getTimestamp();
+            
             this.playerName = player.getName();
             
             this.online = true;
-            this.sessionStart = Util.getTimestamp();
+            this.sessionStart = lastSync;
             this.totalPlaytime = 0;
-            this.firstJoin = Util.getTimestamp();
+            this.firstJoin = lastSync;
             this.logins = 0;
             
             fetchData(playerId);
@@ -204,7 +208,10 @@ public class PlayersData implements DataStore {
         @Override
         public boolean pushData(int playerId) {
             online = Bukkit.getServer().getPlayer(playerName) != null;
-            if(online) totalPlaytime += Util.getTimestamp() - sessionStart;
+            if(online) {
+                totalPlaytime += (lastSync - sessionStart);
+                lastSync = Util.getTimestamp();
+            }
             boolean result = Query.table(PlayersTable.TableName.toString())
                 .value(PlayersTable.Name.toString(), playerName)
                 .value(PlayersTable.Online.toString(), online)
