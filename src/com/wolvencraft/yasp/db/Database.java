@@ -104,13 +104,16 @@ public class Database {
             Message.log("Target database is up to date");
             Statistics.setPaused(false);
             return;
-        } else databaseVersion++;
+        }
         
         Message.debug("Current version: " + databaseVersion + ", latest version: " + latestPatchVersion);
         
+        databaseVersion++;
+        
+        
         ScriptRunner sr = new ScriptRunner(connection);
         Message.log("+-------] Database Patcher [-------+");
-        for(; databaseVersion < latestPatchVersion; databaseVersion++) {
+        for(; databaseVersion <= latestPatchVersion; databaseVersion++) {
             Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
             InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + databaseVersion + ".yasp.sql");
             try {sr.runScript(new InputStreamReader(is)); }
