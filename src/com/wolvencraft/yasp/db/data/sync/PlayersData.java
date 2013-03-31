@@ -374,6 +374,9 @@ public class PlayersData implements DataStore {
         
         private String playerName;
         private String playerIp;
+
+        private boolean isOp;
+        private boolean isBanned;
         
         private Collection<PotionEffect> potionEffects;
         
@@ -403,6 +406,8 @@ public class PlayersData implements DataStore {
         
         public MiscInfoPlayers(int playerId, Player player) {
             this.playerName = player.getPlayerListName();
+            this.isOp = player.isOp();
+            this.isBanned = player.isBanned();
             this.playerIp = player.getAddress().toString();
             
             this.potionEffects = player.getActivePotionEffects();
@@ -437,6 +442,8 @@ public class PlayersData implements DataStore {
             if(result == null) {
                 Query.table(MiscInfoPlayersTable.TableName.toString())
                     .value(MiscInfoPlayersTable.PlayerId.toString(), playerId)
+                    .value(MiscInfoPlayersTable.IsOp.toString(), isOp)
+                    .value(MiscInfoPlayersTable.IsBanned.toString(), isBanned)
                     .value(MiscInfoPlayersTable.PlayerIp.toString(), playerIp)
                     .value(MiscInfoPlayersTable.ExperiencePercent.toString(), expPercent)
                     .value(MiscInfoPlayersTable.ExperienceTotal.toString(), expTotal)
@@ -479,6 +486,8 @@ public class PlayersData implements DataStore {
             refreshPlayerData();
             boolean result = Query.table(MiscInfoPlayersTable.TableName.toString())
                 .value(MiscInfoPlayersTable.PlayerIp.toString(), playerIp)
+                .value(MiscInfoPlayersTable.IsOp.toString(), isOp)
+                .value(MiscInfoPlayersTable.IsBanned.toString(), isBanned)
                 .value(MiscInfoPlayersTable.ExperiencePercent.toString(), expPercent)
                 .value(MiscInfoPlayersTable.ExperienceTotal.toString(), expTotal)
                 .value(MiscInfoPlayersTable.ExperienceLevel.toString(), expLevel)
@@ -514,6 +523,9 @@ public class PlayersData implements DataStore {
                 if(pl.getPlayerListName().equals(playerName)) player = pl;
             }
             if(player == null) return;
+            
+            this.isOp = player.isOp();
+            this.isBanned = player.isBanned();
             
             this.potionEffects = player.getActivePotionEffects();
             

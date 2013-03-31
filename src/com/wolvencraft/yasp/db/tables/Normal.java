@@ -119,6 +119,8 @@ public class Normal {
         TableName("misc_info_players"),
         EntryId("misc_info_players_id"),
         PlayerId("player_id"),
+        IsOp("is_op"),
+        IsBanned("is_banned"),
         PlayerIp("player_ip"),
         Gamemode("gamemode"),
         ExperiencePercent("exp_perc"),
