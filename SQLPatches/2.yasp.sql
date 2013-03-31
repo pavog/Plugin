@@ -1,571 +1,528 @@
--- Server Statistics
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("first_startup", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("last_startup", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("current_uptime", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("total_uptime", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("last_shutdown", "0");
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("total_memory", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("free_memory", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("ticks_per_second", "0");
+SET storage_engine=InnoDB;
 
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_ip", "localhost");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_port", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_motd", "A Minecraft Server");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("bukkit_version", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("plugins", "0");
+CREATE SCHEMA IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8 ;
+USE `$dbname` ;
 
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("server_time", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("weather", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("weather_duration", "0");
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_players`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_players` ;
 
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("max_players_online_time", "0");
-INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("players_allowed", "0");
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_players` (
+  `player_id` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(16) NOT NULL ,
+  `online` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `first_login` INT(11) NULL DEFAULT NULL ,
+  `logins` INT(11) NULL DEFAULT 0 ,
+  `login_time` INT(11) NULL DEFAULT 0 ,
+  `playtime` BIGINT(11) NULL DEFAULT 0 ,
+  PRIMARY KEY (`player_id`),
+  UNIQUE KEY `name` (`name`) );
 
--- Materials
--- Update on 11.03.2013 - 19:42:06-- 
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("-1:0", "none");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("0:0", "hand");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:0", "stone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2:0", "grass");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("3:0", "dirt");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("4:0", "cobblestone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("5:0", "wooden_plank_oak");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("5:1", "wooden_plank_spruce");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("5:2", "wooden_plank_birch");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("5:3", "wooden_plank_jungle");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("6:0", "sapling_oak");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("6:1", "sapling_spruce");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("6:2", "sapling_birch");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("6:3", "sapling_jungle");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("7:0", "bedrock");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("8:0", "water");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("9:0", "water_no_spread");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("10:0", "lava");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("11:0", "lava_no_spread");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("12:0", "sand");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("13:0", "gravel");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("14:0", "gold_ore");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("15:0", "iron_ore");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("16:0", "coal_ore");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("17:0", "wood_oak");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("17:1", "wood_spruce");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("17:2", "wood_birch");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("17:3", "wood_jungle");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("18:0", "leaves_oak");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("18:1", "leaves_spruce");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("18:2", "leaves_birch");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("18:3", "leaves_jungle");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("19:0", "sponge");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("20:0", "glass");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("21:0", "lapis_lazuli_ore");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("22:0", "lapis_lazuli_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("23:0", "dispenser");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("24:0", "sandstone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("24:1", "sandstone_chiseled");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("24:2", "sandstone_smooth");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("25:0", "note_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("26:0", "bed_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("27:0", "powered_rail");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("28:0", "detector_rail");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("29:0", "sticky_piston");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("30:0", "web");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("31:0", "tall_grass_dead_shrub");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("31:1", "tall_grass");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("31:2", "tall_grass_fern");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("32:0", "dead_shrub");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("33:0", "piston");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("34:0", "piston_head");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:0", "wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:1", "orange_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:2", "magenta_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:3", "light_blue_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:4", "yellow_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:5", "lime_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:6", "pink_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:7", "gray_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:8", "light_gray_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:9", "cyan_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:10", "purple_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:11", "blue_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:12", "brown_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:13", "green_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:14", "red_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("35:15", "black_wool");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("36:0", "piston_moving");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("37:0", "dandelion");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("38:0", "rose");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("39:0", "brown_mushroom");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("40:0", "red_mushroom");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("41:0", "block_of_gold");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("42:0", "block_of_iron");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("43:0", "stone_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("43:1", "sandstone_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("43:2", "wooden_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("43:3", "cobblestone_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("43:4", "brick_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("43:5", "stone_brick_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("43:6", "nether_brick_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("43:7", "quartz_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("44:0", "stone_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("44:1", "sandstone_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("44:2", "wooden_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("44:3", "cobblestone_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("44:4", "brick_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("44:5", "stone_brick_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("44:6", "nether_brick_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("44:7", "quartz_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("45:0", "brick");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("46:0", "tnt");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("47:0", "bookcase");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("48:0", "moss_stone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("49:0", "obsidian");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("50:0", "torch");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("51:0", "fire");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("52:0", "mob_spawner");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("53:0", "wooden_stairs_oak");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("54:0", "chest");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("55:0", "redstone_wire");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("56:0", "diamond_ore");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("57:0", "block_of_diamond");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("58:0", "workbench");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("59:0", "wheat_crop");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("60:0", "farmland");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("61:0", "furnace");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("62:0", "furnace_smelting");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("63:0", "sign_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("64:0", "wood_door_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("65:0", "ladder");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("66:0", "rail");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("67:0", "cobblestone_stairs");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("68:0", "sign_wall_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("69:0", "lever");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("70:0", "stone_pressure_plate");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("71:0", "iron_door_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("72:0", "wooden_pressure_plate");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("73:0", "redstone_ore");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("74:0", "redstone_ore_glowing");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("75:0", "redstone_torch_off");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("76:0", "redstone_torch");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("77:0", "button_stone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("78:0", "snow");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("79:0", "ice");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("80:0", "snow_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("81:0", "cactus");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("82:0", "clay_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("83:0", "sugar_cane_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("84:0", "jukebox");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("85:0", "fence");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("86:0", "pumpkin");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("87:0", "netherrack");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("88:0", "soul_sand");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("89:0", "glowstone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("90:0", "portal");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("91:0", "jack-o-lantern");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("92:0", "cake_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("93:0", "redstone_repeater_block_off");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("94:0", "redstone_repeater_block_on");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("95:0", "locked_chest");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("96:0", "trapdoor");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("97:0", "silverfish_stone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("97:1", "silverfish_cobblestone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("97:2", "silverfish_stone_brick");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("98:0", "stone_bricks");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("98:1", "mossy_stone_bricks");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("98:2", "cracked_stone_bricks");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("98:3", "chiseled_stone_brick");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("99:0", "brown_mushroom_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("100:0", "red_mushroom_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("101:0", "iron_bars");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("102:0", "glass_pane");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("103:0", "melon_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("104:0", "pumpkin_vine");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("105:0", "melon_vine");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("106:0", "vines");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("107:0", "fence_gate");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("108:0", "brick_stairs");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("109:0", "stone_brick_stairs");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("110:0", "mycelium");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("111:0", "lily_pad");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("112:0", "nether_brick");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("113:0", "nether_brick_fence");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("114:0", "nether_brick_stairs");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("115:0", "nether_wart");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("116:0", "enchantment_table");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("117:0", "brewing_stand_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("118:0", "cauldron_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("119:0", "end_portal");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("120:0", "end_portal_frame");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("121:0", "end_stone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("122:0", "dragon_egg");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("123:0", "redstone_lamp");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("124:0", "redstone_lamp_on");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("125:0", "oak-wood_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("125:1", "spruce-wood_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("125:2", "birch-wood_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("125:3", "jungle-wood_slab_double");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("126:0", "oak-wood_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("126:1", "spruce-wood_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("126:2", "birch-wood_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("126:3", "jungle-wood_slab");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("127:0", "coca_plant");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("128:0", "sandstone_stairs");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("129:0", "emerald_ore");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("130:0", "ender_chest");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("131:0", "tripwire_hook");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("132:0", "tripwire");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("133:0", "block_of_emerald");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("134:0", "wooden_stairs_spruce");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("135:0", "wooden_stairs_birch");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("136:0", "wooden_stairs_jungle");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("137:0", "command_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("138:0", "beacon");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("139:0", "cobblestone_wall");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("139:1", "mossy_cobblestone_wall");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("140:0", "flower_pot_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("141:0", "carrot_crop");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("142:0", "potatoes_crop");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("143:0", "button_wood");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:0", "head_block_skeleton");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:1", "head_block_wither");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:2", "head_block_zombie");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:3", "head_block_steve");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:4", "head_block_creeper");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("144:5", "head_block_player");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("145:0", "anvil");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("146:0", "trapped_chest");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("147:0", "weighted_pressure_plate_light");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("148:0", "weighted_pressure_plate_heavy");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("149:0", "redstone_comparator_off");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("150:0", "redstone_comparator_on");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("151:0", "daylight_sensor");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("152:0", "block_of_redstone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("153:0", "nether_quartz_ore");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("154:0", "hopper");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("155:0", "quartz_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("155:1", "chiseled_quartz_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("155:2", "pillar_quartz_block");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("156:0", "quartz_stairs");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("157:0", "activator_rail");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("158:0", "dropper");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("256:0", "iron_shovel");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("257:0", "iron_pickaxe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("258:0", "iron_axe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("259:0", "flint_and_steel");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("260:0", "apple");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("261:0", "bow");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("262:0", "arrow");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("263:0", "coal");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("263:1", "charcoal");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("264:0", "diamond_gem");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("265:0", "iron_ingot");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("266:0", "gold_ingot");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("267:0", "iron_sword");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("268:0", "wooden_sword");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("269:0", "wooden_shovel");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("270:0", "wooden_pickaxe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("271:0", "wooden_axe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("272:0", "stone_sword");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("273:0", "stone_shovel");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("274:0", "stone_pickaxe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("275:0", "stone_axe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("276:0", "diamond_sword");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("277:0", "diamond_shovel");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("278:0", "diamond_pickaxe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("279:0", "diamond_axe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("280:0", "stick");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("281:0", "bowl");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("282:0", "mushroom_stew");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("283:0", "gold_sword");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("284:0", "gold_shovel");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("285:0", "gold_pickaxe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("286:0", "gold_axe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("287:0", "string");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("288:0", "feather");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("289:0", "gunpowder");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("290:0", "wooden_hoe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("291:0", "stone_hoe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("292:0", "iron_hoe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("293:0", "diamond_hoe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("294:0", "gold_hoe");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("295:0", "wheat_seeds");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("296:0", "wheat");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("297:0", "bread");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("298:0", "leather_helmet");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("299:0", "leather_chestplate");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("300:0", "leather_leggings");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("301:0", "leather_boots");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("302:0", "chainmail_helmet");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("303:0", "chainmail_chestplate");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("304:0", "chainmail_leggings");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("305:0", "chainmail_boots");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("306:0", "iron_helmet");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("307:0", "iron_chestplate");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("308:0", "iron_leggings");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("309:0", "iron_boots");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("310:0", "diamond_helmet");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("311:0", "diamond_chestplate");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("312:0", "diamond_leggings");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("313:0", "diamond_boots");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("314:0", "gold_helmet");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("315:0", "gold_chestplate");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("316:0", "gold_leggings");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("317:0", "gold_boots");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("318:0", "flint");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("319:0", "raw_porkchop");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("320:0", "cooked_porkchop");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("321:0", "painting");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("322:0", "golden_apple");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("322:1", "enchanted_golden_apple");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("323:0", "sign");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("324:0", "wooden_door");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("325:0", "bucket");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("326:0", "bucket_water");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("327:0", "bucket_lava");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("328:0", "minecart");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("329:0", "saddle");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("330:0", "iron_door");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("331:0", "redstone_dust");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("332:0", "snowball");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("333:0", "boat");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("334:0", "leather");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("335:0", "bucket_milk");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("336:0", "clay_brick");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("337:0", "clay");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("338:0", "sugar_cane");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("339:0", "paper");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("340:0", "book");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("341:0", "slime_ball");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("342:0", "storage_minecart");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("343:0", "powered_minecart");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("344:0", "egg");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("345:0", "compass");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("346:0", "fishing_rod");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("347:0", "watch");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("348:0", "glowstone_dust");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("349:0", "raw_fish");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("350:0", "cooked_fish");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:0", "ink_sack");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:1", "rose_red_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:2", "cactus_green_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:3", "coca_bean");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:4", "lapis_lazuli");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:5", "purple_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:6", "cyan_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:7", "light_gray_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:8", "gray_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:9", "pink_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:10", "lime_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:11", "dandelion_yellow_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:12", "light_blue_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:13", "magenta_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:14", "orange_dye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("351:15", "bone_meal");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("352:0", "bone");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("353:0", "sugar");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("354:0", "cake");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("355:0", "bed");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("356:0", "redstone_repeater");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("357:0", "cookie");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("358:0", "map");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("359:0", "shears");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("360:0", "melon_slice");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("361:0", "pumpkin_seeds");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("362:0", "melon_seeds");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("363:0", "raw_beef");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("364:0", "steak");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("365:0", "raw_chicken");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("366:0", "cooked_chicken");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("367:0", "rotten_flesh");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("368:0", "ender_pearl");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("369:0", "blaze_rod");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("370:0", "ghast_tear");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("371:0", "gold_nugget");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("372:0", "nether_wart_seeds");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:0", "water_bottle");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16", "awkward_potion");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:32", "thick_potion");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:64", "mundane_potion");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8193", "regeneration_potion_45");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8194", "swiftness_potion_3");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8195", "fire_resistance_potion_3");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8196", "poison_potion_45");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8197", "healing_potion");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8198", "night_vision_potion_3");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8200", "weakness_potion_13");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8201", "strength_potion_3");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8202", "slowness_potion_13");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8204", "harming_potion");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8206", "invisibility_potion_3");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8225", "regeneration_potion_ii_22");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8226", "swiftness_potion_ii_13");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8228", "poison_potion_ii_22");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8229", "healing_potion_ii");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8233", "strength_potion_ii_13");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8236", "harming_potion_ii");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8257", "regeneration_potion_2");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8258", "swiftness_potion_8");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8259", "fire_resistance_potion_8");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8260", "poison_potion_2");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8262", "night_vision_potion_8");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8264", "weakness_potion_4");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8265", "strength_potion_8");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8266", "slowness_potion_4");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:8270", "invisibility_potion_8");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16385", "regeneration_splash_33");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16386", "swiftness_splash_215");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16387", "fire_resistance_splash_215");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16388", "poison_splash_33");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16389", "healing_splash");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16390", "night_vision_splash_215");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16392", "weakness_splash_17");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16393", "strength_splash_215");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16394", "slowness_splash_17");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16396", "harming_splash");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16398", "invisibility_splash_215");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16417", "regeneration_splash_ii_16");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16418", "swiftness_splash_ii_17");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16420", "poison_splash_ii_16");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16421", "healing_splash_ii");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16425", "strength_splash_ii_17");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16428", "harming_splash_ii");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16449", "regeneration_splash_13");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16450", "swiftness_splash_6");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16451", "fire_resistance_splash_6");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16452", "poison_splash_13");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16454", "night_vision_splash_6");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16456", "weakness_splash_3");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16457", "strength_splash_6");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16458", "slowness_splash_3");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("373:16462", "invisibility_splash_6");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("374:0", "glass_bottle");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("375:0", "spider_eye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("376:0", "fermented_spider_eye");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("377:0", "blaze_powder");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("378:0", "magma_cream");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("379:0", "brewing_stand");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("380:0", "cauldron");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("381:0", "eye_of_ender");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("382:0", "glistering_melon_slice");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:50", "spawn_egg_creeper");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:51", "spawn_egg_skeleton");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:52", "spawn_egg_spider");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:54", "spawn_egg_zombie");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:55", "spawn_egg_slime");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:56", "spawn_egg_ghast");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:57", "spawn_egg_zombie_pigmen");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:58", "spawn_egg_endermen");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:59", "spawn_egg_cave_spider");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:60", "spawn_egg_silverfish");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:61", "spawn_egg_blaze");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:62", "spawn_egg_magma_cube");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:65", "spawn_egg_bat");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:66", "spawn_egg_witch");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:90", "spawn_egg_pig");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:91", "spawn_egg_sheep");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:92", "spawn_egg_cow");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:93", "spawn_egg_chicken");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:94", "spawn_egg_squid");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:95", "spawn_egg_wolf");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:96", "spawn_egg_mooshroom");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:98", "spawn_egg_ocelot");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:120", "spawn_egg_villager");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("384:0", "bottle_of_enchanting");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("385:0", "fire_charge");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("386:0", "book_and_quill");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("387:0", "written_book");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("388:0", "emerald");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("389:0", "item_frame");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("390:0", "flower_pot");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("391:0", "carrot");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("392:0", "potato");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("393:0", "baked_potato");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("394:0", "poisonous_potato");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("395:0", "empty_map");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("396:0", "golden_carrot");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:0", "head_skeleton");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:1", "head_wither");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:2", "head_zombie");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:3", "head_steve");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:4", "head_creeper");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("397:5", "head_player");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("398:0", "carrot_on_a_stick");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("399:0", "nether_star");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("400:0", "pumpkin_pie");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("401:0", "firework_rocket");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("402:0", "firework_star");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("403:0", "enchanted_book");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("404:0", "redstone_comparator");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("405:0", "nether_brick_item");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("406:0", "nether_quartz");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("407:0", "tnt_minecart");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("408:0", "hopper_minecart");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2256:0", "music_disk_13");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2257:0", "music_disk_cat");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2258:0", "music_disk_blocks");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2259:0", "music_disk_chirp");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2260:0", "music_disk_far");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2261:0", "music_disk_mall");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2262:0", "music_disk_mellohi");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2263:0", "music_disk_stal");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2264:0", "music_disk_strad");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2265:0", "music_disk_ward");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2266:0", "music_disk_11");
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("2267:0", "music_disk_wait");
 
--- Entities
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("1", "item");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("2", "xporb");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("9", "painting");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("10", "arrow");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("11", "snowball");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("12", "fireball");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("13", "smallfireball");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("14", "thrownenderpearl");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("15", "eyeofendersignal");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("16", "thrownpotion");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("17", "thrownexpbottle");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("18", "itemframe");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("19", "witherskull");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("20", "primedtnt");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("21", "fallingsand");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("22", "fireworksrocketentity");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("41", "boat");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("42", "minecartrideable");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("43", "minecartchest");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("44", "minecartfurnace");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("45", "minecarthopper");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("46", "minecarthopper");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("47", "minecartspawner");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("48", "mob");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("49", "monster");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("50", "creeper");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("51", "skeleton");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("52", "spider");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("53", "giant");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("54", "zombie");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("55", "slime");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("56", "ghast");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("57", "pigzombie");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("58", "enderman");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("59", "cavespider");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("60", "silverfish");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("61", "blaze");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("62", "lavalslime");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("63", "enderdragon");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("64", "witherboss");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("66", "witch");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("65", "bat");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("90", "pig");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("91", "sheep");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("92", "cow");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("93", "chicken");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("94", "squid");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("95", "wolf");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("96", "mushroomcow");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("97", "snowman");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("98", "ozelot");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("99", "villagergolem");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("120", "villager");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("200", "endercrystal");
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_detailed_log_players`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_log_players` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_log_players` (
+  `detailed_log_players_id` INT NOT NULL AUTO_INCREMENT ,
+  `player_id` INT NOT NULL ,
+  `time` INT(11) NOT NULL ,
+  `world` VARCHAR(255) NULL DEFAULT NULL ,
+  `x` INT NULL DEFAULT NULL ,
+  `y` INT NULL DEFAULT NULL ,
+  `z` INT NULL DEFAULT NULL ,
+  `is_login` TINYINT(1) NULL DEFAULT 1 ,
+  PRIMARY KEY (`detailed_log_players_id`) ,
+  INDEX `fk_player_id4_idx` (`player_id` ASC) ,
+  CONSTRAINT `fk_player_id4`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_distance_players`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_distances` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_distances` (
+  `player_id` INT NOT NULL ,
+  `foot` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
+  `boat` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
+  `minecart` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
+  `pig` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
+  `swim` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
+  `flight` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ,
+  PRIMARY KEY (`player_id`) ,
+  CONSTRAINT `fk_player_id1`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_entities`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_entities` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_entities` (
+  `entity_id` INT NOT NULL ,
+  `tp_name` VARCHAR(100) NULL DEFAULT NULL ,
+  PRIMARY KEY (`entity_id`) );
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_materials`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_materials` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_materials` (
+  `material_id` VARCHAR(16) NOT NULL ,
+  `tp_name` VARCHAR(45) NULL DEFAULT 'none' ,
+  PRIMARY KEY (`material_id`) );
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_detailed_pvp_kills`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pvp_kills` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pvp_kills` (
+  `detailed_pvp_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `victim_id` INT NOT NULL ,
+  `cause` VARCHAR(45) NULL ,
+  `world` VARCHAR(255) NULL ,
+  `x` INT NULL ,
+  `y` INT NULL ,
+  `z` INT NULL ,
+  `time` INT(11) NULL ,
+  PRIMARY KEY (`detailed_pvp_id`) ,
+  INDEX `fk_player_id17_idx` (`player_id` ASC) ,
+  INDEX `fk_player_id18_idx` (`victim_id` ASC) ,
+  INDEX `fk_material_id7_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id17`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_player_id18`
+    FOREIGN KEY (`victim_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id7`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_detailed_death_players`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_death_players` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_death_players` (
+  `detailed_death_players_id` INT NOT NULL AUTO_INCREMENT ,
+  `player_id` INT NOT NULL ,
+  `cause` VARCHAR(45) NOT NULL ,
+  `world` VARCHAR(255) NULL ,
+  `x` INT NULL ,
+  `y` INT NULL ,
+  `z` INT NULL ,
+  `time` INT NULL ,
+  PRIMARY KEY (`detailed_death_players_id`) ,
+  INDEX `fk_player_id2_idx` (`player_id` ASC) ,
+  CONSTRAINT `fk_player_id2`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_detailed_placed_blocks`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_placed_blocks` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_placed_blocks` (
+  `detailed_placed_blocks_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `world` VARCHAR(255) NULL DEFAULT NULL ,
+  `x` INT NULL DEFAULT NULL ,
+  `y` INT NULL DEFAULT NULL ,
+  `z` INT NULL DEFAULT NULL ,
+  `time` INT(11) NULL DEFAULT NULL ,
+  PRIMARY KEY (`detailed_placed_blocks_id`) ,
+  INDEX `fk_player_id7_idx` (`player_id` ASC) ,
+  INDEX `fk_material_id3_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id7`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id3`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_detailed_destroyed_blocks`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_destroyed_blocks` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_destroyed_blocks` (
+  `detailed_destroyed_blocks_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `world` VARCHAR(255) NULL ,
+  `x` INT NULL ,
+  `y` INT NULL ,
+  `z` INT NULL ,
+  `time` INT(11) NULL ,
+  PRIMARY KEY (`detailed_destroyed_blocks_id`) ,
+  INDEX `fk_player_id6_idx` (`player_id` ASC) ,
+  INDEX `fk_material_id8_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id6`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id8`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_detailed_dropped_items`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_dropped_items` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_dropped_items` (
+  `detailed_dropped_items_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `world` VARCHAR(255) NULL ,
+  `x` INT NULL DEFAULT NULL ,
+  `y` INT NULL DEFAULT NULL ,
+  `z` INT NULL DEFAULT NULL ,
+  `time` INT(11) NULL DEFAULT NULL ,
+  PRIMARY KEY (`detailed_dropped_items_id`) ,
+  INDEX `fk_player_id11_idx` (`player_id` ASC) ,
+  INDEX `fk_material_id4_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id11`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id4`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_detailed_pickedup_items`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pickedup_items` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pickedup_items` (
+  `detailed_pickedup_items_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `world` VARCHAR(255) NULL DEFAULT NULL ,
+  `x` INT NULL DEFAULT NULL ,
+  `y` INT NULL DEFAULT NULL ,
+  `z` INT NULL DEFAULT NULL ,
+  `time` INT(11) NULL DEFAULT NULL ,
+  PRIMARY KEY (`detailed_pickedup_items_id`) ,
+  INDEX `fk_player_id12_idx` (`player_id` ASC) ,
+  INDEX `fk_material_id10_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id12`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id10`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_detailed_pve_kills`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_pve_kills` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_pve_kills` (
+  `detailed_pve_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `entity_id` INT NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `cause` VARCHAR(45) NULL ,
+  `world` VARCHAR(255) NULL DEFAULT NULL ,
+  `x` INT NULL DEFAULT NULL ,
+  `y` INT NULL DEFAULT NULL ,
+  `z` INT NULL DEFAULT NULL ,
+  `time` INT(11) NULL DEFAULT NULL ,
+  `player_killed` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`detailed_pve_id`) ,
+  INDEX `fk_player_id16_idx` (`player_id` ASC) ,
+  INDEX `fk_entity_id2_idx` (`entity_id` ASC) ,
+  INDEX `fk_material_id11_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id16`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_entity_id2`
+    FOREIGN KEY (`entity_id` )
+    REFERENCES `$dbname`.`$prefix_entities` (`entity_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id11`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_total_blocks`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_total_blocks` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_blocks` (
+  `total_blocks_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `destroyed` INT UNSIGNED NULL DEFAULT 0 ,
+  `placed` INT UNSIGNED NULL DEFAULT 0 ,
+  PRIMARY KEY (`total_blocks_id`) ,
+  INDEX `fk_player_id5_idx` (`player_id` ASC) ,
+  INDEX `fk_material_id1_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id5`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id1`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_total_items`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_total_items` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_items` (
+  `total_items_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `dropped` INT UNSIGNED NULL DEFAULT 0 ,
+  `picked_up` INT UNSIGNED NULL DEFAULT 0 ,
+  `used` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `crafted` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `smelted` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `broken` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `enchanted` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  PRIMARY KEY (`total_items_id`) ,
+  INDEX `fk_player_id10_idx` (`player_id` ASC) ,
+  INDEX `fk_material_id6_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id10`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id6`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_total_death_players`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_total_deaths` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_deaths` (
+  `total_death_players_id` INT NOT NULL AUTO_INCREMENT ,
+  `player_id` INT NOT NULL ,
+  `cause` VARCHAR(45) NOT NULL ,
+  `times` INT NULL DEFAULT 0 ,
+  PRIMARY KEY (`total_death_players_id`) ,
+  INDEX `fk_player_id3_idx` (`player_id` ASC) ,
+  CONSTRAINT `fk_player_id3`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_total_pvp_kills`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_total_pvp_kills` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pvp_kills` (
+  `total_pvp_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `victim_id` INT NOT NULL ,
+  `times` INT(10) NULL DEFAULT NULL ,
+  PRIMARY KEY (`total_pvp_id`) ,
+  INDEX `fk_player_id14_idx` (`player_id` ASC) ,
+  INDEX `fk_player_id15_idx` (`victim_id` ASC) ,
+  INDEX `fk_material_id2_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id14`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_player_id15`
+    FOREIGN KEY (`victim_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id2`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_total_pve_kills`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_total_pve_kills` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_total_pve_kills` (
+  `total_pve_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `entity_id` INT NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `player_killed` INT(10) NULL DEFAULT 0 ,
+  `creature_killed` INT(10) NULL DEFAULT 0 ,
+  PRIMARY KEY (`total_pve_id`) ,
+  INDEX `fk_player_id13_idx` (`player_id` ASC) ,
+  INDEX `fk_entity_id1_idx` (`entity_id` ASC) ,
+  INDEX `fk_material_id9_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id13`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_entity_id1`
+    FOREIGN KEY (`entity_id` )
+    REFERENCES `$dbname`.`$prefix_entities` (`entity_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id9`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_detailed_used_items`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_used_items` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_used_items` (
+  `detailed_used_items_id` INT NOT NULL AUTO_INCREMENT ,
+  `material_id` VARCHAR(16) NOT NULL ,
+  `player_id` INT NOT NULL ,
+  `world` VARCHAR(255) NULL DEFAULT NULL ,
+  `x` INT NULL DEFAULT NULL ,
+  `y` INT NULL DEFAULT NULL ,
+  `z` INT NULL DEFAULT NULL ,
+  `time` INT NULL DEFAULT NULL ,
+  PRIMARY KEY (`detailed_used_items_id`) ,
+  INDEX `fk_player_id8_idx` (`player_id` ASC) ,
+  INDEX `fk_material_id5_idx` (`material_id` ASC) ,
+  CONSTRAINT `fk_player_id8`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_material_id5`
+    FOREIGN KEY (`material_id` )
+    REFERENCES `$dbname`.`$prefix_materials` (`material_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_server_statistics`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_server_statistics` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_server_statistics` (
+  `key` VARCHAR(64) NOT NULL ,
+  `value` TEXT NOT NULL ,
+  PRIMARY KEY (`key`) );
+
+
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_misc_info_players`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_misc_info_players` ;
+
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
+  `player_id` INT NOT NULL ,
+  `player_ip` VARCHAR(32) NOT NULL ,
+  `gamemode` TINYINT(2) NOT NULL DEFAULT 0 ,
+  `exp_level` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
+  `exp_perc` FLOAT(3,2) UNSIGNED NOT NULL DEFAULT '0.00',
+  `exp_total` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
+  `food_level` TINYINT UNSIGNED NOT NULL DEFAULT 0 ,
+  `health` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
+  `fish_caught` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `times_kicked` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `eggs_thrown` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `food_eaten` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `arrows_shot` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `damage_taken` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `times_jumped` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `words_said` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `commands_sent` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `beds_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `portals_entered` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `kill_streak` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `max_kill_streak` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `potion_effects` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`player_id`) ,
+  CONSTRAINT `fk_player_id9`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+USE `$dbname` ;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

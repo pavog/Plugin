@@ -91,38 +91,31 @@ public class Database {
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
     public void runPatch(boolean force) throws DatabaseConnectionException {
-        int currentVersion, latestVersion;
-        if(!force) {
-            currentVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger();
-            latestVersion = currentVersion;
-        } else {
-            currentVersion = 1;
-            latestVersion = 0;
-        }
-        List<Integer> patches = new ArrayList<Integer>();
-        do {
-            if(this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + latestVersion + ".yasp.sql") == null) break;
-            patches.add(latestVersion);
-            latestVersion++;
-        } while (true);
+        int databaseVersion;
+        if(force) { databaseVersion = 1; }
+        else { databaseVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
+        int latestPatchVersion = databaseVersion;
         
-        if(currentVersion >= latestVersion) {
+        while (this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + latestPatchVersion + ".yasp.sql") != null) {
+            latestPatchVersion++;
+        }
+        
+        if(databaseVersion >= latestPatchVersion) {
             Message.log("Target database is up to date");
             Statistics.setPaused(false);
             return;
-        } else {
-            Message.debug("Current version: " + currentVersion + ", latest version: " + latestVersion);
         }
+        
+        Message.debug("Current version: " + databaseVersion + ", latest version: " + latestPatchVersion);
         
         ScriptRunner sr = new ScriptRunner(connection);
         Message.log("+-------] Database Patcher [-------+");
-        for(Integer patch : patches) {
-            Message.log("|       Applying patch " + patch + " / " + patches.size() + "       |");
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patch + ".yasp.sql");
+        for(; databaseVersion < latestPatchVersion; databaseVersion++) {
+            Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + databaseVersion + ".yasp.sql");
             try {sr.runScript(new InputStreamReader(is)); }
-            catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + patch, e); }
-            
-            Settings.RemoteConfiguration.DatabaseVersion.update(patch);
+            catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
+            Settings.RemoteConfiguration.DatabaseVersion.update(databaseVersion);
         }
         Message.log("+----------------------------------+");
         
