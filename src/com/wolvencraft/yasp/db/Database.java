@@ -92,7 +92,7 @@ public class Database {
      */
     public void runPatch(boolean force) throws DatabaseConnectionException {
         int databaseVersion;
-        if(force) { databaseVersion = 0; }
+        if(force) { databaseVersion = 1; }
         else { databaseVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
         int latestPatchVersion = databaseVersion;
         
