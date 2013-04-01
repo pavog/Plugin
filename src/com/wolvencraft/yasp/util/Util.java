@@ -59,18 +59,18 @@ public class Util {
         
         int playerId = -1;
         do {
-            QueryResult playerRow = Query.table(PlayersTable.TableName.toString())
-                    .column(PlayersTable.PlayerId.toString())
-                    .column(PlayersTable.Name.toString())
-                    .condition(PlayersTable.Name.toString(), username)
+            QueryResult playerRow = Query.table(PlayersTable.TableName)
+                    .column(PlayersTable.PlayerId)
+                    .column(PlayersTable.Name)
+                    .condition(PlayersTable.Name, username)
                     .select();
             
             if(playerRow == null) {
-                Query.table(PlayersTable.TableName.toString())
-                        .value(PlayersTable.Name.toString(), username)
+                Query.table(PlayersTable.TableName)
+                        .value(PlayersTable.Name, username)
                         .insert();
             } else {
-                playerId = playerRow.getValueAsInteger(PlayersTable.PlayerId.toString());
+                playerId = playerRow.asInt(PlayersTable.PlayerId);
             }
         } while (playerId == -1);
         Message.debug("User ID found: " + playerId);

@@ -167,35 +167,35 @@ public class PVEData implements DataStore{
         
         @Override
         public void fetchData(int playerId) {
-            QueryResult result = Query.table(TotalPVEKillsTable.TableName.toString())
-                    .column(TotalPVEKillsTable.PlayerKilled.toString())
-                    .column(TotalPVEKillsTable.CreatureKilled.toString())
-                    .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
-                    .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-                    .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(type, data))
+            QueryResult result = Query.table(TotalPVEKillsTable.TableName)
+                    .column(TotalPVEKillsTable.PlayerKilled)
+                    .column(TotalPVEKillsTable.CreatureKilled)
+                    .condition(TotalPVEKillsTable.PlayerId, playerId)
+                    .condition(TotalPVEKillsTable.CreatureId, creatureType.getTypeId() + "")
+                    .condition(TotalPVEKillsTable.Material, Util.getBlockString(type, data))
                     .select();
             if(result == null) {
-                Query.table(TotalPVEKillsTable.TableName.toString())
-                    .value(TotalPVEKillsTable.PlayerId.toString(), playerId)
-                    .value(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId())
-                    .value(TotalPVEKillsTable.Material.toString(), Util.getBlockString(type, data))
-                    .value(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths)
-                    .value(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths)
+                Query.table(TotalPVEKillsTable.TableName)
+                    .value(TotalPVEKillsTable.PlayerId, playerId)
+                    .value(TotalPVEKillsTable.CreatureId, creatureType.getTypeId())
+                    .value(TotalPVEKillsTable.Material, Util.getBlockString(type, data))
+                    .value(TotalPVEKillsTable.PlayerKilled, playerDeaths)
+                    .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
                     .insert();
             } else {
-                playerDeaths = result.getValueAsInteger(TotalPVEKillsTable.PlayerKilled.toString());
-                creatureDeaths = result.getValueAsInteger(TotalPVEKillsTable.CreatureKilled.toString());
+                playerDeaths = result.asInt(TotalPVEKillsTable.PlayerKilled);
+                creatureDeaths = result.asInt(TotalPVEKillsTable.CreatureKilled);
             }
         }
 
         @Override
         public boolean pushData(int playerId) {
-            boolean result = Query.table(TotalPVEKillsTable.TableName.toString())
-                    .value(TotalPVEKillsTable.PlayerKilled.toString(), playerDeaths)
-                    .value(TotalPVEKillsTable.CreatureKilled.toString(), creatureDeaths)
-                    .condition(TotalPVEKillsTable.PlayerId.toString(), playerId)
-                    .condition(TotalPVEKillsTable.CreatureId.toString(), creatureType.getTypeId() + "")
-                    .condition(TotalPVEKillsTable.Material.toString(), Util.getBlockString(type, data))
+            boolean result = Query.table(TotalPVEKillsTable.TableName)
+                    .value(TotalPVEKillsTable.PlayerKilled, playerDeaths)
+                    .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
+                    .condition(TotalPVEKillsTable.PlayerId, playerId)
+                    .condition(TotalPVEKillsTable.CreatureId, creatureType.getTypeId() + "")
+                    .condition(TotalPVEKillsTable.Material, Util.getBlockString(type, data))
                     .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
@@ -284,16 +284,16 @@ public class PVEData implements DataStore{
         
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(PVEKills.TableName.toString())
-                    .value(PVEKills.PlayerId.toString(), playerId)
-                    .value(PVEKills.CreatureId.toString(), creatureType.getTypeId())
-                    .value(PVEKills.PlayerKilled.toString(), playerKilled)
-                    .value(PVEKills.Material.toString(), Util.getBlockString(type, data))
-                    .value(PVEKills.World.toString(), location.getWorld().getName())
-                    .value(PVEKills.XCoord.toString(), location.getBlockX())
-                    .value(PVEKills.YCoord.toString(), location.getBlockY())
-                    .value(PVEKills.ZCoord.toString(), location.getBlockZ())
-                    .value(PVEKills.Timestamp.toString(), timestamp)
+            return Query.table(PVEKills.TableName)
+                    .value(PVEKills.PlayerId, playerId)
+                    .value(PVEKills.CreatureId, creatureType.getTypeId())
+                    .value(PVEKills.PlayerKilled, playerKilled)
+                    .value(PVEKills.Material, Util.getBlockString(type, data))
+                    .value(PVEKills.World, location.getWorld().getName())
+                    .value(PVEKills.XCoord, location.getBlockX())
+                    .value(PVEKills.YCoord, location.getBlockY())
+                    .value(PVEKills.ZCoord, location.getBlockZ())
+                    .value(PVEKills.Timestamp, timestamp)
                     .insert();
         }
 

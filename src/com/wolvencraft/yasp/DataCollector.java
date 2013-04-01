@@ -95,8 +95,8 @@ public class DataCollector implements Runnable {
             remove(session);
             
             if(session.getConfirmed()) continue;
-            Query.table(Normal.PlayersTable.TableName.toString())
-                    .condition(PlayersTable.Name.toString(), session.getPlayerName())
+            Query.table(Normal.PlayersTable.TableName)
+                    .condition(PlayersTable.Name, session.getPlayerName())
                     .delete();
         }
     }
@@ -175,26 +175,26 @@ public class DataCollector implements Runnable {
         Message.debug("Retrieving a player ID for " + username);
         
         int playerId = -1;
-        QueryResult playerRow = Query.table(PlayersTable.TableName.toString())
-                .column(PlayersTable.PlayerId.toString())
-                .column(PlayersTable.Name.toString())
-                .condition(PlayersTable.Name.toString(), username)
+        QueryResult playerRow = Query.table(PlayersTable.TableName)
+                .column(PlayersTable.PlayerId)
+                .column(PlayersTable.Name)
+                .condition(PlayersTable.Name, username)
                 .select();
         
         if(playerRow == null) {
-            Query.table(PlayersTable.TableName.toString())
-                    .value(PlayersTable.Name.toString(), username)
+            Query.table(PlayersTable.TableName)
+                    .value(PlayersTable.Name, username)
                     .insert();
             
             playerRow = Query
-                    .table(PlayersTable.TableName.toString())
-                    .column(PlayersTable.PlayerId.toString())
-                    .column(PlayersTable.Name.toString())
-                    .condition(PlayersTable.Name.toString(), username)
+                    .table(PlayersTable.TableName)
+                    .column(PlayersTable.PlayerId)
+                    .column(PlayersTable.Name)
+                    .condition(PlayersTable.Name, username)
                     .select();
         }
         
-        playerId = playerRow.getValueAsInteger(PlayersTable.PlayerId.toString());
+        playerId = playerRow.asInt(PlayersTable.PlayerId);
         
         Message.debug("User ID found: " + playerId);
         return playerId;

@@ -161,34 +161,34 @@ public class BlocksData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
-            QueryResult result = Query.table(TotalBlocksTable.TableName.toString())
-                    .column(TotalBlocksTable.Destroyed.toString())
-                    .column(TotalBlocksTable.Placed.toString())
-                    .condition(TotalBlocksTable.PlayerId.toString(), playerId)
-                    .condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
+            QueryResult result = Query.table(TotalBlocksTable.TableName)
+                    .column(TotalBlocksTable.Destroyed)
+                    .column(TotalBlocksTable.Placed)
+                    .condition(TotalBlocksTable.PlayerId, playerId)
+                    .condition(TotalBlocksTable.Material, Util.getBlockString(type, data))
                     .select();
             
             if(result == null) {
-                Query.table(TotalBlocksTable.TableName.toString())
-                    .value(TotalBlocksTable.PlayerId.toString(), playerId)
-                    .value(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
-                    .value(TotalBlocksTable.Destroyed.toString(), broken)
-                    .value(TotalBlocksTable.Placed.toString(), placed)
+                Query.table(TotalBlocksTable.TableName)
+                    .value(TotalBlocksTable.PlayerId, playerId)
+                    .value(TotalBlocksTable.Material, Util.getBlockString(type, data))
+                    .value(TotalBlocksTable.Destroyed, broken)
+                    .value(TotalBlocksTable.Placed, placed)
                     .insert();
             } else {
-                broken = result.getValueAsInteger(TotalBlocksTable.Destroyed.toString());
-                placed = result.getValueAsInteger(TotalBlocksTable.Placed.toString());
+                broken = result.asInt(TotalBlocksTable.Destroyed);
+                placed = result.asInt(TotalBlocksTable.Placed);
             }
         }
 
         @Override
         public boolean pushData(int playerId) {
-            boolean result = Query.table(TotalBlocksTable.TableName.toString())
-                .value(TotalBlocksTable.Destroyed.toString(), broken)
-                .value(TotalBlocksTable.Placed.toString(), placed)
-                .condition(TotalBlocksTable.PlayerId.toString(), playerId)
-                .condition(TotalBlocksTable.Material.toString(), Util.getBlockString(type, data))
-                .update(true);
+            boolean result = Query.table(TotalBlocksTable.TableName)
+                .value(TotalBlocksTable.Destroyed, broken)
+                .value(TotalBlocksTable.Placed, placed)
+                .condition(TotalBlocksTable.PlayerId, playerId)
+                .condition(TotalBlocksTable.Material, Util.getBlockString(type, data))
+                .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
         }
@@ -252,14 +252,14 @@ public class BlocksData implements DataStore {
 
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(DestroyedBlocks.TableName.toString())
-                .value(DestroyedBlocks.PlayerId.toString(), playerId)
-                .value(DestroyedBlocks.Material.toString(), Util.getBlockString(type, data))
-                .value(DestroyedBlocks.World.toString(), location.getWorld().getName())
-                .value(DestroyedBlocks.XCoord.toString(), location.getBlockX())
-                .value(DestroyedBlocks.YCoord.toString(), location.getBlockY())
-                .value(DestroyedBlocks.ZCoord.toString(), location.getBlockZ())
-                .value(DestroyedBlocks.Timestamp.toString(), timestamp)
+            return Query.table(DestroyedBlocks.TableName)
+                .value(DestroyedBlocks.PlayerId, playerId)
+                .value(DestroyedBlocks.Material, Util.getBlockString(type, data))
+                .value(DestroyedBlocks.World, location.getWorld().getName())
+                .value(DestroyedBlocks.XCoord, location.getBlockX())
+                .value(DestroyedBlocks.YCoord, location.getBlockY())
+                .value(DestroyedBlocks.ZCoord, location.getBlockZ())
+                .value(DestroyedBlocks.Timestamp, timestamp)
                 .insert();
         }
 
@@ -296,14 +296,14 @@ public class BlocksData implements DataStore {
 
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(PlacedBlocks.TableName.toString())
-                .value(PlacedBlocks.PlayerId.toString(), playerId)
-                .value(PlacedBlocks.Material.toString(), Util.getBlockString(type, data))
-                .value(PlacedBlocks.World.toString(), location.getWorld().getName())
-                .value(PlacedBlocks.XCoord.toString(), location.getBlockX())
-                .value(PlacedBlocks.YCoord.toString(), location.getBlockY())
-                .value(PlacedBlocks.ZCoord.toString(), location.getBlockZ())
-                .value(PlacedBlocks.Timestamp.toString(), timestamp)
+            return Query.table(PlacedBlocks.TableName)
+                .value(PlacedBlocks.PlayerId, playerId)
+                .value(PlacedBlocks.Material, Util.getBlockString(type, data))
+                .value(PlacedBlocks.World, location.getWorld().getName())
+                .value(PlacedBlocks.XCoord, location.getBlockX())
+                .value(PlacedBlocks.YCoord, location.getBlockY())
+                .value(PlacedBlocks.ZCoord, location.getBlockZ())
+                .value(PlacedBlocks.Timestamp, timestamp)
                 .insert();
         }
         

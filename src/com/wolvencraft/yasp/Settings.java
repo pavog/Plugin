@@ -90,12 +90,11 @@ public class Settings {
         
         public boolean getEnabled() {
             try {
-                return Query.table(SettingsTable.TableName.toString())
+                return Query.table(SettingsTable.TableName)
                     .column("value")
                     .condition("key", row)
-                    .selectAll()
-                    .get(0)
-                    .getValueAsBoolean("value");
+                    .select()
+                    .asBoolean("value");
             } catch (Throwable t) { return true; }
         }
     }
@@ -144,37 +143,34 @@ public class Settings {
         public String toString() { return asString(); }
         public String asString() {
             try {
-                return Query.table(SettingsTable.TableName.toString())
+                return Query.table(SettingsTable.TableName)
                     .column("value")
                     .condition("key", row)
-                    .selectAll()
-                    .get(0)
-                    .getValue("value");
+                    .select()
+                    .asString("value");
             } catch (Throwable t) { return ""; }
         }
         public Integer asInteger() { 
             try {
-                return Query.table(SettingsTable.TableName.toString())
+                return Query.table(SettingsTable.TableName)
                     .column("value")
                     .condition("key", row)
-                    .selectAll()
-                    .get(0)
-                    .getValueAsInteger("value");
+                    .select()
+                    .asInt("value");
             } catch (Throwable t) { return 0; }
         }
         public Boolean asBoolean() {
             try {
-                return Query.table(SettingsTable.TableName.toString())
+                return Query.table(SettingsTable.TableName)
                     .column("value")
                     .condition("key", row)
-                    .selectAll()
-                    .get(0)
-                    .getValueAsBoolean("value");
+                    .select()
+                    .asBoolean("value");
             } catch (Throwable t) { return false; }
         }
         
         public boolean update(Object value) {
-            return Query.table(SettingsTable.TableName.toString())
+            return Query.table(SettingsTable.TableName)
                 .value("value", value)
                 .condition("key", row)
                 .update();

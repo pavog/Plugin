@@ -225,54 +225,54 @@ public class ItemsData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
-            QueryResult result = Query.table(TotalItemsTable.TableName.toString())
-                    .column(TotalItemsTable.Dropped.toString())
-                    .column(TotalItemsTable.PickedUp.toString())
-                    .column(TotalItemsTable.Used.toString())
-                    .column(TotalItemsTable.Crafted.toString())
-                    .column(TotalItemsTable.Broken.toString())
-                    .column(TotalItemsTable.Smelted.toString())
-                    .column(TotalItemsTable.Enchanted.toString())
-                    .condition(TotalItemsTable.PlayerId.toString(), playerId)
-                    .condition(TotalItemsTable.Material.toString(), Util.getBlockString(type, data))
+            QueryResult result = Query.table(TotalItemsTable.TableName)
+                    .column(TotalItemsTable.Dropped)
+                    .column(TotalItemsTable.PickedUp)
+                    .column(TotalItemsTable.Used)
+                    .column(TotalItemsTable.Crafted)
+                    .column(TotalItemsTable.Broken)
+                    .column(TotalItemsTable.Smelted)
+                    .column(TotalItemsTable.Enchanted)
+                    .condition(TotalItemsTable.PlayerId, playerId)
+                    .condition(TotalItemsTable.Material, Util.getBlockString(type, data))
                     .select();
             
             if(result == null) {
-                Query.table(TotalItemsTable.TableName.toString())
-                    .value(TotalItemsTable.PlayerId.toString(), playerId)
-                    .value(TotalItemsTable.Material.toString(), Util.getBlockString(type, data))
-                    .value(TotalItemsTable.Dropped.toString(), dropped)
-                    .value(TotalItemsTable.PickedUp.toString(), pickedUp)
-                    .value(TotalItemsTable.Used.toString(), used)
-                    .value(TotalItemsTable.Crafted.toString(), crafted)
-                    .value(TotalItemsTable.Broken.toString(), broken)
-                    .value(TotalItemsTable.Smelted.toString(), smelted)
-                    .value(TotalItemsTable.Enchanted.toString(), enchanted)
+                Query.table(TotalItemsTable.TableName)
+                    .value(TotalItemsTable.PlayerId, playerId)
+                    .value(TotalItemsTable.Material, Util.getBlockString(type, data))
+                    .value(TotalItemsTable.Dropped, dropped)
+                    .value(TotalItemsTable.PickedUp, pickedUp)
+                    .value(TotalItemsTable.Used, used)
+                    .value(TotalItemsTable.Crafted, crafted)
+                    .value(TotalItemsTable.Broken, broken)
+                    .value(TotalItemsTable.Smelted, smelted)
+                    .value(TotalItemsTable.Enchanted, enchanted)
                     .insert();
             } else {
-                dropped = result.getValueAsInteger(TotalItemsTable.Dropped.toString());
-                pickedUp = result.getValueAsInteger(TotalItemsTable.PickedUp.toString());
-                used = result.getValueAsInteger(TotalItemsTable.Used.toString());
-                crafted = result.getValueAsInteger(TotalItemsTable.Crafted.toString());
-                broken = result.getValueAsInteger(TotalItemsTable.Broken.toString());
-                smelted = result.getValueAsInteger(TotalItemsTable.Smelted.toString());
-                enchanted = result.getValueAsInteger(TotalItemsTable.Enchanted.toString());
+                dropped = result.asInt(TotalItemsTable.Dropped);
+                pickedUp = result.asInt(TotalItemsTable.PickedUp);
+                used = result.asInt(TotalItemsTable.Used);
+                crafted = result.asInt(TotalItemsTable.Crafted);
+                broken = result.asInt(TotalItemsTable.Broken);
+                smelted = result.asInt(TotalItemsTable.Smelted);
+                enchanted = result.asInt(TotalItemsTable.Enchanted);
             }
         }
 
         @Override
         public boolean pushData(int playerId) {
-            boolean result = Query.table(TotalItemsTable.TableName.toString())
-                    .value(TotalItemsTable.Dropped.toString(), dropped)
-                    .value(TotalItemsTable.PickedUp.toString(), pickedUp)
-                    .value(TotalItemsTable.Used.toString(), used)
-                    .value(TotalItemsTable.Crafted.toString(), crafted)
-                    .value(TotalItemsTable.Broken.toString(), broken)
-                    .value(TotalItemsTable.Smelted.toString(), smelted)
-                    .value(TotalItemsTable.Enchanted.toString(), enchanted)
-                    .condition(TotalItemsTable.PlayerId.toString(), playerId)
-                    .condition(TotalItemsTable.Material.toString(), Util.getBlockString(type, data))
-                    .update(true);
+            boolean result = Query.table(TotalItemsTable.TableName)
+                    .value(TotalItemsTable.Dropped, dropped)
+                    .value(TotalItemsTable.PickedUp, pickedUp)
+                    .value(TotalItemsTable.Used, used)
+                    .value(TotalItemsTable.Crafted, crafted)
+                    .value(TotalItemsTable.Broken, broken)
+                    .value(TotalItemsTable.Smelted, smelted)
+                    .value(TotalItemsTable.Enchanted, enchanted)
+                    .condition(TotalItemsTable.PlayerId, playerId)
+                    .condition(TotalItemsTable.Material, Util.getBlockString(type, data))
+                    .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
         }
@@ -381,14 +381,14 @@ public class ItemsData implements DataStore {
         
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(DroppedItems.TableName.toString())
-                    .value(DroppedItems.PlayerId.toString(), playerId)
-                    .value(DroppedItems.Material.toString(), Util.getBlockString(type, data))
-                    .value(DroppedItems.World.toString(), location.getWorld().getName())
-                    .value(DroppedItems.XCoord.toString(), location.getBlockX())
-                    .value(DroppedItems.YCoord.toString(), location.getBlockY())
-                    .value(DroppedItems.ZCoord.toString(), location.getBlockZ())
-                    .value(DroppedItems.Timestamp.toString(), timestamp)
+            return Query.table(DroppedItems.TableName)
+                    .value(DroppedItems.PlayerId, playerId)
+                    .value(DroppedItems.Material, Util.getBlockString(type, data))
+                    .value(DroppedItems.World, location.getWorld().getName())
+                    .value(DroppedItems.XCoord, location.getBlockX())
+                    .value(DroppedItems.YCoord, location.getBlockY())
+                    .value(DroppedItems.ZCoord, location.getBlockZ())
+                    .value(DroppedItems.Timestamp, timestamp)
                     .insert();
         }
 
@@ -424,14 +424,14 @@ public class ItemsData implements DataStore {
         
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(PickedupItems.TableName.toString())
-                    .value(PickedupItems.PlayerId.toString(), playerId)
-                    .value(PickedupItems.Material.toString(), Util.getBlockString(type, data))
-                    .value(PickedupItems.World.toString(), location.getWorld().getName())
-                    .value(PickedupItems.XCoord.toString(), location.getBlockX())
-                    .value(PickedupItems.YCoord.toString(), location.getBlockY())
-                    .value(PickedupItems.ZCoord.toString(), location.getBlockZ())
-                    .value(PickedupItems.Timestamp.toString(), timestamp)
+            return Query.table(PickedupItems.TableName)
+                    .value(PickedupItems.PlayerId, playerId)
+                    .value(PickedupItems.Material, Util.getBlockString(type, data))
+                    .value(PickedupItems.World, location.getWorld().getName())
+                    .value(PickedupItems.XCoord, location.getBlockX())
+                    .value(PickedupItems.YCoord, location.getBlockY())
+                    .value(PickedupItems.ZCoord, location.getBlockZ())
+                    .value(PickedupItems.Timestamp, timestamp)
                     .insert();
         }
 
@@ -467,14 +467,14 @@ public class ItemsData implements DataStore {
         
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(UsedItems.TableName.toString())
-                    .value(UsedItems.PlayerId.toString(), playerId)
-                    .value(UsedItems.Material.toString(), Util.getBlockString(type, data))
-                    .value(UsedItems.World.toString(), location.getWorld().getName())
-                    .value(UsedItems.XCoord.toString(), location.getBlockX())
-                    .value(UsedItems.YCoord.toString(), location.getBlockY())
-                    .value(UsedItems.ZCoord.toString(), location.getBlockZ())
-                    .value(UsedItems.Timestamp.toString(), timestamp)
+            return Query.table(UsedItems.TableName)
+                    .value(UsedItems.PlayerId, playerId)
+                    .value(UsedItems.Material, Util.getBlockString(type, data))
+                    .value(UsedItems.World, location.getWorld().getName())
+                    .value(UsedItems.XCoord, location.getBlockX())
+                    .value(UsedItems.YCoord, location.getBlockY())
+                    .value(UsedItems.ZCoord, location.getBlockZ())
+                    .value(UsedItems.Timestamp, timestamp)
                     .insert();
         }
 

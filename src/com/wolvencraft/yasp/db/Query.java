@@ -30,6 +30,7 @@ import java.util.logging.Level;
 
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Settings.LocalConfiguration;
+import com.wolvencraft.yasp.db.tables.DBTable;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -53,8 +54,8 @@ public class Query {
      * @param table Name of the table to query
      * @return Database query
      */
-    public static DatabaseQuery table(String table) {
-        return instance.new DatabaseQuery(table);
+    public static DatabaseQuery table(DBTable table) {
+        return instance.new DatabaseQuery(table.toString());
     }
     
     /**
@@ -147,6 +148,17 @@ public class Query {
          * @param column Columns to include
          * @return Database query
          */
+        public DatabaseQuery column(DBTable... column) {
+            for(DBTable col : column) this.columns.add(col.toString());
+            return instance;
+        }
+        
+        /**
+         * Defines which columns to return.<br />
+         * If no columns are selected, returns everything
+         * @param column Columns to include
+         * @return Database query
+         */
         public DatabaseQuery columns(String[] column) {
             for(String col : column) this.columns.add(col);
             return instance;
@@ -162,15 +174,15 @@ public class Query {
             this.conditions.add("`" + key + "`='" + value + "'");
             return instance;
         }
-
+        
         /**
          * Applies a condition to the query
          * @param key Column name
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(String key, Integer value) {
-            this.conditions.add("`" + key + "`=" + value);
+        public DatabaseQuery condition(DBTable key, String value) {
+            this.conditions.add("`" + key.toString() + "`='" + value + "'");
             return instance;
         }
 
@@ -180,8 +192,8 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(String key, Double value) {
-            this.conditions.add("`" + key + "`=" + value);
+        public DatabaseQuery condition(DBTable key, Integer value) {
+            this.conditions.add("`" + key.toString() + "`=" + value);
             return instance;
         }
 
@@ -191,8 +203,8 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(String key, Long value) {
-            this.conditions.add("`" + key + "`=" + value);
+        public DatabaseQuery condition(DBTable key, Double value) {
+            this.conditions.add("`" + key.toString() + "`=" + value);
             return instance;
         }
 
@@ -202,9 +214,20 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(String key, Boolean value) {
-            if(value) this.conditions.add("`" + key + "`=1");
-            else this.conditions.add("`" + key + "`=0");
+        public DatabaseQuery condition(DBTable key, Long value) {
+            this.conditions.add("`" + key.toString() + "`=" + value);
+            return instance;
+        }
+
+        /**
+         * Applies a condition to the query
+         * @param key Column name
+         * @param value Column value
+         * @return Database query
+         */
+        public DatabaseQuery condition(DBTable key, Boolean value) {
+            if(value) this.conditions.add("`" + key.toString() + "`=1");
+            else this.conditions.add("`" + key.toString() + "`=0");
             return instance;
         }
 
@@ -235,9 +258,20 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery value(String key, boolean value) {
-            if(value) values.put(key, 1);
-            else values.put(key, 0);
+        public DatabaseQuery value(DBTable key, Object value) {
+            this.values.put(key.toString(), value);
+            return instance;
+        }
+        
+        /**
+         * Adds a value to be inserted into the database
+         * @param key Column name
+         * @param value Column value
+         * @return Database query
+         */
+        public DatabaseQuery value(DBTable key, boolean value) {
+            if(value) values.put(key.toString(), 1);
+            else values.put(key.toString(), 0);
             return instance;
         }
         
@@ -306,7 +340,8 @@ public class Query {
         }
         
         /**
-         * Builds and runs the SELECT query that returns a list of results from the database
+         * Builds and runs the SELECT query that returns a list of results from the database.<br />
+         * In most cases, <code>select();</code> is sufficient.
          * @return List of results. Might be empty.
          */
         public List<QueryResult> selectAll() {
@@ -364,7 +399,7 @@ public class Query {
             }
             if(!conditionString.equals("")) sql += " WHERE " + conditionString;
             
-            try { return Query.fetchData(sql + ";").get(0).getValueAsDouble("temp"); }
+            try { return Query.fetchData(sql + ";").get(0).asDouble("temp"); }
             catch (Exception e) { return 0; }
         }
         
@@ -429,6 +464,7 @@ public class Query {
         
         /**
          * Checks if the row that is up for updating exists. If it does not, it is created.
+         * @deprecated Does not work properly, in addition to being taxing on the connection.
          * @return  <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
          */
         public boolean update(boolean force) {
@@ -477,8 +513,13 @@ public class Query {
             this.fields = fields;
         }
         
-        public Object getRawValue(String column) {
-            return fields.get(column);
+        /**
+         * Returns the value of the specified column.
+         * @param column Column name
+         * @return <b>String</b> The value of the specified column, or <b>null</b> if there isn't one.
+         */
+        public String asString(String column) {
+            return fields.get(column.toString());
         }
         
         /**
@@ -486,28 +527,53 @@ public class Query {
          * @param column Column name
          * @return <b>String</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
-        public String getValue(String column) {
-            return fields.get(column);
+        public String asString(DBTable column) {
+            return asString(column.toString());
         }
-        
         
         /**
          * Returns the value of the specified column.
          * @param column Column name
          * @return <b>boolean</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
-        public boolean getValueAsBoolean(String column) {
+        public boolean asBoolean(String column) {
             return fields.get(column).equalsIgnoreCase("1");
         }
         
+        /**
+         * Returns the value of the specified column.
+         * @param column Column name
+         * @return <b>boolean</b> The value of the specified column, or <b>null</b> if there isn't one.
+         */
+        public boolean asBoolean(DBTable column) {
+            return asBoolean(column.toString());
+        }
         
         /**
          * Returns the value of the specified column.
          * @param column Column name
          * @return <b>int</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
-        public int getValueAsInteger(String column) {
+        public int asInt(String column) {
             try { return Integer.parseInt(fields.get(column)); }
+            catch (NumberFormatException e) { return -1; }
+        }
+        /**
+         * Returns the value of the specified column.
+         * @param column Column name
+         * @return <b>int</b> The value of the specified column, or <b>null</b> if there isn't one.
+         */
+        public int asInt(DBTable column) {
+            return asInt(column.toString());
+        }
+        
+        /**
+         * Returns the value of the specified column.
+         * @param column Column name
+         * @return <b>long</b> The value of the specified column, or <b>null</b> if there isn't one.
+         */
+        public long asLong(String column) {
+            try { return Long.parseLong(fields.get(column)); }
             catch (NumberFormatException e) { return -1; }
         }
         
@@ -516,8 +582,17 @@ public class Query {
          * @param column Column name
          * @return <b>long</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
-        public long getValueAsLong(String column) {
-            try { return Long.parseLong(fields.get(column)); }
+        public long asLong(DBTable column) {
+            return asLong(column.toString());
+        }
+        
+        /**
+         * Returns the raw value of the specified column.
+         * @param column Column name
+         * @return <b>double</b> The value of the specified column, or <b>null</b> if there isn't one.
+         */
+        public double asDouble(String column) {
+            try { return Double.parseDouble(fields.get(column)); }
             catch (NumberFormatException e) { return -1; }
         }
         
@@ -526,9 +601,8 @@ public class Query {
          * @param column Column name
          * @return <b>double</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
-        public double getValueAsDouble(String column) {
-            try { return Double.parseDouble(fields.get(column)); }
-            catch (NumberFormatException e) { return -1; }
+        public double asDouble(DBTable column) {
+            return asDouble(column.toString());
         }
     }
     

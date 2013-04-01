@@ -121,21 +121,21 @@ public class WGHookFactory implements PluginHookFactory {
                 it.remove();
             }
             
-            if(Query.table(WorldGuardTable.TableName.toString())
-                    .condition(WorldGuardTable.PlayerId.toString(), playerId)
+            if(Query.table(WorldGuardTable.TableName)
+                    .condition(WorldGuardTable.PlayerId, playerId)
                     .exists()) return;
             
-            Query.table(WorldGuardTable.TableName.toString())
-            .value(WorldGuardTable.PlayerId.toString(), playerId)
-            .value(WorldGuardTable.RegionName.toString(), Util.toJsonArray(regions))
+            Query.table(WorldGuardTable.TableName)
+            .value(WorldGuardTable.PlayerId, playerId)
+            .value(WorldGuardTable.RegionName, Util.toJsonArray(regions))
             .insert();
         }
 
         @Override
         public boolean pushData() {
-            return Query.table(WorldGuardTable.TableName.toString())
-                .value(WorldGuardTable.RegionName.toString(), Util.toJsonArray(regions))
-                .condition(WorldGuardTable.PlayerId.toString(), playerId)
+            return Query.table(WorldGuardTable.TableName)
+                .value(WorldGuardTable.RegionName, Util.toJsonArray(regions))
+                .condition(WorldGuardTable.PlayerId, playerId)
                 .update();
         }
         

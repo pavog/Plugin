@@ -33,7 +33,7 @@ public class Detailed {
      * @author bitWolfy
      *
      */
-    public enum DestroyedBlocks {
+    public enum DestroyedBlocks implements DBTable {
         TableName("detailed_destroyed_blocks"),
         EntryId("detailed_destroyed_blocks_id"),
         Material("material_id"),
@@ -42,7 +42,8 @@ public class Detailed {
         XCoord("x"),
         YCoord("y"),
         ZCoord("z"),
-        Timestamp("time");
+        Timestamp("time")
+        ;
         
         DestroyedBlocks(String columnName) { this.columnName = columnName; }
         
@@ -57,7 +58,7 @@ public class Detailed {
      * @author bitWolfy
      *
      */
-    public enum PlacedBlocks {
+    public enum PlacedBlocks implements DBTable {
         TableName("detailed_placed_blocks"),
         EntryId("detailed_placed_blocks_id"),
         Material("material_id"),
@@ -81,7 +82,7 @@ public class Detailed {
      * @author bitWolfy
      *
      */
-    public enum DroppedItems {
+    public enum DroppedItems implements DBTable {
         TableName("detailed_dropped_items"),
         EntryId("detailed_dropped_items_id"),
         Material("material_id"),
@@ -105,7 +106,7 @@ public class Detailed {
      * @author bitWolfy
      *
      */
-    public enum PickedupItems {
+    public enum PickedupItems implements DBTable {
 
         TableName("detailed_pickedup_items"),
         
@@ -131,7 +132,7 @@ public class Detailed {
      * @author bitWolfy
      *
      */
-    public enum UsedItems {
+    public enum UsedItems implements DBTable {
         TableName("detailed_used_items"),
         EntryId("detailed_used_items_id"),
         Material("material_id"),
@@ -155,7 +156,7 @@ public class Detailed {
      * @author bitWolfy
      *
      */
-    public enum LogPlayers {
+    public enum LogPlayers implements DBTable {
         TableName("detailed_log_players"),
         EntryId("detailed_log_players_id"),
         PlayerId("player_id"),
@@ -179,7 +180,7 @@ public class Detailed {
      * @author bitWolfy
      *
      */
-    public enum DeathPlayers {
+    public enum DeathPlayers implements DBTable {
         TableName("detailed_death_players"),
         EntryId("detailed_death_players_id"),
         PlayerId("player_id"),
@@ -203,7 +204,7 @@ public class Detailed {
      * @author bitWolfy
      *
      */
-    public enum PVEKills {
+    public enum PVEKills implements DBTable {
         TableName("detailed_pve_kills"),
         EntryId("detailed_pve_id"),
         Material("material_id"),
@@ -229,7 +230,7 @@ public class Detailed {
      * @author bitWolfy
      *
      */
-    public enum PVPKills {
+    public enum PVPKills implements DBTable {
         TableName("detailed_pvp_kills"),
         EntryId("detailed_pvp_id"),
         Material("material_id"),

@@ -136,29 +136,29 @@ public class DeathsData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
-           QueryResult result = Query.table(TotalDeathPlayersTable.TableName.toString())
-                    .column(TotalDeathPlayersTable.Times.toString())
-                    .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId)
-                    .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
+           QueryResult result = Query.table(TotalDeathPlayersTable.TableName)
+                    .column(TotalDeathPlayersTable.Times)
+                    .condition(TotalDeathPlayersTable.PlayerId, playerId)
+                    .condition(TotalDeathPlayersTable.Cause, cause.name())
                     .select();
             
             if(result == null) {
-                Query.table(TotalDeathPlayersTable.TableName.toString())
-                    .value(TotalDeathPlayersTable.PlayerId.toString(), playerId)
-                    .value(TotalDeathPlayersTable.Cause.toString(), cause.name())
-                    .value(TotalDeathPlayersTable.Times.toString(), times)
+                Query.table(TotalDeathPlayersTable.TableName)
+                    .value(TotalDeathPlayersTable.PlayerId, playerId)
+                    .value(TotalDeathPlayersTable.Cause, cause.name())
+                    .value(TotalDeathPlayersTable.Times, times)
                     .insert();
             } else {
-                times = result.getValueAsInteger(TotalDeathPlayersTable.Times.toString());
+                times = result.asInt(TotalDeathPlayersTable.Times);
             }
         }
 
         @Override
         public boolean pushData(int playerId) {
-            boolean result = Query.table(TotalDeathPlayersTable.TableName.toString())
-                    .value(TotalDeathPlayersTable.Times.toString(), times)
-                    .condition(TotalDeathPlayersTable.PlayerId.toString(), playerId)
-                    .condition(TotalDeathPlayersTable.Cause.toString(), cause.name())
+            boolean result = Query.table(TotalDeathPlayersTable.TableName)
+                    .value(TotalDeathPlayersTable.Times, times)
+                    .condition(TotalDeathPlayersTable.PlayerId, playerId)
+                    .condition(TotalDeathPlayersTable.Cause, cause.name())
                     .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
@@ -217,14 +217,14 @@ public class DeathsData implements DataStore {
 
         @Override
         public boolean pushData(int playerId) {
-            return Query.table(DeathPlayers.TableName.toString())
-                    .value(DeathPlayers.PlayerId.toString(), playerId)
-                    .value(DeathPlayers.Cause.toString(), deathCause)
-                    .value(DeathPlayers.World.toString(), location.getWorld().getName())
-                    .value(DeathPlayers.XCoord.toString(), location.getBlockX())
-                    .value(DeathPlayers.YCoord.toString(), location.getBlockY())
-                    .value(DeathPlayers.ZCoord.toString(), location.getBlockZ())
-                    .value(DeathPlayers.Timestamp.toString(), timestamp)
+            return Query.table(DeathPlayers.TableName)
+                    .value(DeathPlayers.PlayerId, playerId)
+                    .value(DeathPlayers.Cause, deathCause)
+                    .value(DeathPlayers.World, location.getWorld().getName())
+                    .value(DeathPlayers.XCoord, location.getBlockX())
+                    .value(DeathPlayers.YCoord, location.getBlockY())
+                    .value(DeathPlayers.ZCoord, location.getBlockZ())
+                    .value(DeathPlayers.Timestamp, timestamp)
                     .insert();
         }
 

@@ -156,31 +156,31 @@ public class PVPData implements DataStore {
         
         @Override
         public void fetchData(int killerId) {
-            QueryResult result = Query.table(TotalPVPKillsTable.TableName.toString())
-                    .column(TotalPVPKillsTable.Times.toString())
-                    .condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
-                    .condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
-                    .condition(TotalPVPKillsTable.Material.toString(), Util.getBlockString(type, data))
+            QueryResult result = Query.table(TotalPVPKillsTable.TableName)
+                    .column(TotalPVPKillsTable.Times)
+                    .condition(TotalPVPKillsTable.PlayerId, killerId)
+                    .condition(TotalPVPKillsTable.VictimId, victimId)
+                    .condition(TotalPVPKillsTable.Material, Util.getBlockString(type, data))
                     .select();
             if(result == null) {
-                Query.table(TotalPVPKillsTable.TableName.toString())
-                    .value(TotalPVPKillsTable.PlayerId.toString(), killerId)
-                    .value(TotalPVPKillsTable.VictimId.toString(), victimId)
-                    .value(TotalPVPKillsTable.Material.toString(), Util.getBlockString(type, data))
-                    .value(TotalPVPKillsTable.Times.toString(), times)
+                Query.table(TotalPVPKillsTable.TableName)
+                    .value(TotalPVPKillsTable.PlayerId, killerId)
+                    .value(TotalPVPKillsTable.VictimId, victimId)
+                    .value(TotalPVPKillsTable.Material, Util.getBlockString(type, data))
+                    .value(TotalPVPKillsTable.Times, times)
                     .insert();
             } else {
-                times = result.getValueAsInteger(TotalPVPKillsTable.Times.toString());
+                times = result.asInt(TotalPVPKillsTable.Times);
             }
         }
 
         @Override
         public boolean pushData(int killerId) {
-            boolean result = Query.table(TotalPVPKillsTable.TableName.toString())
-                    .value(TotalPVPKillsTable.Times.toString(), times)
-                    .condition(TotalPVPKillsTable.PlayerId.toString(), killerId + "")
-                    .condition(TotalPVPKillsTable.VictimId.toString(), victimId + "")
-                    .condition(TotalPVPKillsTable.Material.toString(), Util.getBlockString(type, data))
+            boolean result = Query.table(TotalPVPKillsTable.TableName)
+                    .value(TotalPVPKillsTable.Times, times)
+                    .condition(TotalPVPKillsTable.PlayerId, killerId)
+                    .condition(TotalPVPKillsTable.VictimId, victimId)
+                    .condition(TotalPVPKillsTable.Material, Util.getBlockString(type, data))
                     .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(killerId);
             return result;
@@ -251,15 +251,15 @@ public class PVPData implements DataStore {
         
         @Override
         public boolean pushData(int killerId) {
-            return Query.table(PVPKills.TableName.toString())
-                    .value(PVPKills.KillerId.toString(), killerId)
-                    .value(PVPKills.VictimId.toString(), victimId)
-                    .value(PVPKills.Material.toString(), Util.getBlockString(type, data))
-                    .value(PVPKills.World.toString(), location.getWorld().getName())
-                    .value(PVPKills.XCoord.toString(), location.getBlockX())
-                    .value(PVPKills.YCoord.toString(), location.getBlockY())
-                    .value(PVPKills.ZCoord.toString(), location.getBlockZ())
-                    .value(PVPKills.Timestamp.toString(), timestamp)
+            return Query.table(PVPKills.TableName)
+                    .value(PVPKills.KillerId, killerId)
+                    .value(PVPKills.VictimId, victimId)
+                    .value(PVPKills.Material, Util.getBlockString(type, data))
+                    .value(PVPKills.World, location.getWorld().getName())
+                    .value(PVPKills.XCoord, location.getBlockX())
+                    .value(PVPKills.YCoord, location.getBlockY())
+                    .value(PVPKills.ZCoord, location.getBlockZ())
+                    .value(PVPKills.Timestamp, timestamp)
                     .insert();
         }
 

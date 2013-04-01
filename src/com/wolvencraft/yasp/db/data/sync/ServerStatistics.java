@@ -75,16 +75,16 @@ public class ServerStatistics {
         maxPlayersOnlineTime = 0;
         maxPlayersAllowed = Bukkit.getMaxPlayers();
         
-        List<QueryResult> entries = Query.table(ServerStatsTable.TableName.toString()).selectAll();
+        List<QueryResult> entries = Query.table(ServerStatsTable.TableName).selectAll();
         for(QueryResult entry : entries) {
-            if(entry.getValue("key").equalsIgnoreCase("first_startup")) firstStartup = entry.getValueAsLong("value");
-            else if(entry.getValue("key").equalsIgnoreCase("total_uptime")) totalUptime = entry.getValueAsLong("value");
-            else if(entry.getValue("key").equalsIgnoreCase("last_shutdown")) lastShutdown = entry.getValueAsLong("value");
-            else if(entry.getValue("key").equalsIgnoreCase("max_players_online")) maxPlayersOnline = entry.getValueAsInteger("value");
-            else if(entry.getValue("key").equalsIgnoreCase("max_players_online_time")) maxPlayersOnlineTime = entry.getValueAsLong("value");
+            if(entry.asString("key").equalsIgnoreCase("first_startup")) firstStartup = entry.asLong("value");
+            else if(entry.asString("key").equalsIgnoreCase("total_uptime")) totalUptime = entry.asLong("value");
+            else if(entry.asString("key").equalsIgnoreCase("last_shutdown")) lastShutdown = entry.asLong("value");
+            else if(entry.asString("key").equalsIgnoreCase("max_players_online")) maxPlayersOnline = entry.asInt("value");
+            else if(entry.asString("key").equalsIgnoreCase("max_players_online_time")) maxPlayersOnlineTime = entry.asLong("value");
         }
-        if(firstStartup == 0) firstStartup = curTime;
-        if(lastShutdown == 0) lastShutdown = curTime;
+        if(firstStartup == 0 || firstStartup == -1) firstStartup = curTime;
+        if(lastShutdown == 0 || lastShutdown == -1) lastShutdown = curTime;
                 
         pushStaticData();
     }
@@ -131,16 +131,16 @@ public class ServerStatistics {
         freeMemory = runtime.freeMemory();
         ticksPerSecond = TPSTracker.getTicksPerSecond();
         
-        Query.table(ServerStatsTable.TableName.toString()).value("value", currentUptime).condition("key", "current_uptime").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", totalUptime).condition("key", "total_uptime").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", maxPlayersOnline).condition("key", "max_players_online").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", maxPlayersOnlineTime).condition("key", "max_players_online_time").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", totalMemory).condition("key", "total_memory").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", freeMemory).condition("key", "free_memory").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", ticksPerSecond).condition("key", "ticks_per_second").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", serverTime).condition("key", "server_time").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", weather).condition("key", "weather").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", weatherDuration).condition("key", "weather_duration").update();
+        Query.table(ServerStatsTable.TableName).value("value", currentUptime).condition("key", "current_uptime").update();
+        Query.table(ServerStatsTable.TableName).value("value", totalUptime).condition("key", "total_uptime").update();
+        Query.table(ServerStatsTable.TableName).value("value", maxPlayersOnline).condition("key", "max_players_online").update();
+        Query.table(ServerStatsTable.TableName).value("value", maxPlayersOnlineTime).condition("key", "max_players_online_time").update();
+        Query.table(ServerStatsTable.TableName).value("value", totalMemory).condition("key", "total_memory").update();
+        Query.table(ServerStatsTable.TableName).value("value", freeMemory).condition("key", "free_memory").update();
+        Query.table(ServerStatsTable.TableName).value("value", ticksPerSecond).condition("key", "ticks_per_second").update();
+        Query.table(ServerStatsTable.TableName).value("value", serverTime).condition("key", "server_time").update();
+        Query.table(ServerStatsTable.TableName).value("value", weather).condition("key", "weather").update();
+        Query.table(ServerStatsTable.TableName).value("value", weatherDuration).condition("key", "weather_duration").update();
         return true;
     }
     
@@ -149,22 +149,22 @@ public class ServerStatistics {
      * Only performed on plugin startup.
      */
     public void pushStaticData() {
-        Query.table(ServerStatsTable.TableName.toString()).value("value", firstStartup).condition("key", "first_startup").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", lastStartup).condition("key", "last_startup").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", plugins).condition("key", "plugins").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", bukkitVersion).condition("key", "bukkit_version").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", serverIP).condition("key", "server_ip").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", serverPort).condition("key", "server_port").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", serverMOTD).condition("key", "server_motd").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value",  maxPlayersAllowed).condition("key", "players_allowed").update();
+        Query.table(ServerStatsTable.TableName).value("value", firstStartup).condition("key", "first_startup").update();
+        Query.table(ServerStatsTable.TableName).value("value", lastStartup).condition("key", "last_startup").update();
+        Query.table(ServerStatsTable.TableName).value("value", plugins).condition("key", "plugins").update();
+        Query.table(ServerStatsTable.TableName).value("value", bukkitVersion).condition("key", "bukkit_version").update();
+        Query.table(ServerStatsTable.TableName).value("value", serverIP).condition("key", "server_ip").update();
+        Query.table(ServerStatsTable.TableName).value("value", serverPort).condition("key", "server_port").update();
+        Query.table(ServerStatsTable.TableName).value("value", serverMOTD).condition("key", "server_motd").update();
+        Query.table(ServerStatsTable.TableName).value("value",  maxPlayersAllowed).condition("key", "players_allowed").update();
     }
     
     /**
      * Indicates that the plugin is shutting down and registers the current shutdown time.
      */
     public void pluginShutdown() {
-        Query.table(ServerStatsTable.TableName.toString()).value("value", Util.getTimestamp()).condition("key", "last_shutdown").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", 0).condition("key", "current_uptime").update();
+        Query.table(ServerStatsTable.TableName).value("value", Util.getTimestamp()).condition("key", "last_shutdown").update();
+        Query.table(ServerStatsTable.TableName).value("value", 0).condition("key", "current_uptime").update();
     }
     
     /**
@@ -185,8 +185,8 @@ public class ServerStatistics {
         weather = isStorming;
         weatherDuration = duration;
         
-        Query.table(ServerStatsTable.TableName.toString()).value("value", weather).condition("key", "weather").update();
-        Query.table(ServerStatsTable.TableName.toString()).value("value", weatherDuration).condition("key", "weather_duration").update();
+        Query.table(ServerStatsTable.TableName).value("value", weather).condition("key", "weather").update();
+        Query.table(ServerStatsTable.TableName).value("value", weatherDuration).condition("key", "weather_duration").update();
     }
     
     /**
@@ -194,7 +194,7 @@ public class ServerStatistics {
      */
     public void pluginNumberChange() {
         plugins = Bukkit.getServer().getPluginManager().getPlugins().length;
-        Query.table(ServerStatsTable.TableName.toString()).value("value", plugins).condition("key", "plugins").update();
+        Query.table(ServerStatsTable.TableName).value("value", plugins).condition("key", "plugins").update();
     }
     
     /**

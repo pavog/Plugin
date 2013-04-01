@@ -33,7 +33,7 @@ public class Hook {
      * @author bitWolfy
      *
      */
-    public enum VaultTable {
+    public enum VaultTable implements DBTable {
         TableName("hook_vault"),
         PlayerId("player_id"),
         GroupName("group_name"),
@@ -52,7 +52,7 @@ public class Hook {
      * @author bitWolfy
      *
      */
-    public enum WorldGuardTable {
+    public enum WorldGuardTable implements DBTable {
         TableName("hook_worldguard"),
         PlayerId("player_id"),
         RegionName("region_name");

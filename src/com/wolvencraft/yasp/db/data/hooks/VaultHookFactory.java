@@ -122,23 +122,23 @@ public class VaultHookFactory implements PluginHookFactory {
             if(economy != null) balance = economy.getBalance(player.getPlayerListName());
             else balance = -1;
             
-            if(Query.table(VaultTable.TableName.toString())
-                    .condition(VaultTable.PlayerId.toString(), playerId)
+            if(Query.table(VaultTable.TableName)
+                    .condition(VaultTable.PlayerId, playerId)
                     .exists()) return;
             
-            Query.table(VaultTable.TableName.toString())
-            .value(VaultTable.PlayerId.toString(), playerId)
-            .value(VaultTable.Balance.toString(), balance)
-            .value(VaultTable.GroupName.toString(), groupName)
+            Query.table(VaultTable.TableName)
+            .value(VaultTable.PlayerId, playerId)
+            .value(VaultTable.Balance, balance)
+            .value(VaultTable.GroupName, groupName)
             .insert();
         }
         
         @Override
         public boolean pushData() {
-            return Query.table(VaultTable.TableName.toString())
-                .value(VaultTable.Balance.toString(), balance)
-                .value(VaultTable.GroupName.toString(), groupName)
-                .condition(VaultTable.PlayerId.toString(), playerId)
+            return Query.table(VaultTable.TableName)
+                .value(VaultTable.Balance, balance)
+                .value(VaultTable.GroupName, groupName)
+                .condition(VaultTable.PlayerId, playerId)
                 .update();
         }
         

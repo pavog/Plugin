@@ -33,7 +33,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum SettingsTable {
+    public enum SettingsTable implements DBTable {
         TableName("settings"),
         Key("key"),
         Value("value");
@@ -51,7 +51,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum ServerStatsTable {
+    public enum ServerStatsTable implements DBTable {
         TableName("server_statistics"),
         Key("key"),
         Value("value");
@@ -69,7 +69,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum DistancePlayersTable {
+    public enum DistancePlayersTable implements DBTable {
         TableName("distances"),
         PlayerId("player_id"),
         Foot("foot"),
@@ -92,7 +92,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum PlayersTable{
+    public enum PlayersTable implements DBTable {
         TableName("players"),
         PlayerId("player_id"),
         Name("name"),
@@ -115,7 +115,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum MiscInfoPlayersTable {
+    public enum MiscInfoPlayersTable implements DBTable {
         TableName("misc_info_players"),
         EntryId("misc_info_players_id"),
         PlayerId("player_id"),
@@ -156,7 +156,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum TotalBlocksTable {
+    public enum TotalBlocksTable implements DBTable {
         TableName("total_blocks"),
         EntryId("total_blocks_id"),
         Material("material_id"),
@@ -177,7 +177,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum TotalItemsTable {
+    public enum TotalItemsTable implements DBTable {
         TableName("total_items"),
         EntryId("total_items_id"),
         Material("material_id"),
@@ -203,7 +203,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum TotalDeathPlayersTable {
+    public enum TotalDeathPlayersTable implements DBTable {
         TableName("total_deaths"),
         EntryId("total_death_players_id"),
         PlayerId("player_id"),
@@ -223,7 +223,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum TotalPVEKillsTable {
+    public enum TotalPVEKillsTable implements DBTable {
         TableName("total_pve_kills"),
         EntryId("total_pve_id"),
         Material("material_id"),
@@ -245,7 +245,7 @@ public class Normal {
      * @author bitWolfy
      *
      */
-    public enum TotalPVPKillsTable {
+    public enum TotalPVPKillsTable implements DBTable {
         TableName("total_pvp_kills"),
         EntryId("total_pvp_id"),
         Material("material_id"),
