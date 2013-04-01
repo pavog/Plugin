@@ -23,10 +23,10 @@ package com.wolvencraft.yasp;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.db.data.hooks.VaultHook;
-import com.wolvencraft.yasp.db.data.hooks.WorldGuardHook;
-import com.wolvencraft.yasp.db.data.hooks.VaultHook.VaultHookEntry;
-import com.wolvencraft.yasp.db.data.hooks.WorldGuardHook.WorldGuardHookEntry;
+import com.wolvencraft.yasp.db.data.hooks.VaultHookFactory;
+import com.wolvencraft.yasp.db.data.hooks.VaultHookFactory.*;
+import com.wolvencraft.yasp.db.data.hooks.WGHookFactory;
+import com.wolvencraft.yasp.db.data.hooks.WGHookFactory.*;
 import com.wolvencraft.yasp.db.data.receive.PlayerTotals;
 import com.wolvencraft.yasp.db.data.sync.*;
 
@@ -58,9 +58,9 @@ public class LocalSession {
         this.playerTotals = new PlayerTotals(playerId);
         
         if(Settings.Modules.HookVault.getEnabled() && Settings.ActiveHooks.HookVault.getActive())
-            vaultHookEntry = VaultHook.getInstance().new VaultHookEntry(player, playerId);
+            vaultHookEntry = VaultHookFactory.getInstance().new VaultHookData(player, playerId);
         if(Settings.Modules.HookWorldGuard.getEnabled() && Settings.ActiveHooks.HookWorldGuard.getActive())
-            worldGuardHookEntry = WorldGuardHook.getInstance().new WorldGuardHookEntry(player, playerId);
+            wgHookEntry = WGHookFactory.getInstance().new WGHookData(player, playerId);
     }
     
     private boolean confirmed;
@@ -74,8 +74,8 @@ public class LocalSession {
     
     private PlayerTotals playerTotals;
     
-    private VaultHookEntry vaultHookEntry;
-    private WorldGuardHookEntry worldGuardHookEntry;
+    private VaultHookData vaultHookEntry;
+    private WGHookData wgHookEntry;
     
     /**
      * Performs an operation to push the locally stored data to the database.<br />
@@ -103,7 +103,7 @@ public class LocalSession {
         if(Settings.Modules.HookVault.getEnabled() && Settings.ActiveHooks.HookVault.getActive())
             vaultHookEntry.pushData();
         if(Settings.Modules.HookWorldGuard.getEnabled() && Settings.ActiveHooks.HookWorldGuard.getActive())
-            worldGuardHookEntry.pushData();
+            wgHookEntry.pushData();
         
         playerTotals.fetchData();
     }

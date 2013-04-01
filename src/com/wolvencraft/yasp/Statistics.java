@@ -57,8 +57,8 @@ public class Statistics extends JavaPlugin {
     
     private static Gson gson;
     
-    private static VaultHook vaultHook;
-    private static WorldGuardHook worldGuardHook;
+    private static VaultHookFactory vaultHook;
+    private static WGHookFactory worldGuardHook;
     
     /**
      * <b>Default constructor</b><br />
@@ -99,13 +99,13 @@ public class Statistics extends JavaPlugin {
         Message.log("Database connection established.");
         
         if (getServer().getPluginManager().getPlugin("Vault") != null && Settings.Modules.HookVault.getEnabled()) {
-            vaultHook = new VaultHook();
-            vaultHook.patch();
+            vaultHook = new VaultHookFactory();
+            vaultHook.onEnable();
         }
         
         if (getServer().getPluginManager().getPlugin("WorldGuard") != null && Settings.Modules.HookWorldGuard.getEnabled()) {
-            worldGuardHook = new WorldGuardHook();
-            worldGuardHook.patch();
+            worldGuardHook = new WGHookFactory();
+            worldGuardHook.onEnable();
         }
 
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
@@ -147,8 +147,8 @@ public class Statistics extends JavaPlugin {
             
             Bukkit.getScheduler().cancelTasks(this);
             
-            if(vaultHook != null) { vaultHook.cleanup(); }
-            if(worldGuardHook != null) { worldGuardHook.cleanup(); }
+            if(vaultHook != null) { vaultHook.onDisable(); }
+            if(worldGuardHook != null) { worldGuardHook.onDisable(); }
 
             Database.cleanup();
         } catch (NullPointerException npe) {

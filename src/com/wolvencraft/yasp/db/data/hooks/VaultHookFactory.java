@@ -1,5 +1,5 @@
 /*
- * VaultHook.java
+ * VaultHookFactory.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -20,13 +20,12 @@
 
 package com.wolvencraft.yasp.db.data.hooks;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
@@ -44,9 +43,13 @@ import com.wolvencraft.yasp.util.Message;
  * @author bitWolfy
  *
  */
-public class VaultHook implements _PluginHook {
+public class VaultHookFactory implements PluginHookFactory {
     
-    public VaultHook() {
+    private static VaultHookFactory instance;
+    private static Economy economy;
+    private static Permission permissions;
+    
+    public VaultHookFactory() {
         ServicesManager svm = Statistics.getInstance().getServer().getServicesManager();
         boolean broken = false;
         
@@ -63,69 +66,90 @@ public class VaultHook implements _PluginHook {
         }
     }
     
-    private static VaultHook instance;
-    private static Economy economy;
-    private static Permission permissions;
+    public static VaultHookFactory getInstance() {
+        return instance;
+    }
     
-    public class VaultHookEntry implements PluginHookEntry {
-        
-        public VaultHookEntry(Player player, int playerId) {
-            this.playerId = playerId;
-            fetchData(player);
+    @Override
+    public void onEnable() {
+        try { Database.getInstance().runCustomPatch("vault_v1"); }
+        catch (DatabaseConnectionException ex) {
+            Message.log(Level.SEVERE, ex.getMessage());
         }
+    }
+
+    @Override
+    public void onDisable() {
+        economy = null;
+        permissions = null;
+    }
+    
+    /**
+     * Represents the general player's information
+     * @author bitWolfy
+     *
+     */
+    public class VaultHookData implements PluginHook {
         
         private int playerId;
+        private String playerName;
+        
         private String groupName;
         private double balance;
         
+        /**
+         * <b>Default constructor</b><br />
+         * Creates a new normal table for the player
+         * @param player Player object
+         * @param playerId Player ID
+         */
+        public VaultHookData(Player player, int playerId) {
+            this.playerId = playerId;
+            this.playerName = player.getName();
+            this.groupName = "";
+            this.balance = 0;
+            
+            fetchData();
+        }
+        
         @Override
-        public void fetchData(Player player) { 
+        public void fetchData() {
+            Player player = Bukkit.getPlayerExact(playerName);
+            if(player == null) return;
+            
             if(permissions != null) groupName = permissions.getPrimaryGroup(player);
             else groupName = null;
             if(economy != null) balance = economy.getBalance(player.getPlayerListName());
             else balance = -1;
+            
+            if(Query.table(VaultTable.TableName.toString())
+                    .condition(VaultTable.PlayerId.toString(), playerId)
+                    .exists()) return;
+            
+            Query.table(VaultTable.TableName.toString())
+            .value(VaultTable.PlayerId.toString(), playerId)
+            .value(VaultTable.Balance.toString(), balance)
+            .value(VaultTable.GroupName.toString(), groupName)
+            .insert();
         }
         
         @Override
         public boolean pushData() {
             return Query.table(VaultTable.TableName.toString())
-                .value(getValues())
+                .value(VaultTable.Balance.toString(), balance)
+                .value(VaultTable.GroupName.toString(), groupName)
                 .condition(VaultTable.PlayerId.toString(), playerId)
-                .update(true);
-        }
-
-        @Override
-        public Map<String, Object> getValues() {
-            Map<String, Object> values = new HashMap<String, Object>();
-            values.put(VaultTable.PlayerId.toString(), playerId);
-            values.put(VaultTable.Balance.toString(), balance);
-            values.put(VaultTable.GroupName.toString(), groupName);
-            return values;
+                .update();
         }
         
     }
     
     /**
-     * Returns the hook instance
-     * @return <b>VaultHook</b> instance
+     * Represents the detailed balance information for the player
+     * @author bitWolfy
+     *
      */
-    public static VaultHook getInstance() {
-        return instance;
-    }
-    
-    @Override
-    public boolean patch() {
-        try { Database.getInstance().runCustomPatch("vault_v1"); }
-        catch (DatabaseConnectionException ex) {
-            Message.log(Level.SEVERE, ex.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public void cleanup() {
-        economy = null;
-        permissions = null;
+    public class DetailedEconomyData {
+        //TODO everything
     }
 }

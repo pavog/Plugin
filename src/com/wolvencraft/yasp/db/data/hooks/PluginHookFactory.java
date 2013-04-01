@@ -1,5 +1,5 @@
 /*
- * PluginHook.java
+ * PluginHookFactory.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -20,48 +20,43 @@
 
 package com.wolvencraft.yasp.db.data.hooks;
 
-import java.util.Map;
-
-import org.bukkit.entity.Player;
-
 /**
- * Common interface for plugin hook data stores
+ * Common interface for plugin hook factories.
  * @author bitWolfy
  *
  */
-public interface _PluginHook {
+public interface PluginHookFactory {
     
     /**
-     * Patches the database to the latest version of the corresponding plugin
-     * @return <b>true</b> if the database was brought to date, <b>false</b> if an error occurred
+     * Code that is to be executed when the hook is being enabled.<br />
+     * This should include a database patch, if necessary
      */
-    public boolean patch();
+    public void onEnable();
     
     /**
-     * Makes sure that there are no loose ends. Breaks the connection to the parent plugin if need be.
+     * Code that is to be executed when the hook is being disabled.<br />
+     * This should include a cleanup routine.
      */
-    public void cleanup();
+    public void onDisable();
     
-    public interface PluginHookEntry {
+    /**
+     * A common interface for plugin hook data stores.
+     * @author bitWolfy
+     *
+     */
+    public interface PluginHook {
         
         /**
          * Fetches the data from the remote database.<br />
          * Might not actually do anything if the plugin sends data in a log format.
          * @param player Player object
          */
-        public void fetchData(Player player);
+        public void fetchData();
         
         /**
          * Pushes the data to the remote database.
          * @return <b>true</b> if the data was sent successfully, <b>false</b> if an error occurred
          */
         public boolean pushData();
-        
-
-        /**
-         * Returns the data values of the DataHolder in a Map form
-         * @return <b>Map</b> of column names and their corresponding values
-         */
-        public Map<String, Object> getValues();
     }
 }
