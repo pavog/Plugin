@@ -464,7 +464,7 @@ public class PlayersData implements DataStore {
                     .value(MiscInfoPlayersTable.CommandsSent.toString(), commandsSent)
                     .value(MiscInfoPlayersTable.CurKillStreak.toString(), curKillStreak)
                     .value(MiscInfoPlayersTable.MaxKillStreak.toString(), maxKillStreak)
-                    .value(MiscInfoPlayersTable.PotionEffects.toString(), SimplePotionEffect.toGsonArray(potionEffects))
+                    .value(MiscInfoPlayersTable.PotionEffects.toString(), SimplePotionEffect.toJsonArray(potionEffects))
                     .insert();
             } else {
                 fishCaught = result.getValueAsInteger(MiscInfoPlayersTable.FishCaught.toString());
@@ -507,7 +507,7 @@ public class PlayersData implements DataStore {
                 .value(MiscInfoPlayersTable.CommandsSent.toString(), commandsSent)
                 .value(MiscInfoPlayersTable.CurKillStreak.toString(), curKillStreak)
                 .value(MiscInfoPlayersTable.MaxKillStreak.toString(), maxKillStreak)
-                .value(MiscInfoPlayersTable.PotionEffects.toString(), SimplePotionEffect.toGsonArray(potionEffects))
+                .value(MiscInfoPlayersTable.PotionEffects.toString(), SimplePotionEffect.toJsonArray(potionEffects))
                 .condition(MiscInfoPlayersTable.PlayerId.toString(), playerId)
                 .update(true);
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);

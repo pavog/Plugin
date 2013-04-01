@@ -26,8 +26,6 @@ import java.util.List;
 
 import org.bukkit.potion.PotionEffect;
 
-import com.wolvencraft.yasp.Statistics;
-
 /**
  * Simple class intended to temporarily store basic information about a potion effect
  * @author bitWolfy
@@ -64,9 +62,16 @@ public class SimplePotionEffect {
         return time;
     }
     
-    public static String toGsonArray(Collection<PotionEffect> effects) {
+    /**
+     * Compresses a Collection into a single-line json array.<br />
+     * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code><br />
+     * Stores only potion ID and duration.
+     * @param effects Effects to compress
+     * @return String json array
+     */
+    public static String toJsonArray(Collection<PotionEffect> effects) {
         List<SimplePotionEffect> potEffects = new ArrayList<SimplePotionEffect>();
         for(PotionEffect eff : effects) potEffects.add(new SimplePotionEffect(eff));
-        return Statistics.getGson().toJson(potEffects.toArray());
+        return Util.toJsonArray(potEffects);
     }
 }

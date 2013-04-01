@@ -22,6 +22,7 @@ package com.wolvencraft.yasp.util;
 
 import java.sql.Timestamp;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -33,6 +34,7 @@ import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
@@ -73,6 +75,15 @@ public class Util {
         } while (playerId == -1);
         Message.debug("User ID found: " + playerId);
         return playerId;
+    }
+    
+    /**
+     * Compresses a List into a single-line json array
+     * @param source List to compress
+     * @return String json array
+     */
+    public static String toJsonArray(List<?> source) {
+        return Statistics.getGson().toJson(source.toArray());
     }
     
     /**
