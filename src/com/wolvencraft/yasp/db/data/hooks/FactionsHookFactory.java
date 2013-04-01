@@ -20,8 +20,7 @@ public class FactionsHookFactory implements PluginHookFactory {
 
     @Override
     public void onDisable() {
-        // TODO Auto-generated method stub
-        
+        instance = null;
     }
     
     public class FactionsHook implements PluginHook {

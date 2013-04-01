@@ -65,4 +65,23 @@ public class Hook {
         public String toString() { return columnName; }
     }
     
+    /**
+     * Represents the <i>hook_factions</i> table.
+     * @author bitWolfy
+     *
+     */
+    public enum FactionsTable implements DBTable {
+        TableName("hook_factions"),
+        PlayerId("player_id"),
+        FactionName("faction_name"),
+        CurrentlyIn("current_position");
+        
+        FactionsTable (String columnName) { this.columnName = columnName; }
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
 }
