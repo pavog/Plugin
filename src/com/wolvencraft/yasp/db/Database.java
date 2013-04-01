@@ -96,9 +96,9 @@ public class Database {
         else { databaseVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
         int latestPatchVersion = databaseVersion;
         
-        do {
+        while (this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + (latestPatchVersion + 1) + ".yasp.sql") != null) {
             latestPatchVersion++;
-        } while (this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + (latestPatchVersion + 1) + ".yasp.sql") != null);
+        }
         
         if(databaseVersion >= latestPatchVersion) {
             Message.log("Target database is up to date");
