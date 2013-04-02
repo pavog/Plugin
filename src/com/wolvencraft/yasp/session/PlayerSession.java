@@ -1,5 +1,5 @@
 /*
- * OfflineSession.java
+ * PlayerSession.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,26 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+package com.wolvencraft.yasp.session;
 
 /**
- * Represents a user session for a tracked player.<br />
- * The player may be offline, or not exist at all.
+ * Player session interface
  * @author bitWolfy
  *
  */
-public class OfflineSession extends LocalSession {
+public interface PlayerSession {
     
     /**
-     * <b>Default constructor</b><br />
-     * Attempts to create a new user session for the player with the specified name.
-     * @param playerName Player name
+     * Returns the stored player ID
+     * @return Player ID
      */
-    public OfflineSession(String playerName) {
-        super((Player) Bukkit.getServer().getOfflinePlayer(playerName));
-    }
-
+    public int getId();
+    
+    /**
+     * Returns the player name
+     * @return Player name
+     */
+    public String getName();
+    
+    /**
+     * Checks if the player is online
+     * @return <b>true</b> if the player is online, <b>false</b> otherwise
+     */
+    public boolean isOnline();
+    
 }

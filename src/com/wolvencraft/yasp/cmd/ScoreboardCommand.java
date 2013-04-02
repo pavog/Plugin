@@ -50,7 +50,7 @@ public class ScoreboardCommand implements BaseCommand {
             return false;
         }
         Player player = (Player) CommandManager.getSender();
-        Map<String, Object> stats = DataCollector.get(player.getName()).playerTotals().getValues();
+        Map<String, Object> stats = DataCollector.get(player.getName()).getTotals().getValues();
         
         Scoreboard board = ScoreboardAPI.get(player.getName());
         if(board == null) {

@@ -29,6 +29,8 @@ import java.util.List;
  */
 public interface DataStore {
     
+    public DataStoreType getType();
+    
     /**
      * Returns the dynamic entries in the data store.<br />
      * Asynchronous method; changes to the returned List will not affect the data store.
@@ -90,6 +92,14 @@ public interface DataStore {
          * @return <b>true</b> if the holder has been synchronized and can be removed, <b>false</b> if it is on hold
          */
         public boolean pushData(int playerId);
+    }
+    
+    public enum DataStoreType {
+        Blocks,
+        Items,
+        Deaths,
+        PVE,
+        PVP
     }
 
 }

@@ -55,6 +55,11 @@ public class ItemsData implements DataStore {
         normalData = new ArrayList<TotalItemsEntry>();
         detailedData = new ArrayList<DetailedData>();
     }
+    
+    @Override
+    public DataStoreType getType() {
+        return DataStoreType.Items;
+    }
 
     @Override
     public List<NormalData> getNormalData() {

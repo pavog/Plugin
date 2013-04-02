@@ -114,7 +114,7 @@ public class Query {
         private DatabaseQuery instance;
         private String table;
         private List<String> columns;
-        private Map<String, Object> values;
+        private Map<Object, Object> values;
         private List<String> conditions;
         
         /**
@@ -127,7 +127,7 @@ public class Query {
             this.instance = this;
             this.table = table;
             this.columns = new ArrayList<String>();
-            this.values = new HashMap<String, Object>();
+            this.values = new HashMap<Object, Object>();
             this.conditions = new ArrayList<String>();
         }
         
@@ -280,21 +280,31 @@ public class Query {
          * @param values Map of values to be added to the database
          * @return Database query
          */
-        public DatabaseQuery value(Map<String, Object> values) {
+        public DatabaseQuery value(Map<Object, Object> values) {
             this.values.putAll(values);
             return instance;
         }
-
+        
+        /**
+         * Adds values to be inserted into the database
+         * @param values Map of values to be added to the database
+         * @return Database query
+         */
+        public DatabaseQuery valueRaw(Map<DBTable, Object> values) {
+            this.values.putAll(values);
+            return instance;
+        }
+        
         /**
          * Bundles up the altered columns as an array
          * @return Array of columns
          */
         private String[] getColumnsFromValues() {
             List<String> columns = new ArrayList<String>();
-            Iterator<Entry<String, Object>> it = instance.values.entrySet().iterator();
+            Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
-                columns.add(pairs.getKey());
+                Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
+                columns.add(pairs.getKey().toString());
             }
             String[] colArr = new String[columns.size()];
             colArr = columns.toArray(colArr);
@@ -412,9 +422,9 @@ public class Query {
             
             String fieldString = "";
             String valueString = "";
-            Iterator<Entry<String, Object>> it = instance.values.entrySet().iterator();
+            Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
+                Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
                 if(!fieldString.equals("")) fieldString += ", ";
                 if(!valueString.equals("")) valueString += ", ";
                 
@@ -442,9 +452,9 @@ public class Query {
             String sql = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
             
             String valueString = "";
-            Iterator<Entry<String, Object>> it = instance.values.entrySet().iterator();
+            Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<String, Object> pairs = (Entry<String, Object>) it.next();
+                Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
                 if(!valueString.equals("")) valueString += ", ";
                 
                 valueString += "`" + pairs.getKey().toString() + "`='" + pairs.getValue().toString() + "'";
@@ -603,6 +613,14 @@ public class Query {
          */
         public double asDouble(DBTable column) {
             return asDouble(column.toString());
+        }
+        
+        /**
+         * Returns all values in the QueryResult
+         * @return Column values
+         */
+        public Map<String, String> asMap() {
+            return fields;
         }
     }
     

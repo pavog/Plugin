@@ -20,7 +20,7 @@
 
 package com.wolvencraft.yasp.util;
 
-import com.wolvencraft.yasp.LocalSession;
+import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * A simple timed task that checks if the specified session's player is still online
@@ -33,11 +33,11 @@ public class ConfirmationTimer implements Runnable {
      * <b>Default constructor</b>
      * @param session Player session
      */
-    public ConfirmationTimer(LocalSession session) {
+    public ConfirmationTimer(OnlineSession session) {
         this.session = session;
     }
     
-    LocalSession session;
+    OnlineSession session;
     
     @Override
     public void run() {

@@ -57,6 +57,11 @@ public class PVEData implements DataStore{
     }
     
     @Override
+    public DataStoreType getType() {
+        return DataStoreType.PVE;
+    }
+    
+    @Override
     public List<NormalData> getNormalData() {
         List<NormalData> temp = new ArrayList<NormalData>();
         for(NormalData value : normalData) temp.add(value);

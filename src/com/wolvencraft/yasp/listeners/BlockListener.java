@@ -54,7 +54,6 @@ public class BlockListener implements Listener {
         if(!Util.isTracked(player, "block.break")) return;
         DataCollector
             .get(player)
-            .blocks()
             .blockBreak(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
     }
 
@@ -65,7 +64,6 @@ public class BlockListener implements Listener {
         if(!Util.isTracked(player, "block.place")) return;
         DataCollector
             .get(player)
-            .blocks()
             .blockPlace(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
     }
 }

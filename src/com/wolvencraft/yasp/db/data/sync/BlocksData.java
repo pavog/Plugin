@@ -56,6 +56,11 @@ public class BlocksData implements DataStore {
     }
     
     @Override
+    public DataStoreType getType() {
+        return DataStoreType.Blocks;
+    }
+    
+    @Override
     public List<NormalData> getNormalData() {
         List<NormalData> temp = new ArrayList<NormalData>();
         for(TotalBlocksEntry value : normalData) temp.add(value);

@@ -32,6 +32,8 @@ import com.wolvencraft.yasp.db.data.receive.ServerTotals;
 import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.session.OfflineSession;
+import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
@@ -43,16 +45,16 @@ import com.wolvencraft.yasp.util.Util;
  */
 public class DataCollector implements Runnable {
     
-    private static List<LocalSession> sessions;
+    private static List<OnlineSession> sessions;
     private static ServerTotals serverTotals;
     private static ServerStatistics serverStatistics;
 
     /**
      * <b>Default constructor.</b><br />
-     * Initializes an empty list of LocalSessions
+     * Initializes an empty list of OnlineSessions
      */
     public DataCollector() {
-        sessions = new ArrayList<LocalSession>();
+        sessions = new ArrayList<OnlineSession>();
         serverStatistics = new ServerStatistics();
         serverTotals = new ServerTotals();
         
@@ -87,9 +89,9 @@ public class DataCollector implements Runnable {
      */
     public static void pushPlayerData() {
         Message.debug("Database synchronization in progress");
-        for(LocalSession session : get()) {
+        for(OnlineSession session : get()) {
             session.pushData();
-            session.playerTotals().fetchData();
+            session.getTotals().fetchData();
             
             if(session.isOnline()) continue;
             remove(session);
@@ -106,7 +108,7 @@ public class DataCollector implements Runnable {
      * After that, clears the session list.
      */
     public static void dumpPlayerData() {
-        for(LocalSession session : get()) session.dump();
+        for(OnlineSession session : get()) session.dumpData();
         sessions.clear();
     }
     
@@ -114,27 +116,27 @@ public class DataCollector implements Runnable {
      * Returns all stored sessions.
      * @return List of stored player sessions
      */
-    private static List<LocalSession> get() {
-        List<LocalSession> tempList = new ArrayList<LocalSession>();
-        for(LocalSession session : sessions) tempList.add(session);
+    private static List<OnlineSession> get() {
+        List<OnlineSession> tempList = new ArrayList<OnlineSession>();
+        for(OnlineSession session : sessions) tempList.add(session);
         return tempList;
     }
     
     /**
-     * Returns the LocalSession associated with the specified player.<br />
+     * Returns the OnlineSession associated with the specified player.<br />
      * If no session is found, it will be created.
      * @param player Tracked player
-     * @return LocalSession associated with the player.
+     * @return OnlineSession associated with the player.
      */
-    public static LocalSession get(Player player) {
+    public static OnlineSession get(Player player) {
         String username = player.getName();
-        for(LocalSession session : sessions) {
+        for(OnlineSession session : sessions) {
             if(session.getName().equals(username)) {
                 return session;
             }
         }
         Message.debug("Creating a new user session for " + username);
-        LocalSession newSession = new LocalSession(player);
+        OnlineSession newSession = new OnlineSession(player);
         newSession.setConfirmed(false);
         sessions.add(newSession);
         if(Settings.RemoteConfiguration.ShowFirstJoinMessages.asBoolean())
@@ -146,13 +148,13 @@ public class DataCollector implements Runnable {
     }
     
     /**
-     * Returns the LocalSession associated with the specified player.<br />
+     * Returns the OnlineSession associated with the specified player.<br />
      * If no session is found, returns <b>null</b>
      * @param playerId
-     * @return LocalSession associated with the player, or <b>null<b> if there isn't one.
+     * @return OnlineSession associated with the player, or <b>null<b> if there isn't one.
      */
-    public static LocalSession get(int playerId) {
-        for(LocalSession session : sessions) {
+    public static OnlineSession get(int playerId) {
+        for(OnlineSession session : sessions) {
             if(session.getId() == playerId) {
                 return session;
             }
@@ -174,7 +176,7 @@ public class DataCollector implements Runnable {
      * Removes the specified session
      * @param session Session to remove
      */
-    public static void remove(LocalSession session) {
+    public static void remove(OnlineSession session) {
         Message.debug("Removing a user session for " + session.getName());
         sessions.remove(session);
     }

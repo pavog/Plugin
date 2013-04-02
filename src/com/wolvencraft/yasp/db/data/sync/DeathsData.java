@@ -55,6 +55,11 @@ public class DeathsData implements DataStore {
     }
     
     @Override
+    public DataStoreType getType() {
+        return DataStoreType.Deaths;
+    }
+    
+    @Override
     public List<NormalData> getNormalData() {
         List<NormalData> temp = new ArrayList<NormalData>();
         for(NormalData value : normalData) temp.add(value);

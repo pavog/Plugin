@@ -88,10 +88,10 @@ public class Statistics extends JavaPlugin {
         
         try { new Database(); }
         catch (Exception e) {
+            crashed = true;
             Message.log(Level.SEVERE, "Cannot establish a database connection!");
             Message.log(Level.SEVERE, "Is the plugin set up correctly?");
             if (Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
-            crashed = true;
             this.setEnabled(false);
             return;
         }
@@ -140,7 +140,7 @@ public class Statistics extends JavaPlugin {
         
         try {
             for(Player player : Bukkit.getOnlinePlayers())
-                DataCollector.get(player).player().logout(player.getLocation());
+                DataCollector.get(player).logout(player.getLocation());
             DataCollector.pushPlayerData();
             DataCollector.getStats().pluginShutdown();
             DataCollector.dumpPlayerData();
@@ -151,11 +151,9 @@ public class Statistics extends JavaPlugin {
             if(worldGuardHook != null) { worldGuardHook.onDisable(); }
 
             Database.cleanup();
-        } catch (NullPointerException npe) {
-            Message.log(Level.SEVERE, npe.getMessage());
-        } catch (Exception e) { 
-            Message.log(Level.SEVERE, e.getMessage());
-            if(Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+        } catch (Throwable t) { 
+            Message.log(Level.SEVERE, t.getMessage());
+            if(Settings.LocalConfiguration.Debug.asBoolean()) t.printStackTrace();
         }
         instance = null;
     }

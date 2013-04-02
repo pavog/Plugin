@@ -38,7 +38,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DataCollector;
-import com.wolvencraft.yasp.LocalSession;
+import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Util;
 
@@ -78,56 +78,47 @@ public class DeathListener implements Listener {
                         if (arrow.getShooter() instanceof Player) {                // | | + Player shot Player
                             Player killer = (Player) arrow.getShooter();
                             if(!Util.isTracked(victim, "death.pvp") || !Util.isTracked(killer, "death.pvp")) return;
-                            LocalSession session = DataCollector.get(killer);
-                            session.PVP().playerKilledPlayer(victim, new ItemStack(Material.ARROW));
-                            session.player().misc().playerKilled(victim);
+                            OnlineSession session = DataCollector.get(killer);
+                            session.killedPlayer(victim, new ItemStack(Material.ARROW));
                         } else if (arrow.getShooter() instanceof Creature) {    // | | + Creature shot Player
                             if(!Util.isTracked(victim, "death.pve")) return;
                             Creature killer = (Creature) arrow.getShooter();
-                            LocalSession session = DataCollector.get(victim);
-                            session.PVE().creatureKilledPlayer(killer, new ItemStack(Material.ARROW));
-                            session.player().misc().died();
+                            OnlineSession session = DataCollector.get(victim);
+                            session.killedByCreature(killer, new ItemStack(Material.ARROW));
                         }
                 } else if (killerEntity instanceof Player) {                    // | + Player killed Player
                     Player killer = (Player) killerEntity;
                     if(!Util.isTracked(victim, "death.pvp") || !Util.isTracked(killer, "death.pvp")) return;
-                    LocalSession session = DataCollector.get(killer);
-                    session.PVP().playerKilledPlayer(victim, killer.getItemInHand());
-                    session.player().misc().playerKilled(victim);
+                    OnlineSession session = DataCollector.get(killer);
+                    session.killedPlayer(victim, killer.getItemInHand());
                 } else if (killerEntity instanceof Explosive) {                    // | + Player exploded
                     if(!Util.isTracked(victim, "death.other")) return;
-                    LocalSession session = DataCollector.get(victim);
-                    session.deaths().playerDied(victim.getLocation(), cause);
-                    session.player().misc().died();
+                    OnlineSession session = DataCollector.get(victim);
+                    session.killedByEnvironment(victim.getLocation(), cause);
                 } else if (killerEntity instanceof Creature) {                    // | + Creature killed Player
                     if(!Util.isTracked(victim, "death.pve")) return;
                     Creature killer = (Creature) killerEntity;
-                    LocalSession session = DataCollector.get(victim);
-                    session.PVE().creatureKilledPlayer(killer, new ItemStack(Material.AIR));
-                    session.player().misc().died();
+                    OnlineSession session = DataCollector.get(victim);
+                    session.killedByCreature(killer, new ItemStack(Material.AIR));
                 } else if (killerEntity instanceof Slime) {                        // | + Slime killed player
                     if(!Util.isTracked(victim, "death.pve")) return;
                     Creature killer = (Creature) killerEntity;
                     //TODO Check if the Slime kill behavior is the same as the one with Creature
-                    LocalSession session = DataCollector.get(victim);
-                    session.PVE().creatureKilledPlayer(killer, new ItemStack(Material.AIR));
-                    session.player().misc().died();
+                    OnlineSession session = DataCollector.get(victim);
+                    session.killedByCreature(killer, new ItemStack(Material.AIR));
                 } else {                                                        // | + Player died
                     if(!Util.isTracked(victim, "death.other")) return;
-                    LocalSession session = DataCollector.get(victim);
-                    session.deaths().playerDied(victim.getLocation(), cause);
-                    session.player().misc().died();
+                    OnlineSession session = DataCollector.get(victim);
+                    session.killedByEnvironment(victim.getLocation(), cause);
                 }
             } else if (lastDamageEvent instanceof EntityDamageByBlockEvent) {    // + Player killed by blocks
                 if(!Util.isTracked(victim, "death.other")) return;
-                LocalSession session = DataCollector.get(victim);
-                session.deaths().playerDied(victim.getLocation(), cause);
-                session.player().misc().died();
+                OnlineSession session = DataCollector.get(victim);
+                session.killedByEnvironment(victim.getLocation(), cause);
             } else {                                                            // + Player died
                 if(!Util.isTracked(victim, "death.other")) return;
-                LocalSession session = DataCollector.get(victim);
-                session.deaths().playerDied(victim.getLocation(), cause);
-                session.player().misc().died();
+                OnlineSession session = DataCollector.get(victim);
+                session.killedByEnvironment(victim.getLocation(), cause);
             }
         } else {
             if (!(lastDamageEvent instanceof EntityDamageByEntityEvent)) return;
@@ -141,20 +132,20 @@ public class DeathListener implements Listener {
                 if(!Util.isTracked(killer, "death.pve")) return;
                 if (victimEntity instanceof Creature) {                            // | + Player shot Creature
                     Creature victim = (Creature) victimEntity;
-                    DataCollector.get(killer).PVE().playerKilledCreature(victim, new ItemStack(Material.ARROW));
+                    DataCollector.get(killer).killedCreature(victim, new ItemStack(Material.ARROW));
                 } else if (victimEntity instanceof Slime) {                        // | + Player shot Slime
                     Creature victim = (Creature) victimEntity;
-                    DataCollector.get(killer).PVE().playerKilledCreature(victim, new ItemStack(Material.ARROW));
+                    DataCollector.get(killer).killedCreature(victim, new ItemStack(Material.ARROW));
                 }
             } else if (killerEntity instanceof Player) {                        // + Player killed an entity
                 Player killer = (Player) killerEntity;
                 if(!Util.isTracked(killer, "death.pve")) return;
                 if (victimEntity instanceof Creature) {                            // | + Player killed Creature
                     Creature victim = (Creature) victimEntity;
-                    DataCollector.get(killer).PVE().playerKilledCreature(victim, killer.getItemInHand());
+                    DataCollector.get(killer).killedCreature(victim, killer.getItemInHand());
                 } else if (victimEntity instanceof Slime) {                        // | + Player killed Slime
                     Creature victim = (Creature) victimEntity;
-                    DataCollector.get(killer).PVE().playerKilledCreature(victim, killer.getItemInHand());
+                    DataCollector.get(killer).killedCreature(victim, killer.getItemInHand());
                 }
             }
         }
