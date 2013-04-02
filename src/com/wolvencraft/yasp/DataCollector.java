@@ -96,7 +96,7 @@ public class DataCollector implements Runnable {
             
             if(session.getConfirmed()) continue;
             Query.table(Normal.PlayersTable.TableName)
-                    .condition(PlayersTable.Name, session.getPlayerName())
+                    .condition(PlayersTable.Name, session.getName())
                     .delete();
         }
     }
@@ -129,7 +129,7 @@ public class DataCollector implements Runnable {
     public static LocalSession get(Player player) {
         String username = player.getName();
         for(LocalSession session : sessions) {
-            if(session.getPlayerName().equals(username)) {
+            if(session.getName().equals(username)) {
                 return session;
             }
         }
@@ -143,6 +143,21 @@ public class DataCollector implements Runnable {
                 Settings.RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
             );
         return newSession;
+    }
+    
+    /**
+     * Returns the LocalSession associated with the specified player.<br />
+     * If no session is found, returns <b>null</b>
+     * @param playerId
+     * @return LocalSession associated with the player, or <b>null<b> if there isn't one.
+     */
+    public static LocalSession get(int playerId) {
+        for(LocalSession session : sessions) {
+            if(session.getId() == playerId) {
+                return session;
+            }
+        }
+        return null;
     }
     
     /**
@@ -160,7 +175,7 @@ public class DataCollector implements Runnable {
      * @param session Session to remove
      */
     public static void remove(LocalSession session) {
-        Message.debug("Removing a user session for " + session.getPlayerName());
+        Message.debug("Removing a user session for " + session.getName());
         sessions.remove(session);
     }
     

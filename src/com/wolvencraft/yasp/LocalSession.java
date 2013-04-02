@@ -38,6 +38,21 @@ import com.wolvencraft.yasp.db.data.sync.*;
  */
 public class LocalSession {
     
+    private int playerId;
+    private boolean confirmed;
+    
+    private PlayersData playersData;
+    private BlocksData blocksData;
+    private ItemsData itemsData;
+    private DeathsData deathsData;
+    private PVEData PVEData;
+    private PVPData PVPData;
+    
+    private PlayerTotals playerTotals;
+    
+    private VaultHookData vaultHookEntry;
+    private WGHookData wgHookEntry;
+    
     /**
      * <b>Default constructor</b><br />
      * Creates a new user session based on the Player specified
@@ -46,7 +61,7 @@ public class LocalSession {
     public LocalSession(Player player) {
         confirmed = true;
         
-        int playerId = DataCollector.getPlayerId(player);
+        playerId = DataCollector.getPlayerId(player);
         
         this.playersData = new PlayersData(player, playerId);
         this.blocksData = new BlocksData(playerId);
@@ -62,20 +77,6 @@ public class LocalSession {
         if(Settings.Modules.HookWorldGuard.getEnabled() && Settings.ActiveHooks.HookWorldGuard.getActive())
             wgHookEntry = WGHookFactory.getInstance().new WGHookData(player, playerId);
     }
-    
-    private boolean confirmed;
-    
-    private PlayersData playersData;
-    private BlocksData blocksData;
-    private ItemsData itemsData;
-    private DeathsData deathsData;
-    private PVEData PVEData;
-    private PVPData PVPData;
-    
-    private PlayerTotals playerTotals;
-    
-    private VaultHookData vaultHookEntry;
-    private WGHookData wgHookEntry;
     
     /**
      * Performs an operation to push the locally stored data to the database.<br />
@@ -125,8 +126,16 @@ public class LocalSession {
      * Returns the unique player name.
      * @return <b>String</b> Player name
      */
-    public String getPlayerName() {
+    public String getName() {
         return playersData.general().getName();
+    }
+    
+    /**
+     * Returns the player database ID
+     * @return Player ID
+     */
+    public int getId() {
+        return playerId;
     }
     
     /**

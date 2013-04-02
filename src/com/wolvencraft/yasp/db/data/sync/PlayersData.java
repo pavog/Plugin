@@ -21,22 +21,25 @@
 package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.LocalSession;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.LogPlayers;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.PlayersInv;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.util.SimpleInventoryItem;
 import com.wolvencraft.yasp.util.SimplePotionEffect;
 import com.wolvencraft.yasp.util.Util;
 
@@ -52,6 +55,7 @@ public class PlayersData implements DataStore {
     private Players generalData;
     private DistancePlayers distanceData;
     private MiscInfoPlayers miscData;
+    private InventoryData inventoryData;
     private List<DetailedData> detailedData;
     
     public PlayersData(Player player, int playerId) {
@@ -59,6 +63,7 @@ public class PlayersData implements DataStore {
         generalData = new Players(playerId, player);
         distanceData = new DistancePlayers(playerId);
         miscData = new MiscInfoPlayers(playerId, player);
+        inventoryData = new InventoryData(playerId);
         
         detailedData = new ArrayList<DetailedData>();
     }
@@ -80,6 +85,7 @@ public class PlayersData implements DataStore {
         generalData.pushData(playerId);
         distanceData.pushData(playerId);
         miscData.pushData(playerId);
+        inventoryData.pushData(playerId);
         
         for(DetailedData entry : getDetailedData()) {
             if(entry.pushData(playerId)) detailedData.remove(entry);
@@ -378,8 +384,6 @@ public class PlayersData implements DataStore {
         private boolean isOp;
         private boolean isBanned;
         
-        private Collection<PotionEffect> potionEffects;
-        
         private int gamemode;
         private float expPercent;
         private int expTotal;
@@ -409,8 +413,6 @@ public class PlayersData implements DataStore {
             this.isOp = player.isOp();
             this.isBanned = player.isBanned();
             this.playerIp = player.getAddress().toString();
-            
-            this.potionEffects = player.getActivePotionEffects();
             
             this.gamemode = 0;
             this.expPercent = player.getExp();
@@ -464,7 +466,6 @@ public class PlayersData implements DataStore {
                     .value(MiscInfoPlayersTable.CommandsSent, commandsSent)
                     .value(MiscInfoPlayersTable.CurKillStreak, curKillStreak)
                     .value(MiscInfoPlayersTable.MaxKillStreak, maxKillStreak)
-                    .value(MiscInfoPlayersTable.PotionEffects, SimplePotionEffect.toJsonArray(potionEffects))
                     .insert();
             } else {
                 fishCaught = result.asInt(MiscInfoPlayersTable.FishCaught);
@@ -507,7 +508,6 @@ public class PlayersData implements DataStore {
                 .value(MiscInfoPlayersTable.CommandsSent, commandsSent)
                 .value(MiscInfoPlayersTable.CurKillStreak, curKillStreak)
                 .value(MiscInfoPlayersTable.MaxKillStreak, maxKillStreak)
-                .value(MiscInfoPlayersTable.PotionEffects, SimplePotionEffect.toJsonArray(potionEffects))
                 .condition(MiscInfoPlayersTable.PlayerId, playerId)
                 .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
@@ -526,8 +526,6 @@ public class PlayersData implements DataStore {
             
             this.isOp = player.isOp();
             this.isBanned = player.isBanned();
-            
-            this.potionEffects = player.getActivePotionEffects();
             
             this.gamemode = player.getGameMode().getValue();
             this.expPercent = player.getExp();
@@ -596,6 +594,66 @@ public class PlayersData implements DataStore {
         public void died() {
             if(maxKillStreak < curKillStreak) maxKillStreak = curKillStreak;
             curKillStreak = 0;
+        }
+    }
+    
+    public class InventoryData implements NormalData {
+        
+        public InventoryData(int playerId) {
+            if(!Query.table(PlayersInv.TableName)
+                    .column(PlayersInv.PlayerId)
+                    .exists())
+                Query.table(PlayersInv.TableName)
+                    .value(PlayersInv.PlayerId, playerId)
+                    .insert();
+        }
+        
+        @Override
+        public void fetchData(int playerId) { }
+
+        @Override
+        public boolean pushData(int playerId) {
+            LocalSession session = DataCollector.get(playerId);
+            if(session == null) return false;
+            Player player = Bukkit.getPlayerExact(session.getName());
+            if(player == null) return false;
+            PlayerInventory inv = player.getInventory();
+            List<ItemStack> invRow = new ArrayList<ItemStack>();
+            
+            for(int i = 9; i < 18; i++) { invRow.add(inv.getItem(i)); }
+            String rowOne = SimpleInventoryItem.toJsonArray(invRow);
+            invRow.clear();
+
+            for(int i = 18; i < 27; i++) { invRow.add(inv.getItem(i)); }
+            String rowTwo = SimpleInventoryItem.toJsonArray(invRow);
+            invRow.clear();
+            
+            for(int i = 27; i < 36; i++) { invRow.add(inv.getItem(i)); }
+            String rowThree = SimpleInventoryItem.toJsonArray(invRow);
+            invRow.clear();
+
+            for(int i = 36; i < 45; i++) { invRow.add(inv.getItem(i)); }
+            String hotbar = SimpleInventoryItem.toJsonArray(invRow);
+            invRow.clear();
+            
+            invRow.add(inv.getHelmet());
+            invRow.add(inv.getChestplate());
+            invRow.add(inv.getLeggings());
+            invRow.add(inv.getBoots());
+            String armor = SimpleInventoryItem.toJsonArray(invRow);
+            
+            String potionEffects = SimplePotionEffect.toJsonArray(player.getActivePotionEffects());
+            
+            Query.table(PlayersInv.TableName)
+                .value(PlayersInv.Armor, armor)
+                .value(PlayersInv.RowOne, rowOne)
+                .value(PlayersInv.RowTwo, rowTwo)
+                .value(PlayersInv.RowThree, rowThree)
+                .value(PlayersInv.Hotbar, hotbar)
+                .value(PlayersInv.PotionEffects, potionEffects)
+                .condition(PlayersInv.PlayerId, playerId)
+                .update();
+            return false;
         }
     }
     

@@ -31,7 +31,11 @@ import org.bukkit.potion.PotionEffect;
  * @author bitWolfy
  *
  */
+@SuppressWarnings("unused")
 public class SimplePotionEffect {
+    
+    private int id;
+    private int time;
     
     /**
      * <b>Default constructor</b><br />
@@ -41,25 +45,6 @@ public class SimplePotionEffect {
     private SimplePotionEffect(PotionEffect effect) {
         this.id = effect.getType().getId();
         this.time = effect.getDuration() / 20;
-    }
-    
-    private int id;
-    private int time;
-    
-    /**
-     * Returns the ID of the effect
-     * @return Effect ID
-     */
-    public int getId() {
-        return id;
-    }
-    
-    /**
-     * Returns the duration (in seconds) of the effect
-     * @return Effect duration
-     */
-    public int getDuration() {
-        return time;
     }
     
     /**

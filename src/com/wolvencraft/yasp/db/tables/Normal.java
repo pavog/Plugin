@@ -117,7 +117,6 @@ public class Normal {
      */
     public enum MiscInfoPlayersTable implements DBTable {
         TableName("misc_info_players"),
-        EntryId("misc_info_players_id"),
         PlayerId("player_id"),
         IsOp("is_op"),
         IsBanned("is_banned"),
@@ -140,10 +139,32 @@ public class Normal {
         WordsSaid("words_said"),
         CommandsSent("commands_sent"),
         CurKillStreak("kill_streak"),
-        MaxKillStreak("max_kill_streak"),
-        PotionEffects("potion_effects");
+        MaxKillStreak("max_kill_streak");
         
         MiscInfoPlayersTable (String columnName) { this.columnName = columnName; }
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
+     * Represents the <i>player_inventories</i> table.
+     * @author bitWolfy
+     *
+     */
+    public enum PlayersInv implements DBTable {
+        TableName("player_inventories"),
+        PlayerId("player_id"),
+        Hotbar("hotbar"),
+        RowOne("row_one"),
+        RowTwo("row_two"),
+        RowThree("row_three"),
+        Armor("armor"),
+        PotionEffects("potion_effects");
+        
+        PlayersInv (String columnName) { this.columnName = columnName; }
         
         private String columnName;
         
