@@ -316,6 +316,7 @@ public class PlayersData {
             values.put(MiscInfoPlayersTable.DamageTaken, 0);
             values.put(MiscInfoPlayersTable.WordsSaid, 0);
             values.put(MiscInfoPlayersTable.CommandsSent, 0);
+            values.put(MiscInfoPlayersTable.TimesJumped, 0);
             
             values.put(MiscInfoPlayersTable.CurKillStreak, 0);
             values.put(MiscInfoPlayersTable.MaxKillStreak, 0);
@@ -345,6 +346,7 @@ public class PlayersData {
                 values.put(MiscInfoPlayersTable.WordsSaid, result.asInt(MiscInfoPlayersTable.WordsSaid));
                 values.put(MiscInfoPlayersTable.CommandsSent, result.asInt(MiscInfoPlayersTable.CommandsSent));
                 values.put(MiscInfoPlayersTable.MaxKillStreak, result.asInt(MiscInfoPlayersTable.MaxKillStreak));
+                values.put(MiscInfoPlayersTable.TimesJumped, result.asInt(MiscInfoPlayersTable.TimesJumped));
             }
         }
 
