@@ -165,7 +165,7 @@ public class OnlineSession implements PlayerSession {
     public void logout(Location location) {
         playersData.addDetailedData(location, true);
         Query.table(PlayersTable.TableName)
-            .value(PlayersTable.Online, true)
+            .value(PlayersTable.Online, false)
             .condition(PlayersTable.PlayerId, id)
             .update();
     }
