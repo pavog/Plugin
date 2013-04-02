@@ -438,12 +438,14 @@ public class PlayersData {
         @Override
         public void fetchData(int playerId) { }
 
+        @SuppressWarnings("deprecation")
         @Override
         public boolean pushData(int playerId) {
             OnlineSession session = DataCollector.get(playerId);
             if(session == null) return false;
             Player player = Bukkit.getPlayerExact(session.getName());
             if(player == null) return false;
+            player.updateInventory();
             PlayerInventory inv = player.getInventory();
             List<ItemStack> invRow = new ArrayList<ItemStack>();
             
@@ -459,7 +461,7 @@ public class PlayersData {
             String rowThree = SimpleInventoryItem.toJsonArray(invRow);
             invRow.clear();
 
-            for(int i = 36; i < 45; i++) { invRow.add(inv.getItem(i)); }
+            for(int i = 0; i < 9; i++) { invRow.add(inv.getItem(i)); }
             String hotbar = SimpleInventoryItem.toJsonArray(invRow);
             invRow.clear();
             

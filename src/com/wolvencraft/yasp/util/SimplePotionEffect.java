@@ -35,7 +35,7 @@ import org.bukkit.potion.PotionEffect;
 public class SimplePotionEffect {
     
     private int id;
-    private int time;
+    private int t;
     
     /**
      * <b>Default constructor</b><br />
@@ -43,8 +43,8 @@ public class SimplePotionEffect {
      * @param effect
      */
     private SimplePotionEffect(PotionEffect effect) {
-        this.id = effect.getType().getId();
-        this.time = effect.getDuration() / 20;
+        id = effect.getType().getId();
+        t = effect.getDuration() / 20;
     }
     
     /**
