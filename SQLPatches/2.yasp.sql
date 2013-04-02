@@ -522,6 +522,24 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
     ON DELETE CASCADE
     ON UPDATE NO ACTION);
 
+-- -----------------------------------------------------
+-- Table `$dbname`.`$prefix_player_inventories`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_player_inventories` (
+  `player_id` INT NOT NULL ,
+  `hotbar` VARCHAR(255) NULL DEFAULT '' ,
+  `row_one` VARCHAR(255) NULL DEFAULT '' ,
+  `row_two` VARCHAR(255) NULL DEFAULT '' ,
+  `row_three` VARCHAR(255) NULL DEFAULT '' ,
+  `armor` VARCHAR(255) NULL DEFAULT '' ,
+  `potion_effects` VARCHAR(255) NULL DEFAULT '' ,
+  PRIMARY KEY (`player_id`) ,
+  CONSTRAINT `fk_player_id19`
+    FOREIGN KEY (`player_id` )
+    REFERENCES `$dbname`.`$prefix_players` (`player_id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
 USE `$dbname` ;
 
 
