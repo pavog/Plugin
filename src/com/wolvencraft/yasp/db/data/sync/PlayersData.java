@@ -180,6 +180,14 @@ public class PlayersData {
                 .update();
             return result;
         }
+
+        /**
+         * Returns the total playtime for the player
+         * @return Total playtime
+         */
+        public long getPlaytime() {
+            return generalData.totalPlaytime;
+        }
     }
     
     /**

@@ -77,16 +77,19 @@ public class PlayerListener implements Listener {
         if(!Util.isTracked(player)) return;
         OnlineSession session = DataCollector.get(player);
         session.login(player.getLocation());
-        if(session.getConfirmed()) {
-            if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean())
-                Message.send(
-                    player,
-                    Settings.RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName())
-                );
-        } else {
-            long delay = Settings.RemoteConfiguration.LogDelay.asInteger() * 20;
-            if(delay == 0) session.setConfirmed(true);
-            else Bukkit.getScheduler().runTaskLater(Statistics.getInstance(), new ConfirmationTimer(session), delay);
+        
+        long delay = Settings.RemoteConfiguration.LogDelay.asInteger();
+        if(delay != 0 && session.getPlaytime() < delay) {
+            session.setConfirmed(false);
+            Bukkit.getScheduler().runTaskLater(Statistics.getInstance(), new ConfirmationTimer(session), delay * 20L);
+            return;
+        }
+        
+        if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
+            Message.send(
+                player,
+                Settings.RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName())
+            );
         }
     }
     

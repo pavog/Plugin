@@ -108,6 +108,14 @@ public class OnlineSession implements PlayerSession {
     }
     
     /**
+     * Returns the total playtime for the player
+     * @return Total playtime
+     */
+    public long getPlaytime() {
+        return playersData.getGeneralData().getPlaytime();
+    }
+    
+    /**
      * Returns the data store with the specified type
      * @param type Data store type
      * @return Data store, or <b>null</b> if the type is not valid

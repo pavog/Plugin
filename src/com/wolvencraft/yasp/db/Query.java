@@ -485,6 +485,7 @@ public class Query {
         
         /**
          * Deletes a row from the database
+         * This method is dangerous and should not be used in normal circumstances
          * @return <b>true</b> if the row was deleted, <b>false</b> if an error occurred
          */
         public boolean delete() {
