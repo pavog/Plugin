@@ -488,6 +488,7 @@ public class PlayersData {
         public InventoryData(int playerId) {
             if(!Query.table(PlayersInv.TableName)
                     .column(PlayersInv.PlayerId)
+                    .condition(PlayersInv.PlayerId, playerId)
                     .exists())
                 Query.table(PlayersInv.TableName)
                     .value(PlayersInv.PlayerId, playerId)
@@ -497,14 +498,12 @@ public class PlayersData {
         @Override
         public void fetchData(int playerId) { }
 
-        @SuppressWarnings("deprecation")
         @Override
         public boolean pushData(int playerId) {
             OnlineSession session = DataCollector.get(playerId);
             if(session == null) return false;
             Player player = Bukkit.getPlayerExact(session.getName());
             if(player == null) return false;
-            player.updateInventory();
             PlayerInventory inv = player.getInventory();
             List<ItemStack> invRow = new ArrayList<ItemStack>();
             
