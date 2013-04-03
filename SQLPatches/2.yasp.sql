@@ -528,12 +528,12 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_player_inventories` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_player_inventories` (
   `player_id` INT NOT NULL ,
-  `hotbar` TEXT NULL DEFAULT '' ,
-  `row_one` TEXT NULL DEFAULT '' ,
-  `row_two` TEXT NULL DEFAULT '' ,
-  `row_three` TEXT NULL DEFAULT '' ,
-  `armor` TEXT NULL DEFAULT '' ,
-  `potion_effects` TEXT NULL DEFAULT '' ,
+  `hotbar` TEXT NULL ,
+  `row_one` TEXT NULL ,
+  `row_two` TEXT NULL ,
+  `row_three` TEXT NULL ,
+  `armor` TEXT NULL ,
+  `potion_effects` TEXT NULL ,
   PRIMARY KEY (`player_id`) ,
   CONSTRAINT `fk_player_id19`
     FOREIGN KEY (`player_id` )
