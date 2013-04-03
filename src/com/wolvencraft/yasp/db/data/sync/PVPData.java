@@ -27,12 +27,12 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PVPKills;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
+import com.wolvencraft.yasp.util.PlayerUtil;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -119,7 +119,7 @@ public class PVPData implements DataStore {
      * @param weapon Weapon used by killer
      */
     public void playerKilledPlayer(Player victim, ItemStack weapon) {
-        int victimId = DataCollector.getPlayerId(victim);
+        int victimId = PlayerUtil.get(victim.getName());
         getNormalData(victimId, weapon).addTimes();
         detailedData.add(new DetailedPVPEntry(victim.getLocation(), victimId, weapon));
     }

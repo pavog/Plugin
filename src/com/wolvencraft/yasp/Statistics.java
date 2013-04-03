@@ -38,6 +38,7 @@ import com.wolvencraft.yasp.db.data.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.scoreboard.ScoreboardAPI;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.PlayerUtil;
 import com.wolvencraft.yasp.util.StatsSignFactory;
 import com.wolvencraft.yasp.util.TPSTracker;
 import com.wolvencraft.yasp.util.StatsSignFactory.StatsSign;
@@ -128,6 +129,7 @@ public class Statistics extends JavaPlugin {
         catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DataCollector(), (ping / 2), ping);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new PlayerUtil(), 0L, 1728020L);
         Bukkit.getScheduler().runTaskTimer(this, new StatsSignFactory(), ping, ping);
         Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0, 1);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ScoreboardAPI(), 0L, 40L);

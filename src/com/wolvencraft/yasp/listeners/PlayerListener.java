@@ -33,6 +33,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -51,6 +52,7 @@ import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.ConfirmationTimer;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.PlayerUtil;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -67,6 +69,11 @@ public class PlayerListener implements Listener {
      */
     public PlayerListener(Statistics plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+        PlayerUtil.add(event.getName());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)

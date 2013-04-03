@@ -37,10 +37,7 @@ import com.wolvencraft.yasp.DataCollector;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
-import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.sync.*;
-import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 
 /**
  * Utility class containing assorted methods that do not fit other categories
@@ -50,43 +47,11 @@ import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 public class Util {
     
     /**
-     * Returns the PlayerID corresponding with the specified username.<br />
-     * If the username is not in the database, a dummy entry is created, and an ID is assigned.
-     * @param player Player name to look up in the database
-     * @return <b>Integer</b> PlayerID corresponding to the specified username
+     * Composes a list of active modules for the player
+     * @param player Player object
+     * @param playerId Player ID
+     * @return List of modules
      */
-    public static Integer getPlayerIdAsynchronously(String player) {
-        Message.debug("Retrieving a player ID for " + player);
-        
-        int playerId = -1;
-        do {
-            QueryResult playerRow = Query.table(PlayersTable.TableName)
-                    .column(PlayersTable.PlayerId)
-                    .condition(PlayersTable.Name, player)
-                    .select();
-            
-            if(playerRow == null) {
-                Query.table(PlayersTable.TableName)
-                     .value(PlayersTable.Name, player)
-                     .insert();
-                continue;
-            }
-            playerId = playerRow.asInt(PlayersTable.PlayerId);
-        } while (playerId == -1);
-        Message.debug("User ID found: " + playerId);
-        return playerId;
-    }
-    
-    /**
-     * Returns the PlayerID corresponding with the specified username.<br />
-     * If the username is not in the database, a dummy entry is created, and an ID is assigned.
-     * @param player Player name to look up in the database
-     * @return <b>Integer</b> PlayerID corresponding to the specified username
-     */
-    public static Integer getPlayerIdAsynchronously(Player player) {
-        return getPlayerIdAsynchronously(player.getName());
-    }
-    
     public static List<DataStore> getModules(Player player, int playerId) {
         List<DataStore> dataStores = new ArrayList<DataStore>();
         if(Settings.Modules.Blocks.getEnabled()) dataStores.add(new BlocksData(playerId));

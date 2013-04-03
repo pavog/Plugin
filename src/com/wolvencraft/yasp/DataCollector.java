@@ -27,7 +27,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.receive.ServerTotals;
 import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
 import com.wolvencraft.yasp.db.tables.Normal;
@@ -179,42 +178,6 @@ public class DataCollector implements Runnable {
     public static void remove(OnlineSession session) {
         Message.debug("Removing a user session for " + session.getName());
         sessions.remove(session);
-    }
-    
-    /**
-     * Returns the PlayerID corresponding with the specified username.<br />
-     * If the username is not in the database, a dummy entry is created, and an ID is assigned.
-     * @param player Player name to look up in the database
-     * @return <b>Integer</b> PlayerID corresponding to the specified username
-     */
-    public static Integer getPlayerId(Player player) {
-        String username = player.getName();
-        Message.debug("Retrieving a player ID for " + username);
-        
-        int playerId = -1;
-        QueryResult playerRow = Query.table(PlayersTable.TableName)
-                .column(PlayersTable.PlayerId)
-                .column(PlayersTable.Name)
-                .condition(PlayersTable.Name, username)
-                .select();
-        
-        if(playerRow == null) {
-            Query.table(PlayersTable.TableName)
-                    .value(PlayersTable.Name, username)
-                    .insert();
-            
-            playerRow = Query
-                    .table(PlayersTable.TableName)
-                    .column(PlayersTable.PlayerId)
-                    .column(PlayersTable.Name)
-                    .condition(PlayersTable.Name, username)
-                    .select();
-        }
-        
-        playerId = playerRow.asInt(PlayersTable.PlayerId);
-        
-        Message.debug("User ID found: " + playerId);
-        return playerId;
     }
     
     /**

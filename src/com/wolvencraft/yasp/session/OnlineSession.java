@@ -37,6 +37,7 @@ import com.wolvencraft.yasp.db.data.sync.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.util.PlayerUtil;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -64,8 +65,8 @@ public class OnlineSession implements PlayerSession {
      * @param player Player object
      */
     public OnlineSession(Player player) {
-        id = Util.getPlayerIdAsynchronously(player);
         name = player.getName();
+        id = PlayerUtil.get(name);
         
         confirmed = true;
         
@@ -73,6 +74,26 @@ public class OnlineSession implements PlayerSession {
         this.dataStores = Util.getModules(player, id);
         this.playerTotals = new PlayerTotals(id);
         
+    }
+    
+    /**
+     * <b>Constructor</b><Br />
+     * Creates a new online session from an offline session
+     * @param session Session to inherit
+     * @throws InstantiationException Thrown if the player is not currently online
+     */
+    public OnlineSession(OfflineSession session) throws InstantiationException {
+        id = session.getId();
+        name = session.getName();
+        
+        Player player = Bukkit.getPlayerExact(name);
+        if(player == null) throw new InstantiationException("Player " + name + " is not online!");
+        
+        confirmed = true;
+
+        this.playersData = new PlayersData(player, id);
+        this.dataStores = Util.getModules(player, id);
+        this.playerTotals = new PlayerTotals(id);
     }
     
     @Override
