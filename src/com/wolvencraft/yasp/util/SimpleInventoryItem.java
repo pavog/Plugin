@@ -37,9 +37,9 @@ import org.bukkit.potion.PotionEffect;
 @SuppressWarnings("unused")
 public class SimpleInventoryItem {
     
-    private String a;   // Material ID (with metadata)
-    private int b;      // Metadata
-    private int c;      // Amount
+    private String material_id;   // Material ID (with metadata)
+    private int durability;       // Metadata
+    private int amount;           // Amount
     
     /**
      * <b>Default constructor</b><br />
@@ -47,9 +47,9 @@ public class SimpleInventoryItem {
      * @param ItemStack stack
      */
     private SimpleInventoryItem(ItemStack stack) {
-        a = Util.getBlockString(stack);
-        b = stack.getData().getData();
-        c = stack.getAmount();
+        material_id = Util.getBlockString(stack);
+        durability = stack.getData().getData();
+        amount = stack.getAmount();
     }
     
     /**
