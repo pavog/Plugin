@@ -49,7 +49,6 @@ public interface PluginHookFactory {
         /**
          * Fetches the data from the remote database.<br />
          * Might not actually do anything if the plugin sends data in a log format.
-         * @param player Player object
          */
         public void fetchData();
         

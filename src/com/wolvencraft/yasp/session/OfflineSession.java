@@ -41,7 +41,7 @@ public class OfflineSession implements PlayerSession {
     /**
      * <b>Default constructor</b><br />
      * Attempts to create a new user session for the player with the specified name.
-     * @param playerName Player name
+     * @param name Player name
      */
     public OfflineSession(String name) {
         this.id = Util.getPlayerIdAsynchronously(name);
