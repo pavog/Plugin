@@ -524,6 +524,8 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
 -- -----------------------------------------------------
 -- Table `$dbname`.`$prefix_player_inventories`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `$dbname`.`$prefix_player_inventories`;
+
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_player_inventories` (
   `player_id` INT NOT NULL ,
   `hotbar` VARCHAR(255) NULL DEFAULT '' ,
