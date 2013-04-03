@@ -1,5 +1,5 @@
 /*
- * PlayerSession.java
+ * OnlineSession.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -159,7 +159,7 @@ public class OnlineSession implements PlayerSession {
      * @param location Location on login
      */
     public void login(Location location) {
-        playersData.addDetailedData(location, true);
+        playersData.addPlayerLog(location, true);
         Query.table(PlayersTable.TableName)
             .value(PlayersTable.Online, true)
             .condition(PlayersTable.PlayerId, id)
@@ -171,7 +171,7 @@ public class OnlineSession implements PlayerSession {
      * @param location Location on logout
      */
     public void logout(Location location) {
-        playersData.addDetailedData(location, true);
+        playersData.addPlayerLog(location, true);
         Query.table(PlayersTable.TableName)
             .value(PlayersTable.Online, false)
             .condition(PlayersTable.PlayerId, id)

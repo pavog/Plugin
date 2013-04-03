@@ -63,6 +63,12 @@ public class PlayersData {
     
     private List<DetailedData> detailedData;
     
+    /**
+     * <b>Default constructor</b><br />
+     * Creates a new PlayersData object based on the data provided
+     * @param player Player object
+     * @param playerId Player ID
+     */
     public PlayersData(Player player, int playerId) {
         this.playerId = playerId;
         generalData = new Players(playerId, player);
@@ -73,12 +79,19 @@ public class PlayersData {
         detailedData = new ArrayList<DetailedData>();
     }
     
+    /**
+     * Returns a static copy of DetailedData to prevent ConcurrentModificationException occurrences
+     * @return List of DetailedData objects
+     */
     private List<DetailedData> getDetailedData() {
         List<DetailedData> temp = new ArrayList<DetailedData>();
         for(DetailedData value : detailedData) temp.add(value);
         return temp;
     }
     
+    /**
+     * Pushes the data to the database
+     */
     public void sync() {
         generalData.pushData(playerId);
         distanceData.pushData(playerId);
@@ -90,6 +103,9 @@ public class PlayersData {
         }
     }
     
+    /**
+     * Erases all locally stored data
+     */
     public void dump() {
         for(DetailedData entry : getDetailedData()) {
             detailedData.remove(entry);
@@ -122,7 +138,12 @@ public class PlayersData {
         return miscData;
     }
     
-    public void addDetailedData(Location location, boolean isLogin) {
+    /**
+     * Logs player's login/logout location
+     * @param location Location of the login
+     * @param isLogin <b>true</b> if the player has logged in, <b>false</b> otherwise
+     */
+    public void addPlayerLog(Location location, boolean isLogin) {
         detailedData.add(new DetailedLogPlayersEntry(location, isLogin));
     }
     
@@ -294,11 +315,22 @@ public class PlayersData {
         }
     }
     
+    /**
+     * Represents all the miscellaneous information that does not fit any other category
+     * @author bitWolfy
+     *
+     */
     public class MiscInfoPlayers implements NormalData {
         
         private Map<DBTable, Object> values;
         private String playerName;
         
+        /**
+         * <b>Default constructor</b><br />
+         * Creates a new MiscInfoPlayers object based on arguments provided
+         * @param playerId Player ID
+         * @param player Player object
+         */
         public MiscInfoPlayers(int playerId, Player player) {
             this.playerName = player.getPlayerListName();
             
@@ -393,11 +425,20 @@ public class PlayersData {
             values.put(MiscInfoPlayersTable.HealthLevel, player.getHealth());
         }
         
+        /**
+         * Increments the specified miscellaneous statistic by 1
+         * @param type Statistic type
+         */
         public void incrementStat(MiscInfoPlayersTable type) {
             int value = ((Integer) values.get(type)).intValue() + 1;
             values.put(type, value);
         }
         
+        /**
+         * Increments the miscellaneous statistic by the specified amount
+         * @param type Statistic type
+         * @param value Amount
+         */
         public void incrementStat(MiscInfoPlayersTable type, int value) {
             value += ((Integer) values.get(type)).intValue();
             values.put(type, value);
@@ -432,8 +473,18 @@ public class PlayersData {
         }
     }
     
+    /**
+     * Represents player inventory and potion effects
+     * @author bitWolfy
+     *
+     */
     public class InventoryData implements NormalData {
         
+        /**
+         * <b>Default constructor</b><br />
+         * Creates a new InventoryData object based on arguments provided
+         * @param playerId Player ID
+         */
         public InventoryData(int playerId) {
             if(!Query.table(PlayersInv.TableName)
                     .column(PlayersInv.PlayerId)
@@ -494,12 +545,23 @@ public class PlayersData {
         }
     }
     
+    /**
+     * Tracks player's login and logout locations
+     * @author bitWolfy
+     *
+     */
     public class DetailedLogPlayersEntry implements DetailedData {
         
         private long time;
         private boolean isLogin;
         private Location location;
          
+        /**
+         * <b>Default constructor</b><br />
+         * Creates a new DetailedLogPlayersEntry object based on arguments provided
+         * @param location Location of the event
+         * @param isLogin <b>true</b> if the player has logged in, <b>false</b> if he logged off
+         */
         public DetailedLogPlayersEntry(Location location, boolean isLogin) {
             this.time = Util.getTimestamp();
             this.isLogin = isLogin;
