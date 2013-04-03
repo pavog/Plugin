@@ -171,7 +171,7 @@ public class OnlineSession implements PlayerSession {
      * @param location Location on logout
      */
     public void logout(Location location) {
-        playersData.addPlayerLog(location, true);
+        playersData.addPlayerLog(location, false);
         Query.table(PlayersTable.TableName)
             .value(PlayersTable.Online, false)
             .condition(PlayersTable.PlayerId, id)
