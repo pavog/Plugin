@@ -524,16 +524,16 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
 -- -----------------------------------------------------
 -- Table `$dbname`.`$prefix_player_inventories`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_player_inventories`;
+DROP TABLE IF EXISTS `$dbname`.`$prefix_player_inventories` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_player_inventories` (
   `player_id` INT NOT NULL ,
-  `hotbar` VARCHAR(255) NULL DEFAULT '' ,
-  `row_one` VARCHAR(255) NULL DEFAULT '' ,
-  `row_two` VARCHAR(255) NULL DEFAULT '' ,
-  `row_three` VARCHAR(255) NULL DEFAULT '' ,
-  `armor` VARCHAR(255) NULL DEFAULT '' ,
-  `potion_effects` VARCHAR(255) NULL DEFAULT '' ,
+  `hotbar` TEXT NULL DEFAULT '' ,
+  `row_one` TEXT NULL DEFAULT '' ,
+  `row_two` TEXT NULL DEFAULT '' ,
+  `row_three` TEXT NULL DEFAULT '' ,
+  `armor` TEXT NULL DEFAULT '' ,
+  `potion_effects` TEXT NULL DEFAULT '' ,
   PRIMARY KEY (`player_id`) ,
   CONSTRAINT `fk_player_id19`
     FOREIGN KEY (`player_id` )
