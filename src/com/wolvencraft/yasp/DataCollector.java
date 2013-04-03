@@ -95,10 +95,13 @@ public class DataCollector implements Runnable {
             if(session.isOnline()) continue;
             remove(session);
             
-            if(session.getConfirmed()) continue;
+            long delay = Settings.RemoteConfiguration.LogDelay.asInteger();
+            if(delay == 0 || session.getPlaytime() > delay) continue;
+            
             Query.table(Normal.PlayersTable.TableName)
-                    .condition(PlayersTable.Name, session.getName())
-                    .delete();
+                .condition(PlayersTable.Name, session.getName())
+                .delete();
+            
         }
     }
     
@@ -136,7 +139,6 @@ public class DataCollector implements Runnable {
         }
         Message.debug("Creating a new user session for " + username);
         OnlineSession newSession = new OnlineSession(player);
-        newSession.setConfirmed(false);
         sessions.add(newSession);
         if(Settings.RemoteConfiguration.ShowFirstJoinMessages.asBoolean())
             Message.send(

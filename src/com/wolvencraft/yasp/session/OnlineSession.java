@@ -52,8 +52,6 @@ public class OnlineSession implements PlayerSession {
     private final int id;
     private final String name;
     
-    private boolean confirmed;
-    
     private PlayersData playersData;
     private List<DataStore> dataStores;
     
@@ -67,8 +65,6 @@ public class OnlineSession implements PlayerSession {
     public OnlineSession(Player player) {
         name = player.getName();
         id = PlayerUtil.get(name);
-        
-        confirmed = true;
         
         this.playersData = new PlayersData(player, id);
         this.dataStores = Util.getModules(player, id);
@@ -88,8 +84,6 @@ public class OnlineSession implements PlayerSession {
         
         Player player = Bukkit.getPlayerExact(name);
         if(player == null) throw new InstantiationException("Player " + name + " is not online!");
-        
-        confirmed = true;
 
         this.playersData = new PlayersData(player, id);
         this.dataStores = Util.getModules(player, id);
@@ -110,22 +104,6 @@ public class OnlineSession implements PlayerSession {
     public boolean isOnline() {
         if(Bukkit.getPlayerExact(name) == null) return false;
         return true;
-    }
-    
-    /**
-     * Checks if the specified user is confirmed
-     * @return <b>true</b> if the user is confirmed, <b>false</b> otherwise
-     */
-    public boolean getConfirmed() {
-        return confirmed;
-    }
-    
-    /**
-     * Sets the confirmed status of the player
-     * @param confirmed <b>true</b> if the user is confirmed, <b>false</b> otherwise
-     */
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
     }
     
     /**
@@ -152,8 +130,6 @@ public class OnlineSession implements PlayerSession {
      * Performs a database operation to push the locally stored data.
      */
     public void pushData() {
-        if(!confirmed) return;
-        
         playersData.sync();
         for(DataStore store : dataStores) store.sync();
         

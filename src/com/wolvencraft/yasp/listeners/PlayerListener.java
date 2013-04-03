@@ -20,7 +20,6 @@
 
 package com.wolvencraft.yasp.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -50,7 +49,6 @@ import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.util.ConfirmationTimer;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PlayerUtil;
 import com.wolvencraft.yasp.util.Util;
@@ -82,15 +80,7 @@ public class PlayerListener implements Listener {
         DataCollector.getStats().playerLogin();
         Player player = event.getPlayer();
         if(!Util.isTracked(player)) return;
-        OnlineSession session = DataCollector.get(player);
-        session.login(player.getLocation());
-        
-        long delay = Settings.RemoteConfiguration.LogDelay.asInteger();
-        if(delay != 0 && session.getPlaytime() < delay) {
-            session.setConfirmed(false);
-            Bukkit.getScheduler().runTaskLater(Statistics.getInstance(), new ConfirmationTimer(session), delay * 20L);
-            return;
-        }
+        DataCollector.get(player).login(player.getLocation());
         
         if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
             Message.send(
