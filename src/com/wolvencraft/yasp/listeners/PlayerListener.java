@@ -50,7 +50,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PlayerUtil;
+import com.wolvencraft.yasp.util.PlayerCache;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -71,12 +71,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        PlayerUtil.add(event.getName());
+        PlayerCache.add(event.getName());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if(Statistics.getPaused()) return;
         DataCollector.getStats().playerLogin();
         Player player = event.getPlayer();
         if(!Util.isTracked(player)) return;
@@ -92,10 +91,10 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!Util.isTracked(player)) return;
         DataCollector.get(player).logout(player.getLocation());
+        PlayerCache.remove(player.getName());
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

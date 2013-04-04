@@ -23,7 +23,7 @@ package com.wolvencraft.yasp.session;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.db.data.receive.PlayerTotals;
-import com.wolvencraft.yasp.util.PlayerUtil;
+import com.wolvencraft.yasp.util.PlayerCache;
 
 /**
  * A cut-down version of OnlineSession.<br />
@@ -45,7 +45,7 @@ public class OfflineSession implements PlayerSession {
      */
     public OfflineSession(String name) {
         this.name = name;
-        this.id = PlayerUtil.get(name);
+        this.id = PlayerCache.get(name);
         
         this.playerTotals = new PlayerTotals(id);
     }

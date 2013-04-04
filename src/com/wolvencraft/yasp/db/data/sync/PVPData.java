@@ -32,7 +32,7 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PVPKills;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
-import com.wolvencraft.yasp.util.PlayerUtil;
+import com.wolvencraft.yasp.util.PlayerCache;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -119,7 +119,7 @@ public class PVPData implements DataStore {
      * @param weapon Weapon used by killer
      */
     public void playerKilledPlayer(Player victim, ItemStack weapon) {
-        int victimId = PlayerUtil.get(victim.getName());
+        int victimId = PlayerCache.get(victim.getName());
         getNormalData(victimId, weapon).addTimes();
         detailedData.add(new DetailedPVPEntry(victim.getLocation(), victimId, weapon));
     }

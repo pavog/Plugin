@@ -1,5 +1,5 @@
 /* 
- * PlayerUtil.java
+ * PlayerCache.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -36,7 +36,7 @@ import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
  * @author bitWolfy
  *
  */
-public class PlayerUtil implements Runnable {
+public class PlayerCache implements Runnable {
     
     private static Map<String, Integer> players;
     
@@ -44,7 +44,7 @@ public class PlayerUtil implements Runnable {
      * <b>Default constructor</b><br />
      * Creates a new hashmap for player data storage
      */
-    public PlayerUtil() {
+    public PlayerCache() {
         players = new HashMap<String, Integer>();
     }
     
@@ -63,45 +63,54 @@ public class PlayerUtil implements Runnable {
     
     /**
      * Adds a new player to the cache
-     * @param playerName Player name
+     * @param username Player name
      */
-    public static void add(String playerName) {
-        if(players.containsKey(playerName)) return;
-        int playerId = fetchID(playerName);
-        players.put(playerName, playerId);
+    public static void add(String username) {
+        if(players.containsKey(username)) return;
+        int playerId = fetchID(username);
+        players.put(username, playerId);
+    }
+    
+    /**
+     * Removes a name-ID pair from the cache
+     * @param username Player name
+     */
+    public static void remove(String username) {
+        if(!players.containsKey(username)) return;
+        players.remove(username);
     }
     
     /**
      * Fetches the player ID from the cache
-     * @param playerName Player name
+     * @param username Player name
      * @return Player ID
      */
-    public static int get(String playerName) {
-        if(players.containsKey(playerName)) return players.get(playerName);
-        int playerId = fetchID(playerName);
-        players.put(playerName, playerId);
+    public static int get(String username) {
+        if(players.containsKey(username)) return players.get(username);
+        int playerId = fetchID(username);
+        players.put(username, playerId);
         return playerId;
     }
     
     /**
      * Returns the PlayerID corresponding with the specified username.<br />
      * If the username is not in the database, a dummy entry is created, and an ID is assigned.
-     * @param player Player name to look up in the database
+     * @param username Player name to look up in the database
      * @return <b>Integer</b> PlayerID corresponding to the specified username
      */
-    private static Integer fetchID(String player) {
-        Message.debug("Retrieving a player ID for " + player);
+    private static Integer fetchID(String username) {
+        Message.debug("Retrieving a player ID for " + username);
         
         int playerId = -1;
         do {
             QueryResult playerRow = Query.table(PlayersTable.TableName)
                     .column(PlayersTable.PlayerId)
-                    .condition(PlayersTable.Name, player)
+                    .condition(PlayersTable.Name, username)
                     .select();
             
             if(playerRow == null) {
                 Query.table(PlayersTable.TableName)
-                     .value(PlayersTable.Name, player)
+                     .value(PlayersTable.Name, username)
                      .insert();
                 continue;
             }

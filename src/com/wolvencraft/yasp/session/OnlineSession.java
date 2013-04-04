@@ -37,7 +37,7 @@ import com.wolvencraft.yasp.db.data.sync.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
-import com.wolvencraft.yasp.util.PlayerUtil;
+import com.wolvencraft.yasp.util.PlayerCache;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -64,7 +64,7 @@ public class OnlineSession implements PlayerSession {
      */
     public OnlineSession(Player player) {
         name = player.getName();
-        id = PlayerUtil.get(name);
+        id = PlayerCache.get(name);
         
         this.playersData = new PlayersData(player, id);
         this.dataStores = Util.getModules(player, id);

@@ -154,7 +154,8 @@ public class PlayersData {
      *
      */
     public class Players implements NormalData {
-
+        
+        private String username;
         private long lastSync;
         
         private long sessionStart;
@@ -163,6 +164,7 @@ public class PlayersData {
         private int logins;
         
         public Players (int playerId, Player player) {
+            this.username = player.getName();
             this.lastSync = Util.getTimestamp();
             
             this.sessionStart = lastSync;
@@ -184,10 +186,17 @@ public class PlayersData {
                 .condition(PlayersTable.PlayerId, playerId)
                 .select();
             
-            firstJoin = result.asLong(PlayersTable.FirstLogin);
-            if(firstJoin == -1) { firstJoin = Util.getTimestamp(); }
-            logins = result.asInt(PlayersTable.Logins);
-            totalPlaytime = result.asLong(PlayersTable.TotalPlaytime);
+            // XXX This is really bogus, a solution to a bigger problem
+            if(result == null) {
+                Query.table(PlayersTable.TableName)
+                     .value(PlayersTable.Name, username)
+                     .insert();
+            } else {
+                firstJoin = result.asLong(PlayersTable.FirstLogin);
+                if(firstJoin == -1) { firstJoin = Util.getTimestamp(); }
+                logins = result.asInt(PlayersTable.Logins);
+                totalPlaytime = result.asLong(PlayersTable.TotalPlaytime);
+            }
         }
 
         @Override
