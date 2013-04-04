@@ -47,7 +47,7 @@ public class RepatchCommand implements BaseCommand {
 
             @Override
             public void run() {
-                try { Database.getInstance().runPatch(true); }
+                try { Database.runPatcher(true); }
                 catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed!"); }
                 finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {

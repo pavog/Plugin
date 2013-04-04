@@ -72,7 +72,7 @@ public class VaultHookFactory implements PluginHookFactory {
     
     @Override
     public void onEnable() {
-        try { Database.getInstance().runCustomPatch("vault_v1"); }
+        try { Database.executePatch("1.vault"); }
         catch (DatabaseConnectionException ex) {
             Message.log(Level.SEVERE, ex.getMessage());
         }

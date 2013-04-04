@@ -76,7 +76,7 @@ public class Query {
     private static boolean pushData(String sql) {
         try {
             Message.debug(Level.FINEST, sql);
-            return Database.getInstance().pushData(sql);
+            return Database.executeUpdate(sql);
         } catch (Exception e) {
             Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
             Message.log(Level.SEVERE, e.getMessage());
@@ -94,7 +94,7 @@ public class Query {
     private static List<QueryResult> fetchData(String sql) {
         try {
             Message.debug(Level.FINEST, sql);
-            return Database.getInstance().fetchData(sql);
+            return Database.executeQuery(sql);
         } catch (Exception e) {
             Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
             Message.log(Level.SEVERE, e.getMessage());

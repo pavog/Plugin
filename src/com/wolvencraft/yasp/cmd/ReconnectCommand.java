@@ -35,7 +35,7 @@ public class ReconnectCommand implements BaseCommand {
     @Override
     public boolean run(String[] args) {
         try {
-            Database.getInstance().reconnect();
+            Database.reconnect();
             Message.sendFormattedSuccess(CommandManager.getSender(), "Re-established the database connection");
             return true;
         } catch (Exception ex) {

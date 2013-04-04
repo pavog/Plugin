@@ -68,14 +68,15 @@ public class Database {
         try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
         catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
         
-        runPatch(false);
+        if(!runPatcher(false)) Message.log("Target database is up to date");
+        Statistics.setPaused(false);
     }
     
     /**
      * Connects to the remote database according to the data stored in the configuration
      * @throws DatabaseConnectionException Thrown if an error occurs while connecting to the database
      */
-    private void connect() throws DatabaseConnectionException {
+    private static void connect() throws DatabaseConnectionException {
         try {
             connection = DriverManager.getConnection(
                 LocalConfiguration.DBConnect.asString(),
@@ -88,62 +89,69 @@ public class Database {
     /**
      * Patches the remote database to the latest version.<br />
      * This method will run in the <b>main server thread</b> and therefore will freeze the server until the patch is complete.
+     * @param force <b>true</b> to drop all data in the database and start anew.
+     * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
-    public void runPatch(boolean force) throws DatabaseConnectionException {
+    public static boolean runPatcher(boolean force) throws DatabaseConnectionException {
         int databaseVersion;
         if(force) { databaseVersion = 1; }
         else { databaseVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
         int latestPatchVersion = databaseVersion;
         
-        while (this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + (latestPatchVersion + 1) + ".yasp.sql") != null) {
+        while (instance.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + (latestPatchVersion + 1) + ".yasp.sql") != null) {
             latestPatchVersion++;
         }
         
-        if(databaseVersion >= latestPatchVersion) {
-            Message.log("Target database is up to date");
-            Statistics.setPaused(false);
-            return;
-        }
+        if(databaseVersion >= latestPatchVersion) { return true; }
         
         Message.debug("Current version: " + databaseVersion + ", latest version: " + latestPatchVersion);
         
         databaseVersion++;
         
-        
-        ScriptRunner sr = new ScriptRunner(connection);
+        ScriptRunner scriptRunner = new ScriptRunner(connection);
         Message.log("+-------] Database Patcher [-------+");
         for(; databaseVersion <= latestPatchVersion; databaseVersion++) {
             Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + databaseVersion + ".yasp.sql");
-            try {sr.runScript(new InputStreamReader(is)); }
-            catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while patching the database to v." + databaseVersion, e); }
+            executePatch(scriptRunner, databaseVersion + ".yasp");
             Settings.RemoteConfiguration.DatabaseVersion.update(databaseVersion);
         }
         Message.log("+----------------------------------+");
         
-        Statistics.setPaused(false);
+        return true;
     }
     
     /**
-     * Applies a custom patch to the remote database
-     * @param patchId Unique ID of the desired patch
+     * Applies the patch to the remote database
+     * @param patchId Unique ID of the desired patch, i.e. <code>1.vault</code>.
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
+     * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      */
-    public void runCustomPatch(String patchId) throws DatabaseConnectionException {
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patchId + ".sql");
-        if (is == null) return;
-        Message.log("Executing database patch: " + patchId + ".sql");
-        ScriptRunner sr = new ScriptRunner(connection);
-        try {sr.runScript(new InputStreamReader(is)); }
+    public static boolean executePatch(String patchId) throws DatabaseConnectionException {
+        return executePatch(new ScriptRunner(connection), patchId);
+    }
+    
+    /**
+     * Applies the patch to the remote database
+     * @param scriptRunner Script runner instance that executes the patch
+     * @param patchId Unique ID of the desired patch, i.e. <code>1.vault</code>.
+     * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
+     * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
+     */
+    public static boolean executePatch(ScriptRunner scriptRunner, String patchId) throws DatabaseConnectionException {
+        InputStream is = instance.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patchId + ".sql");
+        if (is == null) return false;
+        Message.log(Level.FINE, "Executing database patch: " + patchId + ".sql");
+        try {scriptRunner.runScript(new InputStreamReader(is)); }
         catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + patchId + ".sql", e); }
+        return true;
     }
     
     /**
      * Attempts to reconnect to the remote server
      * @return <b>true</b> if the connection was present, or reconnect is successful. <b>false</b> otherwise.
      */
-    public boolean reconnect() {
+    public static boolean reconnect() {
         try {
             if (connection.isValid(10)) {
                 Message.log("Connection is still present. Malformed query detected.");
@@ -171,21 +179,21 @@ public class Database {
      * Pushes data to the remote database.<br />
      * This is a raw method and should never be used by itself. Use the <b>QueryUtils</b> wrapper for more options 
      * and proper error handling. This method is not to be used for regular commits to the database.
-     * @param sql SQL query
+     * @param query SQL query
      * @return <b>true</b> if the sync is successful, <b>false</b> otherwise
      */
-    public boolean pushData(String sql) {
+    public static boolean executeUpdate(String query) {
         int rowsChanged = 0;
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            rowsChanged = statement.executeUpdate(sql);
+            rowsChanged = statement.executeUpdate(query);
             statement.close();
             connection.commit();
         } catch (SQLException e) {
             Message.log(Level.WARNING, "Failed to push data to the remote database");
             if(LocalConfiguration.Debug.asBoolean()) {
-                Message.log(Level.WARNING, sql);
+                Message.log(Level.FINE, query);
                 e.printStackTrace();
             }
             return reconnect();
@@ -202,17 +210,17 @@ public class Database {
      * Returns the data from the remote server according to the SQL query.<br />
      * This is a raw method and should never be used by itself. Use the <b>QueryUtils</b> wrapper for more options 
      * and proper error handling. This method is not to be used for regular commits to the database.
-     * @param sql SQL query
+     * @param query SQL query
      * @return Data from the remote database
      */
-    public List<QueryResult> fetchData(String sql) {
+    public static List<QueryResult> executeQuery(String query) {
         List<QueryResult> colData = new ArrayList<QueryResult>();
 
         Statement statement = null;
         ResultSet rs = null;
         try {
             statement = connection.createStatement();
-            rs = statement.executeQuery(sql);
+            rs = statement.executeQuery(query);
             while (rs.next()) {
                 HashMap<String, String> rowToAdd = new HashMap<String, String>();
                 for (int x = 1; x <= rs.getMetaData().getColumnCount(); ++x) {
@@ -224,7 +232,7 @@ public class Database {
             Message.log(Level.WARNING, "Error retrieving data from the database");
             if(LocalConfiguration.Debug.asBoolean()) {
                 Message.log(Level.WARNING, e.getMessage());
-                Message.log(Level.WARNING, sql);
+                Message.log(Level.FINE, query);
             }
             reconnect();
             return new ArrayList<QueryResult>();
@@ -241,27 +249,6 @@ public class Database {
             }
         }
         return colData;
-    }
-    
-    /**
-     * Returns the current running instance of the database
-     * @return Database instance
-     * @throws DatabaseConnectionException Thrown if there is no active connection to the database
-     */
-    public static Database getInstance() throws DatabaseConnectionException {
-        if(instance == null) throw new DatabaseConnectionException("Could not find an active connection to the database");
-        return instance;
-    }
-    
-    /**
-     * Returns the current running instance of the database
-     * @param silent If <b>true</b>, will not check if a database instance exists.
-     * @return Database instance
-     * @throws DatabaseConnectionException Thrown if there is no active connection to the database
-     */
-    public static Database getInstance(boolean silent) throws DatabaseConnectionException {
-        if(!silent && instance == null) throw new DatabaseConnectionException("Could not find an active connection to the database");
-        return instance;
     }
     
     /**

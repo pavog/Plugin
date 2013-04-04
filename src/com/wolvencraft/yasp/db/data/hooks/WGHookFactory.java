@@ -72,7 +72,7 @@ public class WGHookFactory implements PluginHookFactory {
     
     @Override
     public void onEnable() {
-        try { Database.getInstance().runCustomPatch("worldguard_v1"); }
+        try { Database.executePatch("1.worldguard"); }
         catch (DatabaseConnectionException ex) {
             Message.log(Level.SEVERE, ex.getMessage());
         }
