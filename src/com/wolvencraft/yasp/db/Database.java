@@ -191,11 +191,12 @@ public class Database {
             statement.close();
             connection.commit();
         } catch (SQLException e) {
-            Message.log(Level.WARNING, "Failed to push data to the remote database");
-            if(LocalConfiguration.Debug.asBoolean()) {
-                Message.log(Level.FINE, query);
-                e.printStackTrace();
-            }
+            Message.log(Level.WARNING,
+                    "Error retrieving data from the database",
+                    e.getMessage(),
+                    query
+            );
+            if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
             return reconnect();
         } finally {
             if (statement != null) {
@@ -229,11 +230,12 @@ public class Database {
                 colData.add(Query.toQueryResult(rowToAdd));
             }
         } catch (SQLException e) {
-            Message.log(Level.WARNING, "Error retrieving data from the database");
-            if(LocalConfiguration.Debug.asBoolean()) {
-                Message.log(Level.WARNING, e.getMessage());
-                Message.log(Level.FINE, query);
-            }
+            Message.log(Level.WARNING,
+                    "Error retrieving data from the database",
+                    e.getMessage(),
+                    query
+            );
+            if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
             reconnect();
             return new ArrayList<QueryResult>();
         } finally {

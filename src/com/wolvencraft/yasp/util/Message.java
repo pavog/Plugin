@@ -132,8 +132,8 @@ public class Message {
      * Sends a message into the server log
      * @param message Message to be sent
      */
-    public static void log(String message) {
-        logger.info(message);
+    public static void log(String... messages) {
+        for(String message : messages) logger.info(message);
     }
     
     /**
@@ -141,8 +141,8 @@ public class Message {
      * @param level Severity level
      * @param message Message to be sent
      */
-    public static void log(Level level, String message) {
-        logger.log(level, message);
+    public static void log(Level level, String... messages) {
+        for(String message : messages) logger.log(level, message);
     }
     
     /**
@@ -150,7 +150,7 @@ public class Message {
      * Should not be used if there is more then one line to be sent to the console.
      * @param message Message to be sent
      */
-    public static void debug(String message) {
+    public static void debug(String... message) {
         if (Settings.LocalConfiguration.Debug.asBoolean()) log(message);
     }
     
@@ -160,7 +160,7 @@ public class Message {
      * @param level Severity level
      * @param message Message to be sent
      */
-    public static void debug(Level level, String message) {
+    public static void debug(Level level, String... message) {
         if (Settings.LocalConfiguration.Debug.asBoolean()) log(level, message);
     }
     
