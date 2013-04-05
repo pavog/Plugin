@@ -439,7 +439,8 @@ public class PlayersData {
          * @param type Statistic type
          */
         public void incrementStat(MiscInfoPlayersTable type) {
-            int value = ((Integer) values.get(type)).intValue() + 1;
+            int value = 1;
+            if(values.containsKey(type)) value = ((Integer) values.get(type)).intValue() + 1;
             values.put(type, value);
         }
         
@@ -449,7 +450,7 @@ public class PlayersData {
          * @param value Amount
          */
         public void incrementStat(MiscInfoPlayersTable type, int value) {
-            value += ((Integer) values.get(type)).intValue();
+            if(values.containsKey(type)) value += ((Integer) values.get(type)).intValue();
             values.put(type, value);
         }
         
