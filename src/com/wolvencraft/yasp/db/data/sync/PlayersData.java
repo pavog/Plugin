@@ -363,6 +363,8 @@ public class PlayersData {
             values.put(MiscInfoPlayersTable.FoodEaten, 0);
             values.put(MiscInfoPlayersTable.ArrowsShot, 0);
             values.put(MiscInfoPlayersTable.DamageTaken, 0);
+            values.put(MiscInfoPlayersTable.BedsEntered, 0);
+            values.put(MiscInfoPlayersTable.PortalsEntered, 0);
             values.put(MiscInfoPlayersTable.WordsSaid, 0);
             values.put(MiscInfoPlayersTable.CommandsSent, 0);
             values.put(MiscInfoPlayersTable.TimesJumped, 0);
