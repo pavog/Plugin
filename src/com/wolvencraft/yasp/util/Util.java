@@ -82,11 +82,9 @@ public class Util {
     public static String getBlockString(int type, int data) {
         if(type == -1) return "-1:0";
         if(Material.getMaterial(type) == null) return "0:0";
-        String result = "" + type;
-        if(!Settings.ItemsWithMetadata.checkAgainst(type)) return result + ":0";
-        if(data <= Material.getMaterial(type).getMaxDurability()) result += ":" + data;
-        else result += ":" + ItemsWithMetadata.get(type).getData();
-        return result;
+        if(!Settings.ItemsWithMetadata.checkAgainst(type)) return type + ":" + "0";
+        if(data <= Material.getMaterial(type).getMaxDurability()) return type + ":" + data;
+        else return type + ":" + ItemsWithMetadata.get(type).getData();
     }
     
     /**
