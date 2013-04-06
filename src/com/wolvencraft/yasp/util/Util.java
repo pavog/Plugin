@@ -83,7 +83,7 @@ public class Util {
         if(type == -1) return "-1:0";
         if(Material.getMaterial(type) == null) return "0:0";
         if(!Settings.ItemsWithMetadata.checkAgainst(type)) return type + ":" + "0";
-        if(data <= Material.getMaterial(type).getMaxDurability()) return type + ":" + data;
+        if(data <= Material.getMaterial(type).getMaxDurability() && data >= 0) return type + ":" + data;
         else return type + ":" + ItemsWithMetadata.get(type).getData();
     }
     
