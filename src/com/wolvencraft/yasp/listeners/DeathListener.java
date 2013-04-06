@@ -82,7 +82,7 @@ public class DeathListener implements Listener {
                             session.killedPlayer(victim, new ItemStack(Material.ARROW));
                         } else if (arrow.getShooter() instanceof Creature) {    // | | + Creature shot Player
                             if(!Util.isTracked(victim, "death.pve")) return;
-                            Creature killer = (Creature) arrow.getShooter();
+                            Entity killer = (Entity) arrow.getShooter();
                             OnlineSession session = DataCollector.get(victim);
                             session.killedByCreature(killer, new ItemStack(Material.ARROW));
                         }
@@ -97,15 +97,12 @@ public class DeathListener implements Listener {
                     session.killedByEnvironment(victim.getLocation(), cause);
                 } else if (killerEntity instanceof Creature) {                    // | + Creature killed Player
                     if(!Util.isTracked(victim, "death.pve")) return;
-                    Creature killer = (Creature) killerEntity;
                     OnlineSession session = DataCollector.get(victim);
-                    session.killedByCreature(killer, new ItemStack(Material.AIR));
+                    session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else if (killerEntity instanceof Slime) {                        // | + Slime killed player
                     if(!Util.isTracked(victim, "death.pve")) return;
-                    Creature killer = (Creature) killerEntity;
-                    //TODO Check if the Slime kill behavior is the same as the one with Creature
                     OnlineSession session = DataCollector.get(victim);
-                    session.killedByCreature(killer, new ItemStack(Material.AIR));
+                    session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else {                                                        // | + Player died
                     if(!Util.isTracked(victim, "death.other")) return;
                     OnlineSession session = DataCollector.get(victim);
@@ -131,21 +128,17 @@ public class DeathListener implements Listener {
                 Player killer = (Player) arrow.getShooter();
                 if(!Util.isTracked(killer, "death.pve")) return;
                 if (victimEntity instanceof Creature) {                            // | + Player shot Creature
-                    Creature victim = (Creature) victimEntity;
-                    DataCollector.get(killer).killedCreature(victim, new ItemStack(Material.ARROW));
+                    DataCollector.get(killer).killedCreature(victimEntity, new ItemStack(Material.ARROW));
                 } else if (victimEntity instanceof Slime) {                        // | + Player shot Slime
-                    Creature victim = (Creature) victimEntity;
-                    DataCollector.get(killer).killedCreature(victim, new ItemStack(Material.ARROW));
+                    DataCollector.get(killer).killedCreature(victimEntity, new ItemStack(Material.ARROW));
                 }
             } else if (killerEntity instanceof Player) {                        // + Player killed an entity
                 Player killer = (Player) killerEntity;
                 if(!Util.isTracked(killer, "death.pve")) return;
                 if (victimEntity instanceof Creature) {                            // | + Player killed Creature
-                    Creature victim = (Creature) victimEntity;
-                    DataCollector.get(killer).killedCreature(victim, killer.getItemInHand());
+                    DataCollector.get(killer).killedCreature(victimEntity, killer.getItemInHand());
                 } else if (victimEntity instanceof Slime) {                        // | + Player killed Slime
-                    Creature victim = (Creature) victimEntity;
-                    DataCollector.get(killer).killedCreature(victim, killer.getItemInHand());
+                    DataCollector.get(killer).killedCreature(victimEntity, killer.getItemInHand());
                 }
             }
         }

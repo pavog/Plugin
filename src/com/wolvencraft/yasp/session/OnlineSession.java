@@ -25,7 +25,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
@@ -216,7 +216,7 @@ public class OnlineSession implements PlayerSession {
      * @param victim Creature killed
      * @param weapon Weapon used by killer
      */
-    public void killedCreature(Creature victim, ItemStack weapon) {
+    public void killedCreature(Entity victim, ItemStack weapon) {
         ((PVEData) getData(DataStoreType.PVE)).playerKilledCreature(victim, weapon);
     }
     
@@ -225,7 +225,7 @@ public class OnlineSession implements PlayerSession {
      * @param killer Creature that killed the player
      * @param weapon Weapon used by killer
      */
-    public void killedByCreature(Creature killer, ItemStack weapon) {
+    public void killedByCreature(Entity killer, ItemStack weapon) {
         ((PVEData) getData(DataStoreType.PVE)).creatureKilledPlayer(killer, weapon);
         died();
     }

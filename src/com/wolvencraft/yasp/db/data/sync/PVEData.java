@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -118,7 +118,7 @@ public class PVEData implements DataStore{
      * @param victim Creature killed
      * @param weapon Weapon used by killer
      */
-    public void playerKilledCreature(Creature victim, ItemStack weapon) {
+    public void playerKilledCreature(Entity victim, ItemStack weapon) {
         getNormalData(victim.getType(), weapon).addCreatureDeaths();
         detailedData.add(new DetailedPVEEntry(victim.getType(), victim.getLocation(), weapon));
     }
@@ -128,7 +128,7 @@ public class PVEData implements DataStore{
      * @param killer Creature that killed the player
      * @param weapon Weapon used by killer
      */
-    public void creatureKilledPlayer(Creature killer, ItemStack weapon) {
+    public void creatureKilledPlayer(Entity killer, ItemStack weapon) {
         getNormalData(killer.getType(), weapon).addPlayerDeaths();
         detailedData.add(new DetailedPVEEntry(killer.getType(), killer.getLocation()));
     }
