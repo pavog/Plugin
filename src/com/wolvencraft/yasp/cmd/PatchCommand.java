@@ -31,23 +31,27 @@ import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
 /**
- * Repatch command.<br />
- * Forces a database patch to be executed.
+ * Patch command.<br />
+ * Executes the specified patch
  * @author bitWolfy
  *
  */
-public class RepatchCommand implements BaseCommand {
+public class PatchCommand implements BaseCommand {
 
     @Override
-    public boolean run(String[] args) {
-        Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database...");
-        DataCollector.dumpPlayerData();
+    public boolean run(final String[] args) {
+        if(args.length < 1) {
+            Message.sendFormattedError("Invalid parameter count");
+            return false;
+        }
+        
+        Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database (" + args[0] + ")");
         Statistics.setPaused(true);
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
 
             @Override
             public void run() {
-                try { Database.runPatcher(true); }
+                try { Database.executePatch(args[0]); }
                 catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed!"); }
                 finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
@@ -64,6 +68,8 @@ public class RepatchCommand implements BaseCommand {
     }
 
     @Override
-    public void getHelp() { Message.formatHelp("repatch", "", "Attempts to re-patch the database"); }
+    public void getHelp() {
+        Message.formatHelp("patch", "[id]", "Exectutes a database patch with the specified ID");
+    }
 
 }

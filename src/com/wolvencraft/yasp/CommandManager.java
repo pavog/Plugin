@@ -44,6 +44,7 @@ public enum CommandManager {
     Dump(DumpCommand.class, "stats.cmd.debug", "dump"),
     Pause(PauseCommand.class, "stats.cmd.debug", "pause"),
     Sync(SyncCommand.class, "stats.cmd.debug", "sync"),
+    Patch(PatchCommand.class, "stats.cmd.debug", "patch"),
     Reconnect(ReconnectCommand.class, "stats.cmd.debug", "reconnect"),
     Repatch(RepatchCommand.class, "stats.cmd.debug", "repatch");
     
