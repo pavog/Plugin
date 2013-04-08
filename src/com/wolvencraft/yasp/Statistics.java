@@ -152,7 +152,7 @@ public class Statistics extends JavaPlugin {
             if(vaultHook != null) { vaultHook.onDisable(); }
             if(worldGuardHook != null) { worldGuardHook.onDisable(); }
 
-            Database.cleanup();
+            Database.close();
         } catch (Throwable t) { 
             Message.log(Level.SEVERE, t.getMessage());
             if(Settings.LocalConfiguration.Debug.asBoolean()) t.printStackTrace();

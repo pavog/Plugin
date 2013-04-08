@@ -49,7 +49,6 @@ import com.wolvencraft.yasp.util.Message;
  */
 public class Database {
     
-    private static Database instance = null;
     private static Connection connection = null;
     
     /**
@@ -57,27 +56,10 @@ public class Database {
      * @throws DatabaseConnectionException Thrown if the plugin could not connect to the database
      */
     public Database() throws DatabaseConnectionException {
-        if (instance != null) throw new DatabaseConnectionException("Attempted to establish a duplicate connection with a remote database");
         
         try { Class.forName("com.mysql.jdbc.Driver"); }
         catch (ClassNotFoundException ex) { throw new DatabaseConnectionException("MySQL driver was not found!"); }
         
-        instance = this;
-        
-        connect();
-        
-        try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
-        catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
-        
-        if(!runPatcher(false)) Message.log("Target database is up to date");
-        Statistics.setPaused(false);
-    }
-    
-    /**
-     * Connects to the remote database according to the data stored in the configuration
-     * @throws DatabaseConnectionException Thrown if an error occurs while connecting to the database
-     */
-    private static void connect() throws DatabaseConnectionException {
         try {
             connection = DriverManager.getConnection(
                 LocalConfiguration.DBConnect.asString(),
@@ -85,6 +67,12 @@ public class Database {
                 LocalConfiguration.DBPass.asString()
             );
         } catch (SQLException e) { throw new DatabaseConnectionException(e); }
+        
+        try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
+        catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
+        
+        if(!runPatcher(false)) Message.log("Target database is up to date");
+        Statistics.setPaused(false);
     }
     
     /**
@@ -100,14 +88,12 @@ public class Database {
         else { databaseVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
         int latestPatchVersion = databaseVersion;
         
-        while (instance.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + (latestPatchVersion + 1) + ".yasp.sql") != null) {
+        while (Statistics.getInstance().getClass().getClassLoader().getResourceAsStream("patches/" + (latestPatchVersion + 1) + ".yasp.sql") != null) {
             latestPatchVersion++;
         }
         
         if(databaseVersion >= latestPatchVersion) { return true; }
-        
         Message.debug("Current version: " + databaseVersion + ", latest version: " + latestPatchVersion);
-        
         databaseVersion++;
         
         ScriptRunner scriptRunner = new ScriptRunner(connection);
@@ -118,7 +104,6 @@ public class Database {
             Settings.RemoteConfiguration.DatabaseVersion.update(databaseVersion);
         }
         Message.log("+----------------------------------+");
-        
         return true;
     }
     
@@ -139,8 +124,8 @@ public class Database {
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      */
-    public static boolean executePatch(ScriptRunner scriptRunner, String patchId) throws DatabaseConnectionException {
-        InputStream is = instance.getClass().getClassLoader().getResourceAsStream("SQLPatches/" + patchId + ".sql");
+    private static boolean executePatch(ScriptRunner scriptRunner, String patchId) throws DatabaseConnectionException {
+        InputStream is = Statistics.getInstance().getClass().getClassLoader().getResourceAsStream("patches/" + patchId + ".sql");
         if (is == null) return false;
         Message.log(Level.FINE, "Executing database patch: " + patchId + ".sql");
         try {scriptRunner.runScript(new InputStreamReader(is)); }
@@ -163,22 +148,20 @@ public class Database {
             if (connection.isValid(10)) {
                 Message.log("Connection is still present. Malformed query detected.");
                 return true;
-            } else {
-                Message.log(Level.WARNING, "Attempting to re-connect to the database");
-                try {
-                    connect();
-                    Message.log("Connection re-established. No data is lost.");
-                    return true;
-                } catch (DatabaseConnectionException e) {
-                    Message.log(Level.SEVERE, "Failed to re-connect to the database. Data is being stored locally.");
-                    if (LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
-                    return false;
-                }
             }
-        } catch (SQLException e) {
+            Message.log(Level.WARNING, "Attempting to re-connect to the database");
+            connection = DriverManager.getConnection(
+                LocalConfiguration.DBConnect.asString(),
+                LocalConfiguration.DBUser.asString(),
+                LocalConfiguration.DBPass.asString()
+            );
+            Message.log("Connection re-established. No data is lost.");
+            return true;
+        } catch (Exception e) {
+            Message.log(Level.SEVERE, "Failed to re-connect to the database. Data is being stored locally.");
             if (LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
-            return false;
         }
+        return false;
     }
     
     /**
@@ -197,13 +180,10 @@ public class Database {
             statement.close();
             connection.commit();
         } catch (SQLException e) {
-            Message.log(Level.WARNING,
-                    "Error retrieving data from the database",
-                    e.getMessage(),
-                    query
-            );
+            Message.log(Level.WARNING, "An error occurred while executing a database update.", e.getMessage(), query);
             if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
-            return reconnect();
+            if(reconnect()) return executeUpdate(query);
+            else return false;
         } finally {
             if (statement != null) {
                 try { statement.close(); }
@@ -222,7 +202,6 @@ public class Database {
      */
     public static List<QueryResult> executeQuery(String query) {
         List<QueryResult> colData = new ArrayList<QueryResult>();
-
         Statement statement = null;
         ResultSet rs = null;
         try {
@@ -236,34 +215,37 @@ public class Database {
                 colData.add(Query.toQueryResult(rowToAdd));
             }
         } catch (SQLException e) {
-            Message.log(Level.WARNING,
-                    "Error retrieving data from the database",
-                    e.getMessage(),
-                    query
-            );
+            Message.log(Level.WARNING, "An error occurred while executing a database query.", e.getMessage(), query);
             if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
-            reconnect();
-            return new ArrayList<QueryResult>();
+            if(reconnect()) return executeQuery(query);
+            else return new ArrayList<QueryResult>();
         } finally {
             if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {}
+                try { rs.close(); }
+                catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection [ResultSet]"); }
             }
             if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
+                try { statement.close(); }
+                catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection [Statement]"); }
             }
         }
         return colData;
     }
     
     /**
-     * Cleans up the leftover database and connection instances to prevent memory leaks.
+     * Closes the database connection and cleans up any leftover instances to prevent memory leaks
      */
-    public static void cleanup() {
+    public static void close() {
+        try { connection.close(); }
+        catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
         connection = null;
-        instance = null;
+    }
+    
+    /**
+     * Checks if the database connection is safe to use
+     * @return <b>true</b> if the connection is closed, <b>false</b> if it is open.
+     */
+    public static boolean isClosed() {
+        return connection == null;
     }
 }
