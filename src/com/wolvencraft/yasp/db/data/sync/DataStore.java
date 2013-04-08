@@ -66,12 +66,14 @@ public interface DataStore {
         /**
          * Performs a database operation to fetch the data from the remote database.<br />
          * If no data is found in the database, the default values are inserted.
+         * @param playerId Player ID
          */
         public void fetchData(int playerId);
         
         /**
          * Performs a database operation to push the local data to the remote database.<br />
          * If no data is found in the database, the default values are inserted instead.
+         * @param playerId Player ID
          * @return <b>true</b> if the insertion was successful, <b>false</b> otherwise
          */
         public boolean pushData(int playerId);
@@ -89,11 +91,17 @@ public interface DataStore {
         /**
          * Explicitly pushes data to the remote database.<br />
          * If the data holder is marked as <i>on hold</i>, skips the holder
+         * @param playerId Player ID
          * @return <b>true</b> if the holder has been synchronized and can be removed, <b>false</b> if it is on hold
          */
         public boolean pushData(int playerId);
     }
     
+    /**
+     * Represents the data store type
+     * @author bitWolfy
+     *
+     */
     public enum DataStoreType {
         Blocks,
         Items,
