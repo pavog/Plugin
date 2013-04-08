@@ -13,8 +13,8 @@
                 <include name="*.yml"/>
             </fileset>
         </copy>
-        <copy todir="build/SQLPatches">
-            <fileset dir="SQLPatches">
+        <copy todir="build/patches">
+            <fileset dir="patches">
                 <include name="*.sql"/>
             </fileset>
         </copy>
