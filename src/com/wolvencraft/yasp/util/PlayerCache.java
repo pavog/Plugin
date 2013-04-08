@@ -110,8 +110,8 @@ public class PlayerCache implements Runnable {
             
             if(playerRow == null) {
                 Query.table(PlayersTable.TableName)
-                     .value(PlayersTable.Name, username)
-                     .insert();
+                    .value(PlayersTable.Name, username)
+                    .insert();
                 continue;
             }
             playerId = playerRow.asInt(PlayersTable.PlayerId);
