@@ -1,6 +1,6 @@
 <plugin>
-	<name>Statistics</name>
-	<version>1.0</version>
-	<craftbukkit>CB 1.5.1-R0.2</craftbukkit>
-	<type>Development Build</type>
+    <name>Statistics</name>
+    <version>1.0</version>
+    <craftbukkit>CB 1.5.1-R0.2</craftbukkit>
+    <type>Development Build</type>
 </plugin>
