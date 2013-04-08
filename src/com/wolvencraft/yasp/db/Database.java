@@ -36,6 +36,7 @@ import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.util.Message;
@@ -144,6 +145,12 @@ public class Database {
         Message.log(Level.FINE, "Executing database patch: " + patchId + ".sql");
         try {scriptRunner.runScript(new InputStreamReader(is)); }
         catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + patchId + ".sql", e); }
+        finally {
+            if(!Query.table(SettingsTable.TableName).column("patched").exists()) {
+                Query.table(SettingsTable.TableName).value("patched", 1).insert();
+            }
+            Query.table(SettingsTable.TableName).value("patched", 1).update();
+        }
         return true;
     }
     
@@ -156,8 +163,7 @@ public class Database {
             if (connection.isValid(10)) {
                 Message.log("Connection is still present. Malformed query detected.");
                 return true;
-            }
-            else {
+            } else {
                 Message.log(Level.WARNING, "Attempting to re-connect to the database");
                 try {
                     connect();
