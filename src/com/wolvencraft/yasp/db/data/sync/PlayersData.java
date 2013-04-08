@@ -158,27 +158,15 @@ public class PlayersData {
         private String username;
         private long lastSync;
         
-        private long sessionStart;
         private long totalPlaytime;
-        private long firstJoin;
-        private int logins;
         
         public Players (int playerId, Player player) {
             this.username = player.getName();
             this.lastSync = Util.getTimestamp();
             
-            this.sessionStart = lastSync;
-            this.totalPlaytime = 0;
-            this.firstJoin = lastSync;
-            this.logins = 0;
+            long firstLogin = lastSync;
+            int logins = 0;
             
-            fetchData(playerId);
-            
-            logins++;
-        }
-        
-        @Override
-        public void fetchData(int playerId) {
             QueryResult result = Query.table(PlayersTable.TableName)
                 .column(PlayersTable.Logins)
                 .column(PlayersTable.FirstLogin)
@@ -186,29 +174,38 @@ public class PlayersData {
                 .condition(PlayersTable.PlayerId, playerId)
                 .select();
             
-            // XXX This is really bogus, a solution to a bigger problem
             if(result == null) {
                 Query.table(PlayersTable.TableName)
                      .value(PlayersTable.Name, username)
                      .insert();
             } else {
-                firstJoin = result.asLong(PlayersTable.FirstLogin);
-                if(firstJoin == -1) { firstJoin = Util.getTimestamp(); }
+                firstLogin = result.asLong(PlayersTable.FirstLogin);
+                if(firstLogin == -1) { firstLogin = lastSync; }
                 logins = result.asInt(PlayersTable.Logins);
-                totalPlaytime = result.asLong(PlayersTable.TotalPlaytime);
+                this.totalPlaytime = result.asLong(PlayersTable.TotalPlaytime);
             }
+            
+            Query.table(PlayersTable.TableName)
+                .value(PlayersTable.SessionStart, lastSync)
+                .value(PlayersTable.FirstLogin, firstLogin)
+                .value(PlayersTable.Logins, logins++)
+                .condition(PlayersTable.PlayerId, playerId)
+                .update();
         }
+        
+        @Override
+        @Deprecated
+        public void fetchData(int playerId) { }
 
         @Override
         public boolean pushData(int playerId) {
-            boolean result = Query.table(PlayersTable.TableName)
-                .value(PlayersTable.SessionStart, sessionStart)
-                .value(PlayersTable.FirstLogin, firstJoin)
-                .value(PlayersTable.Logins, logins)
+            totalPlaytime += Util.getTimestamp() - lastSync;
+            lastSync = Util.getTimestamp();
+            
+            return Query.table(PlayersTable.TableName)
                 .value(PlayersTable.TotalPlaytime, totalPlaytime)
                 .condition(PlayersTable.PlayerId, playerId)
                 .update();
-            return result;
         }
 
         /**
@@ -216,7 +213,7 @@ public class PlayersData {
          * @return Total playtime
          */
         public long getPlaytime() {
-            return generalData.totalPlaytime;
+            return totalPlaytime;
         }
     }
     
