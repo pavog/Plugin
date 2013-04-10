@@ -36,35 +36,33 @@ public class Settings {
      *
      */
     public enum LocalConfiguration {
-        Debug("debug"),
-        DBHost("database.host"),
-        DBPort("database.port"),
-        DBName("database.name"),
-        DBUser("database.user"),
-        DBPass("database.pass"),
-        DBPrefix("database.prefix"),
-        DBConnect("", "jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
-        LogPrefix("log-prefix"),
-        Cloud("", true);
+        Debug("debug", true),
+        DBHost("database.host", true),
+        DBPort("database.port", true),
+        DBName("database.name", true),
+        DBUser("database.user", true),
+        DBPass("database.pass", true),
+        DBPrefix("database.prefix", true),
+        DBConnect("jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
+        LogPrefix("log-prefix", true),
+        Cloud(true);
         
-        LocalConfiguration(String node) {
-            this.node = node;
-            this.value = null;
+        Object entry;
+        
+        LocalConfiguration(Object entry) {
+            this.entry = entry;
         }
         
-        LocalConfiguration(String node, Object value) {
-            this.node = node;
-            this.value = value;
+        LocalConfiguration(Object entry, boolean fromFile) {
+            if(fromFile) this.entry = Statistics.getInstance().getConfig().getString((String) entry);
+            else this.entry = entry;
         }
-        
-        String node;
-        Object value;
         
         @Override
         public String toString() { return asString(); }
-        public String asString() { return value == null ? Statistics.getInstance().getConfig().getString(node) : (String) value; }
-        public Boolean asBoolean() { return value == null ? Statistics.getInstance().getConfig().getBoolean(node) : (Boolean) value; }
-        public Integer asInteger() { return value == null ? Statistics.getInstance().getConfig().getInt(node) : (Integer) value; }
+        public String asString() { return (String) entry; }
+        public Boolean asBoolean() { return (Boolean) entry; }
+        public Integer asInteger() { return (Integer) entry; }
     }
     
     /**
