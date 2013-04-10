@@ -131,7 +131,7 @@ public class Database {
         try {scriptRunner.runScript(new InputStreamReader(is)); }
         catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + patchId + ".sql", e); }
         finally {
-            if(!Query.table(SettingsTable.TableName).condition("key", "patched").condition("value", 0).exists()) {
+            if(!Query.table(SettingsTable.TableName).condition("key", "patched").exists()) {
                 Query.table(SettingsTable.TableName).value("key", "patched").value("value", 1).insert();
             }
             Query.table(SettingsTable.TableName).value("value", 1).condition("key", "patched").update();
