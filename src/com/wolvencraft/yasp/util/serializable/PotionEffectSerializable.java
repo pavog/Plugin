@@ -1,5 +1,5 @@
 /*
- * SimplePotionEffect.java
+ * PotionEffectSerializable.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util;
+package com.wolvencraft.yasp.util.serializable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,13 +26,15 @@ import java.util.List;
 
 import org.bukkit.potion.PotionEffect;
 
+import com.wolvencraft.yasp.util.Util;
+
 /**
  * Simple class intended to temporarily store basic information about a potion effect
  * @author bitWolfy
  *
  */
 @SuppressWarnings("unused")
-public class SimplePotionEffect {
+public class PotionEffectSerializable {
     
     private int effect_id;
     private int time;
@@ -42,7 +44,7 @@ public class SimplePotionEffect {
      * Creates a new SimplePotionEffect based on a PotionEffect provided
      * @param effect
      */
-    private SimplePotionEffect(PotionEffect effect) {
+    private PotionEffectSerializable(PotionEffect effect) {
         effect_id = effect.getType().getId();
         time = effect.getDuration() / 20;
     }
@@ -55,8 +57,8 @@ public class SimplePotionEffect {
      * @return String json array
      */
     public static String toJsonArray(Collection<PotionEffect> effects) {
-        List<SimplePotionEffect> potEffects = new ArrayList<SimplePotionEffect>();
-        for(PotionEffect eff : effects) potEffects.add(new SimplePotionEffect(eff));
+        List<PotionEffectSerializable> potEffects = new ArrayList<PotionEffectSerializable>();
+        for(PotionEffect eff : effects) potEffects.add(new PotionEffectSerializable(eff));
         return Util.toJsonArray(potEffects);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * SimpleInventoryItem.java
+ * ItemStackSerializable.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util;
+package com.wolvencraft.yasp.util.serializable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,27 +29,35 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
+import com.wolvencraft.yasp.util.Util;
+
 /**
  * Simple class intended to temporarily store basic information about inventory items
  * @author bitWolfy
  *
  */
 @SuppressWarnings("unused")
-public class SimpleInventoryItem {
+public class ItemStackSerializable {
     
     private String material_id;   // Material ID (with metadata)
-    private int durability;       // Metadata
+    private double durability;    // Current durability / total durability
     private int amount;           // Amount
+    private String enchantments;  // Json array of enchantments
     
     /**
      * <b>Default constructor</b><br />
      * Creates a new SimpleInventoryItem based on an ItemStack provided
      * @param ItemStack stack
      */
-    private SimpleInventoryItem(ItemStack stack) {
+    private ItemStackSerializable(ItemStack stack) {
         material_id = Util.getBlockString(stack);
-        durability = stack.getData().getData();
+        if(stack.getDurability() == 0) durability = 0;
+        else {
+            durability = (double)(stack.getDurability()) / stack.getType().getMaxDurability();
+            durability = ((int)(100 * durability)) / 100.0;
+        }
         amount = stack.getAmount();
+        enchantments = EnchantmentSerializable.toJsonArray(stack.getEnchantments());
     }
     
     /**
@@ -60,10 +68,10 @@ public class SimpleInventoryItem {
      * @return String json array
      */
     public static String toJsonArray(List<ItemStack> inventoryRow) {
-        List<SimpleInventoryItem> invRow = new ArrayList<SimpleInventoryItem>();
+        List<ItemStackSerializable> invRow = new ArrayList<ItemStackSerializable>();
         for(ItemStack stack : inventoryRow) {
             if(stack == null) { stack = new ItemStack(Material.AIR); }
-            invRow.add(new SimpleInventoryItem(stack));
+            invRow.add(new ItemStackSerializable(stack));
         }
         return Util.toJsonArray(invRow);
     }

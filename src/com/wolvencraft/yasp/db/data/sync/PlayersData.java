@@ -44,9 +44,9 @@ import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersInv;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.util.SimpleInventoryItem;
-import com.wolvencraft.yasp.util.SimplePotionEffect;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.serializable.ItemStackSerializable;
+import com.wolvencraft.yasp.util.serializable.PotionEffectSerializable;
 
 /**
  * A unique data store that contains basic information about the player
@@ -517,28 +517,28 @@ public class PlayersData {
             List<ItemStack> invRow = new ArrayList<ItemStack>();
             
             for(int i = 9; i < 18; i++) { invRow.add(inv.getItem(i)); }
-            String rowOne = SimpleInventoryItem.toJsonArray(invRow);
+            String rowOne = ItemStackSerializable.toJsonArray(invRow);
             invRow.clear();
 
             for(int i = 18; i < 27; i++) { invRow.add(inv.getItem(i)); }
-            String rowTwo = SimpleInventoryItem.toJsonArray(invRow);
+            String rowTwo = ItemStackSerializable.toJsonArray(invRow);
             invRow.clear();
             
             for(int i = 27; i < 36; i++) { invRow.add(inv.getItem(i)); }
-            String rowThree = SimpleInventoryItem.toJsonArray(invRow);
+            String rowThree = ItemStackSerializable.toJsonArray(invRow);
             invRow.clear();
 
             for(int i = 0; i < 9; i++) { invRow.add(inv.getItem(i)); }
-            String hotbar = SimpleInventoryItem.toJsonArray(invRow);
+            String hotbar = ItemStackSerializable.toJsonArray(invRow);
             invRow.clear();
             
             invRow.add(inv.getHelmet());
             invRow.add(inv.getChestplate());
             invRow.add(inv.getLeggings());
             invRow.add(inv.getBoots());
-            String armor = SimpleInventoryItem.toJsonArray(invRow);
+            String armor = ItemStackSerializable.toJsonArray(invRow);
             
-            String potionEffects = SimplePotionEffect.toJsonArray(player.getActivePotionEffects());
+            String potionEffects = PotionEffectSerializable.toJsonArray(player.getActivePotionEffects());
             
             Query.table(PlayersInv.TableName)
                 .value(PlayersInv.Armor, armor)
