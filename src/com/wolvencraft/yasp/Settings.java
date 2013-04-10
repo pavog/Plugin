@@ -101,16 +101,18 @@ public class Settings {
          * Returns the configuration value as a boolean
          * @return Configuration value
          */
-        public Boolean asBoolean() {
-            return ((Boolean) entry).booleanValue();
+        public boolean asBoolean() {
+            try { return Boolean.parseBoolean((String) entry); }
+            catch (Throwable t) { return false; }
         }
         
         /**
          * Returns the configuration value as an integer
          * @return Configuration value
          */
-        public Integer asInteger() {
-            return ((Integer) entry).intValue();
+        public int asInteger() {
+            try { return Integer.parseInt((String) entry); }
+            catch (Throwable t) { return 0; }
         }
     }
     
