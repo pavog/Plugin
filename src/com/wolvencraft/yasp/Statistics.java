@@ -138,11 +138,12 @@ public class Statistics extends JavaPlugin {
     @Override
     public void onDisable() {
         Message.log("Plugin shutting down.");
-        if(crashed) { instance = null; return; }
+        if(crashed) { crashed = false; return; }
         
         try {
-            for(Player player : Bukkit.getOnlinePlayers())
+            for(Player player : Bukkit.getOnlinePlayers()) {
                 DataCollector.get(player).logout(player.getLocation());
+            }
             DataCollector.pushPlayerData();
             DataCollector.getStats().pluginShutdown();
             DataCollector.dumpPlayerData();
@@ -157,7 +158,6 @@ public class Statistics extends JavaPlugin {
             Message.log(Level.SEVERE, t.getMessage());
             if(Settings.LocalConfiguration.Debug.asBoolean()) t.printStackTrace();
         }
-        instance = null;
     }
     
     @Override
