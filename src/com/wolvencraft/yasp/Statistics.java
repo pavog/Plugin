@@ -128,8 +128,8 @@ public class Statistics extends JavaPlugin {
         }
         catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseTask(), (ping / 2), ping);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new PlayerCache(), 0L, 12000L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseTask(), (ping / 2), ping);
         Bukkit.getScheduler().runTaskTimer(this, new StatsSignFactory(), ping, ping);
         Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0L, 1L);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ScoreboardAPI(), 0L, 40L);
