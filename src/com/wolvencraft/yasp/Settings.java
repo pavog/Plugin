@@ -202,7 +202,7 @@ public class Settings {
         LogDelay("log_delay"),
         ShowWelcomeMessages("show_welcome_messages"),
         WelcomeMessage("welcome_message"),
-        ShowFirstJoinMessages("show_first_join_messages"),
+        ShowFirstJoinMessages("show_first_join_message"),
         FirstJoinMessage("first_join_message");
         
         /**
@@ -241,7 +241,8 @@ public class Settings {
                 catch (Throwable t) { entry = null; }
                 refresh = false;
             }
-            return entry.asString("value");
+            try { return entry.asString("value"); }
+            catch (Throwable t) { return ""; }
         }
         
         /**
@@ -254,7 +255,8 @@ public class Settings {
                 catch (Throwable t) { entry = null; }
                 refresh = false;
             }
-            return entry.asInt("value");
+            try { return entry.asInt("value"); }
+            catch (Throwable t) { return 0; }
         }
         
         /**
@@ -267,7 +269,8 @@ public class Settings {
                 catch (Throwable t) { entry = null; }
                 refresh = false;
             }
-            return entry.asBoolean("value");
+            try { return entry.asBoolean("value"); }
+            catch (Throwable t) { return false; }
         }
         
         /**
