@@ -42,7 +42,7 @@ public class ItemStackSerializable {
     private String material_id;   // Material ID (with metadata)
     private double durability;    // Current durability / total durability
     private int amount;           // Amount
-    private String enchantments;  // Json array of enchantments
+    private List<EnchantmentSerializable> enchantments;  // Json array of enchantments
     
     /**
      * <b>Default constructor</b><br />
@@ -59,7 +59,7 @@ public class ItemStackSerializable {
             durability = ((int)(100 * durability)) / 100.0;
         }
         amount = stack.getAmount();
-        enchantments = EnchantmentSerializable.toJsonArray(stack.getEnchantments());
+        enchantments = EnchantmentSerializable.serialize(stack.getEnchantments());
     }
     
     /**
@@ -69,7 +69,7 @@ public class ItemStackSerializable {
      * @param inventoryRow inventory row to compress
      * @return String json array
      */
-    public static String toJsonArray(List<ItemStack> inventoryRow) {
+    public static String serialize(List<ItemStack> inventoryRow) {
         List<ItemStackSerializable> invRow = new ArrayList<ItemStackSerializable>();
         for(ItemStack stack : inventoryRow) {
             if(stack == null) { stack = new ItemStack(Material.AIR); }

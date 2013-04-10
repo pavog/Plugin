@@ -517,28 +517,28 @@ public class PlayersData {
             List<ItemStack> invRow = new ArrayList<ItemStack>();
             
             for(int i = 9; i < 18; i++) { invRow.add(inv.getItem(i)); }
-            String rowOne = ItemStackSerializable.toJsonArray(invRow);
+            String rowOne = ItemStackSerializable.serialize(invRow);
             invRow.clear();
 
             for(int i = 18; i < 27; i++) { invRow.add(inv.getItem(i)); }
-            String rowTwo = ItemStackSerializable.toJsonArray(invRow);
+            String rowTwo = ItemStackSerializable.serialize(invRow);
             invRow.clear();
             
             for(int i = 27; i < 36; i++) { invRow.add(inv.getItem(i)); }
-            String rowThree = ItemStackSerializable.toJsonArray(invRow);
+            String rowThree = ItemStackSerializable.serialize(invRow);
             invRow.clear();
 
             for(int i = 0; i < 9; i++) { invRow.add(inv.getItem(i)); }
-            String hotbar = ItemStackSerializable.toJsonArray(invRow);
+            String hotbar = ItemStackSerializable.serialize(invRow);
             invRow.clear();
             
             invRow.add(inv.getHelmet());
             invRow.add(inv.getChestplate());
             invRow.add(inv.getLeggings());
             invRow.add(inv.getBoots());
-            String armor = ItemStackSerializable.toJsonArray(invRow);
+            String armor = ItemStackSerializable.serialize(invRow);
             
-            String potionEffects = PotionEffectSerializable.toJsonArray(player.getActivePotionEffects());
+            String potionEffects = PotionEffectSerializable.serialize(player.getActivePotionEffects());
             
             Query.table(PlayersInv.TableName)
                 .value(PlayersInv.Armor, armor)

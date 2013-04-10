@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonArray;
 import org.bukkit.enchantments.Enchantment;
 
 import com.wolvencraft.yasp.util.Util;
@@ -48,15 +49,14 @@ public class EnchantmentSerializable {
      * @param inventoryRow inventory row to compress
      * @return String json array
      */
-    public static String toJsonArray(Map<Enchantment, Integer> enchantments) {
+    public static List<EnchantmentSerializable> serialize(Map<Enchantment, Integer> enchantments) {
         List<EnchantmentSerializable> enchList = new ArrayList<EnchantmentSerializable>();
         Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<Enchantment, Integer> enchantment = (Map.Entry<Enchantment, Integer>)it.next();
             enchList.add(new EnchantmentSerializable(enchantment.getKey(), enchantment.getValue().intValue()));
-            it.remove();
         }
-        return Util.toJsonArray(enchList);
+        return enchList;
     }
     
 }

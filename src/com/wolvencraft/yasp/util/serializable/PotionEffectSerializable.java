@@ -56,7 +56,7 @@ public class PotionEffectSerializable {
      * @param effects Effects to compress
      * @return String json array
      */
-    public static String toJsonArray(Collection<PotionEffect> effects) {
+    public static String serialize(Collection<PotionEffect> effects) {
         List<PotionEffectSerializable> potEffects = new ArrayList<PotionEffectSerializable>();
         for(PotionEffect eff : effects) potEffects.add(new PotionEffectSerializable(eff));
         return Util.toJsonArray(potEffects);
