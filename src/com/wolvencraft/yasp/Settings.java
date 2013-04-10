@@ -31,6 +31,10 @@ import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
  */
 public class Settings {
     
+    /**
+     * Clears the settings cache.<br />
+     * Entries will have to be pulled from the database next time they are requested
+     */
     public static void clearCache() {
         Modules.clearCache();
         RemoteConfiguration.clearCache();
@@ -55,20 +59,59 @@ public class Settings {
         
         Object entry;
         
+        /**
+         * <b>Default constructor</b><br />
+         * Creates a new LocalConfiguration with the specified value
+         * @param entry Configuration value
+         */
         LocalConfiguration(Object entry) {
             this.entry = entry;
         }
         
+        /**
+         * <b>Constructor</b><br />
+         * Creates a new LocalConfiguration entry with the value that can be pulled from <code>config.yml</code>.
+         * @param entry Configuration value or <code>config.yml</code> node
+         * @param fromFile If <b>true</b>, configuration values will be pulled from file, otherwise, the <code>entry</code> will be used
+         */
         LocalConfiguration(Object entry, boolean fromFile) {
             if(fromFile) this.entry = Statistics.getInstance().getConfig().getString((String) entry);
             else this.entry = entry;
         }
         
+        /**
+         * Returns the configuration value as String
+         * @deprecated <code>asString();</code> should be used instead
+         * @return Configuration value
+         */
         @Override
-        public String toString() { return asString(); }
-        public String asString() { return (String) entry; }
-        public Boolean asBoolean() { return (Boolean) entry; }
-        public Integer asInteger() { return (Integer) entry; }
+        public String toString() {
+            return asString();
+        }
+        
+        /**
+         * Returns the configuration value as String
+         * @return Configuration value
+         */
+        public String asString() {
+            return (String) entry;
+        }
+        
+        /**
+         * Returns the configuration value as a boolean
+         * @return Configuration value
+         */
+        public Boolean asBoolean() {
+            return ((Boolean) entry).booleanValue();
+        }
+        
+        /**
+         * Returns the configuration value as an integer
+         * @return Configuration value
+         */
+        public Integer asInteger() {
+            return ((Integer) entry).intValue();
+        }
     }
     
     /**
@@ -179,7 +222,7 @@ public class Settings {
         /**
          * Returns the configuration value as String
          * @deprecated <code>asString();</code> should be used instead
-         * @return String configuration value
+         * @return Configuration value
          */
         @Override
         public String toString() {
@@ -192,8 +235,8 @@ public class Settings {
          */
         public String asString() {
             if(refresh) {
-                try { this.entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
-                catch (Throwable t) { this.entry = null; }
+                try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
+                catch (Throwable t) { entry = null; }
                 refresh = false;
             }
             return entry.asString("value");
@@ -205,8 +248,8 @@ public class Settings {
          */
         public int asInteger() { 
             if(refresh) {
-                try { this.entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
-                catch (Throwable t) { this.entry = null; }
+                try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
+                catch (Throwable t) { entry = null; }
                 refresh = false;
             }
             return entry.asInt("value");
@@ -218,8 +261,8 @@ public class Settings {
          */
         public boolean asBoolean() {
             if(refresh) {
-                try { this.entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
-                catch (Throwable t) { this.entry = null; }
+                try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
+                catch (Throwable t) { entry = null; }
                 refresh = false;
             }
             return entry.asBoolean("value");
@@ -231,10 +274,7 @@ public class Settings {
          * @return <b>true</b> if the update was successful, <b>false</b> otherwise
          */
         public boolean update(Object value) {
-            return Query.table(SettingsTable.TableName)
-                .value("value", value)
-                .condition("key", key)
-                .update();
+            return Query.table(SettingsTable.TableName).value("value", value).condition("key", key).update();
         }
         
         /**
@@ -248,7 +288,8 @@ public class Settings {
     }
     
     /**
-     * A hard-coded list of items that have a metadata that should be tracked
+     * A hard-coded list of items that have a metadata that should be tracked.<br />
+     * This is really bogus, but until we have a better solution, it will have to do.
      * @author bitWolfy
      *
      */
@@ -300,6 +341,11 @@ public class Settings {
             return false;
         }
         
+        /**
+         * Returns the ItemsWithMetadata object based on the item ID provided
+         * @param id Item ID
+         * @return ItemsWithMetadata object
+         */
         public static ItemsWithMetadata get(int id) {
             for(ItemsWithMetadata entry : ItemsWithMetadata.values()) {
                 if(entry.getId() == id) return entry;
