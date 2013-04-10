@@ -109,6 +109,8 @@ public class PlayerTotals {
      */
     public void fetchData() {
         
+        if(!Statistics.getInstance().isEnabled()) return;
+        
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             
             @Override

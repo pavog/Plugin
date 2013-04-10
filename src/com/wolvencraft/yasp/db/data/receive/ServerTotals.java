@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.wolvencraft.yasp.DatabaseTask;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal.*;
 
@@ -68,6 +69,9 @@ public class ServerTotals {
      * Automatically calculates values from the contents of corresponding tables.
      */
     public void fetchData() {
+
+        if(!Statistics.getInstance().isEnabled()) return;
+        
         blocksBroken = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Destroyed).sum();
         blocksPlaced = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Placed).sum();
         distance = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
