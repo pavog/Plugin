@@ -98,15 +98,10 @@ public class Settings {
          * @param key Entry key
          */
         Modules(String key) {
-            try {
-                this.active = Query.table(SettingsTable.TableName)
-                    .column("value")
-                    .condition("key", key)
-                    .select()
-                    .asBoolean("value");
-            } catch (Throwable t) { active = true; }
-            refresh = false;
             this.key = key;
+            try { active = Query.table(SettingsTable.TableName).column("value").condition("key", key).select().asBoolean("value"); }
+            catch (Throwable t) { active = true; }
+            refresh = false;
         }
         
         /**
@@ -115,13 +110,8 @@ public class Settings {
          */
         public boolean getEnabled() {
             if(refresh) {
-                try {
-                    this.active = Query.table(SettingsTable.TableName)
-                        .column("value")
-                        .condition("key", key)
-                        .select()
-                        .asBoolean("value");
-                } catch (Throwable t) { active = true; }
+                try { active = Query.table(SettingsTable.TableName).column("value").condition("key", key).select().asBoolean("value"); }
+                catch (Throwable t) { active = true; }
                 refresh = false;
             }
             return active;
