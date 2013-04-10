@@ -147,7 +147,7 @@ public class Database {
         try {
             if (connection.isValid(10)) {
                 Message.log("Connection is still present. Malformed query detected.");
-                return true;
+                return false;
             }
             Message.log(Level.WARNING, "Attempting to re-connect to the database");
             connection = DriverManager.getConnection(
