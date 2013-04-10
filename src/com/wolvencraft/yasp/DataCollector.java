@@ -70,6 +70,7 @@ public class DataCollector implements Runnable {
      * <li>Push all player data to the database</li>
      * <li>Push generic server statistics to the database</li>
      * <li>Fetch server totals for signs and statistics books</li>
+     * <li>Clear settings cache</li>
      * </ul>
      * This method is likely to freeze the main server thread.
      * Asynchronous threading is strongly recommended.
@@ -80,11 +81,14 @@ public class DataCollector implements Runnable {
         pushPlayerData();
         serverStatistics.pushData();
         serverTotals.fetchData();
+        
+        Settings.clearCache();
     }
     
     /**
      * Forces the plugin to synchronize the player data to the database.<br />
      * If the player is not online, removes the session after the synchronization is complete.
+     * @deprecated
      */
     public static void pushPlayerData() {
         Message.debug("Database synchronization in progress");

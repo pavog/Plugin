@@ -21,6 +21,7 @@
 package com.wolvencraft.yasp;
 
 import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 
 /**
@@ -29,6 +30,11 @@ import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
  *
  */
 public class Settings {
+    
+    public static void clearCache() {
+        Modules.clearCache();
+        RemoteConfiguration.clearCache();
+    }
     
     /**
      * Represents the local configuration, stored in <i>config.yml</i>
@@ -80,20 +86,52 @@ public class Settings {
         HookVault("hook.vault"),
         HookWorldGuard("hook.worldguard"),
         HookJobs("hook.jobs"),
-        HookMcMMO("hook.mcmmo");;
+        HookMcMMO("hook.mcmmo");
         
-        Modules(String row) { this.row = row;}
+        private String key;
+        private boolean active;
+        private boolean refresh;
         
-        String row;
-        
-        public boolean getEnabled() {
+        /**
+         * <b>Default constructor</b><br />
+         * Creates a new Module entry with the specified key
+         * @param key Entry key
+         */
+        Modules(String key) {
             try {
-                return Query.table(SettingsTable.TableName)
+                this.active = Query.table(SettingsTable.TableName)
                     .column("value")
-                    .condition("key", row)
+                    .condition("key", key)
                     .select()
                     .asBoolean("value");
-            } catch (Throwable t) { return true; }
+            } catch (Throwable t) { active = true; }
+            refresh = false;
+            this.key = key;
+        }
+        
+        /**
+         * Returns the status of the module according to the remote configuration
+         * @return <b>true</b> if the module is enabled, <b>false</b> if it is not
+         */
+        public boolean getEnabled() {
+            if(refresh) {
+                try {
+                    this.active = Query.table(SettingsTable.TableName)
+                        .column("value")
+                        .condition("key", key)
+                        .select()
+                        .asBoolean("value");
+                } catch (Throwable t) { active = true; }
+                refresh = false;
+            }
+            return active;
+        }
+        
+        /**
+         * Signals the plugin to pull the stored value from the database next time it is called
+         */
+        private static void clearCache() {
+            for(Modules module : Modules.values()) module.refresh = true;
         }
     }
     
@@ -132,46 +170,90 @@ public class Settings {
         ShowFirstJoinMessages("show_first_join_messages"),
         FirstJoinMessage("first_join_message");
         
-        RemoteConfiguration(String row) {
-            this.row = row;
+        /**
+         * <b>Default constructor</b><br />
+         * Creates a new RemoteConfiguration entry based on the specified key
+         * @param key Entry key
+         */
+        RemoteConfiguration(String key) {
+            try { this.entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
+            catch (Throwable t) { this.entry = null; }
+            refresh = false;
+            this.key = key;
         }
         
-        String row;
+        String key;
+        QueryResult entry;
+        boolean refresh;
         
-        public String toString() { return asString(); }
+        /**
+         * Returns the configuration value as String
+         * @deprecated <code>asString();</code> should be used instead
+         * @return String configuration value
+         */
+        @Override
+        public String toString() {
+            return asString();
+        }
+        
+        /**
+         * Returns the configuration value as String
+         * @return Configuration value
+         */
         public String asString() {
-            try {
-                return Query.table(SettingsTable.TableName)
-                    .column("value")
-                    .condition("key", row)
-                    .select()
-                    .asString("value");
-            } catch (Throwable t) { return ""; }
-        }
-        public Integer asInteger() { 
-            try {
-                return Query.table(SettingsTable.TableName)
-                    .column("value")
-                    .condition("key", row)
-                    .select()
-                    .asInt("value");
-            } catch (Throwable t) { return 0; }
-        }
-        public Boolean asBoolean() {
-            try {
-                return Query.table(SettingsTable.TableName)
-                    .column("value")
-                    .condition("key", row)
-                    .select()
-                    .asBoolean("value");
-            } catch (Throwable t) { return false; }
+            if(refresh) {
+                try { this.entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
+                catch (Throwable t) { this.entry = null; }
+                refresh = false;
+            }
+            return entry.asString("value");
         }
         
+        /**
+         * Returns the configuration value as an integer
+         * @return Configuration value
+         */
+        public int asInteger() { 
+            if(refresh) {
+                try { this.entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
+                catch (Throwable t) { this.entry = null; }
+                refresh = false;
+            }
+            return entry.asInt("value");
+        }
+        
+        /**
+         * Returns the configuration value as a boolean
+         * @return Configuration value
+         */
+        public boolean asBoolean() {
+            if(refresh) {
+                try { this.entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
+                catch (Throwable t) { this.entry = null; }
+                refresh = false;
+            }
+            return entry.asBoolean("value");
+        }
+        
+        /**
+         * Updates the configuration with the specified value
+         * @param value New configuration value
+         * @return <b>true</b> if the update was successful, <b>false</b> otherwise
+         */
         public boolean update(Object value) {
             return Query.table(SettingsTable.TableName)
                 .value("value", value)
-                .condition("key", row)
+                .condition("key", key)
                 .update();
+        }
+        
+        /**
+         * Signals the plugin to pull the stored value from the database next time it is called
+         */
+        private static void clearCache() {
+            for(RemoteConfiguration configEntry : RemoteConfiguration.values()) {
+                configEntry.refresh = true;
+            }
         }
     }
     
