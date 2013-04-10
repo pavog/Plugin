@@ -31,7 +31,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
@@ -458,7 +458,7 @@ public class PlayersData {
          * @param player Player that was killed
          */
         public void killed(Player player) {
-            DataCollector.get(player).died();
+            DatabaseTask.getSession(player).died();
             int curKillStreak = ((Integer) values.get(MiscInfoPlayersTable.CurKillStreak)).intValue() + 1;
             int maxKillStreak = ((Integer) values.get(MiscInfoPlayersTable.MaxKillStreak)).intValue();
             values.put(MiscInfoPlayersTable.CurKillStreak, curKillStreak);
@@ -509,7 +509,7 @@ public class PlayersData {
 
         @Override
         public boolean pushData(int playerId) {
-            OnlineSession session = DataCollector.get(playerId);
+            OnlineSession session = DatabaseTask.getSession(playerId);
             if(session == null) return false;
             Player player = Bukkit.getPlayerExact(session.getName());
             if(player == null) return false;

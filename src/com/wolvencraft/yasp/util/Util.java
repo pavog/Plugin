@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
@@ -113,7 +113,7 @@ public class Util {
      */
     public static String parseVars(String str) {
         if(str == null) return "";
-        Map<String, Object> values = DataCollector.getTotals().getValues();
+        Map<String, Object> values = DatabaseTask.getTotals().getValues();
         Iterator<Entry<String, Object>> it = values.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();

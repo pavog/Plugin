@@ -42,7 +42,7 @@ import com.wolvencraft.yasp.util.Util;
  * @author bitWolfy
  *
  */
-public class DataCollector implements Runnable {
+public class DatabaseTask implements Runnable {
     
     private static List<OnlineSession> sessions;
     private static ServerTotals serverTotals;
@@ -52,18 +52,25 @@ public class DataCollector implements Runnable {
      * <b>Default constructor.</b><br />
      * Initializes an empty list of OnlineSessions
      */
-    public DataCollector() {
+    public DatabaseTask() {
         sessions = new ArrayList<OnlineSession>();
         serverStatistics = new ServerStatistics();
         serverTotals = new ServerTotals();
         
         for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-            if(Util.isTracked(player)) get(player);
+            if(Util.isTracked(player)) getSession(player);
         }
     }
     
     /**
-     * Main database synchronization method.<br />
+     * Database synchronization method.<br />
+     * Wraps around <code>public static void commit();</code>
+     */
+    @Override
+    public void run() { commit(); }
+    
+    /**
+     * Commits collected data to the database.<br />
      * Performs actions in the following order:<br />
      * <ul>
      * <li>Confirm that the synchronization is not paused.</li>
@@ -75,29 +82,16 @@ public class DataCollector implements Runnable {
      * This method is likely to freeze the main server thread.
      * Asynchronous threading is strongly recommended.
      */
-    @Override
-    public void run() {
+    public static void commit() {
         if(Statistics.getPaused()) return;
-        pushPlayerData();
-        serverStatistics.pushData();
-        serverTotals.fetchData();
-        
-        Settings.clearCache();
-    }
-    
-    /**
-     * Forces the plugin to synchronize the player data to the database.<br />
-     * If the player is not online, removes the session after the synchronization is complete.
-     * @deprecated
-     */
-    public static void pushPlayerData() {
         Message.debug("Database synchronization in progress");
-        for(OnlineSession session : get()) {
+        
+        for(OnlineSession session : getSessionList()) {
             session.pushData();
             session.getTotals().fetchData();
             
             if(session.isOnline()) continue;
-            remove(session);
+            removeSession(session);
             
             long delay = Settings.RemoteConfiguration.LogDelay.asInteger();
             if(delay == 0 || session.getPlaytime() > delay) continue;
@@ -105,16 +99,20 @@ public class DataCollector implements Runnable {
             Query.table(Normal.PlayersTable.TableName)
                 .condition(PlayersTable.Name, session.getName())
                 .delete();
-            
         }
+        
+        serverStatistics.pushData();
+        serverTotals.fetchData();
+        
+        Settings.clearCache();
     }
     
     /**
      * Cycles through all open player sessions and dumps their data.
      * After that, clears the session list.
      */
-    public static void dumpPlayerData() {
-        for(OnlineSession session : get()) session.dumpData();
+    public static void dumpSessions() {
+        for(OnlineSession session : getSessionList()) session.dumpData();
         sessions.clear();
     }
     
@@ -122,7 +120,7 @@ public class DataCollector implements Runnable {
      * Returns all stored sessions.
      * @return List of stored player sessions
      */
-    private static List<OnlineSession> get() {
+    private static List<OnlineSession> getSessionList() {
         List<OnlineSession> tempList = new ArrayList<OnlineSession>();
         for(OnlineSession session : sessions) tempList.add(session);
         return tempList;
@@ -134,7 +132,7 @@ public class DataCollector implements Runnable {
      * @param player Tracked player
      * @return OnlineSession associated with the player.
      */
-    public static OnlineSession get(Player player) {
+    public static OnlineSession getSession(Player player) {
         String username = player.getName();
         for(OnlineSession session : sessions) {
             if(session.getName().equals(username)) {
@@ -158,7 +156,7 @@ public class DataCollector implements Runnable {
      * @param playerId
      * @return OnlineSession associated with the player, or <b>null<b> if there isn't one.
      */
-    public static OnlineSession get(int playerId) {
+    public static OnlineSession getSession(int playerId) {
         for(OnlineSession session : sessions) {
             if(session.getId() == playerId) {
                 return session;
@@ -172,7 +170,7 @@ public class DataCollector implements Runnable {
      * @param playerName Name of the player
      * @return OfflineSession with the specified player name, even if there isn't one.
      */
-    public static OfflineSession get(String playerName) {
+    public static OfflineSession getSession(String playerName) {
         Message.debug("Fetching an offline session for " + playerName);
         return new OfflineSession(playerName);
     }
@@ -181,7 +179,7 @@ public class DataCollector implements Runnable {
      * Removes the specified session
      * @param session Session to remove
      */
-    public static void remove(OnlineSession session) {
+    public static void removeSession(OnlineSession session) {
         Message.debug("Removing a user session for " + session.getName());
         sessions.remove(session);
     }

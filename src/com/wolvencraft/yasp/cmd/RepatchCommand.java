@@ -24,7 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.util.Message;
@@ -41,7 +41,7 @@ public class RepatchCommand implements BaseCommand {
     @Override
     public boolean run(String[] args) {
         Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database...");
-        DataCollector.dumpPlayerData();
+        DatabaseTask.dumpSessions();
         Statistics.setPaused(true);
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
 
@@ -51,9 +51,9 @@ public class RepatchCommand implements BaseCommand {
                 catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed!"); }
                 finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                        if(Util.isTracked(player)) DataCollector.get(player);
+                        if(Util.isTracked(player)) DatabaseTask.getSession(player);
                     }
-                    DataCollector.getStats().pushStaticData();
+                    DatabaseTask.getStats().pushStaticData();
                     Message.sendFormattedSuccess(CommandManager.getSender(), "Patching finished.");
                     Statistics.setPaused(false);
                 }

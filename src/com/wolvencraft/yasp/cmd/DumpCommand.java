@@ -21,7 +21,7 @@
 package com.wolvencraft.yasp.cmd;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -34,7 +34,7 @@ public class DumpCommand implements BaseCommand {
 
     @Override
     public boolean run(String[] args) {
-        DataCollector.dumpPlayerData();
+        DatabaseTask.dumpSessions();
         Message.sendFormattedSuccess(CommandManager.getSender(), "The local data has been dumped");
         return true;
     }

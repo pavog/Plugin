@@ -23,7 +23,7 @@ package com.wolvencraft.yasp.cmd;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.StatsSignFactory;
@@ -42,7 +42,7 @@ public class SyncCommand implements BaseCommand {
 
             @Override
             public void run() {
-                DataCollector.pushPlayerData();
+                DatabaseTask.commit();
             }
             
         });

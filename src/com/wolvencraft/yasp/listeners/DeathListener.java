@@ -37,7 +37,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DataCollector;
+import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Util;
@@ -78,43 +78,43 @@ public class DeathListener implements Listener {
                         if (arrow.getShooter() instanceof Player) {                // | | + Player shot Player
                             Player killer = (Player) arrow.getShooter();
                             if(!Util.isTracked(victim, "death.pvp") || !Util.isTracked(killer, "death.pvp")) return;
-                            OnlineSession session = DataCollector.get(killer);
+                            OnlineSession session = DatabaseTask.getSession(killer);
                             session.killedPlayer(victim, new ItemStack(Material.ARROW));
                         } else if (arrow.getShooter() instanceof Creature) {    // | | + Creature shot Player
                             if(!Util.isTracked(victim, "death.pve")) return;
                             Entity killer = (Entity) arrow.getShooter();
-                            OnlineSession session = DataCollector.get(victim);
+                            OnlineSession session = DatabaseTask.getSession(victim);
                             session.killedByCreature(killer, new ItemStack(Material.ARROW));
                         }
                 } else if (killerEntity instanceof Player) {                    // | + Player killed Player
                     Player killer = (Player) killerEntity;
                     if(!Util.isTracked(victim, "death.pvp") || !Util.isTracked(killer, "death.pvp")) return;
-                    OnlineSession session = DataCollector.get(killer);
+                    OnlineSession session = DatabaseTask.getSession(killer);
                     session.killedPlayer(victim, killer.getItemInHand());
                 } else if (killerEntity instanceof Explosive) {                    // | + Player exploded
                     if(!Util.isTracked(victim, "death.other")) return;
-                    OnlineSession session = DataCollector.get(victim);
+                    OnlineSession session = DatabaseTask.getSession(victim);
                     session.killedByEnvironment(victim.getLocation(), cause);
                 } else if (killerEntity instanceof Creature) {                    // | + Creature killed Player
                     if(!Util.isTracked(victim, "death.pve")) return;
-                    OnlineSession session = DataCollector.get(victim);
+                    OnlineSession session = DatabaseTask.getSession(victim);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else if (killerEntity instanceof Slime) {                        // | + Slime killed player
                     if(!Util.isTracked(victim, "death.pve")) return;
-                    OnlineSession session = DataCollector.get(victim);
+                    OnlineSession session = DatabaseTask.getSession(victim);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else {                                                        // | + Player died
                     if(!Util.isTracked(victim, "death.other")) return;
-                    OnlineSession session = DataCollector.get(victim);
+                    OnlineSession session = DatabaseTask.getSession(victim);
                     session.killedByEnvironment(victim.getLocation(), cause);
                 }
             } else if (lastDamageEvent instanceof EntityDamageByBlockEvent) {    // + Player killed by blocks
                 if(!Util.isTracked(victim, "death.other")) return;
-                OnlineSession session = DataCollector.get(victim);
+                OnlineSession session = DatabaseTask.getSession(victim);
                 session.killedByEnvironment(victim.getLocation(), cause);
             } else {                                                            // + Player died
                 if(!Util.isTracked(victim, "death.other")) return;
-                OnlineSession session = DataCollector.get(victim);
+                OnlineSession session = DatabaseTask.getSession(victim);
                 session.killedByEnvironment(victim.getLocation(), cause);
             }
         } else {
@@ -128,17 +128,17 @@ public class DeathListener implements Listener {
                 Player killer = (Player) arrow.getShooter();
                 if(!Util.isTracked(killer, "death.pve")) return;
                 if (victimEntity instanceof Creature) {                            // | + Player shot Creature
-                    DataCollector.get(killer).killedCreature(victimEntity, new ItemStack(Material.ARROW));
+                    DatabaseTask.getSession(killer).killedCreature(victimEntity, new ItemStack(Material.ARROW));
                 } else if (victimEntity instanceof Slime) {                        // | + Player shot Slime
-                    DataCollector.get(killer).killedCreature(victimEntity, new ItemStack(Material.ARROW));
+                    DatabaseTask.getSession(killer).killedCreature(victimEntity, new ItemStack(Material.ARROW));
                 }
             } else if (killerEntity instanceof Player) {                        // + Player killed an entity
                 Player killer = (Player) killerEntity;
                 if(!Util.isTracked(killer, "death.pve")) return;
                 if (victimEntity instanceof Creature) {                            // | + Player killed Creature
-                    DataCollector.get(killer).killedCreature(victimEntity, killer.getItemInHand());
+                    DatabaseTask.getSession(killer).killedCreature(victimEntity, killer.getItemInHand());
                 } else if (victimEntity instanceof Slime) {                        // | + Player killed Slime
-                    DataCollector.get(killer).killedCreature(victimEntity, killer.getItemInHand());
+                    DatabaseTask.getSession(killer).killedCreature(victimEntity, killer.getItemInHand());
                 }
             }
         }
