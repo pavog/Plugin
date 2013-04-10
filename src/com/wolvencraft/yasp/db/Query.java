@@ -170,8 +170,8 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(String key, String value) {
-            this.conditions.add("`" + key + "`='" + value + "'");
+        public DatabaseQuery condition(String key, Object value) {
+            this.conditions.add("`" + key + "`='" + value.toString() + "'");
             return instance;
         }
         
