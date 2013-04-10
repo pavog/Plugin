@@ -84,7 +84,6 @@ public class Util {
         if(Material.getMaterial(type) == null) return "0:0";
         if(!Settings.ItemsWithMetadata.checkAgainst(type)) return type + ":" + "0";
         short maxDurability = Material.getMaterial(type).getMaxDurability();
-        Message.debug("data = " + data + ", type = " + type + " maxDurability = " + maxDurability);
         if(data >= 0 && (maxDurability == 0 || data <= maxDurability)) return type + ":" + data;
         else return type + ":" + ItemsWithMetadata.get(type).getData();
     }
