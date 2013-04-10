@@ -51,10 +51,10 @@ public class ItemStackSerializable {
      */
     private ItemStackSerializable(ItemStack stack) {
         material_id = Util.getBlockString(stack);
-        if(stack.getDurability() == 0) durability = 0;
+        short curDurability = stack.getDurability();
+        short maxDurability = stack.getType().getMaxDurability();
+        if(curDurability <= 0 || maxDurability <= 0) durability = 0;
         else {
-            short curDurability = stack.getDurability();
-            short maxDurability = stack.getType().getMaxDurability();
             durability = (double)(maxDurability - curDurability) / maxDurability;
             durability = ((int)(100 * durability)) / 100.0;
         }
