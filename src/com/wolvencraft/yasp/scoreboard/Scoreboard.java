@@ -39,6 +39,13 @@ import java.util.List;
  */
 public class Scoreboard {
     
+    private List<Player> players = new ArrayList<Player>();
+    private HashMap<String, Integer> items = new HashMap<String, Integer>();
+    private Type type = Type.SIDEBAR;
+    private String id;
+    private String name = "Not initialized";
+    private int priority = 10;
+    
     /**
      * <b>Default constructor</b><br />
      * Creates a new score board with the specified ID
@@ -82,13 +89,6 @@ public class Scoreboard {
         this.priority = priority;
         this.type = type;
     }
-    
-    private List<Player> players = new ArrayList<Player>();
-    private HashMap<String, Integer> items = new HashMap<String, Integer>();
-    private Type type = Type.SIDEBAR;
-    private String id;
-    private String name = "Not initialized";
-    private int priority = 10;
     
     /**
      * Returns the unique ID of the score board
