@@ -299,40 +299,58 @@ public class Settings {
      *
      */
     public enum ItemsWithMetadata {
-        Plank(5),
-        Sapling(6),
-        Log(17),
-        Leave(18),
-        Sandstone(24),
-        TallGrass(31),
-        Wool(35),
-        DoubleSlab(43),
-        Slab(44),
-        PlankDoubleSlab(125),
-        PlankSlab(126),
-        MobHeadBlock(144),
-        Quartz(155),
-        GoldenApple(322),
-        Dye(351),
-        Potion(373),
-        MobEgg(383, 50),
-        MobHead(397);
+        Plank(5, 0, 3),
+        Sapling(6, 0, 3),
+        Log(17, 0, 3),
+        Leave(18, 0, 3),
+        Sandstone(24, 0, 2),
+        TallGrass(31, 0, 2),
+        Wool(35, 0, 15),
+        DoubleSlab(43, 0, 7),
+        Slab(44, 0, 7),
+        SilverfishBlock(97, 0, 2),
+        StoneBricks(98, 0, 3),
+        PlankDoubleSlab(125, 0, 3),
+        PlankSlab(126, 0, 3),
+        CobblestoneWall(139, 0, 1),
+        MobHeadBlock(144, 0, 4),
+        Quartz(155, 0, 2),
+        Coal(263, 0, 1),
+        GoldenApple(322, 0, 1),
+        Dye(351, 0, 15),
+        Potion(373, 0, 16489),
+        MobEgg(383, 50, 120),
+        MobHead(397, 0, 4);
         
-        ItemsWithMetadata(int itemId){
+        /**
+         * <b>Default constructor</b><br />
+         * Sets up a constraint on item's metadata with the specified values
+         * @param itemId Item ID
+         * @param minMetaData Minimum allowed metadata
+         * @param maxMetaData Maximum allowed metadata
+         */
+        ItemsWithMetadata(int itemId, int minMetaData, int maxMetaData) {
             this.itemId = itemId;
-            this.data = 0;
-        }
-        
-        ItemsWithMetadata(int itemId, int data) {
-            this.itemId = itemId;
-            this.data = data;
+            this.minMetaData = minMetaData;
+            this.maxMetaData = maxMetaData;
         }
         
         int itemId;
-        int data;
+        int minMetaData;
+        int maxMetaData;
         
         private int getId() { return itemId; }
-        public int getData() { return data; }
+        
+        /**
+         * Checks if the specified metadata falls under the constraint.<br />
+         * If it does, it is returned unchanged, otherwise, the minMetaData is returned
+         * @param data Metadata to check
+         * @return Resulting metadata
+         */
+        public int getData(int data) {
+            if(data >= minMetaData && data <= maxMetaData) return data;
+            return minMetaData;
+        }
         
         /**
          * Checks if the specified ID is in the list

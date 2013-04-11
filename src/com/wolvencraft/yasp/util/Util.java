@@ -83,9 +83,7 @@ public class Util {
         if(type == -1) return "-1:0";
         if(Material.getMaterial(type) == null) return "0:0";
         if(!Settings.ItemsWithMetadata.checkAgainst(type)) return type + ":" + "0";
-        short maxDurability = Material.getMaterial(type).getMaxDurability();
-        if(data >= 0 && (maxDurability == 0 || data <= maxDurability)) return type + ":" + data;
-        else return type + ":" + ItemsWithMetadata.get(type).getData();
+        return type + ":" + ItemsWithMetadata.get(type).getData(data);
     }
     
     /**
@@ -103,7 +101,8 @@ public class Util {
      * @return Database-safe string
      */
     public static String getBlockString(ItemStack stack) {
-        return getBlockString(stack.getTypeId(), stack.getDurability());
+        if(stack.getType().equals(Material.POTION)) return getBlockString(stack.getTypeId(), stack.getDurability());
+        return getBlockString(stack.getTypeId(), stack.getData().getData());
     }
     
     /**
