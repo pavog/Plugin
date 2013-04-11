@@ -181,9 +181,9 @@ public class Settings {
         HookJobs,
         HookMcMMO;
         
-        ActiveHooks() { active = false; }
-        
         boolean active;
+        
+        ActiveHooks() { active = false; }
         
         public boolean getActive() { return active; }
         public void setActive(boolean active) { this.active = active; }
@@ -205,6 +205,10 @@ public class Settings {
         ShowFirstJoinMessages("show_first_join_message"),
         FirstJoinMessage("first_join_message");
         
+        String key;
+        QueryResult entry;
+        boolean refresh;
+        
         /**
          * <b>Default constructor</b><br />
          * Creates a new RemoteConfiguration entry based on the specified key
@@ -216,10 +220,6 @@ public class Settings {
             refresh = false;
             this.key = key;
         }
-        
-        String key;
-        QueryResult entry;
-        boolean refresh;
         
         /**
          * Returns the configuration value as String
@@ -322,6 +322,10 @@ public class Settings {
         MobEgg(383, 50, 120),
         MobHead(397, 0, 4);
         
+        int itemId;
+        int minMetaData;
+        int maxMetaData;
+        
         /**
          * <b>Default constructor</b><br />
          * Sets up a constraint on item's metadata with the specified values
@@ -335,11 +339,39 @@ public class Settings {
             this.maxMetaData = maxMetaData;
         }
         
-        int itemId;
-        int minMetaData;
-        int maxMetaData;
+        /**
+         * Returns the item ID associated with this constraint
+         * @return Item ID
+         */
+        public int getId() {
+            return itemId;
+        }
         
-        private int getId() { return itemId; }
+        /**
+         * Returns the minimum metadata constraint for this item ID
+         * @return Minimum metadata
+         */
+        public int getMinData() {
+            return minMetaData;
+        }
+        
+        /**
+         * Returns the maximum metadata constraint for this item ID
+         * @return Maximum metadata
+         */
+        public int getMaxData() {
+            return maxMetaData;
+        }
+        
+        /**
+         * Checks if the specified metadata is valid
+         * @param data Metadata to check
+         * @return <b>true</b> if the data is valid, <b>false</b> otherwise
+         */
+        public boolean isDataValid(int data) {
+            if(data < minMetaData || data > maxMetaData) return false;
+            return true;
+        }
         
         /**
          * Checks if the specified metadata falls under the constraint.<br />
