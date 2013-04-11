@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.awardments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.wolvencraft.yasp.Statistics;
@@ -32,17 +33,20 @@ import com.wolvencraft.yasp.Statistics;
 public class Awardment {
     
     public String name;
+    public List<AwardmentRequirement> requirements;
     public List<AwardmentReward> rewards;
     
     /**
      * <b>Default constructor</b><br />
      * Creates a new Awardment based on the arguments provided
      * @param name Awardment name
+     * @param requirementArray Json array of requirements
      * @param rewardArray Json array of rewards
      */
-    public Awardment(String name, String rewardArray) {
+    public Awardment(String name, String requirementArray, String rewardArray) {
         this.name = name;
-        Statistics.getGson().fromJson(rewardArray, AwardmentReward.class);
+        requirements = Statistics.getGson().fromJson(requirementArray, ArrayList.class);
+        rewards = Statistics.getGson().fromJson(rewardArray, ArrayList.class);
     }
     
     /**
@@ -51,6 +55,14 @@ public class Awardment {
      */
     public String getName() {
         return name;
+    }
+    
+    /**
+     * Returns the list of requirements a player needs to fulfill in order to get an awardment
+     * @return List of requirements
+     */
+    public List<AwardmentRequirement> getRequirements() {
+        return requirements;
     }
     
     /**
