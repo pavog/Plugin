@@ -43,6 +43,7 @@ public class Awardment {
      * @param requirementArray Json array of requirements
      * @param rewardArray Json array of rewards
      */
+    @SuppressWarnings("unchecked")
     public Awardment(String name, String requirementArray, String rewardArray) {
         this.name = name;
         requirements = Statistics.getGson().fromJson(requirementArray, ArrayList.class);
