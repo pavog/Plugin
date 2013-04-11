@@ -120,7 +120,7 @@ public class DatabaseTask implements Runnable {
      * Returns all stored sessions.
      * @return List of stored player sessions
      */
-    private static List<OnlineSession> getSessionList() {
+    public static List<OnlineSession> getSessionList() {
         List<OnlineSession> tempList = new ArrayList<OnlineSession>();
         for(OnlineSession session : sessions) tempList.add(session);
         return tempList;
