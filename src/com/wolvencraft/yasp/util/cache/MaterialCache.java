@@ -55,12 +55,14 @@ public class MaterialCache implements Runnable {
     }
     
     /**
-     * Parses a block type ID and data value and returns a String representation of the material.
+     * Parses a block type ID and data value and returns a String representation of the material.<br />
+     * Inserts a new entry into the materials table
      * @param type Type ID
      * @param data Data value
+     * @param name Item name
      * @return Material string
      */
-    private static String parse(int type, int data) {
+    private static String parse(int type, int data, String name) {
         String material = "";
     
         if(type == -1) return "-1:0";
@@ -72,7 +74,7 @@ public class MaterialCache implements Runnable {
         if(Query.table(MaterialsTable.TableName).value(MaterialsTable.MaterialId, material).exists()) return material;
         Query.table(MaterialsTable.TableName)
              .value(MaterialsTable.MaterialId, material)
-             .value(MaterialsTable.TpName, "shithead")
+             .value(MaterialsTable.TpName, "invalid")
              .insert();
         return material;
     }
@@ -83,10 +85,7 @@ public class MaterialCache implements Runnable {
      * @return Material string
      */
     public static String parse(ItemStack stack) {
-        int type = stack.getTypeId();
-        int data = stack.getDurability();
-        
-        return parse(type, data);
+        return parse(stack.getTypeId(), stack.getDurability(), stack.getType().name().toLowerCase());
     }
     
     /**
@@ -95,10 +94,7 @@ public class MaterialCache implements Runnable {
      * @return Material string
      */
     public static String parse(BlockState block) {
-        int type = block.getTypeId();
-        int data = block.getRawData();
-        
-        return parse(type, data);
+        return parse(block.getTypeId(), block.getRawData(), block.getType().name().toLowerCase());
     }
     
 }
