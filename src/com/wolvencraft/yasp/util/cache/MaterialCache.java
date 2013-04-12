@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.Settings;
@@ -54,18 +55,14 @@ public class MaterialCache implements Runnable {
     }
     
     /**
-     * Parses an item stack and returns a String representation of the material
-     * @param stack Item stack to parse
+     * Parses a block type ID and data value and returns a String representation of the material.
+     * @param type Type ID
+     * @param data Data value
      * @return Material string
      */
-    public static String parseStack (ItemStack stack) {
-        int type = stack.getTypeId();
-        int data;
-        if(type == 373) data = stack.getDurability();
-        else data = stack.getData().getData();
-        
+    private static String parse(int type, int data) {
         String material = "";
-        
+    
         if(type == -1) return "-1:0";
         if(Material.getMaterial(type) == null) return "0:0";
         if(!Settings.ItemsWithMetadata.checkAgainst(type)) material = type + ":" + "0";
@@ -78,6 +75,30 @@ public class MaterialCache implements Runnable {
              .value(MaterialsTable.TpName, "shithead")
              .insert();
         return material;
+    }
+    
+    /**
+     * Parses an item stack and returns a String representation of the material
+     * @param stack Item stack to parse
+     * @return Material string
+     */
+    public static String parse(ItemStack stack) {
+        int type = stack.getTypeId();
+        int data = stack.getDurability();
+        
+        return parse(type, data);
+    }
+    
+    /**
+     * Parses a block and returns a String representation of the material
+     * @param block Block to parse
+     * @return Material string
+     */
+    public static String parse(BlockState block) {
+        int type = block.getTypeId();
+        int data = block.getRawData();
+        
+        return parse(type, data);
     }
     
 }

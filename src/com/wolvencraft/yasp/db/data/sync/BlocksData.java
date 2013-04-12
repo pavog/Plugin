@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
@@ -33,6 +33,7 @@ import com.wolvencraft.yasp.db.tables.Detailed.PlacedBlocks;
 import com.wolvencraft.yasp.db.tables.Detailed.DestroyedBlocks;
 import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
  * Data store that records all block interactions on the server.
@@ -99,15 +100,14 @@ public class BlocksData implements DataStore {
     /**
      * Returns the specific entry from the data store.<br />
      * If the entry does not exist, it will be created.
-     * @param type Material type
-     * @param blockData Damage value of the item
+     * @param block BlockState of the block
      * @return Corresponding entry
      */
-    public TotalBlocksEntry getNormalData(Material type, byte blockData) {
+    public TotalBlocksEntry getNormalData(BlockState block) {
         for(TotalBlocksEntry entry : normalData) {
-            if(entry.equals(type, blockData)) return entry;
+            if(entry.equals(block)) return entry;
         }
-        TotalBlocksEntry entry = new TotalBlocksEntry(playerId, type, blockData);
+        TotalBlocksEntry entry = new TotalBlocksEntry(playerId, block);
         normalData.add(entry);
         return entry;
     }
@@ -115,23 +115,21 @@ public class BlocksData implements DataStore {
     /**
      * Registers the broken block in the data stores
      * @param location Location of the block
-     * @param type Material of the block
-     * @param data Damage value of the material
+     * @param block BlockState of the block
      */
-    public void blockBreak(Location location, Material type, byte data) {
-        getNormalData(type, data).addBroken();
-        detailedData.add(new DetailedDestroyerdBlocksEntry(location, type, data));
+    public void blockBreak(Location location, BlockState block) {
+        getNormalData(block).addBroken();
+        detailedData.add(new DetailedDestroyerdBlocksEntry(location, block));
     }
     
     /**
      * Registers the placed block in the data stores
      * @param location Location of the block
-     * @param type Material of the block
-     * @param data Damage value of the material
+     * @param block BlockState of the block
      */
-    public void blockPlace(Location location, Material type, byte data) {
-        getNormalData(type, data).addPlaced();
-        detailedData.add(new DetailedPlacedBlocksEntry(location, type, data));
+    public void blockPlace(Location location, BlockState block) {
+        getNormalData(block).addPlaced();
+        detailedData.add(new DetailedPlacedBlocksEntry(location, block));
     }
     
     
@@ -143,20 +141,18 @@ public class BlocksData implements DataStore {
      */
     public class TotalBlocksEntry implements NormalData {
         
-        private int type;
-        private int data;
+        private BlockState block;
+        
         private int broken;
         private int placed;
 
         /**
          * <b>Default constructor</b><br />
          * Creates a new TotalItemsEntry based on the data provided
-         * @param materialType
-         * @param data
+         * @param block BlockState of the block
          */
-        public TotalBlocksEntry(int playerId, Material materialType, byte data) {
-            this.type = materialType.getId();
-            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) this.data = data;
+        public TotalBlocksEntry(int playerId, BlockState block) {
+            this.block = block;
             
             this.broken = 0;
             this.placed = 0;
@@ -170,13 +166,13 @@ public class BlocksData implements DataStore {
                     .column(TotalBlocksTable.Destroyed)
                     .column(TotalBlocksTable.Placed)
                     .condition(TotalBlocksTable.PlayerId, playerId)
-                    .condition(TotalBlocksTable.Material, Util.getBlockString(type, data))
+                    .condition(TotalBlocksTable.Material, MaterialCache.parse(block))
                     .select();
             
             if(result == null) {
                 Query.table(TotalBlocksTable.TableName)
                     .value(TotalBlocksTable.PlayerId, playerId)
-                    .value(TotalBlocksTable.Material, Util.getBlockString(type, data))
+                    .value(TotalBlocksTable.Material, MaterialCache.parse(block))
                     .value(TotalBlocksTable.Destroyed, broken)
                     .value(TotalBlocksTable.Placed, placed)
                     .insert();
@@ -192,7 +188,7 @@ public class BlocksData implements DataStore {
                 .value(TotalBlocksTable.Destroyed, broken)
                 .value(TotalBlocksTable.Placed, placed)
                 .condition(TotalBlocksTable.PlayerId, playerId)
-                .condition(TotalBlocksTable.Material, Util.getBlockString(type, data))
+                .condition(TotalBlocksTable.Material, MaterialCache.parse(block))
                 .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
@@ -200,15 +196,11 @@ public class BlocksData implements DataStore {
         
         /**
          * Checks if the object corresponds to provided parameters
-         * @param materialType
-         * @param data
+         * @param item ItemStack to compare to
          * @return <b>true</b> if the conditions are met, <b>false</b> otherwise
          */
-        public boolean equals(Material materialType, byte data) {
-            if(Settings.ItemsWithMetadata.checkAgainst(type)) {
-                return this.type == materialType.getId() && this.data == data;
-            }
-            return this.type == materialType.getId();
+        public boolean equals(BlockState block) {
+            return block.equals(this.block);
         }
         
         /**
@@ -235,21 +227,18 @@ public class BlocksData implements DataStore {
      */
     public class DetailedDestroyerdBlocksEntry implements DetailedData {
         
-        private int type;
-        private int data;
+        private BlockState block;
         private Location location;
         private long timestamp;
         
         /**
          * <b>Default constructor</b><br />
          * Creates a new DetailedDestroyedBlocksEntry based on the data provided
-         * @param location
-         * @param materialType
-         * @param data
+         * @param location Location of the block
+         * @param block BlockState of the block
          */
-        public DetailedDestroyerdBlocksEntry(Location location, Material materialType, byte data) {
-            this.type = materialType.getId();
-            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) this.data = data;
+        public DetailedDestroyerdBlocksEntry(Location location, BlockState block) {
+            this.block = block;
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
@@ -259,7 +248,7 @@ public class BlocksData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(DestroyedBlocks.TableName)
                 .value(DestroyedBlocks.PlayerId, playerId)
-                .value(DestroyedBlocks.Material, Util.getBlockString(type, data))
+                .value(DestroyedBlocks.Material, MaterialCache.parse(block))
                 .value(DestroyedBlocks.World, location.getWorld().getName())
                 .value(DestroyedBlocks.XCoord, location.getBlockX())
                 .value(DestroyedBlocks.YCoord, location.getBlockY())
@@ -279,21 +268,18 @@ public class BlocksData implements DataStore {
      */
     public class DetailedPlacedBlocksEntry implements DetailedData {
         
-        private int type;
-        private int data;
+        private BlockState block;
         private Location location;
         private long timestamp;
 
         /**
          * <b>Default constructor</b><br />
          * Creates a new DetailedPlacedBlocksEntry based on the data provided
-         * @param location
-         * @param materialType
-         * @param data
+         * @param location Location of the block
+         * @param block BlockState of the block
          */
-        public DetailedPlacedBlocksEntry(Location location, Material materialType, byte data) {
-            this.type = materialType.getId();
-            this.data = data;
+        public DetailedPlacedBlocksEntry(Location location, BlockState block) {
+            this.block = block;
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
@@ -303,7 +289,7 @@ public class BlocksData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(PlacedBlocks.TableName)
                 .value(PlacedBlocks.PlayerId, playerId)
-                .value(PlacedBlocks.Material, Util.getBlockString(type, data))
+                .value(PlacedBlocks.Material, MaterialCache.parse(block))
                 .value(PlacedBlocks.World, location.getWorld().getName())
                 .value(PlacedBlocks.XCoord, location.getBlockX())
                 .value(PlacedBlocks.YCoord, location.getBlockY())

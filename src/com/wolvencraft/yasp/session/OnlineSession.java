@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -251,21 +251,19 @@ public class OnlineSession implements PlayerSession {
     /**
      * Registers the broken block in the data stores
      * @param location Location of the block
-     * @param type Material of the block
-     * @param data Damage value of the material
+     * @param block BlockState of the block
      */
-    public void blockBreak(Location location, Material type, byte data) {
-        ((BlocksData) getData(DataStoreType.Blocks)).blockBreak(location, type, data);
+    public void blockBreak(Location location, BlockState block) {
+        ((BlocksData) getData(DataStoreType.Blocks)).blockBreak(location, block);
     }
     
     /**
      * Registers the placed block in the data stores
      * @param location Location of the block
-     * @param type Material of the block
-     * @param data Damage value of the material
+     * @param block BlockState of the block
      */
-    public void blockPlace(Location location, Material type, byte data) {
-        ((BlocksData) getData(DataStoreType.Blocks)).blockPlace(location, type, data);
+    public void blockPlace(Location location, BlockState block) {
+        ((BlocksData) getData(DataStoreType.Blocks)).blockPlace(location, block);
     }
     
     /**

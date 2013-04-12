@@ -30,6 +30,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
  * Simple class intended to temporarily store basic information about inventory items
@@ -50,7 +51,7 @@ public class ItemStackSerializable {
      * @param ItemStack stack
      */
     private ItemStackSerializable(ItemStack stack) {
-        material_id = Util.getBlockString(stack);
+        material_id = MaterialCache.parse(stack);
         short curDurability = stack.getDurability();
         short maxDurability = stack.getType().getMaxDurability();
         if(curDurability <= 0 || maxDurability <= 0) durability = 0;

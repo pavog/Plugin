@@ -52,9 +52,7 @@ public class BlockListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!Util.isTracked(player, "block.break")) return;
-        DatabaseTask
-            .getSession(player)
-            .blockBreak(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
+        DatabaseTask.getSession(player).blockBreak(event.getBlock().getLocation(), event.getBlock().getState());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -62,8 +60,6 @@ public class BlockListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!Util.isTracked(player, "block.place")) return;
-        DatabaseTask
-            .getSession(player)
-            .blockPlace(event.getBlock().getLocation(), event.getBlock().getType(), event.getBlock().getData());
+        DatabaseTask.getSession(player).blockPlace(event.getBlock().getLocation(), event.getBlock().getState());
     }
 }

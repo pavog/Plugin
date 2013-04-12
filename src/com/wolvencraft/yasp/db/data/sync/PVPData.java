@@ -33,6 +33,7 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PVPKills;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.MaterialCache;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
@@ -135,8 +136,7 @@ public class PVPData implements DataStore {
         
         private int victimId;
         
-        private int type;
-        private int data;
+        private ItemStack weapon;
         
         private int times;
         
@@ -149,10 +149,8 @@ public class PVPData implements DataStore {
          */
         public TotalPVPEntry(int playerId, int victimId, ItemStack weapon) {
             this.victimId = victimId;
-            this.type = weapon.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) {
-                this.data = weapon.getData().getData();
-            }
+            this.weapon = weapon;
+            this.weapon.setAmount(1);
             
             this.times = 0;
             
@@ -165,13 +163,13 @@ public class PVPData implements DataStore {
                     .column(TotalPVPKillsTable.Times)
                     .condition(TotalPVPKillsTable.PlayerId, killerId)
                     .condition(TotalPVPKillsTable.VictimId, victimId)
-                    .condition(TotalPVPKillsTable.Material, Util.getBlockString(type, data))
+                    .condition(TotalPVPKillsTable.Material, MaterialCache.parse(weapon))
                     .select();
             if(result == null) {
                 Query.table(TotalPVPKillsTable.TableName)
                     .value(TotalPVPKillsTable.PlayerId, killerId)
                     .value(TotalPVPKillsTable.VictimId, victimId)
-                    .value(TotalPVPKillsTable.Material, Util.getBlockString(type, data))
+                    .value(TotalPVPKillsTable.Material, MaterialCache.parse(weapon))
                     .value(TotalPVPKillsTable.Times, times)
                     .insert();
             } else {
@@ -185,7 +183,7 @@ public class PVPData implements DataStore {
                     .value(TotalPVPKillsTable.Times, times)
                     .condition(TotalPVPKillsTable.PlayerId, killerId)
                     .condition(TotalPVPKillsTable.VictimId, victimId)
-                    .condition(TotalPVPKillsTable.Material, Util.getBlockString(type, data))
+                    .condition(TotalPVPKillsTable.Material, MaterialCache.parse(weapon))
                     .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(killerId);
             return result;
@@ -198,16 +196,10 @@ public class PVPData implements DataStore {
          * @return <b>true</b> if the data matches, <b>false</b> otherwise.
          */
         public boolean equals(int victimId, ItemStack weapon) {
-            int weaponType = weapon.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) {
-                int weaponData = weapon.getData().getData();
-                return this.victimId == victimId
-                    && this.type == weaponType
-                    && this.data == weaponData;
-            }
-            
-            return this.victimId == victimId
-                && this.type == weaponType;
+            if(this.victimId != victimId) return false;
+            ItemStack comparableWeapon = weapon.clone();
+            comparableWeapon.setAmount(1);
+            return comparableWeapon.equals(weapon);
             
         }
         
@@ -230,8 +222,7 @@ public class PVPData implements DataStore {
         
         private int victimId;
         
-        private int type;
-        private int data;
+        private ItemStack weapon;
         
         private Location location;
         private long timestamp;
@@ -245,10 +236,8 @@ public class PVPData implements DataStore {
          */
         public DetailedPVPEntry(Location location, int victimId, ItemStack weapon) {
             this.victimId = victimId;
-            this.type = weapon.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) {
-                this.data = weapon.getData().getData();
-            }
+            this.weapon = weapon;
+            this.weapon.setAmount(1);
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
@@ -259,7 +248,7 @@ public class PVPData implements DataStore {
             return Query.table(PVPKills.TableName)
                     .value(PVPKills.KillerId, killerId)
                     .value(PVPKills.VictimId, victimId)
-                    .value(PVPKills.Material, Util.getBlockString(type, data))
+                    .value(PVPKills.Material, MaterialCache.parse(weapon))
                     .value(PVPKills.World, location.getWorld().getName())
                     .value(PVPKills.XCoord, location.getBlockX())
                     .value(PVPKills.YCoord, location.getBlockY())

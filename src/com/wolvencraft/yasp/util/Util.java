@@ -28,14 +28,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
 import com.wolvencraft.yasp.db.data.sync.*;
 
 /**
@@ -70,34 +67,6 @@ public class Util {
      */
     public static String toJsonArray(List<?> source) {
         return Statistics.getGson().toJson(source.toArray());
-    }
-    
-    /**
-     * Parses the block and returns a database-safe string
-     * @deprecated
-     * @param type Block ID
-     * @param data Block damage value
-     * @return Database-safe string
-     */
-    public static String getBlockString(int type, int data) {
-        if(type == -1) return "-1:0";
-        if(Material.getMaterial(type) == null) return "0:0";
-        else if(Material.getMaterial(type).equals(Material.POTION)) return type + ":" + 0; // XXX
-        if(!Settings.ItemsWithMetadata.checkAgainst(type)) return type + ":" + "0";
-        return type + ":" + ItemsWithMetadata.get(type).getData(data);
-    }
-    
-    /**
-     * Parses the block and returns a database-safe string
-     * @deprecated
-     * @param stack Item stack
-     * @return Database-safe string
-     */
-    public static String getBlockString(ItemStack stack) {
-        // XXX Hotfix: Completely disable metadata parsing for potions.
-        // if(stack.getType().equals(Material.POTION)) return getBlockString(stack.getTypeId(), stack.getDurability());
-        if(stack.getType().equals(Material.POTION)) return getBlockString(stack.getTypeId(), 0);
-        return getBlockString(stack.getTypeId(), stack.getData().getData());
     }
     
     /**

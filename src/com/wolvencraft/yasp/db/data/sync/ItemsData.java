@@ -34,6 +34,7 @@ import com.wolvencraft.yasp.db.tables.Detailed.PickedupItems;
 import com.wolvencraft.yasp.db.tables.Detailed.UsedItems;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
  * Data store that records all item interactions on the server.
@@ -100,7 +101,7 @@ public class ItemsData implements DataStore {
     /**
      * Returns the specific entry from the data store.<br />
      * If the entry does not exist, it will be created.
-     * @param itemStack
+     * @param itemStack Item stack
      * @return Corresponding entry
      */
     public TotalItemsEntry getNormalData(ItemStack itemStack) {
@@ -196,8 +197,7 @@ public class ItemsData implements DataStore {
      */
     public class TotalItemsEntry implements NormalData {
         
-        private int type;
-        private int data;
+        private ItemStack stack;
         private int dropped;
         private int pickedUp;
         private int used;
@@ -209,13 +209,11 @@ public class ItemsData implements DataStore {
         /**
          * <b>Default constructor</b><br />
          * Creates a new TotalItemsEntry based on the data provided
-         * @param itemStack
+         * @param stack Item stack
          */
-        public TotalItemsEntry(int playerId, ItemStack itemStack) {
-            this.type = itemStack.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) {
-                this.data = itemStack.getData().getData();
-            }
+        public TotalItemsEntry(int playerId, ItemStack stack) {
+            this.stack = stack;
+            this.stack.setAmount(1);
             
             this.dropped = 0;
             this.pickedUp = 0;
@@ -239,13 +237,13 @@ public class ItemsData implements DataStore {
                     .column(TotalItemsTable.Smelted)
                     .column(TotalItemsTable.Enchanted)
                     .condition(TotalItemsTable.PlayerId, playerId)
-                    .condition(TotalItemsTable.Material, Util.getBlockString(type, data))
+                    .condition(TotalItemsTable.Material, MaterialCache.parse(stack))
                     .select();
             
             if(result == null) {
                 Query.table(TotalItemsTable.TableName)
                     .value(TotalItemsTable.PlayerId, playerId)
-                    .value(TotalItemsTable.Material, Util.getBlockString(type, data))
+                    .value(TotalItemsTable.Material, MaterialCache.parse(stack))
                     .value(TotalItemsTable.Dropped, dropped)
                     .value(TotalItemsTable.PickedUp, pickedUp)
                     .value(TotalItemsTable.Used, used)
@@ -276,7 +274,7 @@ public class ItemsData implements DataStore {
                     .value(TotalItemsTable.Smelted, smelted)
                     .value(TotalItemsTable.Enchanted, enchanted)
                     .condition(TotalItemsTable.PlayerId, playerId)
-                    .condition(TotalItemsTable.Material, Util.getBlockString(type, data))
+                    .condition(TotalItemsTable.Material, MaterialCache.parse(stack))
                     .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
@@ -284,16 +282,13 @@ public class ItemsData implements DataStore {
         
         /**
          * Checks if the ItemStack corresponds to this entry 
-         * @param itemStack ItemStack to check
+         * @param stack ItemStack to check
          * @return b>true</b> if the data matches, <b>false</b> otherwise.
          */
-        public boolean equals(ItemStack itemStack) {
-            int type = itemStack.getTypeId();
-            int data = itemStack.getData().getData();
-            if(Settings.ItemsWithMetadata.checkAgainst(type)) {
-                return this.type == type;
-            }
-            return this.type == type && this.data == data;
+        public boolean equals(ItemStack stack) {
+            ItemStack comparableStack = stack.clone();
+            comparableStack.setAmount(0);
+            return comparableStack.equals(this.stack);
         }
         
         /**
@@ -363,8 +358,7 @@ public class ItemsData implements DataStore {
      */
     public class DetailedDroppedItemsEntry implements DetailedData {
         
-        private int type;
-        private int data;
+        private ItemStack stack;
         private Location location;
         private long timestamp;
 
@@ -374,11 +368,9 @@ public class ItemsData implements DataStore {
          * @param location
          * @param itemStack
          */
-        public DetailedDroppedItemsEntry(Location location, ItemStack itemStack) {
-            this.type = itemStack.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) {
-                this.data = itemStack.getData().getData();
-            }
+        public DetailedDroppedItemsEntry(Location location, ItemStack stack) {
+            this.stack = stack;
+            this.stack.setAmount(1);
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
@@ -388,7 +380,7 @@ public class ItemsData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(DroppedItems.TableName)
                     .value(DroppedItems.PlayerId, playerId)
-                    .value(DroppedItems.Material, Util.getBlockString(type, data))
+                    .value(DroppedItems.Material, MaterialCache.parse(stack))
                     .value(DroppedItems.World, location.getWorld().getName())
                     .value(DroppedItems.XCoord, location.getBlockX())
                     .value(DroppedItems.YCoord, location.getBlockY())
@@ -408,20 +400,19 @@ public class ItemsData implements DataStore {
      */
     public class DetailedPickedupItemsEntry implements DetailedData {
         
-        private int type;
-        private int data;
+        private ItemStack stack;
         private Location location;
         private long timestamp;
         
         /**
          * <b>Default constructor</b><br />
          * Creates a new DetailedPickedupItemsEntry based on the data provided
-         * @param location
-         * @param itemStack
+         * @param location Item location
+         * @param stack Item stack
          */
-        public DetailedPickedupItemsEntry(Location location, ItemStack itemStack) {
-            this.type = itemStack.getTypeId();
-            this.data = itemStack.getData().getData();
+        public DetailedPickedupItemsEntry(Location location, ItemStack stack) {
+            this.stack = stack;
+            this.stack.setAmount(1);
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
@@ -431,7 +422,7 @@ public class ItemsData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(PickedupItems.TableName)
                     .value(PickedupItems.PlayerId, playerId)
-                    .value(PickedupItems.Material, Util.getBlockString(type, data))
+                    .value(PickedupItems.Material, MaterialCache.parse(stack))
                     .value(PickedupItems.World, location.getWorld().getName())
                     .value(PickedupItems.XCoord, location.getBlockX())
                     .value(PickedupItems.YCoord, location.getBlockY())
@@ -451,20 +442,19 @@ public class ItemsData implements DataStore {
      */
     public class DetailedUsedItemsEntry implements DetailedData {
 
-        private int type;
-        private byte data;
+        private ItemStack stack;
         private Location location;
         private long timestamp;
         
         /**
          * <b>Default constructor</b><br />
          * Creates a new DetailedUsedItemsEntry based on the data provided
-         * @param location
-         * @param itemStack
+         * @param location Item location
+         * @param itemStack Item stack
          */
-        public DetailedUsedItemsEntry(Location location, ItemStack itemStack) {
-            this.type = itemStack.getTypeId();
-            this.data = itemStack.getData().getData();
+        public DetailedUsedItemsEntry(Location location, ItemStack stack) {
+            this.stack = stack;
+            this.stack.setAmount(1);
             
             this.location = location;
             this.timestamp = Util.getTimestamp();
@@ -474,7 +464,7 @@ public class ItemsData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(UsedItems.TableName)
                     .value(UsedItems.PlayerId, playerId)
-                    .value(UsedItems.Material, Util.getBlockString(type, data))
+                    .value(UsedItems.Material, MaterialCache.parse(stack))
                     .value(UsedItems.World, location.getWorld().getName())
                     .value(UsedItems.XCoord, location.getBlockX())
                     .value(UsedItems.YCoord, location.getBlockY())

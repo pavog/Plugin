@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -34,6 +35,7 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PVEKills;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
  * Data collector that records all PVE statistics on the server for a specific player.
@@ -144,8 +146,7 @@ public class PVEData implements DataStore{
         
         private EntityType creatureType;
         
-        private int type;
-        private int data;
+        private ItemStack weapon;
         
         private int playerDeaths;
         private int creatureDeaths;
@@ -158,11 +159,8 @@ public class PVEData implements DataStore{
          * @param weapon Weapon used
          */
         public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
-            this.creatureType = creatureType;
-            this.type = weapon.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(this.type)) {
-                this.data = weapon.getData().getData();
-            }
+            this.weapon = weapon;
+            this.weapon.setAmount(1);
             
             this.playerDeaths = 0;
             this.creatureDeaths = 0;
@@ -177,13 +175,13 @@ public class PVEData implements DataStore{
                     .column(TotalPVEKillsTable.CreatureKilled)
                     .condition(TotalPVEKillsTable.PlayerId, playerId)
                     .condition(TotalPVEKillsTable.CreatureId, creatureType.getTypeId() + "")
-                    .condition(TotalPVEKillsTable.Material, Util.getBlockString(type, data))
+                    .condition(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
                     .select();
             if(result == null) {
                 Query.table(TotalPVEKillsTable.TableName)
                     .value(TotalPVEKillsTable.PlayerId, playerId)
                     .value(TotalPVEKillsTable.CreatureId, creatureType.getTypeId())
-                    .value(TotalPVEKillsTable.Material, Util.getBlockString(type, data))
+                    .value(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
                     .value(TotalPVEKillsTable.PlayerKilled, playerDeaths)
                     .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
                     .insert();
@@ -200,7 +198,7 @@ public class PVEData implements DataStore{
                     .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
                     .condition(TotalPVEKillsTable.PlayerId, playerId)
                     .condition(TotalPVEKillsTable.CreatureId, creatureType.getTypeId() + "")
-                    .condition(TotalPVEKillsTable.Material, Util.getBlockString(type, data))
+                    .condition(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
                     .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
             return result;
@@ -213,14 +211,10 @@ public class PVEData implements DataStore{
          * @return <b>true</b> if the data matches, <b>false</b> otherwise.
          */
         public boolean equals(EntityType creatureType, ItemStack weapon) {
-            int weaponType = weapon.getTypeId();
-            if(Settings.ItemsWithMetadata.checkAgainst(weaponType)) {
-                int weaponData = weapon.getData().getData();
-                return this.creatureType.equals(creatureType)
-                        && this.type == weaponType
-                        && this.data == weaponData;
-            }
-            return this.creatureType.equals(creatureType) && this.type == weaponType;
+            if(!this.creatureType.equals(creatureType)) return false;
+            ItemStack comparableWeapon = weapon.clone();
+            comparableWeapon.setAmount(1);
+            return comparableWeapon.equals(this.weapon);
         }
         
         /**
@@ -248,8 +242,7 @@ public class PVEData implements DataStore{
         
         private EntityType creatureType;
         
-        private int type;
-        private int data;
+        private ItemStack weapon;
         
         private Location location;
         
@@ -265,8 +258,8 @@ public class PVEData implements DataStore{
          */
         public DetailedPVEEntry (EntityType creatureType, Location location, ItemStack weapon) {
             this.creatureType = creatureType;
-            this.type = weapon.getTypeId();
-            this.data = weapon.getData().getData();
+            this.weapon = weapon;
+            this.weapon.setAmount(1);
             this.location = location;
             this.playerKilled = false;
             this.timestamp = Util.getTimestamp();
@@ -280,8 +273,7 @@ public class PVEData implements DataStore{
          */
         public DetailedPVEEntry (EntityType creatureType, Location location) {
             this.creatureType = creatureType;
-            this.type = -1;
-            this.data = 0;
+            this.weapon = new ItemStack(Material.AIR, 1);
             this.location = location;
             this.playerKilled = true;
             this.timestamp = Util.getTimestamp();
@@ -293,7 +285,7 @@ public class PVEData implements DataStore{
                     .value(PVEKills.PlayerId, playerId)
                     .value(PVEKills.CreatureId, creatureType.getTypeId())
                     .value(PVEKills.PlayerKilled, playerKilled)
-                    .value(PVEKills.Material, Util.getBlockString(type, data))
+                    .value(PVEKills.Material, MaterialCache.parse(weapon))
                     .value(PVEKills.World, location.getWorld().getName())
                     .value(PVEKills.XCoord, location.getBlockX())
                     .value(PVEKills.YCoord, location.getBlockY())
