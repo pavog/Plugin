@@ -22,17 +22,21 @@ package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.DroppedItems;
 import com.wolvencraft.yasp.db.tables.Detailed.PickedupItems;
 import com.wolvencraft.yasp.db.tables.Detailed.UsedItems;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
+import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
@@ -212,6 +216,7 @@ public class ItemsData implements DataStore {
          * @param stack Item stack
          */
         public TotalItemsEntry(int playerId, ItemStack stack) {
+            Message.debug(Level.FINE, "Creating a new instance of TotalItemsEntry");
             this.stack = stack;
             this.stack.setAmount(1);
             
@@ -286,9 +291,13 @@ public class ItemsData implements DataStore {
          * @return b>true</b> if the data matches, <b>false</b> otherwise.
          */
         public boolean equals(ItemStack stack) {
-            ItemStack comparableStack = stack.clone();
-            comparableStack.setAmount(0);
-            return comparableStack.equals(this.stack);
+            if(stack.getType().equals(Material.POTION)) {
+                return stack.getType().equals(this.stack.getType()) && stack.getDurability() == this.stack.getDurability();
+            } else if(ItemsWithMetadata.checkAgainst(stack.getTypeId())) {
+                return stack.getType().equals(this.stack.getType()) && stack.getData().getData() == this.stack.getData().getData();
+            } else {
+                return stack.getType().equals(this.stack.getType());
+            }
         }
         
         /**
@@ -369,6 +378,7 @@ public class ItemsData implements DataStore {
          * @param itemStack
          */
         public DetailedDroppedItemsEntry(Location location, ItemStack stack) {
+            Message.debug(Level.FINE, "Creating a new instance of DetailedDroppedItemsEntry");
             this.stack = stack;
             this.stack.setAmount(1);
             
@@ -411,6 +421,7 @@ public class ItemsData implements DataStore {
          * @param stack Item stack
          */
         public DetailedPickedupItemsEntry(Location location, ItemStack stack) {
+            Message.debug(Level.FINE, "Creating a new instance of DetailedPickedupItemsEntry");
             this.stack = stack;
             this.stack.setAmount(1);
             
@@ -453,6 +464,7 @@ public class ItemsData implements DataStore {
          * @param itemStack Item stack
          */
         public DetailedUsedItemsEntry(Location location, ItemStack stack) {
+            Message.debug(Level.FINE, "Creating a new instance of DetailedUsedItemsEntry");
             this.stack = stack;
             this.stack.setAmount(1);
             
