@@ -22,13 +22,18 @@ package com.wolvencraft.yasp.cmd;
 
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.scoreboard.Scoreboard;
-import com.wolvencraft.yasp.scoreboard.ScoreboardAPI;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -49,21 +54,17 @@ public class ScoreboardCommand implements BaseCommand {
             Message.sendFormattedError(CommandManager.getSender(), "This command can only be executed by a living player");
             return false;
         }
+        
         Player player = (Player) CommandManager.getSender();
         Map<String, Object> stats = DatabaseTask.getSession(player.getName()).getTotals().getValues();
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        Objective objective = board.registerNewObjective("Blocks broken", "blocksBroken");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        objective.setDisplayName("Statistics");
+        Score score = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Broken:"));
+        score.setScore((Integer) stats.get("blocksBroken"));
         
-        Scoreboard board = ScoreboardAPI.get(player.getName());
-        if(board == null) {
-            board = ScoreboardAPI.add(player.getName());
-            board.setName("Statistics");
-            board.add("Kills", (Integer) stats.get("pvpKills"));
-            board.add("Deaths", (Integer) stats.get("pvpDeaths"));
-            board.setVisible(true);
-        } else {
-            if(board.isVisible(player)) board.setVisible(false);
-            else board.setVisible(true);
-            ScoreboardAPI.refresh(player);
-        }
         Message.sendFormattedSuccess("Displaying a scoreboard");
         return true;
     }
