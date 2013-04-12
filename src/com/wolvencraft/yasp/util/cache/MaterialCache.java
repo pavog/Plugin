@@ -75,7 +75,7 @@ public class MaterialCache implements Runnable {
         if(!Query.table(MaterialsTable.TableName).condition(MaterialsTable.MaterialId, material).exists()) {
             Query.table(MaterialsTable.TableName)
                  .value(MaterialsTable.MaterialId, material)
-                 .value(MaterialsTable.TpName, "invalid_" + name)
+                 .value(MaterialsTable.TpName, name + "_" + data)
                  .insert();
         }
         return material;
