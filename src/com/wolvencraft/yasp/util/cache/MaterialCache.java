@@ -71,11 +71,13 @@ public class MaterialCache implements Runnable {
         else material = type + ":" + ItemsWithMetadata.get(type).getData(data);
         
         if(materials.contains(material)) return material;
-        if(Query.table(MaterialsTable.TableName).condition(MaterialsTable.MaterialId, material).exists()) return material;
-        Query.table(MaterialsTable.TableName)
-             .value(MaterialsTable.MaterialId, material)
-             .value(MaterialsTable.TpName, "invalid_" + name)
-             .insert();
+        materials.add(material);
+        if(!Query.table(MaterialsTable.TableName).condition(MaterialsTable.MaterialId, material).exists()) {
+            Query.table(MaterialsTable.TableName)
+                 .value(MaterialsTable.MaterialId, material)
+                 .value(MaterialsTable.TpName, "invalid_" + name)
+                 .insert();
+        }
         return material;
     }
     
