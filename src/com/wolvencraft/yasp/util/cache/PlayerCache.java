@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util;
+package com.wolvencraft.yasp.util.cache;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,6 +30,7 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.util.Message;
 
 /**
  * Caches player names and IDs server-side

@@ -37,8 +37,8 @@ import com.wolvencraft.yasp.db.data.sync.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
-import com.wolvencraft.yasp.util.PlayerCache;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
  * Represents a player session that is created when a player logs into the server.<br />

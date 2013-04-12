@@ -74,6 +74,7 @@ public class Util {
     
     /**
      * Parses the block and returns a database-safe string
+     * @deprecated
      * @param type Block ID
      * @param data Block damage value
      * @return Database-safe string
@@ -88,6 +89,7 @@ public class Util {
     
     /**
      * Parses the block and returns a database-safe string
+     * @deprecated
      * @param stack Item stack
      * @return Database-safe string
      */

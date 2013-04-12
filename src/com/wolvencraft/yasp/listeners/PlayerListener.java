@@ -50,8 +50,8 @@ import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PlayerCache;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
  * Listens to miscellaneous player events on the server and reports them to the plugin.

@@ -32,8 +32,8 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PVPKills;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
-import com.wolvencraft.yasp.util.PlayerCache;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
  * Data collector that records all PVP statistics on the server for a specific player.

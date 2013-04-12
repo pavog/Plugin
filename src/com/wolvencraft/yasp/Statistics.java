@@ -37,10 +37,10 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PlayerCache;
 import com.wolvencraft.yasp.util.StatsSignFactory;
 import com.wolvencraft.yasp.util.TPSTracker;
 import com.wolvencraft.yasp.util.StatsSignFactory.StatsSign;
+import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
  * <b>Main plugin class</b><br />
