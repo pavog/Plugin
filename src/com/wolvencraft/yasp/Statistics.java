@@ -1,5 +1,5 @@
 /*
- * StatsPlugin.java
+ * Statistics.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -65,7 +65,7 @@ public class Statistics extends JavaPlugin {
     
     /**
      * <b>Default constructor</b><br />
-     * Creates a new instance of the StatsPlugin.
+     * Creates a new instance of the Statistics.
      */
     public Statistics() {
         instance = this;

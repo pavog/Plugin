@@ -73,7 +73,7 @@ public class Query {
      * @param sql SQL query
      * @return <b>true</b> if the sync is successful, <b>false</b> otherwise
      */
-    private static boolean pushData(String sql) {
+    private static boolean executeUpdate(String sql) {
         try {
             Message.debug(Level.FINEST, sql);
             return Database.executeUpdate(sql);
@@ -91,12 +91,12 @@ public class Query {
      * @param sql SQL query
      * @return Data from the remote database
      */
-    private static List<QueryResult> fetchData(String sql) {
+    private static List<QueryResult> executeQuery(String sql) {
         try {
             Message.debug(Level.FINEST, sql);
             return Database.executeQuery(sql);
         } catch (Exception e) {
-            Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
+            Message.log(Level.SEVERE, "An error occurred while fetching data from the remote database.");
             Message.log(Level.SEVERE, e.getMessage());
             if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
             return new ArrayList<QueryResult>();
@@ -344,7 +344,7 @@ public class Query {
             }
             if(!conditionString.equals("")) sql += " WHERE " + conditionString;
             
-            try { return Query.fetchData(sql + ";").get(index); }
+            try { return Query.executeQuery(sql + ";").get(index); }
             catch (NullPointerException ex) { return null; }
             catch (IndexOutOfBoundsException aiex) { return null; }
         }
@@ -374,7 +374,7 @@ public class Query {
             }
             if(!conditionString.equals("")) sql += " WHERE " + conditionString;
             
-            return Query.fetchData(sql + ";");
+            return Query.executeQuery(sql + ";");
         }
         
         /**
@@ -409,7 +409,7 @@ public class Query {
             }
             if(!conditionString.equals("")) sql += " WHERE " + conditionString;
             
-            try { return Query.fetchData(sql + ";").get(0).asDouble("temp"); }
+            try { return Query.executeQuery(sql + ";").get(0).asDouble("temp"); }
             catch (Exception e) { return 0; }
         }
         
@@ -441,7 +441,7 @@ public class Query {
             }
             if(!conditionString.equals("")) sql += " WHERE " + conditionString;
             
-            return pushData(sql + ";");
+            return executeUpdate(sql + ";");
         }
         
         /**
@@ -469,7 +469,7 @@ public class Query {
             }
             if(!conditionString.equals("")) sql += " WHERE " + conditionString;
             
-            return pushData(sql + ";");
+            return executeUpdate(sql + ";");
         }
         
         /**
@@ -498,7 +498,7 @@ public class Query {
             }
             if(!conditionString.equals("")) sql += " WHERE " + conditionString;
             
-            return pushData(sql + ";");
+            return executeUpdate(sql + ";");
         }
         
     }
