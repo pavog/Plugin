@@ -27,9 +27,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Listens to any block changes on the server and reports them to the plugin.

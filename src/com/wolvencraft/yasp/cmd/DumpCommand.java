@@ -21,8 +21,8 @@
 package com.wolvencraft.yasp.cmd;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Dump command.<br />

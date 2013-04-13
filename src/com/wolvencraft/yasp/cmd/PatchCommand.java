@@ -24,11 +24,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Patch command.<br />

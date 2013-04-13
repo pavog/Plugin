@@ -37,10 +37,10 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Listens to any entity deaths on the server and reports them to the plugin

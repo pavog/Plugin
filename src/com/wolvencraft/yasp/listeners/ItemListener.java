@@ -33,11 +33,11 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Listens to any item changes on the server and reports them to the plugin.

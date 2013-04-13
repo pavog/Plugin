@@ -23,10 +23,10 @@ package com.wolvencraft.yasp.db.data.receive;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal.*;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Generic Server information used on DisplaySigns and books.

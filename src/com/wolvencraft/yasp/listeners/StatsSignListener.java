@@ -34,7 +34,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.StatsSignFactory;
+import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
 
 /**
  * Handles StatsSign events
@@ -62,15 +62,15 @@ public class StatsSignListener implements Listener {
         if(!(block.getState() instanceof Sign)) return;
         
         Sign sign = (Sign) block.getState();
-        if(StatsSignFactory.isValid(sign)) {
+        if(SignRefreshTask.isValid(sign)) {
             Message.debug("Stats sign found at the location!");
             return;
         }
         
         if(!sign.getLines()[0].startsWith("<Y>")) return;
-        StatsSignFactory.add(sign);
+        SignRefreshTask.add(sign);
         Message.sendFormattedSuccess(CommandManager.getSender(), "A new StatsSign has been added");
-        StatsSignFactory.updateAll();
+        SignRefreshTask.updateAll();
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -78,9 +78,9 @@ public class StatsSignListener implements Listener {
         BlockState blockState = event.getBlock().getState();
         if(!(blockState instanceof Sign)) return;
         Sign sign = (Sign) blockState;
-        if(!StatsSignFactory.isValid(sign)) return;
+        if(!SignRefreshTask.isValid(sign)) return;
         Message.debug("Stats sign found at the location!");
-        StatsSignFactory.remove(sign);
+        SignRefreshTask.remove(sign);
         Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
     }
     

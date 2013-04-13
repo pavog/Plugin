@@ -37,11 +37,13 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.StatsSignFactory;
 import com.wolvencraft.yasp.util.TPSTracker;
-import com.wolvencraft.yasp.util.StatsSignFactory.StatsSign;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
+import com.wolvencraft.yasp.util.tasks.RefreshTask;
+import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
+import com.wolvencraft.yasp.util.tasks.SignRefreshTask.StatsSign;
 
 /**
  * <b>Main plugin class</b><br />
@@ -130,8 +132,11 @@ public class Statistics extends JavaPlugin {
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new PlayerCache(), 0L, (long)(30 * 60 * 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new MaterialCache(), 0L, (long)(24 * 3600 * 20));
+        
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseTask(), (ping / 2), ping);
-        Bukkit.getScheduler().runTaskTimer(this, new StatsSignFactory(), ping, ping);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTask(), 0L, 40L);
+        
+        Bukkit.getScheduler().runTaskTimer(this, new SignRefreshTask(), ping, ping);
         Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0L, 1L);
     }
 

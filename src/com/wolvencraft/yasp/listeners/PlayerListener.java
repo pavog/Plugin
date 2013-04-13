@@ -43,7 +43,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
@@ -52,6 +51,7 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Listens to miscellaneous player events on the server and reports them to the plugin.

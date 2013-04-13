@@ -23,10 +23,10 @@ package com.wolvencraft.yasp.cmd;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.StatsSignFactory;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
+import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
 
 /**
  * Synchronization command.<br />
@@ -46,7 +46,7 @@ public class SyncCommand implements BaseCommand {
             }
             
         });
-        StatsSignFactory.updateAll();
+        SignRefreshTask.updateAll();
         Message.sendFormattedSuccess(CommandManager.getSender(), "Synchronization complete");
         return true;
     }

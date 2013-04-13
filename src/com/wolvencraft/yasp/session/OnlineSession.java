@@ -21,14 +21,20 @@
 package com.wolvencraft.yasp.session;
 
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.receive.PlayerTotals;
@@ -56,6 +62,7 @@ public class OnlineSession implements PlayerSession {
     private List<DataStore> dataStores;
     
     private PlayerTotals playerTotals;
+    private Scoreboard scoreboard;
     
     /**
      * <b>Default constructor</b><br />
@@ -70,6 +77,7 @@ public class OnlineSession implements PlayerSession {
         this.dataStores = Util.getModules(player, id);
         this.playerTotals = new PlayerTotals(id);
         
+        this.scoreboard = null;
     }
     
     /**
@@ -327,5 +335,43 @@ public class OnlineSession implements PlayerSession {
      */
     public void itemEnchant(Location location, ItemStack itemStack) {
         ((ItemsData) getData(DataStoreType.Items)).itemEnchant(location, itemStack);
+    }
+    
+    public void toggleScoreboard() {
+        if(scoreboard != null) {
+            scoreboard = null;
+            return;
+        }
+        
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        scoreboard = manager.getNewScoreboard();
+        Bukkit.getServer().getPlayer(getName()).setScoreboard(scoreboard);
+        
+        scoreboard.clearSlot(DisplaySlot.SIDEBAR);
+        Objective stats = scoreboard.registerNewObjective("stats", "dummy");
+        stats.setDisplaySlot(DisplaySlot.SIDEBAR);
+        stats.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Statistics");        
+        
+    }
+    
+    /**
+     * Refreshes the statistics displayed on a scoreboard
+     */
+    public void refreshScoreboard() {
+        if(scoreboard == null) return;
+        
+        Map<String, Object> totals = this.playerTotals.getValues();
+        
+        Objective stats = scoreboard.getObjective("stats");
+        
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Broken"))
+             .setScore((Integer) totals.get("blocksBroken"));
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Placed"))
+             .setScore((Integer) totals.get("blocksPlaced"));
+        
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "PVP Kills"))
+             .setScore((Integer) totals.get("pvpKills"));
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "PVP Deaths"))
+             .setScore((Integer) totals.get("pvpDeaths"));
     }
 }

@@ -31,7 +31,7 @@ import org.bukkit.craftbukkit.v1_5_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.DatabaseTask;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 public class BookUtil {
     

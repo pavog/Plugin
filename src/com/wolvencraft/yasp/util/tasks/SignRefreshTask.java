@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util;
+package com.wolvencraft.yasp.util.tasks;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -43,22 +43,24 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.util.Vector;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.Util;
 
 /**
  * Handles all StatsSign functionality.
  * @author bitWolfy
  *
  */
-public class StatsSignFactory implements Runnable {
+public class SignRefreshTask implements Runnable {
     
     private static List<StatsSign> signs;
-    private static StatsSignFactory instance;
+    private static SignRefreshTask instance;
     
     /**
      * <b>Default constructor</b><br />
      * Creates a list of active signs and loads stored sign information from file
      */
-    public StatsSignFactory() {
+    public SignRefreshTask() {
         instance = this;
         signs = new ArrayList<StatsSign>();
         File signFolder = new File(Statistics.getInstance().getDataFolder(), "signs");

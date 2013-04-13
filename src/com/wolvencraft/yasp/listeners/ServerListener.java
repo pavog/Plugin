@@ -28,8 +28,8 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Listens to generic server events and reports them to the plugin.

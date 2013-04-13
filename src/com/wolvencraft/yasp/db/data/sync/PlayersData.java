@@ -31,7 +31,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
@@ -47,6 +46,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.serializable.ItemStackSerializable;
 import com.wolvencraft.yasp.util.serializable.PotionEffectSerializable;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * A unique data store that contains basic information about the player

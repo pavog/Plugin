@@ -30,10 +30,10 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.data.sync.*;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Utility class containing assorted methods that do not fit other categories

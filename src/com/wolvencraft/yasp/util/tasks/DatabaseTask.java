@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp;
+package com.wolvencraft.yasp.util.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,8 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.receive.ServerTotals;
 import com.wolvencraft.yasp.db.data.sync.ServerStatistics;

@@ -1,5 +1,5 @@
 /*
- * AwardmentAPI.java
+ * ScoreboardAPI.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,22 +18,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.awardments;
+package com.wolvencraft.yasp.util.tasks;
 
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
-public class AwardmentAPI implements Runnable {
+/**
+ * A simple asynchronous task that repeats itself every 20 ticks (1 second)
+ * @author bitWolfy
+ *
+ */
+public class RefreshTask implements Runnable {
     
-    public AwardmentAPI() {
-        
-    }
+    /**
+     * <b>Default constructor</b>
+     */
+    public RefreshTask() { }
     
     @Override
-    @SuppressWarnings("unused")
     public void run() {
         for(OnlineSession session : DatabaseTask.getSessionList()) {
-            // do shit
+            if(session.isOnline()) session.refreshScoreboard();
         }
     }
     

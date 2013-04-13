@@ -20,21 +20,12 @@
 
 package com.wolvencraft.yasp.cmd;
 
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 
-import com.wolvencraft.yasp.DatabaseTask;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Score board command.<br />
@@ -56,14 +47,7 @@ public class ScoreboardCommand implements BaseCommand {
         }
         
         Player player = (Player) CommandManager.getSender();
-        Map<String, Object> stats = DatabaseTask.getSession(player.getName()).getTotals().getValues();
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-        Scoreboard board = manager.getNewScoreboard();
-        Objective objective = board.registerNewObjective("Blocks broken", "blocksBroken");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName("Statistics");
-        Score score = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Broken:"));
-        score.setScore((Integer) stats.get("blocksBroken"));
+        DatabaseTask.getSession(player).toggleScoreboard();
         
         Message.sendFormattedSuccess("Displaying a scoreboard");
         return true;
