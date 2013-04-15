@@ -29,7 +29,11 @@ import java.util.List;
  */
 public interface DataStore {
     
-    public DataStoreType getType();
+    /**
+     * Returns the type of the data store
+     * @return Data store type
+     */
+    public StoreType getType();
     
     /**
      * Returns the dynamic entries in the data store.<br />
@@ -98,16 +102,24 @@ public interface DataStore {
     }
     
     /**
+     * Common interface for data store type enums
+     * @author bitWolfy
+     *
+     */
+    public interface StoreType {}
+    
+    /**
      * Represents the data store type
      * @author bitWolfy
      *
      */
-    public enum DataStoreType {
+    public enum DataStoreType implements StoreType {
         Blocks,
         Items,
         Deaths,
         PVE,
-        PVP
+        PVP,
+        Vault;
     }
 
 }

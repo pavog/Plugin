@@ -30,7 +30,8 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.Settings.ActiveHooks;
+import com.wolvencraft.yasp.Settings.Modules;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.data.sync.*;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
@@ -50,13 +51,25 @@ public class Util {
      */
     public static List<DataStore> getModules(Player player, int playerId) {
         List<DataStore> dataStores = new ArrayList<DataStore>();
-        if(Settings.Modules.Blocks.getEnabled()) dataStores.add(new BlocksData(playerId));
-        if(Settings.Modules.Items.getEnabled()) dataStores.add(new ItemsData(playerId));
-        if(Settings.Modules.Deaths.getEnabled()) {
+        if(Modules.Blocks.getEnabled()) dataStores.add(new BlocksData(playerId));
+        if(Modules.Items.getEnabled()) dataStores.add(new ItemsData(playerId));
+        if(Modules.Deaths.getEnabled()) {
             dataStores.add(new DeathsData(playerId));
             dataStores.add(new PVEData(playerId));
             dataStores.add(new PVPData(playerId));
         }
+        return dataStores;
+    }
+    
+    /**
+     * Composes a list of active plugin hooks for the player
+     * @param player Player object
+     * @param playerId Player ID
+     * @return List of plugin hooks
+     */
+    public static List<DataStore> getHooks(Player player, int playerId) {
+        List<DataStore> dataStores = new ArrayList<DataStore>();
+        if(ActiveHooks.HookVault.getActive()) dataStores.add(new VaultData(player, playerId));
         return dataStores;
     }
     

@@ -135,7 +135,7 @@ public class PatchFetcher {
      * @author bitWolfy
      *
      */
-    private enum PatchType {
+    public enum PatchType {
         YASPX("yaspx"),
         Vault("vault");
         

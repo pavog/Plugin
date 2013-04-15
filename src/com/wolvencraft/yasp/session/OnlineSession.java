@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.session;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -75,9 +76,12 @@ public class OnlineSession implements PlayerSession {
         id = PlayerCache.get(name);
         
         this.playersData = new PlayersData(player, id);
-        this.dataStores = Util.getModules(player, id);
-        this.playerTotals = new PlayerTotals(id);
         
+        this.dataStores = new ArrayList<DataStore>();
+        this.dataStores.addAll(Util.getModules(player, id));
+        this.dataStores.addAll(Util.getHooks(player, id));
+        
+        this.playerTotals = new PlayerTotals(id);
         this.scoreboard = null;
     }
     

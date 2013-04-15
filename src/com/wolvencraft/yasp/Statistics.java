@@ -35,7 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.data.hooks.*;
+import com.wolvencraft.yasp.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher;
@@ -61,8 +61,7 @@ public class Statistics extends JavaPlugin {
     
     private static Gson gson;
     
-    private static VaultHookFactory vaultHook;
-    private static WGHookFactory worldGuardHook;
+    private static VaultHook vaultHook;
     
     /**
      * <b>Default constructor</b><br />
@@ -104,13 +103,8 @@ public class Statistics extends JavaPlugin {
         Message.log("Database connection established.");
         
         if (getServer().getPluginManager().getPlugin("Vault") != null && Settings.Modules.HookVault.getEnabled()) {
-            vaultHook = new VaultHookFactory();
+            vaultHook = new VaultHook();
             vaultHook.onEnable();
-        }
-        
-        if (getServer().getPluginManager().getPlugin("WorldGuard") != null && Settings.Modules.HookWorldGuard.getEnabled()) {
-            worldGuardHook = new WGHookFactory();
-            worldGuardHook.onEnable();
         }
 
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
@@ -158,7 +152,6 @@ public class Statistics extends JavaPlugin {
             Bukkit.getScheduler().cancelTasks(this);
             
             if(vaultHook != null) { vaultHook.onDisable(); }
-            if(worldGuardHook != null) { worldGuardHook.onDisable(); }
 
             Database.close();
         } catch (Throwable t) { 
