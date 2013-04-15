@@ -98,15 +98,6 @@ public class Database {
             else break;
         } while(patchFile != null && patchFile.exists());
         
-        /*
-        Message.log(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + ".yasp.sql");
-        while (Statistics.getInstance().getClass().getClassLoader().getResourceAsStream(
-                Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + ".yasp.sql") != null) {
-            latestPatchVersion++;
-        }
-        */
-        Message.log("latestPatchVersion=" + latestPatchVersion);
-        
         if(databaseVersion >= latestPatchVersion) { return true; }
         Message.debug("Current version: " + databaseVersion + ", latest version: " + latestPatchVersion);
         databaseVersion++;
