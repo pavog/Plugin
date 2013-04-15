@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.receive.ServerTotals;
 import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
@@ -36,7 +37,6 @@ import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.Util;
 
 /**
  * Stores collected statistical data until it can be processed and sent to the database.<br />
@@ -60,7 +60,7 @@ public class DatabaseTask implements Runnable {
         serverTotals = new ServerTotals();
         
         for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-            if(Util.isTracked(player)) getSession(player);
+            if(StatPerms.Statistics.has(player)) getSession(player);
         }
     }
     

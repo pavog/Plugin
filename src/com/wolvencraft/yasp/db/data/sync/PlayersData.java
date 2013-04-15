@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.sync.DataStore.DetailedData;
@@ -513,6 +514,8 @@ public class PlayersData {
             if(session == null) return false;
             Player player = Bukkit.getPlayerExact(session.getName());
             if(player == null) return false;
+            if(!StatPerms.PlayerInventory.has(player)) return false;
+            
             PlayerInventory inv = player.getInventory();
             List<ItemStack> invRow = new ArrayList<ItemStack>();
             

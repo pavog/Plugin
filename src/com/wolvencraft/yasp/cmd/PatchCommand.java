@@ -25,9 +25,9 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
@@ -55,7 +55,7 @@ public class PatchCommand implements BaseCommand {
                 catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed!"); }
                 finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                        if(Util.isTracked(player)) DatabaseTask.getSession(player);
+                        if(StatPerms.Statistics.has(player)) DatabaseTask.getSession(player);
                     }
                     DatabaseTask.getStats().pushStaticData();
                     Message.sendFormattedSuccess(CommandManager.getSender(), "Patching finished.");

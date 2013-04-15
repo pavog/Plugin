@@ -43,13 +43,13 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
@@ -78,7 +78,7 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         DatabaseTask.getStats().playerLogin();
         Player player = event.getPlayer();
-        if(!Util.isTracked(player)) return;
+        if(!StatPerms.Statistics.has(player)) return;
         DatabaseTask.getSession(player).login(player.getLocation());
         
         if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
@@ -92,7 +92,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if(!Util.isTracked(player)) return;
+        if(!StatPerms.Statistics.has(player)) return;
         DatabaseTask.getSession(player).logout(player.getLocation());
         PlayerCache.remove(player.getName());
     }
@@ -101,7 +101,7 @@ public class PlayerListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "move")) return;
+        if(!StatPerms.PlayerDistances.has(player)) return;
         Location playerLocation = player.getLocation();
         if(!playerLocation.getWorld().equals(event.getTo().getWorld())) return;
         double distance = playerLocation.distance(event.getTo());
@@ -130,7 +130,7 @@ public class PlayerListener implements Listener {
     public void onPlayerFish(PlayerFishEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "misc.fish")) return;
+        if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.FishCaught);
     }
     
@@ -138,7 +138,7 @@ public class PlayerListener implements Listener {
     public void onPlayerKick(PlayerKickEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "misc.kick")) return;
+        if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.TimesKicked);
     }
     
@@ -146,7 +146,7 @@ public class PlayerListener implements Listener {
     public void onEggThrow(PlayerEggThrowEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "misc.eggThrow")) return;
+        if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.EggsThrown);
     }
     
@@ -155,7 +155,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        if(!Util.isTracked(player, "misc.arrowShoot")) return;
+        if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.ArrowsShot);
     }
     
@@ -164,7 +164,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        if(!Util.isTracked(player, "misc.takeDamage")) return;
+        if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.DamageTaken, event.getDamage());
     }
 
@@ -172,7 +172,7 @@ public class PlayerListener implements Listener {
     public void onBedEnter(PlayerBedEnterEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "misc.bedEnter")) return;
+        if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.BedsEntered);
     }
 
@@ -180,7 +180,7 @@ public class PlayerListener implements Listener {
     public void onPortalEnter(PlayerPortalEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "misc.portalEnter")) return;
+        if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.PortalsEntered);
     }
     
@@ -188,7 +188,7 @@ public class PlayerListener implements Listener {
     public void onChatMessage(AsyncPlayerChatEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "misc.chat")) return;
+        if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.WordsSaid, event.getMessage().split(" ").length);
     }
     
@@ -196,7 +196,7 @@ public class PlayerListener implements Listener {
     public void onChatCommand(PlayerCommandPreprocessEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "misc.command")) return;
+        if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.CommandsSent);
     }
 }

@@ -27,8 +27,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
@@ -51,7 +51,7 @@ public class BlockListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "block.break")) return;
+        if(!StatPerms.BlockBreak.has(player)) return;
         DatabaseTask.getSession(player).blockBreak(event.getBlock().getLocation(), event.getBlock().getState());
     }
 
@@ -59,7 +59,7 @@ public class BlockListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "block.place")) return;
+        if(!StatPerms.BlockPlace.has(player)) return;
         DatabaseTask.getSession(player).blockPlace(event.getBlock().getLocation(), event.getBlock().getState());
     }
 }

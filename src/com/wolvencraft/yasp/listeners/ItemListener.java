@@ -33,10 +33,10 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
@@ -59,7 +59,7 @@ public class ItemListener implements Listener {
     public void onItemPickup(PlayerPickupItemEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "item.pickup")) return;
+        if(!StatPerms.ItemPickUp.has(player)) return;
         DatabaseTask.getSession(player).itemPickUp(player.getLocation(), event.getItem().getItemStack());
     }
 
@@ -67,7 +67,7 @@ public class ItemListener implements Listener {
     public void onItemDrop(PlayerDropItemEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "item.drop")) return;
+        if(!StatPerms.ItemDrop.has(player)) return;
         DatabaseTask.getSession(player).itemDrop(player.getLocation(), event.getItemDrop().getItemStack());
     }
     
@@ -76,7 +76,7 @@ public class ItemListener implements Listener {
         if(Statistics.getPaused()) return;
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        if(!Util.isTracked(player, "item.use")) return;
+        if(!StatPerms.ItemUse.has(player)) return;
         OnlineSession session = DatabaseTask.getSession(player);
         session.itemUse(player.getLocation(), player.getItemInHand());
         session.addMiscValue(MiscInfoPlayersTable.FoodEaten);
@@ -86,7 +86,7 @@ public class ItemListener implements Listener {
     public void onItemCraft(CraftItemEvent event) {
         if(Statistics.getPaused()) return;
         Player player = (Player) event.getWhoClicked();
-        if(!Util.isTracked(player, "item.craft")) return;
+        if(!StatPerms.ItemCraft.has(player)) return;
         DatabaseTask.getSession(player).itemCraft(player.getLocation(), event.getCurrentItem());
     }
 
@@ -94,7 +94,7 @@ public class ItemListener implements Listener {
     public void onItemSmelt(FurnaceExtractEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "item.smelt")) return;
+        if(!StatPerms.ItemMisc.has(player)) return;
         DatabaseTask.getSession(player).itemSmelt(player.getLocation(), new ItemStack(event.getItemType()));
     }
 
@@ -102,7 +102,7 @@ public class ItemListener implements Listener {
     public void onToolBreak(PlayerItemBreakEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
-        if(!Util.isTracked(player, "item.break")) return;
+        if(!StatPerms.ItemBreak.has(player)) return;
         DatabaseTask.getSession(player).itemBreak(player.getLocation(), event.getBrokenItem());
     }
     
@@ -110,7 +110,7 @@ public class ItemListener implements Listener {
     public void onItemEnchant(EnchantItemEvent event) {
         if(Statistics.getPaused()) return;
         Player player = event.getEnchanter();
-        if(!Util.isTracked(player, "item.enchant")) return;
+        if(!StatPerms.ItemMisc.has(player)) return;
         DatabaseTask.getSession(player).itemEnchant(player.getLocation(), new ItemStack(event.getItem().getType()));
     }
 }

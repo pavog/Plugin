@@ -37,9 +37,9 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
@@ -69,7 +69,7 @@ public class DeathListener implements Listener {
 
         if (victimEntity instanceof Player) {
             Player victim = (Player) victimEntity;
-            if(!Util.isTracked(victim)) return;
+            if(!StatPerms.Death.has(victim)) return;
             if (lastDamageEvent instanceof EntityDamageByEntityEvent) {            // + Player killed by entity
                 Entity killerEntity = ((EntityDamageByEntityEvent) lastDamageEvent).getDamager();
 
@@ -77,43 +77,43 @@ public class DeathListener implements Listener {
                         Arrow arrow = (Arrow) killerEntity;
                         if (arrow.getShooter() instanceof Player) {                // | | + Player shot Player
                             Player killer = (Player) arrow.getShooter();
-                            if(!Util.isTracked(victim, "death.pvp") || !Util.isTracked(killer, "death.pvp")) return;
+                            if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(victim)) return;
                             OnlineSession session = DatabaseTask.getSession(killer);
                             session.killedPlayer(victim, new ItemStack(Material.ARROW));
                         } else if (arrow.getShooter() instanceof Creature) {    // | | + Creature shot Player
-                            if(!Util.isTracked(victim, "death.pve")) return;
+                            if(!StatPerms.DeathPVE.has(victim)) return;
                             Entity killer = (Entity) arrow.getShooter();
                             OnlineSession session = DatabaseTask.getSession(victim);
                             session.killedByCreature(killer, new ItemStack(Material.ARROW));
                         }
                 } else if (killerEntity instanceof Player) {                    // | + Player killed Player
                     Player killer = (Player) killerEntity;
-                    if(!Util.isTracked(victim, "death.pvp") || !Util.isTracked(killer, "death.pvp")) return;
+                    if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(victim)) return;
                     OnlineSession session = DatabaseTask.getSession(killer);
                     session.killedPlayer(victim, killer.getItemInHand());
                 } else if (killerEntity instanceof Explosive) {                    // | + Player exploded
-                    if(!Util.isTracked(victim, "death.other")) return;
+                    if(!StatPerms.DeathOther.has(victim)) return;
                     OnlineSession session = DatabaseTask.getSession(victim);
                     session.killedByEnvironment(victim.getLocation(), cause);
                 } else if (killerEntity instanceof Creature) {                    // | + Creature killed Player
-                    if(!Util.isTracked(victim, "death.pve")) return;
+                    if(!StatPerms.DeathPVE.has(victim)) return;
                     OnlineSession session = DatabaseTask.getSession(victim);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else if (killerEntity instanceof Slime) {                        // | + Slime killed player
-                    if(!Util.isTracked(victim, "death.pve")) return;
+                    if(!StatPerms.DeathPVE.has(victim)) return;
                     OnlineSession session = DatabaseTask.getSession(victim);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else {                                                        // | + Player died
-                    if(!Util.isTracked(victim, "death.other")) return;
+                    if(!StatPerms.DeathOther.has(victim)) return;
                     OnlineSession session = DatabaseTask.getSession(victim);
                     session.killedByEnvironment(victim.getLocation(), cause);
                 }
             } else if (lastDamageEvent instanceof EntityDamageByBlockEvent) {    // + Player killed by blocks
-                if(!Util.isTracked(victim, "death.other")) return;
+                if(!StatPerms.DeathOther.has(victim)) return;
                 OnlineSession session = DatabaseTask.getSession(victim);
                 session.killedByEnvironment(victim.getLocation(), cause);
             } else {                                                            // + Player died
-                if(!Util.isTracked(victim, "death.other")) return;
+                if(!StatPerms.DeathOther.has(victim)) return;
                 OnlineSession session = DatabaseTask.getSession(victim);
                 session.killedByEnvironment(victim.getLocation(), cause);
             }
@@ -126,7 +126,7 @@ public class DeathListener implements Listener {
                 Arrow arrow = (Arrow) killerEntity;
                 if (!(arrow.getShooter() instanceof Player)) return;
                 Player killer = (Player) arrow.getShooter();
-                if(!Util.isTracked(killer, "death.pve")) return;
+                if(!StatPerms.DeathPVE.has(killer)) return;
                 if (victimEntity instanceof Creature) {                            // | + Player shot Creature
                     DatabaseTask.getSession(killer).killedCreature(victimEntity, new ItemStack(Material.ARROW));
                 } else if (victimEntity instanceof Slime) {                        // | + Player shot Slime
@@ -134,7 +134,7 @@ public class DeathListener implements Listener {
                 }
             } else if (killerEntity instanceof Player) {                        // + Player killed an entity
                 Player killer = (Player) killerEntity;
-                if(!Util.isTracked(killer, "death.pve")) return;
+                if(!StatPerms.DeathPVE.has(killer)) return;
                 if (victimEntity instanceof Creature) {                            // | + Player killed Creature
                     DatabaseTask.getSession(killer).killedCreature(victimEntity, killer.getItemInHand());
                 } else if (victimEntity instanceof Slime) {                        // | + Player killed Slime

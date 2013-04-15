@@ -20,6 +20,8 @@
 
 package com.wolvencraft.yasp;
 
+import org.bukkit.entity.Player;
+
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
@@ -407,6 +409,74 @@ public class Settings {
             }
             return null;
         }
+    }
+    
+    /**
+     * Temporary solution to the permissions problem.<br />
+     * <blockquote>Nothing is more permanent than the temporary.<br />- Greek proverb</blockquote>
+     * @author bitWolfy
+     *
+     */
+    public enum StatPerms {
+        
+        Statistics("stats.track"),
+        Block("stats.track.block"),
+        BlockPlace("stats.track.block.place", Block),
+        BlockBreak("stats.track.block.break", Block),
+        Item("stats.track.item"),
+        ItemDrop("stats.track.item.drop", Item),
+        ItemPickUp("stats.track.item.pickup", Item),
+        ItemUse("stats.track.item.use", Item),
+        ItemBreak("stats.track.item.break", Item),
+        ItemCraft("stats.track.item.craft", Item),
+        ItemMisc("stats.track.item.misc", Item),
+        Player("stats.track.player"),
+        PlayerDistances("stats.track.player.distances", Player),
+        PlayerInventory("stats.track.player.inventory", Player),
+        PlayerMisc("stats.track.player.misc", Player),
+        Death("stats.track.death"),
+        DeathPVP("stats.track.death.pvp", Death),
+        DeathPVE("stats.track.death.pve", Death),
+        DeathOther("stats.track.death.other", Death);
+        
+        StatPerms parent;
+        String node;
+        
+        /**
+         * <b>Default constructor</b><br />
+         * Constructor for the parent nodes
+         * @param node Permissions node
+         */
+        StatPerms(String node) {
+            this.node = node;
+            this.parent = null;
+        }
+        
+        /**
+         * <b>Constructor</b><br />
+         * Constructor for child nodes
+         * @param node Permissions node
+         * @param parent Parent node
+         */
+        StatPerms(String node, StatPerms parent) {
+            this.node = node;
+            this.parent = parent;
+        }
+        
+        /**
+         * Checks if the player has the specified node
+         * @param player Player to check
+         * @return <b>true</b> if the player has the node, <b>false</b> otherwise
+         */
+        public boolean has(Player player) {
+            return player.isOp()
+                || player.hasPermission("stats.track")
+                || player.hasPermission("stats.track.*")
+                || player.hasPermission(node)
+                || player.hasPermission(node + "*")
+                || (parent != null && parent.has(player));
+        }
+        
     }
     
 }

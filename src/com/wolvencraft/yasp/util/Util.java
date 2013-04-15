@@ -127,6 +127,7 @@ public class Util {
     /**
      * Checks if the player is exempt from the statistics.<br />
      * Performs a simple permissions check with node <i>stats.track</i>.
+     * @deprecated Use Settings.Permissions instead
      * @param player Player to check
      * @return <b>true</b> if the player's statistics should not be registered, <b>false</b> otherwise.
      */
@@ -137,6 +138,7 @@ public class Util {
     
     /**
      * Checks if the player is exempt from the statistics.
+     * @deprecated Use Settings.Permissions instead
      * @param player Player to check
      * @param statsType Permission modifier
      * @return <b>true</b> if the player's statistics should not be registered, <b>false</b> otherwise
