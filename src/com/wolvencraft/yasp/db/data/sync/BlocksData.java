@@ -27,6 +27,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 
 import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PlacedBlocks;
@@ -200,7 +201,11 @@ public class BlocksData implements DataStore {
          * @return <b>true</b> if the conditions are met, <b>false</b> otherwise
          */
         public boolean equals(BlockState block) {
-            return block.equals(this.block);
+            if(ItemsWithMetadata.checkAgainst(block.getTypeId())) {
+                return block.getType().equals(this.block.getType()) && block.getData().getData() == this.block.getData().getData();
+            } else {
+                return block.getType().equals(this.block.getType());
+            }
         }
         
         /**
