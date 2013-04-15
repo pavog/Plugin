@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
+import com.wolvencraft.yasp.util.Message;
 
 /**
  * Data store that contains both local and remote plugin configurations
@@ -469,12 +470,9 @@ public class Settings {
          * @return <b>true</b> if the player has the node, <b>false</b> otherwise
          */
         public boolean has(Player player) {
-            return player.isOp()
-                || player.hasPermission("stats.track")
-                || player.hasPermission("stats.track.*")
-                || player.hasPermission(node)
-                || player.hasPermission(node + "*")
-                || (parent != null && parent.has(player));
+            boolean result = player.isOp() || player.hasPermission(node);
+            Message.debug(player.getName() + "." + node + "=" + result);
+            return result;
         }
         
     }

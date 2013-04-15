@@ -18,13 +18,11 @@ permissions:
       stats.track.death: true
   stats.track.block:
     description: Track player's block statistics
-    default: true
     children:
       stats.track.block.break: true
       stats.track.block.place: true
   stats.track.item:
     description: Track player's item statistics
-    default: true
     children:
       stats.track.item.drop: true
       stats.track.item.pickup: true
@@ -34,14 +32,12 @@ permissions:
       stats.track.item.misc: true
   stats.track.player:
     description: Track some basic player statistics
-    default: true
     children:
       stats.track.player.distances: true
       stats.track.player.inventory: true
       stats.track.player.misc: true
   stats.track.death:
     description: Track death and kill statistics
-    default: true
     children:
       stats.track.death.pvp: true
       stats.track.death.pve: true
