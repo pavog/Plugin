@@ -45,6 +45,7 @@ import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Represents a player session that is created when a player logs into the server.<br />
@@ -190,6 +191,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void addDistance(DistancePlayersTable type, double distance) {
         playersData.getDistanceData().addDistance(type, distance);
+        playerTotals.addDistance(type, distance);
     }
     
     /**
@@ -217,6 +219,8 @@ public class OnlineSession implements PlayerSession {
     public void killedPlayer(Player victim, ItemStack weapon) {
         ((PVPData) getData(DataStoreType.PVP)).playerKilledPlayer(victim, weapon);
         playersData.getMiscData().killed(victim);
+        playerTotals.pvpKill();
+        DatabaseTask.getSession(victim).getTotals().pvpDeath();
     }
     
     /**
@@ -226,6 +230,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void killedCreature(Entity victim, ItemStack weapon) {
         ((PVEData) getData(DataStoreType.PVE)).playerKilledCreature(victim, weapon);
+        playerTotals.pveKill();
     }
     
     /**
@@ -236,6 +241,7 @@ public class OnlineSession implements PlayerSession {
     public void killedByCreature(Entity killer, ItemStack weapon) {
         ((PVEData) getData(DataStoreType.PVE)).creatureKilledPlayer(killer, weapon);
         died();
+        playerTotals.otherDeath();
     }
     
     /**
@@ -246,6 +252,7 @@ public class OnlineSession implements PlayerSession {
     public void killedByEnvironment(Location location, DamageCause cause) {
         ((DeathsData) getData(DataStoreType.Deaths)).playerDied(location, cause);
         died();
+        playerTotals.otherDeath();
     }
     
     /**
@@ -263,6 +270,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void blockBreak(Location location, BlockState block) {
         ((BlocksData) getData(DataStoreType.Blocks)).blockBreak(location, block);
+        playerTotals.blockBreak();
     }
     
     /**
@@ -272,6 +280,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void blockPlace(Location location, BlockState block) {
         ((BlocksData) getData(DataStoreType.Blocks)).blockPlace(location, block);
+        playerTotals.blockPlace();
     }
     
     /**
@@ -299,6 +308,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void itemUse(Location location, ItemStack itemStack) {
         ((ItemsData) getData(DataStoreType.Items)).itemUse(location, itemStack);
+        playerTotals.snacksEaten();
     }
     
     /**
@@ -308,6 +318,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void itemCraft(Location location, ItemStack itemStack) {
         ((ItemsData) getData(DataStoreType.Items)).itemCraft(location, itemStack);
+        playerTotals.itemCraft();
     }
     
     /**
@@ -326,6 +337,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void itemBreak(Location location, ItemStack itemStack) {
         ((ItemsData) getData(DataStoreType.Items)).itemBreak(location, itemStack);
+        playerTotals.toolBreak();
     }
     
     /**
@@ -364,14 +376,14 @@ public class OnlineSession implements PlayerSession {
         
         Objective stats = scoreboard.getObjective("stats");
         
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Broken"))
-             .setScore((Integer) totals.get("blocksBroken"));
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Placed"))
-             .setScore((Integer) totals.get("blocksPlaced"));
-        
         stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "PVP Kills"))
              .setScore((Integer) totals.get("pvpKills"));
         stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "PVP Deaths"))
              .setScore((Integer) totals.get("pvpDeaths"));
+        
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Broken"))
+             .setScore((Integer) totals.get("blocksBroken"));
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Placed"))
+             .setScore((Integer) totals.get("blocksPlaced"));
     }
 }

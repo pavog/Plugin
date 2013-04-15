@@ -134,7 +134,7 @@ public class Statistics extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new MaterialCache(), 0L, (long)(24 * 3600 * 20));
         
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseTask(), (ping / 2), ping);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTask(), 0L, 40L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTask(), 0L, 20L);
         
         Bukkit.getScheduler().runTaskTimer(this, new SignRefreshTask(), ping, ping);
         Bukkit.getScheduler().runTaskTimer(this, new TPSTracker(), 0L, 1L);

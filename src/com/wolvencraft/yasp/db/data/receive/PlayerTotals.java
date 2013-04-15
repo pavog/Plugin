@@ -91,6 +91,7 @@ public class PlayerTotals {
     private double distMinecarted;
     private double distPiggybacked;
     private double distSwam;
+    private double distFlight;
     private double distTotal;
     
     private int toolsBroken;
@@ -130,6 +131,7 @@ public class PlayerTotals {
                 distMinecarted = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Minecart).condition(DistancePlayersTable.PlayerId, playerId).sum();
                 distPiggybacked = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Pig).condition(DistancePlayersTable.PlayerId, playerId).sum();
                 distSwam = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Swimmed).condition(DistancePlayersTable.PlayerId, playerId).sum();
+                distFlight = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Flight).condition(DistancePlayersTable.PlayerId, playerId).sum();
                 distTotal = distWalked + distBoated + distMinecarted + distPiggybacked + distSwam;
                 
                 toolsBroken = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Broken).condition(TotalItemsTable.PlayerId, playerId).sum();
@@ -153,6 +155,10 @@ public class PlayerTotals {
      * @return Map of values
      */
     public Map<String, Object> getValues() {
+        if(pvpDeaths != 0) kdr = (double) Math.round((pvpKills / pvpDeaths) * 100000) / 100000;
+        else kdr = pvpKills;
+        currentSession = Util.getTimestamp() - sessionStart;
+        
         Map<String, Object> values = new HashMap<String, Object>();
         values.put("currentSession", Util.parseTimestamp(currentSession));
         values.put("totalPlaytime", Util.parseTimestamp(totalPlaytime));
@@ -165,6 +171,7 @@ public class PlayerTotals {
         values.put("distMinecarted", distMinecarted);
         values.put("distPiggybacked", distPiggybacked);
         values.put("distSwam", distSwam);
+        values.put("distFlight", distFlight);
         values.put("distTotal", distTotal);
         
         values.put("toolsBroken", toolsBroken);
@@ -178,4 +185,67 @@ public class PlayerTotals {
         values.put("otherKills", otherKills);
         return values;
     }
+    
+    public void blockBreak() {
+        blocksBroken++;
+    }
+    
+    public void blockPlace() {
+        blocksPlaced++;
+    }
+    
+    public void addDistance(DistancePlayersTable type, double distance) {
+        distTotal += distance;
+        switch(type) {
+            case Foot:
+                distWalked += distance;
+                break;
+            case Swimmed:
+                distSwam += distance;
+                break;
+            case Flight:
+                distFlight += distance;
+                break;
+            case Boat:
+                distBoated += distance;
+                break;
+            case Minecart:
+                distMinecarted += distance;
+                break;
+            case Pig:
+                distPiggybacked += distance;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    public void toolBreak() {
+        toolsBroken++;
+    }
+    
+    public void itemCraft() {
+        itemsCrafted++;
+    }
+    
+    public void snacksEaten() {
+        snacksEaten++;
+    }
+    
+    public void pvpKill() {
+        pvpKills++;
+    }
+    
+    public void pvpDeath() {
+        pvpDeaths++;
+    }
+    
+    public void pveKill() {
+        pveKills++;
+    }
+    
+    public void otherDeath() {
+        otherKills++;
+    }
+    
 }
