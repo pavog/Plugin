@@ -32,6 +32,7 @@ import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.hooks.*;
@@ -88,7 +89,7 @@ public class Statistics extends JavaPlugin {
             return;
         }
         
-        new PatchFetcher();
+        if(LocalConfiguration.FetchPatches.asBoolean()) new PatchFetcher();
         new Query();
         
         try { new Database(); }

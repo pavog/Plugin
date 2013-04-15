@@ -57,6 +57,7 @@ public class Settings {
         DBPrefix("database.prefix", true),
         DBConnect("jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
         LogPrefix("log-prefix", true),
+        FetchPatches("fetch-patches", true),
         Cloud(true);
         
         Object entry;
