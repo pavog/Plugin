@@ -37,6 +37,7 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.hooks.*;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.PatchFetcher;
 import com.wolvencraft.yasp.util.TPSTracker;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
@@ -87,6 +88,7 @@ public class Statistics extends JavaPlugin {
             return;
         }
         
+        new PatchFetcher();
         new Query();
         
         try { new Database(); }
@@ -142,7 +144,6 @@ public class Statistics extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Message.log("Plugin shutting down.");
         if(crashed) { crashed = false; return; }
         
         try {

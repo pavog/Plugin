@@ -20,6 +20,9 @@
 
 package com.wolvencraft.yasp.db;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -88,9 +91,21 @@ public class Database {
         else { databaseVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
         int latestPatchVersion = databaseVersion;
         
-        while (Statistics.getInstance().getClass().getClassLoader().getResourceAsStream("patches/" + (latestPatchVersion + 1) + ".yasp.sql") != null) {
+        File patchFile = null;
+        do {
+            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + ".yasp.sql");
+            if(patchFile.exists()) latestPatchVersion++;
+            else break;
+        } while(patchFile != null && patchFile.exists());
+        
+        /*
+        Message.log(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + ".yasp.sql");
+        while (Statistics.getInstance().getClass().getClassLoader().getResourceAsStream(
+                Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + ".yasp.sql") != null) {
             latestPatchVersion++;
         }
+        */
+        Message.log("latestPatchVersion=" + latestPatchVersion);
         
         if(databaseVersion >= latestPatchVersion) { return true; }
         Message.debug("Current version: " + databaseVersion + ", latest version: " + latestPatchVersion);
@@ -125,8 +140,9 @@ public class Database {
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      */
     private static boolean executePatch(ScriptRunner scriptRunner, String patchId) throws DatabaseConnectionException {
-        InputStream is = Statistics.getInstance().getClass().getClassLoader().getResourceAsStream("patches/" + patchId + ".sql");
-        if (is == null) return false;
+        InputStream is;
+        try { is = new FileInputStream(Statistics.getInstance().getDataFolder() + "/patches/" + patchId + ".sql"); }
+        catch (FileNotFoundException e1) { return false; }
         Message.log(Level.FINE, "Executing database patch: " + patchId + ".sql");
         try {scriptRunner.runScript(new InputStreamReader(is)); }
         catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + patchId + ".sql", e); }
