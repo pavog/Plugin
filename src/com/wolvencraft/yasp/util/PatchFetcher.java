@@ -45,16 +45,19 @@ public class PatchFetcher {
      * Copies the patch files to the plugin directory
      */
     public PatchFetcher() {
-        Message.log("+-------] Fetching Patches [-------+");
-        Message.log("|        Copying 0.yasp.sql        |");
         patchDir = new File(Statistics.getInstance().getDataFolder(), "patches");
         if(!patchDir.exists()) patchDir.mkdir();
+        Message.log("+-------] Fetching Patches [-------+");
+        int j = 1;
+        while(Statistics.getInstance().getResource("patches/" + j + ".yasp.sql") != null) {
+            if(localFileExists(j + ".yasp.sql")) { j++; continue; }
+            Message.log("|        Copying " + j + ".yasp.sql        |");
+            Statistics.getInstance().saveResource("patches/" + j + ".yasp.sql", false);
+            j++;
+        }
         int i = 1;
         while(remoteFileExists(i + ".yasp.sql")) {
-            if(localFileExists(i + ".yasp.sql")) {
-                i++;
-                continue;
-            }
+            if(localFileExists(i + ".yasp.sql")) { i++; continue; }
             Message.log("|      Downloading " + i + ".yasp.sql      |");
             try { download(i + ".yasp.sql"); }
             catch (MalformedURLException e) {
