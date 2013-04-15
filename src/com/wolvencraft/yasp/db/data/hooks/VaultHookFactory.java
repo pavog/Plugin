@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.db.data.hooks;
 
+import java.util.List;
 import java.util.logging.Level;
 
 import net.milkbowl.vault.economy.Economy;
@@ -37,13 +38,15 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Hook.VaultTable;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.PatchFetcher;
+import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 
 /**
  * Hooks into Vault to track its statistics
  * @author bitWolfy
  *
  */
-public class VaultHookFactory implements PluginHookFactory {
+public class VaultHookFactory implements HookDataStore {
     
     private static VaultHookFactory instance;
     private static Economy economy;
@@ -72,8 +75,10 @@ public class VaultHookFactory implements PluginHookFactory {
     
     @Override
     public void onEnable() {
-        try { Database.executePatch("1.vault"); }
-        catch (DatabaseConnectionException ex) {
+        try {
+            PatchFetcher.fetch(PatchType.Vault);
+            Database.executePatch("1.vault");
+        } catch (DatabaseConnectionException ex) {
             Message.log(Level.SEVERE, ex.getMessage());
         }
     }
@@ -89,9 +94,8 @@ public class VaultHookFactory implements PluginHookFactory {
      * @author bitWolfy
      *
      */
-    public class VaultHookData implements PluginHook {
+    public class VaultPlayerData implements HookNormalData {
         
-        private int playerId;
         private String playerName;
         
         private String groupName;
@@ -103,17 +107,16 @@ public class VaultHookFactory implements PluginHookFactory {
          * @param player Player object
          * @param playerId Player ID
          */
-        public VaultHookData(Player player, int playerId) {
-            this.playerId = playerId;
+        public VaultPlayerData(Player player, int playerId) {
             this.playerName = player.getName();
             this.groupName = "";
             this.balance = 0;
             
-            fetchData();
+            fetchData(playerId);
         }
         
         @Override
-        public void fetchData() {
+        public void fetchData(int playerId) {
             Player player = Bukkit.getPlayerExact(playerName);
             if(player == null) return;
             
@@ -134,7 +137,7 @@ public class VaultHookFactory implements PluginHookFactory {
         }
         
         @Override
-        public boolean pushData() {
+        public boolean pushData(int playerId) {
             return Query.table(VaultTable.TableName)
                 .value(VaultTable.Balance, balance)
                 .value(VaultTable.GroupName, groupName)
@@ -149,7 +152,43 @@ public class VaultHookFactory implements PluginHookFactory {
      * @author bitWolfy
      *
      */
-    public class DetailedEconomyData {
-        //TODO everything
+    public class DetailedEconomyData implements HookDetailedData {
+
+        @Override
+        public boolean pushData(int playerId) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+        
+    }
+
+    @Override
+    public StoreType getType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<NormalData> getNormalData() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<DetailedData> getDetailedData() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void sync() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void dump() {
+        // TODO Auto-generated method stub
+        
     }
 }
