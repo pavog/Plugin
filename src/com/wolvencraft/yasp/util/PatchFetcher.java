@@ -47,19 +47,27 @@ public class PatchFetcher {
     public PatchFetcher() {
         patchDir = new File(Statistics.getInstance().getDataFolder(), "patches");
         if(!patchDir.exists()) patchDir.mkdir();
+        fetch(PatchType.YASPX);
+    }
+    
+    /**
+     * Fetches the patch of the specified type
+     * @param type Patch type
+     */
+    public static void fetch(PatchType type) {
         Message.log("+-------] Fetching Patches [-------+");
         int j = 1;
-        while(Statistics.getInstance().getResource("patches/" + j + ".yasp.sql") != null) {
-            if(localFileExists(j + ".yasp.sql")) { j++; continue; }
-            Message.log("|        Copying " + j + ".yasp.sql        |");
-            Statistics.getInstance().saveResource("patches/" + j + ".yasp.sql", false);
+        while(Statistics.getInstance().getResource("patches/" + j + "." + type.extension + ".sql") != null) {
+            if(localFileExists(j + "." + type.extension + ".sql")) { j++; continue; }
+            Message.log("|       Copying " + j + "." + type.extension + ".sql        |");
+            Statistics.getInstance().saveResource("patches/" + j + "." + type.extension + ".sql", false);
             j++;
         }
         int i = 1;
-        while(remoteFileExists(i + ".yasp.sql")) {
-            if(localFileExists(i + ".yasp.sql")) { i++; continue; }
-            Message.log("|      Downloading " + i + ".yasp.sql      |");
-            try { download(i + ".yasp.sql"); }
+        while(remoteFileExists(i + "." + type.extension + ".sql")) {
+            if(localFileExists(i + "." + type.extension + ".sql")) { i++; continue; }
+            Message.log("|      Downloading " + i + "." + type.extension + ".sql      |");
+            try { download(i + "." + type.extension + ".sql"); }
             catch (MalformedURLException e) {
                 Message.log("Downloaded " + i + " patch files");
                 break;
@@ -120,6 +128,26 @@ public class PatchFetcher {
             con.setRequestMethod("HEAD");
             return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
         } catch (Exception e) { return false;}
+    }
+    
+    /**
+     * Specifies the different types of patches and their extensions
+     * @author bitWolfy
+     *
+     */
+    private enum PatchType {
+        YASPX("yaspx"),
+        Vault("vault");
+        
+        private String extension;
+        
+        /**
+         * <b>Default constructor</b>
+         * @param extension Patch extension
+         */
+        PatchType(String extension) {
+            this.extension = extension;
+        }
     }
     
 }
