@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Hook.VaultTable;
-import com.wolvencraft.yasp.hooks.VaultHook;
+import com.wolvencraft.yasp.util.hooks.VaultHook;
 
 /**
  * Hooks into Vault to track its statistics

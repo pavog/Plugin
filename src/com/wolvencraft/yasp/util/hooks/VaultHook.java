@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.hooks;
+package com.wolvencraft.yasp.util.hooks;
 
 import java.util.logging.Level;
 
