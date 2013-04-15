@@ -1,5 +1,5 @@
-/*
- * RefreshTask.java
+/* 
+ * CachedData.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,27 +18,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util.tasks;
-
-import com.wolvencraft.yasp.session.OnlineSession;
+package com.wolvencraft.yasp.util.cache;
 
 /**
- * A simple asynchronous task that repeats itself every 20 ticks (1 second)
+ * Common interface for cached data stores
  * @author bitWolfy
  *
  */
-public class RefreshTask implements Runnable {
-    
-    /**
-     * <b>Default constructor</b>
-     */
-    public RefreshTask() { }
-    
-    @Override
-    public void run() {
-        for(OnlineSession session : DatabaseTask.getSessionList()) {
-            if(session.isOnline()) session.refreshScoreboard();
-        }
-    }
-    
-}
+public interface CachedData extends Runnable { }

@@ -37,7 +37,7 @@ import com.wolvencraft.yasp.util.Message;
  * @author bitWolfy
  *
  */
-public class PlayerCache implements Runnable {
+public class PlayerCache implements CachedData {
     
     private static Map<String, Integer> players;
     

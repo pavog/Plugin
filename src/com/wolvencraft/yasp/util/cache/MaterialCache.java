@@ -37,7 +37,7 @@ import com.wolvencraft.yasp.db.tables.Miscellaneous.MaterialsTable;
  * @author bitWolfy
  *
  */
-public class MaterialCache implements Runnable {
+public class MaterialCache implements CachedData {
     
     private static List<String> materials;
     

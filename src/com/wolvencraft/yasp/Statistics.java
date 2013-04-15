@@ -40,8 +40,7 @@ import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher;
 import com.wolvencraft.yasp.util.TPSTracker;
-import com.wolvencraft.yasp.util.cache.MaterialCache;
-import com.wolvencraft.yasp.util.cache.PlayerCache;
+import com.wolvencraft.yasp.util.cache.*;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 import com.wolvencraft.yasp.util.tasks.RefreshTask;
 import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
@@ -135,6 +134,7 @@ public class Statistics extends JavaPlugin {
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new PlayerCache(), 0L, (long)(30 * 60 * 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new MaterialCache(), 0L, (long)(24 * 3600 * 20));
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new EntityCache(), 0L, (long)(24 * 3600 * 20));
         
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseTask(), (ping / 2), ping);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTask(), 0L, 20L);

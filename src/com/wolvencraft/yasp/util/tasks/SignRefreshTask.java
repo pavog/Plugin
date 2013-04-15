@@ -1,5 +1,5 @@
 /*
- * StatsSignFactory.java
+ * SignRefreshTask.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors

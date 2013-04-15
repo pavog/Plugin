@@ -35,6 +35,7 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PVEKills;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.EntityCache;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
@@ -174,13 +175,13 @@ public class PVEData implements DataStore{
                     .column(TotalPVEKillsTable.PlayerKilled)
                     .column(TotalPVEKillsTable.CreatureKilled)
                     .condition(TotalPVEKillsTable.PlayerId, playerId)
-                    .condition(TotalPVEKillsTable.CreatureId, creatureType.getTypeId() + "")
+                    .condition(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
                     .condition(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
                     .select();
             if(result == null) {
                 Query.table(TotalPVEKillsTable.TableName)
                     .value(TotalPVEKillsTable.PlayerId, playerId)
-                    .value(TotalPVEKillsTable.CreatureId, creatureType.getTypeId())
+                    .value(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
                     .value(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
                     .value(TotalPVEKillsTable.PlayerKilled, playerDeaths)
                     .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
@@ -197,7 +198,7 @@ public class PVEData implements DataStore{
                     .value(TotalPVEKillsTable.PlayerKilled, playerDeaths)
                     .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
                     .condition(TotalPVEKillsTable.PlayerId, playerId)
-                    .condition(TotalPVEKillsTable.CreatureId, creatureType.getTypeId() + "")
+                    .condition(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
                     .condition(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
                     .update();
             if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
@@ -241,11 +242,8 @@ public class PVEData implements DataStore{
     public class DetailedPVEEntry implements DetailedData {
         
         private EntityType creatureType;
-        
         private ItemStack weapon;
-        
         private Location location;
-        
         private boolean playerKilled;
         private long timestamp;
         
@@ -283,7 +281,7 @@ public class PVEData implements DataStore{
         public boolean pushData(int playerId) {
             return Query.table(PVEKills.TableName)
                     .value(PVEKills.PlayerId, playerId)
-                    .value(PVEKills.CreatureId, creatureType.getTypeId())
+                    .value(PVEKills.CreatureId, EntityCache.parse(creatureType))
                     .value(PVEKills.PlayerKilled, playerKilled)
                     .value(PVEKills.Material, MaterialCache.parse(weapon))
                     .value(PVEKills.World, location.getWorld().getName())
