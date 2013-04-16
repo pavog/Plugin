@@ -22,7 +22,6 @@ package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,7 +35,6 @@ import com.wolvencraft.yasp.db.tables.Detailed.DroppedItems;
 import com.wolvencraft.yasp.db.tables.Detailed.PickedupItems;
 import com.wolvencraft.yasp.db.tables.Detailed.UsedItems;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
-import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
@@ -216,17 +214,16 @@ public class ItemsData implements DataStore {
          * @param stack Item stack
          */
         public TotalItemsEntry(int playerId, ItemStack stack) {
-            Message.debug(Level.FINE, "Creating a new instance of TotalItemsEntry");
-            this.stack = stack;
+            this.stack = stack.clone();
             this.stack.setAmount(1);
             
-            this.dropped = 0;
-            this.pickedUp = 0;
-            this.used = 0;
-            this.crafted = 0;
-            this.broken = 0;
-            this.smelted = 0;
-            this.enchanted = 0;
+            dropped = 0;
+            pickedUp = 0;
+            used = 0;
+            crafted = 0;
+            broken = 0;
+            smelted = 0;
+            enchanted = 0;
             
             fetchData(playerId);
         }
@@ -394,12 +391,10 @@ public class ItemsData implements DataStore {
          * @param itemStack
          */
         public DetailedDroppedItemsEntry(Location location, ItemStack stack) {
-            Message.debug(Level.FINE, "Creating a new instance of DetailedDroppedItemsEntry");
-            this.stack = stack;
+            this.stack = stack.clone();
             this.stack.setAmount(1);
-            
-            this.location = location;
-            this.timestamp = Util.getTimestamp();
+            this.location = location.clone();
+            timestamp = Util.getTimestamp();
         }
         
         @Override
@@ -437,12 +432,10 @@ public class ItemsData implements DataStore {
          * @param stack Item stack
          */
         public DetailedPickedupItemsEntry(Location location, ItemStack stack) {
-            Message.debug(Level.FINE, "Creating a new instance of DetailedPickedupItemsEntry");
-            this.stack = stack;
+            this.stack = stack.clone();
             this.stack.setAmount(1);
-            
-            this.location = location;
-            this.timestamp = Util.getTimestamp();
+            this.location = location.clone();
+            timestamp = Util.getTimestamp();
         }
         
         @Override
@@ -480,12 +473,10 @@ public class ItemsData implements DataStore {
          * @param itemStack Item stack
          */
         public DetailedUsedItemsEntry(Location location, ItemStack stack) {
-            Message.debug(Level.FINE, "Creating a new instance of DetailedUsedItemsEntry");
-            this.stack = stack;
+            this.stack = stack.clone();
             this.stack.setAmount(1);
-            
-            this.location = location;
-            this.timestamp = Util.getTimestamp();
+            this.location = location.clone();
+            timestamp = Util.getTimestamp();
         }
         
         @Override

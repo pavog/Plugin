@@ -143,7 +143,6 @@ public class BlocksData implements DataStore {
     public class TotalBlocksEntry implements NormalData {
         
         private BlockState block;
-        
         private int broken;
         private int placed;
 
@@ -154,9 +153,8 @@ public class BlocksData implements DataStore {
          */
         public TotalBlocksEntry(int playerId, BlockState block) {
             this.block = block;
-            
-            this.broken = 0;
-            this.placed = 0;
+            broken = 0;
+            placed = 0;
             
             fetchData(playerId);
         }
@@ -255,9 +253,8 @@ public class BlocksData implements DataStore {
          */
         public DetailedDestroyerdBlocksEntry(Location location, BlockState block) {
             this.block = block;
-            
-            this.location = location;
-            this.timestamp = Util.getTimestamp();
+            this.location = location.clone();
+            timestamp = Util.getTimestamp();
         }
 
         @Override
@@ -296,9 +293,8 @@ public class BlocksData implements DataStore {
          */
         public DetailedPlacedBlocksEntry(Location location, BlockState block) {
             this.block = block;
-            
-            this.location = location;
-            this.timestamp = Util.getTimestamp();
+            this.location = location.clone();
+            timestamp = Util.getTimestamp();
         }
 
         @Override

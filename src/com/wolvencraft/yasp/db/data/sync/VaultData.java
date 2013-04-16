@@ -84,8 +84,8 @@ public class VaultData implements DataStore {
          */
         public VaultPlayerData(Player player, int playerId) {
             this.playerName = player.getName();
-            this.groupName = "";
-            this.balance = 0;
+            groupName = "";
+            balance = 0;
             
             fetchData(playerId);
         }

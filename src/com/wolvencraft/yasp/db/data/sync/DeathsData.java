@@ -134,7 +134,7 @@ public class DeathsData implements DataStore {
         
         public TotalDeathsEntry(int playerId, DamageCause cause) {
             this.cause = cause;
-            this.times = 0;
+            times = 0;
             
             fetchData(playerId);
         }
@@ -185,7 +185,7 @@ public class DeathsData implements DataStore {
          * @return b>true</b> if the data matches, <b>false</b> otherwise.
          */
         public boolean equals(DamageCause cause) {
-            return this.cause.equals(cause);
+            return cause.equals(this.cause);
         }
         
         /**
@@ -214,6 +214,10 @@ public class DeathsData implements DataStore {
      */
     public class DetailedDeathEntry implements DetailedData {
         
+        private String deathCause;
+        private Location location;
+        private long timestamp;
+        
         /**
          * <b>Default constructor</b><br />
          * Creates a new DetailedDeathPlayersEntry based on the data provided
@@ -222,13 +226,9 @@ public class DeathsData implements DataStore {
          */
         public DetailedDeathEntry(Location location, DamageCause deathCause) {
             this.deathCause = deathCause.name();
-            this.location = location;
-            this.timestamp = Util.getTimestamp();
+            this.location = location.clone();
+            timestamp = Util.getTimestamp();
         }
-        
-        private String deathCause;
-        private Location location;
-        private long timestamp;
 
         @Override
         public boolean pushData(int playerId) {

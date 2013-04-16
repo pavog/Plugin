@@ -135,9 +135,7 @@ public class PVPData implements DataStore {
     public class TotalPVPEntry implements NormalData {
         
         private int victimId;
-        
         private ItemStack weapon;
-        
         private int times;
         
         /**
@@ -151,7 +149,6 @@ public class PVPData implements DataStore {
             this.victimId = victimId;
             this.weapon = weapon.clone();
             this.weapon.setAmount(1);
-            
             times = 0;
             
             fetchData(playerId);
@@ -231,9 +228,7 @@ public class PVPData implements DataStore {
     public class DetailedPVPEntry implements DetailedData {
         
         private int victimId;
-        
         private ItemStack weapon;
-        
         private Location location;
         private long timestamp;
         
@@ -248,9 +243,8 @@ public class PVPData implements DataStore {
             this.victimId = victimId;
             this.weapon = weapon.clone();
             this.weapon.setAmount(1);
-            
-            this.location = location;
-            this.timestamp = Util.getTimestamp();
+            this.location = location.clone();
+            timestamp = Util.getTimestamp();
         }
         
         @Override

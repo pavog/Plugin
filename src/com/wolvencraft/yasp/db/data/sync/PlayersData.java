@@ -158,13 +158,11 @@ public class PlayersData {
         
         private String username;
         private long lastSync;
-        
         private long totalPlaytime;
         
         public Players (int playerId, Player player) {
-            this.username = player.getName();
-            this.lastSync = Util.getTimestamp();
-            
+            username = player.getName();
+            lastSync = Util.getTimestamp();
             long firstLogin = lastSync;
             int logins = 0;
             
@@ -358,9 +356,10 @@ public class PlayersData {
          * @param player Player object
          */
         public MiscInfoPlayers(int playerId, Player player) {
-            this.playerName = player.getPlayerListName();
+            playerName = player.getPlayerListName();
             
-            this.values = new HashMap<DBTable, Object>();
+            values = new HashMap<DBTable, Object>();
+            
             if(player.isOp()) values.put(MiscInfoPlayersTable.IsOp, 1);
             else values.put(MiscInfoPlayersTable.IsOp, 0);
             if(player.isBanned()) values.put(MiscInfoPlayersTable.IsBanned, 1);
@@ -620,9 +619,9 @@ public class PlayersData {
          * @param isLogin <b>true</b> if the player has logged in, <b>false</b> if he logged off
          */
         public DetailedLogPlayersEntry(Location location, boolean isLogin) {
-            this.time = Util.getTimestamp();
+            time = Util.getTimestamp();
             this.isLogin = isLogin;
-            this.location = location;
+            this.location = location.clone();
         }
          
         @Override

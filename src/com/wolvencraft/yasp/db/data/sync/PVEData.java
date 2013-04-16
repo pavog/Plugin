@@ -146,9 +146,7 @@ public class PVEData implements DataStore{
     public class TotalPVEEntry implements NormalData {
         
         private EntityType creatureType;
-        
         private ItemStack weapon;
-        
         private int playerDeaths;
         private int creatureDeaths;
         
@@ -162,9 +160,8 @@ public class PVEData implements DataStore{
         public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
             this.weapon = weapon.clone();
             this.weapon.setAmount(1);
-            
-            this.playerDeaths = 0;
-            this.creatureDeaths = 0;
+            playerDeaths = 0;
+            creatureDeaths = 0;
             
             fetchData(playerId);
         }
@@ -269,9 +266,9 @@ public class PVEData implements DataStore{
             this.creatureType = creatureType;
             this.weapon = weapon.clone();
             this.weapon.setAmount(1);
-            this.location = location;
-            this.playerKilled = false;
-            this.timestamp = Util.getTimestamp();
+            this.location = location.clone();
+            playerKilled = false;
+            timestamp = Util.getTimestamp();
         }
         
         /**
@@ -282,10 +279,10 @@ public class PVEData implements DataStore{
          */
         public DetailedPVEEntry (EntityType creatureType, Location location) {
             this.creatureType = creatureType;
-            this.weapon = new ItemStack(Material.AIR, 1);
-            this.location = location;
-            this.playerKilled = true;
-            this.timestamp = Util.getTimestamp();
+            weapon = new ItemStack(Material.AIR, 1);
+            this.location = location.clone();
+            playerKilled = true;
+            timestamp = Util.getTimestamp();
         }
         
         @Override

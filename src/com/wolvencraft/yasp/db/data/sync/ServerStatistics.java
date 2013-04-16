@@ -40,6 +40,33 @@ import com.wolvencraft.yasp.util.tasks.TickTask;
  */
 public class ServerStatistics {
     
+    private long lastSyncTime;
+    
+    private long firstStartup;
+    private long lastStartup;
+    private long currentUptime;
+    private long totalUptime;
+    private long lastShutdown;
+
+    private long totalMemory;
+    private long freeMemory;
+    private int ticksPerSecond;
+
+    private String serverIP;
+    private int serverPort;
+    private String serverMOTD;
+    private String bukkitVersion;
+    private int plugins;
+
+    private long serverTime;
+    private boolean weather;
+    private int weatherDuration;
+    
+    private int maxPlayersOnline;
+    private long maxPlayersOnlineTime;
+    
+    private int maxPlayersAllowed;
+    
     /**
      * <b>Default constructor</b><br />
      * Creates an empty data store to save the statistics until database synchronization.
@@ -88,33 +115,6 @@ public class ServerStatistics {
                 
         pushStaticData();
     }
-    
-    private long lastSyncTime;
-    
-    private long firstStartup;
-    private long lastStartup;
-    private long currentUptime;
-    private long totalUptime;
-    private long lastShutdown;
-
-    private long totalMemory;
-    private long freeMemory;
-    private int ticksPerSecond;
-
-    private String serverIP;
-    private int serverPort;
-    private String serverMOTD;
-    private String bukkitVersion;
-    private int plugins;
-
-    private long serverTime;
-    private boolean weather;
-    private int weatherDuration;
-    
-    private int maxPlayersOnline;
-    private long maxPlayersOnlineTime;
-    
-    private int maxPlayersAllowed;
     
     /**
      * Performs a database operation to push the local data to the remote database.
