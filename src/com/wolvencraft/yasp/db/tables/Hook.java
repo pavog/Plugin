@@ -55,7 +55,8 @@ public class Hook {
     public enum WorldGuardTable implements DBTable {
         TableName("hook_worldguard"),
         PlayerId("player_id"),
-        RegionName("region_name");
+        RegionName("regions"),
+        RegionFlags("flags");
         
         WorldGuardTable (String columnName) { this.columnName = columnName; }
         
