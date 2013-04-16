@@ -30,6 +30,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 
 import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
@@ -105,6 +106,7 @@ public class VaultHook {
             Database.executePatch("1.vault");
         } catch (DatabaseConnectionException ex) {
             Message.log(Level.SEVERE, ex.getMessage());
+            if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();
         }
     }
     

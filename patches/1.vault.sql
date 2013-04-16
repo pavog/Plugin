@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_vaults` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_vaults` (
   `player_id` INT NOT NULL ,
-  `group` TEXT NOT NULL DEFAULT '' ,
+  `group` TEXT NULL ,
   `balance` FLOAT NOT NULL DEFAULT 0.0 ,
   PRIMARY KEY (`player_id`) ,
   CONSTRAINT `fk_player_id20`
