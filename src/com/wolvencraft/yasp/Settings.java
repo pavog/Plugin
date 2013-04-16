@@ -58,6 +58,7 @@ public class Settings {
         DBConnect       ("jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
         LogPrefix       ("log-prefix", true),
         FetchPatches    ("fetch-patches", true),
+        PatchServer     ("http://dl.wolvencraft.com/raw/Statistics/"),
         Standalone      (true);
         
         Object entry;

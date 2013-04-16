@@ -29,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.Settings.LocalConfiguration;
 
 /**
  * First copies the patch files from jar to the plugin directory. Then checks the download server for updates.
@@ -37,7 +38,6 @@ import com.wolvencraft.yasp.Statistics;
  */
 public class PatchFetcher {
     
-    private static String downloadServer = "http://dl.wolvencraft.com/raw/Statistics/";
     private static File patchDir;
     
     /**
@@ -47,7 +47,7 @@ public class PatchFetcher {
     public PatchFetcher() {
         patchDir = new File(Statistics.getInstance().getDataFolder(), "patches");
         if(!patchDir.exists()) patchDir.mkdir();
-        fetch(PatchType.YASPX);
+        fetch(PatchType.YASP);
     }
     
     /**
@@ -90,7 +90,7 @@ public class PatchFetcher {
      * @throws IOException Thrown if an error occurred while downloading the file
      */
     private static void download(String filename) throws MalformedURLException, IOException {
-        String urlString = downloadServer + filename;
+        String urlString = LocalConfiguration.PatchServer.asString() + filename;
         BufferedInputStream inputStream = null;
         FileOutputStream fileOut = null;
         try {
@@ -123,7 +123,7 @@ public class PatchFetcher {
      * @return <b>true</b> if the file exists, <b>false</b> otherwise
      */
     private static boolean remoteFileExists(String filename) {
-        filename = downloadServer + filename;
+        filename = LocalConfiguration.PatchServer.asString() + filename;
         try {
             HttpURLConnection.setFollowRedirects(false);
             HttpURLConnection con = (HttpURLConnection) new URL(filename).openConnection();
@@ -138,7 +138,7 @@ public class PatchFetcher {
      *
      */
     public enum PatchType {
-        YASPX("yasp"),
+        YASP("yasp"),
         Vault("vault"),
         WorldGuard("wg"),
         Factions("factions");
