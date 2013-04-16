@@ -58,7 +58,6 @@ public class Settings {
         DBConnect       ("jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
         LogPrefix       ("log-prefix", true),
         FetchPatches    ("fetch-patches", true),
-        @Deprecated
         Standalone      (true);
         
         Object entry;
