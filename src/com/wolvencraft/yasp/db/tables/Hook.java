@@ -34,9 +34,9 @@ public class Hook {
      *
      */
     public enum VaultTable implements DBTable {
-        TableName("hook_vault"),
+        TableName("vaults"),
         PlayerId("player_id"),
-        GroupName("group_name"),
+        GroupName("group"),
         Balance("balance");
         
         VaultTable (String columnName) { this.columnName = columnName; }
@@ -53,7 +53,7 @@ public class Hook {
      *
      */
     public enum WorldGuardTable implements DBTable {
-        TableName("hook_worldguard"),
+        TableName("wg_regions"),
         PlayerId("player_id"),
         RegionName("regions"),
         RegionFlags("flags");
