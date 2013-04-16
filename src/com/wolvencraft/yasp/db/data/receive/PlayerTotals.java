@@ -69,10 +69,9 @@ public class PlayerTotals {
         snacksEaten = 0;
         
         pvpKills = 0;
-        pvpDeaths = 0;
-        kdr = 1;
         pveKills = 0;
-        otherKills = 0;
+        deaths = 0;
+        kdr = 1;
         
         fetchData();
     }
@@ -99,10 +98,9 @@ public class PlayerTotals {
     private int snacksEaten;
     
     private int pvpKills;
-    private int pvpDeaths;
-    private double kdr;
     private int pveKills;
-    private int otherKills;
+    private int deaths;
+    private double kdr;
     
     /**
      * Fetches the data from the remote database.<br />
@@ -139,12 +137,13 @@ public class PlayerTotals {
                 snacksEaten = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Used).condition(TotalItemsTable.PlayerId, playerId).sum();
                 
                 pvpKills = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.PlayerId, playerId).sum();
-                pvpDeaths = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.VictimId, playerId).sum();
-                if(pvpDeaths != 0) kdr = (double) Math.round((pvpKills / pvpDeaths) * 100000) / 100000;
-                else kdr = pvpKills;
-                
                 pveKills = (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.CreatureKilled).condition(TotalPVEKillsTable.PlayerId, playerId).sum();
-                otherKills = (int) Query.table(TotalDeathPlayersTable.TableName).column(TotalDeathPlayersTable.Times).condition(TotalDeathPlayersTable.PlayerId, playerId).sum();
+                int pvpDeaths = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.VictimId, playerId).sum();
+                int otherDeaths = (int) Query.table(TotalDeathPlayersTable.TableName).column(TotalDeathPlayersTable.Times).condition(TotalDeathPlayersTable.PlayerId, playerId).sum();
+                
+                deaths = pvpDeaths + otherDeaths;
+                if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
+                else kdr = pvpKills;
             }
             
         });
@@ -155,7 +154,7 @@ public class PlayerTotals {
      * @return Map of values
      */
     public Map<String, Object> getValues() {
-        if(pvpDeaths != 0) kdr = (double) Math.round((pvpKills / pvpDeaths) * 100000) / 100000;
+        if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
         else kdr = pvpKills;
         currentSession = Util.getTimestamp() - sessionStart;
         
@@ -179,10 +178,9 @@ public class PlayerTotals {
         values.put("snacksEaten", snacksEaten);
         
         values.put("pvpKills", pvpKills);
-        values.put("pvpDeaths", pvpDeaths);
-        values.put("kdr", kdr);
         values.put("pveKills", pveKills);
-        values.put("otherKills", otherKills);
+        values.put("deaths", deaths);
+        values.put("kdr", kdr);
         return values;
     }
     
@@ -236,16 +234,12 @@ public class PlayerTotals {
         pvpKills++;
     }
     
-    public void pvpDeath() {
-        pvpDeaths++;
+    public void death() {
+        deaths++;
     }
     
     public void pveKill() {
         pveKills++;
-    }
-    
-    public void otherDeath() {
-        otherKills++;
     }
     
 }

@@ -47,9 +47,8 @@ public class ScoreboardCommand implements BaseCommand {
         }
         
         Player player = (Player) CommandManager.getSender();
-        DatabaseTask.getSession(player).toggleScoreboard();
-        
-        Message.sendFormattedSuccess("Displaying a scoreboard");
+        if(DatabaseTask.getSession(player).toggleScoreboard()) Message.sendFormattedSuccess("Displaying a scoreboard");
+        else Message.sendFormattedSuccess("Scoreboard disabled");
         return true;
     }
 

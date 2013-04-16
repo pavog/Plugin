@@ -224,7 +224,7 @@ public class OnlineSession implements PlayerSession {
         ((PVPData) getData(DataStoreType.PVP)).playerKilledPlayer(victim, weapon);
         playersData.getMiscData().killed(victim);
         playerTotals.pvpKill();
-        DatabaseTask.getSession(victim).getTotals().pvpDeath();
+        DatabaseTask.getSession(victim).getTotals().death();
     }
     
     /**
@@ -245,7 +245,6 @@ public class OnlineSession implements PlayerSession {
     public void killedByCreature(Entity killer, ItemStack weapon) {
         ((PVEData) getData(DataStoreType.PVE)).creatureKilledPlayer(killer, weapon);
         died();
-        playerTotals.otherDeath();
     }
     
     /**
@@ -256,7 +255,6 @@ public class OnlineSession implements PlayerSession {
     public void killedByEnvironment(Location location, DamageCause cause) {
         ((DeathsData) getData(DataStoreType.Deaths)).playerDied(location, cause);
         died();
-        playerTotals.otherDeath();
     }
     
     /**
@@ -265,6 +263,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void died() {
         playersData.getMiscData().died();
+        playerTotals.death();
     }
     
     /**
@@ -353,10 +352,15 @@ public class OnlineSession implements PlayerSession {
         ((ItemsData) getData(DataStoreType.Items)).itemEnchant(location, itemStack);
     }
     
-    public void toggleScoreboard() {
+    /**
+     * Toggles the scoreboard state
+     * @return <b>true</b> if the scoreboard has been turned on, <b>false</b> if it is now off
+     */
+    public boolean toggleScoreboard() {
         if(scoreboard != null) {
+            clearScoreboard();
             scoreboard = null;
-            return;
+            return false;
         }
         
         ScoreboardManager manager = Bukkit.getScoreboardManager();
@@ -367,7 +371,7 @@ public class OnlineSession implements PlayerSession {
         Objective stats = scoreboard.registerNewObjective("stats", "dummy");
         stats.setDisplaySlot(DisplaySlot.SIDEBAR);
         stats.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Statistics");        
-        
+        return true;
     }
     
     /**
@@ -380,14 +384,34 @@ public class OnlineSession implements PlayerSession {
         
         Objective stats = scoreboard.getObjective("stats");
         
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "PVP Kills"))
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "PVP Kills"))
              .setScore((Integer) totals.get("pvpKills"));
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "PVP Deaths"))
-             .setScore((Integer) totals.get("pvpDeaths"));
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "PVE Kills"))
+             .setScore((Integer) totals.get("pveKills"));
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Deaths"))
+             .setScore((Integer) totals.get("deaths"));
         
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Broken"))
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.AQUA + "Blocks Broken"))
              .setScore((Integer) totals.get("blocksBroken"));
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Placed"))
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.AQUA + "Blocks Placed"))
              .setScore((Integer) totals.get("blocksPlaced"));
+
+        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Travelled"))
+             .setScore(((Double) totals.get("distTotal")).intValue() / 1000);
+    }
+    
+    /**
+     * Clears the scoreboard from all content
+     */
+    public void clearScoreboard() {
+        if(scoreboard == null) return;
+        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.RED + "PVP Kills"));
+        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.RED + "PVE Kills"));
+        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.RED + "Deaths"));
+        
+        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.AQUA + "Blocks Broken"));
+        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.AQUA + "Blocks Placed"));
+
+        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Travelled"));
     }
 }
