@@ -45,8 +45,8 @@ import com.wolvencraft.yasp.db.tables.Normal.PlayersInv;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.Util;
-import com.wolvencraft.yasp.util.serializable.ItemStackSerializable;
-import com.wolvencraft.yasp.util.serializable.PotionEffectSerializable;
+import com.wolvencraft.yasp.util.serializable.inventory.ItemStackSerializable;
+import com.wolvencraft.yasp.util.serializable.inventory.PotionEffectSerializable;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**

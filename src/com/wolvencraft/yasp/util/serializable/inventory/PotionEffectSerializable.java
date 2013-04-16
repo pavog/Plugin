@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util.serializable;
+package com.wolvencraft.yasp.util.serializable.inventory;
 
 import java.util.ArrayList;
 import java.util.Collection;

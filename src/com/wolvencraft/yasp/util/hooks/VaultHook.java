@@ -68,11 +68,22 @@ public class VaultHook {
     
     /**
      * <b>Returns the primary group for the specified player</b>
+     * @deprecated Use <code>getGroup(player, world);</code> instead
      * @param player Player object
      * @return Player's group
      */
     public static String getGroup(Player player) {
         return permissions.getPrimaryGroup(player);
+    }
+    
+    /**
+     * <b>Returns the primary group for the specified player in the world</b>
+     * @param player Player name
+     * @param world World name
+     * @return Player's group
+     */
+    public static String getGroup(String player, String world) {
+        return permissions.getPrimaryGroup(world, player);
     }
     
     /**

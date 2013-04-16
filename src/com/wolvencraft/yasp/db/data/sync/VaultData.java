@@ -22,13 +22,13 @@ package com.wolvencraft.yasp.db.data.sync;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Hook.VaultTable;
 import com.wolvencraft.yasp.util.hooks.VaultHook;
+import com.wolvencraft.yasp.util.serializable.vault.GroupSerializable;
 
 /**
  * Hooks into Vault to track its statistics
@@ -73,7 +73,7 @@ public class VaultData implements DataStore {
         
         private String playerName;
         
-        private String groupName;
+        private String groups;
         private double balance;
         
         /**
@@ -84,7 +84,7 @@ public class VaultData implements DataStore {
          */
         public VaultPlayerData(Player player, int playerId) {
             this.playerName = player.getName();
-            groupName = "";
+            groups = "";
             balance = 0;
             
             fetchData(playerId);
@@ -97,10 +97,7 @@ public class VaultData implements DataStore {
                 return;
             }
             
-            Player player = Bukkit.getPlayerExact(playerName);
-            if(player == null) return;
-            
-            groupName = VaultHook.getGroup(player);
+            groups = GroupSerializable.serialize(playerName);
             balance = VaultHook.getBalance(playerName);
             
             if(Query.table(VaultTable.TableName)
@@ -110,7 +107,7 @@ public class VaultData implements DataStore {
             Query.table(VaultTable.TableName)
                  .value(VaultTable.PlayerId, playerId)
                  .value(VaultTable.Balance, balance)
-                 .value(VaultTable.GroupName, groupName)
+                 .value(VaultTable.GroupName, groups)
                  .insert();
         }
         
@@ -118,7 +115,7 @@ public class VaultData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(VaultTable.TableName)
                 .value(VaultTable.Balance, balance)
-                .value(VaultTable.GroupName, groupName)
+                .value(VaultTable.GroupName, groups)
                 .condition(VaultTable.PlayerId, playerId)
                 .update();
         }

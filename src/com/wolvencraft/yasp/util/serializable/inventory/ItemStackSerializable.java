@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util.serializable;
+package com.wolvencraft.yasp.util.serializable.inventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +40,10 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
 @SuppressWarnings("unused")
 public class ItemStackSerializable {
     
-    private String material_id;   // Material ID (with metadata)
-    private double durability;    // Current durability / total durability
-    private int amount;           // Amount
-    private List<EnchantmentSerializable> enchantments;  // Json array of enchantments
+    private String material_id;
+    private double durability;
+    private int amount;
+    private List<EnchantmentSerializable> enchantments;
     
     /**
      * <b>Default constructor</b><br />
