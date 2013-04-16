@@ -59,14 +59,16 @@ public class PatchFetcher {
         int j = 1;
         while(Statistics.getInstance().getResource("patches/" + j + "." + type.extension + ".sql") != null) {
             if(localFileExists(j + "." + type.extension + ".sql")) { j++; continue; }
-            Message.log("|       Copying " + j + "." + type.extension + ".sql        |");
+            Message.log("|" + Message.centerString("Copying " + j + "." + type.extension + ".sql", 34) + "|");
+//            Message.log("|       Copying " + j + "." + type.extension + ".sql        |");
             Statistics.getInstance().saveResource("patches/" + j + "." + type.extension + ".sql", false);
             j++;
         }
         int i = 1;
         while(remoteFileExists(i + "." + type.extension + ".sql")) {
             if(localFileExists(i + "." + type.extension + ".sql")) { i++; continue; }
-            Message.log("|      Downloading " + i + "." + type.extension + ".sql      |");
+            Message.log("|" + Message.centerString("Downloading " + i + "." + type.extension + ".sql", 34) + "|");
+//            Message.log("|      Downloading " + i + "." + type.extension + ".sql      |");
             try { download(i + "." + type.extension + ".sql"); }
             catch (MalformedURLException e) {
                 Message.log("Downloaded " + i + " patch files");
@@ -136,8 +138,10 @@ public class PatchFetcher {
      *
      */
     public enum PatchType {
-        YASPX("yaspx"),
-        Vault("vault");
+        YASPX("yasp"),
+        Vault("vault"),
+        WorldGuard("wg"),
+        Factions("factions");
         
         private String extension;
         

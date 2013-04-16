@@ -206,4 +206,16 @@ public class Message {
         for(int i = 0; i < padding; i++) { spaces = spaces + " "; }
         sender.sendMessage(spaces + "-=[ " + ChatColor.BLUE + str + ChatColor.WHITE + " ]=-");
     }
+    
+    /**
+     * Centers the string to take up the specified number of characters
+     * @param str String to center
+     * @param length New String length
+     * @return New String
+     */
+    public static String centerString(String str, int length) {
+        while(str.length() < length) { str = " " + str + " "; }
+        if(str.length() > length) str = str.substring(1);
+        return str;
+    }
 }
