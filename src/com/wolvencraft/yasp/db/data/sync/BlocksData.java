@@ -163,6 +163,11 @@ public class BlocksData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
+            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+                clearData(playerId);
+                return;
+            }
+            
             QueryResult result = Query.table(TotalBlocksTable.TableName)
                     .column(TotalBlocksTable.Destroyed)
                     .column(TotalBlocksTable.Placed)
@@ -190,9 +195,15 @@ public class BlocksData implements DataStore {
                 .value(TotalBlocksTable.Placed, placed)
                 .condition(TotalBlocksTable.PlayerId, playerId)
                 .condition(TotalBlocksTable.Material, MaterialCache.parse(block))
-                .update();
-            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
+                .update(Settings.LocalConfiguration.Standalone.asBoolean());
+            fetchData(playerId);
             return result;
+        }
+        
+        @Override
+        public void clearData(int playerId) {
+            broken = 0;
+            placed = 0;
         }
         
         /**

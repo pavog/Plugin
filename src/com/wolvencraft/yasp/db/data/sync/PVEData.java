@@ -160,7 +160,7 @@ public class PVEData implements DataStore{
          * @param weapon Weapon used
          */
         public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
-            this.weapon = weapon;
+            this.weapon = weapon.clone();
             this.weapon.setAmount(1);
             
             this.playerDeaths = 0;
@@ -171,6 +171,11 @@ public class PVEData implements DataStore{
         
         @Override
         public void fetchData(int playerId) {
+            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+                clearData(playerId);
+                return;
+            }
+            
             QueryResult result = Query.table(TotalPVEKillsTable.TableName)
                     .column(TotalPVEKillsTable.PlayerKilled)
                     .column(TotalPVEKillsTable.CreatureKilled)
@@ -200,9 +205,15 @@ public class PVEData implements DataStore{
                     .condition(TotalPVEKillsTable.PlayerId, playerId)
                     .condition(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
                     .condition(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
-                    .update();
-            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
+                    .update(Settings.LocalConfiguration.Standalone.asBoolean());
+            fetchData(playerId);
             return result;
+        }
+        
+        @Override
+        public void clearData(int playerId) {
+            playerDeaths = 0;
+            creatureDeaths = 0;
         }
 
         /**
@@ -256,7 +267,7 @@ public class PVEData implements DataStore{
          */
         public DetailedPVEEntry (EntityType creatureType, Location location, ItemStack weapon) {
             this.creatureType = creatureType;
-            this.weapon = weapon;
+            this.weapon = weapon.clone();
             this.weapon.setAmount(1);
             this.location = location;
             this.playerKilled = false;

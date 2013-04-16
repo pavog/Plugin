@@ -149,16 +149,21 @@ public class PVPData implements DataStore {
          */
         public TotalPVPEntry(int playerId, int victimId, ItemStack weapon) {
             this.victimId = victimId;
-            this.weapon = weapon;
+            this.weapon = weapon.clone();
             this.weapon.setAmount(1);
             
-            this.times = 0;
+            times = 0;
             
             fetchData(playerId);
         }
         
         @Override
         public void fetchData(int killerId) {
+            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+                clearData(playerId);
+                return;
+            }
+            
             QueryResult result = Query.table(TotalPVPKillsTable.TableName)
                     .column(TotalPVPKillsTable.Times)
                     .condition(TotalPVPKillsTable.PlayerId, killerId)
@@ -184,9 +189,14 @@ public class PVPData implements DataStore {
                     .condition(TotalPVPKillsTable.PlayerId, killerId)
                     .condition(TotalPVPKillsTable.VictimId, victimId)
                     .condition(TotalPVPKillsTable.Material, MaterialCache.parse(weapon))
-                    .update();
-            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(killerId);
+                    .update(Settings.LocalConfiguration.Standalone.asBoolean());
+            fetchData(killerId);
             return result;
+        }
+        
+        @Override
+        public void clearData(int playerId) {
+            times = 0;
         }
         
         /**
@@ -236,7 +246,7 @@ public class PVPData implements DataStore {
          */
         public DetailedPVPEntry(Location location, int victimId, ItemStack weapon) {
             this.victimId = victimId;
-            this.weapon = weapon;
+            this.weapon = weapon.clone();
             this.weapon.setAmount(1);
             
             this.location = location;

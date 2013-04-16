@@ -81,6 +81,12 @@ public interface DataStore {
          * @return <b>true</b> if the insertion was successful, <b>false</b> otherwise
          */
         public boolean pushData(int playerId);
+        
+        /**
+         * Resets the values of the data store to the default ones
+         * @param playerId Player ID
+         */
+        public void clearData(int playerId);
     }
     
     

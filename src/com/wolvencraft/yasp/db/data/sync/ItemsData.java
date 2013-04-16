@@ -233,6 +233,11 @@ public class ItemsData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
+            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+                clearData(playerId);
+                return;
+            }
+            
             QueryResult result = Query.table(TotalItemsTable.TableName)
                     .column(TotalItemsTable.Dropped)
                     .column(TotalItemsTable.PickedUp)
@@ -280,9 +285,20 @@ public class ItemsData implements DataStore {
                     .value(TotalItemsTable.Enchanted, enchanted)
                     .condition(TotalItemsTable.PlayerId, playerId)
                     .condition(TotalItemsTable.Material, MaterialCache.parse(stack))
-                    .update();
-            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
+                    .update(Settings.LocalConfiguration.Standalone.asBoolean());
+            fetchData(playerId);
             return result;
+        }
+        
+        @Override
+        public void clearData(int playerId) {
+            dropped = 0;
+            pickedUp = 0;
+            used = 0;
+            crafted = 0;
+            broken = 0;
+            smelted = 0;
+            enchanted = 0;
         }
         
         /**

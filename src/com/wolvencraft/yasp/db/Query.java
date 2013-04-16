@@ -296,22 +296,6 @@ public class Query {
         }
         
         /**
-         * Bundles up the altered columns as an array
-         * @return Array of columns
-         */
-        private String[] getColumnsFromValues() {
-            List<String> columns = new ArrayList<String>();
-            Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
-                columns.add(pairs.getKey().toString());
-            }
-            String[] colArr = new String[columns.size()];
-            colArr = columns.toArray(colArr);
-            return colArr;
-        }
-        
-        /**
          * Builds and runs the SELECT query that returns the first result found
          * @return <b>QueryResult</b> the first result found or <b>null</b> if there isn't one.
          */
@@ -473,14 +457,34 @@ public class Query {
         }
         
         /**
-         * Checks if the row that is up for updating exists. If it does not, it is created.
-         * @deprecated Does not work properly, in addition to being taxing on the connection.
-         * @return  <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
+         * Builds and runs the UPDATE query.
+         * @param overwrite If <b>true</b>, acts like a normal <code>update</code>. Otherwise, adds the specified values to the
+         * existing ones
+         * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
          */
-        public boolean update(boolean force) {
-            if(!force) return instance.update();
-            if(instance.columns(getColumnsFromValues()).exists()) return instance.update();
-            else return instance.insert();
+        public boolean update(boolean overwrite) {
+            if(overwrite) return update();
+            String sql = "UPDATE `" + Settings.LocalConfiguration.DBPrefix.asString() + table + "`";
+            
+            String valueString = "";
+            Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
+                if(!valueString.equals("")) valueString += ", ";
+                
+                valueString += "`" + pairs.getKey().toString() + "` = `" + pairs.getKey().toString() + "` + '" + pairs.getValue().toString() + "'";
+                it.remove();
+            }
+            sql += " SET " + valueString;
+            
+            String conditionString = "";
+            for(String str : instance.conditions) {
+                if(!conditionString.equals("")) conditionString += " AND ";
+                conditionString += str;
+            }
+            if(!conditionString.equals("")) sql += " WHERE " + conditionString;
+            
+            return executeUpdate(sql + ";");
         }
         
         /**

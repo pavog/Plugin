@@ -197,7 +197,11 @@ public class PlayersData {
         @Override
         @Deprecated
         public void fetchData(int playerId) { }
-
+        
+        @Override
+        @Deprecated
+        public void clearData(int playerId) { }
+        
         @Override
         public boolean pushData(int playerId) {
             totalPlaytime += Util.getTimestamp() - lastSync;
@@ -239,18 +243,23 @@ public class PlayersData {
          * @param playerId ID of the tracked player
          */
         public DistancePlayers(int playerId) {
-            this.foot = 0;
-            this.swim = 0;
-            this.flight = 0;
-            this.boat = 0;
-            this.minecart = 0;
-            this.pig = 0;
+            foot = 0;
+            swim = 0;
+            flight = 0;
+            boat = 0;
+            minecart = 0;
+            pig = 0;
             
             fetchData(playerId);
         }
         
         @Override
         public void fetchData(int playerId) {
+            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+                clearData(playerId);
+                return;
+            }
+            
             QueryResult result = Query.table(DistancePlayersTable.TableName)
                     .column(DistancePlayersTable.Foot)
                     .column(DistancePlayersTable.Swimmed)
@@ -290,8 +299,18 @@ public class PlayersData {
                 .value(DistancePlayersTable.Minecart, minecart)
                 .value(DistancePlayersTable.Pig, pig)
                 .condition(DistancePlayersTable.PlayerId, playerId)
-                .update();
+                .update(Settings.LocalConfiguration.Standalone.asBoolean());
             return result;
+        }
+        
+        @Override
+        public void clearData(int playerId) {
+            foot = 0;
+            swim = 0;
+            flight = 0;
+            boat = 0;
+            minecart = 0;
+            pig = 0;
         }
         
         /**
@@ -375,6 +394,11 @@ public class PlayersData {
         
         @Override
         public void fetchData(int playerId) {
+            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+                clearData(playerId);
+                return;
+            }
+            
             QueryResult result = Query.table(MiscInfoPlayersTable.TableName)
                 .condition(MiscInfoPlayersTable.PlayerId, playerId)
                 .select();
@@ -405,9 +429,26 @@ public class PlayersData {
             boolean result = Query.table(MiscInfoPlayersTable.TableName)
                 .valueRaw(values)
                 .condition(MiscInfoPlayersTable.PlayerId, playerId)
-                .update();
-            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
+                .update(Settings.LocalConfiguration.Standalone.asBoolean());
+            fetchData(playerId);
             return result;
+        }
+        
+        public void clearData(int playerId) {
+            values.put(MiscInfoPlayersTable.FishCaught, 0);
+            values.put(MiscInfoPlayersTable.TimesKicked, 0);
+            values.put(MiscInfoPlayersTable.EggsThrown, 0);
+            values.put(MiscInfoPlayersTable.FoodEaten, 0);
+            values.put(MiscInfoPlayersTable.ArrowsShot, 0);
+            values.put(MiscInfoPlayersTable.DamageTaken, 0);
+            values.put(MiscInfoPlayersTable.BedsEntered, 0);
+            values.put(MiscInfoPlayersTable.PortalsEntered, 0);
+            values.put(MiscInfoPlayersTable.WordsSaid, 0);
+            values.put(MiscInfoPlayersTable.CommandsSent, 0);
+            values.put(MiscInfoPlayersTable.TimesJumped, 0);
+            
+            values.put(MiscInfoPlayersTable.CurKillStreak, 0);
+            values.put(MiscInfoPlayersTable.MaxKillStreak, 0);
         }
         
         /**
@@ -506,8 +547,13 @@ public class PlayersData {
         }
         
         @Override
+        @Deprecated
         public void fetchData(int playerId) { }
-
+        
+        @Override
+        @Deprecated
+        public void clearData(int playerId) { }
+        
         @Override
         public boolean pushData(int playerId) {
             OnlineSession session = DatabaseTask.getSession(playerId);

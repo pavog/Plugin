@@ -48,17 +48,18 @@ public class Settings {
      *
      */
     public enum LocalConfiguration {
-        Debug("debug", true),
-        DBHost("database.host", true),
-        DBPort("database.port", true),
-        DBName("database.name", true),
-        DBUser("database.user", true),
-        DBPass("database.pass", true),
-        DBPrefix("database.prefix", true),
-        DBConnect("jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
-        LogPrefix("log-prefix", true),
-        FetchPatches("fetch-patches", true),
-        Cloud(true);
+        Debug           ("debug", true),
+        DBHost          ("database.host", true),
+        DBPort          ("database.port", true),
+        DBName          ("database.name", true),
+        DBUser          ("database.user", true),
+        DBPass          ("database.pass", true),
+        DBPrefix        ("database.prefix", true),
+        DBConnect       ("jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
+        LogPrefix       ("log-prefix", true),
+        FetchPatches    ("fetch-patches", true),
+        @Deprecated
+        Standalone      (true);
         
         Object entry;
         
@@ -302,28 +303,28 @@ public class Settings {
      *
      */
     public enum ItemsWithMetadata {
-        Plank(5, 0, 3),
-        Sapling(6, 0, 3),
-        Log(17, 0, 3),
-        Leave(18, 0, 3),
-        Sandstone(24, 0, 2),
-        TallGrass(31, 0, 2),
-        Wool(35, 0, 15),
-        DoubleSlab(43, 0, 7),
-        Slab(44, 0, 7),
-        SilverfishBlock(97, 0, 2),
-        StoneBricks(98, 0, 3),
-        PlankDoubleSlab(125, 0, 3),
-        PlankSlab(126, 0, 3),
-        CobblestoneWall(139, 0, 1),
-        MobHeadBlock(144, 0, 4),
-        Quartz(155, 0, 2),
-        Coal(263, 0, 1),
-        GoldenApple(322, 0, 1),
-        Dye(351, 0, 15),
-        Potion(373, 0, 16489),
-        MobEgg(383, 50, 120),
-        MobHead(397, 0, 4);
+        Plank           (5, 0, 3),
+        Sapling         (6, 0, 3),
+        Log             (17, 0, 3),
+        Leave           (18, 0, 3),
+        Sandstone       (24, 0, 2),
+        TallGrass       (31, 0, 2),
+        Wool            (35, 0, 15),
+        DoubleSlab      (43, 0, 7),
+        Slab            (44, 0, 7),
+        SilverfishBlock (97, 0, 2),
+        StoneBricks     (98, 0, 3),
+        PlankDoubleSlab (125, 0, 3),
+        PlankSlab       (126, 0, 3),
+        CobblestoneWall (139, 0, 1),
+        MobHeadBlock    (144, 0, 4),
+        Quartz          (155, 0, 2),
+        Coal            (263, 0, 1),
+        GoldenApple     (322, 0, 1),
+        Dye             (351, 0, 15),
+        Potion          (373, 0, 16489),
+        MobEgg          (383, 50, 120),
+        MobHead         (397, 0, 4);
         
         int itemId;
         int minMetaData;
@@ -420,25 +421,25 @@ public class Settings {
      */
     public enum StatPerms {
         
-        Statistics("stats.track"),
-        Block("stats.track.block"),
-        BlockPlace("stats.track.block.place", Block),
-        BlockBreak("stats.track.block.break", Block),
-        Item("stats.track.item"),
-        ItemDrop("stats.track.item.drop", Item),
-        ItemPickUp("stats.track.item.pickup", Item),
-        ItemUse("stats.track.item.use", Item),
-        ItemBreak("stats.track.item.break", Item),
-        ItemCraft("stats.track.item.craft", Item),
-        ItemMisc("stats.track.item.misc", Item),
-        Player("stats.track.player"),
-        PlayerDistances("stats.track.player.distances", Player),
-        PlayerInventory("stats.track.player.inventory", Player),
-        PlayerMisc("stats.track.player.misc", Player),
-        Death("stats.track.death"),
-        DeathPVP("stats.track.death.pvp", Death),
-        DeathPVE("stats.track.death.pve", Death),
-        DeathOther("stats.track.death.other", Death);
+        Statistics      ("stats.track"),
+        Block           ("stats.track.block"),
+        BlockPlace      ("stats.track.block.place", Block),
+        BlockBreak      ("stats.track.block.break", Block),
+        Item            ("stats.track.item"),
+        ItemDrop        ("stats.track.item.drop", Item),
+        ItemPickUp      ("stats.track.item.pickup", Item),
+        ItemUse         ("stats.track.item.use", Item),
+        ItemBreak       ("stats.track.item.break", Item),
+        ItemCraft       ("stats.track.item.craft", Item),
+        ItemMisc        ("stats.track.item.misc", Item),
+        Player          ("stats.track.player"),
+        PlayerDistances ("stats.track.player.distances", Player),
+        PlayerInventory ("stats.track.player.inventory", Player),
+        PlayerMisc      ("stats.track.player.misc", Player),
+        Death           ("stats.track.death"),
+        DeathPVP        ("stats.track.death.pvp", Death),
+        DeathPVE        ("stats.track.death.pve", Death),
+        DeathOther      ("stats.track.death.other", Death);
         
         StatPerms parent;
         String node;

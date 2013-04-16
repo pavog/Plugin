@@ -141,7 +141,12 @@ public class DeathsData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
-           QueryResult result = Query.table(TotalDeathPlayersTable.TableName)
+            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+                clearData(playerId);
+                return;
+            }
+            
+            QueryResult result = Query.table(TotalDeathPlayersTable.TableName)
                     .column(TotalDeathPlayersTable.Times)
                     .condition(TotalDeathPlayersTable.PlayerId, playerId)
                     .condition(TotalDeathPlayersTable.Cause, cause.name())
@@ -164,9 +169,14 @@ public class DeathsData implements DataStore {
                     .value(TotalDeathPlayersTable.Times, times)
                     .condition(TotalDeathPlayersTable.PlayerId, playerId)
                     .condition(TotalDeathPlayersTable.Cause, cause.name())
-                    .update();
-            if(Settings.LocalConfiguration.Cloud.asBoolean()) fetchData(playerId);
+                    .update(Settings.LocalConfiguration.Standalone.asBoolean());
+            fetchData(playerId);
             return result;
+        }
+        
+        @Override
+        public void clearData(int playerId) {
+            times = 0;
         }
 
         /**

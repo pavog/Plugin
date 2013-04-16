@@ -184,14 +184,25 @@ public class PlayerTotals {
         return values;
     }
     
+    /**
+     * Registers a block being broken
+     */
     public void blockBreak() {
         blocksBroken++;
     }
     
+    /**
+     * Registers a block being places
+     */
     public void blockPlace() {
         blocksPlaced++;
     }
     
+    /**
+     * Increases the distance traveled by different means
+     * @param type Travel type
+     * @param distance Distance traveled
+     */
     public void addDistance(DistancePlayersTable type, double distance) {
         distTotal += distance;
         switch(type) {
@@ -218,26 +229,44 @@ public class PlayerTotals {
         }
     }
     
+    /**
+     * Registers a tool being broken
+     */
     public void toolBreak() {
         toolsBroken++;
     }
     
+    /**
+     * Registers an item being crafted
+     */
     public void itemCraft() {
         itemsCrafted++;
     }
     
+    /**
+     * Registers a food item being eaten
+     */
     public void snacksEaten() {
         snacksEaten++;
     }
     
+    /**
+     * Registers a player being killed in PvP
+     */
     public void pvpKill() {
         pvpKills++;
     }
     
+    /**
+     * Registers the player dying
+     */
     public void death() {
         deaths++;
     }
     
+    /**
+     * Registers a player killing a mob
+     */
     public void pveKill() {
         pveKills++;
     }

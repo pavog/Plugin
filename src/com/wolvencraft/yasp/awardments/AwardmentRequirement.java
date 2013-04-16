@@ -1,5 +1,5 @@
 /*
- * AwardmentReward.java
+ * AwardmentRequirement.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
