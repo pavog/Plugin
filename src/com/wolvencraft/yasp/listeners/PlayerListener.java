@@ -115,7 +115,7 @@ public class PlayerListener implements Listener {
                 DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Pig, distance);
             }
         } else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
-            DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Swimmed, distance);
+            DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Swim, distance);
         } else if (player.isFlying()) {
             DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Flight, distance);
         } else {

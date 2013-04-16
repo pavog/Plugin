@@ -35,15 +35,13 @@ public class Detailed {
      */
     public enum DestroyedBlocks implements DBTable {
         TableName("detailed_destroyed_blocks"),
-        EntryId("detailed_destroyed_blocks_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         PlayerId("player_id"),
         World("world"),
         XCoord("x"),
         YCoord("y"),
         ZCoord("z"),
-        Timestamp("time")
-        ;
+        Timestamp("time");
         
         DestroyedBlocks(String columnName) { this.columnName = columnName; }
         
@@ -60,8 +58,7 @@ public class Detailed {
      */
     public enum PlacedBlocks implements DBTable {
         TableName("detailed_placed_blocks"),
-        EntryId("detailed_placed_blocks_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         PlayerId("player_id"),
         World("world"),
         XCoord("x"),
@@ -84,8 +81,7 @@ public class Detailed {
      */
     public enum DroppedItems implements DBTable {
         TableName("detailed_dropped_items"),
-        EntryId("detailed_dropped_items_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         PlayerId("player_id"),
         World("world"),
         XCoord("x"),
@@ -134,8 +130,7 @@ public class Detailed {
      */
     public enum UsedItems implements DBTable {
         TableName("detailed_used_items"),
-        EntryId("detailed_used_items_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         PlayerId("player_id"),
         World("world"),
         XCoord("x"),
@@ -158,7 +153,6 @@ public class Detailed {
      */
     public enum LogPlayers implements DBTable {
         TableName("detailed_log_players"),
-        EntryId("detailed_log_players_id"),
         PlayerId("player_id"),
         Timestamp("time"),
         World("world"),
@@ -182,7 +176,6 @@ public class Detailed {
      */
     public enum DeathPlayers implements DBTable {
         TableName("detailed_death_players"),
-        EntryId("detailed_death_players_id"),
         PlayerId("player_id"),
         Cause("cause"),
         World("world"),
@@ -206,8 +199,7 @@ public class Detailed {
      */
     public enum PVEKills implements DBTable {
         TableName("detailed_pve_kills"),
-        EntryId("detailed_pve_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         CreatureId("entity_id"),
         PlayerId("player_id"),
         World("world"),
@@ -232,8 +224,7 @@ public class Detailed {
      */
     public enum PVPKills implements DBTable {
         TableName("detailed_pvp_kills"),
-        EntryId("detailed_pvp_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         KillerId("player_id"),
         VictimId("victim_id"),
         Cause("cause"),

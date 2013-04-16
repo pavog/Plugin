@@ -169,7 +169,7 @@ public class PlayersData {
             QueryResult result = Query.table(PlayersTable.TableName)
                 .column(PlayersTable.Logins)
                 .column(PlayersTable.FirstLogin)
-                .column(PlayersTable.TotalPlaytime)
+                .column(PlayersTable.Playtime)
                 .condition(PlayersTable.PlayerId, playerId)
                 .select();
             
@@ -181,11 +181,11 @@ public class PlayersData {
                 firstLogin = result.asLong(PlayersTable.FirstLogin);
                 if(firstLogin == -1) { firstLogin = lastSync; }
                 logins = result.asInt(PlayersTable.Logins);
-                this.totalPlaytime = result.asLong(PlayersTable.TotalPlaytime);
+                this.totalPlaytime = result.asLong(PlayersTable.Playtime);
             }
             
             Query.table(PlayersTable.TableName)
-                .value(PlayersTable.SessionStart, lastSync)
+                .value(PlayersTable.LoginTime, lastSync)
                 .value(PlayersTable.FirstLogin, firstLogin)
                 .value(PlayersTable.Logins, logins++)
                 .condition(PlayersTable.PlayerId, playerId)
@@ -206,7 +206,7 @@ public class PlayersData {
             lastSync = Util.getTimestamp();
             
             return Query.table(PlayersTable.TableName)
-                .value(PlayersTable.TotalPlaytime, totalPlaytime)
+                .value(PlayersTable.Playtime, totalPlaytime)
                 .condition(PlayersTable.PlayerId, playerId)
                 .update();
         }
@@ -260,7 +260,7 @@ public class PlayersData {
             
             QueryResult result = Query.table(DistancePlayersTable.TableName)
                     .column(DistancePlayersTable.Foot)
-                    .column(DistancePlayersTable.Swimmed)
+                    .column(DistancePlayersTable.Swim)
                     .column(DistancePlayersTable.Flight)
                     .column(DistancePlayersTable.Boat)
                     .column(DistancePlayersTable.Minecart)
@@ -271,7 +271,7 @@ public class PlayersData {
                 Query.table(DistancePlayersTable.TableName)
                     .value(DistancePlayersTable.PlayerId, playerId)
                     .value(DistancePlayersTable.Foot, foot)
-                    .value(DistancePlayersTable.Swimmed, swim)
+                    .value(DistancePlayersTable.Swim, swim)
                     .value(DistancePlayersTable.Flight, flight)
                     .value(DistancePlayersTable.Boat, boat)
                     .value(DistancePlayersTable.Minecart, minecart)
@@ -279,7 +279,7 @@ public class PlayersData {
                     .insert();
             } else {
                 foot = result.asInt(DistancePlayersTable.Foot);
-                swim = result.asInt(DistancePlayersTable.Swimmed);
+                swim = result.asInt(DistancePlayersTable.Swim);
                 flight = result.asInt(DistancePlayersTable.Flight);
                 boat = result.asInt(DistancePlayersTable.Boat);
                 minecart = result.asInt(DistancePlayersTable.Minecart);
@@ -291,7 +291,7 @@ public class PlayersData {
         public boolean pushData(int playerId) {
             boolean result = Query.table(DistancePlayersTable.TableName)
                 .value(DistancePlayersTable.Foot, foot)
-                .value(DistancePlayersTable.Swimmed, swim)
+                .value(DistancePlayersTable.Swim, swim)
                 .value(DistancePlayersTable.Flight, flight)
                 .value(DistancePlayersTable.Boat, boat)
                 .value(DistancePlayersTable.Minecart, minecart)
@@ -318,7 +318,7 @@ public class PlayersData {
          */
         public void addDistance(DistancePlayersTable type, double distance) {
             switch(type) {
-                case Swimmed:
+                case Swim:
                     swim += distance;
                     break;
                 case Flight:

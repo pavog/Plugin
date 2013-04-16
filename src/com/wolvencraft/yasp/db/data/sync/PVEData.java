@@ -178,13 +178,13 @@ public class PVEData implements DataStore{
                     .column(TotalPVEKillsTable.CreatureKilled)
                     .condition(TotalPVEKillsTable.PlayerId, playerId)
                     .condition(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
-                    .condition(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
+                    .condition(TotalPVEKillsTable.MaterialId, MaterialCache.parse(weapon))
                     .select();
             if(result == null) {
                 Query.table(TotalPVEKillsTable.TableName)
                     .value(TotalPVEKillsTable.PlayerId, playerId)
                     .value(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
-                    .value(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
+                    .value(TotalPVEKillsTable.MaterialId, MaterialCache.parse(weapon))
                     .value(TotalPVEKillsTable.PlayerKilled, playerDeaths)
                     .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
                     .insert();
@@ -201,7 +201,7 @@ public class PVEData implements DataStore{
                     .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
                     .condition(TotalPVEKillsTable.PlayerId, playerId)
                     .condition(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
-                    .condition(TotalPVEKillsTable.Material, MaterialCache.parse(weapon))
+                    .condition(TotalPVEKillsTable.MaterialId, MaterialCache.parse(weapon))
                     .update(Settings.LocalConfiguration.Standalone.asBoolean());
             fetchData(playerId);
             return result;
@@ -291,7 +291,7 @@ public class PVEData implements DataStore{
                     .value(PVEKills.PlayerId, playerId)
                     .value(PVEKills.CreatureId, EntityCache.parse(creatureType))
                     .value(PVEKills.PlayerKilled, playerKilled)
-                    .value(PVEKills.Material, MaterialCache.parse(weapon))
+                    .value(PVEKills.MaterialId, MaterialCache.parse(weapon))
                     .value(PVEKills.World, location.getWorld().getName())
                     .value(PVEKills.XCoord, location.getBlockX())
                     .value(PVEKills.YCoord, location.getBlockY())

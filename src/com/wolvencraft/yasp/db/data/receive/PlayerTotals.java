@@ -115,11 +115,11 @@ public class PlayerTotals {
             @Override
             public void run() {
                 try {   // XXX
-                    sessionStart = Query.table(PlayersTable.TableName).column(PlayersTable.SessionStart).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.SessionStart);
+                    sessionStart = Query.table(PlayersTable.TableName).column(PlayersTable.LoginTime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.LoginTime);
                 } catch (NullPointerException ex) { sessionStart = Util.getTimestamp(); }
                 
                 currentSession = Util.getTimestamp() - sessionStart;
-                totalPlaytime = Query.table(PlayersTable.TableName).column(PlayersTable.TotalPlaytime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.TotalPlaytime);
+                totalPlaytime = Query.table(PlayersTable.TableName).column(PlayersTable.Playtime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.Playtime);
                 
                 blocksBroken = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Destroyed).condition(TotalBlocksTable.PlayerId, playerId).sum();
                 blocksPlaced = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Placed).condition(TotalBlocksTable.PlayerId, playerId).sum();
@@ -128,7 +128,7 @@ public class PlayerTotals {
                 distBoated = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Boat).condition(DistancePlayersTable.PlayerId, playerId).sum();
                 distMinecarted = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Minecart).condition(DistancePlayersTable.PlayerId, playerId).sum();
                 distPiggybacked = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Pig).condition(DistancePlayersTable.PlayerId, playerId).sum();
-                distSwam = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Swimmed).condition(DistancePlayersTable.PlayerId, playerId).sum();
+                distSwam = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Swim).condition(DistancePlayersTable.PlayerId, playerId).sum();
                 distFlight = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Flight).condition(DistancePlayersTable.PlayerId, playerId).sum();
                 distTotal = distWalked + distBoated + distMinecarted + distPiggybacked + distSwam;
                 
@@ -209,7 +209,7 @@ public class PlayerTotals {
             case Foot:
                 distWalked += distance;
                 break;
-            case Swimmed:
+            case Swim:
                 distSwam += distance;
                 break;
             case Flight:

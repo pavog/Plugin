@@ -73,7 +73,7 @@ public class Normal {
         TableName("distances"),
         PlayerId("player_id"),
         Foot("foot"),
-        Swimmed("swim"),
+        Swim("swim"),
         Flight("flight"),
         Boat("boat"),
         Minecart("minecart"),
@@ -97,8 +97,8 @@ public class Normal {
         PlayerId("player_id"),
         Name("name"),
         Online("online"),
-        SessionStart("login_time"),
-        TotalPlaytime("playtime"),
+        LoginTime("login_time"),
+        Playtime("playtime"),
         FirstLogin("first_login"),
         Logins("logins");
         
@@ -179,8 +179,7 @@ public class Normal {
      */
     public enum TotalBlocksTable implements DBTable {
         TableName("total_blocks"),
-        EntryId("total_blocks_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         PlayerId("player_id"),
         Destroyed("destroyed"),
         Placed("placed");
@@ -200,8 +199,7 @@ public class Normal {
      */
     public enum TotalItemsTable implements DBTable {
         TableName("total_items"),
-        EntryId("total_items_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         PlayerId("player_id"),
         Dropped("dropped"),
         PickedUp("picked_up"),
@@ -226,7 +224,6 @@ public class Normal {
      */
     public enum TotalDeathPlayersTable implements DBTable {
         TableName("total_deaths"),
-        EntryId("total_death_players_id"),
         PlayerId("player_id"),
         Cause("cause"),
         Times("times");
@@ -246,8 +243,7 @@ public class Normal {
      */
     public enum TotalPVEKillsTable implements DBTable {
         TableName("total_pve_kills"),
-        EntryId("total_pve_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         CreatureId("entity_id"),
         PlayerId("player_id"),
         PlayerKilled("player_killed"),
@@ -268,8 +264,7 @@ public class Normal {
      */
     public enum TotalPVPKillsTable implements DBTable {
         TableName("total_pvp_kills"),
-        EntryId("total_pvp_id"),
-        Material("material_id"),
+        MaterialId("material_id"),
         PlayerId("player_id"),
         VictimId("victim_id"),
         Times("times");

@@ -170,13 +170,13 @@ public class BlocksData implements DataStore {
                     .column(TotalBlocksTable.Destroyed)
                     .column(TotalBlocksTable.Placed)
                     .condition(TotalBlocksTable.PlayerId, playerId)
-                    .condition(TotalBlocksTable.Material, MaterialCache.parse(block))
+                    .condition(TotalBlocksTable.MaterialId, MaterialCache.parse(block))
                     .select();
             
             if(result == null) {
                 Query.table(TotalBlocksTable.TableName)
                     .value(TotalBlocksTable.PlayerId, playerId)
-                    .value(TotalBlocksTable.Material, MaterialCache.parse(block))
+                    .value(TotalBlocksTable.MaterialId, MaterialCache.parse(block))
                     .value(TotalBlocksTable.Destroyed, broken)
                     .value(TotalBlocksTable.Placed, placed)
                     .insert();
@@ -192,7 +192,7 @@ public class BlocksData implements DataStore {
                 .value(TotalBlocksTable.Destroyed, broken)
                 .value(TotalBlocksTable.Placed, placed)
                 .condition(TotalBlocksTable.PlayerId, playerId)
-                .condition(TotalBlocksTable.Material, MaterialCache.parse(block))
+                .condition(TotalBlocksTable.MaterialId, MaterialCache.parse(block))
                 .update(Settings.LocalConfiguration.Standalone.asBoolean());
             fetchData(playerId);
             return result;
@@ -261,7 +261,7 @@ public class BlocksData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(DestroyedBlocks.TableName)
                 .value(DestroyedBlocks.PlayerId, playerId)
-                .value(DestroyedBlocks.Material, MaterialCache.parse(block))
+                .value(DestroyedBlocks.MaterialId, MaterialCache.parse(block))
                 .value(DestroyedBlocks.World, location.getWorld().getName())
                 .value(DestroyedBlocks.XCoord, location.getBlockX())
                 .value(DestroyedBlocks.YCoord, location.getBlockY())
@@ -301,7 +301,7 @@ public class BlocksData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(PlacedBlocks.TableName)
                 .value(PlacedBlocks.PlayerId, playerId)
-                .value(PlacedBlocks.Material, MaterialCache.parse(block))
+                .value(PlacedBlocks.MaterialId, MaterialCache.parse(block))
                 .value(PlacedBlocks.World, location.getWorld().getName())
                 .value(PlacedBlocks.XCoord, location.getBlockX())
                 .value(PlacedBlocks.YCoord, location.getBlockY())

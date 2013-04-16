@@ -165,13 +165,13 @@ public class PVPData implements DataStore {
                     .column(TotalPVPKillsTable.Times)
                     .condition(TotalPVPKillsTable.PlayerId, killerId)
                     .condition(TotalPVPKillsTable.VictimId, victimId)
-                    .condition(TotalPVPKillsTable.Material, MaterialCache.parse(weapon))
+                    .condition(TotalPVPKillsTable.MaterialId, MaterialCache.parse(weapon))
                     .select();
             if(result == null) {
                 Query.table(TotalPVPKillsTable.TableName)
                     .value(TotalPVPKillsTable.PlayerId, killerId)
                     .value(TotalPVPKillsTable.VictimId, victimId)
-                    .value(TotalPVPKillsTable.Material, MaterialCache.parse(weapon))
+                    .value(TotalPVPKillsTable.MaterialId, MaterialCache.parse(weapon))
                     .value(TotalPVPKillsTable.Times, times)
                     .insert();
             } else {
@@ -185,7 +185,7 @@ public class PVPData implements DataStore {
                     .value(TotalPVPKillsTable.Times, times)
                     .condition(TotalPVPKillsTable.PlayerId, killerId)
                     .condition(TotalPVPKillsTable.VictimId, victimId)
-                    .condition(TotalPVPKillsTable.Material, MaterialCache.parse(weapon))
+                    .condition(TotalPVPKillsTable.MaterialId, MaterialCache.parse(weapon))
                     .update(Settings.LocalConfiguration.Standalone.asBoolean());
             fetchData(killerId);
             return result;
@@ -252,7 +252,7 @@ public class PVPData implements DataStore {
             return Query.table(PVPKills.TableName)
                     .value(PVPKills.KillerId, killerId)
                     .value(PVPKills.VictimId, victimId)
-                    .value(PVPKills.Material, MaterialCache.parse(weapon))
+                    .value(PVPKills.MaterialId, MaterialCache.parse(weapon))
                     .value(PVPKills.World, location.getWorld().getName())
                     .value(PVPKills.XCoord, location.getBlockX())
                     .value(PVPKills.YCoord, location.getBlockY())

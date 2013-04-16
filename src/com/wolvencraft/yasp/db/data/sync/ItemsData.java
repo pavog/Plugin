@@ -244,13 +244,13 @@ public class ItemsData implements DataStore {
                     .column(TotalItemsTable.Smelted)
                     .column(TotalItemsTable.Enchanted)
                     .condition(TotalItemsTable.PlayerId, playerId)
-                    .condition(TotalItemsTable.Material, MaterialCache.parse(stack))
+                    .condition(TotalItemsTable.MaterialId, MaterialCache.parse(stack))
                     .select();
             
             if(result == null) {
                 Query.table(TotalItemsTable.TableName)
                     .value(TotalItemsTable.PlayerId, playerId)
-                    .value(TotalItemsTable.Material, MaterialCache.parse(stack))
+                    .value(TotalItemsTable.MaterialId, MaterialCache.parse(stack))
                     .value(TotalItemsTable.Dropped, dropped)
                     .value(TotalItemsTable.PickedUp, pickedUp)
                     .value(TotalItemsTable.Used, used)
@@ -281,7 +281,7 @@ public class ItemsData implements DataStore {
                     .value(TotalItemsTable.Smelted, smelted)
                     .value(TotalItemsTable.Enchanted, enchanted)
                     .condition(TotalItemsTable.PlayerId, playerId)
-                    .condition(TotalItemsTable.Material, MaterialCache.parse(stack))
+                    .condition(TotalItemsTable.MaterialId, MaterialCache.parse(stack))
                     .update(Settings.LocalConfiguration.Standalone.asBoolean());
             fetchData(playerId);
             return result;
@@ -401,7 +401,7 @@ public class ItemsData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(DroppedItems.TableName)
                     .value(DroppedItems.PlayerId, playerId)
-                    .value(DroppedItems.Material, MaterialCache.parse(stack))
+                    .value(DroppedItems.MaterialId, MaterialCache.parse(stack))
                     .value(DroppedItems.World, location.getWorld().getName())
                     .value(DroppedItems.XCoord, location.getBlockX())
                     .value(DroppedItems.YCoord, location.getBlockY())
@@ -483,7 +483,7 @@ public class ItemsData implements DataStore {
         public boolean pushData(int playerId) {
             return Query.table(UsedItems.TableName)
                     .value(UsedItems.PlayerId, playerId)
-                    .value(UsedItems.Material, MaterialCache.parse(stack))
+                    .value(UsedItems.MaterialId, MaterialCache.parse(stack))
                     .value(UsedItems.World, location.getWorld().getName())
                     .value(UsedItems.XCoord, location.getBlockX())
                     .value(UsedItems.YCoord, location.getBlockY())
