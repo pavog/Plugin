@@ -29,6 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 
+import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
@@ -60,9 +61,8 @@ public class VaultHook {
         catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); }
         
         if(economy != null && permissions != null) {
-            Message.log("Vault hook found, but disabled");
-//          Message.log("Vault hook enabled!");
-//          Settings.ActiveHooks.HookVault.setActive(true);
+            Message.log("Vault hook enabled!");
+            Settings.ActiveHooks.HookVault.setActive(true);
         }
     }
     
