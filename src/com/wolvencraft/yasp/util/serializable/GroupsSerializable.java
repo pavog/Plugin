@@ -1,5 +1,5 @@
 /*
- * GroupSerializable.java
+ * GroupsSerializable.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util.serializable.vault;
+package com.wolvencraft.yasp.util.serializable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +29,23 @@ import org.bukkit.World;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.hooks.VaultHook;
 
+/**
+ * Provides means to serialize player's groups into a Json array
+ * @author bitWolfy
+ *
+ */
 @SuppressWarnings("unused")
-public class GroupSerializable {
+public class GroupsSerializable {
     
     private String group;
     private String world;
     
-    private GroupSerializable(String group, String world) {
+    /**
+     * <b>Default constructor</b>
+     * @param group Group name
+     * @param world World name
+     */
+    private GroupsSerializable(String group, String world) {
         this.group = group;
         this.world = world;
     }
@@ -48,9 +58,9 @@ public class GroupSerializable {
      * @return String json array
      */
     public static String serialize(String playerName) {
-        List<GroupSerializable> groups = new ArrayList<GroupSerializable>();
+        List<GroupsSerializable> groups = new ArrayList<GroupsSerializable>();
         for(World world : Bukkit.getServer().getWorlds()) {
-            groups.add(new GroupSerializable(world.getName(), VaultHook.getGroup(playerName, world.getName())));
+            groups.add(new GroupsSerializable(world.getName(), VaultHook.getGroup(playerName, world.getName())));
         }
         return Util.toJsonArray(groups);
     }

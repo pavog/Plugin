@@ -45,8 +45,8 @@ import com.wolvencraft.yasp.db.tables.Normal.PlayersInv;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.Util;
-import com.wolvencraft.yasp.util.serializable.inventory.ItemStackSerializable;
-import com.wolvencraft.yasp.util.serializable.inventory.PotionEffectSerializable;
+import com.wolvencraft.yasp.util.serializable.EffectsSerializable;
+import com.wolvencraft.yasp.util.serializable.InventorySerializable;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
@@ -565,28 +565,28 @@ public class PlayersData {
             List<ItemStack> invRow = new ArrayList<ItemStack>();
             
             for(int i = 9; i < 18; i++) { invRow.add(inv.getItem(i)); }
-            String rowOne = ItemStackSerializable.serialize(invRow);
+            String rowOne = InventorySerializable.serialize(invRow);
             invRow.clear();
 
             for(int i = 18; i < 27; i++) { invRow.add(inv.getItem(i)); }
-            String rowTwo = ItemStackSerializable.serialize(invRow);
+            String rowTwo = InventorySerializable.serialize(invRow);
             invRow.clear();
             
             for(int i = 27; i < 36; i++) { invRow.add(inv.getItem(i)); }
-            String rowThree = ItemStackSerializable.serialize(invRow);
+            String rowThree = InventorySerializable.serialize(invRow);
             invRow.clear();
 
             for(int i = 0; i < 9; i++) { invRow.add(inv.getItem(i)); }
-            String hotbar = ItemStackSerializable.serialize(invRow);
+            String hotbar = InventorySerializable.serialize(invRow);
             invRow.clear();
             
             invRow.add(inv.getHelmet());
             invRow.add(inv.getChestplate());
             invRow.add(inv.getLeggings());
             invRow.add(inv.getBoots());
-            String armor = ItemStackSerializable.serialize(invRow);
+            String armor = InventorySerializable.serialize(invRow);
             
-            String potionEffects = PotionEffectSerializable.serialize(player.getActivePotionEffects());
+            String potionEffects = EffectsSerializable.serialize(player.getActivePotionEffects());
             
             Query.table(PlayersInv.TableName)
                 .value(PlayersInv.Armor, armor)

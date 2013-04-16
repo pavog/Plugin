@@ -1,5 +1,5 @@
 /*
- * PotionEffectSerializable.java
+ * EffectsSerializable.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util.serializable.inventory;
+package com.wolvencraft.yasp.util.serializable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,22 +29,21 @@ import org.bukkit.potion.PotionEffect;
 import com.wolvencraft.yasp.util.Util;
 
 /**
- * Simple class intended to temporarily store basic information about a potion effect
+ * Provides means to serialize a <code>Collection&lt;PotionEffect&gt;</code> into a Json array
  * @author bitWolfy
  *
  */
 @SuppressWarnings("unused")
-public class PotionEffectSerializable {
+public class EffectsSerializable {
     
     private int effect_id;
     private int time;
     
     /**
-     * <b>Default constructor</b><br />
-     * Creates a new SimplePotionEffect based on a PotionEffect provided
-     * @param effect
+     * <b>Default constructor</b>
+     * @param effect Potion effect type
      */
-    private PotionEffectSerializable(PotionEffect effect) {
+    private EffectsSerializable(PotionEffect effect) {
         effect_id = effect.getType().getId();
         time = effect.getDuration() / 20;
     }
@@ -54,11 +53,11 @@ public class PotionEffectSerializable {
      * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code><br />
      * Stores only potion ID and duration.
      * @param effects Effects to compress
-     * @return String json array
+     * @return String Json array
      */
     public static String serialize(Collection<PotionEffect> effects) {
-        List<PotionEffectSerializable> potEffects = new ArrayList<PotionEffectSerializable>();
-        for(PotionEffect eff : effects) potEffects.add(new PotionEffectSerializable(eff));
+        List<EffectsSerializable> potEffects = new ArrayList<EffectsSerializable>();
+        for(PotionEffect eff : effects) potEffects.add(new EffectsSerializable(eff));
         return Util.toJsonArray(potEffects);
     }
 }

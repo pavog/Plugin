@@ -1,5 +1,5 @@
 /*
- * EnchantmentSerializable.java
+ * EnchantmentsSerializable.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util.serializable.inventory;
+package com.wolvencraft.yasp.util.serializable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,13 +31,23 @@ import org.bukkit.enchantments.Enchantment;
 
 import com.wolvencraft.yasp.util.Util;
 
+/**
+ * Provides means to serialize a <code>Map&lt;Enchantment, Integer&gt;</code> into a Json array
+ * @author bitWolfy
+ *
+ */
 @SuppressWarnings("unused")
-public class EnchantmentSerializable {
+public class EnchantmentsSerializable {
     
     private int enchantment_id;
     private int enchantment_level;
     
-    private EnchantmentSerializable(Enchantment enchantment, int level) {
+    /**
+     * <b>Default constructor</b>
+     * @param enchantment Enchantment type
+     * @param level Enchantment level
+     */
+    private EnchantmentsSerializable(Enchantment enchantment, int level) {
         enchantment_id = enchantment.getId();
         enchantment_level = level;
     }
@@ -49,12 +59,12 @@ public class EnchantmentSerializable {
      * @param inventoryRow inventory row to compress
      * @return String json array
      */
-    public static List<EnchantmentSerializable> serialize(Map<Enchantment, Integer> enchantments) {
-        List<EnchantmentSerializable> enchList = new ArrayList<EnchantmentSerializable>();
+    public static List<EnchantmentsSerializable> serialize(Map<Enchantment, Integer> enchantments) {
+        List<EnchantmentsSerializable> enchList = new ArrayList<EnchantmentsSerializable>();
         Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<Enchantment, Integer> enchantment = (Map.Entry<Enchantment, Integer>)it.next();
-            enchList.add(new EnchantmentSerializable(enchantment.getKey(), enchantment.getValue().intValue()));
+            enchList.add(new EnchantmentsSerializable(enchantment.getKey(), enchantment.getValue().intValue()));
         }
         return enchList;
     }

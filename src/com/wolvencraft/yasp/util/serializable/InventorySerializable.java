@@ -1,5 +1,5 @@
 /*
- * ItemStackSerializable.java
+ * InventorySerializable.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util.serializable.inventory;
+package com.wolvencraft.yasp.util.serializable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,24 +33,23 @@ import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
- * Simple class intended to temporarily store basic information about inventory items
+ * Provides means to serialize a <code>List&lt;ItemStack&gt;</code> into a Json array
  * @author bitWolfy
  *
  */
 @SuppressWarnings("unused")
-public class ItemStackSerializable {
+public class InventorySerializable {
     
     private String material_id;
     private double durability;
     private int amount;
-    private List<EnchantmentSerializable> enchantments;
+    private List<EnchantmentsSerializable> enchantments;
     
     /**
-     * <b>Default constructor</b><br />
-     * Creates a new SimpleInventoryItem based on an ItemStack provided
-     * @param ItemStack stack
+     * <b>Default constructor</b>
+     * @param ItemStack Stack of items
      */
-    private ItemStackSerializable(ItemStack stack) {
+    private InventorySerializable(ItemStack stack) {
         material_id = MaterialCache.parse(stack);
         short curDurability = stack.getDurability();
         short maxDurability = stack.getType().getMaxDurability();
@@ -60,7 +59,7 @@ public class ItemStackSerializable {
             durability = ((int)(100 * durability)) / 100.0;
         }
         amount = stack.getAmount();
-        enchantments = EnchantmentSerializable.serialize(stack.getEnchantments());
+        enchantments = EnchantmentsSerializable.serialize(stack.getEnchantments());
     }
     
     /**
@@ -71,10 +70,10 @@ public class ItemStackSerializable {
      * @return String json array
      */
     public static String serialize(List<ItemStack> inventoryRow) {
-        List<ItemStackSerializable> invRow = new ArrayList<ItemStackSerializable>();
+        List<InventorySerializable> invRow = new ArrayList<InventorySerializable>();
         for(ItemStack stack : inventoryRow) {
             if(stack == null) { stack = new ItemStack(Material.AIR); }
-            invRow.add(new ItemStackSerializable(stack));
+            invRow.add(new InventorySerializable(stack));
         }
         return Util.toJsonArray(invRow);
     }

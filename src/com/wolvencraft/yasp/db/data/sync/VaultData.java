@@ -28,7 +28,7 @@ import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Hook.VaultTable;
 import com.wolvencraft.yasp.util.hooks.VaultHook;
-import com.wolvencraft.yasp.util.serializable.vault.GroupSerializable;
+import com.wolvencraft.yasp.util.serializable.GroupsSerializable;
 
 /**
  * Hooks into Vault to track its statistics
@@ -97,7 +97,7 @@ public class VaultData implements DataStore {
                 return;
             }
             
-            groups = GroupSerializable.serialize(playerName);
+            groups = GroupsSerializable.serialize(playerName);
             balance = VaultHook.getBalance(playerName);
             
             if(Query.table(VaultTable.TableName)
