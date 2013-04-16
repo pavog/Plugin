@@ -114,7 +114,7 @@ public class Settings {
          * @return Configuration value
          */
         public int asInteger() {
-            try { return Integer.parseInt((String) entry); }
+            try { return (Integer) entry; }
             catch (Throwable t) { return 0; }
         }
     }
