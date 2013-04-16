@@ -1,5 +1,5 @@
 /*
- * TPSTracker.java
+ * TickTask.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util;
+package com.wolvencraft.yasp.util.tasks;
 
 /**
  * Measures the tick rate of the server.<br />
@@ -26,13 +26,13 @@ package com.wolvencraft.yasp.util;
  * @author bitWolfy
  *
  */
-public class TPSTracker implements Runnable {
+public class TickTask implements Runnable {
     
     /**
      * <b>Default constructor.</b><br />
      * Creates a new tracker to record ticks per second.
      */
-    public TPSTracker() {
+    public TickTask() {
         ticksPerSecond = 0;
     }
     
