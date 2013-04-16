@@ -78,7 +78,7 @@ public class Settings {
          * @param fromFile If <b>true</b>, configuration values will be pulled from file, otherwise, the <code>entry</code> will be used
          */
         LocalConfiguration(Object entry, boolean fromFile) {
-            if(fromFile) this.entry = Statistics.getInstance().getConfig().getString((String) entry);
+            if(fromFile) this.entry = Statistics.getInstance().getConfig().get((String) entry);
             else this.entry = entry;
         }
         
@@ -105,7 +105,7 @@ public class Settings {
          * @return Configuration value
          */
         public boolean asBoolean() {
-            try { return Boolean.parseBoolean((String) entry); }
+            try { return (Boolean) entry; }
             catch (Throwable t) { return false; }
         }
         
