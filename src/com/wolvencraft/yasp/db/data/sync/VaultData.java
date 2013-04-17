@@ -46,7 +46,7 @@ public class VaultData implements DataStore {
     }
 
     @Override
-    public StoreType getType() {
+    public DataStoreType getType() {
         return DataStoreType.Vault;
     }
 

@@ -33,7 +33,7 @@ public interface DataStore {
      * Returns the type of the data store
      * @return Data store type
      */
-    public StoreType getType();
+    public DataStoreType getType();
     
     /**
      * Returns the dynamic entries in the data store.<br />
@@ -108,24 +108,18 @@ public interface DataStore {
     }
     
     /**
-     * Common interface for data store type enums
-     * @author bitWolfy
-     *
-     */
-    public interface StoreType {}
-    
-    /**
      * Represents the data store type
      * @author bitWolfy
      *
      */
-    public enum DataStoreType implements StoreType {
+    public enum DataStoreType {
         Blocks,
         Items,
         Deaths,
         PVE,
         PVP,
-        Vault;
+        Vault,
+        WorldGuard;
     }
 
 }
