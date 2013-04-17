@@ -59,9 +59,17 @@ public class DatabaseTask implements Runnable {
         serverStatistics = new ServerStatistics();
         serverTotals = new ServerTotals();
         
-        for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-            if(StatPerms.Statistics.has(player)) getSession(player);
-        }
+        Bukkit.getScheduler().runTaskLater(Statistics.getInstance(), new Runnable() {
+            
+            @Override
+            public void run() {
+                for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+                    if(StatPerms.Statistics.has(player)) getSession(player);
+                }
+            }
+            
+        }, 200L);
+        
     }
     
     /**
