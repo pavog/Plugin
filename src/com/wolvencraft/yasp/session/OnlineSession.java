@@ -22,7 +22,6 @@ package com.wolvencraft.yasp.session;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -39,6 +38,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.receive.PlayerTotals;
+import com.wolvencraft.yasp.db.data.receive.PlayerTotals.NamedValue;
 import com.wolvencraft.yasp.db.data.sync.*;
 import com.wolvencraft.yasp.db.data.sync.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
@@ -379,25 +379,14 @@ public class OnlineSession implements PlayerSession {
      */
     public void refreshScoreboard() {
         if(scoreboard == null) return;
-        
-        Map<String, Object> totals = this.playerTotals.getValues();
-        
+
         Objective stats = scoreboard.getObjective("stats");
         
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "PVP Kills"))
-             .setScore((Integer) totals.get("pvpKills"));
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "PVE Kills"))
-             .setScore((Integer) totals.get("pveKills"));
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Deaths"))
-             .setScore((Integer) totals.get("deaths"));
-        
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.AQUA + "Blocks Broken"))
-             .setScore((Integer) totals.get("blocksBroken"));
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.AQUA + "Blocks Placed"))
-             .setScore((Integer) totals.get("blocksPlaced"));
-
-        stats.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Travelled"))
-             .setScore(((Double) totals.get("distTotal")).intValue() / 1000);
+        for(NamedValue value : playerTotals.getNamedValues()) {
+            for(String name : value.getPossibleNames()) scoreboard.resetScores(Bukkit.getOfflinePlayer(name));
+            stats.getScore(Bukkit.getOfflinePlayer(value.getName()))
+                 .setScore((Integer) (value.getValue()));
+        }
     }
     
     /**

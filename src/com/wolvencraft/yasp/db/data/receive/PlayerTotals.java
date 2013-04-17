@@ -21,9 +21,12 @@
 package com.wolvencraft.yasp.db.data.receive;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
@@ -51,7 +54,6 @@ public class PlayerTotals {
         this.playerId = playerId;
         
         sessionStart = Util.getTimestamp();
-        currentSession = 0;
         totalPlaytime = 0;
         
         blocksBroken = 0;
@@ -79,7 +81,6 @@ public class PlayerTotals {
     private int playerId;
     
     private long sessionStart;
-    private long currentSession;
     private long totalPlaytime;
     
     private int blocksBroken;
@@ -118,7 +119,6 @@ public class PlayerTotals {
                     sessionStart = Query.table(PlayersTable.TableName).column(PlayersTable.LoginTime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.LoginTime);
                 } catch (NullPointerException ex) { sessionStart = Util.getTimestamp(); }
                 
-                currentSession = Util.getTimestamp() - sessionStart;
                 totalPlaytime = Query.table(PlayersTable.TableName).column(PlayersTable.Playtime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.Playtime);
                 
                 blocksBroken = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Destroyed).condition(TotalBlocksTable.PlayerId, playerId).sum();
@@ -156,10 +156,9 @@ public class PlayerTotals {
     public Map<String, Object> getValues() {
         if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
         else kdr = pvpKills;
-        currentSession = Util.getTimestamp() - sessionStart;
         
         Map<String, Object> values = new HashMap<String, Object>();
-        values.put("currentSession", Util.parseTimestamp(currentSession));
+        values.put("currentSession", Util.parseTimestamp(Util.getTimestamp() - sessionStart));
         values.put("totalPlaytime", Util.parseTimestamp(totalPlaytime));
         
         values.put("blocksBroken", blocksBroken);
@@ -182,6 +181,90 @@ public class PlayerTotals {
         values.put("deaths", deaths);
         values.put("kdr", kdr);
         return values;
+    }
+    
+    public List<NamedValue> getNamedValues() {
+        List<NamedValue> values = new LinkedList<NamedValue>();
+        values.add(getBlocksBroken());
+        values.add(getBlocksPlaced());
+        values.add(getCurrentSession());
+        values.add(getTotalPlaytime());
+        values.add(getDeaths());
+        values.add(getPVPKills());
+        values.add(getPVEKills());
+        values.add(getDistance());
+        return values;
+    }
+    
+    public NamedValue getCurrentSession() {
+        long currentSession = Util.getTimestamp() - sessionStart;
+        NamedValue value = new NamedValue();
+        if(currentSession < 60) {
+            value.setData (ChatColor.GREEN + "Online (sec)", (int) (currentSession));
+        } else if(currentSession < 3600) {
+            value.setData (ChatColor.GREEN + "Online (min)", (int) (currentSession / 60));
+        } else {
+            value.setData (ChatColor.GREEN + "Online (hours)", (int) (currentSession / 3600));
+        }
+        value.setPossibleNames(ChatColor.GREEN + "Online (sec)", ChatColor.GREEN + "Online (min)", ChatColor.GREEN + "Online (hours)");
+        return value;
+    }
+    
+    public NamedValue getTotalPlaytime() {
+        NamedValue value = new NamedValue();
+        if(totalPlaytime < 60) {
+            value.setData (ChatColor.GREEN + "Playtime (sec)", (int) (totalPlaytime));
+        } else if(totalPlaytime < 3600) {
+            value.setData (ChatColor.GREEN + "Playtime (min)", (int) (totalPlaytime / 60));
+        } else {
+            value.setData (ChatColor.GREEN + "Playtime (hours)", (int) (totalPlaytime / 3600));
+        }
+        value.setPossibleNames(ChatColor.GREEN + "Playtime (sec)", ChatColor.GREEN + "Playtime (min)", ChatColor.GREEN + "Playtime (hours)");
+        return value;
+    }
+    
+    public NamedValue getBlocksBroken() {
+        NamedValue value = new NamedValue();
+        if(blocksBroken < 100000) {
+            value.setData (ChatColor.GOLD + "Blocks broken", blocksBroken);
+        } else {
+            value.setData (ChatColor.GOLD + "Blocks broken (k)", (int) (blocksBroken / 1000));
+        }
+        value.setPossibleNames(ChatColor.GOLD + "Blocks broken", ChatColor.GOLD + "Blocks broken (k)");
+        return value;
+    }
+    
+    public NamedValue getBlocksPlaced() {
+        NamedValue value = new NamedValue();
+        if(blocksPlaced < 100000) {
+            value.setData (ChatColor.GOLD + "Blocks placed", blocksPlaced);
+        } else {
+            value.setData (ChatColor.GOLD + "Blocks placed (k)", (int) (blocksPlaced / 1000));
+        }
+        value.setPossibleNames(ChatColor.GOLD + "Blocks placed", ChatColor.GOLD + "Blocks placed (k)");
+        return value;
+    }
+    public NamedValue getDistance() {
+        NamedValue value = new NamedValue();
+        if(distTotal < 1000) {
+            value.setData (ChatColor.BLUE + "Travelled (m)", (int) (distTotal));
+        } else {
+            value.setData (ChatColor.BLUE + "Travelled (km)", (int) (distTotal / 1000));
+        }
+        value.setPossibleNames(ChatColor.BLUE + "Travelled (m)", ChatColor.BLUE + "Travelled (km)");
+        return value;
+    }
+    
+    public NamedValue getPVPKills() {
+        return new NamedValue (ChatColor.RED + "PVP Kills", pvpKills);
+    }
+    
+    public NamedValue getPVEKills() {
+        return new NamedValue (ChatColor.RED + "PVE Kills", pveKills);
+    }
+    
+    public NamedValue getDeaths() {
+        return new NamedValue (ChatColor.RED + "Deaths", deaths);
     }
     
     /**
@@ -269,6 +352,43 @@ public class PlayerTotals {
      */
     public void pveKill() {
         pveKills++;
+    }
+    
+    public class NamedValue {
+        
+        private String name;
+        private String[] names;
+        private Integer value;
+        
+        public NamedValue() { }
+        
+        public NamedValue(String name, Integer value) {
+            this.name = name;
+            this.value = value;
+            names = new String[] { name };
+        }
+        
+        public String getName() {
+            return name;
+        }
+        
+        public Integer getValue() {
+            return value;
+        }
+        
+        public String[] getPossibleNames() {
+            return names;
+        }
+        
+        private void setData(String name, Integer value) {
+            this.name = name;
+            this.value = value;
+        }
+        
+        private void setPossibleNames(String... names) {
+            this.names = names;
+        }
+        
     }
     
 }
