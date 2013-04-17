@@ -217,41 +217,41 @@ public class PlayerTotals {
         } else if(totalPlaytime < 3600) {
             value.setData (ChatColor.GREEN + "Playtime (min)", (int) (totalPlaytime / 60));
         } else {
-            value.setData (ChatColor.GREEN + "Playtime (hours)", (int) (totalPlaytime / 3600));
+            value.setData (ChatColor.GREEN + "Playtime (hrs)", (int) (totalPlaytime / 3600));
         }
-        value.setPossibleNames(ChatColor.GREEN + "Playtime (sec)", ChatColor.GREEN + "Playtime (min)", ChatColor.GREEN + "Playtime (hours)");
+        value.setPossibleNames(ChatColor.GREEN + "Playtime (sec)", ChatColor.GREEN + "Playtime (min)", ChatColor.GREEN + "Playtime (hrs)");
         return value;
     }
     
     public NamedValue getBlocksBroken() {
         NamedValue value = new NamedValue();
         if(blocksBroken < 100000) {
-            value.setData (ChatColor.GOLD + "Blocks broken", blocksBroken);
+            value.setData (ChatColor.GOLD + "Broken", blocksBroken);
         } else {
-            value.setData (ChatColor.GOLD + "Blocks broken (k)", (int) (blocksBroken / 1000));
+            value.setData (ChatColor.GOLD + "Broken (k)", (int) (blocksBroken / 1000));
         }
-        value.setPossibleNames(ChatColor.GOLD + "Blocks broken", ChatColor.GOLD + "Blocks broken (k)");
+        value.setPossibleNames(ChatColor.GOLD + "Broken", ChatColor.GOLD + "Broken (k)");
         return value;
     }
     
     public NamedValue getBlocksPlaced() {
         NamedValue value = new NamedValue();
         if(blocksPlaced < 100000) {
-            value.setData (ChatColor.GOLD + "Blocks placed", blocksPlaced);
+            value.setData (ChatColor.GOLD + "Placed", blocksPlaced);
         } else {
-            value.setData (ChatColor.GOLD + "Blocks placed (k)", (int) (blocksPlaced / 1000));
+            value.setData (ChatColor.GOLD + "Placed (k)", (int) (blocksPlaced / 1000));
         }
-        value.setPossibleNames(ChatColor.GOLD + "Blocks placed", ChatColor.GOLD + "Blocks placed (k)");
+        value.setPossibleNames(ChatColor.GOLD + "Placed", ChatColor.GOLD + "Placed (k)");
         return value;
     }
     public NamedValue getDistance() {
         NamedValue value = new NamedValue();
         if(distTotal < 1000) {
-            value.setData (ChatColor.BLUE + "Travelled (m)", (int) (distTotal));
+            value.setData (ChatColor.BLUE + "Traveled (m)", (int) (distTotal));
         } else {
-            value.setData (ChatColor.BLUE + "Travelled (km)", (int) (distTotal / 1000));
+            value.setData (ChatColor.BLUE + "Traveled (km)", (int) (distTotal / 1000));
         }
-        value.setPossibleNames(ChatColor.BLUE + "Travelled (m)", ChatColor.BLUE + "Travelled (km)");
+        value.setPossibleNames(ChatColor.BLUE + "Traveled (m)", ChatColor.BLUE + "Traveled (km)");
         return value;
     }
     
