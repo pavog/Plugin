@@ -59,7 +59,7 @@ public class DatabaseTask implements Runnable {
         serverStatistics = new ServerStatistics();
         serverTotals = new ServerTotals();
         
-        Bukkit.getScheduler().runTaskLater(Statistics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Statistics.getInstance(), new Runnable() {
             
             @Override
             public void run() {
