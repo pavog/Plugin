@@ -107,6 +107,7 @@ public class PlayerListener implements Listener {
         double distance = playerLocation.distance(event.getTo());
         if(player.isInsideVehicle()) {
             Vehicle vehicle = (Vehicle) player.getVehicle();
+            distance = vehicle.getLocation().distance(event.getTo());
             if(vehicle.getType().equals(EntityType.MINECART)) {
                 DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Minecart, distance);
             } else if(vehicle.getType().equals(EntityType.BOAT)) {

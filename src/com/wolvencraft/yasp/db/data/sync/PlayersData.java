@@ -318,6 +318,9 @@ public class PlayersData {
          */
         public void addDistance(DistancePlayersTable type, double distance) {
             switch(type) {
+                case Foot:
+                    foot += distance;
+                    break;
                 case Swim:
                     swim += distance;
                     break;
@@ -334,7 +337,7 @@ public class PlayersData {
                     pig += distance;
                     break;
                 default:
-                    foot += distance;
+                    break;
             }
         }
     }
