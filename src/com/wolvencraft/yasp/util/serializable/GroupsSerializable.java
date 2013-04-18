@@ -54,7 +54,7 @@ public class GroupsSerializable {
      * Compresses a List into a single-line json array.<br />
      * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code><br />
      * Stores world and group names
-     * @param Name of the player to serialize
+     * @param playerName Name of the player to serialize
      * @return String json array
      */
     public static String serialize(String playerName) {

@@ -53,11 +53,10 @@ public class EnchantmentsSerializable {
     }
     
     /**
-     * Compresses a List into a single-line json array.<br />
-     * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code><br />
-     * Stores material, amount, and durability of an itemstack
-     * @param inventoryRow inventory row to compress
-     * @return String json array
+     * Compresses a Map of enchantments into a Json array.<br />
+     * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code>
+     * @param enchantments Enchantments
+     * @return Json array
      */
     public static List<EnchantmentsSerializable> serialize(Map<Enchantment, Integer> enchantments) {
         List<EnchantmentsSerializable> enchList = new ArrayList<EnchantmentsSerializable>();
