@@ -158,6 +158,7 @@ public class PVEData implements DataStore{
          * @param weapon Weapon used
          */
         public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
+            this.creatureType = creatureType;
             this.weapon = weapon.clone();
             this.weapon.setAmount(1);
             playerDeaths = 0;
