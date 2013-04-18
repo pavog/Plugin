@@ -60,7 +60,6 @@ public class PatchFetcher {
         while(Statistics.getInstance().getResource("patches/" + j + "." + type.extension + ".sql") != null) {
             if(localFileExists(j + "." + type.extension + ".sql")) { j++; continue; }
             Message.log("|" + Message.centerString("Copying " + j + "." + type.extension + ".sql", 34) + "|");
-//            Message.log("|       Copying " + j + "." + type.extension + ".sql        |");
             Statistics.getInstance().saveResource("patches/" + j + "." + type.extension + ".sql", false);
             j++;
         }
@@ -68,7 +67,6 @@ public class PatchFetcher {
         while(remoteFileExists(i + "." + type.extension + ".sql")) {
             if(localFileExists(i + "." + type.extension + ".sql")) { i++; continue; }
             Message.log("|" + Message.centerString("Downloading " + i + "." + type.extension + ".sql", 34) + "|");
-//            Message.log("|      Downloading " + i + "." + type.extension + ".sql      |");
             try { download(i + "." + type.extension + ".sql"); }
             catch (MalformedURLException e) {
                 Message.log("Downloaded " + i + " patch files");
@@ -78,6 +76,26 @@ public class PatchFetcher {
                 return;
             }
             i++;
+        }
+        Message.log("|  All patch files are up to date  |");
+        Message.log("+----------------------------------+");
+    }
+    
+    
+    /**
+     * Fetches the patch of the specified type
+     * @param id Patch ID
+     */
+    public static void fetch(String id) {
+        if(localFileExists(id + ".sql")) { return; }
+        Message.log("|" + Message.centerString("Downloading " + id + ".sql", 34) + "|");
+        try { download(id + ".sql"); }
+        catch (MalformedURLException e) {
+            Message.log("An error occurred while downloading patch files [MalformedURLException]");
+            return;
+        } catch (IOException e) {
+            Message.log("An error occurred while downloading patch files [IOException]");
+            return;
         }
         Message.log("|  All patch files are up to date  |");
         Message.log("+----------------------------------+");

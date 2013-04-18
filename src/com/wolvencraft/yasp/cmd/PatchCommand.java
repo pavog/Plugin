@@ -1,5 +1,5 @@
 /*
- * RepatchCommand.java
+ * PatchCommand.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -40,7 +40,7 @@ public class PatchCommand implements BaseCommand {
 
     @Override
     public boolean run(final String[] args) {
-        if(args.length < 1) {
+        if(args.length != 1) {
             Message.sendFormattedError("Invalid parameter count");
             return false;
         }

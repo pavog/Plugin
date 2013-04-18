@@ -42,6 +42,7 @@ public enum CommandManager {
     Scoreboard(ScoreboardCommand.class, "stats.cmd.scoreboard", "scoreboard"),
     
     Dump(DumpCommand.class, "stats.cmd.debug", "dump"),
+    Fetch(FetchCommand.class, "stats.cmd.debug", "fetch"),
     Pause(PauseCommand.class, "stats.cmd.debug", "pause"),
     Sync(SyncCommand.class, "stats.cmd.debug", "sync"),
     Patch(PatchCommand.class, "stats.cmd.debug", "patch"),
