@@ -130,7 +130,7 @@ public class Message {
     
     /**
      * Sends a message into the server log
-     * @param message Message to be sent
+     * @param messages Messages to be sent
      */
     public static void log(String... messages) {
         for(String message : messages) logger.info(message);
@@ -139,7 +139,7 @@ public class Message {
     /**
      * Sends a message into the server log
      * @param level Severity level
-     * @param message Message to be sent
+     * @param messages Messages to be sent
      */
     public static void log(Level level, String... messages) {
         for(String message : messages) logger.log(level, message);

@@ -206,7 +206,7 @@ public class BlocksData implements DataStore {
         
         /**
          * Checks if the object corresponds to provided parameters
-         * @param item ItemStack to compare to
+         * @param block Block to compare to
          * @return <b>true</b> if the conditions are met, <b>false</b> otherwise
          */
         public boolean equals(BlockState block) {

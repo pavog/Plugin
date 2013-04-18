@@ -387,8 +387,8 @@ public class ItemsData implements DataStore {
         /**
          * <b>Default constructor</b><br />
          * Creates a new DetailedDroppedItemsEntry based on the data provided
-         * @param location
-         * @param itemStack
+         * @param location Location of the item
+         * @param stack Item stack
          */
         public DetailedDroppedItemsEntry(Location location, ItemStack stack) {
             this.stack = stack.clone();
@@ -470,7 +470,7 @@ public class ItemsData implements DataStore {
          * <b>Default constructor</b><br />
          * Creates a new DetailedUsedItemsEntry based on the data provided
          * @param location Item location
-         * @param itemStack Item stack
+         * @param stack Item stack
          */
         public DetailedUsedItemsEntry(Location location, ItemStack stack) {
             this.stack = stack.clone();

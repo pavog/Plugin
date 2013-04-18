@@ -98,7 +98,7 @@ public class StatisticsAPI {
     
     /**
      * Returns the total number of times players died
-     * @return
+     * @return Total number of deaths
      */
     public static int getDeaths() {
         return (Integer) DatabaseTask.getTotals().getValues().get("deaths");
