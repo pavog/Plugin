@@ -54,7 +54,7 @@ public class Miscellaneous {
      */
     public enum EntitiesTable implements DBTable {
         TableName("entities"),
-        EntityId("material_id"),
+        EntityId("entity_id"),
         TpName("tp_name");
         
         EntitiesTable (String columnName) { this.columnName = columnName; }
