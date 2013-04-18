@@ -149,8 +149,13 @@ public class Settings {
          */
         Modules(String key) {
             this.key = key;
-            try { active = Query.table(SettingsTable.TableName).column("value").condition("key", key).select().asBoolean("value"); }
-            catch (Throwable t) { active = true; }
+            if(Query.table(SettingsTable.TableName).condition("key", key).exists()) {
+                try { active = Query.table(SettingsTable.TableName).column("value").condition("key", key).select().asBoolean("value"); }
+                catch (Throwable t) { active = true; }
+            } else {
+                Query.table(SettingsTable.TableName).value("key", key).value("value", true).insert();
+                active = true;
+            }
             refresh = false;
         }
         
