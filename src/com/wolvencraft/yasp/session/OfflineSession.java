@@ -22,7 +22,7 @@ package com.wolvencraft.yasp.session;
 
 import org.bukkit.Bukkit;
 
-import com.wolvencraft.yasp.db.data.receive.PlayerTotals;
+import com.wolvencraft.yasp.api.PlayerTotals;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**

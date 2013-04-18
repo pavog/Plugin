@@ -29,13 +29,12 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.StatPerms;
+import com.wolvencraft.yasp.api.ServerTotals;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.data.receive.ServerTotals;
 import com.wolvencraft.yasp.db.data.sync.ServerStatistics;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
-import com.wolvencraft.yasp.session.OfflineSession;
-import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.session.*;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -183,6 +182,11 @@ public class DatabaseTask implements Runnable {
     public static OfflineSession getSession(String playerName) {
         Message.debug("Fetching an offline session for " + playerName);
         return new OfflineSession(playerName);
+    }
+    
+    public static DataSession getDataSession(String playerName) {
+        Message.debug("Fetching a data session for " + playerName);
+        return new DataSession(playerName);
     }
     
     /**

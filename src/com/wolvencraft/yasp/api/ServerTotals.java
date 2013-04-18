@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.receive;
+package com.wolvencraft.yasp.api;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,27 +42,40 @@ public class ServerTotals {
     public ServerTotals() {
         blocksBroken = 0;
         blocksPlaced = 0;
-        distance = 0;
+        
+        distanceTotal = 0;
+        distanceFoot = 0;
+        distancePig = 0;
+        distanceMinecart = 0;
+        distanceBoat = 0;
+        distanceFlight = 0;
+        distanceSwim = 0;
+        
         toolsBroken = 0;
         itemsCrafted = 0;
         snacksEaten = 0;
         
         pvpKills = 0;
-        pveKills = 0;
-        otherKills = 0;
     }
     
     private int blocksBroken;
     private int blocksPlaced;
-    private double distance;
+    
+    private double distanceTotal;
+    private double distanceFoot;
+    private double distancePig;
+    private double distanceMinecart;
+    private double distanceBoat;
+    private double distanceFlight;
+    private double distanceSwim;
+    
     private int toolsBroken;
     private int itemsCrafted;
     private int snacksEaten;
     
     private int pvpKills;
     private int pveKills;
-    private int pveDeaths;
-    private int otherKills;
+    private int deaths;
     
     /**
      * Fetches the data from the remote database.<br />
@@ -74,15 +87,25 @@ public class ServerTotals {
         
         blocksBroken = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Destroyed).sum();
         blocksPlaced = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Placed).sum();
-        distance = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
+        
+        distanceFoot = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
+        distancePig = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
+        distanceMinecart = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
+        distanceBoat = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
+        distanceFlight = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
+        distanceSwim = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
+        distanceTotal = distanceFoot + distancePig + distanceMinecart + distanceBoat + distanceFlight + distanceSwim;
+        
         toolsBroken = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Broken).sum();
         itemsCrafted = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Crafted).sum();
         snacksEaten = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Used).sum();
         
         pvpKills = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).sum();
         pveKills = (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.CreatureKilled).sum();
-        pveDeaths = (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.PlayerKilled).sum();
-        otherKills = (int) Query.table(TotalDeathPlayersTable.TableName).column(TotalDeathPlayersTable.Times).sum();
+        
+        int pveDeaths = (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.PlayerKilled).sum();
+        int otherKills = (int) Query.table(TotalDeathPlayersTable.TableName).column(TotalDeathPlayersTable.Times).sum();
+        deaths = pveDeaths + otherKills;
     }
     
     /**
@@ -93,14 +116,20 @@ public class ServerTotals {
         Map<String, Object> values = new HashMap<String, Object>();
         values.put("blBroken", blocksBroken);
         values.put("blPlaced", blocksPlaced);
-        values.put("distance", distance);
+        
+        values.put("distTotal", distanceTotal);
+        values.put("distPig", distanceTotal);
+        values.put("distCart", distanceTotal);
+        values.put("distBoat", distanceTotal);
+        values.put("distFlight", distanceTotal);
+        values.put("distSwim", distanceTotal);
+        
         values.put("itBroken", toolsBroken);
         values.put("itCrafted", itemsCrafted);
         values.put("itEaten", snacksEaten);
         values.put("pvpKills", pvpKills);
         values.put("pveKills", pveKills);
-        values.put("pveDeaths", pveDeaths);
-        values.put("othKills", otherKills);
+        values.put("deaths", deaths);
         values.putAll(DatabaseTask.getStats().getValueMap());
         return values;
     }

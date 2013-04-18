@@ -36,14 +36,14 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
+import com.wolvencraft.yasp.api.PlayerTotals;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.data.receive.PlayerTotals;
-import com.wolvencraft.yasp.db.data.receive.PlayerTotals.NamedValue;
 import com.wolvencraft.yasp.db.data.sync.*;
 import com.wolvencraft.yasp.db.data.sync.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
@@ -382,7 +382,7 @@ public class OnlineSession implements PlayerSession {
 
         Objective stats = scoreboard.getObjective("stats");
         
-        for(NamedValue value : playerTotals.getNamedValues()) {
+        for(NamedInteger value : playerTotals.getNamedValues()) {
             for(String name : value.getPossibleNames()) scoreboard.resetScores(Bukkit.getOfflinePlayer(name));
             stats.getScore(Bukkit.getOfflinePlayer(value.getName()))
                  .setScore((Integer) (value.getValue()));

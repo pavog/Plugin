@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.receive;
+package com.wolvencraft.yasp.api;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,6 +37,7 @@ import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
+import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -159,7 +160,9 @@ public class PlayerTotals {
         
         Map<String, Object> values = new HashMap<String, Object>();
         values.put("currentSession", Util.parseTimestamp(Util.getTimestamp() - sessionStart));
+        values.put("rawCurrentSession", (Util.getTimestamp() - sessionStart));
         values.put("totalPlaytime", Util.parseTimestamp(totalPlaytime));
+        values.put("rawTotalPlaytime", totalPlaytime);
         
         values.put("blocksBroken", blocksBroken);
         values.put("blocksPlaced", blocksPlaced);
@@ -183,8 +186,12 @@ public class PlayerTotals {
         return values;
     }
     
-    public List<NamedValue> getNamedValues() {
-        List<NamedValue> values = new LinkedList<NamedValue>();
+    /**
+     * Bundles up the Named values into one Map for ease of access.
+     * @return Map of named values
+     */
+    public List<NamedInteger> getNamedValues() {
+        List<NamedInteger> values = new LinkedList<NamedInteger>();
         values.add(getBlocksBroken());
         values.add(getBlocksPlaced());
         values.add(getCurrentSession());
@@ -196,9 +203,14 @@ public class PlayerTotals {
         return values;
     }
     
-    public NamedValue getCurrentSession() {
+    /**
+     * Returns the length of the current session.<br />
+     * This method is intended to be used with a Scoreboard.
+     * @return Current session lenght
+     */
+    public NamedInteger getCurrentSession() {
         long currentSession = Util.getTimestamp() - sessionStart;
-        NamedValue value = new NamedValue();
+        NamedInteger value = new NamedInteger();
         if(currentSession < 60) {
             value.setData (ChatColor.GREEN + "Online (sec)", (int) (currentSession));
         } else if(currentSession < 3600) {
@@ -210,8 +222,13 @@ public class PlayerTotals {
         return value;
     }
     
-    public NamedValue getTotalPlaytime() {
-        NamedValue value = new NamedValue();
+    /**
+     * Returns the total playtime.<br />
+     * This method is intended to be used with a Scoreboard.
+     * @return Total playtime
+     */
+    public NamedInteger getTotalPlaytime() {
+        NamedInteger value = new NamedInteger();
         if(totalPlaytime < 60) {
             value.setData (ChatColor.GREEN + "Playtime (sec)", (int) (totalPlaytime));
         } else if(totalPlaytime < 3600) {
@@ -223,8 +240,13 @@ public class PlayerTotals {
         return value;
     }
     
-    public NamedValue getBlocksBroken() {
-        NamedValue value = new NamedValue();
+    /**
+     * Returns the number of blocks the player has broken.<br />
+     * This method is intended to be used with a Scoreboard.
+     * @return Number of blocks
+     */
+    public NamedInteger getBlocksBroken() {
+        NamedInteger value = new NamedInteger();
         if(blocksBroken < 100000) {
             value.setData (ChatColor.GOLD + "Broken", blocksBroken);
         } else {
@@ -234,8 +256,13 @@ public class PlayerTotals {
         return value;
     }
     
-    public NamedValue getBlocksPlaced() {
-        NamedValue value = new NamedValue();
+    /**
+     * Returns the number of blocks the player has placed.<br />
+     * This method is intended to be used with a Scoreboard.
+     * @return Number of blocks
+     */
+    public NamedInteger getBlocksPlaced() {
+        NamedInteger value = new NamedInteger();
         if(blocksPlaced < 100000) {
             value.setData (ChatColor.GOLD + "Placed", blocksPlaced);
         } else {
@@ -244,8 +271,14 @@ public class PlayerTotals {
         value.setPossibleNames(ChatColor.GOLD + "Placed", ChatColor.GOLD + "Placed (k)");
         return value;
     }
-    public NamedValue getDistance() {
-        NamedValue value = new NamedValue();
+    
+    /**
+     * Returns the total distance the player has traveled.<br />
+     * This method is intended to be used with a Scoreboard.
+     * @return Distance traveled
+     */
+    public NamedInteger getDistance() {
+        NamedInteger value = new NamedInteger();
         if(distTotal < 1000) {
             value.setData (ChatColor.BLUE + "Traveled (m)", (int) (distTotal));
         } else {
@@ -255,16 +288,31 @@ public class PlayerTotals {
         return value;
     }
     
-    public NamedValue getPVPKills() {
-        return new NamedValue (ChatColor.RED + "PVP Kills", pvpKills);
+    /**
+     * Returns the total number of PVP kills.<br />
+     * This method is intended to be used with a Scoreboard.
+     * @return Number of kills
+     */
+    public NamedInteger getPVPKills() {
+        return new NamedInteger (ChatColor.RED + "PVP Kills", pvpKills);
     }
     
-    public NamedValue getPVEKills() {
-        return new NamedValue (ChatColor.RED + "PVE Kills", pveKills);
+    /**
+     * Returns the total number of PVE kills.<br />
+     * This method is intended to be used with a Scoreboard.
+     * @return Number of kills
+     */
+    public NamedInteger getPVEKills() {
+        return new NamedInteger (ChatColor.RED + "PVE Kills", pveKills);
     }
     
-    public NamedValue getDeaths() {
-        return new NamedValue (ChatColor.RED + "Deaths", deaths);
+    /**
+     * Returns the number of deaths.<br />
+     * This method is intended to be used with a Scoreboard.
+     * @return Number of deaths
+     */
+    public NamedInteger getDeaths() {
+        return new NamedInteger (ChatColor.RED + "Deaths", deaths);
     }
     
     /**
@@ -354,41 +402,6 @@ public class PlayerTotals {
         pveKills++;
     }
     
-    public class NamedValue {
-        
-        private String name;
-        private String[] names;
-        private Integer value;
-        
-        public NamedValue() { }
-        
-        public NamedValue(String name, Integer value) {
-            this.name = name;
-            this.value = value;
-            names = new String[] { name };
-        }
-        
-        public String getName() {
-            return name;
-        }
-        
-        public Integer getValue() {
-            return value;
-        }
-        
-        public String[] getPossibleNames() {
-            return names;
-        }
-        
-        private void setData(String name, Integer value) {
-            this.name = name;
-            this.value = value;
-        }
-        
-        private void setPossibleNames(String... names) {
-            this.names = names;
-        }
-        
-    }
+
     
 }
