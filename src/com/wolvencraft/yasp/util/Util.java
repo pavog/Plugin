@@ -70,6 +70,7 @@ public class Util {
     public static List<DataStore> getHooks(Player player, int playerId) {
         List<DataStore> dataStores = new ArrayList<DataStore>();
         if(ActiveHooks.HookVault.getActive()) dataStores.add(new VaultData(player, playerId));
+        if(ActiveHooks.HookWorldGuard.getActive()) dataStores.add(new WorldGuardData(player, playerId));
         return dataStores;
     }
     

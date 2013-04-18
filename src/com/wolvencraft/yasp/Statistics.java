@@ -62,6 +62,7 @@ public class Statistics extends JavaPlugin {
     private static Gson gson;
     
     private static VaultHook vaultHook;
+    private static WorldGuardHook worldGuardHook;
     
     /**
      * <b>Default constructor</b><br />
@@ -102,9 +103,17 @@ public class Statistics extends JavaPlugin {
         
         Message.log("Database connection established.");
         
-        if (getServer().getPluginManager().getPlugin("Vault") != null && Settings.Modules.HookVault.getEnabled()) {
+        if (getServer().getPluginManager().getPlugin("Vault") != null
+         && Settings.Modules.HookVault.getEnabled()) {
             vaultHook = new VaultHook();
             vaultHook.onEnable();
+        }
+        
+        if (getServer().getPluginManager().getPlugin("WorldGuard") != null
+         && getServer().getPluginManager().getPlugin("WorldEdit") != null
+         && Settings.Modules.HookWorldGuard.getEnabled()) {
+            worldGuardHook = new WorldGuardHook();
+            worldGuardHook.onEnable();
         }
 
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
@@ -152,6 +161,7 @@ public class Statistics extends JavaPlugin {
             Bukkit.getScheduler().cancelTasks(this);
             
             if(vaultHook != null) { vaultHook.onDisable(); }
+            if(worldGuardHook != null) { worldGuardHook.onDisable(); }
 
             Database.close();
         } catch (Throwable t) { 
