@@ -75,7 +75,7 @@ public class PlayersData {
         generalData = new Players(playerId, player);
         distanceData = new DistancePlayers(playerId);
         miscData = new MiscInfoPlayers(playerId, player);
-        inventoryData = new InventoryData(playerId);
+        if(Settings.Modules.Inventory.getEnabled()) inventoryData = new InventoryData(playerId);
         
         detailedData = new ArrayList<DetailedData>();
     }
@@ -97,7 +97,7 @@ public class PlayersData {
         generalData.pushData(playerId);
         distanceData.pushData(playerId);
         miscData.pushData(playerId);
-        inventoryData.pushData(playerId);
+        if(Settings.Modules.Inventory.getEnabled()) inventoryData.pushData(playerId);
         
         for(DetailedData entry : getDetailedData()) {
             if(entry.pushData(playerId)) { detailedData.remove(entry); }

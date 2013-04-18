@@ -133,9 +133,10 @@ public class Settings {
         Inventory("module.inventory"),
         
         HookVault("hook.vault"),
-        HookWorldGuard("hook.worldguard"),
+        HookMcMMO("hook.mcmmo"),
         HookJobs("hook.jobs"),
-        HookMcMMO("hook.mcmmo");
+        HookWorldGuard("hook.worldguard"),
+        HookMobArena("hook.mobarena");
         
         private String key;
         private boolean active;
