@@ -39,6 +39,7 @@ import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Generic Player information used on DisplaySigns and books.
@@ -320,6 +321,7 @@ public class PlayerTotals {
      */
     public void blockBreak() {
         blocksBroken++;
+        DatabaseTask.getTotals().blockBreak();
     }
     
     /**
@@ -327,6 +329,7 @@ public class PlayerTotals {
      */
     public void blockPlace() {
         blocksPlaced++;
+        DatabaseTask.getTotals().blockPlace();
     }
     
     /**
@@ -335,6 +338,7 @@ public class PlayerTotals {
      * @param distance Distance traveled
      */
     public void addDistance(DistancePlayersTable type, double distance) {
+        DatabaseTask.getTotals().addDistance(type, distance);
         distTotal += distance;
         switch(type) {
             case Foot:
@@ -365,6 +369,7 @@ public class PlayerTotals {
      */
     public void toolBreak() {
         toolsBroken++;
+        DatabaseTask.getTotals().toolBreak();
     }
     
     /**
@@ -372,6 +377,7 @@ public class PlayerTotals {
      */
     public void itemCraft() {
         itemsCrafted++;
+        DatabaseTask.getTotals().itemCraft();
     }
     
     /**
@@ -379,6 +385,7 @@ public class PlayerTotals {
      */
     public void snacksEaten() {
         snacksEaten++;
+        DatabaseTask.getTotals().snacksEaten();
     }
     
     /**
@@ -386,6 +393,7 @@ public class PlayerTotals {
      */
     public void pvpKill() {
         pvpKills++;
+        DatabaseTask.getTotals().pvpKill();
     }
     
     /**
@@ -393,6 +401,7 @@ public class PlayerTotals {
      */
     public void death() {
         deaths++;
+        DatabaseTask.getTotals().death();
     }
     
     /**
@@ -400,8 +409,7 @@ public class PlayerTotals {
      */
     public void pveKill() {
         pveKills++;
+        DatabaseTask.getTotals().pveKill();
     }
-    
-
     
 }

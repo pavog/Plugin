@@ -118,11 +118,12 @@ public class ServerTotals {
         values.put("blPlaced", blocksPlaced);
         
         values.put("distTotal", distanceTotal);
-        values.put("distPig", distanceTotal);
-        values.put("distCart", distanceTotal);
-        values.put("distBoat", distanceTotal);
-        values.put("distFlight", distanceTotal);
-        values.put("distSwim", distanceTotal);
+        values.put("distFoot", distanceFoot);
+        values.put("distPig", distancePig);
+        values.put("distCart", distanceMinecart);
+        values.put("distBoat", distanceBoat);
+        values.put("distFlight", distanceFlight);
+        values.put("distSwim", distanceSwim);
         
         values.put("itBroken", toolsBroken);
         values.put("itCrafted", itemsCrafted);
@@ -132,6 +133,95 @@ public class ServerTotals {
         values.put("deaths", deaths);
         values.putAll(DatabaseTask.getStats().getValueMap());
         return values;
+    }
+    
+
+    
+    /**
+     * Registers a block being broken
+     */
+    public void blockBreak() {
+        blocksBroken++;
+    }
+    
+    /**
+     * Registers a block being places
+     */
+    public void blockPlace() {
+        blocksPlaced++;
+    }
+    
+    /**
+     * Increases the distance traveled by different means
+     * @param type Travel type
+     * @param distance Distance traveled
+     */
+    public void addDistance(DistancePlayersTable type, double distance) {
+        distanceTotal += distance;
+        switch(type) {
+            case Foot:
+                distanceFoot += distance;
+                break;
+            case Swim:
+                distanceSwim += distance;
+                break;
+            case Flight:
+                distanceFlight += distance;
+                break;
+            case Boat:
+                distanceBoat += distance;
+                break;
+            case Minecart:
+                distanceMinecart += distance;
+                break;
+            case Pig:
+                distancePig += distance;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    /**
+     * Registers a tool being broken
+     */
+    public void toolBreak() {
+        toolsBroken++;
+    }
+    
+    /**
+     * Registers an item being crafted
+     */
+    public void itemCraft() {
+        itemsCrafted++;
+    }
+    
+    /**
+     * Registers a food item being eaten
+     */
+    public void snacksEaten() {
+        snacksEaten++;
+    }
+    
+    /**
+     * Registers a player being killed in PvP
+     */
+    public void pvpKill() {
+        pvpKills++;
+    }
+    
+    /**
+     * Registers the player dying
+     */
+    public void death() {
+        deaths++;
+    }
+    
+    /**
+     * Registers a player killing a mob
+     */
+    public void pveKill() {
+        pveKills++;
     }
     
 }
