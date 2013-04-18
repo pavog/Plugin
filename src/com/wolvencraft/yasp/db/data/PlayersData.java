@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.sync;
+package com.wolvencraft.yasp.db.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,8 +35,8 @@ import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.data.sync.DataStore.DetailedData;
-import com.wolvencraft.yasp.db.data.sync.DataStore.NormalData;
+import com.wolvencraft.yasp.db.data.DataStore.DetailedData;
+import com.wolvencraft.yasp.db.data.DataStore.NormalData;
 import com.wolvencraft.yasp.db.tables.DBTable;
 import com.wolvencraft.yasp.db.tables.Detailed.LogPlayers;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;

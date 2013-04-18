@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.Settings.ActiveHooks;
 import com.wolvencraft.yasp.Settings.Modules;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.data.sync.*;
+import com.wolvencraft.yasp.db.data.*;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**

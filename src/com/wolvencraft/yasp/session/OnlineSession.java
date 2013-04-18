@@ -38,8 +38,8 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.wolvencraft.yasp.api.PlayerTotals;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.data.sync.*;
-import com.wolvencraft.yasp.db.data.sync.DataStore.DataStoreType;
+import com.wolvencraft.yasp.db.data.*;
+import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
