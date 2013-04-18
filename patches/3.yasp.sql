@@ -552,7 +552,7 @@ INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("58", "enderman
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("59", "cavespider");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("60", "silverfish");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("61", "blaze");
-INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("62", "lavalslime");
+INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("62", "lavaslime");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("63", "enderdragon");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("64", "witherboss");
 INSERT INTO `$prefix_entities` (`entity_id` , `tp_name`) VALUES ("66", "witch");
