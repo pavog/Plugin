@@ -20,10 +20,15 @@
 
 package com.wolvencraft.yasp.cmd;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
@@ -43,6 +48,13 @@ public class SyncCommand implements BaseCommand {
             @Override
             public void run() {
                 DatabaseTask.commit();
+                
+                List<QueryResult> results= Query.table(PlayersTable.TableName).column(PlayersTable.Name).condition(PlayersTable.Online, true).selectAll();
+                for(QueryResult result : results) {
+                    String playerName = result.asString(PlayersTable.Name);
+                    if(Bukkit.getPlayerExact(playerName) == null)
+                        Query.table(PlayersTable.TableName).value(PlayersTable.Online, false).condition(PlayersTable.Name, playerName).update();
+                }
             }
             
         });
