@@ -47,7 +47,7 @@ public class PatchFetcher {
     public PatchFetcher() {
         patchDir = new File(Statistics.getInstance().getDataFolder(), "patches");
         if(!patchDir.exists()) patchDir.mkdir();
-        fetch(PatchType.YASP);
+        fetch(PatchType.YASPX);
     }
     
     /**
@@ -156,12 +156,13 @@ public class PatchFetcher {
      *
      */
     public enum PatchType {
-        YASP("yasp"),
-        Vault("vault"),
-        WorldGuard("worldguard"),
+        YASPX("yaspx"),
+
         Factions("factions"),
         MobArena("mobarena"),
-        PvpArena("pvparena");
+        PvpArena("pvparena"),
+        Vault("vault"),
+        WorldGuard("worldguard");
         
         private String extension;
         
