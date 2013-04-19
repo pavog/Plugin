@@ -158,7 +158,7 @@ public class PatchFetcher {
     public enum PatchType {
         YASP("yasp"),
         Vault("vault"),
-        WorldGuard("wg"),
+        WorldGuard("worldguard"),
         Factions("factions"),
         MobArena("mobarena"),
         PvpArena("pvparena");
