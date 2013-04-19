@@ -31,6 +31,7 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.api.ServerTotals;
 import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
@@ -85,6 +86,7 @@ public class DatabaseTask implements Runnable {
      * <li>Confirm that the synchronization is not paused.</li>
      * <li>Push all player data to the database</li>
      * <li>Push generic server statistics to the database</li>
+     * <li>Confirms that the players marked as online are actually online</li>
      * <li>Fetch server totals for signs and statistics books</li>
      * <li>Clear settings cache</li>
      * </ul>
@@ -108,6 +110,13 @@ public class DatabaseTask implements Runnable {
             Query.table(Normal.PlayersTable.TableName)
                 .condition(PlayersTable.Name, session.getName())
                 .delete();
+        }
+        
+        List<QueryResult> results= Query.table(PlayersTable.TableName).column(PlayersTable.Name).condition(PlayersTable.Online, true).selectAll();
+        for(QueryResult result : results) {
+            String playerName = result.asString(PlayersTable.Name);
+            if(Bukkit.getPlayerExact(playerName) == null)
+                Query.table(PlayersTable.TableName).value(PlayersTable.Online, false).condition(PlayersTable.Name, playerName).update();
         }
         
         serverStatistics.pushData();
