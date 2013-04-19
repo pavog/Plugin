@@ -177,6 +177,16 @@ public class OnlineSession implements PlayerSession {
     }
     
     /**
+     * Player has logged out, but the logout event was not caught
+     */
+    public void logout() {
+        Query.table(PlayersTable.TableName)
+            .value(PlayersTable.Online, false)
+            .condition(PlayersTable.PlayerId, id)
+            .update();
+    }
+    
+    /**
      * Player has logged out
      * @param location Location on logout
      */

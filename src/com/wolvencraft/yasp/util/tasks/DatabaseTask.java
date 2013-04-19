@@ -31,7 +31,6 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.api.ServerTotals;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
@@ -102,6 +101,7 @@ public class DatabaseTask implements Runnable {
             session.getTotals().fetchData();
             
             if(session.isOnline()) continue;
+            session.logout();
             removeSession(session);
             
             long delay = Settings.RemoteConfiguration.LogDelay.asInteger();
@@ -110,13 +110,6 @@ public class DatabaseTask implements Runnable {
             Query.table(Normal.PlayersTable.TableName)
                 .condition(PlayersTable.Name, session.getName())
                 .delete();
-        }
-        
-        List<QueryResult> results= Query.table(PlayersTable.TableName).column(PlayersTable.Name).condition(PlayersTable.Online, true).selectAll();
-        for(QueryResult result : results) {
-            String playerName = result.asString(PlayersTable.Name);
-            if(Bukkit.getPlayerExact(playerName) == null)
-                Query.table(PlayersTable.TableName).value(PlayersTable.Online, false).condition(PlayersTable.Name, playerName).update();
         }
         
         serverStatistics.pushData();
