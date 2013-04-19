@@ -60,7 +60,7 @@ public class WorldGuardHook {
         
         if (plugin != null && plugin instanceof WorldGuardPlugin) {
             instance = (WorldGuardPlugin) plugin;
-            Message.log("Vault hook enabled!");
+            Message.log("WorldGuard hook enabled!");
             Settings.ActiveHooks.HookWorldGuard.setActive(true);
         }
         
