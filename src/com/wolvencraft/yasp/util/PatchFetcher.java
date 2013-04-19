@@ -159,7 +159,9 @@ public class PatchFetcher {
         YASP("yasp"),
         Vault("vault"),
         WorldGuard("wg"),
-        Factions("factions");
+        Factions("factions"),
+        MobArena("mobarena"),
+        PvpArena("pvparena");
         
         private String extension;
         

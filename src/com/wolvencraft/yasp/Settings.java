@@ -189,7 +189,9 @@ public class Settings {
         HookVault,
         HookWorldGuard,
         HookJobs,
-        HookMcMMO;
+        HookMcMMO,
+        HookMobArena,
+        HookPvpArena;
         
         boolean active;
         
