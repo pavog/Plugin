@@ -30,6 +30,7 @@ import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.hooks.VaultHook;
 
 /**
+ * <b>Requires VaultHook</b><br />
  * Provides means to serialize player's groups into a Json array
  * @author bitWolfy
  *
