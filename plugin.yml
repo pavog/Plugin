@@ -1,9 +1,9 @@
 name: Statistics
 main: com.wolvencraft.yasp.Statistics
-version: 1.0.0b
+version: 1.0.x
 description: Extremely detailed player/server statistic tracking with web portal
 authors: [bitWolfy, Dazzel_]
-softdepend: [Vault, WorldEdit, WorldGuard, mcMMO, Factions]
+softdepend: [Vault, WorldEdit, WorldGuard, mcMMO, Factions, MobArena, PvpArena]
 commands:
   stats:
     description: Statistics commands
