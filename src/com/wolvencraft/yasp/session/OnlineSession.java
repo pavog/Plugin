@@ -36,13 +36,13 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-import com.wolvencraft.yasp.api.PlayerTotals;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.*;
 import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.db.totals.PlayerTotals;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.PlayerCache;

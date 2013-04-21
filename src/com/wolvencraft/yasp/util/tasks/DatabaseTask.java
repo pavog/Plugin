@@ -29,11 +29,11 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.StatPerms;
-import com.wolvencraft.yasp.api.ServerTotals;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.db.totals.ServerTotals;
 import com.wolvencraft.yasp.session.*;
 import com.wolvencraft.yasp.util.Message;
 
