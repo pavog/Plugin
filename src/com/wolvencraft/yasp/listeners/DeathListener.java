@@ -22,6 +22,7 @@ package com.wolvencraft.yasp.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Explosive;
 import org.bukkit.entity.Player;
@@ -104,6 +105,10 @@ public class DeathListener implements Listener {
                     if(!StatPerms.DeathPVE.has(victim)) return;
                     OnlineSession session = DatabaseTask.getSession(victim);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
+                } else if (killerEntity instanceof EnderDragon) {                        // | + Ender Dragon killed player
+                    if(!StatPerms.DeathPVE.has(victim)) return;
+                    OnlineSession session = DatabaseTask.getSession(victim);
+                    session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else {                                                        // | + Player died
                     if(!StatPerms.DeathOther.has(victim)) return;
                     OnlineSession session = DatabaseTask.getSession(victim);
@@ -139,6 +144,8 @@ public class DeathListener implements Listener {
                 if (victimEntity instanceof Creature) {                            // | + Player killed Creature
                     DatabaseTask.getSession(killer).killedCreature(victimEntity, killer.getItemInHand());
                 } else if (victimEntity instanceof Slime) {                        // | + Player killed Slime
+                    DatabaseTask.getSession(killer).killedCreature(victimEntity, killer.getItemInHand());
+                } else if (victimEntity instanceof EnderDragon) {                  // | + Player killed an EnderDragon
                     DatabaseTask.getSession(killer).killedCreature(victimEntity, killer.getItemInHand());
                 }
             }
