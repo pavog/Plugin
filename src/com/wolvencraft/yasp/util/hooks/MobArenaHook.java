@@ -64,10 +64,21 @@ public class MobArenaHook {
      * @param playerName Name of the player
      * @return <b>true</b> if a player is in the arena, <b>false</b> otherwise
      */
-    public boolean isPlayer(String playerName) {
+    public boolean isPlaying(String playerName) {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
         if(player == null) return false;
         return instance.getArenaMaster().getAllPlayers().contains(player);
+    }
+    
+    /**
+     * Returns the name of the arena the player is currently in
+     * @param playerName Name of the player 
+     * @return <b>String</b> name of the arena, or <b>null</b> if the player is not participating
+     */
+    public String getArenaName(String playerName) {
+        Player player = Bukkit.getServer().getPlayerExact(playerName);
+        if(player == null) return "";
+        return instance.getArenaMaster().getArenaWithPlayer(player).arenaName();
     }
     
     /**
