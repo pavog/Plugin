@@ -187,7 +187,7 @@ public class PlayersData {
             Query.table(PlayersTable.TableName)
                 .value(PlayersTable.LoginTime, lastSync)
                 .value(PlayersTable.FirstLogin, firstLogin)
-                .value(PlayersTable.Logins, logins++)
+                .value(PlayersTable.Logins, ++logins)
                 .condition(PlayersTable.PlayerId, playerId)
                 .update();
         }
