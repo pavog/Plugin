@@ -77,7 +77,7 @@ public class MobArenaHook {
      */
     public String getArenaName(String playerName) {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return "";
+        if(player == null) return null;
         return instance.getArenaMaster().getArenaWithPlayer(player).arenaName();
     }
     

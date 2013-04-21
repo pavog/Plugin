@@ -76,7 +76,7 @@ public class PvpArenaHook {
      */
     public String getArenaName(String playerName) {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return "";
+        if(player == null) return null;
         return PVPArenaAPI.getArenaName(player);
     }
     
