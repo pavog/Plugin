@@ -20,7 +20,10 @@
 
 package com.wolvencraft.yasp;
 
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
@@ -480,6 +483,69 @@ public class Settings {
          */
         public boolean has(Player player) {
             return player.isOp() || player.hasPermission(node);
+        }
+        
+    }
+    
+    /**
+     * Describes the relationships between Projectile types and their item IDs.<br />
+     * Used to extract an ItemStack from an EntityType.
+     * @author bitWolfy
+     *
+     */
+    public enum ProjectileToItem {
+        
+        Arrow(EntityType.ARROW, 262),
+        Egg(EntityType.EGG, 344),
+        EnderPearl(EntityType.ENDER_PEARL, 368),
+        FishingHook(EntityType.FISHING_HOOK, 346),
+        LargeFireball(EntityType.FIREBALL, 385),
+        SmallFireball(EntityType.SMALL_FIREBALL, 51),
+        Snowball(EntityType.SNOWBALL, 332),
+        ThrownExpBottle(EntityType.THROWN_EXP_BOTTLE, 384),
+        ThrownPotion(EntityType.SPLASH_POTION, 373),
+        WitherSkull(EntityType.WITHER_SKULL, 397, (short) 1);
+        
+        private EntityType type;
+        private int itemId;
+        private short data;
+        
+        /**
+         * <b>Default constructor</b><br />
+         * Damage value defaults to 0.
+         * @param type Entity type
+         * @param itemId Item ID
+         */
+        ProjectileToItem(EntityType type, int itemId) {
+            this.type = type;
+            this.itemId = itemId;
+            this.data = 0;
+        }
+        
+        /**
+         * <b>Constructor</b>
+         * @param type Entity type
+         * @param itemId Item ID
+         * @param data Damage value
+         */
+        ProjectileToItem(EntityType type, int itemId, short data) {
+            this.type = type;
+            this.itemId = itemId;
+            this.data = data;
+        }
+        
+        /**
+         * Parses an EntityType and returns a corresponding ItemStack
+         * @param type Projectile type
+         * @return Item tack
+         */
+        public static ItemStack parse(EntityType type) {
+            for(ProjectileToItem entry : ProjectileToItem.values()) {
+                if(type.equals(entry.type)) {
+                    return new ItemStack(entry.itemId, 1, entry.data);
+                }
+            }
+            return new ItemStack(Material.ARROW);
         }
         
     }

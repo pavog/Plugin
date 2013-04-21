@@ -21,11 +21,11 @@
 package com.wolvencraft.yasp.listeners;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Explosive;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,6 +37,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.Statistics;
@@ -73,19 +74,19 @@ public class DeathListener implements Listener {
             if (lastDamageEvent instanceof EntityDamageByEntityEvent) {            // + Player killed by entity
                 Entity killerEntity = ((EntityDamageByEntityEvent) lastDamageEvent).getDamager();
 
-                if (killerEntity instanceof Arrow) {                            // | + Victim was shot
-                        Arrow arrow = (Arrow) killerEntity;
-                        if (arrow.getShooter() instanceof Player) {                // | | + Player shot Player
-                            Player killer = (Player) arrow.getShooter();
-                            if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(victim)) return;
-                            OnlineSession session = DatabaseTask.getSession(killer);
-                            session.killedPlayer(victim, new ItemStack(Material.ARROW));
-                        } else if (arrow.getShooter() instanceof Creature) {    // | | + Creature shot Player
-                            if(!StatPerms.DeathPVE.has(victim)) return;
-                            Entity killer = (Entity) arrow.getShooter();
-                            OnlineSession session = DatabaseTask.getSession(victim);
-                            session.killedByCreature(killer, new ItemStack(Material.ARROW));
-                        }
+                if (killerEntity instanceof Projectile) {                            // | + Victim was shot
+                    Projectile projectile = (Projectile) killerEntity;
+                    if (projectile.getShooter() instanceof Player) {                // | | + Player shot Player
+                        Player killer = (Player) projectile.getShooter();
+                        if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(victim)) return;
+                        OnlineSession session = DatabaseTask.getSession(killer);
+                        session.killedPlayer(victim, Settings.ProjectileToItem.parse(projectile.getType()));
+                    } else if (projectile.getShooter() instanceof Creature) {    // | | + Creature shot Player
+                        if(!StatPerms.DeathPVE.has(victim)) return;
+                        Entity killer = (Entity) projectile.getShooter();
+                        OnlineSession session = DatabaseTask.getSession(victim);
+                        session.killedByCreature(killer, Settings.ProjectileToItem.parse(projectile.getType()));
+                    }
                 } else if (killerEntity instanceof Player) {                    // | + Player killed Player
                     Player killer = (Player) killerEntity;
                     if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(victim)) return;
@@ -122,15 +123,15 @@ public class DeathListener implements Listener {
             
             Entity killerEntity = ((EntityDamageByEntityEvent) lastDamageEvent).getDamager();
             
-            if (killerEntity instanceof Arrow) {                                // + Player shot an entity
-                Arrow arrow = (Arrow) killerEntity;
-                if (!(arrow.getShooter() instanceof Player)) return;
-                Player killer = (Player) arrow.getShooter();
+            if (killerEntity instanceof Projectile) {                                // + Player shot an entity
+                Projectile projectile = (Projectile) killerEntity;
+                if (!(projectile.getShooter() instanceof Player)) return;
+                Player killer = (Player) projectile.getShooter();
                 if(!StatPerms.DeathPVE.has(killer)) return;
                 if (victimEntity instanceof Creature) {                            // | + Player shot Creature
-                    DatabaseTask.getSession(killer).killedCreature(victimEntity, new ItemStack(Material.ARROW));
+                    DatabaseTask.getSession(killer).killedCreature(victimEntity, Settings.ProjectileToItem.parse(projectile.getType()));
                 } else if (victimEntity instanceof Slime) {                        // | + Player shot Slime
-                    DatabaseTask.getSession(killer).killedCreature(victimEntity, new ItemStack(Material.ARROW));
+                    DatabaseTask.getSession(killer).killedCreature(victimEntity, Settings.ProjectileToItem.parse(projectile.getType()));
                 }
             } else if (killerEntity instanceof Player) {                        // + Player killed an entity
                 Player killer = (Player) killerEntity;
