@@ -37,6 +37,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -130,6 +131,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerFish(PlayerFishEvent event) {
         if(Statistics.getPaused()) return;
+        if(!event.getState().equals(State.CAUGHT_FISH)) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
         DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.FishCaught);
