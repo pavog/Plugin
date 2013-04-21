@@ -51,7 +51,7 @@ public class BookUtil {
         }
         
         tags.setString("title", player.getPlayerListName() + " Statistics");
-        tags.setString("author", "YASP");
+        tags.setString("author", "Statistics");
         
         NBTTagList pages = new NBTTagList("pages");
         String[] newPages = getBookPages(player.getPlayerListName());
@@ -98,12 +98,10 @@ public class BookUtil {
                 
                 ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.BLACK + ChatColor.BOLD + "  Kills and Deaths \n" + 
-                ChatColor.RED + ChatColor.BOLD + " - PvP" + ChatColor.RESET + "\n" + 
-                ChatColor.BLACK + " Kills: " + stats.get("pvpKills") + "\n" + 
-                ChatColor.BLACK + " Deaths: " + stats.get("pvpDeaths") + "\n" + 
-                ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n\n" + 
-                ChatColor.RED + ChatColor.BOLD + " - Other \n" + ChatColor.RESET +
-                ChatColor.BLACK + " Mob kills: " + stats.get("pveKills")
+                ChatColor.BLACK + " PVP Kills: " + stats.get("pvpKills") + "\n" + 
+                ChatColor.BLACK + " PVE kills: " + stats.get("pveKills") + 
+                ChatColor.BLACK + " Deaths: " + stats.get("deaths") + "\n" + 
+                ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n\n"
         };
     }
     

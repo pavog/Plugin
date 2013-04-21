@@ -73,7 +73,7 @@ public class StatsBookListener implements Listener {
         String title = tags.getString("title");
         Player player = event.getPlayer();
         
-        if(!(author.equals("YASP"))) return;
+        if(!(author.equals("Statistics"))) return;
         Message.debug("Player " + player.getPlayerListName() + " read the book '" + title + "' by " + author);
         String playerName = title.split(" ")[0];
         
