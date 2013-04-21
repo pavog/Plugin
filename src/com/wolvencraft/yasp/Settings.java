@@ -189,6 +189,7 @@ public class Settings {
      *
      */
     public enum ActiveHooks {
+        HookFactions,
         HookVault,
         HookWorldGuard,
         HookJobs,
