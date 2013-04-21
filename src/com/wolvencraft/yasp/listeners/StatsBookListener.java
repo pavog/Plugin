@@ -60,7 +60,6 @@ public class StatsBookListener implements Listener {
         if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))) return;
         ItemStack craftItem = event.getItem();
         if(craftItem == null || craftItem.getTypeId() != 387) return;
-        
         net.minecraft.server.v1_5_R2.ItemStack item = CraftItemStack.asNMSCopy(craftItem);
         
         NBTTagCompound tags = item.getTag();
@@ -72,7 +71,6 @@ public class StatsBookListener implements Listener {
         String author = tags.getString("author");
         String title = tags.getString("title");
         Player player = event.getPlayer();
-        
         if(!(author.equals("Statistics"))) return;
         Message.debug("Player " + player.getPlayerListName() + " read the book '" + title + "' by " + author);
         String playerName = title.split(" ")[0];

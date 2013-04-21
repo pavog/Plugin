@@ -50,7 +50,7 @@ public class BookUtil {
             item.setTag(tags);
         }
         
-        tags.setString("title", player.getPlayerListName() + " Statistics");
+        tags.setString("title", player.getPlayerListName());
         tags.setString("author", "Statistics");
         
         NBTTagList pages = new NBTTagList("pages");
