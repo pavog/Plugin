@@ -55,7 +55,7 @@ public class FactionsHook {
         
         if (plugin != null && plugin instanceof Factions) {
             Message.log("Factions hook enabled!");
-            Settings.ActiveHooks.HookFactions.setActive(true);
+            Settings.ActiveHook.HookFactions.setActive(true);
         }
     }
     

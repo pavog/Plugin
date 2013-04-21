@@ -20,11 +20,13 @@
 
 package com.wolvencraft.yasp;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.api.events.HookInitEvent;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
@@ -188,7 +190,7 @@ public class Settings {
      * @author bitWolfy
      *
      */
-    public enum ActiveHooks {
+    public enum ActiveHook {
         HookFactions,
         HookVault,
         HookWorldGuard,
@@ -199,10 +201,24 @@ public class Settings {
         
         boolean active;
         
-        ActiveHooks() { active = false; }
+        ActiveHook() { active = false; }
         
-        public boolean getActive() { return active; }
-        public void setActive(boolean active) { this.active = active; }
+        /**
+         * Returns the hook status
+         * @return <b>true</b> if the hook is active, <b>false</b> otherwise
+         */
+        public boolean getActive() {
+            return active;
+        }
+        
+        /**
+         * Sets the hook status
+         * @param active <b>true</b> if the hook is active, <b>false</b> otherwise
+         */
+        public void setActive(boolean active) { 
+            this.active = active;
+            Bukkit.getServer().getPluginManager().callEvent(new HookInitEvent(this));
+        }
     }
     
     /**

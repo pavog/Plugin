@@ -30,7 +30,7 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.Settings.ActiveHooks;
+import com.wolvencraft.yasp.Settings.ActiveHook;
 import com.wolvencraft.yasp.Settings.Modules;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.data.*;
@@ -69,8 +69,8 @@ public class Util {
      */
     public static List<DataStore> getHooks(Player player, int playerId) {
         List<DataStore> dataStores = new ArrayList<DataStore>();
-        if(ActiveHooks.HookVault.getActive()) dataStores.add(new VaultData(player, playerId));
-        if(ActiveHooks.HookWorldGuard.getActive()) dataStores.add(new WorldGuardData(player, playerId));
+        if(ActiveHook.HookVault.getActive()) dataStores.add(new VaultData(player, playerId));
+        if(ActiveHook.HookWorldGuard.getActive()) dataStores.add(new WorldGuardData(player, playerId));
         return dataStores;
     }
     

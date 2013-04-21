@@ -63,7 +63,7 @@ public class VaultHook {
         
         if(economy != null && permissions != null) {
             Message.log("Vault hook enabled!");
-            Settings.ActiveHooks.HookVault.setActive(true);
+            Settings.ActiveHook.HookVault.setActive(true);
         }
     }
     

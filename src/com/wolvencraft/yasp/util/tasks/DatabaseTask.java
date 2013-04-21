@@ -29,6 +29,9 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.StatPerms;
+import com.wolvencraft.yasp.api.events.SessionRemoveEvent;
+import com.wolvencraft.yasp.api.events.SynchronizationEvent;
+import com.wolvencraft.yasp.api.events.SynchronizationPreProcessEvent;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.tables.Normal;
@@ -45,6 +48,7 @@ import com.wolvencraft.yasp.util.Message;
  */
 public class DatabaseTask implements Runnable {
     
+    private static int iteration;
     private static List<OnlineSession> sessions;
     private static ServerTotals serverTotals;
     private static ServerStatistics serverStatistics;
@@ -54,6 +58,7 @@ public class DatabaseTask implements Runnable {
      * Initializes an empty list of OnlineSessions
      */
     public DatabaseTask() {
+        iteration = 0;
         sessions = new ArrayList<OnlineSession>();
         serverStatistics = new ServerStatistics();
         serverTotals = new ServerTotals();
@@ -93,6 +98,7 @@ public class DatabaseTask implements Runnable {
      * Asynchronous threading is strongly recommended.
      */
     public static void commit() {
+        Bukkit.getServer().getPluginManager().callEvent(new SynchronizationPreProcessEvent(iteration));
         if(Statistics.getPaused()) return;
         Message.debug("Database synchronization in progress");
         
@@ -116,6 +122,8 @@ public class DatabaseTask implements Runnable {
         serverTotals.fetchData();
         
         Settings.clearCache();
+        Bukkit.getServer().getPluginManager().callEvent(new SynchronizationEvent(iteration));
+        iteration++;
     }
     
     /**
@@ -123,7 +131,10 @@ public class DatabaseTask implements Runnable {
      * After that, clears the session list.
      */
     public static void dumpSessions() {
-        for(OnlineSession session : getSessionList()) session.dumpData();
+        for(OnlineSession session : getSessionList()) {
+            session.dumpData();
+            Bukkit.getServer().getPluginManager().callEvent(new SessionRemoveEvent(session.getName()));
+        }
         sessions.clear();
     }
     
@@ -197,6 +208,7 @@ public class DatabaseTask implements Runnable {
      */
     public static void removeSession(OnlineSession session) {
         Message.debug("Removing a user session for " + session.getName());
+        Bukkit.getServer().getPluginManager().callEvent(new SessionRemoveEvent(session.getName()));
         sessions.remove(session);
     }
     

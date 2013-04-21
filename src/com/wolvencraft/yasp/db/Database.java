@@ -35,9 +35,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+
 import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.Settings.LocalConfiguration;
+import com.wolvencraft.yasp.api.events.DatabasePatchEvent;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
@@ -131,6 +134,7 @@ public class Database {
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      */
     private static boolean executePatch(ScriptRunner scriptRunner, String patchId) throws DatabaseConnectionException {
+        Bukkit.getServer().getPluginManager().callEvent(new DatabasePatchEvent(patchId));
         InputStream is;
         try { is = new FileInputStream(Statistics.getInstance().getDataFolder() + "/patches/" + patchId + ".sql"); }
         catch (FileNotFoundException e1) { return false; }

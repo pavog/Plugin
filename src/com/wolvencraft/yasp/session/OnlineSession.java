@@ -36,6 +36,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
+import com.wolvencraft.yasp.api.events.SessionCreateEvent;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.*;
 import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
@@ -83,6 +84,8 @@ public class OnlineSession implements PlayerSession {
         
         this.playerTotals = new PlayerTotals(id);
         this.scoreboard = null;
+        
+        Bukkit.getServer().getPluginManager().callEvent(new SessionCreateEvent(name));
     }
     
     /**

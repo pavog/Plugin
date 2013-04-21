@@ -55,7 +55,7 @@ public class MobArenaHook {
         if (plugin != null && plugin instanceof MobArena) {
             instance = (MobArena) plugin;
             Message.log("MobArena hook enabled!");
-            Settings.ActiveHooks.HookMobArena.setActive(true);
+            Settings.ActiveHook.HookMobArena.setActive(true);
         }
     }
     

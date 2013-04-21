@@ -54,7 +54,7 @@ public class PvpArenaHook {
         
         if (plugin != null && plugin instanceof PVPArena) {
             Message.log("PvpArena hook enabled!");
-            Settings.ActiveHooks.HookPvpArena.setActive(true);
+            Settings.ActiveHook.HookPvpArena.setActive(true);
         }
     }
     
