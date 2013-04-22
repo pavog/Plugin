@@ -61,7 +61,7 @@ public class GroupsSerializable {
     public static String serialize(String playerName) {
         List<GroupsSerializable> groups = new ArrayList<GroupsSerializable>();
         for(World world : Bukkit.getServer().getWorlds()) {
-            groups.add(new GroupsSerializable(world.getName(), VaultHook.getGroup(playerName, world.getName())));
+            groups.add(new GroupsSerializable(VaultHook.getGroup(playerName, world.getName()), world.getName()));
         }
         return Util.toJsonArray(groups);
     }
