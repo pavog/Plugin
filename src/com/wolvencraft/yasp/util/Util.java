@@ -129,10 +129,10 @@ public class Util {
      */
     public static String parseTimestamp(long timestamp) {
         String result = "";
-        int minutes = (int) (timestamp / 60);
-        int seconds = (int) (timestamp - minutes);
-        int hours = (int) (timestamp / 3600);
         int days = (int) (timestamp / 86400);
+        int hours = (int) ((timestamp - (days * 86400)) / 3600);
+        int minutes = (int) ((timestamp - (days * 86400) - (hours * 3600)) / 60);
+        int seconds = (int) ((timestamp - (days * 86400) - (hours * 3600) - (minutes * 60)) - minutes);
         if(days != 0) result += days + " days, ";
         result += hours + ":" + minutes + ":" + seconds;
         return result;

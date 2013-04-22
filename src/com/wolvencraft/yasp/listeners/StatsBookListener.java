@@ -55,11 +55,11 @@ public class StatsBookListener implements Listener {
         Message.debug("StatsBookListener loads");
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onBookOpen(PlayerInteractEvent event) {
-        if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))) return;
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !event.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
         ItemStack craftItem = event.getItem();
-        if(craftItem == null || craftItem.getTypeId() != 387) return;
+        if(craftItem == null || (craftItem.getTypeId() != 387 && craftItem.getTypeId() != 340)) return;
         net.minecraft.server.v1_5_R2.ItemStack item = CraftItemStack.asNMSCopy(craftItem);
         
         NBTTagCompound tags = item.getTag();

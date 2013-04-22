@@ -136,6 +136,7 @@ public class Statistics extends JavaPlugin {
         catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new PlayerCache(), 0L, (long)(30 * 60 * 20));
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new OfflineSessionCache(), 0L, (long)(24 * 3600 * 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new MaterialCache(), 0L, (long)(24 * 3600 * 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new EntityCache(), 0L, (long)(24 * 3600 * 20));
         

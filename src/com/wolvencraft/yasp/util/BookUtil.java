@@ -31,7 +31,7 @@ import org.bukkit.craftbukkit.v1_5_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
+import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 
 public class BookUtil {
     
@@ -50,7 +50,7 @@ public class BookUtil {
             item.setTag(tags);
         }
         
-        tags.setString("title", player.getPlayerListName());
+        tags.setString("title", player.getPlayerListName() + " Statistics");
         tags.setString("author", "Statistics");
         
         NBTTagList pages = new NBTTagList("pages");
@@ -71,7 +71,7 @@ public class BookUtil {
      * @return Array of strings, each of them representing a new page in the book.
      */
     public static String[] getBookPages(String playerName) {
-        Map<String, Object> stats = DatabaseTask.getSession(playerName).getTotals().getValues();
+        Map<String, Object> stats = OfflineSessionCache.fetch(playerName).getTotals().getValues();
         return new String[] {
                 ChatColor.DARK_RED + "\n\n" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.BLACK + "Current session: \n\n" + stats.get("currentSession") + "\n\n" + 
@@ -99,7 +99,7 @@ public class BookUtil {
                 ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.BLACK + ChatColor.BOLD + "  Kills and Deaths \n" + 
                 ChatColor.BLACK + " PVP Kills: " + stats.get("pvpKills") + "\n" + 
-                ChatColor.BLACK + " PVE kills: " + stats.get("pveKills") + 
+                ChatColor.BLACK + " PVE kills: " + stats.get("pveKills") + "\n" + 
                 ChatColor.BLACK + " Deaths: " + stats.get("deaths") + "\n" + 
                 ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n\n"
         };

@@ -48,6 +48,31 @@ import com.wolvencraft.yasp.util.tasks.DatabaseTask;
  */
 public class PlayerTotals {
     
+    private int playerId;
+    
+    private long sessionStart;
+    private long totalPlaytime;
+    
+    private int blocksBroken;
+    private int blocksPlaced;
+    
+    private double distWalked;
+    private double distBoated;
+    private double distMinecarted;
+    private double distPiggybacked;
+    private double distSwam;
+    private double distFlight;
+    private double distTotal;
+    
+    private int toolsBroken;
+    private int itemsCrafted;
+    private int snacksEaten;
+    
+    private int pvpKills;
+    private int pveKills;
+    private int deaths;
+    private double kdr;
+    
     /**
      * <b>Default Constructor</b><br />
      * Sets up the default values for the data holder.
@@ -79,31 +104,6 @@ public class PlayerTotals {
         
         fetchData();
     }
-    
-    private int playerId;
-    
-    private long sessionStart;
-    private long totalPlaytime;
-    
-    private int blocksBroken;
-    private int blocksPlaced;
-    
-    private double distWalked;
-    private double distBoated;
-    private double distMinecarted;
-    private double distPiggybacked;
-    private double distSwam;
-    private double distFlight;
-    private double distTotal;
-    
-    private int toolsBroken;
-    private int itemsCrafted;
-    private int snacksEaten;
-    
-    private int pvpKills;
-    private int pveKills;
-    private int deaths;
-    private double kdr;
     
     /**
      * Fetches the data from the remote database.<br />
