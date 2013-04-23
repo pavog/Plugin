@@ -37,7 +37,7 @@ public class StatisticsAPI {
      * @return DataSession with player's totals
      */
     public static DataSession getPlayer(String username) {
-        return DatabaseTask.getDataSession(username);
+        return new DataSession(username);
     }
     
     /**

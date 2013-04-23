@@ -43,7 +43,6 @@ import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersInv;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
-import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.serializable.EffectsSerializable;
 import com.wolvencraft.yasp.util.serializable.InventorySerializable;
@@ -75,7 +74,7 @@ public class PlayersData {
         generalData = new Players(playerId, player);
         distanceData = new DistancePlayers(playerId);
         miscData = new MiscInfoPlayers(playerId, player);
-        if(Settings.Modules.Inventory.getEnabled()) inventoryData = new InventoryData(playerId);
+        if(Settings.Modules.Inventory.getEnabled()) inventoryData = new InventoryData(playerId, player);
         
         detailedData = new ArrayList<DetailedData>();
     }
@@ -533,12 +532,16 @@ public class PlayersData {
      */
     public class InventoryData implements NormalData {
         
+        String playerName;
+        
         /**
          * <b>Default constructor</b><br />
          * Creates a new InventoryData object based on arguments provided
          * @param playerId Player ID
          */
-        public InventoryData(int playerId) {
+        public InventoryData(int playerId, Player player) {
+            this.playerName = player.getName();
+            
             if(!Query.table(PlayersInv.TableName)
                     .column(PlayersInv.PlayerId)
                     .condition(PlayersInv.PlayerId, playerId)
@@ -558,9 +561,7 @@ public class PlayersData {
         
         @Override
         public boolean pushData(int playerId) {
-            OnlineSession session = DatabaseTask.getSession(playerId);
-            if(session == null) return false;
-            Player player = Bukkit.getPlayerExact(session.getName());
+            Player player = Bukkit.getPlayerExact(playerName);
             if(player == null) return false;
             if(!StatPerms.PlayerInventory.has(player)) return false;
             

@@ -133,7 +133,7 @@ public class DatabaseTask implements Runnable {
     public static void dumpSessions() {
         for(OnlineSession session : getSessionList()) {
             session.dumpData();
-            Bukkit.getServer().getPluginManager().callEvent(new SessionRemoveEvent(session.getName()));
+            removeSession(session);
         }
         sessions.clear();
     }
@@ -164,42 +164,13 @@ public class DatabaseTask implements Runnable {
         Message.debug("Creating a new user session for " + username);
         OnlineSession newSession = new OnlineSession(player);
         sessions.add(newSession);
-        if(Settings.RemoteConfiguration.ShowFirstJoinMessages.asBoolean())
+        if(Settings.RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
             Message.send(
                 player,
                 Settings.RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
             );
-        return newSession;
-    }
-    
-    /**
-     * Returns the OnlineSession associated with the specified player.<br />
-     * If no session is found, returns <b>null</b>
-     * @param playerId
-     * @return OnlineSession associated with the player, or <b>null<b> if there isn't one.
-     */
-    public static OnlineSession getSession(int playerId) {
-        for(OnlineSession session : sessions) {
-            if(session.getId() == playerId) {
-                return session;
-            }
         }
-        return null;
-    }
-    
-    /**
-     * Attempts to find a player session by the name. The player might be offline.
-     * @param playerName Name of the player
-     * @return OfflineSession with the specified player name, even if there isn't one.
-     */
-    public static OfflineSession getSession(String playerName) {
-        Message.debug("Fetching an offline session for " + playerName);
-        return new OfflineSession(playerName);
-    }
-    
-    public static DataSession getDataSession(String playerName) {
-        Message.debug("Fetching a data session for " + playerName);
-        return new DataSession(playerName);
+        return newSession;
     }
     
     /**
