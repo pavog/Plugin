@@ -31,10 +31,10 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.wolvencraft.yasp.Settings;
-import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher;
 import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
@@ -55,7 +55,7 @@ public class FactionsHook {
         
         if (plugin != null && plugin instanceof Factions) {
             Message.log("Factions hook enabled!");
-            Settings.ActiveHook.HookFactions.setActive(true);
+            Module.Factions.setActive(true);
         }
     }
     

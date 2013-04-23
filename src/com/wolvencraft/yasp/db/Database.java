@@ -37,14 +37,14 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 
-import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.api.events.DatabasePatchEvent;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -91,7 +91,7 @@ public class Database {
     public static boolean runPatcher(boolean force) throws DatabaseConnectionException {
         int databaseVersion;
         if(force) { databaseVersion = 1; }
-        else { databaseVersion = Settings.RemoteConfiguration.DatabaseVersion.asInteger(); }
+        else { databaseVersion = RemoteConfiguration.DatabaseVersion.asInteger(); }
         int latestPatchVersion = databaseVersion;
         
         File patchFile = null;
@@ -110,7 +110,7 @@ public class Database {
         for(; databaseVersion <= latestPatchVersion; databaseVersion++) {
             Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
             executePatch(scriptRunner, databaseVersion + ".yasp");
-            Settings.RemoteConfiguration.DatabaseVersion.update(databaseVersion);
+            RemoteConfiguration.DatabaseVersion.update(databaseVersion);
         }
         Message.log("+----------------------------------+");
         return true;

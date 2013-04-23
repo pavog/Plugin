@@ -26,13 +26,13 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 
-import com.wolvencraft.yasp.Settings;
-import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PlacedBlocks;
 import com.wolvencraft.yasp.db.tables.Detailed.DestroyedBlocks;
 import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
@@ -161,7 +161,7 @@ public class BlocksData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
-            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+            if(!LocalConfiguration.Standalone.asBoolean()) {
                 clearData(playerId);
                 return;
             }
@@ -193,7 +193,7 @@ public class BlocksData implements DataStore {
                 .value(TotalBlocksTable.Placed, placed)
                 .condition(TotalBlocksTable.PlayerId, playerId)
                 .condition(TotalBlocksTable.MaterialId, MaterialCache.parse(block))
-                .update(Settings.LocalConfiguration.Standalone.asBoolean());
+                .update(LocalConfiguration.Standalone.asBoolean());
             fetchData(playerId);
             return result;
         }

@@ -29,11 +29,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PVEKills;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.EntityCache;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
@@ -169,7 +169,7 @@ public class PVEData implements DataStore{
         
         @Override
         public void fetchData(int playerId) {
-            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+            if(!LocalConfiguration.Standalone.asBoolean()) {
                 clearData(playerId);
                 return;
             }
@@ -203,7 +203,7 @@ public class PVEData implements DataStore{
                     .condition(TotalPVEKillsTable.PlayerId, playerId)
                     .condition(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
                     .condition(TotalPVEKillsTable.MaterialId, MaterialCache.parse(weapon))
-                    .update(Settings.LocalConfiguration.Standalone.asBoolean());
+                    .update(LocalConfiguration.Standalone.asBoolean());
             fetchData(playerId);
             return result;
         }

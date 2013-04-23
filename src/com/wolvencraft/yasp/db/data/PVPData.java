@@ -27,11 +27,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.PVPKills;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
@@ -156,7 +156,7 @@ public class PVPData implements DataStore {
         
         @Override
         public void fetchData(int killerId) {
-            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+            if(!LocalConfiguration.Standalone.asBoolean()) {
                 clearData(playerId);
                 return;
             }
@@ -186,7 +186,7 @@ public class PVPData implements DataStore {
                     .condition(TotalPVPKillsTable.PlayerId, killerId)
                     .condition(TotalPVPKillsTable.VictimId, victimId)
                     .condition(TotalPVPKillsTable.MaterialId, MaterialCache.parse(weapon))
-                    .update(Settings.LocalConfiguration.Standalone.asBoolean());
+                    .update(LocalConfiguration.Standalone.asBoolean());
             fetchData(killerId);
             return result;
         }

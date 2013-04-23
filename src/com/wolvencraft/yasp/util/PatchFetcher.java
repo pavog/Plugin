@@ -29,7 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.Settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
 
 /**
  * First copies the patch files from jar to the plugin directory. Then checks the download server for updates.

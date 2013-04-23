@@ -27,10 +27,10 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.Settings;
-import com.wolvencraft.yasp.Settings.ItemsWithMetadata;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Miscellaneous.MaterialsTable;
+import com.wolvencraft.yasp.settings.Constants;
+import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
 
 /**
  * Caches material IDs server-side
@@ -67,7 +67,7 @@ public class MaterialCache implements CachedData {
     
         if(type == -1) return "-1:0";
         if(Material.getMaterial(type) == null) return "0:0";
-        if(!Settings.ItemsWithMetadata.checkAgainst(type)) material = type + ":" + "0";
+        if(!Constants.ItemsWithMetadata.checkAgainst(type)) material = type + ":" + "0";
         else material = type + ":" + ItemsWithMetadata.get(type).getData(data);
         
         if(materials.contains(material)) return material;

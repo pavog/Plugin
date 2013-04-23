@@ -29,10 +29,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import com.wolvencraft.yasp.Settings;
-import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher;
 import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
@@ -54,7 +54,7 @@ public class PvpArenaHook {
         
         if (plugin != null && plugin instanceof PVPArena) {
             Message.log("PvpArena hook enabled!");
-            Settings.ActiveHook.HookPvpArena.setActive(true);
+            Module.PvpArena.setActive(true);
         }
     }
     

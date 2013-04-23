@@ -42,8 +42,8 @@ import java.util.logging.Level;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -102,9 +102,9 @@ public class ScriptRunner {
                 BufferedReader lineReader = new BufferedReader(reader);
                 int i = 0;
                 String line = "";
-                String dbName = Settings.LocalConfiguration.DBName.asString();
-                String dbPrefix = Settings.LocalConfiguration.DBPrefix.asString();
-                boolean debug = Settings.LocalConfiguration.Debug.asBoolean();
+                String dbName = LocalConfiguration.DBName.asString();
+                String dbPrefix = LocalConfiguration.DBPrefix.asString();
+                boolean debug = LocalConfiguration.Debug.asBoolean();
                 while ((line = lineReader.readLine()) != null) {
                     line = StringUtils.replace(line, "$dbname", dbName);
                     line = StringUtils.replace(line, "$prefix_", dbPrefix);

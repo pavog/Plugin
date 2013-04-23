@@ -30,10 +30,9 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.Settings.ActiveHook;
-import com.wolvencraft.yasp.Settings.Modules;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.data.*;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
@@ -51,9 +50,9 @@ public class Util {
      */
     public static List<DataStore> getModules(Player player, int playerId) {
         List<DataStore> dataStores = new ArrayList<DataStore>();
-        if(Modules.Blocks.getEnabled()) dataStores.add(new BlocksData(playerId));
-        if(Modules.Items.getEnabled()) dataStores.add(new ItemsData(playerId));
-        if(Modules.Deaths.getEnabled()) {
+        if(Module.Blocks.isEnabled()) dataStores.add(new BlocksData(playerId));
+        if(Module.Items.isEnabled()) dataStores.add(new ItemsData(playerId));
+        if(Module.Deaths.isEnabled()) {
             dataStores.add(new DeathsData(playerId));
             dataStores.add(new PVEData(playerId));
             dataStores.add(new PVPData(playerId));
@@ -69,9 +68,9 @@ public class Util {
      */
     public static List<DataStore> getHooks(Player player, int playerId) {
         List<DataStore> dataStores = new ArrayList<DataStore>();
-        if(ActiveHook.HookVault.getActive()) dataStores.add(new VaultData(player, playerId));
-        if(ActiveHook.HookWorldGuard.getActive()) dataStores.add(new WorldGuardData(player, playerId));
-        if(ActiveHook.HookFactions.getActive()) dataStores.add(new FactionsData(player, playerId));
+        if(Module.Vault.isActive()) dataStores.add(new VaultData(player, playerId));
+        if(Module.WorldGuard.isActive()) dataStores.add(new WorldGuardData(player, playerId));
+        if(Module.Factions.isActive()) dataStores.add(new FactionsData(player, playerId));
         return dataStores;
     }
     

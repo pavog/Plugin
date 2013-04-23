@@ -27,8 +27,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**

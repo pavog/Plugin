@@ -25,8 +25,8 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.db.Database;
+import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 

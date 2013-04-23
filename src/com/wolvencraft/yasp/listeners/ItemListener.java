@@ -33,10 +33,10 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**

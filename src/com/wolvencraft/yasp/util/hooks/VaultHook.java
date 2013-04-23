@@ -29,11 +29,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 
-import com.wolvencraft.yasp.Settings;
-import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher;
 import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
@@ -63,7 +63,7 @@ public class VaultHook {
         
         if(economy != null && permissions != null) {
             Message.log("Vault hook enabled!");
-            Settings.ActiveHook.HookVault.setActive(true);
+            Module.Vault.setActive(true);
         }
     }
     

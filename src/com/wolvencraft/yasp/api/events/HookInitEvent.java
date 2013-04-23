@@ -23,7 +23,7 @@ package com.wolvencraft.yasp.api.events;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.Settings.ActiveHook;
+import com.wolvencraft.yasp.settings.Module;
 
 /**
  * Called when a plugin hook is being initialized by the plugin
@@ -32,9 +32,9 @@ import com.wolvencraft.yasp.Settings.ActiveHook;
  */
 public class HookInitEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-    private ActiveHook hook;
+    private Module hook;
     
-    public HookInitEvent(ActiveHook hook) {
+    public HookInitEvent(Module hook) {
         this.hook = hook;
     }
     
@@ -42,7 +42,7 @@ public class HookInitEvent extends Event {
      * Returns the hook type
      * @return Hook type
      */
-    public ActiveHook getHook() {
+    public Module getHook() {
         return hook;
     }
     

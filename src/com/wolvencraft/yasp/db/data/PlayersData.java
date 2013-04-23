@@ -31,8 +31,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.wolvencraft.yasp.Settings;
-import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.DataStore.DetailedData;
@@ -43,6 +41,9 @@ import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersInv;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.Constants.StatPerms;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.serializable.EffectsSerializable;
 import com.wolvencraft.yasp.util.serializable.InventorySerializable;
@@ -74,7 +75,7 @@ public class PlayersData {
         generalData = new Players(playerId, player);
         distanceData = new DistancePlayers(playerId);
         miscData = new MiscInfoPlayers(playerId, player);
-        if(Settings.Modules.Inventory.getEnabled()) inventoryData = new InventoryData(playerId, player);
+        if(Module.Inventory.isEnabled()) inventoryData = new InventoryData(playerId, player);
         
         detailedData = new ArrayList<DetailedData>();
     }
@@ -96,7 +97,7 @@ public class PlayersData {
         generalData.pushData(playerId);
         distanceData.pushData(playerId);
         miscData.pushData(playerId);
-        if(Settings.Modules.Inventory.getEnabled()) inventoryData.pushData(playerId);
+        if(Module.Inventory.isEnabled()) inventoryData.pushData(playerId);
         
         for(DetailedData entry : getDetailedData()) {
             if(entry.pushData(playerId)) { detailedData.remove(entry); }
@@ -252,7 +253,7 @@ public class PlayersData {
         
         @Override
         public void fetchData(int playerId) {
-            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+            if(!LocalConfiguration.Standalone.asBoolean()) {
                 clearData(playerId);
                 return;
             }
@@ -296,7 +297,7 @@ public class PlayersData {
                 .value(DistancePlayersTable.Minecart, minecart)
                 .value(DistancePlayersTable.Pig, pig)
                 .condition(DistancePlayersTable.PlayerId, playerId)
-                .update(Settings.LocalConfiguration.Standalone.asBoolean());
+                .update(LocalConfiguration.Standalone.asBoolean());
             return result;
         }
         
@@ -395,7 +396,7 @@ public class PlayersData {
         
         @Override
         public void fetchData(int playerId) {
-            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+            if(!LocalConfiguration.Standalone.asBoolean()) {
                 clearData(playerId);
                 return;
             }
@@ -430,7 +431,7 @@ public class PlayersData {
             boolean result = Query.table(MiscInfoPlayersTable.TableName)
                 .valueRaw(values)
                 .condition(MiscInfoPlayersTable.PlayerId, playerId)
-                .update(Settings.LocalConfiguration.Standalone.asBoolean());
+                .update(LocalConfiguration.Standalone.asBoolean());
             fetchData(playerId);
             return result;
         }

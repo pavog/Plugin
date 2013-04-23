@@ -31,10 +31,10 @@ import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.wolvencraft.yasp.Settings;
-import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher;
 import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
@@ -61,7 +61,7 @@ public class WorldGuardHook {
         if (plugin != null && plugin instanceof WorldGuardPlugin) {
             instance = (WorldGuardPlugin) plugin;
             Message.log("WorldGuard hook enabled!");
-            Settings.ActiveHook.HookWorldGuard.setActive(true);
+            Module.WorldGuard.setActive(true);
         }
         
     }

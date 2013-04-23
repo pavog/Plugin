@@ -32,10 +32,10 @@ import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.wolvencraft.yasp.Settings.LocalConfiguration;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.listeners.*;
+import com.wolvencraft.yasp.settings.*;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher;
 import com.wolvencraft.yasp.util.cache.*;
@@ -96,7 +96,7 @@ public class Statistics extends JavaPlugin {
             crashed = true;
             Message.log(Level.SEVERE, "Cannot establish a database connection!");
             Message.log(Level.SEVERE, "Is the plugin set up correctly?");
-            if (Settings.LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+            if (LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
             this.setEnabled(false);
             return;
         }
@@ -104,14 +104,14 @@ public class Statistics extends JavaPlugin {
         Message.log("Database connection established.");
         
         if (getServer().getPluginManager().getPlugin("Vault") != null
-         && Settings.Modules.HookVault.getEnabled()) {
+         && Module.Vault.isEnabled()) {
             vaultHook = new VaultHook();
             vaultHook.onEnable();
         }
         
         if (getServer().getPluginManager().getPlugin("WorldGuard") != null
          && getServer().getPluginManager().getPlugin("WorldEdit") != null
-         && Settings.Modules.HookWorldGuard.getEnabled()) {
+         && Module.WorldGuard.isEnabled()) {
             worldGuardHook = new WorldGuardHook();
             worldGuardHook.onEnable();
         }
@@ -120,13 +120,13 @@ public class Statistics extends JavaPlugin {
         
         new ServerListener(this);
         new PlayerListener(this);
-        if(Settings.Modules.Blocks.getEnabled()) new BlockListener(this);
-        if(Settings.Modules.Items.getEnabled()) new ItemListener(this);
-        if(Settings.Modules.Deaths.getEnabled()) new DeathListener(this);
+        if(Module.Blocks.isEnabled()) new BlockListener(this);
+        if(Module.Items.isEnabled()) new ItemListener(this);
+        if(Module.Deaths.isEnabled()) new DeathListener(this);
         new StatsSignListener(this);
         if(isCraftBukkitCompatible()) new StatsBookListener(this);
 
-        long ping = Settings.RemoteConfiguration.Ping.asInteger() * 20;
+        long ping = RemoteConfiguration.Ping.asInteger() * 20;
         Message.debug("ping=" + ping);
         
         try {
@@ -167,7 +167,7 @@ public class Statistics extends JavaPlugin {
             Database.close();
         } catch (Throwable t) { 
             Message.log(Level.SEVERE, t.getMessage());
-            if(Settings.LocalConfiguration.Debug.asBoolean()) t.printStackTrace();
+            if(LocalConfiguration.Debug.asBoolean()) t.printStackTrace();
         }
     }
     
@@ -184,7 +184,7 @@ public class Statistics extends JavaPlugin {
         
         for(CommandManager cmd : CommandManager.values()) {
             if(cmd.isCommand(args[0])) {
-                if(Settings.LocalConfiguration.Debug.asBoolean()) {
+                if(LocalConfiguration.Debug.asBoolean()) {
                     String argString = "/stats";
                     for (String arg : args) { argString = argString + " " + arg; }
                     Message.log(sender.getName() + ": " + argString);
@@ -210,22 +210,6 @@ public class Statistics extends JavaPlugin {
     }
     
     /**
-     * Checks if the database synchronization is paused or not
-     * @return <b>true</b> if the database synchronization is paused, <b>false</b> otherwise
-     */
-    public static boolean getPaused() {
-        return paused;
-    }
-    
-    /**
-     * Sets the synchronization status
-     * @param paused <b>true</b> to pause the database synchronization, <b>false</b> to unpause it.
-     */
-    public static void setPaused(boolean paused) {
-        Statistics.paused = paused;
-    }
-    
-    /**
      * Wraps around a BookUtils method to check if the server's bukkit version differs from the one
      * the plugin was compiled with
      * @return <b>true</b> if it is safe to proceed, <b>false</b> otherwise
@@ -242,5 +226,21 @@ public class Statistics extends JavaPlugin {
      */
     public static Gson getGson() {
         return gson;
+    }
+    
+    /**
+     * Checks if the database synchronization is paused or not
+     * @return <b>true</b> if the database synchronization is paused, <b>false</b> otherwise
+     */
+    public static boolean getPaused() {
+        return paused;
+    }
+    
+    /**
+     * Sets the synchronization status
+     * @param paused <b>true</b> to pause the database synchronization, <b>false</b> to unpause it.
+     */
+    public static void setPaused(boolean paused) {
+        Statistics.paused = paused;
     }
 }

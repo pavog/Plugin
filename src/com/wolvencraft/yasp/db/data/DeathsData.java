@@ -26,11 +26,11 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Detailed.DeathPlayers;
 import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -141,7 +141,7 @@ public class DeathsData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
-            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+            if(!LocalConfiguration.Standalone.asBoolean()) {
                 clearData(playerId);
                 return;
             }
@@ -169,7 +169,7 @@ public class DeathsData implements DataStore {
                     .value(TotalDeathPlayersTable.Times, times)
                     .condition(TotalDeathPlayersTable.PlayerId, playerId)
                     .condition(TotalDeathPlayersTable.Cause, cause.name())
-                    .update(Settings.LocalConfiguration.Standalone.asBoolean());
+                    .update(LocalConfiguration.Standalone.asBoolean());
             fetchData(playerId);
             return result;
         }

@@ -44,11 +44,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.Settings;
+import com.wolvencraft.yasp.settings.Constants.StatPerms;
+import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
@@ -82,10 +82,10 @@ public class PlayerListener implements Listener {
         if(!StatPerms.Statistics.has(player)) return;
         DatabaseTask.getSession(player).login(player.getLocation());
         
-        if(Settings.RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
+        if(RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
             Message.send(
                 player,
-                Settings.RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName())
+                RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName())
             );
         }
     }

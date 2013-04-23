@@ -26,9 +26,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.Settings.StatPerms;
 import com.wolvencraft.yasp.api.events.SessionRemoveEvent;
 import com.wolvencraft.yasp.api.events.SynchronizationEvent;
 import com.wolvencraft.yasp.api.events.SynchronizationPreProcessEvent;
@@ -38,6 +36,9 @@ import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.db.totals.ServerTotals;
 import com.wolvencraft.yasp.session.*;
+import com.wolvencraft.yasp.settings.Constants.StatPerms;
+import com.wolvencraft.yasp.settings.Module;
+import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -110,7 +111,7 @@ public class DatabaseTask implements Runnable {
             session.logout();
             removeSession(session);
             
-            long delay = Settings.RemoteConfiguration.LogDelay.asInteger();
+            long delay = RemoteConfiguration.LogDelay.asInteger();
             if(delay == 0 || session.getPlaytime() > delay) continue;
             
             Query.table(Normal.PlayersTable.TableName)
@@ -121,7 +122,8 @@ public class DatabaseTask implements Runnable {
         serverStatistics.pushData();
         serverTotals.fetchData();
         
-        Settings.clearCache();
+        Module.clearCache();
+        RemoteConfiguration.clearCache();
         Bukkit.getServer().getPluginManager().callEvent(new SynchronizationEvent(iteration));
         iteration++;
     }
@@ -164,10 +166,10 @@ public class DatabaseTask implements Runnable {
         Message.debug("Creating a new user session for " + username);
         OnlineSession newSession = new OnlineSession(player);
         sessions.add(newSession);
-        if(Settings.RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
+        if(RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
             Message.send(
                 player,
-                Settings.RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
+                RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
             );
         }
         return newSession;

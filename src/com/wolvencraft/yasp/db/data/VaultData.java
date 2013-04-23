@@ -24,9 +24,9 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.Settings;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Hook.VaultTable;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.hooks.VaultHook;
 import com.wolvencraft.yasp.util.serializable.GroupsSerializable;
 
@@ -92,7 +92,7 @@ public class VaultData implements DataStore {
         
         @Override
         public void fetchData(int playerId) {
-            if(!Settings.LocalConfiguration.Standalone.asBoolean()) {
+            if(!LocalConfiguration.Standalone.asBoolean()) {
                 clearData(playerId);
                 return;
             }
