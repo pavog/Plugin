@@ -47,7 +47,7 @@ public class VaultData implements DataStore {
 
     @Override
     public DataStoreType getType() {
-        return DataStoreType.Vault;
+        return DataStoreType.Hook_Vault;
     }
 
     @Override

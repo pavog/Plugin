@@ -64,7 +64,7 @@ public class FactionsHook {
      * @param playerName Name of the player
      * @return Name of the faction
      */
-    public String getCurrentFaction(String playerName) {
+    public static String getCurrentFaction(String playerName) {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
         if(player == null) return null;
         FPlayer fplayer = FPlayers.i.get(player);
@@ -76,13 +76,61 @@ public class FactionsHook {
      * @param playerName Name of the player
      * @return Name of the faction
      */
-    public String getCurrentLocation(String playerName) {
+    public static String getCurrentLocation(String playerName) {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
         if(player == null) return null;
         FPlayer fplayer = FPlayers.i.get(player);
         Faction factionAt = Board.getFactionAt(fplayer.getLastStoodAt());
         if(factionAt == null) return "none";
         return factionAt.getId();
+    }
+    
+    /**
+     * Returns the player's current power
+     * @param playerName Name of the player
+     * @return Player's power
+     */
+    public static double getPower(String playerName) {
+        Player player = Bukkit.getServer().getPlayerExact(playerName);
+        if(player == null) return -1;
+        FPlayer fplayer = FPlayers.i.get(player);
+        return fplayer.getPower();
+    }
+    
+    /**
+     * Returns the player's maximum power
+     * @param playerName Name of the player
+     * @return Player's maximum power
+     */
+    public static double getMaxPower(String playerName) {
+        Player player = Bukkit.getServer().getPlayerExact(playerName);
+        if(player == null) return -1;
+        FPlayer fplayer = FPlayers.i.get(player);
+        return fplayer.getPowerMax();
+    }
+    
+    /**
+     * Returns the player's role
+     * @param playerName Name of the player
+     * @return Player's role
+     */
+    public static String getRole(String playerName) {
+        Player player = Bukkit.getServer().getPlayerExact(playerName);
+        if(player == null) return null;
+        FPlayer fplayer = FPlayers.i.get(player);
+        return fplayer.getRole().nicename;
+    }
+    
+    /**
+     * Returns the player's title
+     * @param playerName Name of the player
+     * @return Player's title
+     */
+    public static String getTitle(String playerName) {
+        Player player = Bukkit.getServer().getPlayerExact(playerName);
+        if(player == null) return null;
+        FPlayer fplayer = FPlayers.i.get(player);
+        return fplayer.getTitle();
     }
     
     /**

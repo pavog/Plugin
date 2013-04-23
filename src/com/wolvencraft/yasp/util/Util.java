@@ -71,6 +71,7 @@ public class Util {
         List<DataStore> dataStores = new ArrayList<DataStore>();
         if(ActiveHook.HookVault.getActive()) dataStores.add(new VaultData(player, playerId));
         if(ActiveHook.HookWorldGuard.getActive()) dataStores.add(new WorldGuardData(player, playerId));
+        if(ActiveHook.HookFactions.getActive()) dataStores.add(new FactionsData(player, playerId));
         return dataStores;
     }
     

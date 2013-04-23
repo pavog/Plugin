@@ -75,7 +75,11 @@ public class Hook {
         TableName("hook_factions"),
         PlayerId("player_id"),
         FactionName("faction_name"),
-        CurrentlyIn("current_position");
+        CurrentlyIn("current_position"),
+        CurrentPower("current_power"),
+        MaximumPower("max_power"),
+        FactionRole("role"),
+        Title("title");
         
         FactionsTable (String columnName) { this.columnName = columnName; }
         

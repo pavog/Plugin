@@ -118,8 +118,9 @@ public interface DataStore {
         Deaths,
         PVE,
         PVP,
-        Vault,
-        WorldGuard;
+        Hook_Factions,
+        Hook_Vault,
+        Hook_WorldGuard;
     }
 
 }

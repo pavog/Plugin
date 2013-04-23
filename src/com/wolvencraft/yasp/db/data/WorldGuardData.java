@@ -46,7 +46,7 @@ public class WorldGuardData implements DataStore {
     
     @Override
     public DataStoreType getType() {
-        return DataStoreType.WorldGuard;
+        return DataStoreType.Hook_WorldGuard;
     }
 
     @Override
