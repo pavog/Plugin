@@ -45,7 +45,7 @@ public enum RemoteConfiguration {
     
     String key;
     QueryResult entry;
-    boolean refresh;
+    boolean refreshScheduled;
     
     /**
      * <b>Default constructor</b><br />
@@ -53,10 +53,9 @@ public enum RemoteConfiguration {
      * @param key Entry key
      */
     RemoteConfiguration(String key) {
-        try { this.entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
-        catch (Throwable t) { this.entry = null; }
-        refresh = false;
+        refreshScheduled = false;
         this.key = key;
+        refresh();
     }
     
     /**
@@ -74,7 +73,7 @@ public enum RemoteConfiguration {
      * @return Configuration value
      */
     public String asString() {
-        if(refresh) refresh();
+        if(refreshScheduled) refreshAsynchronously();
         try { return entry.asString("value"); }
         catch (Throwable t) { return ""; }
     }
@@ -84,9 +83,9 @@ public enum RemoteConfiguration {
      * @return Configuration value
      */
     public int asInteger() { 
-        if(refresh) refresh();
+        if(refreshScheduled) refreshAsynchronously();
         try { return entry.asInt("value"); }
-        catch (Throwable t) { return 0; }
+        catch (Throwable t) { com.wolvencraft.yasp.util.Message.log("Entry is null (" + t.getMessage() + ")"); return 0; }
     }
     
     /**
@@ -94,7 +93,7 @@ public enum RemoteConfiguration {
      * @return Configuration value
      */
     public boolean asBoolean() {
-        if(refresh) refresh();
+        if(refreshScheduled) refreshAsynchronously();
         try { return entry.asBoolean("value"); }
         catch (Throwable t) { return false; }
     }
@@ -111,14 +110,22 @@ public enum RemoteConfiguration {
     /**
      * Fetches the configuration data from the database
      */
-    public void refresh() {
+    private void refresh() {
+        if(Query.table(SettingsTable.TableName).column("value").condition("key", key).exists()) {
+            try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
+            catch (Throwable t) { entry = null; }
+            refreshScheduled = false;
+        } else entry = null;
+    }
+    
+    /**
+     * Fetches the configuration data from the database asynchronously
+     */
+    private void refreshAsynchronously() {
+        if(!Statistics.getInstance().isEnabled()) return;
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             @Override
-            public void run() {
-                try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
-                catch (Throwable t) { entry = null; }
-                refresh = false;
-            }
+            public void run() { refresh(); }
         });
     }
     
@@ -127,7 +134,7 @@ public enum RemoteConfiguration {
      */
     public static void clearCache() {
         for(RemoteConfiguration configEntry : RemoteConfiguration.values()) {
-            configEntry.refresh = true;
+            configEntry.refreshScheduled = true;
         }
     }
 }

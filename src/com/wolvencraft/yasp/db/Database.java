@@ -47,6 +47,7 @@ import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 
 /**
  * Represents a running database instance.<br />
@@ -79,7 +80,11 @@ public class Database {
         catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
         
         if(!patchDatabase(false)) Message.log("Target database is up to date");
+        
         Statistics.setPaused(false);
+        
+        RemoteConfiguration.clearCache();
+        Module.clearCache();
     }
     
     /**
@@ -97,7 +102,7 @@ public class Database {
         
         File patchFile = null;
         do {
-            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + ".yasp.sql");
+            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + PatchType.YASPX.EXTENSION + ".sql");
             if(patchFile.exists()) latestPatchVersion++;
             else break;
         } while(patchFile != null && patchFile.exists());
@@ -110,7 +115,7 @@ public class Database {
         Message.log("+-------] Database Patcher [-------+");
         for(; databaseVersion <= latestPatchVersion; databaseVersion++) {
             Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
-            executePatch(scriptRunner, databaseVersion + ".yasp");
+            executePatch(scriptRunner, databaseVersion + "." + PatchType.YASPX.EXTENSION);
             RemoteConfiguration.DatabaseVersion.update(databaseVersion);
         }
         Message.log("+----------------------------------+");

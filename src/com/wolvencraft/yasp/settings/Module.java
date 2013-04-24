@@ -69,10 +69,9 @@ public enum Module {
     Module(String key, boolean isHook) {
         this.isHook = isHook;
         this.KEY = key;
+        refreshScheduled = false;
         
         refresh();
-        
-        refreshScheduled = false;
     }
 
     /**
@@ -106,7 +105,7 @@ public enum Module {
      * @return Module version
      */
     public int getVersion() {
-        if(refreshScheduled) refresh();
+        if(refreshScheduled) refreshAsynchronously();
         return version;
     }
     
@@ -116,7 +115,7 @@ public enum Module {
      * @param version New version
      */
     public void setVersion(int version) {
-        if(refreshScheduled) refresh();
+        if(refreshScheduled) refreshAsynchronously();
         this.version = version;
         if(!isHook) return;
         String versionKey = "version." + KEY;
@@ -130,36 +129,40 @@ public enum Module {
      * Fetches the module variables from the database
      */
     private void refresh() {
-        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+        String stateKey = "";
+        if(isHook) {
+            stateKey = "hook." + KEY;
             
-            @Override
-            public void run() {
-                String stateKey = "";
-                if(isHook) {
-                    stateKey = "hook." + KEY;
-                    
-                    String versionKey = "version." + KEY;
-                    if(Query.table(SettingsTable.TableName).condition("key", versionKey).exists()) {
-                        try { version = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select().asInt("value"); }
-                        catch (Throwable t) { enabled = true; }
-                    } else {
-                        Query.table(SettingsTable.TableName).value("key", versionKey).value("value", 0).insert();
-                        enabled = true;
-                    }
-                } else {
-                    stateKey = "module." + KEY;
-                    version = -1;
-                }
-                
-                if(Query.table(SettingsTable.TableName).condition("key", stateKey).exists()) {
-                    try { enabled = Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).select().asBoolean("value"); }
-                    catch (Throwable t) { enabled = true; }
-                } else {
-                    Query.table(SettingsTable.TableName).value("key", stateKey).value("value", true).insert();
-                    enabled = true;
-                }
+            String versionKey = "version." + KEY;
+            if(Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).exists()) {
+                try { version = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select().asInt("value"); }
+                catch (Throwable t) { version = 0; }
+            } else {
+                Query.table(SettingsTable.TableName).value("key", versionKey).value("value", 0).insert();
+                version = 0;
             }
-            
+        } else {
+            stateKey = "module." + KEY;
+            version = -1;
+        }
+        
+        if(Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).exists()) {
+            try { enabled = Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).select().asBoolean("value"); }
+            catch (Throwable t) { enabled = false; }
+        } else {
+            Query.table(SettingsTable.TableName).value("key", stateKey).value("value", false).insert();
+            enabled = true;
+        }
+    }
+    
+    /**
+     * Fetches the module variables from the database asynchronously
+     */
+    private void refreshAsynchronously() {
+        if(!Statistics.getInstance().isEnabled()) return;
+        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+            @Override
+            public void run() { refresh(); }
         });
     }
     

@@ -57,17 +57,17 @@ public class PatchFetcher {
     public static void fetch(PatchType type) {
         Message.log("+-------] Fetching Patches [-------+");
         int j = 1;
-        while(Statistics.getInstance().getResource("patches/" + j + "." + type.extension + ".sql") != null) {
-            if(localFileExists(j + "." + type.extension + ".sql")) { j++; continue; }
-            Message.log("|" + Message.centerString("Copying " + j + "." + type.extension + ".sql", 34) + "|");
-            Statistics.getInstance().saveResource("patches/" + j + "." + type.extension + ".sql", false);
+        while(Statistics.getInstance().getResource("patches/" + j + "." + type.EXTENSION + ".sql") != null) {
+            if(localFileExists(j + "." + type.EXTENSION + ".sql")) { j++; continue; }
+            Message.log("|" + Message.centerString("Copying " + j + "." + type.EXTENSION + ".sql", 34) + "|");
+            Statistics.getInstance().saveResource("patches/" + j + "." + type.EXTENSION + ".sql", false);
             j++;
         }
         int i = 1;
-        while(remoteFileExists(i + "." + type.extension + ".sql")) {
-            if(localFileExists(i + "." + type.extension + ".sql")) { i++; continue; }
-            Message.log("|" + Message.centerString("Downloading " + i + "." + type.extension + ".sql", 34) + "|");
-            try { download(i + "." + type.extension + ".sql"); }
+        while(remoteFileExists(i + "." + type.EXTENSION + ".sql")) {
+            if(localFileExists(i + "." + type.EXTENSION + ".sql")) { i++; continue; }
+            Message.log("|" + Message.centerString("Downloading " + i + "." + type.EXTENSION + ".sql", 34) + "|");
+            try { download(i + "." + type.EXTENSION + ".sql"); }
             catch (MalformedURLException e) {
                 Message.log("Downloaded " + i + " patch files");
                 break;
@@ -164,14 +164,14 @@ public class PatchFetcher {
         Vault("vault"),
         WorldGuard("worldguard");
         
-        private String extension;
+        public final String EXTENSION;
         
         /**
          * <b>Default constructor</b>
          * @param extension Patch extension
          */
         PatchType(String extension) {
-            this.extension = extension;
+            this.EXTENSION = extension;
         }
     }
     
