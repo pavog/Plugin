@@ -148,7 +148,7 @@ public class Database {
         for(; moduleVersion <= latestPatchVersion; moduleVersion++) {
             Message.log("|       Applying patch " + moduleVersion + " / " + latestPatchVersion + "       |");
             executePatch(scriptRunner, moduleVersion + ".yasp");
-            RemoteConfiguration.DatabaseVersion.update(moduleVersion);
+            module.setVersion(moduleVersion);
         }
         Message.log("+----------------------------------+");
         return true;

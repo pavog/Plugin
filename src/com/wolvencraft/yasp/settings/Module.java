@@ -107,6 +107,22 @@ public enum Module {
         return version;
     }
     
+    /**
+     * Sets the new version of the module.<br />
+     * Updates the version in the database if the module is a hook
+     * @param version New version
+     */
+    public void setVersion(int version) {
+        if(refreshScheduled) refresh();
+        this.version = version;
+        if(!isHook) return;
+        String versionKey = "version." + KEY;
+        Query.table(SettingsTable.TableName)
+             .value("value", version)
+             .condition("key", versionKey)
+             .update();
+    }
+    
     private void refresh() {
         String stateKey = "";
         if(isHook) {
