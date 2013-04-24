@@ -43,9 +43,9 @@ public enum Module {
     MobArena("mobarena", true),
     PvpArena("pvparena", true),
     Factions("factions", true);
-    
+
+    public final String KEY;
     private boolean isHook;
-    private String key;
     
     private boolean refreshScheduled;
     
@@ -56,7 +56,7 @@ public enum Module {
     
     Module(String key) {
         this.isHook = false;
-        this.key = key;
+        this.KEY = key;
         
         refresh();
         
@@ -65,7 +65,7 @@ public enum Module {
     
     Module(String key, boolean isHook) {
         this.isHook = isHook;
-        this.key = key;
+        this.KEY = key;
         
         refresh();
         
@@ -110,9 +110,9 @@ public enum Module {
     private void refresh() {
         String stateKey = "";
         if(isHook) {
-            stateKey = "hook." + key;
+            stateKey = "hook." + KEY;
             
-            String versionKey = "version." + key;
+            String versionKey = "version." + KEY;
             if(Query.table(SettingsTable.TableName).condition("key", versionKey).exists()) {
                 try { version = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select().asInt("value"); }
                 catch (Throwable t) { enabled = true; }
@@ -121,7 +121,7 @@ public enum Module {
                 enabled = true;
             }
         } else {
-            stateKey = "module." + key;
+            stateKey = "module." + KEY;
             version = -1;
         }
         

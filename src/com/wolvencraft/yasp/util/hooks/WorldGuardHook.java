@@ -98,7 +98,7 @@ public class WorldGuardHook {
     public void onEnable() {
         try {
             PatchFetcher.fetch(PatchType.WorldGuard);
-            Database.executePatch("1.wg");
+            Database.patchModule(false, Module.WorldGuard);
         } catch (DatabaseConnectionException ex) {
             Message.log(Level.SEVERE, ex.getMessage());
             if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();

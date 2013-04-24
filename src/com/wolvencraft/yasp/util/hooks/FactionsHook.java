@@ -140,7 +140,7 @@ public class FactionsHook {
     public void onEnable() {
         try {
             PatchFetcher.fetch(PatchType.MobArena);
-            Database.executePatch("1.mobarena");
+            Database.patchModule(false, Module.Factions);
         } catch (DatabaseConnectionException ex) {
             Message.log(Level.SEVERE, ex.getMessage());
             if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();

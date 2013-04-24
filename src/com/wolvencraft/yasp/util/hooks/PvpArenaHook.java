@@ -87,7 +87,7 @@ public class PvpArenaHook {
     public void onEnable() {
         try {
             PatchFetcher.fetch(PatchType.PvpArena);
-            Database.executePatch("1.pvparena");
+            Database.patchModule(false, Module.PvpArena);
         } catch (DatabaseConnectionException ex) {
             Message.log(Level.SEVERE, ex.getMessage());
             if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();

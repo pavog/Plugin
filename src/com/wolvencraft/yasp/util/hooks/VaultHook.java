@@ -103,7 +103,7 @@ public class VaultHook {
     public void onEnable() {
         try {
             PatchFetcher.fetch(PatchType.Vault);
-            Database.executePatch("1.vault");
+            Database.patchModule(false, Module.Vault);
         } catch (DatabaseConnectionException ex) {
             Message.log(Level.SEVERE, ex.getMessage());
             if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();

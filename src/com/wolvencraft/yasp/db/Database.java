@@ -44,6 +44,7 @@ import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
 
@@ -77,7 +78,7 @@ public class Database {
         try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
         catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
         
-        if(!runPatcher(false)) Message.log("Target database is up to date");
+        if(!patchDatabase(false)) Message.log("Target database is up to date");
         Statistics.setPaused(false);
     }
     
@@ -88,7 +89,7 @@ public class Database {
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
-    public static boolean runPatcher(boolean force) throws DatabaseConnectionException {
+    public static boolean patchDatabase(boolean force) throws DatabaseConnectionException {
         int databaseVersion;
         if(force) { databaseVersion = 1; }
         else { databaseVersion = RemoteConfiguration.DatabaseVersion.asInteger(); }
@@ -111,6 +112,43 @@ public class Database {
             Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
             executePatch(scriptRunner, databaseVersion + ".yasp");
             RemoteConfiguration.DatabaseVersion.update(databaseVersion);
+        }
+        Message.log("+----------------------------------+");
+        return true;
+    }
+    
+    /**
+     * Patches the specified module to the latest version.<br />
+     * This method will run in the <b>main server thread</b> and therefore will freeze the server until the patch is complete.
+     * @param force <b>true</b> to drop all data in the database and start anew.
+     * @param module Module to patch
+     * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
+     * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
+     */
+    public static boolean patchModule(boolean force, Module module) throws DatabaseConnectionException {
+        int moduleVersion;
+        if(force) { moduleVersion = 0; }
+        else { moduleVersion = module.getVersion(); }
+        int latestPatchVersion = moduleVersion;
+        
+        File patchFile = null;
+        do {
+            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + module.KEY + ".sql");
+            if(patchFile.exists()) latestPatchVersion++;
+            else break;
+        } while(patchFile != null && patchFile.exists());
+        
+        if(moduleVersion >= latestPatchVersion) { return true; }
+        Message.debug("Current version: " + moduleVersion + ", latest version: " + latestPatchVersion);
+        moduleVersion++;
+        
+        ScriptRunner scriptRunner = new ScriptRunner(connection);
+        Message.log("+-------] Database Patcher [-------+");
+        Message.log("| Patching " + module.name() + " |");
+        for(; moduleVersion <= latestPatchVersion; moduleVersion++) {
+            Message.log("|       Applying patch " + moduleVersion + " / " + latestPatchVersion + "       |");
+            executePatch(scriptRunner, moduleVersion + ".yasp");
+            RemoteConfiguration.DatabaseVersion.update(moduleVersion);
         }
         Message.log("+----------------------------------+");
         return true;
