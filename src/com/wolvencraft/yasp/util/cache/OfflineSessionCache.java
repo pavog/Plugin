@@ -23,9 +23,6 @@ package com.wolvencraft.yasp.util.cache;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
@@ -45,9 +42,6 @@ public class OfflineSessionCache implements CachedDataProcess {
      */
     public OfflineSessionCache() {
         players = new ArrayList<OfflineSession>();
-        for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-            players.add(new OfflineSession(player.getName()));
-        }
     }
     
     @Override

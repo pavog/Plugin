@@ -123,9 +123,9 @@ public class CachedData {
         
         CachedDataType(Class<?> process) {
             try { this.process = (CachedDataProcess) process.newInstance(); }
-            catch (InstantiationException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (InstantiationException)"); return; }
-            catch (IllegalAccessException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (IllegalAccessException)"); return; }
-            catch (Exception e)                 { Message.log(Level.SEVERE, "Error while instantiating a cache process! (Exception)"); return; }
+            catch (InstantiationException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " InstantiationException)"); return; }
+            catch (IllegalAccessException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " IllegalAccessException)"); return; }
+            catch (Exception e)                 { Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " " + e.getMessage() + ")"); return; }
         }
     }
     
