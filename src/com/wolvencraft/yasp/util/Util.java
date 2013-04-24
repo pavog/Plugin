@@ -29,6 +29,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.data.*;
@@ -136,6 +137,48 @@ public class Util {
         if(days != 0) result += days + " days, ";
         result += hours + ":" + minutes + ":" + seconds;
         return result;
+    }
+    
+    /**
+     * Calculates the player's armor rating (out of 20)
+     * @param inv Player's inventory
+     * @return armor rating
+     */
+    public static int getArmorRating(PlayerInventory inv) {
+        int armorRating = 0;
+        switch(inv.getHelmet().getType()) {
+            case LEATHER_HELMET: { armorRating += 1; break; }
+            case GOLD_HELMET: { armorRating += 2; break; }
+            case CHAINMAIL_HELMET: {armorRating += 2; break; }
+            case IRON_HELMET: { armorRating += 2; break; }
+            case DIAMOND_HELMET: { armorRating += 3; break; }
+            default: break;
+        }
+        switch(inv.getChestplate().getType()) {
+            case LEATHER_CHESTPLATE: { armorRating += 3; break; }
+            case GOLD_CHESTPLATE: { armorRating += 5; break; }
+            case CHAINMAIL_CHESTPLATE: {armorRating += 5; break; }
+            case IRON_CHESTPLATE: { armorRating += 6; break; }
+            case DIAMOND_CHESTPLATE: { armorRating += 8; break; }
+            default: break;
+        }
+        switch(inv.getLeggings().getType()) {
+            case LEATHER_LEGGINGS: { armorRating += 2; break; }
+            case GOLD_LEGGINGS: { armorRating += 3; break; }
+            case CHAINMAIL_LEGGINGS: {armorRating += 4; break; }
+            case IRON_LEGGINGS: { armorRating += 5; break; }
+            case DIAMOND_LEGGINGS: { armorRating += 6; break; }
+            default: break;
+        }
+        switch(inv.getBoots().getType()) {
+            case LEATHER_BOOTS: { armorRating += 1; break; }
+            case GOLD_BOOTS: { armorRating += 1; break; }
+            case CHAINMAIL_BOOTS: {armorRating += 1; break; }
+            case IRON_BOOTS: { armorRating += 2; break; }
+            case DIAMOND_BOOTS: { armorRating += 3; break; }
+            default: break;
+        }
+        return armorRating;
     }
     
     /**

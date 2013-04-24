@@ -501,6 +501,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_misc_info_players` (
   `exp_total` INT(8) UNSIGNED NOT NULL DEFAULT 0 ,
   `food_level` TINYINT UNSIGNED NOT NULL DEFAULT 0 ,
   `health` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
+  `armor_rating` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
   `fish_caught` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `times_kicked` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `eggs_thrown` INT UNSIGNED NOT NULL DEFAULT 0 ,

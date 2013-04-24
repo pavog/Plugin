@@ -375,6 +375,7 @@ public class PlayersData {
             values.put(MiscInfoPlayersTable.ExperienceLevel, player.getLevel());
             values.put(MiscInfoPlayersTable.FoodLevel, player.getFoodLevel());
             values.put(MiscInfoPlayersTable.HealthLevel, player.getHealth());
+            values.put(MiscInfoPlayersTable.ArmorLevel, Util.getArmorRating(player.getInventory()));
             
             values.put(MiscInfoPlayersTable.FishCaught, 0);
             values.put(MiscInfoPlayersTable.TimesKicked, 0);
@@ -457,10 +458,7 @@ public class PlayersData {
          * Fetches the player data from the player, if he is online
          */
         public void refreshPlayerData() {
-            Player player = null;
-            for(Player pl : Bukkit.getServer().getOnlinePlayers()) {
-                if(pl.getPlayerListName().equals(playerName)) player = pl;
-            }
+            Player player = Bukkit.getServer().getPlayerExact(playerName);
             if(player == null) return;
 
             if(player.isOp()) values.put(MiscInfoPlayersTable.IsOp, 1);
@@ -475,6 +473,7 @@ public class PlayersData {
             values.put(MiscInfoPlayersTable.ExperienceLevel, player.getLevel());
             values.put(MiscInfoPlayersTable.FoodLevel, player.getFoodLevel());
             values.put(MiscInfoPlayersTable.HealthLevel, player.getHealth());
+            values.put(MiscInfoPlayersTable.ArmorLevel, Util.getArmorRating(player.getInventory()));
         }
         
         /**

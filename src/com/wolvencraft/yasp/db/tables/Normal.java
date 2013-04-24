@@ -127,6 +127,7 @@ public class Normal {
         ExperienceLevel("exp_level"),
         FoodLevel("food_level"),
         HealthLevel("health"),
+        ArmorLevel("armor_rating"),
         FishCaught("fish_caught"),
         TimesKicked("times_kicked"),
         EggsThrown("eggs_thrown"),
