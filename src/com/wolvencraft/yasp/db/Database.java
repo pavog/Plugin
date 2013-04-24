@@ -144,7 +144,7 @@ public class Database {
         
         ScriptRunner scriptRunner = new ScriptRunner(connection);
         Message.log("+-------] Database Patcher [-------+");
-        Message.log("| Patching " + module.name() + " |");
+        Message.log("|" + Message.centerString("Patching " + module.name(), 34) + "|");
         for(; moduleVersion <= latestPatchVersion; moduleVersion++) {
             Message.log("|       Applying patch " + moduleVersion + " / " + latestPatchVersion + "       |");
             executePatch(scriptRunner, moduleVersion + ".yasp");

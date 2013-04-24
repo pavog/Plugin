@@ -46,13 +46,13 @@ public class PatchCommand implements BaseCommand {
             return false;
         }
         
-        Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database (" + args[0] + ")");
+        Message.sendFormattedSuccess(CommandManager.getSender(), "Attempting to patch the database (" + args[1] + ")");
         Statistics.setPaused(true);
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
 
             @Override
             public void run() {
-                try { Database.executePatch(args[0]); }
+                try { Database.executePatch(args[1]); }
                 catch (Exception ex) { Message.sendFormattedError(CommandManager.getSender(), "Patch failed!"); }
                 finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {

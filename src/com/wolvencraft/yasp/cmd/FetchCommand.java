@@ -33,14 +33,14 @@ public class FetchCommand implements BaseCommand {
 
     @Override
     public boolean run(final String[] args) {
-        if(args.length != 1) {
+        if(args.length != 2) {
             Message.sendFormattedError("Invalid parameter count");
             return false;
         }
         
-        PatchFetcher.fetch(args[0]);
+        PatchFetcher.fetch(args[1]);
         
-        Message.log("Downloaded " + args[0] + " from the remote server");
+        Message.log("Downloaded " + args[1] + " from the remote server");
         return true;
     }
 
