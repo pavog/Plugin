@@ -39,7 +39,6 @@ import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Generic Player information used on DisplaySigns and books.
@@ -117,9 +116,8 @@ public class PlayerTotals {
             
             @Override
             public void run() {
-                try {   // XXX
-                    sessionStart = Query.table(PlayersTable.TableName).column(PlayersTable.LoginTime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.LoginTime);
-                } catch (NullPointerException ex) { sessionStart = Util.getTimestamp(); }
+                try { sessionStart = Query.table(PlayersTable.TableName).column(PlayersTable.LoginTime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.LoginTime); }
+                catch (NullPointerException ex) { sessionStart = Util.getTimestamp(); }
                 
                 totalPlaytime = Query.table(PlayersTable.TableName).column(PlayersTable.Playtime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.Playtime);
                 
@@ -321,7 +319,7 @@ public class PlayerTotals {
      */
     public void blockBreak() {
         blocksBroken++;
-        DatabaseTask.getTotals().blockBreak();
+        Statistics.getServerTotals().blockBreak();
     }
     
     /**
@@ -329,7 +327,7 @@ public class PlayerTotals {
      */
     public void blockPlace() {
         blocksPlaced++;
-        DatabaseTask.getTotals().blockPlace();
+        Statistics.getServerTotals().blockPlace();
     }
     
     /**
@@ -338,7 +336,7 @@ public class PlayerTotals {
      * @param distance Distance traveled
      */
     public void addDistance(DistancePlayersTable type, double distance) {
-        DatabaseTask.getTotals().addDistance(type, distance);
+        Statistics.getServerTotals().addDistance(type, distance);
         distTotal += distance;
         switch(type) {
             case Foot:
@@ -369,7 +367,7 @@ public class PlayerTotals {
      */
     public void toolBreak() {
         toolsBroken++;
-        DatabaseTask.getTotals().toolBreak();
+        Statistics.getServerTotals().toolBreak();
     }
     
     /**
@@ -377,7 +375,7 @@ public class PlayerTotals {
      */
     public void itemCraft() {
         itemsCrafted++;
-        DatabaseTask.getTotals().itemCraft();
+        Statistics.getServerTotals().itemCraft();
     }
     
     /**
@@ -385,7 +383,7 @@ public class PlayerTotals {
      */
     public void snacksEaten() {
         snacksEaten++;
-        DatabaseTask.getTotals().snacksEaten();
+        Statistics.getServerTotals().snacksEaten();
     }
     
     /**
@@ -393,7 +391,7 @@ public class PlayerTotals {
      */
     public void pvpKill() {
         pvpKills++;
-        DatabaseTask.getTotals().pvpKill();
+        Statistics.getServerTotals().pvpKill();
     }
     
     /**
@@ -401,7 +399,7 @@ public class PlayerTotals {
      */
     public void death() {
         deaths++;
-        DatabaseTask.getTotals().death();
+        Statistics.getServerTotals().death();
     }
     
     /**
@@ -409,7 +407,7 @@ public class PlayerTotals {
      */
     public void pveKill() {
         pveKills++;
-        DatabaseTask.getTotals().pveKill();
+        Statistics.getServerTotals().pveKill();
     }
     
 }

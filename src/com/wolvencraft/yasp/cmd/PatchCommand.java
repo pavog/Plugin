@@ -29,7 +29,6 @@ import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Patch command.<br />
@@ -58,7 +57,7 @@ public class PatchCommand implements BaseCommand {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
                         if(StatPerms.Statistics.has(player)) OnlineSessionCache.fetch(player);
                     }
-                    DatabaseTask.getStats().pushStaticData();
+                    Statistics.getServerStatistics().pushStaticData();
                     Message.sendFormattedSuccess(CommandManager.getSender(), "Patching finished.");
                     Statistics.setPaused(false);
                 }

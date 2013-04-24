@@ -25,8 +25,6 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.api.events.SynchronizationEvent;
 import com.wolvencraft.yasp.api.events.SynchronizationPreProcessEvent;
-import com.wolvencraft.yasp.db.data.ServerStatistics;
-import com.wolvencraft.yasp.db.totals.ServerTotals;
 import com.wolvencraft.yasp.session.*;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
@@ -42,8 +40,6 @@ import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 public class DatabaseTask implements Runnable {
     
     private static int iteration;
-    private static ServerTotals serverTotals;
-    private static ServerStatistics serverStatistics;
 
     /**
      * <b>Default constructor.</b><br />
@@ -51,8 +47,6 @@ public class DatabaseTask implements Runnable {
      */
     public DatabaseTask() {
         iteration = 0;
-        serverStatistics = new ServerStatistics();
-        serverTotals = new ServerTotals();
         
     }
     
@@ -87,28 +81,12 @@ public class DatabaseTask implements Runnable {
             session.getTotals().fetchData();
         }
         
-        serverStatistics.pushData();
-        serverTotals.fetchData();
+        Statistics.getServerStatistics().pushData();
+        Statistics.getServerTotals().fetchData();
         
         Module.clearCache();
         RemoteConfiguration.clearCache();
         Bukkit.getServer().getPluginManager().callEvent(new SynchronizationEvent(iteration));
         iteration++;
-    }
-    
-    /**
-     * Returns the server totals for signs and books
-     * @return Server totals
-     */
-    public static ServerTotals getTotals() {
-        return serverTotals;
-    }
-    
-    /**
-     * Returns the generic server statistics
-     * @return ServerStatistics
-     */
-    public static ServerStatistics getStats() {
-        return serverStatistics;
     }
 }

@@ -34,6 +34,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.data.ServerStatistics;
+import com.wolvencraft.yasp.db.totals.ServerTotals;
 import com.wolvencraft.yasp.listeners.*;
 import com.wolvencraft.yasp.settings.*;
 import com.wolvencraft.yasp.util.Message;
@@ -63,6 +65,9 @@ public class Statistics extends JavaPlugin {
     
     private static VaultHook vaultHook;
     private static WorldGuardHook worldGuardHook;
+
+    private static ServerTotals serverTotals;
+    private static ServerStatistics serverStatistics;
     
     /**
      * <b>Default constructor</b><br />
@@ -125,7 +130,10 @@ public class Statistics extends JavaPlugin {
         if(Module.Deaths.isEnabled()) new DeathListener(this);
         new StatsSignListener(this);
         if(isCraftBukkitCompatible()) new StatsBookListener(this);
-
+        
+        serverStatistics = new ServerStatistics();
+        serverTotals = new ServerTotals();
+        
         long ping = RemoteConfiguration.Ping.asInteger() * 20;
         
         try {
@@ -133,7 +141,7 @@ public class Statistics extends JavaPlugin {
             if(!metrics.isOptOut()) metrics.start();
         }
         catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
-
+        
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new PlayerCache(), 0L, (long)(30 * 60 * 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new OfflineSessionCache(), 0L, (long)(24 * 3600 * 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new OnlineSessionCache(), 0L, (long)(5 * 60 * 20));
@@ -156,7 +164,7 @@ public class Statistics extends JavaPlugin {
                 OnlineSessionCache.fetch(player).logout(player.getLocation());
             }
             DatabaseTask.commit();
-            DatabaseTask.getStats().pluginShutdown();
+            serverStatistics.pluginShutdown();
             OnlineSessionCache.dumpSessions();
             
             Bukkit.getScheduler().cancelTasks(this);
@@ -242,5 +250,21 @@ public class Statistics extends JavaPlugin {
      */
     public static void setPaused(boolean paused) {
         Statistics.paused = paused;
+    }
+    
+    /**
+     * Returns the server totals for signs and books
+     * @return Server totals
+     */
+    public static ServerTotals getServerTotals() {
+        return serverTotals;
+    }
+    
+    /**
+     * Returns the generic server statistics
+     * @return ServerStatistics
+     */
+    public static ServerStatistics getServerStatistics() {
+        return serverStatistics;
     }
 }

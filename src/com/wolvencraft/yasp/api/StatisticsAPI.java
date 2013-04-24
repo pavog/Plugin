@@ -20,8 +20,8 @@
 
 package com.wolvencraft.yasp.api;
 
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.session.DataSession;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Simple API for servers statistics
@@ -45,7 +45,7 @@ public class StatisticsAPI {
      * @return Number of blocks broken
      */
     public static int getBlocksBroken() {
-        return (Integer) DatabaseTask.getTotals().getValues().get("blBroken");
+        return (Integer) Statistics.getServerTotals().getValues().get("blBroken");
     }
     
     /**
@@ -53,7 +53,7 @@ public class StatisticsAPI {
      * @return Number of blocks placed
      */
     public static int getBlocksPlaced() {
-        return (Integer) DatabaseTask.getTotals().getValues().get("blPlaced");
+        return (Integer) Statistics.getServerTotals().getValues().get("blPlaced");
     }
     
     /**
@@ -61,7 +61,7 @@ public class StatisticsAPI {
      * @return Number of tools broken
      */
     public static int getToolsBroken() {
-        return (Integer) DatabaseTask.getTotals().getValues().get("itBroken");
+        return (Integer) Statistics.getServerTotals().getValues().get("itBroken");
     }
     
     /**
@@ -69,7 +69,7 @@ public class StatisticsAPI {
      * @return Number of items crafted
      */
     public static int getItemsCrafted() {
-        return (Integer) DatabaseTask.getTotals().getValues().get("itCrafted");
+        return (Integer) Statistics.getServerTotals().getValues().get("itCrafted");
     }
     
     /**
@@ -77,7 +77,7 @@ public class StatisticsAPI {
      * @return Number of food items eaten
      */
     public static int getFoodEaten() {
-        return (Integer) DatabaseTask.getTotals().getValues().get("itEaten");
+        return (Integer) Statistics.getServerTotals().getValues().get("itEaten");
     }
     
     /**
@@ -85,7 +85,7 @@ public class StatisticsAPI {
      * @return Number of PVP kills
      */
     public static int getPVPKills() {
-        return (Integer) DatabaseTask.getTotals().getValues().get("pvpKills");
+        return (Integer) Statistics.getServerTotals().getValues().get("pvpKills");
     }
     
     /**
@@ -93,7 +93,7 @@ public class StatisticsAPI {
      * @return Number of PVE kills
      */
     public static int getPVEKills() {
-        return (Integer) DatabaseTask.getTotals().getValues().get("pveKills");
+        return (Integer) Statistics.getServerTotals().getValues().get("pveKills");
     }
     
     /**
@@ -101,7 +101,7 @@ public class StatisticsAPI {
      * @return Total number of deaths
      */
     public static int getDeaths() {
-        return (Integer) DatabaseTask.getTotals().getValues().get("deaths");
+        return (Integer) Statistics.getServerTotals().getValues().get("deaths");
     }
     
     /**
@@ -109,7 +109,7 @@ public class StatisticsAPI {
      * @return Total distance traveled
      */
     public static double getDistanceTotal() {
-        return (Double) DatabaseTask.getTotals().getValues().get("distTotal");
+        return (Double) Statistics.getServerTotals().getValues().get("distTotal");
     }
     
     /**
@@ -117,7 +117,7 @@ public class StatisticsAPI {
      * @return Total distance traveled
      */
     public static double getDistancePig() {
-        return (Double) DatabaseTask.getTotals().getValues().get("distPig");
+        return (Double) Statistics.getServerTotals().getValues().get("distPig");
     }
     
     /**
@@ -125,7 +125,7 @@ public class StatisticsAPI {
      * @return Total distance traveled
      */
     public static double getDistanceMinecart() {
-        return (Double) DatabaseTask.getTotals().getValues().get("distCart");
+        return (Double) Statistics.getServerTotals().getValues().get("distCart");
     }
     
     /**
@@ -133,7 +133,7 @@ public class StatisticsAPI {
      * @return Total distance traveled
      */
     public static double getDistanceBoat() {
-        return (Double) DatabaseTask.getTotals().getValues().get("distBoat");
+        return (Double) Statistics.getServerTotals().getValues().get("distBoat");
     }
     
     /**
@@ -141,7 +141,7 @@ public class StatisticsAPI {
      * @return Total distance traveled
      */
     public static double getDistanceFlight() {
-        return (Double) DatabaseTask.getTotals().getValues().get("distFlight");
+        return (Double) Statistics.getServerTotals().getValues().get("distFlight");
     }
     
     /**
@@ -149,7 +149,7 @@ public class StatisticsAPI {
      * @return Total distance traveled
      */
     public static double getDistanceSwam() {
-        return (Double) DatabaseTask.getTotals().getValues().get("distSwim");
+        return (Double) Statistics.getServerTotals().getValues().get("distSwim");
     }
     
 }

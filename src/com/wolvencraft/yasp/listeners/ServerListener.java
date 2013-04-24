@@ -29,7 +29,6 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Listens to generic server events and reports them to the plugin.
@@ -51,18 +50,18 @@ public class ServerListener implements Listener {
     public void onWeatherChange(WeatherChangeEvent event) {
         if(Statistics.getPaused()) return;
         if(!Bukkit.getWorlds().get(0).equals(event.getWorld())) return;
-        DatabaseTask.getStats().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
+        Statistics.getServerStatistics().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPluginEnable(PluginEnableEvent event) {
         if(Statistics.getPaused()) return;
-        DatabaseTask.getStats().pluginNumberChange();
+        Statistics.getServerStatistics().pluginNumberChange();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPluginDisable(PluginDisableEvent event) {
         if(Statistics.getPaused()) return;
-        DatabaseTask.getStats().pluginNumberChange();
+        Statistics.getServerStatistics().pluginNumberChange();
     }
 }

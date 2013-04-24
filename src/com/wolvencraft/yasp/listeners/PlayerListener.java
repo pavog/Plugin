@@ -53,7 +53,6 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Listens to miscellaneous player events on the server and reports them to the plugin.
@@ -78,7 +77,7 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        DatabaseTask.getStats().playerLogin();
+        Statistics.getServerStatistics().playerLogin();
         Player player = event.getPlayer();
         if(!StatPerms.Statistics.has(player)) return;
         OnlineSessionCache.fetch(player).login(player.getLocation());

@@ -34,7 +34,6 @@ import org.bukkit.inventory.PlayerInventory;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.data.*;
 import com.wolvencraft.yasp.settings.Module;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Utility class containing assorted methods that do not fit other categories
@@ -92,7 +91,7 @@ public class Util {
      */
     public static String parseVars(String str) {
         if(str == null) return "";
-        Map<String, Object> values = DatabaseTask.getTotals().getValues();
+        Map<String, Object> values = Statistics.getServerTotals().getValues();
         Iterator<Entry<String, Object>> it = values.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();

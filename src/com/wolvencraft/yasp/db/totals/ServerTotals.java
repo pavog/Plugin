@@ -26,7 +26,6 @@ import java.util.Map;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal.*;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Generic Server information used on DisplaySigns and books.
@@ -131,7 +130,7 @@ public class ServerTotals {
         values.put("pvpKills", pvpKills);
         values.put("pveKills", pveKills);
         values.put("deaths", deaths);
-        values.putAll(DatabaseTask.getStats().getValueMap());
+        values.putAll(Statistics.getServerStatistics().getValueMap());
         return values;
     }
     
