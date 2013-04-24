@@ -40,6 +40,8 @@ import com.wolvencraft.yasp.settings.LocalConfiguration;
 public class Message {
     private static Logger logger = Statistics.getInstance().getLogger();
     
+    private Message() { }
+    
     /**
      * Send a message to the specified CommandSender.<br />
      * Using CommandSender allows to easily send messages both to Player and ConsoleCommandSender.

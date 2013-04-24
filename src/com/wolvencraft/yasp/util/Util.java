@@ -42,6 +42,8 @@ import com.wolvencraft.yasp.settings.Module;
  */
 public class Util {
     
+    private Util() { }
+    
     /**
      * Composes a list of active modules for the player
      * @param player Player object

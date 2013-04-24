@@ -35,6 +35,8 @@ import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 
 public class BookUtil {
     
+    private BookUtil() { }
+    
     /**
      * Creates a new statistics book based for the specified player.<br />
      * Version-specific method. Include methods to check for CraftBukkit version in the implementation.
