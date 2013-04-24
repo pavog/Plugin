@@ -45,9 +45,9 @@ import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 import com.wolvencraft.yasp.util.serializable.EffectsSerializable;
 import com.wolvencraft.yasp.util.serializable.InventorySerializable;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * A unique data store that contains basic information about the player
@@ -501,7 +501,7 @@ public class PlayersData {
          * @param player Player that was killed
          */
         public void killed(Player player) {
-            DatabaseTask.getSession(player).died();
+            OnlineSessionCache.fetch(player).died();
             int curKillStreak = ((Integer) values.get(MiscInfoPlayersTable.CurKillStreak)).intValue() + 1;
             int maxKillStreak = ((Integer) values.get(MiscInfoPlayersTable.MaxKillStreak)).intValue();
             values.put(MiscInfoPlayersTable.CurKillStreak, curKillStreak);

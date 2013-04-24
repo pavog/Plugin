@@ -37,7 +37,7 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * Listens to any item changes on the server and reports them to the plugin.
@@ -60,7 +60,7 @@ public class ItemListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.ItemPickUp.has(player)) return;
-        DatabaseTask.getSession(player).itemPickUp(player.getLocation(), event.getItem().getItemStack());
+        OnlineSessionCache.fetch(player).itemPickUp(player.getLocation(), event.getItem().getItemStack());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -68,7 +68,7 @@ public class ItemListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.ItemDrop.has(player)) return;
-        DatabaseTask.getSession(player).itemDrop(player.getLocation(), event.getItemDrop().getItemStack());
+        OnlineSessionCache.fetch(player).itemDrop(player.getLocation(), event.getItemDrop().getItemStack());
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -77,7 +77,7 @@ public class ItemListener implements Listener {
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         if(!StatPerms.ItemUse.has(player)) return;
-        OnlineSession session = DatabaseTask.getSession(player);
+        OnlineSession session = OnlineSessionCache.fetch(player);
         session.itemUse(player.getLocation(), player.getItemInHand());
         session.addMiscValue(MiscInfoPlayersTable.FoodEaten);
     }
@@ -87,7 +87,7 @@ public class ItemListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = (Player) event.getWhoClicked();
         if(!StatPerms.ItemCraft.has(player)) return;
-        DatabaseTask.getSession(player).itemCraft(player.getLocation(), event.getCurrentItem());
+        OnlineSessionCache.fetch(player).itemCraft(player.getLocation(), event.getCurrentItem());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -95,7 +95,7 @@ public class ItemListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.ItemMisc.has(player)) return;
-        DatabaseTask.getSession(player).itemSmelt(player.getLocation(), new ItemStack(event.getItemType()));
+        OnlineSessionCache.fetch(player).itemSmelt(player.getLocation(), new ItemStack(event.getItemType()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -103,7 +103,7 @@ public class ItemListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.ItemBreak.has(player)) return;
-        DatabaseTask.getSession(player).itemBreak(player.getLocation(), event.getBrokenItem());
+        OnlineSessionCache.fetch(player).itemBreak(player.getLocation(), event.getBrokenItem());
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -111,6 +111,6 @@ public class ItemListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getEnchanter();
         if(!StatPerms.ItemMisc.has(player)) return;
-        DatabaseTask.getSession(player).itemEnchant(player.getLocation(), new ItemStack(event.getItem().getType()));
+        OnlineSessionCache.fetch(player).itemEnchant(player.getLocation(), new ItemStack(event.getItem().getType()));
     }
 }

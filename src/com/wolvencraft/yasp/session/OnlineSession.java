@@ -46,8 +46,8 @@ import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
 /**
  * Represents a player session that is created when a player logs into the server.<br />
@@ -237,7 +237,7 @@ public class OnlineSession implements PlayerSession {
         ((PVPData) getData(DataStoreType.PVP)).playerKilledPlayer(victim, weapon);
         playersData.getMiscData().killed(victim);
         playerTotals.pvpKill();
-        DatabaseTask.getSession(victim).getTotals().death();
+        OnlineSessionCache.fetch(victim).getTotals().death();
     }
     
     /**

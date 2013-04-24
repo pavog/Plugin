@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * Score board command.<br />
@@ -47,7 +47,7 @@ public class ScoreboardCommand implements BaseCommand {
         }
         
         Player player = (Player) CommandManager.getSender();
-        if(DatabaseTask.getSession(player).toggleScoreboard()) Message.sendFormattedSuccess("Displaying a scoreboard");
+        if(OnlineSessionCache.fetch(player).toggleScoreboard()) Message.sendFormattedSuccess("Displaying a scoreboard");
         else Message.sendFormattedSuccess("Scoreboard disabled");
         return true;
     }

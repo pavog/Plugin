@@ -127,7 +127,6 @@ public class Statistics extends JavaPlugin {
         if(isCraftBukkitCompatible()) new StatsBookListener(this);
 
         long ping = RemoteConfiguration.Ping.asInteger() * 20;
-        Message.debug("ping=" + ping);
         
         try {
             metrics = new PluginMetrics(this);
@@ -137,6 +136,7 @@ public class Statistics extends JavaPlugin {
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new PlayerCache(), 0L, (long)(30 * 60 * 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new OfflineSessionCache(), 0L, (long)(24 * 3600 * 20));
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new OnlineSessionCache(), 0L, (long)(5 * 60 * 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new MaterialCache(), 0L, (long)(24 * 3600 * 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new EntityCache(), 0L, (long)(24 * 3600 * 20));
         
@@ -153,11 +153,11 @@ public class Statistics extends JavaPlugin {
         
         try {
             for(Player player : Bukkit.getOnlinePlayers()) {
-                DatabaseTask.getSession(player).logout(player.getLocation());
+                OnlineSessionCache.fetch(player).logout(player.getLocation());
             }
             DatabaseTask.commit();
             DatabaseTask.getStats().pluginShutdown();
-            DatabaseTask.dumpSessions();
+            OnlineSessionCache.dumpSessions();
             
             Bukkit.getScheduler().cancelTasks(this);
             

@@ -20,26 +20,18 @@
 
 package com.wolvencraft.yasp.util.tasks;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.api.events.SessionRemoveEvent;
 import com.wolvencraft.yasp.api.events.SynchronizationEvent;
 import com.wolvencraft.yasp.api.events.SynchronizationPreProcessEvent;
-import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
-import com.wolvencraft.yasp.db.tables.Normal;
-import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.db.totals.ServerTotals;
 import com.wolvencraft.yasp.session.*;
-import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * Stores collected statistical data until it can be processed and sent to the database.<br />
@@ -50,7 +42,6 @@ import com.wolvencraft.yasp.util.Message;
 public class DatabaseTask implements Runnable {
     
     private static int iteration;
-    private static List<OnlineSession> sessions;
     private static ServerTotals serverTotals;
     private static ServerStatistics serverStatistics;
 
@@ -60,20 +51,8 @@ public class DatabaseTask implements Runnable {
      */
     public DatabaseTask() {
         iteration = 0;
-        sessions = new ArrayList<OnlineSession>();
         serverStatistics = new ServerStatistics();
         serverTotals = new ServerTotals();
-        
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Statistics.getInstance(), new Runnable() {
-            
-            @Override
-            public void run() {
-                for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                    if(StatPerms.Statistics.has(player)) getSession(player);
-                }
-            }
-            
-        }, 200L);
         
     }
     
@@ -103,20 +82,9 @@ public class DatabaseTask implements Runnable {
         if(Statistics.getPaused()) return;
         Message.debug("Database synchronization in progress");
         
-        for(OnlineSession session : getSessionList()) {
+        for(OnlineSession session : OnlineSessionCache.getSessions()) {
             session.pushData();
             session.getTotals().fetchData();
-            
-            if(session.isOnline()) continue;
-            session.logout();
-            removeSession(session);
-            
-            long delay = RemoteConfiguration.LogDelay.asInteger();
-            if(delay == 0 || session.getPlaytime() > delay) continue;
-            
-            Query.table(Normal.PlayersTable.TableName)
-                .condition(PlayersTable.Name, session.getName())
-                .delete();
         }
         
         serverStatistics.pushData();
@@ -126,63 +94,6 @@ public class DatabaseTask implements Runnable {
         RemoteConfiguration.clearCache();
         Bukkit.getServer().getPluginManager().callEvent(new SynchronizationEvent(iteration));
         iteration++;
-    }
-    
-    /**
-     * Cycles through all open player sessions and dumps their data.
-     * After that, clears the session list.
-     */
-    public static void dumpSessions() {
-        for(OnlineSession session : getSessionList()) {
-            session.dumpData();
-            removeSession(session);
-        }
-        sessions.clear();
-    }
-    
-    /**
-     * Returns all stored sessions.
-     * @return List of stored player sessions
-     */
-    public static List<OnlineSession> getSessionList() {
-        List<OnlineSession> tempList = new ArrayList<OnlineSession>();
-        for(OnlineSession session : sessions) tempList.add(session);
-        return tempList;
-    }
-    
-    /**
-     * Returns the OnlineSession associated with the specified player.<br />
-     * If no session is found, it will be created.
-     * @param player Tracked player
-     * @return OnlineSession associated with the player.
-     */
-    public static OnlineSession getSession(Player player) {
-        String username = player.getName();
-        for(OnlineSession session : sessions) {
-            if(session.getName().equals(username)) {
-                return session;
-            }
-        }
-        Message.debug("Creating a new user session for " + username);
-        OnlineSession newSession = new OnlineSession(player);
-        sessions.add(newSession);
-        if(RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
-            Message.send(
-                player,
-                RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
-            );
-        }
-        return newSession;
-    }
-    
-    /**
-     * Removes the specified session
-     * @param session Session to remove
-     */
-    public static void removeSession(OnlineSession session) {
-        Message.debug("Removing a user session for " + session.getName());
-        Bukkit.getServer().getPluginManager().callEvent(new SessionRemoveEvent(session.getName()));
-        sessions.remove(session);
     }
     
     /**

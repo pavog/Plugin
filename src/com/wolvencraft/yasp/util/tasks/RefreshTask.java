@@ -21,6 +21,7 @@
 package com.wolvencraft.yasp.util.tasks;
 
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * A simple asynchronous task that repeats itself every 20 ticks (1 second)
@@ -36,7 +37,7 @@ public class RefreshTask implements Runnable {
     
     @Override
     public void run() {
-        for(OnlineSession session : DatabaseTask.getSessionList()) {
+        for(OnlineSession session : OnlineSessionCache.getSessions()) {
             if(session.isOnline()) session.refreshScoreboard();
         }
     }

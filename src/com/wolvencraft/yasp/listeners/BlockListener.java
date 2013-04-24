@@ -29,7 +29,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * Listens to any block changes on the server and reports them to the plugin.
@@ -52,7 +52,7 @@ public class BlockListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.BlockBreak.has(player)) return;
-        DatabaseTask.getSession(player).blockBreak(event.getBlock().getLocation(), event.getBlock().getState());
+        OnlineSessionCache.fetch(player).blockBreak(event.getBlock().getLocation(), event.getBlock().getState());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -60,6 +60,6 @@ public class BlockListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.BlockPlace.has(player)) return;
-        DatabaseTask.getSession(player).blockPlace(event.getBlock().getLocation(), event.getBlock().getState());
+        OnlineSessionCache.fetch(player).blockPlace(event.getBlock().getLocation(), event.getBlock().getState());
     }
 }

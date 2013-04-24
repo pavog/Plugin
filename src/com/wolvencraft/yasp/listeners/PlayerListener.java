@@ -51,6 +51,7 @@ import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 
@@ -80,7 +81,7 @@ public class PlayerListener implements Listener {
         DatabaseTask.getStats().playerLogin();
         Player player = event.getPlayer();
         if(!StatPerms.Statistics.has(player)) return;
-        DatabaseTask.getSession(player).login(player.getLocation());
+        OnlineSessionCache.fetch(player).login(player.getLocation());
         
         if(RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
             Message.send(
@@ -94,7 +95,7 @@ public class PlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         if(!StatPerms.Statistics.has(player)) return;
-        DatabaseTask.getSession(player).logout(player.getLocation());
+        OnlineSessionCache.fetch(player).logout(player.getLocation());
         PlayerCache.remove(player.getName());
     }
     
@@ -110,21 +111,21 @@ public class PlayerListener implements Listener {
             Vehicle vehicle = (Vehicle) player.getVehicle();
             distance = vehicle.getLocation().distance(event.getTo());
             if(vehicle.getType().equals(EntityType.MINECART)) {
-                DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Minecart, distance);
+                OnlineSessionCache.fetch(player).addDistance(DistancePlayersTable.Minecart, distance);
             } else if(vehicle.getType().equals(EntityType.BOAT)) {
-                DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Boat, distance);
+                OnlineSessionCache.fetch(player).addDistance(DistancePlayersTable.Boat, distance);
             } else if(vehicle.getType().equals(EntityType.PIG)) {
-                DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Pig, distance);
+                OnlineSessionCache.fetch(player).addDistance(DistancePlayersTable.Pig, distance);
             }
         } else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
-            DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Swim, distance);
+            OnlineSessionCache.fetch(player).addDistance(DistancePlayersTable.Swim, distance);
         } else if (player.isFlying()) {
-            DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Flight, distance);
+            OnlineSessionCache.fetch(player).addDistance(DistancePlayersTable.Flight, distance);
         } else {
-            OnlineSession session = DatabaseTask.getSession(player);
+            OnlineSession session = OnlineSessionCache.fetch(player);
             if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
                 session.addMiscValue(MiscInfoPlayersTable.TimesJumped);
-            DatabaseTask.getSession(player).addDistance(DistancePlayersTable.Foot, distance);
+            OnlineSessionCache.fetch(player).addDistance(DistancePlayersTable.Foot, distance);
         }
     }
     
@@ -134,7 +135,7 @@ public class PlayerListener implements Listener {
         if(!event.getState().equals(State.CAUGHT_FISH)) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
-        DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.FishCaught);
+        OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.FishCaught);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -142,7 +143,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
-        DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.TimesKicked);
+        OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.TimesKicked);
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
@@ -150,7 +151,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
-        DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.EggsThrown);
+        OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.EggsThrown);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -159,7 +160,7 @@ public class PlayerListener implements Listener {
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         if(!StatPerms.PlayerMisc.has(player)) return;
-        DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.ArrowsShot);
+        OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.ArrowsShot);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -168,7 +169,7 @@ public class PlayerListener implements Listener {
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         if(!StatPerms.PlayerMisc.has(player)) return;
-        DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.DamageTaken, event.getDamage());
+        OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.DamageTaken, event.getDamage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -176,7 +177,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
-        DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.BedsEntered);
+        OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.BedsEntered);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -184,7 +185,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
-        DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.PortalsEntered);
+        OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.PortalsEntered);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -192,7 +193,7 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
-        DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.WordsSaid, event.getMessage().split(" ").length);
+        OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.WordsSaid, event.getMessage().split(" ").length);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -200,6 +201,6 @@ public class PlayerListener implements Listener {
         if(Statistics.getPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
-        DatabaseTask.getSession(player).addMiscValue(MiscInfoPlayersTable.CommandsSent);
+        OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.CommandsSent);
     }
 }

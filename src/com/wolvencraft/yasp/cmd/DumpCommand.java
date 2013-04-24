@@ -22,7 +22,7 @@ package com.wolvencraft.yasp.cmd;
 
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * Dump command.<br />
@@ -34,7 +34,7 @@ public class DumpCommand implements BaseCommand {
 
     @Override
     public boolean run(String[] args) {
-        DatabaseTask.dumpSessions();
+        OnlineSessionCache.dumpSessions();
         Message.sendFormattedSuccess(CommandManager.getSender(), "The local data has been dumped");
         return true;
     }

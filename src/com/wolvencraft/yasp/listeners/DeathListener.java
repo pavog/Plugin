@@ -42,7 +42,7 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Constants;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
-import com.wolvencraft.yasp.util.tasks.DatabaseTask;
+import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * Listens to any entity deaths on the server and reports them to the plugin
@@ -80,47 +80,47 @@ public class DeathListener implements Listener {
                     if (projectile.getShooter() instanceof Player) {                // | | + Player shot Player
                         Player killer = (Player) projectile.getShooter();
                         if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(victim)) return;
-                        OnlineSession session = DatabaseTask.getSession(killer);
+                        OnlineSession session = OnlineSessionCache.fetch(killer);
                         session.killedPlayer(victim, Constants.ProjectileToItem.parse(projectile.getType()));
                     } else if (projectile.getShooter() instanceof Creature) {    // | | + Creature shot Player
                         if(!StatPerms.DeathPVE.has(victim)) return;
                         Entity killer = (Entity) projectile.getShooter();
-                        OnlineSession session = DatabaseTask.getSession(victim);
+                        OnlineSession session = OnlineSessionCache.fetch(victim);
                         session.killedByCreature(killer, Constants.ProjectileToItem.parse(projectile.getType()));
                     }
                 } else if (killerEntity instanceof Player) {                    // | + Player killed Player
                     Player killer = (Player) killerEntity;
                     if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(victim)) return;
-                    OnlineSession session = DatabaseTask.getSession(killer);
+                    OnlineSession session = OnlineSessionCache.fetch(killer);
                     session.killedPlayer(victim, killer.getItemInHand());
                 } else if (killerEntity instanceof Explosive) {                    // | + Player exploded
                     if(!StatPerms.DeathOther.has(victim)) return;
-                    OnlineSession session = DatabaseTask.getSession(victim);
+                    OnlineSession session = OnlineSessionCache.fetch(victim);
                     session.killedByEnvironment(victim.getLocation(), cause);
                 } else if (killerEntity instanceof Creature) {                    // | + Creature killed Player
                     if(!StatPerms.DeathPVE.has(victim)) return;
-                    OnlineSession session = DatabaseTask.getSession(victim);
+                    OnlineSession session = OnlineSessionCache.fetch(victim);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else if (killerEntity instanceof Slime) {                        // | + Slime killed player
                     if(!StatPerms.DeathPVE.has(victim)) return;
-                    OnlineSession session = DatabaseTask.getSession(victim);
+                    OnlineSession session = OnlineSessionCache.fetch(victim);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else if (killerEntity instanceof EnderDragon) {                        // | + Ender Dragon killed player
                     if(!StatPerms.DeathPVE.has(victim)) return;
-                    OnlineSession session = DatabaseTask.getSession(victim);
+                    OnlineSession session = OnlineSessionCache.fetch(victim);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else {                                                        // | + Player died
                     if(!StatPerms.DeathOther.has(victim)) return;
-                    OnlineSession session = DatabaseTask.getSession(victim);
+                    OnlineSession session = OnlineSessionCache.fetch(victim);
                     session.killedByEnvironment(victim.getLocation(), cause);
                 }
             } else if (lastDamageEvent instanceof EntityDamageByBlockEvent) {    // + Player killed by blocks
                 if(!StatPerms.DeathOther.has(victim)) return;
-                OnlineSession session = DatabaseTask.getSession(victim);
+                OnlineSession session = OnlineSessionCache.fetch(victim);
                 session.killedByEnvironment(victim.getLocation(), cause);
             } else {                                                            // + Player died
                 if(!StatPerms.DeathOther.has(victim)) return;
-                OnlineSession session = DatabaseTask.getSession(victim);
+                OnlineSession session = OnlineSessionCache.fetch(victim);
                 session.killedByEnvironment(victim.getLocation(), cause);
             }
         } else {
@@ -134,19 +134,19 @@ public class DeathListener implements Listener {
                 Player killer = (Player) projectile.getShooter();
                 if(!StatPerms.DeathPVE.has(killer)) return;
                 if (victimEntity instanceof Creature) {                            // | + Player shot Creature
-                    DatabaseTask.getSession(killer).killedCreature(victimEntity, Constants.ProjectileToItem.parse(projectile.getType()));
+                    OnlineSessionCache.fetch(killer).killedCreature(victimEntity, Constants.ProjectileToItem.parse(projectile.getType()));
                 } else if (victimEntity instanceof Slime) {                        // | + Player shot Slime
-                    DatabaseTask.getSession(killer).killedCreature(victimEntity, Constants.ProjectileToItem.parse(projectile.getType()));
+                    OnlineSessionCache.fetch(killer).killedCreature(victimEntity, Constants.ProjectileToItem.parse(projectile.getType()));
                 }
             } else if (killerEntity instanceof Player) {                        // + Player killed an entity
                 Player killer = (Player) killerEntity;
                 if(!StatPerms.DeathPVE.has(killer)) return;
                 if (victimEntity instanceof Creature) {                            // | + Player killed Creature
-                    DatabaseTask.getSession(killer).killedCreature(victimEntity, killer.getItemInHand());
+                    OnlineSessionCache.fetch(killer).killedCreature(victimEntity, killer.getItemInHand());
                 } else if (victimEntity instanceof Slime) {                        // | + Player killed Slime
-                    DatabaseTask.getSession(killer).killedCreature(victimEntity, killer.getItemInHand());
+                    OnlineSessionCache.fetch(killer).killedCreature(victimEntity, killer.getItemInHand());
                 } else if (victimEntity instanceof EnderDragon) {                  // | + Player killed an EnderDragon
-                    DatabaseTask.getSession(killer).killedCreature(victimEntity, killer.getItemInHand());
+                    OnlineSessionCache.fetch(killer).killedCreature(victimEntity, killer.getItemInHand());
                 }
             }
         }
