@@ -59,7 +59,7 @@ public class OnlineSessionCache implements CachedDataProcess {
             @Override
             public void run() {
                 for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                    if(StatPerms.Statistics.has(player)) fetch(player);
+                    if(StatPerms.Statistics.has(player)) fetch(player).login(player.getLocation());
                 }
             }
             
