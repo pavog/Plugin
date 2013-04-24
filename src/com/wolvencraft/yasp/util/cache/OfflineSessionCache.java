@@ -27,14 +27,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.session.OfflineSession;
+import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
 /**
  * Caches Offline sessions server-side
  * @author bitWolfy
  *
  */
-public class OfflineSessionCache implements CachedData {
-    
+public class OfflineSessionCache implements CachedDataProcess {
+
+    private final long REFRESH_RATE_TICKS = (long)(24 * 3600 * 20);
     private static List<OfflineSession> players;
     
     /**
@@ -46,6 +48,11 @@ public class OfflineSessionCache implements CachedData {
         for(Player player : Bukkit.getServer().getOnlinePlayers()) {
             players.add(new OfflineSession(player.getName()));
         }
+    }
+    
+    @Override
+    public long getRefreshRate() {
+        return REFRESH_RATE_TICKS;
     }
     
     @Override

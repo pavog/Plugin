@@ -31,14 +31,16 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Miscellaneous.MaterialsTable;
 import com.wolvencraft.yasp.settings.Constants;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
+import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
 /**
  * Caches material IDs server-side
  * @author bitWolfy
  *
  */
-public class MaterialCache implements CachedData {
-    
+public class MaterialCache implements CachedDataProcess {
+
+    private final long REFRESH_RATE_TICKS = (long)(24 * 3600 * 20);
     private static List<String> materials;
     
     /**
@@ -47,6 +49,11 @@ public class MaterialCache implements CachedData {
      */
     public MaterialCache() {
         materials = new ArrayList<String>();
+    }
+    
+    @Override
+    public long getRefreshRate() {
+        return REFRESH_RATE_TICKS;
     }
     
     @Override

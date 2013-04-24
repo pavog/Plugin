@@ -27,14 +27,16 @@ import org.bukkit.entity.EntityType;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Miscellaneous.EntitiesTable;
+import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
 /**
  * Caches entity IDs server-side
  * @author bitWolfy
  *
  */
-public class EntityCache implements CachedData {
+public class EntityCache implements CachedDataProcess {
     
+    private final long REFRESH_RATE_TICKS = (long)(24 * 3600 * 20);
     private static List<Integer> entities;
     
     /**
@@ -43,6 +45,11 @@ public class EntityCache implements CachedData {
      */
     public EntityCache() {
         entities = new ArrayList<Integer>();
+    }
+    
+    @Override
+    public long getRefreshRate() {
+        return REFRESH_RATE_TICKS;
     }
     
     @Override

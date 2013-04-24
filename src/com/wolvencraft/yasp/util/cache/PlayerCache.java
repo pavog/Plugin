@@ -31,14 +31,16 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
 /**
  * Caches player names and IDs server-side
  * @author bitWolfy
  *
  */
-public class PlayerCache implements CachedData {
+public class PlayerCache implements CachedDataProcess {
     
+    private final long REFRESH_RATE_TICKS = (long)(30 * 60 * 20);
     private static Map<String, Integer> players;
     
     /**
@@ -47,6 +49,11 @@ public class PlayerCache implements CachedData {
      */
     public PlayerCache() {
         players = new HashMap<String, Integer>();
+    }
+    
+    @Override
+    public long getRefreshRate() {
+        return REFRESH_RATE_TICKS;
     }
     
     @Override

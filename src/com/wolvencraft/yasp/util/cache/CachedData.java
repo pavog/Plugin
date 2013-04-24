@@ -20,9 +20,114 @@
 
 package com.wolvencraft.yasp.util.cache;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+
+import org.bukkit.Bukkit;
+
+import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.util.Message;
+
 /**
- * Common interface for cached data stores
+ * Handles all the processes that refresh the plugin cache
  * @author bitWolfy
  *
  */
-public interface CachedData extends Runnable { }
+public class CachedData {
+    
+    private static Map<CachedDataType, Integer> tasks = new HashMap<CachedDataType, Integer>();
+    
+    /**
+     * Starts the specified process, as long as it is not running
+     * @param type Process to start
+     * @return <b>true</b> if the process has been started, <b>false</b> if an error occurred
+     */
+    public static boolean startProcess(CachedDataType type) {
+        if(tasks.containsKey(type)) return false;
+        int processId = Bukkit.getScheduler().runTaskTimerAsynchronously(
+                Statistics.getInstance(),
+                type.process,
+                0,
+                type.process.getRefreshRate()
+        ).getTaskId();
+        tasks.put(type, processId);
+        return true;
+    }
+    
+    /**
+     * Stops the specified process (if it is running)
+     * @param type Process to stop
+     * @return <b>true</b> if the process has been stopped, <b>false</b> if an error occurred
+     */
+    public static boolean stopProcess(CachedDataType type) {
+        if(!tasks.containsKey(type)) return false;
+        Bukkit.getScheduler().cancelTask(tasks.get(type));
+        return true;
+    }
+    
+    /**
+     * Starts all processes, as long as they have not been started yet
+     * @return <b>true</b> if all processes have been started, <b>false</b> if an error occurred
+     */
+    public static boolean startAll() {
+        boolean result = true;
+        for(CachedDataType type : CachedDataType.values()) {
+            if(tasks.containsKey(type)) continue;
+            result = result && startProcess(type);
+        }
+        return result;
+    }
+    
+    /**
+     * Stops all processes, as long as they are running
+     * @return <b>true</b> if all processes have been stopped, <b>false</b> if an error occurred
+     */
+    public static boolean stopAll() {
+        boolean result = true;
+        for(CachedDataType type : CachedDataType.values()) {
+            if(tasks.containsKey(type)) continue;
+            result = result && stopProcess(type);
+        }
+        return result;
+    }
+    
+    /**
+     * Public interface for all cached data processes
+     * @author bitWolfy
+     *
+     */
+    public interface CachedDataProcess extends Runnable {
+        
+        /**
+         * Returns the cache refresh rate.
+         * @return Cache refresh rate (in ticks)
+         */
+        public long getRefreshRate();
+        
+    }
+    
+    /**
+     * Denotes different cached data types
+     * @author bitWolfy
+     *
+     */
+    public enum CachedDataType {
+        Entity(EntityCache.class),
+        Material(MaterialCache.class),
+        OfflineSession(OfflineSessionCache.class),
+        OnlineSession(OnlineSessionCache.class),
+        Player(PlayerCache.class);
+        
+        private CachedDataProcess process;
+        
+        CachedDataType(Class<?> process) {
+            try { this.process = (CachedDataProcess) process.newInstance(); }
+            catch (InstantiationException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (InstantiationException)"); return; }
+            catch (IllegalAccessException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (IllegalAccessException)"); return; }
+            catch (Exception e)                 { Message.log(Level.SEVERE, "Error while instantiating a cache process! (Exception)"); return; }
+        }
+    }
+    
+}
+

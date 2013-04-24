@@ -32,17 +32,19 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
+import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
 /**
  * Caches Online player sessions server-side
  * @author bitWolfy
  *
  */
-public class OnlineSessionCache implements CachedData {
-    
+public class OnlineSessionCache implements CachedDataProcess {
+
+    private final long REFRESH_RATE_TICKS = (long)(5 * 60 * 20);
     private static List<OnlineSession> sessions;
     
     /**
@@ -62,6 +64,11 @@ public class OnlineSessionCache implements CachedData {
             }
             
         }, 100L);
+    }
+    
+    @Override
+    public long getRefreshRate() {
+        return REFRESH_RATE_TICKS;
     }
     
     @Override
