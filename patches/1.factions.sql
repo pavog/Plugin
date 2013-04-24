@@ -16,6 +16,10 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_factions` (
   `player_id` INT NOT NULL ,
   `faction` VARCHAR(255) NOT NULL DEFAULT 'none' ,
   `current_position` VARCHAR(255) NULL ,
+  `current_power` FLOAT NOT NULL DEFAULT 0.0 ,
+  `max_power` FLOAT NOT NULL DEFAULT 0.0 ,
+  `role` VARCHAR(255) NULL ,
+  `title` VARCHAR(25) NULL ,
   PRIMARY KEY (`player_id`) ,
   CONSTRAINT `fk_player_id22`
     FOREIGN KEY (`player_id` )
