@@ -32,8 +32,7 @@ import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
- * Stores collected statistical data until it can be processed and sent to the database.<br />
- * This class is intended to be run in an asynchronous thread; all components are thread-safe.
+ * Synchronizes the collected data to the database
  * @author bitWolfy
  *
  */
@@ -42,8 +41,7 @@ public class DatabaseTask implements Runnable {
     private static int iteration;
 
     /**
-     * <b>Default constructor.</b><br />
-     * Initializes an empty list of OnlineSessions
+     * <b>Default constructor.</b>
      */
     public DatabaseTask() {
         iteration = 0;
@@ -64,7 +62,6 @@ public class DatabaseTask implements Runnable {
      * <li>Confirm that the synchronization is not paused.</li>
      * <li>Push all player data to the database</li>
      * <li>Push generic server statistics to the database</li>
-     * <li>Confirms that the players marked as online are actually online</li>
      * <li>Fetch server totals for signs and statistics books</li>
      * <li>Clear settings cache</li>
      * </ul>

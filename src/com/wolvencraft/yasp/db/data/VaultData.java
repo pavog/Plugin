@@ -57,7 +57,7 @@ public class VaultData implements DataStore {
     public List<DetailedData> getDetailedData() { return null; }
 
     @Override
-    public void sync() {
+    public void pushData() {
         data.pushData(playerId);
     }
 

@@ -52,7 +52,7 @@ public interface DataStore {
      * Synchronizes the data from the data store to the database, then removes it from local storage<br />
      * If an entry was not synchronized, it will not be removed.
      */
-    public void sync();
+    public void pushData();
     
     /**
      * Clears the data store of all locally stored data.

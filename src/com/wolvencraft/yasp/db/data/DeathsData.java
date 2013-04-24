@@ -74,7 +74,7 @@ public class DeathsData implements DataStore {
     }
     
     @Override
-    public void sync() {
+    public void pushData() {
         for(NormalData entry : getNormalData()) {
             if(entry.pushData(playerId)) normalData.remove(entry);
         }

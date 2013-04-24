@@ -147,7 +147,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void pushData() {
         playersData.sync();
-        for(DataStore store : dataStores) store.sync();
+        for(DataStore store : dataStores) store.pushData();
         
         playerTotals.fetchData();
     }
