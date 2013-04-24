@@ -20,6 +20,9 @@
 
 package com.wolvencraft.yasp.settings;
 
+import org.bukkit.Bukkit;
+
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 
@@ -123,31 +126,41 @@ public enum Module {
              .update();
     }
     
+    /**
+     * Fetches the module variables from the database
+     */
     private void refresh() {
-        String stateKey = "";
-        if(isHook) {
-            stateKey = "hook." + KEY;
+        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             
-            String versionKey = "version." + KEY;
-            if(Query.table(SettingsTable.TableName).condition("key", versionKey).exists()) {
-                try { version = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select().asInt("value"); }
-                catch (Throwable t) { enabled = true; }
-            } else {
-                Query.table(SettingsTable.TableName).value("key", versionKey).value("value", 0).insert();
-                enabled = true;
+            @Override
+            public void run() {
+                String stateKey = "";
+                if(isHook) {
+                    stateKey = "hook." + KEY;
+                    
+                    String versionKey = "version." + KEY;
+                    if(Query.table(SettingsTable.TableName).condition("key", versionKey).exists()) {
+                        try { version = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select().asInt("value"); }
+                        catch (Throwable t) { enabled = true; }
+                    } else {
+                        Query.table(SettingsTable.TableName).value("key", versionKey).value("value", 0).insert();
+                        enabled = true;
+                    }
+                } else {
+                    stateKey = "module." + KEY;
+                    version = -1;
+                }
+                
+                if(Query.table(SettingsTable.TableName).condition("key", stateKey).exists()) {
+                    try { enabled = Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).select().asBoolean("value"); }
+                    catch (Throwable t) { enabled = true; }
+                } else {
+                    Query.table(SettingsTable.TableName).value("key", stateKey).value("value", true).insert();
+                    enabled = true;
+                }
             }
-        } else {
-            stateKey = "module." + KEY;
-            version = -1;
-        }
-        
-        if(Query.table(SettingsTable.TableName).condition("key", stateKey).exists()) {
-            try { enabled = Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).select().asBoolean("value"); }
-            catch (Throwable t) { enabled = true; }
-        } else {
-            Query.table(SettingsTable.TableName).value("key", stateKey).value("value", true).insert();
-            enabled = true;
-        }
+            
+        });
     }
     
     /**

@@ -20,6 +20,9 @@
 
 package com.wolvencraft.yasp.settings;
 
+import org.bukkit.Bukkit;
+
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
@@ -71,11 +74,7 @@ public enum RemoteConfiguration {
      * @return Configuration value
      */
     public String asString() {
-        if(refresh) {
-            try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
-            catch (Throwable t) { entry = null; }
-            refresh = false;
-        }
+        if(refresh) refresh();
         try { return entry.asString("value"); }
         catch (Throwable t) { return ""; }
     }
@@ -85,11 +84,7 @@ public enum RemoteConfiguration {
      * @return Configuration value
      */
     public int asInteger() { 
-        if(refresh) {
-            try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
-            catch (Throwable t) { entry = null; }
-            refresh = false;
-        }
+        if(refresh) refresh();
         try { return entry.asInt("value"); }
         catch (Throwable t) { return 0; }
     }
@@ -99,11 +94,7 @@ public enum RemoteConfiguration {
      * @return Configuration value
      */
     public boolean asBoolean() {
-        if(refresh) {
-            try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
-            catch (Throwable t) { entry = null; }
-            refresh = false;
-        }
+        if(refresh) refresh();
         try { return entry.asBoolean("value"); }
         catch (Throwable t) { return false; }
     }
@@ -115,6 +106,20 @@ public enum RemoteConfiguration {
      */
     public boolean update(Object value) {
         return Query.table(SettingsTable.TableName).value("value", value).condition("key", key).update();
+    }
+    
+    /**
+     * Fetches the configuration data from the database
+     */
+    public void refresh() {
+        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
+                catch (Throwable t) { entry = null; }
+                refresh = false;
+            }
+        });
     }
     
     /**
