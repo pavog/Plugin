@@ -37,6 +37,7 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
@@ -136,11 +137,8 @@ public class ItemListener implements Listener {
         slot 1 = right item slot
         slot 2 = result item slot
         */
+        
         if(rawSlot != 2) return;
-        /*
-        get the current item in the result slot
-        I think inv.getItem(rawSlot) would be possible too
-        */
         ItemStack item = event.getCurrentItem();
         if(item == null) return;
         
@@ -150,4 +148,40 @@ public class ItemListener implements Listener {
         String displayName = meta.getDisplayName();
         com.wolvencraft.yasp.util.Message.log("Item has been renamed to " + displayName);
     }
+    
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public static void onItemRepair(InventoryClickEvent event){
+        HumanEntity entity = event.getWhoClicked();
+        
+        if(entity instanceof Player) return;
+        Player player = (Player) entity;
+        
+        if(!(event.getInventory() instanceof AnvilInventory)) return;
+        AnvilInventory anvil = (AnvilInventory) event.getInventory();
+        InventoryView view = event.getView();
+        int rawSlot = event.getRawSlot();
+         
+        if(rawSlot != view.convertSlot(rawSlot)) return;
+        if(rawSlot != 2) return;
+        ItemStack[] items = anvil.getContents();
+         
+        if(items[0] == null || items[1] == null) return;
+        int leftSlot = items[0].getTypeId();
+        int rightSlot = items[1].getTypeId();
+        if(leftSlot == 0 || leftSlot != rightSlot) return;
+        
+        ItemStack resultSlot = event.getCurrentItem();
+        if(resultSlot == null) return;
+            
+        ItemMeta meta = resultSlot.getItemMeta();
+         
+        if(meta == null) return;
+        if(!(meta instanceof Repairable)) return;
+        Repairable repairable = (Repairable) meta;
+        int repairCost = repairable.getRepairCost();
+        if(player.getLevel() < repairCost) return;
+        
+        com.wolvencraft.yasp.util.Message.log("Item has been repaired for " + repairable.getRepairCost());
+    }
+    
 }
