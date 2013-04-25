@@ -190,6 +190,15 @@ public class ItemsData implements DataStore {
         getNormalData(itemStack).addEnchanted(itemStack.getAmount());
     }
     
+    /**
+     * Registers the repaired item in the data stores
+     * @param location Location of the event
+     * @param itemStack Stack of items in question
+     */
+    public void itemRepair(Location location, ItemStack itemStack) {
+        getNormalData(itemStack).addRepaired(itemStack.getAmount());
+    }
+    
     
     /**
      * Represents the total number of items player dropped and picked up.<br />
@@ -207,6 +216,7 @@ public class ItemsData implements DataStore {
         private int broken;
         private int smelted;
         private int enchanted;
+        private int repaired;
         
         /**
          * <b>Default constructor</b><br />
@@ -224,6 +234,7 @@ public class ItemsData implements DataStore {
             broken = 0;
             smelted = 0;
             enchanted = 0;
+            repaired = 0;
             
             fetchData(playerId);
         }
@@ -243,6 +254,7 @@ public class ItemsData implements DataStore {
                     .column(TotalItemsTable.Broken)
                     .column(TotalItemsTable.Smelted)
                     .column(TotalItemsTable.Enchanted)
+                    .column(TotalItemsTable.Repaired)
                     .condition(TotalItemsTable.PlayerId, playerId)
                     .condition(TotalItemsTable.MaterialId, MaterialCache.parse(stack))
                     .select();
@@ -258,6 +270,7 @@ public class ItemsData implements DataStore {
                     .value(TotalItemsTable.Broken, broken)
                     .value(TotalItemsTable.Smelted, smelted)
                     .value(TotalItemsTable.Enchanted, enchanted)
+                    .value(TotalItemsTable.Repaired, repaired)
                     .insert();
             } else {
                 dropped = result.asInt(TotalItemsTable.Dropped);
@@ -267,6 +280,7 @@ public class ItemsData implements DataStore {
                 broken = result.asInt(TotalItemsTable.Broken);
                 smelted = result.asInt(TotalItemsTable.Smelted);
                 enchanted = result.asInt(TotalItemsTable.Enchanted);
+                repaired = result.asInt(TotalItemsTable.Repaired);
             }
         }
 
@@ -280,6 +294,7 @@ public class ItemsData implements DataStore {
                     .value(TotalItemsTable.Broken, broken)
                     .value(TotalItemsTable.Smelted, smelted)
                     .value(TotalItemsTable.Enchanted, enchanted)
+                    .value(TotalItemsTable.Repaired, repaired)
                     .condition(TotalItemsTable.PlayerId, playerId)
                     .condition(TotalItemsTable.MaterialId, MaterialCache.parse(stack))
                     .update(LocalConfiguration.Standalone.asBoolean());
@@ -296,6 +311,7 @@ public class ItemsData implements DataStore {
             broken = 0;
             smelted = 0;
             enchanted = 0;
+            repaired = 0;
         }
         
         /**
@@ -368,6 +384,14 @@ public class ItemsData implements DataStore {
          */
         public void addEnchanted(int amount) {
             enchanted += amount;
+        }
+        
+        /**
+         * Increments the number of items repaired
+         * @param amount Number of items
+         */
+        public void addRepaired(int amount) {
+            
         }
     }
     

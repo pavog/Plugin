@@ -121,40 +121,12 @@ public class ItemListener implements Listener {
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onItemRename(InventoryClickEvent event){
-        HumanEntity entity = event.getWhoClicked();
-         
-        if(!(entity instanceof Player)) return;
-        if(!(event.getInventory() instanceof AnvilInventory)) return;
-        
-        InventoryView view = event.getView();
-        int rawSlot = event.getRawSlot();
-         
-        if(rawSlot != view.convertSlot(rawSlot)) return; // Check if inventory in question is the top one
-        
-        /*
-        slot 0 = left item slot
-        slot 1 = right item slot
-        slot 2 = result item slot
-        */
-        
-        if(rawSlot != 2) return;
-        ItemStack item = event.getCurrentItem();
-        if(item == null) return;
-        
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return; // No metadata? Bwaaah?
-        if(!meta.hasDisplayName()) return;
-        String displayName = meta.getDisplayName();
-        com.wolvencraft.yasp.util.Message.log("Item has been renamed to " + displayName);
-    }
-    
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public static void onItemRepair(InventoryClickEvent event){
         HumanEntity entity = event.getWhoClicked();
         
         if(entity instanceof Player) return;
         Player player = (Player) entity;
+        if(!StatPerms.ItemAnvil.has(player)) return;
         
         if(!(event.getInventory() instanceof AnvilInventory)) return;
         AnvilInventory anvil = (AnvilInventory) event.getInventory();
@@ -180,7 +152,8 @@ public class ItemListener implements Listener {
         Repairable repairable = (Repairable) meta;
         int repairCost = repairable.getRepairCost();
         if(player.getLevel() < repairCost) return;
-        
+
+        OnlineSessionCache.fetch(player).itemEnchant(player.getLocation(), resultSlot);
         com.wolvencraft.yasp.util.Message.log("Item has been repaired for " + repairable.getRepairCost());
     }
     

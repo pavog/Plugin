@@ -29,6 +29,7 @@ permissions:
       stats.track.item.use: true
       stats.track.item.break: true
       stats.track.item.craft: true
+      stats.track.item.anvil: true
       stats.track.item.misc: true
   stats.track.player:
     description: Track some basic player statistics

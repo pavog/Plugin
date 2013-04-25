@@ -208,7 +208,8 @@ public class Normal {
         Crafted("crafted"),
         Smelted("smelted"),
         Broken("broken"),
-        Enchanted("enchanted");
+        Enchanted("enchanted"),
+        Repaired("repaired");
         
         TotalItemsTable (String columnName) { this.columnName = columnName;}
         

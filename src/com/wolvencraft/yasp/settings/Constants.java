@@ -167,6 +167,7 @@ public class Constants {
         ItemUse         ("stats.track.item.use", Item),
         ItemBreak       ("stats.track.item.break", Item),
         ItemCraft       ("stats.track.item.craft", Item),
+        ItemAnvil       ("stats.track.item.anvil", Item),
         ItemMisc        ("stats.track.item.misc", Item),
         Player          ("stats.track.player"),
         PlayerDistances ("stats.track.player.distances", Player),

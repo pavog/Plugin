@@ -366,6 +366,15 @@ public class OnlineSession implements PlayerSession {
     }
     
     /**
+     * Registers the reparied item in the data stores
+     * @param location Location of the event
+     * @param itemStack Stack of items in question
+     */
+    public void itemRepair(Location location, ItemStack itemStack) {
+        ((ItemsData) getData(DataStoreType.Items)).itemRepair(location, itemStack);
+    }
+    
+    /**
      * Toggles the scoreboard state
      * @return <b>true</b> if the scoreboard has been turned on, <b>false</b> if it is now off
      */
