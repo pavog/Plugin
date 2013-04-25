@@ -162,6 +162,7 @@ public class Statistics extends JavaPlugin {
             DatabaseTask.commit();
             serverStatistics.pluginShutdown();
             OnlineSessionCache.dumpSessions();
+            CachedData.stopAll();
             
             Bukkit.getScheduler().cancelTasks(this);
             
