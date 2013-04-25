@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.listeners;
 
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,10 +29,14 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
@@ -112,5 +117,37 @@ public class ItemListener implements Listener {
         Player player = event.getEnchanter();
         if(!StatPerms.ItemMisc.has(player)) return;
         OnlineSessionCache.fetch(player).itemEnchant(player.getLocation(), new ItemStack(event.getItem().getType()));
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onItemRename(InventoryClickEvent event){
+        HumanEntity entity = event.getWhoClicked();
+         
+        if(!(entity instanceof Player)) return;
+        if(!(event.getInventory() instanceof AnvilInventory)) return;
+        
+        InventoryView view = event.getView();
+        int rawSlot = event.getRawSlot();
+         
+        if(rawSlot != view.convertSlot(rawSlot)) return; // Check if inventory in question is the top one
+        
+        /*
+        slot 0 = left item slot
+        slot 1 = right item slot
+        slot 2 = result item slot
+        */
+        if(rawSlot != 2) return;
+        /*
+        get the current item in the result slot
+        I think inv.getItem(rawSlot) would be possible too
+        */
+        ItemStack item = event.getCurrentItem();
+        if(item == null) return;
+        
+        ItemMeta meta = item.getItemMeta();
+        if(meta == null) return; // No metadata? Bwaaah?
+        if(!meta.hasDisplayName()) return;
+        String displayName = meta.getDisplayName();
+        com.wolvencraft.yasp.util.Message.log("Item has been renamed to " + displayName);
     }
 }
