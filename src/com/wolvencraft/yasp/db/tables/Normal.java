@@ -100,6 +100,7 @@ public class Normal {
         LoginTime("login_time"),
         Playtime("playtime"),
         FirstLogin("first_login"),
+        LongestSession("longest_session"),
         Logins("logins");
         
         PlayersTable (String columnName) { this.columnName = columnName; }

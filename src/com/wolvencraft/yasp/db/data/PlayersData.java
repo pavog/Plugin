@@ -158,11 +158,19 @@ public class PlayersData {
         
         private String username;
         private long lastSync;
+        
+        private long longestSession;
+        private long currentSession;
+        
         private long totalPlaytime;
         
         public Players (int playerId, Player player) {
             username = player.getName();
             lastSync = Util.getTimestamp();
+            
+            currentSession = 0;
+            longestSession = 0;
+            
             long firstLogin = lastSync;
             int logins = 0;
             
@@ -170,6 +178,7 @@ public class PlayersData {
                 .column(PlayersTable.Logins)
                 .column(PlayersTable.FirstLogin)
                 .column(PlayersTable.Playtime)
+                .column(PlayersTable.LongestSession)
                 .condition(PlayersTable.PlayerId, playerId)
                 .select();
             
@@ -182,6 +191,7 @@ public class PlayersData {
                 if(firstLogin == -1) { firstLogin = lastSync; }
                 logins = result.asInt(PlayersTable.Logins);
                 this.totalPlaytime = result.asLong(PlayersTable.Playtime);
+                longestSession = result.asLong(PlayersTable.LongestSession);
             }
             
             Query.table(PlayersTable.TableName)
@@ -202,11 +212,14 @@ public class PlayersData {
         
         @Override
         public boolean pushData(int playerId) {
+            currentSession += Util.getTimestamp() - lastSync;
+            if(longestSession > currentSession) longestSession = currentSession;
             totalPlaytime += Util.getTimestamp() - lastSync;
             lastSync = Util.getTimestamp();
             
             return Query.table(PlayersTable.TableName)
                 .value(PlayersTable.Playtime, totalPlaytime)
+                .value(PlayersTable.LongestSession, longestSession)
                 .condition(PlayersTable.PlayerId, playerId)
                 .update();
         }
@@ -217,6 +230,22 @@ public class PlayersData {
          */
         public long getPlaytime() {
             return totalPlaytime;
+        }
+        
+        /**
+         * Returns the current session length
+         * @return Current session length
+         */
+        public long getCurrentSession() {
+            return currentSession;
+        }
+        
+        /**
+         * Returns the length of the longest play session
+         * @return Longest session length
+         */
+        public long getLongestSession() {
+            return longestSession;
         }
     }
     
