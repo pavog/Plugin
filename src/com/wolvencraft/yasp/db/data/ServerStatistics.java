@@ -94,7 +94,7 @@ public class ServerStatistics {
         plugins = Bukkit.getServer().getPluginManager().getPlugins().length;
 
         World mainWorld = Bukkit.getWorlds().get(0);
-        serverTime = mainWorld.getFullTime();
+        serverTime = mainWorld.getTime();
         weather = mainWorld.hasStorm();
         weatherDuration = mainWorld.getWeatherDuration();
         
