@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.db.data;
 
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +89,13 @@ public class ServerStatistics {
         ticksPerSecond = TickTask.getTicksPerSecond();
 
         serverIP = Bukkit.getIp();
+        if(serverIP.equals("")) {
+            try {
+                InetAddress in = InetAddress.getLocalHost();
+                InetAddress[] all = InetAddress.getAllByName(in.getHostName());
+                serverIP = all[0].getHostAddress();
+            } catch (Throwable t) { serverIP = ""; }
+        }
         serverPort = Bukkit.getPort();
         serverMOTD = Bukkit.getMotd();
         bukkitVersion = Bukkit.getBukkitVersion();
