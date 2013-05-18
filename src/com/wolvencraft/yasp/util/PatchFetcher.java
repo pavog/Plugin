@@ -20,16 +20,16 @@
 
 package com.wolvencraft.yasp.util;
 
-import java.io.BufferedInputStream;
+//import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+//import java.io.FileOutputStream;
+//import java.io.IOException;
+//import java.net.HttpURLConnection;
+//import java.net.MalformedURLException;
+//import java.net.URL;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
+//import com.wolvencraft.yasp.settings.LocalConfiguration;
 
 /**
  * First copies the patch files from jar to the plugin directory. Then checks the download server for updates.
@@ -63,6 +63,7 @@ public class PatchFetcher {
             Statistics.getInstance().saveResource("patches/" + j + "." + type.EXTENSION + ".sql", false);
             j++;
         }
+        /*
         int i = 1;
         while(remoteFileExists(i + "." + type.EXTENSION + ".sql")) {
             if(localFileExists(i + "." + type.EXTENSION + ".sql")) { i++; continue; }
@@ -77,6 +78,7 @@ public class PatchFetcher {
             }
             i++;
         }
+        */
         Message.log("|  All patch files are up to date  |");
         Message.log("+----------------------------------+");
     }
@@ -86,6 +88,7 @@ public class PatchFetcher {
      * Fetches the patch of the specified type
      * @param id Patch ID
      */
+    /*
     public static void fetch(String id) {
         if(localFileExists(id + ".sql")) { return; }
         Message.log("|" + Message.centerString("Downloading " + id + ".sql", 34) + "|");
@@ -100,6 +103,7 @@ public class PatchFetcher {
         Message.log("|  All patch files are up to date  |");
         Message.log("+----------------------------------+");
     }
+    */
     
     /**
      * Downloads a file from the download server
@@ -107,6 +111,7 @@ public class PatchFetcher {
      * @throws MalformedURLException Thrown if the file does not exist
      * @throws IOException Thrown if an error occurred while downloading the file
      */
+    /*
     private static void download(String filename) throws MalformedURLException, IOException {
         String urlString = LocalConfiguration.PatchServer.asString() + filename;
         BufferedInputStream inputStream = null;
@@ -125,6 +130,7 @@ public class PatchFetcher {
             if (fileOut != null) fileOut.close();
         }
     }
+    */
     
     /**
      * Checks if the file exists in the plugin directory
@@ -140,6 +146,7 @@ public class PatchFetcher {
      * @param filename Name of the file (i.e. <code>1.yasp.sql</code>)
      * @return <b>true</b> if the file exists, <b>false</b> otherwise
      */
+    /*
     private static boolean remoteFileExists(String filename) {
         filename = LocalConfiguration.PatchServer.asString() + filename;
         try {
@@ -149,6 +156,7 @@ public class PatchFetcher {
             return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
         } catch (Exception e) { return false;}
     }
+    */
     
     /**
      * Specifies the different types of patches and their extensions

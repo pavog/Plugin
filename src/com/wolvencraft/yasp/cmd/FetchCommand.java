@@ -21,7 +21,7 @@
 package com.wolvencraft.yasp.cmd;
 
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchFetcher;
+//import com.wolvencraft.yasp.util.PatchFetcher;
 
 /**
  * Fetch command.<br />
@@ -38,7 +38,7 @@ public class FetchCommand implements BaseCommand {
             return false;
         }
         
-        PatchFetcher.fetch(args[1]);
+//        PatchFetcher.fetch(args[1]);
         
         Message.log("Downloaded " + args[1] + " from the remote server");
         return true;
