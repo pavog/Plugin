@@ -65,7 +65,6 @@ public class PlayerCache implements CachedDataProcess {
             if(Bukkit.getPlayerExact(playerName) == null) {
                 players.remove(playerName);
             }
-            it.remove();
         }
     }
     
