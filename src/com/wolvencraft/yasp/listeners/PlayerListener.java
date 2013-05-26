@@ -41,6 +41,7 @@ import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -101,6 +102,8 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
         if(Statistics.getPaused()) return;
+        if(event instanceof PlayerTeleportEvent) return;
+        
         Player player = event.getPlayer();
         if(!StatPerms.PlayerDistances.has(player)) return;
         Location playerLocation = player.getLocation();
