@@ -74,7 +74,7 @@ public class OnlineSession implements PlayerSession {
      */
     public OnlineSession(Player player) {
         name = player.getName();
-        id = PlayerCache.get(name);
+        id = PlayerCache.get(player);
         
         this.playersData = new PlayersData(player, id);
         

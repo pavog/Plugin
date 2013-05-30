@@ -20,92 +20,46 @@
 
 package com.wolvencraft.yasp.util.cache;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
-import org.bukkit.Bukkit;
-
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
 /**
  * Caches player names and IDs server-side
  * @author bitWolfy
  *
  */
-public class PlayerCache implements CachedDataProcess {
+public class PlayerCache {
     
-    private final long REFRESH_RATE_TICKS = (long)(30 * 60 * 20);
-    private static Map<String, Integer> players;
+    private PlayerCache() { }
     
     /**
-     * <b>Default constructor</b><br />
-     * Creates a new hashmap for player data storage
+     * Returns the ID of the player
+     * @param player Player to look up
+     * @return Player ID
      */
-    public PlayerCache() {
-        players = new HashMap<String, Integer>();
-    }
-    
-    @Override
-    public long getRefreshRate() {
-        return REFRESH_RATE_TICKS;
-    }
-    
-    @Override
-    public void run() {
-        Iterator<Entry<String, Integer>> it = players.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, Integer> pairs = (Map.Entry<String, Integer>)it.next();
-            String playerName = pairs.getKey();
-            if(Bukkit.getPlayerExact(playerName) == null) {
-                players.remove(playerName);
-            }
+    public static int get(Player player) {
+        if(player.hasMetadata("stats_id")) {
+            return player.getMetadata("stats_id").get(0).asInt();
+        } else {
+            int playerId = get(player.getName());
+            player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
+            return playerId;
         }
     }
     
     /**
-     * Adds a new player to the cache
-     * @param username Player name
-     */
-    public static void add(String username) {
-        if(players.containsKey(username)) return;
-        int playerId = fetchID(username);
-        players.put(username, playerId);
-    }
-    
-    /**
-     * Removes a name-ID pair from the cache
-     * @param username Player name
-     */
-    public static void remove(String username) {
-        if(!players.containsKey(username)) return;
-        players.remove(username);
-    }
-    
-    /**
-     * Fetches the player ID from the cache
-     * @param username Player name
+     * Returns the player ID based on his name.<br />
+     * Very resource-heavy; if possible, use <code>get(Player player);</code>
+     * @param username Player name to look up
      * @return Player ID
      */
     public static int get(String username) {
-        if(players.containsKey(username)) return players.get(username);
-        int playerId = fetchID(username);
-        players.put(username, playerId);
-        return playerId;
-    }
-    
-    /**
-     * Returns the PlayerID corresponding with the specified username.<br />
-     * If the username is not in the database, a dummy entry is created, and an ID is assigned.
-     * @param username Player name to look up in the database
-     * @return <b>Integer</b> PlayerID corresponding to the specified username
-     */
-    private static Integer fetchID(String username) {
         Message.debug("Retrieving a player ID for " + username);
         
         int playerId = -1;

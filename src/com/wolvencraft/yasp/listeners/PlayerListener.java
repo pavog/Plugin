@@ -53,7 +53,6 @@ import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
-import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
  * Listens to miscellaneous player events on the server and reports them to the plugin.
@@ -73,7 +72,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        PlayerCache.add(event.getName());
+//        PlayerCache.add(event.getName());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
@@ -96,7 +95,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!StatPerms.Statistics.has(player)) return;
         OnlineSessionCache.fetch(player).logout(player.getLocation());
-        PlayerCache.remove(player.getName());
+//        PlayerCache.remove(player.getName());
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

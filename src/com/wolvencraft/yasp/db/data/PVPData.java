@@ -120,7 +120,7 @@ public class PVPData implements DataStore {
      * @param weapon Weapon used by killer
      */
     public void playerKilledPlayer(Player victim, ItemStack weapon) {
-        int victimId = PlayerCache.get(victim.getName());
+        int victimId = PlayerCache.get(victim);
         getNormalData(victimId, weapon).addTimes();
         detailedData.add(new DetailedPVPEntry(victim.getLocation(), victimId, weapon));
     }
