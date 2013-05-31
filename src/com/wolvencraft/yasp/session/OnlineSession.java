@@ -39,7 +39,13 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import com.wolvencraft.yasp.api.events.SessionCreateEvent;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.*;
-import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
+import com.wolvencraft.yasp.db.data.AdvancedDataStore.DataStoreType;
+import com.wolvencraft.yasp.db.data.blocks.BlocksData;
+import com.wolvencraft.yasp.db.data.deaths.DeathsData;
+import com.wolvencraft.yasp.db.data.items.ItemsData;
+import com.wolvencraft.yasp.db.data.players.PlayersData;
+import com.wolvencraft.yasp.db.data.pve.PVEData;
+import com.wolvencraft.yasp.db.data.pvp.PVPData;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
@@ -56,13 +62,14 @@ import com.wolvencraft.yasp.util.cache.PlayerCache;
  * @author bitWolfy
  *
  */
+@SuppressWarnings("rawtypes")
 public class OnlineSession implements PlayerSession {
     
     private final int id;
     private final String name;
     
     private PlayersData playersData;
-    private List<DataStore> dataStores;
+    private List<AdvancedDataStore> dataStores;
     
     private PlayerTotals playerTotals;
     private Scoreboard scoreboard;
@@ -78,7 +85,7 @@ public class OnlineSession implements PlayerSession {
         
         this.playersData = new PlayersData(player, id);
         
-        this.dataStores = new ArrayList<DataStore>();
+        this.dataStores = new ArrayList<AdvancedDataStore>();
         this.dataStores.addAll(Util.getModules(player, id));
         this.dataStores.addAll(Util.getHooks(player, id));
         
@@ -127,7 +134,7 @@ public class OnlineSession implements PlayerSession {
      * @return Total playtime
      */
     public long getPlaytime() {
-        return playersData.getGeneralData().getPlaytime();
+        return playersData.getGeneralData().getTotalPlaytime();
     }
     
     /**
@@ -135,8 +142,8 @@ public class OnlineSession implements PlayerSession {
      * @param type Data store type
      * @return Data store, or <b>null</b> if the type is not valid
      */
-    private DataStore getData(DataStoreType type) {
-        for(DataStore store : dataStores) {
+    private AdvancedDataStore getData(DataStoreType type) {
+        for(AdvancedDataStore store : dataStores) {
             if(store.getType().equals(type)) return store;
         }
         return null;
@@ -147,7 +154,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void pushData() {
         playersData.sync();
-        for(DataStore store : dataStores) store.pushData();
+        for(AdvancedDataStore store : dataStores) store.pushData();
         
         playerTotals.fetchData();
     }
@@ -156,7 +163,7 @@ public class OnlineSession implements PlayerSession {
      * Dumps all locally stored data
      */
     public void dumpData() {
-        for(DataStore store : dataStores) store.dump();
+        for(AdvancedDataStore store : dataStores) store.dump();
     }
     
     /**

@@ -33,6 +33,14 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.data.*;
+import com.wolvencraft.yasp.db.data.blocks.BlocksData;
+import com.wolvencraft.yasp.db.data.deaths.DeathsData;
+import com.wolvencraft.yasp.db.data.hooks.factions.FactionsData;
+import com.wolvencraft.yasp.db.data.hooks.vault.VaultData;
+import com.wolvencraft.yasp.db.data.hooks.worldguard.WorldGuardData;
+import com.wolvencraft.yasp.db.data.items.ItemsData;
+import com.wolvencraft.yasp.db.data.pve.PVEData;
+import com.wolvencraft.yasp.db.data.pvp.PVPData;
 import com.wolvencraft.yasp.settings.Module;
 
 /**
@@ -50,8 +58,9 @@ public class Util {
      * @param playerId Player ID
      * @return List of modules
      */
-    public static List<DataStore> getModules(Player player, int playerId) {
-        List<DataStore> dataStores = new ArrayList<DataStore>();
+    @SuppressWarnings("rawtypes")
+    public static List<AdvancedDataStore> getModules(Player player, int playerId) {
+        List<AdvancedDataStore> dataStores = new ArrayList<AdvancedDataStore>();
         if(Module.Blocks.isEnabled()) dataStores.add(new BlocksData(playerId));
         if(Module.Items.isEnabled()) dataStores.add(new ItemsData(playerId));
         if(Module.Deaths.isEnabled()) {
@@ -68,8 +77,9 @@ public class Util {
      * @param playerId Player ID
      * @return List of plugin hooks
      */
-    public static List<DataStore> getHooks(Player player, int playerId) {
-        List<DataStore> dataStores = new ArrayList<DataStore>();
+    @SuppressWarnings("rawtypes")
+    public static List<AdvancedDataStore> getHooks(Player player, int playerId) {
+        List<AdvancedDataStore> dataStores = new ArrayList<AdvancedDataStore>();
         if(Module.Vault.isActive()) dataStores.add(new VaultData(player, playerId));
         if(Module.WorldGuard.isActive()) dataStores.add(new WorldGuardData(player, playerId));
         if(Module.Factions.isActive()) dataStores.add(new FactionsData(player, playerId));
