@@ -2,6 +2,7 @@ name: Statistics
 main: com.wolvencraft.yasp.Statistics
 version: 1.1
 description: Extremely detailed player/server statistic tracking with web portal
+website: http://dev.bukkit.org/server-mods/Statistics/
 authors: [bitWolfy, Dazzel_]
 softdepend: [Vault, WorldEdit, WorldGuard, mcMMO, Factions, MobArena, PvpArena]
 commands:

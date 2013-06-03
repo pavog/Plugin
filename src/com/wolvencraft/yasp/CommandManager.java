@@ -39,6 +39,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
 import com.wolvencraft.yasp.cmd.*;
+import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 
 public class CommandManager {
@@ -133,7 +134,7 @@ public class CommandManager {
         boolean result;
         try { result = command.run(arguments); }
         catch(Throwable t) {
-            // TODO Exception handler
+            ExceptionHandler.handle(t, sender, command.getProperties());
             result = false;
         }
         CommandManager.sender = null;
