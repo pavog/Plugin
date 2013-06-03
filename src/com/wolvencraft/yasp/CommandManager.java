@@ -20,9 +20,20 @@
 
 package com.wolvencraft.yasp;
 
+import lombok.AllArgsConstructor;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
+
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -30,132 +41,221 @@ import org.bukkit.command.ConsoleCommandSender;
 import com.wolvencraft.yasp.cmd.*;
 import com.wolvencraft.yasp.util.Message;
 
-/**
- * A sturdy implementation of a CommandManager focused on handling sub-commands.<br />
- * Additionally, stores the CommandSender for the duration of the command execution.
- * @author bitWolfy
- *
- */
-public enum CommandManager {
-    Book(BookCommand.class, "stats.cmd.book", "book"),
-    Help(HelpCommand.class, "stats.cmd.help", "help"),
-    Scoreboard(ScoreboardCommand.class, "stats.cmd.scoreboard", "scoreboard"),
-    
-    Dump(DumpCommand.class, "stats.cmd.debug", "dump"),
-//    Fetch(FetchCommand.class, "stats.cmd.debug", "fetch"),
-    Pause(PauseCommand.class, "stats.cmd.debug", "pause"),
-    Sync(SyncCommand.class, "stats.cmd.debug", "sync"),
-    Patch(PatchCommand.class, "stats.cmd.debug", "patch"),
-    Reconnect(ReconnectCommand.class, "stats.cmd.debug", "reconnect"),
-    Repatch(RepatchCommand.class, "stats.cmd.debug", "repatch");
-    
-    private static CommandSender sender = null;
-    
-    private BaseCommand command;
-    private String permission;
-    private List<String> alias;
+public class CommandManager {
     
     /**
-     * <b>Constructor</b><br />
-     * @param command Command base class. Must implement <code>BaseCommand</code>.
-     * @param permission Permission node, or <b>null</b> for ops-only permission
-     * @param args An array of arguments that the command can handle
+     * Registered command container classes
+     * @author bitWolfy
+     *
      */
-    CommandManager(Class<?> command, String permission, String... args) {
-        try {
-            this.command = (BaseCommand) command.newInstance();
-            this.permission = permission;
-            alias = new ArrayList<String>();
-            for (String arg : args) {
-                alias.add(arg);
-            }
+    private enum CommandClass {
+        
+        Database (DatabaseCommands.class),
+        Player   (PlayerCommands.class),
+        Plugin   (PluginCommands.class)
+        ;
+        
+        @Getter(AccessLevel.PRIVATE) private Class<?> command;
+        
+        CommandClass(Class<?> command) {
+            this.command = command;
         }
-        catch (InstantiationException e)     { Message.log(Level.SEVERE, "Error while instantiating a command! (InstantiationException)"); return; }
-        catch (IllegalAccessException e)     { Message.log(Level.SEVERE, "Error while instantiating a command! (IllegalAccessException)"); return; }
-        catch (Exception e)             { Message.log(Level.SEVERE, "Error while instantiating a command! (Exception)"); return; }
+        
     }
     
-    /**
-     * Checks if the command contains the specified alias
-     * @param arg Alias to search for
-     * @return <b>true</b> if the command contains the alias, <b>false</b> otherwise.
-     */
-    public boolean isCommand(String arg) {
-        return alias.contains(arg);
-    }
+    @Getter(AccessLevel.PUBLIC) private static List<CommandPair> commands;
+    @Getter(AccessLevel.PUBLIC) private static CommandSender sender = null;
     
-    /**
-     * Returns the help message for the command
-     */
-    public void getHelp() {
-        command.getHelp();
-    }
-    
-    /**
-     * Performs permissions checks and runs the command.
-     * @param args Arguments to be passed on to the command
-     * @return Command result
-     */
-    public boolean run(String[] args) {
-        if(permission == null) {
-            if(sender instanceof ConsoleCommandSender || sender.isOp()) {
-                return command.run(args);
-            }
-            
-            Message.sendFormattedError(sender, "You are not allowed to perform this task");
-        } else {
-            if(sender instanceof ConsoleCommandSender || sender.hasPermission(permission)) {
-                return command.run(args);
-            }
-            
-            Message.sendFormattedError(sender, "You are not allowed to perform this task");
+    public CommandManager() {
+        Message.debug("Starting to register commands");
+        commands = new ArrayList<CommandPair>();
+        
+        for(CommandClass command : CommandClass.values()) {
+            load(command.getCommand());
         }
-        return false;
     }
     
     /**
-     * Wraps around <code>run(String[] args)</code> to accommodate for commands with a single argument.<br />
-     * Performs permissions checks and runs the command.
-     * @param arg Argument to be passed on to the command
-     * @return Command result
+     * Executes the command with the specified arguments
+     * @param sender Command sender
+     * @param args Command arguments
+     * @return <b>true</b> if the command was executed successfully, <b>false</b> otherwise
      */
-    public boolean run(String arg) {
-        String[] args = {"", arg};
-        return run(args);
-    }
-    
-    /**
-     * Wraps around <code>run(String[] args)</code> to accommodate for commands without arguments.<br />
-     * Performs permissions checks and runs the command.
-     * @return Command result
-     */
-    public boolean run() {
-        String[] args = {"", ""};
-        return run(args);
-    }
-    
-    /**
-     * Returns the CommandSender for the current command.<br />
-     * Unsafe; should only be used inside command classes.
-     * @return CommandSender
-     */
-    public static CommandSender getSender() {
-        return sender;
-    }
-    
-    /**
-     * Sets the CommandSender to the one specified.
-     * @param sender CommandSender to be set as the current one
-     */
-    public static void setSender(CommandSender sender) { 
+    public static boolean run(CommandSender sender, String... args) {
         CommandManager.sender = sender;
+        if(args.length < 1) {
+            return run(sender, "help");
+        }
+        List<String> arguments = new LinkedList<String>(Arrays.asList(args));
+        CommandPair command = get(arguments.get(0));
+        arguments.remove(0);
+        
+        // Command check
+        if(command == null) {
+            Message.sendFormattedError(sender, "Unknown command");
+            CommandManager.sender = null;
+            return false;
+        }
+        Command properties = command.getProperties();
+        
+        // Compatibility check
+        if(properties.unstable() && !Statistics.isCraftBukkitCompatible()) {
+            Message.sendFormattedError("This command is not compatible with the current version of CraftBukkit");
+            return false;
+        }
+        
+        // Argument check
+        if(arguments.size() < properties.minArgs()
+                || (properties.maxArgs() != -1 && arguments.size() > properties.maxArgs())) {
+            Message.sendFormattedError(sender, "Invalid argument count");
+            CommandManager.sender = null;
+            return false;
+        }
+        
+        // Console check
+        if(sender instanceof ConsoleCommandSender && !properties.allowConsole()) {
+            Message.sendFormattedError(sender, "This command can only be run by a living player");
+            CommandManager.sender = null;
+            return false;
+        }
+        
+        // Permission check
+        if(!(sender instanceof ConsoleCommandSender)
+                && !sender.isOp()
+                && !properties.permission().equals("")
+                && !sender.hasPermission(properties.permission())) {
+            Message.sendFormattedError(sender, "You lack the permission to run this command");
+            CommandManager.sender = null;
+            return false;
+        }
+        
+        // Attempting to execute a command
+        boolean result;
+        try { result = command.run(arguments); }
+        catch(Throwable t) {
+            // TODO Exception handler
+            result = false;
+        }
+        CommandManager.sender = null;
+        return result;
     }
     
     /**
-     * Resets the CommandSender to null to prevent memory leaks.<br />
-     * This method is to be run at the end of <code>onCommand()</code>
+     * Performs a lookup of a command method based on an alias
+     * @param alias Alias to look for
+     * @return Command method pair
      */
-    public static void resetSender() {
-        sender = null;
+    private static CommandPair get(String alias) {
+        for(CommandPair command : commands) {
+            if(Arrays.asList(command.getProperties().alias()).contains(alias)) return command;
+        }
+        return null;
     }
+    
+    /**
+     * Loads all methods with the {@link CommandManager.Command} annotation
+     * @param commandClass Command class
+     */
+    private void load(Class<?> commandClass) {
+        Message.debug("Scanning " + commandClass.getName() + " for command methods (" + commandClass.getMethods().length  + " total)");
+        int counter = 0;
+        for(Method method : commandClass.getMethods()) {
+            Command cmd = method.getAnnotation(Command.class);
+            if(cmd != null) {
+                Message.debug("Registering a command with alias: " + cmd.alias()[0]);
+                commands.add(new CommandPair(commandClass, method, cmd));
+                counter++;
+            }
+        }
+        Message.log("counter=" + counter);
+        
+    }
+    
+    /**
+     * An annotation for commands
+     * @author bitWolfy
+     *
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    public @interface Command {
+        
+        /**
+         * Returns the alias associated with this command.
+         * @return List of alias
+         */
+        public String[] alias();
+        
+        /**
+         * Returns the minimum number of arguments this command accepts.
+         * Requires {@link #maxArgs()}.<br />
+         * Defaults to 0 (no arguments).
+         * @return Minimum number of arguments
+         */
+        public int minArgs() default 0;
+        
+        /**
+         * Returns the maximum number of arguments this command accepts.
+         * Required {@link #minArgs()}.<br />
+         * Defaults to -1 (any number of arguments)
+         * @return Minimum number of arguments
+         */
+        public int maxArgs() default -1;
+        
+        /**
+         * Returns the permission required to use this command.
+         * Pass <code>"*"</code> for ops-only; empty string for no permission
+         * @return Command permission
+         */
+        public String permission() default "";
+        
+        /**
+         * Should the console sender be allowed to run this command
+         * @return <b>true</b> if the console command sender should be allowed to run the command, <b>false</b> otherwise
+         */
+        public boolean allowConsole() default true;
+        
+        /**
+         * Returns the usage of the command. Requires {@link #description()}.<br />
+         * Example: <code>/command (requiredArgument) [optionalArgument]</code>
+         * @return Command usage
+         */
+        public String usage() default "";
+        
+        /**
+         * Returns the description string for the help page.
+         * Requires {@link #usage()}.
+         * @return Description string
+         */
+        public String description() default "";
+        
+        /**
+         * Checks if the command is compatible with the current version of CraftBukkit
+         * @return <b>true</b> if the command is prone to crashes with a wrong CB version, <b>false</b> otherwise
+         */
+        public boolean unstable() default false;
+        
+    }
+    
+    /**
+     * Storage unit for command properties
+     * @author bitWolfy
+     *
+     */
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @Getter(AccessLevel.PUBLIC)
+    public class CommandPair {
+        
+        Class<?> declaringClass;
+        Method command;
+        Command properties;
+        
+        public boolean run(List<String> args) throws Throwable {
+            boolean result = false;
+            result = (Boolean) command.invoke(declaringClass, args);
+            return result;
+        }
+        
+    }
+    
 }

@@ -116,8 +116,7 @@ public class CachedData {
         Entity(EntityCache.class),
         Material(MaterialCache.class),
         OfflineSession(OfflineSessionCache.class),
-        OnlineSession(OnlineSessionCache.class),
-        Player(PlayerCache.class);
+        OnlineSession(OnlineSessionCache.class);
         
         private CachedDataProcess process;
         

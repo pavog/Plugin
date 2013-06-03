@@ -123,6 +123,8 @@ public class Statistics extends JavaPlugin {
 
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
         
+        new CommandManager();
+        
         new ServerListener(this);
         new PlayerListener(this);
         if(Module.Blocks.isEnabled()) new BlockListener(this);
@@ -178,32 +180,7 @@ public class Statistics extends JavaPlugin {
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(!(command.getName().equalsIgnoreCase("stats"))) return false;
-        CommandManager.setSender(sender);
-        
-        if(args.length == 0) {
-            CommandManager.Help.run();
-            CommandManager.resetSender();
-            return true;
-        }
-        
-        for(CommandManager cmd : CommandManager.values()) {
-            if(cmd.isCommand(args[0])) {
-                if(LocalConfiguration.Debug.asBoolean()) {
-                    String argString = "/stats";
-                    for (String arg : args) { argString = argString + " " + arg; }
-                    Message.log(sender.getName() + ": " + argString);
-                }
-                
-                boolean result = cmd.run(args);
-                CommandManager.resetSender();
-                return result;
-            }
-        }
-        
-        Message.sendFormattedError(sender, "Unknown command");
-        CommandManager.resetSender();
-        return false;
+        return CommandManager.run(sender, args);
     }
     
     /**
