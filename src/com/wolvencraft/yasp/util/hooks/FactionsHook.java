@@ -121,7 +121,7 @@ public class FactionsHook extends PluginHook {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
         if(player == null) return null;
         FPlayer fplayer = FPlayers.i.get(player);
-        return fplayer.getRole().nicename;
+        return fplayer.getRole().name();
     }
     
     /**
