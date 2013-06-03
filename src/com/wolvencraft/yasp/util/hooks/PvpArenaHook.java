@@ -29,6 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.wolvencraft.yasp.HookManager.ApplicableHook;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
@@ -42,14 +43,15 @@ import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
  * @author bitWolfy
  *
  */
-public class PvpArenaHook {
+public class PvpArenaHook extends PluginHook {
     
     /**
      * <b>Default constructor</b><br />
      * Connects to MobArena and sets up a plugin instance
      */
     public PvpArenaHook() {
-
+        super(ApplicableHook.PVP_ARENA);
+        
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("MobArena");
         
         if (plugin != null && plugin instanceof PVPArena) {
@@ -80,10 +82,7 @@ public class PvpArenaHook {
         return PVPArenaAPI.getArenaName(player);
     }
     
-    /**
-     * Code that is to be executed when the hook is being enabled.<br />
-     * This should include a database patch, if necessary
-     */
+    @Override
     public void onEnable() {
         try {
             PatchFetcher.fetch(PatchType.PvpArena);
@@ -93,10 +92,4 @@ public class PvpArenaHook {
             if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();
         }
     }
-    
-    /**
-     * Code that is to be executed when the hook is being disabled.<br />
-     * This should include a cleanup routine.
-     */
-    public void onDisable() { }
 }

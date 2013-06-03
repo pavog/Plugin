@@ -70,7 +70,7 @@ public class DatabaseTask implements Runnable {
      */
     public static void commit() {
         Bukkit.getServer().getPluginManager().callEvent(new SynchronizationPreProcessEvent(iteration));
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Message.debug("Database synchronization in progress");
         
         for(OnlineSession session : OnlineSessionCache.getSessions()) {

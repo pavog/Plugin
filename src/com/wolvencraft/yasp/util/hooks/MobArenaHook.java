@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.garbagemule.MobArena.MobArena;
+import com.wolvencraft.yasp.HookManager.ApplicableHook;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
@@ -40,7 +41,7 @@ import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
  * @author bitWolfy
  *
  */
-public class MobArenaHook {
+public class MobArenaHook extends PluginHook {
     
     private MobArena instance;
     
@@ -49,7 +50,8 @@ public class MobArenaHook {
      * Connects to MobArena and sets up a plugin instance
      */
     public MobArenaHook() {
-
+        super(ApplicableHook.MOB_ARENA);
+        
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("MobArena");
         
         if (plugin != null && plugin instanceof MobArena) {
@@ -81,10 +83,7 @@ public class MobArenaHook {
         return instance.getArenaMaster().getArenaWithPlayer(player).arenaName();
     }
     
-    /**
-     * Code that is to be executed when the hook is being enabled.<br />
-     * This should include a database patch, if necessary
-     */
+    @Override
     public void onEnable() {
         try {
             PatchFetcher.fetch(PatchType.MobArena);
@@ -95,11 +94,9 @@ public class MobArenaHook {
         }
     }
     
-    /**
-     * Code that is to be executed when the hook is being disabled.<br />
-     * This should include a cleanup routine.
-     */
+    @Override
     public void onDisable() {
+        super.onDisable();
         instance = null;
     }
 }

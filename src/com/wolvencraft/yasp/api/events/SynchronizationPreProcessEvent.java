@@ -52,7 +52,7 @@ public class SynchronizationPreProcessEvent extends Event {
      * @return <b>true</b> if the synchronization was cancelled, <b>false</b> otherwise
      */
     public boolean isCancelled() {
-        return Statistics.getPaused();
+        return Statistics.isPaused();
     }
     
     @Override

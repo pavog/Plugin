@@ -48,20 +48,20 @@ public class ServerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWeatherChange(WeatherChangeEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         if(!Bukkit.getWorlds().get(0).equals(event.getWorld())) return;
         Statistics.getServerStatistics().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPluginEnable(PluginEnableEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Statistics.getServerStatistics().pluginNumberChange();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPluginDisable(PluginDisableEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Statistics.getServerStatistics().pluginNumberChange();
     }
 }

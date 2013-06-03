@@ -30,6 +30,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.HookManager.ApplicableHook;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
@@ -43,7 +44,7 @@ import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
  * @author bitWolfy
  *
  */
-public class VaultHook {
+public class VaultHook extends PluginHook {
     
     private static Economy economy;
     private static Permission permissions;
@@ -53,6 +54,8 @@ public class VaultHook {
      * Connects to Vault economy and permissions hooks
      */
     public VaultHook() {
+        super(ApplicableHook.VAULT);
+        
         ServicesManager svm = Statistics.getInstance().getServer().getServicesManager();
         
         try { economy = ((RegisteredServiceProvider<Economy>)(svm.getRegistration(Economy.class))).getProvider();}
@@ -96,10 +99,7 @@ public class VaultHook {
         return economy.getBalance(playerName);
     }
     
-    /**
-     * Code that is to be executed when the hook is being enabled.<br />
-     * This should include a database patch, if necessary
-     */
+    @Override
     public void onEnable() {
         try {
             PatchFetcher.fetch(PatchType.Vault);
@@ -110,11 +110,9 @@ public class VaultHook {
         }
     }
     
-    /**
-     * Code that is to be executed when the hook is being disabled.<br />
-     * This should include a cleanup routine.
-     */
+    @Override
     public void onDisable() {
+        super.onDisable();
         economy = null;
         permissions = null;
     }

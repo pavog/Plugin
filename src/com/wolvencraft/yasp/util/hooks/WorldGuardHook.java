@@ -31,6 +31,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.wolvencraft.yasp.HookManager.ApplicableHook;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
@@ -46,15 +47,12 @@ import com.wolvencraft.yasp.util.serializable.RegionsSerializable;
  * @author bitWolfy
  *
  */
-public class WorldGuardHook {
+public class WorldGuardHook extends PluginHook {
     
     private static WorldGuardPlugin instance;
     
-    /**
-     * <b>Default constructor</b><br />
-     * Connects to WorldGuard and sets up a plugin instance
-     */
     public WorldGuardHook() {
+        super(ApplicableHook.WORLD_GUARD);
         
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
         
@@ -91,10 +89,7 @@ public class WorldGuardHook {
         return FlagsSerializable.serialize(instance.getRegionManager(loc.getWorld()).getApplicableRegions(loc));
     }
     
-    /**
-     * Code that is to be executed when the hook is being enabled.<br />
-     * This should include a database patch, if necessary
-     */
+    @Override
     public void onEnable() {
         try {
             PatchFetcher.fetch(PatchType.WorldGuard);
@@ -105,11 +100,9 @@ public class WorldGuardHook {
         }
     }
     
-    /**
-     * Code that is to be executed when the hook is being disabled.<br />
-     * This should include a cleanup routine.
-     */
+    @Override
     public void onDisable() {
+        super.onDisable();
         instance = null;
     }
     

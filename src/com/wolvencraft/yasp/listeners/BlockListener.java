@@ -49,7 +49,7 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.BlockBreak.has(player)) return;
         OnlineSessionCache.fetch(player).blockBreak(event.getBlock().getLocation(), event.getBlock().getState());
@@ -57,7 +57,7 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.BlockPlace.has(player)) return;
         OnlineSessionCache.fetch(player).blockPlace(event.getBlock().getLocation(), event.getBlock().getState());

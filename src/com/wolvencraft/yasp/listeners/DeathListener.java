@@ -62,7 +62,7 @@ public class DeathListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Entity victimEntity = event.getEntity();
         EntityDamageEvent lastDamageEvent = victimEntity.getLastDamageCause();
         

@@ -60,7 +60,7 @@ public class PluginCommands {
             description = "Temporarily pauses all data collection"
             )
     public static boolean pause(List<String> args) {
-        if(Statistics.getPaused()) {
+        if(Statistics.isPaused()) {
             Statistics.setPaused(false);
             Message.send("Data collection is unpaused");
         } else {

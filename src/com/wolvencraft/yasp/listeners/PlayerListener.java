@@ -100,7 +100,7 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         if(event instanceof PlayerTeleportEvent) return;
         
         Player player = event.getPlayer();
@@ -132,7 +132,7 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerFish(PlayerFishEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         if(!event.getState().equals(State.CAUGHT_FISH)) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
@@ -141,7 +141,7 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerKick(PlayerKickEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
         OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.TimesKicked);
@@ -149,7 +149,7 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEggThrow(PlayerEggThrowEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
         OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.EggsThrown);
@@ -157,7 +157,7 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onArrowShoot(EntityShootBowEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         if(!StatPerms.PlayerMisc.has(player)) return;
@@ -166,7 +166,7 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         if(!StatPerms.PlayerMisc.has(player)) return;
@@ -175,7 +175,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBedEnter(PlayerBedEnterEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
         OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.BedsEntered);
@@ -183,7 +183,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPortalEnter(PlayerPortalEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
         OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.PortalsEntered);
@@ -191,7 +191,7 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChatMessage(AsyncPlayerChatEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
         OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.WordsSaid, event.getMessage().split(" ").length);
@@ -199,7 +199,7 @@ public class PlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChatCommand(PlayerCommandPreprocessEvent event) {
-        if(Statistics.getPaused()) return;
+        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
         if(!StatPerms.PlayerMisc.has(player)) return;
         OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.CommandsSent);

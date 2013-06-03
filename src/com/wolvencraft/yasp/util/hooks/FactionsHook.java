@@ -1,5 +1,5 @@
 /*
- * MobArenaHook.java
+ * FactionsHook.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -31,6 +31,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import com.wolvencraft.yasp.HookManager.ApplicableHook;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
@@ -44,13 +45,15 @@ import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
  * @author bitWolfy
  *
  */
-public class FactionsHook {
+public class FactionsHook extends PluginHook {
     
     /**
      * <b>Default constructor</b><br />
      * Connects to MobArena and sets up a plugin instance
      */
     public FactionsHook() {
+        super(ApplicableHook.FACTIONS);
+        
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("Factions");
         
         if (plugin != null && plugin instanceof Factions) {
@@ -133,10 +136,7 @@ public class FactionsHook {
         return fplayer.getTitle();
     }
     
-    /**
-     * Code that is to be executed when the hook is being enabled.<br />
-     * This should include a database patch, if necessary
-     */
+    @Override
     public void onEnable() {
         try {
             PatchFetcher.fetch(PatchType.MobArena);
@@ -147,9 +147,4 @@ public class FactionsHook {
         }
     }
     
-    /**
-     * Code that is to be executed when the hook is being disabled.<br />
-     * This should include a cleanup routine.
-     */
-    public void onDisable() { }
 }

@@ -55,7 +55,7 @@ public class PatchFetcher {
      * @param type Patch type
      */
     public static void fetch(PatchType type) {
-        Message.log("+-------] Fetching Patches [-------+");
+        Message.log("+------ [ Fetching Patches ] ------+");
         int j = 1;
         while(Statistics.getInstance().getResource("patches/" + j + "." + type.EXTENSION + ".sql") != null) {
             if(localFileExists(j + "." + type.EXTENSION + ".sql")) { j++; continue; }
