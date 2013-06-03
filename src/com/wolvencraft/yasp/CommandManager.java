@@ -134,7 +134,7 @@ public class CommandManager {
         boolean result;
         try { result = command.run(arguments); }
         catch(Throwable t) {
-            ExceptionHandler.handle(t, sender, command.getProperties());
+            ExceptionHandler.handle(t, sender, command);
             result = false;
         }
         CommandManager.sender = null;
