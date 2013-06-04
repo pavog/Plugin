@@ -56,7 +56,7 @@ public class AdminCmdHook extends PluginHook {
      * @param player Player to look up
      * @return <b>true</b> if the player is AFK, <b>false</b> otherwise
      */
-    public boolean isAfk(Player player) {
+    public static boolean isAfk(Player player) {
         return AFKWorker.getInstance().isAfk(player);
     }
     

@@ -34,7 +34,7 @@ import com.wolvencraft.yasp.HookManager.ApplicableHook;
  */
 public class MobArenaHook extends PluginHook {
     
-    private MobArena instance;
+    private static MobArena instance;
     
     /**
      * <b>Default constructor</b><br />
@@ -66,7 +66,7 @@ public class MobArenaHook extends PluginHook {
      * @param playerName Name of the player
      * @return <b>true</b> if a player is in the arena, <b>false</b> otherwise
      */
-    public boolean isPlaying(String playerName) {
+    public static boolean isPlaying(String playerName) {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
         if(player == null) return false;
         return instance.getArenaMaster().getAllPlayers().contains(player);
@@ -77,7 +77,7 @@ public class MobArenaHook extends PluginHook {
      * @param playerName Name of the player 
      * @return <b>String</b> name of the arena, or <b>null</b> if the player is not participating
      */
-    public String getArenaName(String playerName) {
+    public static String getArenaName(String playerName) {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
         if(player == null) return null;
         return instance.getArenaMaster().getArenaWithPlayer(player).arenaName();

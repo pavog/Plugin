@@ -32,8 +32,8 @@ import com.zachsthings.libcomponents.bukkit.BukkitComponent;
 
 public class CommandBookHook extends PluginHook {
 
-    private CommandBook instance;
-    private ComponentManager<BukkitComponent> componentManager;
+    private static CommandBook instance;
+    private static ComponentManager<BukkitComponent> componentManager;
     
     public CommandBookHook() {
         super(ApplicableHook.COMMAND_BOOK);
@@ -63,7 +63,7 @@ public class CommandBookHook extends PluginHook {
      * @param player Player to look up
      * @return <b>true</b> if the player has god mode on, <b>false</b> otherwise
      */
-    public boolean isGodMode(Player player) {
+    public static boolean isGodMode(Player player) {
         GodComponent component = ((GodComponent) componentManager.getComponent(GodComponent.class));
         return component.isEnabled() && component.hasGodMode(player);
     }

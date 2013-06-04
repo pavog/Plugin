@@ -28,7 +28,7 @@ import com.wolvencraft.yasp.HookManager.ApplicableHook;
 
 public class VanishHook extends PluginHook {
 
-    private VanishPlugin instance;
+    private static VanishPlugin instance;
     
     public VanishHook() {
         super(ApplicableHook.VANISH);
@@ -56,7 +56,7 @@ public class VanishHook extends PluginHook {
      * @param playerName Player to look up
      * @return <b>true</b> if the player is vanished, <b>false</b> otherwise
      */
-    public boolean isVanished(String playerName) {
+    public static boolean isVanished(String playerName) {
         return instance.getManager().isVanished(playerName);
     }
 }

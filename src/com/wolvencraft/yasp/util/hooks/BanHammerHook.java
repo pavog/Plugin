@@ -34,7 +34,7 @@ import com.wolvencraft.yasp.util.serializable.BanRecordSerializable;
 
 public class BanHammerHook extends PluginHook {
     
-    private BanHammer instance;
+    private static BanHammer instance;
     
     public BanHammerHook() {
         super(ApplicableHook.BAN_HAMMER);
@@ -62,7 +62,7 @@ public class BanHammerHook extends PluginHook {
      * @param player Player to look up
      * @return Ban data, or an empty string
      */
-    public String getBan(String playerName) {
+    public static String getBan(String playerName) {
         List<BanRecordSerializable> records = new ArrayList<BanRecordSerializable>();
         for(BanRecord record : instance.getHandler().getPlayerBans(playerName)) {
             records.add(new BanRecordSerializable(
