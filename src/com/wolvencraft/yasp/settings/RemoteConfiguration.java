@@ -34,14 +34,17 @@ import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
  *
  */
 public enum RemoteConfiguration {
-    DatabaseVersion("version"),
+    DatabaseVersion             ("version"),
     
-    Ping("ping"),
-    LogDelay("log_delay"),
-    ShowWelcomeMessages("show_welcome_messages"),
-    WelcomeMessage("welcome_message"),
-    ShowFirstJoinMessages("show_first_join_message"),
-    FirstJoinMessage("first_join_message");
+    Ping                        ("ping"),
+    LogDelay                    ("log_delay"),
+    ShowWelcomeMessages         ("show_welcome_messages"),
+    WelcomeMessage              ("welcome_message"),
+    ShowFirstJoinMessages       ("show_first_join_message"),
+    FirstJoinMessage            ("first_join_message"),
+    
+    VanishDisablesTracking      ("hook.vanish.no_tracking"),
+    ;
     
     String key;
     QueryResult entry;

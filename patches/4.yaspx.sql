@@ -11,3 +11,7 @@ INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("java.vendor.u
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("java.vm.version", "");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("java.vm.vendor", "");
 INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("java.vm.name", "");
+
+-- Option to stop tracking player stats when vanish is active
+
+INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.vanish.no_tracking", "0");

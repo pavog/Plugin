@@ -25,6 +25,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.util.hooks.VanishHook;
+
 /**
  * Data store that contains both local and remote plugin configurations
  * @author bitWolfy
@@ -208,6 +210,11 @@ public class Constants {
          * @return <b>true</b> if the player has the node, <b>false</b> otherwise
          */
         public boolean has(Player player) {
+            // XXX This check should not be in the permissions section
+            if(Module.Vanish.isActive()
+                    && RemoteConfiguration.VanishDisablesTracking.asBoolean()
+                    && VanishHook.isVanished(player.getName())) return false;
+            
             return player.isOp() || player.hasPermission(node);
         }
         
@@ -221,16 +228,16 @@ public class Constants {
      */
     public enum ProjectileToItem {
         
-        Arrow(EntityType.ARROW, 262),
-        Egg(EntityType.EGG, 344),
-        EnderPearl(EntityType.ENDER_PEARL, 368),
-        FishingHook(EntityType.FISHING_HOOK, 346),
-        LargeFireball(EntityType.FIREBALL, 385),
-        SmallFireball(EntityType.SMALL_FIREBALL, 51),
-        Snowball(EntityType.SNOWBALL, 332),
-        ThrownExpBottle(EntityType.THROWN_EXP_BOTTLE, 384),
-        ThrownPotion(EntityType.SPLASH_POTION, 373),
-        WitherSkull(EntityType.WITHER_SKULL, 397, (short) 1);
+        Arrow           (EntityType.ARROW, 262),
+        Egg             (EntityType.EGG, 344),
+        EnderPearl      (EntityType.ENDER_PEARL, 368),
+        FishingHook     (EntityType.FISHING_HOOK, 346),
+        LargeFireball   (EntityType.FIREBALL, 385),
+        SmallFireball   (EntityType.SMALL_FIREBALL, 51),
+        Snowball        (EntityType.SNOWBALL, 332),
+        ThrownExpBottle (EntityType.THROWN_EXP_BOTTLE, 384),
+        ThrownPotion    (EntityType.SPLASH_POTION, 373),
+        WitherSkull     (EntityType.WITHER_SKULL, 397, (short) 1);
         
         private EntityType type;
         private int itemId;
