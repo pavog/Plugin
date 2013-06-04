@@ -20,8 +20,6 @@
 
 package com.wolvencraft.yasp;
 
-import lombok.AllArgsConstructor;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -33,12 +31,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
-import com.wolvencraft.yasp.cmd.*;
+import com.wolvencraft.yasp.cmd.DatabaseCommands;
+import com.wolvencraft.yasp.cmd.PlayerCommands;
+import com.wolvencraft.yasp.cmd.PluginCommands;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 

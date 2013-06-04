@@ -27,8 +27,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.CommandManager.Command;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;

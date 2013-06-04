@@ -34,8 +34,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.BookUtil;
+import com.wolvencraft.yasp.util.Message;
 
 /**
  * Handles StatsBook events.<br />

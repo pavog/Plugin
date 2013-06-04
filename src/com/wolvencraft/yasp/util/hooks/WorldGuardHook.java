@@ -23,7 +23,6 @@ package com.wolvencraft.yasp.util.hooks;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -32,13 +31,7 @@ import org.bukkit.plugin.Plugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
-import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
-import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchFetcher;
-import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 import com.wolvencraft.yasp.util.serializable.FlagsSerializable;
 import com.wolvencraft.yasp.util.serializable.RegionsSerializable;
 
@@ -53,15 +46,6 @@ public class WorldGuardHook extends PluginHook {
     
     public WorldGuardHook() {
         super(ApplicableHook.WORLD_GUARD);
-        
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
-        
-        if (plugin != null && plugin instanceof WorldGuardPlugin) {
-            instance = (WorldGuardPlugin) plugin;
-            Message.log("WorldGuard hook enabled!");
-            Module.WorldGuard.setActive(true);
-        }
-        
     }
     
     /**
@@ -91,18 +75,18 @@ public class WorldGuardHook extends PluginHook {
     
     @Override
     public void onEnable() {
-        try {
-            PatchFetcher.fetch(PatchType.WorldGuard);
-            Database.patchModule(false, Module.WorldGuard);
-        } catch (DatabaseConnectionException ex) {
-            Message.log(Level.SEVERE, ex.getMessage());
-            if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();
+        super.onEnable();
+        
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        
+        if (plugin != null && plugin instanceof WorldGuardPlugin) {
+            instance = (WorldGuardPlugin) plugin;
+            Module.WorldGuard.setActive(true);
         }
     }
     
     @Override
     public void onDisable() {
-        super.onDisable();
         instance = null;
     }
     

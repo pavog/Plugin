@@ -23,8 +23,8 @@ package com.wolvencraft.yasp.db.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
 import lombok.AccessLevel;
+import lombok.Getter;
 
 /**
  * Common interface for all data stores

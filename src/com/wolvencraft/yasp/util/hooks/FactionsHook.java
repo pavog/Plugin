@@ -20,8 +20,6 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -32,13 +30,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
-import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
-import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchFetcher;
-import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 
 /**
  * Quick-and-dirty MobArena hook
@@ -53,13 +45,6 @@ public class FactionsHook extends PluginHook {
      */
     public FactionsHook() {
         super(ApplicableHook.FACTIONS);
-        
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("Factions");
-        
-        if (plugin != null && plugin instanceof Factions) {
-            Message.log("Factions hook enabled!");
-            Module.Factions.setActive(true);
-        }
     }
     
     /**
@@ -138,12 +123,12 @@ public class FactionsHook extends PluginHook {
     
     @Override
     public void onEnable() {
-        try {
-            PatchFetcher.fetch(PatchType.MobArena);
-            Database.patchModule(false, Module.Factions);
-        } catch (DatabaseConnectionException ex) {
-            Message.log(Level.SEVERE, ex.getMessage());
-            if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();
+        super.onEnable();
+        
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        
+        if (plugin != null && plugin instanceof Factions) {
+            Module.Factions.setActive(true);
         }
     }
     

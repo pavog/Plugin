@@ -25,9 +25,9 @@ import java.util.List;
 import org.bukkit.ChatColor;
 
 import com.wolvencraft.yasp.CommandManager;
+import com.wolvencraft.yasp.CommandManager.Command;
 import com.wolvencraft.yasp.CommandManager.CommandPair;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.CommandManager.Command;
 import com.wolvencraft.yasp.util.Message;
 
 public class PluginCommands {

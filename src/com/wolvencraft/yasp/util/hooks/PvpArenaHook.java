@@ -20,8 +20,6 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import java.util.logging.Level;
-
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.api.PVPArenaAPI;
 
@@ -30,13 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
-import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
-import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchFetcher;
-import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 
 /**
  * Quick-and-dirty MobArena hook
@@ -51,13 +43,6 @@ public class PvpArenaHook extends PluginHook {
      */
     public PvpArenaHook() {
         super(ApplicableHook.PVP_ARENA);
-        
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("MobArena");
-        
-        if (plugin != null && plugin instanceof PVPArena) {
-            Message.log("PvpArena hook enabled!");
-            Module.PvpArena.setActive(true);
-        }
     }
     
     /**
@@ -84,12 +69,12 @@ public class PvpArenaHook extends PluginHook {
     
     @Override
     public void onEnable() {
-        try {
-            PatchFetcher.fetch(PatchType.PvpArena);
-            Database.patchModule(false, Module.PvpArena);
-        } catch (DatabaseConnectionException ex) {
-            Message.log(Level.SEVERE, ex.getMessage());
-            if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();
+        super.onEnable();
+        
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        
+        if (plugin != null && plugin instanceof PVPArena) {
+            Module.PvpArena.setActive(true);
         }
     }
 }

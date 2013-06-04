@@ -22,13 +22,13 @@ package com.wolvencraft.yasp.util;
 
 //import java.io.BufferedInputStream;
 import java.io.File;
+
+import com.wolvencraft.yasp.Statistics;
 //import java.io.FileOutputStream;
 //import java.io.IOException;
 //import java.net.HttpURLConnection;
 //import java.net.MalformedURLException;
 //import java.net.URL;
-
-import com.wolvencraft.yasp.Statistics;
 //import com.wolvencraft.yasp.settings.LocalConfiguration;
 
 /**
@@ -164,13 +164,20 @@ public class PatchFetcher {
      *
      */
     public enum PatchType {
-        YASPX("yaspx"),
-
-        Factions("factions"),
-        MobArena("mobarena"),
-        PvpArena("pvparena"),
-        Vault("vault"),
-        WorldGuard("worldguard");
+        YASPX           ("yaspx"),
+        
+        AdminCmd        ("admincmd"),
+        BanHammer       ("banhammer"),
+        CommandBook     ("commandbook"),
+        Factions        ("factions"),
+        Jobs            ("jobs"),
+        MCBans          ("mcbans"),
+        MCMMO           ("mcmmo"),
+        MobArena        ("mobarena"),
+        PvpArena        ("pvparena"),
+        Vanish          ("vanish"),
+        Vault           ("vault"),
+        WorldGuard      ("worldguard");
         
         public final String EXTENSION;
         

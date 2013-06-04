@@ -26,10 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.craftbukkit.libs.com.google.gson.JsonArray;
 import org.bukkit.enchantments.Enchantment;
-
-import com.wolvencraft.yasp.util.Util;
 
 /**
  * Provides means to serialize a <code>Map&lt;Enchantment, Integer&gt;</code> into a Json array

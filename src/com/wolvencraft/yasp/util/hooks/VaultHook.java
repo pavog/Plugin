@@ -29,15 +29,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 
-import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
-import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchFetcher;
-import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 
 /**
  * Simplistic Vault hook
@@ -55,19 +50,6 @@ public class VaultHook extends PluginHook {
      */
     public VaultHook() {
         super(ApplicableHook.VAULT);
-        
-        ServicesManager svm = Statistics.getInstance().getServer().getServicesManager();
-        
-        try { economy = ((RegisteredServiceProvider<Economy>)(svm.getRegistration(Economy.class))).getProvider();}
-        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing economy"); }
-        
-        try { permissions = ((RegisteredServiceProvider<Permission>)(svm.getRegistration(Permission.class))).getProvider(); }
-        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); }
-        
-        if(economy != null && permissions != null) {
-            Message.log("Vault hook enabled!");
-            Module.Vault.setActive(true);
-        }
     }
     
     /**
@@ -101,18 +83,23 @@ public class VaultHook extends PluginHook {
     
     @Override
     public void onEnable() {
-        try {
-            PatchFetcher.fetch(PatchType.Vault);
-            Database.patchModule(false, Module.Vault);
-        } catch (DatabaseConnectionException ex) {
-            Message.log(Level.SEVERE, ex.getMessage());
-            if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();
+        super.onEnable();
+        
+        ServicesManager svm = Statistics.getInstance().getServer().getServicesManager();
+        
+        try { economy = ((RegisteredServiceProvider<Economy>)(svm.getRegistration(Economy.class))).getProvider();}
+        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing economy"); }
+        
+        try { permissions = ((RegisteredServiceProvider<Permission>)(svm.getRegistration(Permission.class))).getProvider(); }
+        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); }
+        
+        if(economy != null && permissions != null) {
+            Module.Vault.setActive(true);
         }
     }
     
     @Override
     public void onDisable() {
-        super.onDisable();
         economy = null;
         permissions = null;
     }

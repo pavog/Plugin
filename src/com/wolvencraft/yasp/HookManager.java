@@ -3,15 +3,22 @@ package com.wolvencraft.yasp;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import org.bukkit.plugin.PluginManager;
 
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.hooks.*;
-
-import lombok.AccessLevel;
-import lombok.Getter;
+import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
+import com.wolvencraft.yasp.util.hooks.AdminCmdHook;
+import com.wolvencraft.yasp.util.hooks.FactionsHook;
+import com.wolvencraft.yasp.util.hooks.MobArenaHook;
+import com.wolvencraft.yasp.util.hooks.PluginHook;
+import com.wolvencraft.yasp.util.hooks.PvpArenaHook;
+import com.wolvencraft.yasp.util.hooks.VaultHook;
+import com.wolvencraft.yasp.util.hooks.WorldGuardHook;
 
 public class HookManager {
     
@@ -19,8 +26,6 @@ public class HookManager {
     
     public HookManager() {
         activeHooks = new ArrayList<PluginHook>();
-        
-        
     }
     
     public void onEnable() {
@@ -56,11 +61,13 @@ public class HookManager {
     public void onDisable() {
         Message.log(
                 "+-------- [ Hook Manager ] --------+",
-                "| Hook Manager shutting down"
+                "|" + Message.centerString("Hook Manager shutting down", 34) + "|",
+                "|" + Message.centerString("", 34) + "|"
                 );
         
         for(PluginHook hook : activeHooks) {
             hook.onDisable();
+            Message.log("|" + Message.centerString(hook.getType().getPluginName() + " is shutting down", 34) + "|");
         }
         
         Message.log("+----------------------------------+");
@@ -69,20 +76,29 @@ public class HookManager {
     @Getter(AccessLevel.PUBLIC)
     public enum ApplicableHook {
         
-        FACTIONS        (FactionsHook.class, Module.Factions, "Factions"),
-        MOB_ARENA       (MobArenaHook.class, Module.MobArena, "MobArena"),
-        PVP_ARENA       (PvpArenaHook.class, Module.PvpArena, "PVPArena"),
-        VAULT           (VaultHook.class, Module.Vault, "Vault"),
-        WORLD_GUARD     (WorldGuardHook.class, Module.WorldGuard, "WorldGuard")
+        ADMIN_CMD       (AdminCmdHook.class, Module.AdminCmd, PatchType.AdminCmd, "AdminCmd"),
+        BAN_HAMMER      (null, Module.BanHammer, PatchType.BanHammer, "BanHammer"),
+        COMMAND_BOOK    (null, Module.CommandBook, PatchType.CommandBook, "CommandBook"),
+        FACTIONS        (FactionsHook.class, Module.Factions, PatchType.Factions, "Factions"),
+        JOBS            (null, Module.Jobs, PatchType.Jobs, "Jobs"),
+        MCBANS          (null, Module.McBans, PatchType.MCBans, "MCBans"),
+        MCMMO           (null, Module.McMMO, PatchType.MCMMO, "McMMO"),
+        MOB_ARENA       (MobArenaHook.class, Module.MobArena, PatchType.MobArena, "MobArena"),
+        PVP_ARENA       (PvpArenaHook.class, Module.PvpArena, PatchType.PvpArena, "PVPArena"),
+        VANISH          (null, Module.Vanish, PatchType.Vanish, "VanishNoPacket"),
+        VAULT           (VaultHook.class, Module.Vault, PatchType.Vault, "Vault"),
+        WORLD_GUARD     (WorldGuardHook.class, Module.WorldGuard, PatchType.WorldGuard, "WorldGuard")
         ;
         
         @Getter(AccessLevel.PRIVATE) private Class<? extends PluginHook> hook;
         private Module module;
+        private PatchType patch;
         private String pluginName;
         
-        ApplicableHook(Class<? extends PluginHook> hook, Module module, String pluginName) {
+        ApplicableHook(Class<? extends PluginHook> hook, Module module, PatchType patch, String pluginName) {
             this.hook = hook;
             this.module = module;
+            this.patch = patch;
             this.pluginName = pluginName;
         }
         

@@ -20,21 +20,13 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.garbagemule.MobArena.MobArena;
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
-import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
-import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchFetcher;
-import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 
 /**
  * Quick-and-dirty MobArena hook
@@ -51,14 +43,6 @@ public class MobArenaHook extends PluginHook {
      */
     public MobArenaHook() {
         super(ApplicableHook.MOB_ARENA);
-        
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("MobArena");
-        
-        if (plugin != null && plugin instanceof MobArena) {
-            instance = (MobArena) plugin;
-            Message.log("MobArena hook enabled!");
-            Module.MobArena.setActive(true);
-        }
     }
     
     /**
@@ -85,18 +69,18 @@ public class MobArenaHook extends PluginHook {
     
     @Override
     public void onEnable() {
-        try {
-            PatchFetcher.fetch(PatchType.MobArena);
-            Database.patchModule(false, Module.MobArena);
-        } catch (DatabaseConnectionException ex) {
-            Message.log(Level.SEVERE, ex.getMessage());
-            if(LocalConfiguration.Debug.asBoolean()) ex.printStackTrace();
+        super.onEnable();
+        
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        
+        if (plugin != null && plugin instanceof MobArena) {
+            instance = (MobArena) plugin;
+            Module.MobArena.setActive(true);
         }
     }
     
     @Override
     public void onDisable() {
-        super.onDisable();
         instance = null;
     }
 }

@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.data.*;
+import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.blocks.BlocksData;
 import com.wolvencraft.yasp.db.data.deaths.DeathsData;
 import com.wolvencraft.yasp.db.data.hooks.factions.FactionsData;

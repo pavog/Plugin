@@ -33,19 +33,25 @@ import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
  */
 public enum Module {
     
-    Server("server"),
-    Blocks("blocks"),
-    Items("items"),
-    Deaths("deaths"),
-    Inventory("inventory"),
+    Server      ("server"),
+    Blocks      ("blocks"),
+    Items       ("items"),
+    Deaths      ("deaths"),
+    Inventory   ("inventory"),
     
-    Vault("vault", true),
-    McMMO("mcmmo", true),
-    Jobs("jobs", true),
-    WorldGuard("worldguard", true),
-    MobArena("mobarena", true),
-    PvpArena("pvparena", true),
-    Factions("factions", true);
+    AdminCmd    ("admincmd", true),
+    BanHammer   ("banhammer", true),
+    CommandBook ("commandbook", true),
+    Factions    ("factions", true),
+    Jobs        ("jobs", true),
+    McBans      ("mcbans", true),
+    McMMO       ("mcmmo", true),
+    MobArena    ("mobarena", true),
+    PvpArena    ("pvparena", true),
+    Vanish      ("vanishnopacket", true),
+    Vault       ("vault", true),
+    WorldGuard  ("worldguard", true),
+    ;
 
     public final String KEY;
     private boolean isHook;

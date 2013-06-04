@@ -38,7 +38,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.wolvencraft.yasp.api.events.SessionCreateEvent;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.data.*;
+import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.blocks.BlocksData;
 import com.wolvencraft.yasp.db.data.deaths.DeathsData;

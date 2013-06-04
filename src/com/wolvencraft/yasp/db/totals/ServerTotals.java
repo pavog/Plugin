@@ -25,7 +25,12 @@ import java.util.Map;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.tables.Normal.*;
+import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
+import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
 
 /**
  * Generic Server information used on DisplaySigns and books.

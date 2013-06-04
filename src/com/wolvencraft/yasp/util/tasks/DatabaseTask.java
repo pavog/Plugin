@@ -25,7 +25,7 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.api.events.SynchronizationEvent;
 import com.wolvencraft.yasp.api.events.SynchronizationPreProcessEvent;
-import com.wolvencraft.yasp.session.*;
+import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
