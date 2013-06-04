@@ -1,3 +1,23 @@
+/*
+ * HookManager.java
+ * 
+ * Statistics
+ * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.wolvencraft.yasp;
 
 import java.util.ArrayList;
@@ -72,14 +92,14 @@ public class HookManager {
         
         ADMIN_CMD       (AdminCmdHook.class, Module.AdminCmd, PatchType.AdminCmd, "AdminCmd"),
         BAN_HAMMER      (BanHammerHook.class, Module.BanHammer, PatchType.BanHammer, "BanHammer"),
-        COMMAND_BOOK    (null, Module.CommandBook, PatchType.CommandBook, "CommandBook"),
+        COMMAND_BOOK    (CommandBookHook.class, Module.CommandBook, PatchType.CommandBook, "CommandBook"),
         FACTIONS        (FactionsHook.class, Module.Factions, PatchType.Factions, "Factions"),
         JOBS            (null, Module.Jobs, PatchType.Jobs, "Jobs"),
         MCBANS          (null, Module.McBans, PatchType.MCBans, "MCBans"),
         MCMMO           (null, Module.McMMO, PatchType.MCMMO, "McMMO"),
         MOB_ARENA       (MobArenaHook.class, Module.MobArena, PatchType.MobArena, "MobArena"),
         PVP_ARENA       (PvpArenaHook.class, Module.PvpArena, PatchType.PvpArena, "PVPArena"),
-        VANISH          (null, Module.Vanish, PatchType.Vanish, "VanishNoPacket"),
+        VANISH          (VanishHook.class, Module.Vanish, PatchType.Vanish, "VanishNoPacket"),
         VAULT           (VaultHook.class, Module.Vault, PatchType.Vault, "Vault"),
         WORLD_GUARD     (WorldGuardHook.class, Module.WorldGuard, PatchType.WorldGuard, "WorldGuard")
         ;
