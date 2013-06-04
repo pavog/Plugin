@@ -52,6 +52,7 @@ public class ServerStatistics {
     private long totalMemory;
     private long freeMemory;
     private int ticksPerSecond;
+    private int availableProcessors;
 
     private String serverIP;
     private int serverPort;
@@ -87,6 +88,7 @@ public class ServerStatistics {
         totalMemory = runtime.totalMemory();
         freeMemory = runtime.freeMemory();
         ticksPerSecond = TickTask.getTicksPerSecond();
+        availableProcessors = runtime.availableProcessors();
 
         serverIP = Bukkit.getIp();
         if(serverIP.equals("")) {
@@ -143,7 +145,6 @@ public class ServerStatistics {
         Query.table(ServerStatsTable.TableName).value("value", totalUptime).condition("key", "total_uptime").update();
         Query.table(ServerStatsTable.TableName).value("value", maxPlayersOnline).condition("key", "max_players_online").update();
         Query.table(ServerStatsTable.TableName).value("value", maxPlayersOnlineTime).condition("key", "max_players_online_time").update();
-        Query.table(ServerStatsTable.TableName).value("value", totalMemory).condition("key", "total_memory").update();
         Query.table(ServerStatsTable.TableName).value("value", freeMemory).condition("key", "free_memory").update();
         Query.table(ServerStatsTable.TableName).value("value", ticksPerSecond).condition("key", "ticks_per_second").update();
         Query.table(ServerStatsTable.TableName).value("value", serverTime).condition("key", "server_time").update();
@@ -164,7 +165,22 @@ public class ServerStatistics {
         Query.table(ServerStatsTable.TableName).value("value", serverIP).condition("key", "server_ip").update();
         Query.table(ServerStatsTable.TableName).value("value", serverPort).condition("key", "server_port").update();
         Query.table(ServerStatsTable.TableName).value("value", serverMOTD).condition("key", "server_motd").update();
-        Query.table(ServerStatsTable.TableName).value("value",  maxPlayersAllowed).condition("key", "players_allowed").update();
+        Query.table(ServerStatsTable.TableName).value("value", maxPlayersAllowed).condition("key", "players_allowed").update();
+        
+        Query.table(ServerStatsTable.TableName).value("value", totalMemory).condition("key", "total_memory").update();
+        Query.table(ServerStatsTable.TableName).value("value", availableProcessors).condition("key", "available_processors").update();
+        
+        Query.table(ServerStatsTable.TableName).value("value", System.getProperty("os.name")).condition("key", "os.name").update();
+        Query.table(ServerStatsTable.TableName).value("value", System.getProperty("os.version")).condition("key", "os.version").update();
+        Query.table(ServerStatsTable.TableName).value("value", System.getProperty("os.arch")).condition("key", "os.arch").update();
+
+        Query.table(ServerStatsTable.TableName).value("value", System.getProperty("java.version")).condition("key", "java.version").update();
+        Query.table(ServerStatsTable.TableName).value("value", System.getProperty("java.vendor")).condition("key", "java.vendor").update();
+        Query.table(ServerStatsTable.TableName).value("value", System.getProperty("java.vendor.url")).condition("key", "java.vendor.url").update();
+
+        Query.table(ServerStatsTable.TableName).value("value", System.getProperty("java.vm.vendor")).condition("key", "java.vm.vendor").update();
+        Query.table(ServerStatsTable.TableName).value("value", System.getProperty("java.vm.name")).condition("key", "java.vm.name").update();
+        Query.table(ServerStatsTable.TableName).value("value", System.getProperty("java.vm.version")).condition("key", "java.vm.version").update();
     }
     
     /**
