@@ -457,12 +457,11 @@ public class Query {
         
         /**
          * Builds and runs the UPDATE query.
-         * @param overwrite If <b>true</b>, acts like a normal <code>update</code>. Otherwise, adds the specified values to the
-         * existing ones
+         * @param merged If <b>false</b>, old values will be overwritten
          * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
          */
-        public boolean update(boolean overwrite) {
-            if(overwrite) return update();
+        public boolean update(boolean merged) {
+            if(!merged) return update();
             String sql = "UPDATE `" + LocalConfiguration.DBPrefix.asString() + table + "`";
             
             String valueString = "";

@@ -31,7 +31,7 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.DBTable;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
@@ -90,7 +90,7 @@ public class MiscInfoPlayerEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(!LocalConfiguration.Standalone.asBoolean()) {
+        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
@@ -125,7 +125,7 @@ public class MiscInfoPlayerEntry extends NormalData {
         boolean result = Query.table(MiscInfoPlayersTable.TableName)
             .valueRaw(values)
             .condition(MiscInfoPlayersTable.PlayerId, playerId)
-            .update(LocalConfiguration.Standalone.asBoolean());
+            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(playerId);
         return result;
     }

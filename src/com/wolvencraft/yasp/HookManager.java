@@ -32,7 +32,16 @@ import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
-import com.wolvencraft.yasp.util.hooks.*;
+import com.wolvencraft.yasp.util.hooks.AdminCmdHook;
+import com.wolvencraft.yasp.util.hooks.BanHammerHook;
+import com.wolvencraft.yasp.util.hooks.CommandBookHook;
+import com.wolvencraft.yasp.util.hooks.FactionsHook;
+import com.wolvencraft.yasp.util.hooks.MobArenaHook;
+import com.wolvencraft.yasp.util.hooks.PluginHook;
+import com.wolvencraft.yasp.util.hooks.PvpArenaHook;
+import com.wolvencraft.yasp.util.hooks.VanishHook;
+import com.wolvencraft.yasp.util.hooks.VaultHook;
+import com.wolvencraft.yasp.util.hooks.WorldGuardHook;
 
 public class HookManager {
     

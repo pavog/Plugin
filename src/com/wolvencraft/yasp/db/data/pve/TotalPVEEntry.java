@@ -27,7 +27,7 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.EntityCache;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
@@ -63,7 +63,7 @@ public class TotalPVEEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(!LocalConfiguration.Standalone.asBoolean()) {
+        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
@@ -97,7 +97,7 @@ public class TotalPVEEntry extends NormalData {
                 .condition(TotalPVEKillsTable.PlayerId, playerId)
                 .condition(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
                 .condition(TotalPVEKillsTable.MaterialId, MaterialCache.parse(weapon))
-                .update(LocalConfiguration.Standalone.asBoolean());
+                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(playerId);
         return result;
     }

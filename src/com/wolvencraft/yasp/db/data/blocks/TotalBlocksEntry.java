@@ -27,7 +27,7 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
@@ -57,7 +57,7 @@ public class TotalBlocksEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(!LocalConfiguration.Standalone.asBoolean()) {
+        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
@@ -89,7 +89,7 @@ public class TotalBlocksEntry extends NormalData {
             .value(TotalBlocksTable.Placed, placed)
             .condition(TotalBlocksTable.PlayerId, playerId)
             .condition(TotalBlocksTable.MaterialId, MaterialCache.parse(block))
-            .update(LocalConfiguration.Standalone.asBoolean());
+            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(playerId);
         return result;
     }

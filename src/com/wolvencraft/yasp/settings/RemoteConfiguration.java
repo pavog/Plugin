@@ -44,6 +44,7 @@ public enum RemoteConfiguration {
     FirstJoinMessage            ("first_join_message"),
     
     VanishDisablesTracking      ("hook.vanish.no_tracking"),
+    MergedDataTracking          ("merged_data_tracking"),
     ;
     
     String key;

@@ -40,7 +40,7 @@ public enum LocalConfiguration {
     LogPrefix       ("log-prefix", true),
     FetchPatches    ("fetch-patches", true),
     PatchServer     ("http://dl.mctrakr.com/files/patches/"),
-    Standalone      (true);
+    ;
     
     Object entry;
     

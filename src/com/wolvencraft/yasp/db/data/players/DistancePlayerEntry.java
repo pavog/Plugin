@@ -24,7 +24,7 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
-import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
 /**
  * Represents the distances a player traveled.
@@ -59,7 +59,7 @@ public class DistancePlayerEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(!LocalConfiguration.Standalone.asBoolean()) {
+        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
@@ -103,7 +103,7 @@ public class DistancePlayerEntry extends NormalData {
             .value(DistancePlayersTable.Minecart, minecart)
             .value(DistancePlayersTable.Pig, pig)
             .condition(DistancePlayersTable.PlayerId, playerId)
-            .update(LocalConfiguration.Standalone.asBoolean());
+            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         return result;
     }
     
