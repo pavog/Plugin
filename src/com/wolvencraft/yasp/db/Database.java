@@ -46,6 +46,7 @@ import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
+import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 
@@ -229,13 +230,13 @@ public class Database {
         int rowsChanged = 0;
         Statement statement = null;
         try {
+            if(connection.getAutoCommit()) connection.setAutoCommit(false);
             statement = connection.createStatement();
             rowsChanged = statement.executeUpdate(query);
             statement.close();
             connection.commit();
-        } catch (SQLException e) {
-            Message.log(Level.WARNING, "An error occurred while executing a database update.", e.getMessage(), query);
-            if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+        } catch (Throwable t) {
+            ExceptionHandler.handle(t);
             if(reconnect()) return executeUpdate(query);
             else return false;
         } finally {
@@ -268,9 +269,8 @@ public class Database {
                 }
                 colData.add(Query.toQueryResult(rowToAdd));
             }
-        } catch (SQLException e) {
-            Message.log(Level.WARNING, "An error occurred while executing a database query.", e.getMessage(), query);
-            if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+        } catch (Throwable t) {
+            ExceptionHandler.handle(t);
             if(reconnect()) return executeQuery(query);
             else return new ArrayList<QueryResult>();
         } finally {
