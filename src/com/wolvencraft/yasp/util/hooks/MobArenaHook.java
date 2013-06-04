@@ -26,7 +26,6 @@ import org.bukkit.plugin.Plugin;
 
 import com.garbagemule.MobArena.MobArena;
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
-import com.wolvencraft.yasp.settings.Module;
 
 /**
  * Quick-and-dirty MobArena hook
@@ -43,6 +42,23 @@ public class MobArenaHook extends PluginHook {
      */
     public MobArenaHook() {
         super(ApplicableHook.MOB_ARENA);
+    }
+    
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        
+        if (plugin != null && plugin instanceof MobArena) {
+            instance = (MobArena) plugin;
+            type.getModule().setActive(true);
+        }
+    }
+    
+    @Override
+    public void onDisable() {
+        instance = null;
     }
     
     /**
@@ -65,22 +81,5 @@ public class MobArenaHook extends PluginHook {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
         if(player == null) return null;
         return instance.getArenaMaster().getArenaWithPlayer(player).arenaName();
-    }
-    
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
-        
-        if (plugin != null && plugin instanceof MobArena) {
-            instance = (MobArena) plugin;
-            Module.MobArena.setActive(true);
-        }
-    }
-    
-    @Override
-    public void onDisable() {
-        instance = null;
     }
 }

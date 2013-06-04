@@ -31,7 +31,6 @@ import org.bukkit.plugin.Plugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
-import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.serializable.FlagsSerializable;
 import com.wolvencraft.yasp.util.serializable.RegionsSerializable;
 
@@ -46,6 +45,23 @@ public class WorldGuardHook extends PluginHook {
     
     public WorldGuardHook() {
         super(ApplicableHook.WORLD_GUARD);
+    }
+    
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        
+        if (plugin != null && plugin instanceof WorldGuardPlugin) {
+            instance = (WorldGuardPlugin) plugin;
+            type.getModule().setActive(true);
+        }
+    }
+    
+    @Override
+    public void onDisable() {
+        instance = null;
     }
     
     /**
@@ -71,23 +87,6 @@ public class WorldGuardHook extends PluginHook {
      */
     public static String getFlags (Location loc) {
         return FlagsSerializable.serialize(instance.getRegionManager(loc.getWorld()).getApplicableRegions(loc));
-    }
-    
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
-        
-        if (plugin != null && plugin instanceof WorldGuardPlugin) {
-            instance = (WorldGuardPlugin) plugin;
-            Module.WorldGuard.setActive(true);
-        }
-    }
-    
-    @Override
-    public void onDisable() {
-        instance = null;
     }
     
 }

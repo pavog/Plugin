@@ -31,7 +31,6 @@ import org.bukkit.plugin.ServicesManager;
 
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -50,6 +49,29 @@ public class VaultHook extends PluginHook {
      */
     public VaultHook() {
         super(ApplicableHook.VAULT);
+    }
+    
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        
+        ServicesManager svm = Statistics.getInstance().getServer().getServicesManager();
+        
+        try { economy = ((RegisteredServiceProvider<Economy>)(svm.getRegistration(Economy.class))).getProvider();}
+        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing economy"); }
+        
+        try { permissions = ((RegisteredServiceProvider<Permission>)(svm.getRegistration(Permission.class))).getProvider(); }
+        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); }
+        
+        if(economy != null && permissions != null) {
+            type.getModule().setActive(true);
+        }
+    }
+    
+    @Override
+    public void onDisable() {
+        economy = null;
+        permissions = null;
     }
     
     /**
@@ -79,29 +101,6 @@ public class VaultHook extends PluginHook {
      */
     public static double getBalance(String playerName) {
         return economy.getBalance(playerName);
-    }
-    
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        ServicesManager svm = Statistics.getInstance().getServer().getServicesManager();
-        
-        try { economy = ((RegisteredServiceProvider<Economy>)(svm.getRegistration(Economy.class))).getProvider();}
-        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing economy"); }
-        
-        try { permissions = ((RegisteredServiceProvider<Permission>)(svm.getRegistration(Permission.class))).getProvider(); }
-        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); }
-        
-        if(economy != null && permissions != null) {
-            Module.Vault.setActive(true);
-        }
-    }
-    
-    @Override
-    public void onDisable() {
-        economy = null;
-        permissions = null;
     }
     
 }

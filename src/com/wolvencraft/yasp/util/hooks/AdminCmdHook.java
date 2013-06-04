@@ -1,7 +1,6 @@
 package com.wolvencraft.yasp.util.hooks;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,9 +11,8 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 import belgium.Balor.Workers.AFKWorker;
 
-import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
-import com.wolvencraft.yasp.settings.Module;
+import com.wolvencraft.yasp.util.serializable.BanRecordSerializable;
 
 public class AdminCmdHook extends PluginHook {
     
@@ -29,9 +27,8 @@ public class AdminCmdHook extends PluginHook {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
         
         if (plugin != null && plugin instanceof AdminCmd) {
-            Module.MobArena.setActive(true);
+            type.getModule().setActive(true);
         }
-        
     }
     
     /**
@@ -50,12 +47,9 @@ public class AdminCmdHook extends PluginHook {
      */
     public String getBan(Player player) {
         IBan ban = ACHelper.getInstance().getBan(player.getName());
-        if(ban == null) return "";
-        Map<String, String> values = new HashMap<String, String>();
-        values.put("issuer", ban.getBanner());
-        values.put("reason", ban.getReason());
-        values.put("date", Long.toString(ban.getDate().getTime() / 1000));
-        return Statistics.getGson().toJson(values);
+        if(ban == null) return BanRecordSerializable.serialize(new ArrayList<BanRecordSerializable>());
+        BanRecordSerializable banReason = new BanRecordSerializable(ban.getBanner(), ban.getReason(), ban.getDate().getTime() / 1000, -1L);
+        return BanRecordSerializable.serialize(banReason);
     }
     
 }

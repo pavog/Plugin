@@ -12,13 +12,7 @@ import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
-import com.wolvencraft.yasp.util.hooks.AdminCmdHook;
-import com.wolvencraft.yasp.util.hooks.FactionsHook;
-import com.wolvencraft.yasp.util.hooks.MobArenaHook;
-import com.wolvencraft.yasp.util.hooks.PluginHook;
-import com.wolvencraft.yasp.util.hooks.PvpArenaHook;
-import com.wolvencraft.yasp.util.hooks.VaultHook;
-import com.wolvencraft.yasp.util.hooks.WorldGuardHook;
+import com.wolvencraft.yasp.util.hooks.*;
 
 public class HookManager {
     
@@ -77,7 +71,7 @@ public class HookManager {
     public enum ApplicableHook {
         
         ADMIN_CMD       (AdminCmdHook.class, Module.AdminCmd, PatchType.AdminCmd, "AdminCmd"),
-        BAN_HAMMER      (null, Module.BanHammer, PatchType.BanHammer, "BanHammer"),
+        BAN_HAMMER      (BanHammerHook.class, Module.BanHammer, PatchType.BanHammer, "BanHammer"),
         COMMAND_BOOK    (null, Module.CommandBook, PatchType.CommandBook, "CommandBook"),
         FACTIONS        (FactionsHook.class, Module.Factions, PatchType.Factions, "Factions"),
         JOBS            (null, Module.Jobs, PatchType.Jobs, "Jobs"),
