@@ -177,6 +177,7 @@ public class PatchFetcher {
         PvpArena        ("pvparena"),
         Vanish          ("vanish"),
         Vault           ("vault"),
+        Votifier        ("votifier"),
         WorldGuard      ("worldguard");
         
         public final String EXTENSION;

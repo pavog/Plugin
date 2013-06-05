@@ -89,4 +89,44 @@ public class Hook {
         public String toString() { return columnName; }
     }
     
+    /**
+     * Represents the <i>hook_votifier_totals</i> table.
+     * @author bitWolfy
+     *
+     */
+    public enum VotifierTotalsTable implements DBTable {
+        
+        TableName       ("votifier_totals"),
+        PlayerId        ("player_id"),
+        ServiceName     ("service_name"),
+        Votes           ("votes");
+        
+        VotifierTotalsTable (String columnName) { this.columnName = columnName; }
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
+     * Represents the <i>hook_votifier_detailed</i> table.
+     * @author bitWolfy
+     *
+     */
+    public enum DetailedVotifierTable implements DBTable {
+        
+        TableName       ("votifier_detailed"),
+        PlayerId        ("player_id"),
+        ServiceName     ("service_name"),
+        Timestamp       ("time");
+        
+        DetailedVotifierTable (String columnName) { this.columnName = columnName; }
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
 }

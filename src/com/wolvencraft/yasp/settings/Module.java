@@ -50,6 +50,7 @@ public enum Module {
     PvpArena    ("pvparena", true),
     Vanish      ("vanishnopacket", true),
     Vault       ("vault", true),
+    Votifier    ("votifier", true),
     WorldGuard  ("worldguard", true),
     ;
 

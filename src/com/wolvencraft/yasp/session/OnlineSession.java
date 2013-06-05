@@ -142,7 +142,7 @@ public class OnlineSession implements PlayerSession {
      * @param type Data store type
      * @return Data store, or <b>null</b> if the type is not valid
      */
-    private AdvancedDataStore getData(DataStoreType type) {
+    public AdvancedDataStore getData(DataStoreType type) {
         for(AdvancedDataStore store : dataStores) {
             if(store.getType().equals(type)) return store;
         }

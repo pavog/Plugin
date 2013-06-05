@@ -101,8 +101,19 @@ public abstract class AdvancedDataStore<N extends NormalData, D extends Detailed
         Deaths,
         PVE,
         PVP,
+        
+        Hook_AdminCmd,
+        Hook_BanHammer,
+        Hook_CommandBook,
         Hook_Factions,
+        Hook_Jobs,
+        Hook_MCBans,
+        Hook_McMMO,
+        Hook_MobArena,
+        Hook_PvpArena,
+        Hook_Vanish,
         Hook_Vault,
+        Hook_Votifier,
         Hook_WorldGuard;
     }
 

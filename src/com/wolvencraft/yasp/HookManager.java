@@ -110,6 +110,7 @@ public class HookManager {
         PVP_ARENA       (PvpArenaHook.class, Module.PvpArena, PatchType.PvpArena, "PVPArena"),
         VANISH          (VanishHook.class, Module.Vanish, PatchType.Vanish, "VanishNoPacket"),
         VAULT           (VaultHook.class, Module.Vault, PatchType.Vault, "Vault"),
+        VOTIFIER        (null, Module.Votifier, PatchType.Votifier, "Votifier"),
         WORLD_GUARD     (WorldGuardHook.class, Module.WorldGuard, PatchType.WorldGuard, "WorldGuard")
         ;
         
