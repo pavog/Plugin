@@ -20,7 +20,6 @@
 
 package com.wolvencraft.yasp.listeners;
 
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,17 +32,19 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.Repairable;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
-import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
+import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.FoodConsume;
+import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemCraft;
+import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemDrop;
+import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemEnchant;
+import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemPickup;
+import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemRepair;
+import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemSmelt;
+import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ToolBreak;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * Listens to any item changes on the server and reports them to the plugin.
@@ -63,98 +64,69 @@ public class ItemListener implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemPickup(PlayerPickupItemEvent event) {
-        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
-        if(!StatPerms.ItemPickUp.has(player)) return;
-        OnlineSessionCache.fetch(player).itemPickUp(player.getLocation(), event.getItem().getItemStack());
+        if(!HandlerManager.playerLookup(player, StatPerms.ItemPickUp)) return;
+        
+        HandlerManager.runAsyncTask(new ItemPickup(player, player.getLocation(), event.getItem().getItemStack()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemDrop(PlayerDropItemEvent event) {
-        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
-        if(!StatPerms.ItemDrop.has(player)) return;
-        OnlineSessionCache.fetch(player).itemDrop(player.getLocation(), event.getItemDrop().getItemStack());
+        if(!HandlerManager.playerLookup(player, StatPerms.ItemDrop)) return;
+
+        HandlerManager.runAsyncTask(new ItemDrop(player, player.getLocation(), event.getItemDrop().getItemStack()));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFoodConsume(FoodLevelChangeEvent event) {
-        if(Statistics.isPaused()) return;
         if(!(event.getEntity() instanceof Player)) return;
+        
         Player player = (Player) event.getEntity();
-        if(!StatPerms.ItemUse.has(player)) return;
-        OnlineSession session = OnlineSessionCache.fetch(player);
-        session.itemUse(player.getLocation(), player.getItemInHand());
-        session.addMiscValue(MiscInfoPlayersTable.FoodEaten);
+        if(!HandlerManager.playerLookup(player, StatPerms.ItemUse)) return;
+
+        HandlerManager.runAsyncTask(new FoodConsume(player));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemCraft(CraftItemEvent event) {
-        if(Statistics.isPaused()) return;
         Player player = (Player) event.getWhoClicked();
-        if(!StatPerms.ItemCraft.has(player)) return;
-        OnlineSessionCache.fetch(player).itemCraft(player.getLocation(), event.getCurrentItem());
+        if(!HandlerManager.playerLookup(player, StatPerms.ItemCraft)) return;
+
+        HandlerManager.runAsyncTask(new ItemCraft(player, player.getLocation(), event.getCurrentItem()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onItemSmelt(FurnaceExtractEvent event) {
-        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
-        if(!StatPerms.ItemMisc.has(player)) return;
-        OnlineSessionCache.fetch(player).itemSmelt(player.getLocation(), new ItemStack(event.getItemType()));
+        if(!HandlerManager.playerLookup(player, StatPerms.ItemMisc)) return;
+
+        HandlerManager.runAsyncTask(new ItemSmelt(player, player.getLocation(), new ItemStack(event.getItemType())));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onToolBreak(PlayerItemBreakEvent event) {
-        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
-        if(!StatPerms.ItemBreak.has(player)) return;
-        OnlineSessionCache.fetch(player).itemBreak(player.getLocation(), event.getBrokenItem());
+        if(!HandlerManager.playerLookup(player, StatPerms.ItemBreak)) return;
+
+        HandlerManager.runAsyncTask(new ToolBreak(player, player.getLocation(), event.getBrokenItem()));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemEnchant(EnchantItemEvent event) {
-        if(Statistics.isPaused()) return;
         Player player = event.getEnchanter();
-        if(!StatPerms.ItemMisc.has(player)) return;
-        OnlineSessionCache.fetch(player).itemEnchant(player.getLocation(), new ItemStack(event.getItem().getType()));
+        if(!HandlerManager.playerLookup(player, StatPerms.ItemMisc)) return;
+
+        HandlerManager.runAsyncTask(new ItemEnchant(player, player.getLocation(), event.getItem()));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public static void onItemRepair(InventoryClickEvent event){
-        HumanEntity entity = event.getWhoClicked();
+        Player player = (Player) event.getWhoClicked();
+        if(!HandlerManager.playerLookup(player, StatPerms.ItemAnvil)) return;
         
-        if(entity instanceof Player) return;
-        Player player = (Player) entity;
-        if(!StatPerms.ItemAnvil.has(player)) return;
-        
-        if(!(event.getInventory() instanceof AnvilInventory)) return;
-        AnvilInventory anvil = (AnvilInventory) event.getInventory();
-        InventoryView view = event.getView();
-        int rawSlot = event.getRawSlot();
-         
-        if(rawSlot != view.convertSlot(rawSlot)) return;
-        if(rawSlot != 2) return;
-        ItemStack[] items = anvil.getContents();
-         
-        if(items[0] == null || items[1] == null) return;
-        int leftSlot = items[0].getTypeId();
-        int rightSlot = items[1].getTypeId();
-        if(leftSlot == 0 || leftSlot != rightSlot) return;
-        
-        ItemStack resultSlot = event.getCurrentItem();
-        if(resultSlot == null) return;
-            
-        ItemMeta meta = resultSlot.getItemMeta();
-         
-        if(meta == null) return;
-        if(!(meta instanceof Repairable)) return;
-        Repairable repairable = (Repairable) meta;
-        int repairCost = repairable.getRepairCost();
-        if(player.getLevel() < repairCost) return;
 
-        OnlineSessionCache.fetch(player).itemEnchant(player.getLocation(), resultSlot);
-        com.wolvencraft.yasp.util.Message.log("Item has been repaired for " + repairable.getRepairCost());
+        HandlerManager.runAsyncTask(new ItemRepair(player, event));
     }
     
 }

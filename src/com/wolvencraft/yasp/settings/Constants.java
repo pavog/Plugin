@@ -25,8 +25,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.util.hooks.VanishHook;
-
 /**
  * Data store that contains both local and remote plugin configurations
  * @author bitWolfy
@@ -210,11 +208,6 @@ public class Constants {
          * @return <b>true</b> if the player has the node, <b>false</b> otherwise
          */
         public boolean has(Player player) {
-            // XXX This check should not be in the permissions section
-            if(Module.Vanish.isActive()
-                    && RemoteConfiguration.VanishDisablesTracking.asBoolean()
-                    && VanishHook.isVanished(player.getName())) return false;
-            
             return player.isOp() || player.hasPermission(node);
         }
         

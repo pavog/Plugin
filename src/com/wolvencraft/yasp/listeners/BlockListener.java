@@ -28,8 +28,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.listeners.handlers.BlockHandlers.BlockBreak;
+import com.wolvencraft.yasp.listeners.handlers.BlockHandlers.BlockPlace;
+import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * Listens to any block changes on the server and reports them to the plugin.
@@ -38,28 +40,23 @@ import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
  */
 public class BlockListener implements Listener {
     
-    /**
-     * <b>Default constructor</b><br />
-     * Creates a new instance of the Listener and registers it with the PluginManager
-     * @param plugin StatsPlugin instance
-     */
     public BlockListener(Statistics plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
-        if(!StatPerms.BlockBreak.has(player)) return;
-        OnlineSessionCache.fetch(player).blockBreak(event.getBlock().getLocation(), event.getBlock().getState());
+        if(!HandlerManager.playerLookup(player, StatPerms.BlockBreak)) return;
+        
+        HandlerManager.runAsyncTask(new BlockBreak(player, event.getBlock()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if(Statistics.isPaused()) return;
         Player player = event.getPlayer();
-        if(!StatPerms.BlockPlace.has(player)) return;
-        OnlineSessionCache.fetch(player).blockPlace(event.getBlock().getLocation(), event.getBlock().getState());
+        if(!HandlerManager.playerLookup(player, StatPerms.BlockPlace)) return;
+
+        HandlerManager.runAsyncTask(new BlockPlace(player, event.getBlock()));
     }
 }

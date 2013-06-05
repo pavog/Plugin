@@ -20,28 +20,18 @@
 
 package com.wolvencraft.yasp.listeners;
 
-import org.bukkit.Material;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.EnderDragon;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.settings.Constants;
+import com.wolvencraft.yasp.listeners.handlers.DeathHandler.MonsterDeath;
+import com.wolvencraft.yasp.listeners.handlers.DeathHandler.PlayerDeath;
+import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
  * Listens to any entity deaths on the server and reports them to the plugin
@@ -50,121 +40,22 @@ import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
  */
 public class DeathListener implements Listener {
     
-    /**
-     * <b>Default constructor</b><br />
-     * Creates a new instance of the Listener and registers it with the PluginManager
-     * @param plugin StatsPlugin instance
-     */
     public DeathListener(Statistics plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        if(Statistics.isPaused()) return;
-        Player victim = event.getEntity();
-        if(!StatPerms.Death.has(victim)) return;
-        EntityDamageEvent lastDamageEvent = victim.getLastDamageCause();
+        Player player = event.getEntity();
+        if(!HandlerManager.playerLookup(player, StatPerms.Death)) return;
         
-        if (lastDamageEvent == null) return;
-        DamageCause cause = lastDamageEvent.getCause();
-        
-        if (lastDamageEvent instanceof EntityDamageByEntityEvent) {
-            // Player killed by entity
-            Entity killerEntity = ((EntityDamageByEntityEvent) lastDamageEvent).getDamager();
-
-            if (killerEntity instanceof Projectile) {
-            // + Player was shot
-                Projectile projectile = (Projectile) killerEntity;
-                if (projectile.getShooter() instanceof Player) {
-            // | + Player shot by Player
-                    Player killer = (Player) projectile.getShooter();
-                    if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(victim)) return;
-                    OnlineSession session = OnlineSessionCache.fetch(killer);
-                    session.killedPlayer(victim, Constants.ProjectileToItem.parse(projectile.getType()));
-                } else if (projectile.getShooter() instanceof Creature) {
-            // | + Player was shot by a monster
-                    if(!StatPerms.DeathPVE.has(victim)) return;
-                    Entity killer = (Entity) projectile.getShooter();
-                    OnlineSession session = OnlineSessionCache.fetch(victim);
-                    session.killedByCreature(killer, Constants.ProjectileToItem.parse(projectile.getType()));
-                }
-            } else if (killerEntity instanceof Player) {
-            // + Player killed Player
-                Player killer = (Player) killerEntity;
-                if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(victim)) return;
-                OnlineSession session = OnlineSessionCache.fetch(killer);
-                session.killedPlayer(victim, killer.getItemInHand());
-            } else if (killerEntity instanceof Creature) {
-            // + Creature killed Player
-                if(!StatPerms.DeathPVE.has(victim)) return;
-                OnlineSession session = OnlineSessionCache.fetch(victim);
-                session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
-            } else if (killerEntity instanceof Slime) {
-            // + Slime killed player
-                if(!StatPerms.DeathPVE.has(victim)) return;
-                OnlineSession session = OnlineSessionCache.fetch(victim);
-                session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
-            } else if (killerEntity instanceof EnderDragon) {
-            // + Ender Dragon killed player
-                if(!StatPerms.DeathPVE.has(victim)) return;
-                OnlineSession session = OnlineSessionCache.fetch(victim);
-                session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
-            } else {
-            // + Player died
-                if(!StatPerms.DeathOther.has(victim)) return;
-                OnlineSession session = OnlineSessionCache.fetch(victim);
-                session.killedByEnvironment(victim.getLocation(), cause);
-            }
-        } else {
-            // Player killed by other means
-            if(!StatPerms.DeathOther.has(victim)) return;
-            OnlineSession session = OnlineSessionCache.fetch(victim);
-            session.killedByEnvironment(victim.getLocation(), cause);
-        }
+        HandlerManager.runAsyncTask(new PlayerDeath(player, event));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMonsterDeath(EntityDeathEvent event) {
         if(Statistics.isPaused()) return;
-        Entity victim = event.getEntity();
-        EntityDamageEvent lastDamageEvent = victim.getLastDamageCause();
-        if (lastDamageEvent == null) return;
-        
-        if (!(lastDamageEvent instanceof EntityDamageByEntityEvent)) return;
-        
-        Entity killerEntity = ((EntityDamageByEntityEvent) lastDamageEvent).getDamager();
-        
-        if (killerEntity instanceof Projectile) {
-            // Entity was shot
-            Projectile projectile = (Projectile) killerEntity;
-            if (!(projectile.getShooter() instanceof Player)) return;
-            Player killer = (Player) projectile.getShooter();
-            if(!StatPerms.DeathPVE.has(killer)) return;
-            if (victim instanceof Creature) {
-                // + Player shot Creature
-                OnlineSessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
-            } else if (victim instanceof Slime) {
-                // + Player shot Slime
-                OnlineSessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
-            } else if (victim instanceof EnderDragon) {
-                // + Player shot EnderDragon
-                OnlineSessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
-            }
-        } else if (killerEntity instanceof Player) {
-            // Player killed an entity
-            Player killer = (Player) killerEntity;
-            if(!StatPerms.DeathPVE.has(killer)) return;
-            if (victim instanceof Creature) {
-                // + Player killed Creature
-                OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
-            } else if (victim instanceof Slime) {
-                // + Player killed Slime
-                OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
-            } else if (victim instanceof EnderDragon) {
-                // + Player killed an EnderDragon
-                OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
-            }
-        }
+
+        HandlerManager.runAsyncTask(new MonsterDeath(event));
     }
 }
