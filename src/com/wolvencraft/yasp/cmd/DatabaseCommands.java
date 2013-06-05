@@ -88,7 +88,7 @@ public class DatabaseCommands {
             permission = "stats.cmd.patch",
             allowConsole = true,
             usage = "/stats patch [id]",
-            description = "Exectutes a database patch with the specified ID"
+            description = "Exectutes a database patch"
             )
     public static boolean patch(List<String> args) {
         final CommandSender sender = CommandManager.getSender();

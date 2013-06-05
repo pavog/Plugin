@@ -55,7 +55,7 @@ public class PlayerCommands {
             allowConsole = false,
             unstable = true,
             usage = "/stats scoreboard",
-            description = "Displays some of your stats on a scoreboard"
+            description = "Displays stats on a scoreboard"
             )
     public static boolean scoreboard(List<String> args) {
         Player player = (Player) CommandManager.getSender();
