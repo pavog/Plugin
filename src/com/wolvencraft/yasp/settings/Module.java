@@ -70,15 +70,18 @@ public enum Module {
         
         refresh();
         
+        active = true;
         refreshScheduled = false;
     }
     
     Module(String key, boolean isHook) {
         this.isHook = isHook;
         this.KEY = key;
-        refreshScheduled = false;
         
         refresh();
+        
+        if(!isHook) active = true;
+        refreshScheduled = false;
     }
 
     /**
