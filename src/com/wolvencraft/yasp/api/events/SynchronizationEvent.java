@@ -20,28 +20,30 @@
 
 package com.wolvencraft.yasp.api.events;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Called when the database synchronization was completed.
+ * Called when the database synchronization is starting
  * @author bitWolfy
  *
  */
-public class SynchronizationEvent extends Event {
+@Getter(AccessLevel.PUBLIC)
+public class SynchronizationEvent extends Event implements Cancellable {
+    
     private static final HandlerList handlers = new HandlerList();
     private int processId;
+    @Setter(AccessLevel.PUBLIC)
+    private boolean cancelled;
     
     public SynchronizationEvent(int processId) {
         this.processId = processId;
-    }
-    
-    /**
-     * Returns the synchronization process ID
-     * @return Process ID
-     */
-    public int getProcessId() {
-        return processId;
+        this.cancelled = false;
     }
     
     @Override

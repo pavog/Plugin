@@ -178,7 +178,11 @@ public class Database {
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      */
     private static boolean executePatch(ScriptRunner scriptRunner, String patchId) throws DatabaseConnectionException {
-        Bukkit.getServer().getPluginManager().callEvent(new DatabasePatchEvent(patchId));
+        DatabasePatchEvent event = new DatabasePatchEvent(patchId);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        
+        if(event.isCancelled()) return false;
+        
         InputStream is;
         try { is = new FileInputStream(Statistics.getInstance().getDataFolder() + "/patches/" + patchId + ".sql"); }
         catch (FileNotFoundException e1) { return false; }

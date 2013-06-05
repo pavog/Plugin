@@ -20,6 +20,11 @@
 
 package com.wolvencraft.yasp.api.events;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -30,20 +35,18 @@ import com.wolvencraft.yasp.settings.Module;
  * @author bitWolfy
  *
  */
-public class HookInitEvent extends Event {
+@Getter(AccessLevel.PUBLIC)
+public class HookInitEvent extends Event implements Cancellable {
+    
     private static final HandlerList handlers = new HandlerList();
-    private Module hook;
+
+    @Setter(AccessLevel.PUBLIC)
+    private boolean cancelled;
+    private Module module;
     
-    public HookInitEvent(Module hook) {
-        this.hook = hook;
-    }
-    
-    /**
-     * Returns the hook type
-     * @return Hook type
-     */
-    public Module getHook() {
-        return hook;
+    public HookInitEvent(Module module) {
+        this.module = module;
+        this.cancelled = false;
     }
     
     @Override

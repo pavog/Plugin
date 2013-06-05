@@ -20,38 +20,29 @@
 
 package com.wolvencraft.yasp.api.events;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+import lombok.Getter;
+import lombok.AccessLevel;
 
-import com.wolvencraft.yasp.session.DataSession;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
+
+import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * Called when a new player session is being created
  * @author bitWolfy
  *
  */
-public class SessionCreateEvent extends Event {
+@Getter(AccessLevel.PUBLIC)
+public class SessionCreateEvent extends PlayerEvent {
+    
     private static final HandlerList handlers = new HandlerList();
-    private String playerName;
+    private OnlineSession session;
     
-    public SessionCreateEvent(String playerName) {
-        this.playerName = playerName;
-    }
-    
-    /**
-     * Returns the player name
-     * @return Player name
-     */
-    public String getName() {
-        return playerName;
-    }
-    
-    /**
-     * Returns the player's statistics
-     * @return Player's totals
-     */
-    public DataSession getSession() {
-        return new DataSession(playerName);
+    public SessionCreateEvent(Player player, OnlineSession session) {
+        super(player);
+        this.session = session;
     }
     
     @Override

@@ -26,8 +26,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
+import com.wolvencraft.yasp.api.events.HookInitEvent;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
@@ -66,15 +68,22 @@ public class HookManager {
             } else if (!hook.getModule().isEnabled()) {
                 Message.log("|" + Message.centerString(hook.getPluginName() + " is disabled", 34) + "|");
             } else {
+                HookInitEvent event = new HookInitEvent(hook.getModule());
+                Bukkit.getServer().getPluginManager().callEvent(event);
+                if(event.isCancelled()) {
+                    Message.log("|" + Message.centerString(hook.getPluginName() + " is cancelled", 34) + "|");
+                    continue;
+                }
+
                 Message.log("|" + Message.centerString(hook.getPluginName() + " has been enabled", 34) + "|");
-                try {
-                    PluginHook hookObj = hook.getHook().newInstance();
-                    hookObj.onEnable();
-                    activeHooks.add(hookObj);
-                } catch (Throwable t) {
+                PluginHook hookObj;
+                try { hookObj = hook.getHook().newInstance(); }
+                catch (Throwable t) {
                     ExceptionHandler.handle(t);
                     continue;
                 }
+                hookObj.onEnable();
+                activeHooks.add(hookObj);
             }
         }
         

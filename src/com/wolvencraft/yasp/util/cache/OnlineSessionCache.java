@@ -27,6 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.api.events.SessionCreateEvent;
 import com.wolvencraft.yasp.api.events.SessionRemoveEvent;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal;
@@ -110,6 +111,8 @@ public class OnlineSessionCache implements CachedDataProcess {
                 RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
             );
         }
+        
+        Bukkit.getServer().getPluginManager().callEvent(new SessionCreateEvent(player, newSession));
         return newSession;
     }
     

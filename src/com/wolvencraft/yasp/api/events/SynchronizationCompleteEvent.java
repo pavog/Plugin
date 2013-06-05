@@ -1,5 +1,5 @@
 /*
- * SynchronizationPreProcessEvent.java
+ * SynchronizationCompletionEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -20,40 +20,24 @@
 
 package com.wolvencraft.yasp.api.events;
 
+import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.Statistics;
-
 /**
- * Called when the plugin being synchronizing data to the database.<br />
- * The synchronization might never actually occur.
+ * Called when the data has been synchronized with the database
  * @author bitWolfy
  *
  */
-public class SynchronizationPreProcessEvent extends Event {
+@AllArgsConstructor(access=AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
+public class SynchronizationCompleteEvent extends Event {
+    
     private static final HandlerList handlers = new HandlerList();
     private int processId;
-    
-    public SynchronizationPreProcessEvent(int processId) {
-        this.processId = processId;
-    }
-    
-    /**
-     * Returns the synchronization process ID
-     * @return Process ID
-     */
-    public int getProcessId() {
-        return processId;
-    }
-    
-    /**
-     * Checks if the database synchronization is cancelled
-     * @return <b>true</b> if the synchronization was cancelled, <b>false</b> otherwise
-     */
-    public boolean isCancelled() {
-        return Statistics.isPaused();
-    }
     
     @Override
     public HandlerList getHandlers() {

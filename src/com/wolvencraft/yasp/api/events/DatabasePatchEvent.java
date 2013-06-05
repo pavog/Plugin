@@ -20,6 +20,11 @@
 
 package com.wolvencraft.yasp.api.events;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -28,24 +33,23 @@ import org.bukkit.event.HandlerList;
  * @author bitWolfy
  *
  */
-public class DatabasePatchEvent extends Event {
+@Getter(AccessLevel.PUBLIC)
+public class DatabasePatchEvent extends Event implements Cancellable {
+    
     private static final HandlerList handlers = new HandlerList();
-    private String name;
+
+    @Setter(AccessLevel.PUBLIC)
+    private boolean cancelled;
+    private String patchId;
     
-    public DatabasePatchEvent(String name) {
-        this.name = name;
-    }
-    
-    /**
-     * Returns the patch file name
-     * @return Patch file name
-     */
-    public String getPatchFileName() {
-        return name + ".sql";
+    public DatabasePatchEvent(String patchId) {
+        this.patchId = patchId;
+        this.cancelled = false;
     }
     
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
+    
 }

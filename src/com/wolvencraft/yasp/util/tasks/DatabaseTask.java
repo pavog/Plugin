@@ -23,8 +23,8 @@ package com.wolvencraft.yasp.util.tasks;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.api.events.SynchronizationCompleteEvent;
 import com.wolvencraft.yasp.api.events.SynchronizationEvent;
-import com.wolvencraft.yasp.api.events.SynchronizationPreProcessEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
@@ -45,7 +45,6 @@ public class DatabaseTask implements Runnable {
      */
     public DatabaseTask() {
         iteration = 0;
-        
     }
     
     /**
@@ -69,8 +68,12 @@ public class DatabaseTask implements Runnable {
      * Asynchronous threading is strongly recommended.
      */
     public static void commit() {
-        Bukkit.getServer().getPluginManager().callEvent(new SynchronizationPreProcessEvent(iteration));
         if(Statistics.isPaused()) return;
+        
+        SynchronizationEvent event = new SynchronizationEvent(iteration);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if(event.isCancelled()) return;
+        
         Message.debug("Database synchronization in progress");
         
         for(OnlineSession session : OnlineSessionCache.getSessions()) {
@@ -83,7 +86,8 @@ public class DatabaseTask implements Runnable {
         
         Module.clearCache();
         RemoteConfiguration.clearCache();
-        Bukkit.getServer().getPluginManager().callEvent(new SynchronizationEvent(iteration));
+        
+        Bukkit.getServer().getPluginManager().callEvent(new SynchronizationCompleteEvent(iteration));
         iteration++;
     }
 }

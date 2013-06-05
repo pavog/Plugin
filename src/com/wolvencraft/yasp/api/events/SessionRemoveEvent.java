@@ -20,6 +20,9 @@
 
 package com.wolvencraft.yasp.api.events;
 
+import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -31,18 +34,12 @@ import com.wolvencraft.yasp.session.DataSession;
  * @author bitWolfy
  *
  */
+@AllArgsConstructor(access=AccessLevel.PUBLIC)
 public class SessionRemoveEvent extends Event {
+    
     private static final HandlerList handlers = new HandlerList();
     private String playerName;
     
-    public SessionRemoveEvent(String playerName) {
-        this.playerName = playerName;
-    }
-    
-    /**
-     * Returns the player's statistics
-     * @return Player's totals
-     */
     public DataSession getSession() {
         return new DataSession(playerName);
     }
