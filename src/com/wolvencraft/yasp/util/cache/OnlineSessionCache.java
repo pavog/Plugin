@@ -93,19 +93,23 @@ public class OnlineSessionCache implements CachedDataProcess {
      * Returns the OnlineSession associated with the specified player.<br />
      * If no session is found, it will be created.
      * @param player Tracked player
-     * @return OnlineSession associated with the player.
+     * @param login login event
+     * @return OnlineSession associated with the player
      */
-    public static OnlineSession fetch(Player player) {
-        String username = player.getName();
+    public static OnlineSession fetch(Player player, boolean login) {
         for(OnlineSession session : sessions) {
-            if(session.getName().equals(username)) {
+            if(session.getName().equals(player.getName())) {
+                if(login && RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
+                    Message.send(player, RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName()));
+                }
                 return session;
             }
         }
-        Message.debug("Creating a new user session for " + username);
+        Message.debug("Creating a new user session for " + player.getName() + "(#" + sessions.size() + ")");
         OnlineSession newSession = new OnlineSession(player);
         sessions.add(newSession);
-        if(RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
+        
+        if(login && RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
             Message.send(
                 player,
                 RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
@@ -114,6 +118,16 @@ public class OnlineSessionCache implements CachedDataProcess {
         
         Bukkit.getServer().getPluginManager().callEvent(new SessionCreateEvent(player, newSession));
         return newSession;
+    }
+    
+    /**
+     * Returns the OnlineSession associated with the specified player.<br />
+     * If no session is found, it will be created.
+     * @param player Tracked player
+     * @return OnlineSession associated with the player.
+     */
+    public static OnlineSession fetch(Player player) {
+        return fetch(player, false);
     }
     
     /**

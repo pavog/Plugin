@@ -23,7 +23,7 @@ public class SessionHandlers {
         @Override
         public void run() {
             Statistics.getServerStatistics().playerLogin();
-            OnlineSessionCache.fetch(player).login(player.getLocation());
+            OnlineSessionCache.fetch(player, true).login(player.getLocation());
         }
     }
     
