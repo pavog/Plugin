@@ -41,6 +41,7 @@ public enum Module {
     
     AdminCmd    ("admincmd", true),
     BanHammer   ("banhammer", true),
+    Citizens    ("citizens", true),
     CommandBook ("commandbook", true),
     Factions    ("factions", true),
     Jobs        ("jobs", true),

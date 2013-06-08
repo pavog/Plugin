@@ -234,7 +234,6 @@ public class Database {
         int rowsChanged = 0;
         Statement statement = null;
         try {
-            if(connection.getAutoCommit()) connection.setAutoCommit(false);
             statement = connection.createStatement();
             rowsChanged = statement.executeUpdate(query);
             statement.close();

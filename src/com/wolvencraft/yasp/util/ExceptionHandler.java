@@ -30,7 +30,12 @@ import com.wolvencraft.yasp.Statistics;
 
 public class ExceptionHandler {
     
+    private static String lastError = "";
+    
     public static void handle(Throwable t) {
+        if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
+        else lastError = t.getLocalizedMessage();
+        
         PluginDescriptionFile description = Statistics.getInstance().getDescription();
         Message.log(
                 "+-------------- [ Statistics ] --------------+",
@@ -45,15 +50,23 @@ public class ExceptionHandler {
                 "|            " + t.getLocalizedMessage(),
                 "+--------------------------------------------+",
                 "| The stack trace of the error follows: ",
-                "| "
+                "| ",
+                "| " + t.getClass().getName()
                 );
         for(StackTraceElement element : t.getStackTrace()) {
-            Message.log("| " + element.toString());
+            Message.log("| at " + element.toString());
         }
-        Message.log("+--------------------------------------------+");
+        Message.log(
+                "| Multiple errors might have occurred, only",
+                "| one stack trace is shown.",
+                "+--------------------------------------------+"
+                );
     }
     
     public static void handle(Throwable t, CommandSender sender, CommandPair command) {
+        if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
+        else lastError = t.getLocalizedMessage();
+        
         Message.send(sender, ChatColor.RED + "An internal error occurred while executing the command");
         
         PluginDescriptionFile description = Statistics.getInstance().getDescription();
@@ -85,7 +98,11 @@ public class ExceptionHandler {
         for(StackTraceElement element : t.getStackTrace()) {
             Message.log("| " + element.toString());
         }
-        Message.log("+--------------------------------------------+");
+        Message.log(
+                "| Multiple errors might have occurred, only",
+                "| one stack trace is shown.",
+                "+--------------------------------------------+"
+                );
     }
     
 }

@@ -36,13 +36,18 @@ import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 import com.wolvencraft.yasp.util.hooks.AdminCmdHook;
 import com.wolvencraft.yasp.util.hooks.BanHammerHook;
+import com.wolvencraft.yasp.util.hooks.CitizensHook;
 import com.wolvencraft.yasp.util.hooks.CommandBookHook;
 import com.wolvencraft.yasp.util.hooks.FactionsHook;
+import com.wolvencraft.yasp.util.hooks.JobsHook;
+import com.wolvencraft.yasp.util.hooks.MCBansHook;
+import com.wolvencraft.yasp.util.hooks.McMMOHook;
 import com.wolvencraft.yasp.util.hooks.MobArenaHook;
 import com.wolvencraft.yasp.util.hooks.PluginHook;
 import com.wolvencraft.yasp.util.hooks.PvpArenaHook;
 import com.wolvencraft.yasp.util.hooks.VanishHook;
 import com.wolvencraft.yasp.util.hooks.VaultHook;
+import com.wolvencraft.yasp.util.hooks.VotifierHook;
 import com.wolvencraft.yasp.util.hooks.WorldGuardHook;
 
 public class HookManager {
@@ -110,16 +115,17 @@ public class HookManager {
         
         ADMIN_CMD       (AdminCmdHook.class, Module.AdminCmd, PatchType.AdminCmd, "AdminCmd"),
         BAN_HAMMER      (BanHammerHook.class, Module.BanHammer, PatchType.BanHammer, "BanHammer"),
+        CITIZENS        (CitizensHook.class, Module.Citizens, PatchType.Citizens, "Citizens"),
         COMMAND_BOOK    (CommandBookHook.class, Module.CommandBook, PatchType.CommandBook, "CommandBook"),
         FACTIONS        (FactionsHook.class, Module.Factions, PatchType.Factions, "Factions"),
-        JOBS            (null, Module.Jobs, PatchType.Jobs, "Jobs"),
-        MCBANS          (null, Module.McBans, PatchType.MCBans, "MCBans"),
-        MCMMO           (null, Module.McMMO, PatchType.MCMMO, "McMMO"),
+        JOBS            (JobsHook.class, Module.Jobs, PatchType.Jobs, "Jobs"),
+        MCBANS          (MCBansHook.class, Module.McBans, PatchType.MCBans, "MCBans"),
+        MCMMO           (McMMOHook.class, Module.McMMO, PatchType.MCMMO, "McMMO"),
         MOB_ARENA       (MobArenaHook.class, Module.MobArena, PatchType.MobArena, "MobArena"),
         PVP_ARENA       (PvpArenaHook.class, Module.PvpArena, PatchType.PvpArena, "PVPArena"),
         VANISH          (VanishHook.class, Module.Vanish, PatchType.Vanish, "VanishNoPacket"),
         VAULT           (VaultHook.class, Module.Vault, PatchType.Vault, "Vault"),
-        VOTIFIER        (null, Module.Votifier, PatchType.Votifier, "Votifier"),
+        VOTIFIER        (VotifierHook.class, Module.Votifier, PatchType.Votifier, "Votifier"),
         WORLD_GUARD     (WorldGuardHook.class, Module.WorldGuard, PatchType.WorldGuard, "WorldGuard")
         ;
         

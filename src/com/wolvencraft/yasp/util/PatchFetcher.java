@@ -168,6 +168,7 @@ public class PatchFetcher {
         
         AdminCmd        ("admincmd"),
         BanHammer       ("banhammer"),
+        Citizens        ("citizens"),
         CommandBook     ("commandbook"),
         Factions        ("factions"),
         Jobs            ("jobs"),
