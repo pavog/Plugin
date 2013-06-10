@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
@@ -51,6 +52,15 @@ import com.wolvencraft.yasp.settings.Module;
 public class Util {
     
     private Util() { }
+    
+    public static String parseString(String str) {
+        if(str == null) return "NULL";
+
+        str = str.replace("\u00A7", "&");
+        str = StringEscapeUtils.escapeSql(str);
+        
+        return str;
+    }
     
     /**
      * Composes a list of active modules for the player

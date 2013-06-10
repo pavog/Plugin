@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import com.wolvencraft.yasp.db.tables.DBTable;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.Util;
 
 /**
  * Modular database query factory. Used to build and run SELECT, INSERT, and UPDATE queries.
@@ -412,7 +413,7 @@ public class Query {
                 if(!valueString.equals("")) valueString += ", ";
                 
                 fieldString += "`" + pairs.getKey().toString() + "`";
-                valueString += "'" + pairs.getValue().toString() + "'";
+                valueString += "'" + Util.parseString(pairs.getValue().toString()) + "'";
                 it.remove();
             }
             sql += fieldString + ") VALUES (" + valueString + ")";
@@ -440,7 +441,7 @@ public class Query {
                 Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
                 if(!valueString.equals("")) valueString += ", ";
                 
-                valueString += "`" + pairs.getKey().toString() + "`='" + pairs.getValue().toString() + "'";
+                valueString += "`" + pairs.getKey().toString() + "`='" + Util.parseString(pairs.getValue().toString()) + "'";
                 it.remove();
             }
             sql += " SET " + valueString;
