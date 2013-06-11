@@ -45,6 +45,7 @@ import com.wolvencraft.yasp.listeners.DeathListener;
 import com.wolvencraft.yasp.listeners.ItemListener;
 import com.wolvencraft.yasp.listeners.PlayerListener;
 import com.wolvencraft.yasp.listeners.ServerListener;
+import com.wolvencraft.yasp.listeners.SessionListener;
 import com.wolvencraft.yasp.listeners.StatsBookListener;
 import com.wolvencraft.yasp.listeners.StatsSignListener;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
@@ -128,14 +129,15 @@ public class Statistics extends JavaPlugin {
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
         
         new CommandManager();
-        
-        new ServerListener(this);
-        new PlayerListener(this);
+
         if(Module.Blocks.isEnabled()) new BlockListener(this);
-        if(Module.Items.isEnabled()) new ItemListener(this);
         if(Module.Deaths.isEnabled()) new DeathListener(this);
-        new StatsSignListener(this);
+        if(Module.Items.isEnabled()) new ItemListener(this);
+        new PlayerListener(this);
+        new ServerListener(this);
+        new SessionListener(this);
         if(isCraftBukkitCompatible()) new StatsBookListener(this);
+        new StatsSignListener(this);
         
         serverStatistics = new ServerStatistics();
         serverTotals = new ServerTotals();
