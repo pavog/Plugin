@@ -20,10 +20,9 @@
 
 package com.wolvencraft.yasp.db.data.hooks.factions;
 
-import org.bukkit.entity.Player;
-
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
+import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * Hooks into Factions to track its statistics
@@ -32,8 +31,8 @@ import com.wolvencraft.yasp.db.data.DetailedData;
  */
 public class FactionsData extends AdvancedDataStore<FactionsPlayerEntry, DetailedData> {
     
-    public FactionsData(Player player, int playerId) {
-        super(playerId, DataStoreType.Hook_Factions);
+    public FactionsData(OnlineSession session) {
+        super(session, DataStoreType.Hook_Factions);
     }
     
 }

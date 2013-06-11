@@ -1,5 +1,5 @@
 /*
- * WorldGuardData.java
+ * SessionCreateEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,21 +18,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.hooks.worldguard;
+package com.wolvencraft.yasp.api.events.session;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
-import com.wolvencraft.yasp.db.data.DetailedData;
+import org.bukkit.event.HandlerList;
+
+import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
- * WorldGuard data store
+ * Called when a new player session is being created
  * @author bitWolfy
  *
  */
-public class WorldGuardData extends AdvancedDataStore<WorldGuardPlayerEntry, DetailedData> {
+public class SessionCreateEvent extends StatisticsPlayerEvent {
     
-    public WorldGuardData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Vault);
+    private static final HandlerList handlers = new HandlerList();
+    
+    public SessionCreateEvent(OnlineSession session) {
+        super(session);
     }
-
+    
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 }

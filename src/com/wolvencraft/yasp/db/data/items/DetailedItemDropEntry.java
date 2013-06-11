@@ -1,5 +1,5 @@
 /*
- * DetailedPlacedBlocksEntry.java
+ * DetailedDroppedItemsEntry.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,14 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.blocks;
+package com.wolvencraft.yasp.db.data.items;
 
 import org.bukkit.Location;
-import org.bukkit.block.BlockState;
+import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.PlacedBlocks;
+import com.wolvencraft.yasp.db.tables.Detailed.DroppedItems;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
@@ -35,35 +35,36 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class DetailedPlacedBlocksEntry extends DetailedData {
+public class DetailedItemDropEntry extends DetailedData {
     
-    private BlockState block;
+    private ItemStack stack;
     private Location location;
     private long timestamp;
 
     /**
      * <b>Default constructor</b><br />
-     * Creates a new DetailedPlacedBlocksEntry based on the data provided
-     * @param location Location of the block
-     * @param block BlockState of the block
+     * Creates a new DetailedDroppedItemsEntry based on the data provided
+     * @param location Location of the item
+     * @param stack Item stack
      */
-    public DetailedPlacedBlocksEntry(Location location, BlockState block) {
-        this.block = block;
+    public DetailedItemDropEntry(Location location, ItemStack stack) {
+        this.stack = stack.clone();
+        this.stack.setAmount(1);
         this.location = location.clone();
         timestamp = Util.getTimestamp();
     }
-
+    
     @Override
     public boolean pushData(int playerId) {
-        return Query.table(PlacedBlocks.TableName)
-            .value(PlacedBlocks.PlayerId, playerId)
-            .value(PlacedBlocks.MaterialId, MaterialCache.parse(block))
-            .value(PlacedBlocks.World, location.getWorld().getName())
-            .value(PlacedBlocks.XCoord, location.getBlockX())
-            .value(PlacedBlocks.YCoord, location.getBlockY())
-            .value(PlacedBlocks.ZCoord, location.getBlockZ())
-            .value(PlacedBlocks.Timestamp, timestamp)
-            .insert();
+        return Query.table(DroppedItems.TableName)
+                .value(DroppedItems.PlayerId, playerId)
+                .value(DroppedItems.MaterialId, MaterialCache.parse(stack))
+                .value(DroppedItems.World, location.getWorld().getName())
+                .value(DroppedItems.XCoord, location.getBlockX())
+                .value(DroppedItems.YCoord, location.getBlockY())
+                .value(DroppedItems.ZCoord, location.getBlockZ())
+                .value(DroppedItems.Timestamp, timestamp)
+                .insert();
     }
-    
+
 }

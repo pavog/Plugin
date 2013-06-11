@@ -1,5 +1,5 @@
 /*
- * WorldGuardData.java
+ * SessionRemoveEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,21 +18,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.hooks.worldguard;
+package com.wolvencraft.yasp.api.events.session;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
-import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.session.OnlineSession;
+import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+
+import org.bukkit.event.HandlerList;
+
+import com.wolvencraft.yasp.api.events.StatisticsEvent;
+import com.wolvencraft.yasp.session.DataSession;
 
 /**
- * WorldGuard data store
+ * Called when the player session expires.<br />
+ * This usually means that the player is offline
  * @author bitWolfy
  *
  */
-public class WorldGuardData extends AdvancedDataStore<WorldGuardPlayerEntry, DetailedData> {
+@AllArgsConstructor(access=AccessLevel.PUBLIC)
+public class SessionRemoveEvent extends StatisticsEvent {
     
-    public WorldGuardData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Vault);
+    private static final HandlerList handlers = new HandlerList();
+    private String playerName;
+    
+    public DataSession getSession() {
+        return new DataSession(playerName);
     }
-
+    
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * WorldGuardData.java
+ * StatisticsEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,21 +18,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.hooks.worldguard;
+package com.wolvencraft.yasp.api.events;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
-import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.session.OnlineSession;
+import org.bukkit.event.Event;
 
-/**
- * WorldGuard data store
- * @author bitWolfy
- *
- */
-public class WorldGuardData extends AdvancedDataStore<WorldGuardPlayerEntry, DetailedData> {
-    
-    public WorldGuardData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Vault);
-    }
+public abstract class StatisticsEvent extends Event {
 
 }

@@ -35,7 +35,7 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class DetailedDestroyedBlocksEntry extends DetailedData {
+public class DetailedBlockBrokenEntry extends DetailedData {
     
     private BlockState block;
     private Location location;
@@ -47,7 +47,7 @@ public class DetailedDestroyedBlocksEntry extends DetailedData {
      * @param location Location of the block
      * @param block BlockState of the block
      */
-    public DetailedDestroyedBlocksEntry(Location location, BlockState block) {
+    public DetailedBlockBrokenEntry(Location location, BlockState block) {
         this.block = block;
         this.location = location.clone();
         timestamp = Util.getTimestamp();

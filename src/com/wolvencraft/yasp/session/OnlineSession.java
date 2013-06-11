@@ -85,8 +85,8 @@ public class OnlineSession implements PlayerSession {
         this.playersData = new PlayersData(player, id);
         
         this.dataStores = new ArrayList<AdvancedDataStore>();
-        this.dataStores.addAll(Util.getModules(player, id));
-        this.dataStores.addAll(Util.getHooks(player, id));
+        this.dataStores.addAll(Util.getModules(this));
+        this.dataStores.addAll(Util.getHooks(this));
         
         this.playerTotals = new PlayerTotals(id);
         this.scoreboard = null;
@@ -106,7 +106,7 @@ public class OnlineSession implements PlayerSession {
         if(player == null) throw new InstantiationException("Player " + name + " is not online!");
 
         this.playersData = new PlayersData(player, id);
-        this.dataStores = Util.getModules(player, id);
+        this.dataStores = Util.getModules(this);
         this.playerTotals = new PlayerTotals(id);
     }
     

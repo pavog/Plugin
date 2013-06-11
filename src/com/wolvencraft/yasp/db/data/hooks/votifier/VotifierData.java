@@ -22,11 +22,12 @@ package com.wolvencraft.yasp.db.data.hooks.votifier;
 
 import com.vexsoftware.votifier.model.Vote;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.session.OnlineSession;
 
 public class VotifierData extends AdvancedDataStore<TotalVotifierEntry, DetailedVotifierEntry> {
     
-    public VotifierData(int playerId) {
-        super(playerId, DataStoreType.Hook_Vanish);
+    public VotifierData(OnlineSession session) {
+        super(session, DataStoreType.Hook_Vanish);
     }
     
     public void playerVoted(Vote vote) {
@@ -39,7 +40,7 @@ public class VotifierData extends AdvancedDataStore<TotalVotifierEntry, Detailed
         }
         
         if(entry == null) {
-            entry = new TotalVotifierEntry(playerId, vote);
+            entry = new TotalVotifierEntry(session.getId(), vote);
             normalData.add(entry);
         }
         

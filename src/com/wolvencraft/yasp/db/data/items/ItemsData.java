@@ -20,11 +20,16 @@
 
 package com.wolvencraft.yasp.db.data.items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.api.events.player.TrackedItemDropEvent;
+import com.wolvencraft.yasp.api.events.player.TrackedItemPickupEvent;
+import com.wolvencraft.yasp.api.events.player.TrackedItemUseEvent;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
+import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * Data store that records all item interactions on the server.
@@ -33,8 +38,8 @@ import com.wolvencraft.yasp.db.data.DetailedData;
  */
 public class ItemsData extends AdvancedDataStore<TotalItemsEntry, DetailedData> {
     
-    public ItemsData(int playerId) {
-        super(playerId, DataStoreType.Items);
+    public ItemsData(OnlineSession session) {
+        super(session, DataStoreType.Items);
     }
 
     /**
@@ -47,7 +52,7 @@ public class ItemsData extends AdvancedDataStore<TotalItemsEntry, DetailedData> 
         for(TotalItemsEntry entry : normalData) {
             if(entry.equals(itemStack)) return entry;
         }
-        TotalItemsEntry entry = new TotalItemsEntry(playerId, itemStack);
+        TotalItemsEntry entry = new TotalItemsEntry(session.getId(), itemStack);
         normalData.add(entry);
         return entry;
     }
@@ -61,7 +66,10 @@ public class ItemsData extends AdvancedDataStore<TotalItemsEntry, DetailedData> 
         int amount = itemStack.getAmount();
         getNormalData(itemStack).addDropped(amount);
         for(int i = 0; i < amount; i++) {
-            detailedData.add(new DetailedDroppedItemsEntry(location, itemStack));
+            DetailedItemDropEntry detailedEntry = new DetailedItemDropEntry(location, itemStack);
+            detailedData.add(detailedEntry);
+            
+            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemDropEvent(session, detailedEntry));
         }
     }
     
@@ -74,7 +82,10 @@ public class ItemsData extends AdvancedDataStore<TotalItemsEntry, DetailedData> 
         int amount = itemStack.getAmount();
         getNormalData(itemStack).addPickedUp(amount);
         for(int i = 0; i < amount; i++) {
-            detailedData.add(new DetailedPickedUpItemsEntry(location, itemStack));
+            DetailedItemPickupEntry detailedEntry = new DetailedItemPickupEntry(location, itemStack);
+            detailedData.add(detailedEntry);
+            
+            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemPickupEvent(session, detailedEntry));
         }
     }
     
@@ -87,7 +98,10 @@ public class ItemsData extends AdvancedDataStore<TotalItemsEntry, DetailedData> 
         int amount = itemStack.getAmount();
         getNormalData(itemStack).addUsed(amount);
         for(int i = 0; i < amount; i++) {
-            detailedData.add(new DetailedUsedItemsEntry(location, itemStack));
+            DetailedItemUseEntry detailedEntry = new DetailedItemUseEntry(location, itemStack);
+            detailedData.add(detailedEntry);
+            
+            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemUseEvent(session, detailedEntry));
         }
     }
     

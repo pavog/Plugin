@@ -1,5 +1,5 @@
 /*
- * SessionCreateEvent.java
+ * SynchronizationEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,31 +18,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events;
+package com.wolvencraft.yasp.api.events.plugin;
 
-import lombok.Getter;
 import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 
-import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.api.events.StatisticsEvent;
 
 /**
- * Called when a new player session is being created
+ * Called when the database synchronization is starting
  * @author bitWolfy
  *
  */
 @Getter(AccessLevel.PUBLIC)
-public class SessionCreateEvent extends PlayerEvent {
+public class SynchronizationEvent extends StatisticsEvent implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
-    private OnlineSession session;
+    private int processId;
+    @Setter(AccessLevel.PUBLIC)
+    private boolean cancelled;
     
-    public SessionCreateEvent(Player player, OnlineSession session) {
-        super(player);
-        this.session = session;
+    public SynchronizationEvent(int processId) {
+        this.processId = processId;
+        this.cancelled = false;
     }
     
     @Override

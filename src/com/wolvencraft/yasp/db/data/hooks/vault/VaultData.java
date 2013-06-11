@@ -20,10 +20,9 @@
 
 package com.wolvencraft.yasp.db.data.hooks.vault;
 
-import org.bukkit.entity.Player;
-
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
+import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * Hooks into Vault to track its statistics
@@ -32,8 +31,8 @@ import com.wolvencraft.yasp.db.data.DetailedData;
  */
 public class VaultData extends AdvancedDataStore<VaultPlayerEntry, DetailedData> {
     
-    public VaultData(Player player, int playerId) {
-        super(playerId, DataStoreType.Hook_Vault);
+    public VaultData(OnlineSession session) {
+        super(session, DataStoreType.Hook_Vault);
     }
     
 }

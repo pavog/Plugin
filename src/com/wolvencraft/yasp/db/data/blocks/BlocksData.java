@@ -20,11 +20,15 @@
 
 package com.wolvencraft.yasp.db.data.blocks;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 
+import com.wolvencraft.yasp.api.events.player.TrackedBlockBrokenEvent;
+import com.wolvencraft.yasp.api.events.player.TrackedBlockPlacedEvent;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
+import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * Data store that records all block interactions on the server.
@@ -33,8 +37,8 @@ import com.wolvencraft.yasp.db.data.DetailedData;
  */
 public class BlocksData extends AdvancedDataStore<TotalBlocksEntry, DetailedData> {
     
-    public BlocksData(int playerId) {
-        super(playerId, DataStoreType.Blocks);
+    public BlocksData(OnlineSession session) {
+        super(session, DataStoreType.Blocks);
     }
 
     /**
@@ -47,29 +51,37 @@ public class BlocksData extends AdvancedDataStore<TotalBlocksEntry, DetailedData
         for(TotalBlocksEntry entry : normalData) {
             if(entry.equals(block)) return entry;
         }
-        TotalBlocksEntry entry = new TotalBlocksEntry(playerId, block);
+        TotalBlocksEntry entry = new TotalBlocksEntry(session.getId(), block);
         normalData.add(entry);
         return entry;
     }
     
     /**
      * Registers the broken block in the data stores
+     * @param session Corresponding OnlineSession
      * @param location Location of the block
      * @param block BlockState of the block
      */
     public void blockBreak(Location location, BlockState block) {
         getNormalData(block).addBroken();
-        detailedData.add(new DetailedDestroyedBlocksEntry(location, block));
+        DetailedBlockBrokenEntry detailedEntry = new DetailedBlockBrokenEntry(location, block);
+        detailedData.add(detailedEntry);
+        
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockBrokenEvent(session, detailedEntry));
     }
     
     /**
      * Registers the placed block in the data stores
+     * @param session Corresponding OnlineSession
      * @param location Location of the block
      * @param block BlockState of the block
      */
     public void blockPlace(Location location, BlockState block) {
         getNormalData(block).addPlaced();
-        detailedData.add(new DetailedPlacedBlocksEntry(location, block));
+        DetailedBlockPlacedEntry detailedEntry = new DetailedBlockPlacedEntry(location, block);
+        detailedData.add(detailedEntry);
+        
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlacedEvent(session, detailedEntry));
     }
     
 }

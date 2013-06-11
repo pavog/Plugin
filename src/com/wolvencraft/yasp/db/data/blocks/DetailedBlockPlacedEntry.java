@@ -1,5 +1,5 @@
 /*
- * PickedUpItemsEntry.java
+ * DetailedPlacedBlocksEntry.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,14 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.items;
+package com.wolvencraft.yasp.db.data.blocks;
 
 import org.bukkit.Location;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.block.BlockState;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.PickedupItems;
+import com.wolvencraft.yasp.db.tables.Detailed.PlacedBlocks;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
@@ -35,36 +35,35 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class DetailedPickedUpItemsEntry extends DetailedData {
+public class DetailedBlockPlacedEntry extends DetailedData {
     
-    private ItemStack stack;
+    private BlockState block;
     private Location location;
     private long timestamp;
-    
+
     /**
      * <b>Default constructor</b><br />
-     * Creates a new DetailedPickedupItemsEntry based on the data provided
-     * @param location Item location
-     * @param stack Item stack
+     * Creates a new DetailedPlacedBlocksEntry based on the data provided
+     * @param location Location of the block
+     * @param block BlockState of the block
      */
-    public DetailedPickedUpItemsEntry(Location location, ItemStack stack) {
-        this.stack = stack.clone();
-        this.stack.setAmount(1);
+    public DetailedBlockPlacedEntry(Location location, BlockState block) {
+        this.block = block;
         this.location = location.clone();
         timestamp = Util.getTimestamp();
     }
-    
+
     @Override
     public boolean pushData(int playerId) {
-        return Query.table(PickedupItems.TableName)
-                .value(PickedupItems.PlayerId, playerId)
-                .value(PickedupItems.Material, MaterialCache.parse(stack))
-                .value(PickedupItems.World, location.getWorld().getName())
-                .value(PickedupItems.XCoord, location.getBlockX())
-                .value(PickedupItems.YCoord, location.getBlockY())
-                .value(PickedupItems.ZCoord, location.getBlockZ())
-                .value(PickedupItems.Timestamp, timestamp)
-                .insert();
+        return Query.table(PlacedBlocks.TableName)
+            .value(PlacedBlocks.PlayerId, playerId)
+            .value(PlacedBlocks.MaterialId, MaterialCache.parse(block))
+            .value(PlacedBlocks.World, location.getWorld().getName())
+            .value(PlacedBlocks.XCoord, location.getBlockX())
+            .value(PlacedBlocks.YCoord, location.getBlockY())
+            .value(PlacedBlocks.ZCoord, location.getBlockZ())
+            .value(PlacedBlocks.Timestamp, timestamp)
+            .insert();
     }
-
+    
 }

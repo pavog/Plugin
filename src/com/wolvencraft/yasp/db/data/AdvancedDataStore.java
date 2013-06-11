@@ -26,6 +26,8 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 
+import com.wolvencraft.yasp.session.OnlineSession;
+
 /**
  * Common interface for all data stores
  * @author bitWolfy
@@ -34,13 +36,13 @@ import lombok.Getter;
 public abstract class AdvancedDataStore<N extends NormalData, D extends DetailedData> {
     
     @Getter(AccessLevel.PUBLIC) private DataStoreType type;
-    @Getter(AccessLevel.PUBLIC) protected int playerId;
+    @Getter(AccessLevel.PUBLIC) protected OnlineSession session;
     
     protected List<N> normalData;
     protected List<D> detailedData;
     
-    public AdvancedDataStore(int playerId, DataStoreType type) {
-        this.playerId = playerId;
+    public AdvancedDataStore(OnlineSession session, DataStoreType type) {
+        this.session = session;
         this.type = type;
         this.normalData = new ArrayList<N>();
         this.detailedData = new ArrayList<D>();
@@ -69,11 +71,11 @@ public abstract class AdvancedDataStore<N extends NormalData, D extends Detailed
      */
     public void pushData() {
         for(N entry : getNormalData()) {
-            if(((NormalData) entry).pushData(playerId)) normalData.remove(entry);
+            if(((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
         }
         
         for(D entry : getDetailedData()) {
-            if(((DetailedData) entry).pushData(playerId)) detailedData.remove(entry);
+            if(((DetailedData) entry).pushData(session.getId())) detailedData.remove(entry);
         }
     }
     

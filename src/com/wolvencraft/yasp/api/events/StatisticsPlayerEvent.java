@@ -1,5 +1,5 @@
 /*
- * DatabasePatchEvent.java
+ * StatisticsPlayerEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -20,36 +20,22 @@
 
 package com.wolvencraft.yasp.api.events;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.AccessLevel;
 
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+import org.bukkit.Bukkit;
+import org.bukkit.event.player.PlayerEvent;
 
-/**
- * Called when the plugin is being patched by the database
- * @author bitWolfy
- *
- */
+import com.wolvencraft.yasp.session.OnlineSession;
+
 @Getter(AccessLevel.PUBLIC)
-public class DatabasePatchEvent extends Event implements Cancellable {
+public abstract class StatisticsPlayerEvent extends PlayerEvent {
     
-    private static final HandlerList handlers = new HandlerList();
+    OnlineSession session;
+    
+    public StatisticsPlayerEvent(OnlineSession session) {
+        super(Bukkit.getServer().getPlayer(session.getName()));
+        this.session = session;
+    }
 
-    @Setter(AccessLevel.PUBLIC)
-    private boolean cancelled;
-    private String patchId;
-    
-    public DatabasePatchEvent(String patchId) {
-        this.patchId = patchId;
-        this.cancelled = false;
-    }
-    
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-    
 }

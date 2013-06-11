@@ -23,8 +23,8 @@ package com.wolvencraft.yasp.util.tasks;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.api.events.SynchronizationCompleteEvent;
-import com.wolvencraft.yasp.api.events.SynchronizationEvent;
+import com.wolvencraft.yasp.api.events.plugin.SynchronizationCompleteEvent;
+import com.wolvencraft.yasp.api.events.plugin.SynchronizationEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;

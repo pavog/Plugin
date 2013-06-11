@@ -20,10 +20,13 @@
 
 package com.wolvencraft.yasp.db.data.pvp;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.api.events.player.TrackedPVPEvent;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
@@ -36,9 +39,10 @@ public class PVPData extends AdvancedDataStore<TotalPVPEntry, DetailedPVPEntry> 
     /**
      * <b>Default constructor</b><br />
      * Creates an empty data store to save the statistics until database synchronization.
+     * @param session Player session
      */
-    public PVPData(int playerId) {
-        super(playerId, DataStoreType.PVP);
+    public PVPData(OnlineSession session) {
+        super(session, DataStoreType.PVP);
     }
     
     /**
@@ -52,7 +56,7 @@ public class PVPData extends AdvancedDataStore<TotalPVPEntry, DetailedPVPEntry> 
         for(TotalPVPEntry entry : normalData) {
             if(entry.equals(victimId, weapon)) return entry;
         }
-        TotalPVPEntry entry = new TotalPVPEntry(playerId, victimId, weapon);
+        TotalPVPEntry entry = new TotalPVPEntry(session.getId(), victimId, weapon);
         normalData.add(entry);
         return entry;
     }
@@ -65,7 +69,10 @@ public class PVPData extends AdvancedDataStore<TotalPVPEntry, DetailedPVPEntry> 
     public void playerKilledPlayer(Player victim, ItemStack weapon) {
         int victimId = PlayerCache.get(victim);
         getNormalData(victimId, weapon).addTimes();
-        detailedData.add(new DetailedPVPEntry(victim.getLocation(), victimId, weapon));
+        DetailedPVPEntry detailedEntry = new DetailedPVPEntry(victim.getLocation(), victimId, weapon);
+        detailedData.add(detailedEntry);
+        
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedPVPEvent(session, detailedEntry));
     }
     
 }

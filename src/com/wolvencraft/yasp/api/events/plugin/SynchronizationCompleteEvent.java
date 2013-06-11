@@ -1,5 +1,5 @@
 /*
- * WorldGuardData.java
+ * SynchronizationCompletionEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,21 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.hooks.worldguard;
+package com.wolvencraft.yasp.api.events.plugin;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
-import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.session.OnlineSession;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import org.bukkit.event.HandlerList;
+
+import com.wolvencraft.yasp.api.events.StatisticsEvent;
 
 /**
- * WorldGuard data store
+ * Called when the data has been synchronized with the database
  * @author bitWolfy
  *
  */
-public class WorldGuardData extends AdvancedDataStore<WorldGuardPlayerEntry, DetailedData> {
+@AllArgsConstructor(access=AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
+public class SynchronizationCompleteEvent extends StatisticsEvent {
     
-    public WorldGuardData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Vault);
+    private static final HandlerList handlers = new HandlerList();
+    private int processId;
+    
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
     }
-
+    
 }

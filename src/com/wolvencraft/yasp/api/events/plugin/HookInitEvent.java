@@ -18,16 +18,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events;
+package com.wolvencraft.yasp.api.events.plugin;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import com.wolvencraft.yasp.api.events.StatisticsEvent;
 import com.wolvencraft.yasp.settings.Module;
 
 /**
@@ -36,7 +36,7 @@ import com.wolvencraft.yasp.settings.Module;
  *
  */
 @Getter(AccessLevel.PUBLIC)
-public class HookInitEvent extends Event implements Cancellable {
+public class HookInitEvent extends StatisticsEvent implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
 

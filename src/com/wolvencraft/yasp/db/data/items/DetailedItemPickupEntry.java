@@ -1,5 +1,5 @@
 /*
- * DetailedDroppedItemsEntry.java
+ * PickedUpItemsEntry.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.DroppedItems;
+import com.wolvencraft.yasp.db.tables.Detailed.PickedupItems;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
@@ -35,19 +35,19 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class DetailedDroppedItemsEntry extends DetailedData {
+public class DetailedItemPickupEntry extends DetailedData {
     
     private ItemStack stack;
     private Location location;
     private long timestamp;
-
+    
     /**
      * <b>Default constructor</b><br />
-     * Creates a new DetailedDroppedItemsEntry based on the data provided
-     * @param location Location of the item
+     * Creates a new DetailedPickedupItemsEntry based on the data provided
+     * @param location Item location
      * @param stack Item stack
      */
-    public DetailedDroppedItemsEntry(Location location, ItemStack stack) {
+    public DetailedItemPickupEntry(Location location, ItemStack stack) {
         this.stack = stack.clone();
         this.stack.setAmount(1);
         this.location = location.clone();
@@ -56,14 +56,14 @@ public class DetailedDroppedItemsEntry extends DetailedData {
     
     @Override
     public boolean pushData(int playerId) {
-        return Query.table(DroppedItems.TableName)
-                .value(DroppedItems.PlayerId, playerId)
-                .value(DroppedItems.MaterialId, MaterialCache.parse(stack))
-                .value(DroppedItems.World, location.getWorld().getName())
-                .value(DroppedItems.XCoord, location.getBlockX())
-                .value(DroppedItems.YCoord, location.getBlockY())
-                .value(DroppedItems.ZCoord, location.getBlockZ())
-                .value(DroppedItems.Timestamp, timestamp)
+        return Query.table(PickedupItems.TableName)
+                .value(PickedupItems.PlayerId, playerId)
+                .value(PickedupItems.Material, MaterialCache.parse(stack))
+                .value(PickedupItems.World, location.getWorld().getName())
+                .value(PickedupItems.XCoord, location.getBlockX())
+                .value(PickedupItems.YCoord, location.getBlockY())
+                .value(PickedupItems.ZCoord, location.getBlockZ())
+                .value(PickedupItems.Timestamp, timestamp)
                 .insert();
     }
 

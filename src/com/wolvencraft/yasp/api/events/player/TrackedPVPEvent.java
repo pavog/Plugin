@@ -1,5 +1,5 @@
 /*
- * WorldGuardData.java
+ * TrackedPVPKillEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,21 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.hooks.worldguard;
+package com.wolvencraft.yasp.api.events.player;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
-import com.wolvencraft.yasp.db.data.DetailedData;
+import lombok.AccessLevel;
+import lombok.Getter;
+
+import org.bukkit.event.HandlerList;
+
+import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.db.data.pvp.DetailedPVPEntry;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-/**
- * WorldGuard data store
- * @author bitWolfy
- *
- */
-public class WorldGuardData extends AdvancedDataStore<WorldGuardPlayerEntry, DetailedData> {
+@Getter(AccessLevel.PUBLIC)
+public class TrackedPVPEvent extends StatisticsPlayerEvent {
     
-    public WorldGuardData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Vault);
+    private static final HandlerList handlers = new HandlerList();
+    private DetailedPVPEntry data;
+    
+    public TrackedPVPEvent(OnlineSession session, DetailedPVPEntry data) {
+        super(session);
+        this.data = data;
     }
 
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+    
 }

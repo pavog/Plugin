@@ -42,6 +42,7 @@ import com.wolvencraft.yasp.db.data.hooks.worldguard.WorldGuardData;
 import com.wolvencraft.yasp.db.data.items.ItemsData;
 import com.wolvencraft.yasp.db.data.pve.PVEData;
 import com.wolvencraft.yasp.db.data.pvp.PVPData;
+import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Module;
 
 /**
@@ -64,35 +65,33 @@ public class Util {
     
     /**
      * Composes a list of active modules for the player
-     * @param player Player object
-     * @param playerId Player ID
+     * @param session Player session
      * @return List of modules
      */
     @SuppressWarnings("rawtypes")
-    public static List<AdvancedDataStore> getModules(Player player, int playerId) {
+    public static List<AdvancedDataStore> getModules(OnlineSession session) {
         List<AdvancedDataStore> dataStores = new ArrayList<AdvancedDataStore>();
-        if(Module.Blocks.isEnabled()) dataStores.add(new BlocksData(playerId));
-        if(Module.Items.isEnabled()) dataStores.add(new ItemsData(playerId));
+        if(Module.Blocks.isEnabled()) dataStores.add(new BlocksData(session));
+        if(Module.Items.isEnabled()) dataStores.add(new ItemsData(session));
         if(Module.Deaths.isEnabled()) {
-            dataStores.add(new DeathsData(playerId));
-            dataStores.add(new PVEData(playerId));
-            dataStores.add(new PVPData(playerId));
+            dataStores.add(new DeathsData(session));
+            dataStores.add(new PVEData(session));
+            dataStores.add(new PVPData(session));
         }
         return dataStores;
     }
     
     /**
      * Composes a list of active plugin hooks for the player
-     * @param player Player object
-     * @param playerId Player ID
+     * @param session Player session
      * @return List of plugin hooks
      */
     @SuppressWarnings("rawtypes")
-    public static List<AdvancedDataStore> getHooks(Player player, int playerId) {
+    public static List<AdvancedDataStore> getHooks(OnlineSession session) {
         List<AdvancedDataStore> dataStores = new ArrayList<AdvancedDataStore>();
-        if(Module.Vault.isActive()) dataStores.add(new VaultData(player, playerId));
-        if(Module.WorldGuard.isActive()) dataStores.add(new WorldGuardData(player, playerId));
-        if(Module.Factions.isActive()) dataStores.add(new FactionsData(player, playerId));
+        if(Module.Vault.isActive()) dataStores.add(new VaultData(session));
+        if(Module.WorldGuard.isActive()) dataStores.add(new WorldGuardData(session));
+        if(Module.Factions.isActive()) dataStores.add(new FactionsData(session));
         return dataStores;
     }
     

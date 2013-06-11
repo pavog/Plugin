@@ -1,5 +1,5 @@
 /*
- * SessionRemoveEvent.java
+ * TrackedBlockBreakEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,34 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events;
+package com.wolvencraft.yasp.api.events.player;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.AccessLevel;
 
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.session.DataSession;
+import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.db.data.blocks.DetailedBlockBrokenEntry;
+import com.wolvencraft.yasp.session.OnlineSession;
 
-/**
- * Called when the player session expires.<br />
- * This usually means that the player is offline
- * @author bitWolfy
- *
- */
-@AllArgsConstructor(access=AccessLevel.PUBLIC)
-public class SessionRemoveEvent extends Event {
+@Getter(AccessLevel.PUBLIC)
+public class TrackedBlockBrokenEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private String playerName;
+    private DetailedBlockBrokenEntry data;
     
-    public DataSession getSession() {
-        return new DataSession(playerName);
+    public TrackedBlockBrokenEvent(OnlineSession session, DetailedBlockBrokenEntry data) {
+        super(session);
+        this.data = data;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
+    
 }

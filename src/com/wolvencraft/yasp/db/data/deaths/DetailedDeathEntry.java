@@ -1,5 +1,5 @@
 /*
- * DetailedUsedItemsEntry.java
+ * DetailedDeathsEntry.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,16 +18,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.items;
+package com.wolvencraft.yasp.db.data.deaths;
+
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import org.bukkit.Location;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.UsedItems;
+import com.wolvencraft.yasp.db.tables.Detailed.DeathPlayers;
 import com.wolvencraft.yasp.util.Util;
-import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
  * Represents an entry in the Detailed data store.
@@ -35,36 +37,37 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class DetailedUsedItemsEntry extends DetailedData {
-
-    private ItemStack stack;
+@Getter(AccessLevel.PUBLIC) 
+public class DetailedDeathEntry extends DetailedData {
+    
+    private DamageCause cause;
     private Location location;
     private long timestamp;
     
     /**
      * <b>Default constructor</b><br />
-     * Creates a new DetailedUsedItemsEntry based on the data provided
-     * @param location Item location
-     * @param stack Item stack
+     * Creates a new DetailedDeathPlayersEntry based on the data provided
+     * @param location
+     * @param deathCause
      */
-    public DetailedUsedItemsEntry(Location location, ItemStack stack) {
-        this.stack = stack.clone();
-        this.stack.setAmount(1);
+    public DetailedDeathEntry(Location location, DamageCause cause) {
+        this.cause = cause;
         this.location = location.clone();
         timestamp = Util.getTimestamp();
     }
-    
+
     @Override
     public boolean pushData(int playerId) {
-        return Query.table(UsedItems.TableName)
-                .value(UsedItems.PlayerId, playerId)
-                .value(UsedItems.MaterialId, MaterialCache.parse(stack))
-                .value(UsedItems.World, location.getWorld().getName())
-                .value(UsedItems.XCoord, location.getBlockX())
-                .value(UsedItems.YCoord, location.getBlockY())
-                .value(UsedItems.ZCoord, location.getBlockZ())
-                .value(UsedItems.Timestamp, timestamp)
+        return Query.table(DeathPlayers.TableName)
+                .value(DeathPlayers.PlayerId, playerId)
+                .value(DeathPlayers.Cause, cause.name())
+                .value(DeathPlayers.World, location.getWorld().getName())
+                .value(DeathPlayers.XCoord, location.getBlockX())
+                .value(DeathPlayers.YCoord, location.getBlockY())
+                .value(DeathPlayers.ZCoord, location.getBlockZ())
+                .value(DeathPlayers.Timestamp, timestamp)
                 .insert();
     }
 
 }
+

@@ -1,5 +1,5 @@
 /*
- * SynchronizationEvent.java
+ * TrackedItemDropEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,36 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events;
+package com.wolvencraft.yasp.api.events.player;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/**
- * Called when the database synchronization is starting
- * @author bitWolfy
- *
- */
+import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.db.data.items.DetailedItemDropEntry;
+import com.wolvencraft.yasp.session.OnlineSession;
+
 @Getter(AccessLevel.PUBLIC)
-public class SynchronizationEvent extends Event implements Cancellable {
+public class TrackedItemDropEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private int processId;
-    @Setter(AccessLevel.PUBLIC)
-    private boolean cancelled;
+    private DetailedItemDropEntry data;
     
-    public SynchronizationEvent(int processId) {
-        this.processId = processId;
-        this.cancelled = false;
+    public TrackedItemDropEvent(OnlineSession session, DetailedItemDropEntry data) {
+        super(session);
+        this.data = data;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
+    
 }

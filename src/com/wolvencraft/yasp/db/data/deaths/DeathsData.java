@@ -20,25 +20,28 @@
 
 package com.wolvencraft.yasp.db.data.deaths;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import com.wolvencraft.yasp.api.events.player.TrackedDeathEvent;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * Data collector that records all item statistics on the server for a specific player.
  * @author bitWolfy
  *
  */
-public class DeathsData extends AdvancedDataStore<TotalDeathsEntry, DetailedDeathsEntry> {
+public class DeathsData extends AdvancedDataStore<TotalDeathsEntry, DetailedDeathEntry> {
 
     /**
      * <b>Default constructor</b><br />
      * Creates an empty data store to save the statistics until database synchronization.
-     * @param playerId Player ID
+     * @param session Player session
      */
-    public DeathsData(int playerId) {
-        super(playerId, DataStoreType.Deaths);
+    public DeathsData(OnlineSession session) {
+        super(session, DataStoreType.Deaths);
     }
     
     /**
@@ -53,12 +56,15 @@ public class DeathsData extends AdvancedDataStore<TotalDeathsEntry, DetailedDeat
         }
         
         if(entry == null) {
-            entry = new TotalDeathsEntry(playerId, cause);
+            entry = new TotalDeathsEntry(session.getId(), cause);
             normalData.add(entry);
         }
         
         entry.addTimes();
-        detailedData.add(new DetailedDeathsEntry(location, cause));
+        DetailedDeathEntry detailedEntry = new DetailedDeathEntry(location, cause);
+        detailedData.add(detailedEntry);
+        
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedDeathEvent(session, detailedEntry));
     }
     
 }
