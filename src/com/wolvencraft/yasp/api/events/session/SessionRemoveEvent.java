@@ -26,6 +26,7 @@ import lombok.AccessLevel;
 import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.api.events.StatisticsEvent;
+import com.wolvencraft.yasp.api.events.TrackedActionType;
 import com.wolvencraft.yasp.session.DataSession;
 
 /**
@@ -38,6 +39,7 @@ import com.wolvencraft.yasp.session.DataSession;
 public class SessionRemoveEvent extends StatisticsEvent {
     
     private static final HandlerList handlers = new HandlerList();
+    private static TrackedActionType actionType = TrackedActionType.LOGOUT;
     private String playerName;
     
     public DataSession getSession() {
@@ -47,5 +49,9 @@ public class SessionRemoveEvent extends StatisticsEvent {
     @Override
     public HandlerList getHandlers() {
         return handlers;
+    }
+    
+    public TrackedActionType getActionType() {
+        return actionType;
     }
 }

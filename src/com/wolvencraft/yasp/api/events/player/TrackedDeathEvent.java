@@ -26,6 +26,7 @@ import lombok.Getter;
 import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.api.events.TrackedActionType;
 import com.wolvencraft.yasp.db.data.deaths.DetailedDeathEntry;
 import com.wolvencraft.yasp.session.OnlineSession;
 
@@ -36,7 +37,7 @@ public class TrackedDeathEvent extends StatisticsPlayerEvent {
     private DetailedDeathEntry data;
     
     public TrackedDeathEvent(OnlineSession session, DetailedDeathEntry data) {
-        super(session);
+        super(session, TrackedActionType.DEATH);
         this.data = data;
     }
 

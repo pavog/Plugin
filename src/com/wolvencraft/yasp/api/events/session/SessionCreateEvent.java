@@ -23,6 +23,7 @@ package com.wolvencraft.yasp.api.events.session;
 import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.api.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
@@ -35,7 +36,7 @@ public class SessionCreateEvent extends StatisticsPlayerEvent {
     private static final HandlerList handlers = new HandlerList();
     
     public SessionCreateEvent(OnlineSession session) {
-        super(session);
+        super(session, TrackedActionType.LOGIN);
     }
     
     @Override

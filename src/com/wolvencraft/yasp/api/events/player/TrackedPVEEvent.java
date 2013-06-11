@@ -26,6 +26,7 @@ import lombok.Getter;
 import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.api.events.TrackedActionType;
 import com.wolvencraft.yasp.db.data.pve.DetailedPVEEntry;
 import com.wolvencraft.yasp.session.OnlineSession;
 
@@ -36,7 +37,7 @@ public class TrackedPVEEvent extends StatisticsPlayerEvent {
     private DetailedPVEEntry data;
     
     public TrackedPVEEvent(OnlineSession session, DetailedPVEEntry data) {
-        super(session);
+        super(session, TrackedActionType.PVE);
         this.data = data;
     }
 

@@ -31,11 +31,13 @@ import com.wolvencraft.yasp.session.OnlineSession;
 @Getter(AccessLevel.PUBLIC)
 public abstract class StatisticsPlayerEvent extends PlayerEvent {
     
-    OnlineSession session;
+    private OnlineSession session;
+    private TrackedActionType actionType;
     
-    public StatisticsPlayerEvent(OnlineSession session) {
+    public StatisticsPlayerEvent(OnlineSession session, TrackedActionType actionType) {
         super(Bukkit.getServer().getPlayer(session.getName()));
         this.session = session;
+        this.actionType = actionType;
     }
 
 }

@@ -26,6 +26,7 @@ import lombok.Getter;
 import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.api.events.TrackedActionType;
 import com.wolvencraft.yasp.db.data.items.DetailedItemDropEntry;
 import com.wolvencraft.yasp.session.OnlineSession;
 
@@ -36,7 +37,7 @@ public class TrackedItemDropEvent extends StatisticsPlayerEvent {
     private DetailedItemDropEntry data;
     
     public TrackedItemDropEvent(OnlineSession session, DetailedItemDropEntry data) {
-        super(session);
+        super(session, TrackedActionType.ITEM_DROP);
         this.data = data;
     }
 

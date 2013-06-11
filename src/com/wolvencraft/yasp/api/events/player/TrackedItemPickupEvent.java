@@ -26,6 +26,7 @@ import lombok.Getter;
 import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.api.events.TrackedActionType;
 import com.wolvencraft.yasp.db.data.items.DetailedItemPickupEntry;
 import com.wolvencraft.yasp.session.OnlineSession;
 
@@ -36,7 +37,7 @@ public class TrackedItemPickupEvent extends StatisticsPlayerEvent {
     private DetailedItemPickupEntry data;
     
     public TrackedItemPickupEvent(OnlineSession session, DetailedItemPickupEntry data) {
-        super(session);
+        super(session, TrackedActionType.ITEM_PICKUP);
         this.data = data;
     }
 
