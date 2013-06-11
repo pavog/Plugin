@@ -45,5 +45,11 @@ public class TrackedPVPEvent extends StatisticsPlayerEvent {
     public HandlerList getHandlers() {
         return handlers;
     }
+
+    @Override
+    public String getParameterString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }

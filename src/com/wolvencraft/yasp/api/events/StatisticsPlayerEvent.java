@@ -39,5 +39,11 @@ public abstract class StatisticsPlayerEvent extends PlayerEvent {
         this.session = session;
         this.actionType = actionType;
     }
+    
+    /**
+     * Returns the data associated with the event as a parameter
+     * @return Parameter String
+     */
+    public abstract String getParameterString();
 
 }

@@ -45,5 +45,11 @@ public class TrackedItemPickupEvent extends StatisticsPlayerEvent {
     public HandlerList getHandlers() {
         return handlers;
     }
+
+    @Override
+    public String getParameterString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }

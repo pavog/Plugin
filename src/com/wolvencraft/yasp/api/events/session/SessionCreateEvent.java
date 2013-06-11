@@ -43,4 +43,9 @@ public class SessionCreateEvent extends StatisticsPlayerEvent {
     public HandlerList getHandlers() {
         return handlers;
     }
+
+    @Override
+    public String getParameterString() {
+        return getSession().getName();
+    }
 }
