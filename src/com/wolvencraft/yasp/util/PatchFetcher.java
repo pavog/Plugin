@@ -167,6 +167,7 @@ public class PatchFetcher {
         YASPX           ("yaspx"),
         
         AdminCmd        ("admincmd"),
+        Awardments      ("awardments"),
         BanHammer       ("banhammer"),
         Citizens        ("citizens"),
         CommandBook     ("commandbook"),

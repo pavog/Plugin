@@ -40,6 +40,7 @@ public enum Module {
     Inventory   ("inventory"),
     
     AdminCmd    ("admincmd", true),
+    Awardments  ("awardments", true),
     BanHammer   ("banhammer", true),
     Citizens    ("citizens", true),
     CommandBook ("commandbook", true),

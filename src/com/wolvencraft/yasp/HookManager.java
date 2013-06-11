@@ -35,6 +35,7 @@ import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
 import com.wolvencraft.yasp.util.hooks.AdminCmdHook;
+import com.wolvencraft.yasp.util.hooks.AwardmentsHook;
 import com.wolvencraft.yasp.util.hooks.BanHammerHook;
 import com.wolvencraft.yasp.util.hooks.CitizensHook;
 import com.wolvencraft.yasp.util.hooks.CommandBookHook;
@@ -114,6 +115,7 @@ public class HookManager {
     public enum ApplicableHook {
         
         ADMIN_CMD       (AdminCmdHook.class, Module.AdminCmd, PatchType.AdminCmd, "AdminCmd"),
+        AWARDMENTS      (AwardmentsHook.class, Module.Awardments, PatchType.Awardments, "Awardments"),
         BAN_HAMMER      (BanHammerHook.class, Module.BanHammer, PatchType.BanHammer, "BanHammer"),
         CITIZENS        (CitizensHook.class, Module.Citizens, PatchType.Citizens, "Citizens"),
         COMMAND_BOOK    (CommandBookHook.class, Module.CommandBook, PatchType.CommandBook, "CommandBook"),
