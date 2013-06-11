@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.bukkit.potion.PotionEffect;
 
+import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -57,7 +58,13 @@ public class EffectsSerializable {
      */
     public static String serialize(Collection<PotionEffect> effects) {
         List<EffectsSerializable> potEffects = new ArrayList<EffectsSerializable>();
-        for(PotionEffect eff : effects) potEffects.add(new EffectsSerializable(eff));
+        for(PotionEffect eff : effects) {
+            try { potEffects.add(new EffectsSerializable(eff)); }
+            catch (Throwable t) {
+                ExceptionHandler.handle(t, true);
+                continue;
+            }
+        }
         return Util.toJsonArray(potEffects);
     }
 }

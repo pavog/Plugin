@@ -28,6 +28,8 @@ import java.util.Map.Entry;
 
 import org.bukkit.enchantments.Enchantment;
 
+import com.wolvencraft.yasp.util.ExceptionHandler;
+
 /**
  * Provides means to serialize a <code>Map&lt;Enchantment, Integer&gt;</code> into a Json array
  * @author bitWolfy
@@ -59,8 +61,13 @@ public class EnchantmentsSerializable {
         List<EnchantmentsSerializable> enchList = new ArrayList<EnchantmentsSerializable>();
         Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<Enchantment, Integer> enchantment = (Map.Entry<Enchantment, Integer>)it.next();
-            enchList.add(new EnchantmentsSerializable(enchantment.getKey(), enchantment.getValue().intValue()));
+            try {
+                Map.Entry<Enchantment, Integer> enchantment = (Map.Entry<Enchantment, Integer>)it.next();
+                enchList.add(new EnchantmentsSerializable(enchantment.getKey(), enchantment.getValue().intValue()));
+            } catch (Throwable t) {
+                ExceptionHandler.handle(t, true);
+                continue;
+            }
         }
         return enchList;
     }

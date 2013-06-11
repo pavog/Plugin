@@ -26,6 +26,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
@@ -69,8 +70,13 @@ public class InventorySerializable {
     public static String serialize(List<ItemStack> inventoryRow) {
         List<InventorySerializable> invRow = new ArrayList<InventorySerializable>();
         for(ItemStack stack : inventoryRow) {
-            if(stack == null) { stack = new ItemStack(Material.AIR); }
-            invRow.add(new InventorySerializable(stack));
+            try {
+                if(stack == null) { stack = new ItemStack(Material.AIR); }
+                invRow.add(new InventorySerializable(stack));
+            } catch (Throwable t) {
+                ExceptionHandler.handle(t, true);
+                continue;
+            }
         }
         return Util.toJsonArray(invRow);
     }

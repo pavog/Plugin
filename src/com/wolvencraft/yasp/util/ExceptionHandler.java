@@ -26,13 +26,29 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import com.wolvencraft.yasp.CommandManager.CommandPair;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.Statistics;
 
 public class ExceptionHandler {
     
     private static String lastError = "";
     
+    /**
+     * Display a properly formatted error log in the server console
+     * @param t Throwable to format
+     */
     public static void handle(Throwable t) {
+        handle(t, false);
+    }
+    
+    /**
+     * Display a properly formatted error log in the server console.
+     * @param t Throwable to format
+     * @param debug If <b>true</b>, will perform a check to see if the debug mode is enabled
+     */
+    public static void handle(Throwable t, boolean debug) {
+        if(debug && !LocalConfiguration.Debug.asBoolean()) return;
+        
         if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
         else lastError = t.getLocalizedMessage();
         
@@ -63,6 +79,13 @@ public class ExceptionHandler {
                 );
     }
     
+    /**
+     * Display a properly formatted error log in the server console.
+     * Used to handle errors that occur while executing a command
+     * @param t Throwable
+     * @param sender Command sender
+     * @param command Command pair that was sent
+     */
     public static void handle(Throwable t, CommandSender sender, CommandPair command) {
         if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
         else lastError = t.getLocalizedMessage();
