@@ -20,6 +20,9 @@
 
 package com.wolvencraft.yasp.db.data.players;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
@@ -32,6 +35,7 @@ import com.wolvencraft.yasp.settings.RemoteConfiguration;
  * @author bitWolfy
  *
  */
+@Getter(AccessLevel.PUBLIC)
 public class DistancePlayerEntry extends NormalData {
     
     private double foot;

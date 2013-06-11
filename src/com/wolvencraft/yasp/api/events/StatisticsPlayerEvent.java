@@ -42,6 +42,7 @@ public abstract class StatisticsPlayerEvent extends PlayerEvent {
     
     /**
      * Returns the data associated with the event as a parameter
+     * @deprecated Unsafe and unreliable
      * @return Parameter String
      */
     public abstract String getParameterString();

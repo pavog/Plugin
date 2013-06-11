@@ -20,6 +20,9 @@
 
 package com.wolvencraft.yasp.db.data.players;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import org.bukkit.Location;
 
 import com.wolvencraft.yasp.db.Query;
@@ -32,6 +35,7 @@ import com.wolvencraft.yasp.util.Util;
  * @author bitWolfy
  *
  */
+@Getter(AccessLevel.PUBLIC)
 public class DetailedLogPlayerEntry extends DetailedData {
     
     private long time;

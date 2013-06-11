@@ -21,11 +21,10 @@
 package com.wolvencraft.yasp.db.data.blocks;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 
-import com.wolvencraft.yasp.api.events.player.TrackedBlockBrokenEvent;
-import com.wolvencraft.yasp.api.events.player.TrackedBlockPlacedEvent;
+import com.wolvencraft.yasp.api.events.player.TrackedBlockBreakEvent;
+import com.wolvencraft.yasp.api.events.player.TrackedBlockPlaceEvent;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
@@ -58,30 +57,26 @@ public class BlocksData extends AdvancedDataStore<TotalBlocksEntry, DetailedData
     
     /**
      * Registers the broken block in the data stores
-     * @param session Corresponding OnlineSession
-     * @param location Location of the block
      * @param block BlockState of the block
      */
-    public void blockBreak(Location location, BlockState block) {
+    public void blockBreak(BlockState block) {
         getNormalData(block).addBroken();
-        DetailedBlockBrokenEntry detailedEntry = new DetailedBlockBrokenEntry(location, block);
+        DetailedBlockBreakEntry detailedEntry = new DetailedBlockBreakEntry(block);
         detailedData.add(detailedEntry);
         
-        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockBrokenEvent(session, detailedEntry));
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockBreakEvent(session, detailedEntry));
     }
     
     /**
      * Registers the placed block in the data stores
-     * @param session Corresponding OnlineSession
-     * @param location Location of the block
      * @param block BlockState of the block
      */
-    public void blockPlace(Location location, BlockState block) {
+    public void blockPlace(BlockState block) {
         getNormalData(block).addPlaced();
-        DetailedBlockPlacedEntry detailedEntry = new DetailedBlockPlacedEntry(location, block);
+        DetailedBlockPlaceEntry detailedEntry = new DetailedBlockPlaceEntry(block);
         detailedData.add(detailedEntry);
         
-        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlacedEvent(session, detailedEntry));
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlaceEvent(session, detailedEntry));
     }
     
 }

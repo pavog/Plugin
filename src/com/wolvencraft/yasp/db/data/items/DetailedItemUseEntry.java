@@ -20,6 +20,9 @@
 
 package com.wolvencraft.yasp.db.data.items;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
@@ -35,6 +38,7 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
+@Getter(AccessLevel.PUBLIC)
 public class DetailedItemUseEntry extends DetailedData {
 
     private ItemStack stack;

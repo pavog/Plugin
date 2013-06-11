@@ -1,5 +1,5 @@
 /*
- * TrackedBlockPlaceEvent.java
+ * TrackedBlockBreakEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -20,24 +20,24 @@
 
 package com.wolvencraft.yasp.api.events.player;
 
-import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.AccessLevel;
 
 import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
 import com.wolvencraft.yasp.api.events.TrackedActionType;
-import com.wolvencraft.yasp.db.data.blocks.DetailedBlockPlacedEntry;
+import com.wolvencraft.yasp.db.data.blocks.DetailedBlockBreakEntry;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 @Getter(AccessLevel.PUBLIC)
-public class TrackedBlockPlacedEvent extends StatisticsPlayerEvent {
+public class TrackedBlockBreakEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedBlockPlacedEntry data;
+    private DetailedBlockBreakEntry data;
     
-    public TrackedBlockPlacedEvent(OnlineSession session, DetailedBlockPlacedEntry data) {
-        super(session, TrackedActionType.BLOCK_PLACE);
+    public TrackedBlockBreakEvent(OnlineSession session, DetailedBlockBreakEntry data) {
+        super(session, TrackedActionType.BLOCK_BREAK);
         this.data = data;
     }
 
@@ -48,8 +48,7 @@ public class TrackedBlockPlacedEvent extends StatisticsPlayerEvent {
 
     @Override
     public String getParameterString() {
-        // TODO Auto-generated method stub
-        return null;
+        return data.getBlock().getTypeId() + ":" + data.getBlock().getRawData();
     }
     
 }

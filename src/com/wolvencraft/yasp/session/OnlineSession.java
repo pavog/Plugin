@@ -288,8 +288,8 @@ public class OnlineSession implements PlayerSession {
      * @param location Location of the block
      * @param block BlockState of the block
      */
-    public void blockBreak(Location location, BlockState block) {
-        ((BlocksData) getData(DataStoreType.Blocks)).blockBreak(location, block);
+    public void blockBreak(BlockState block) {
+        ((BlocksData) getData(DataStoreType.Blocks)).blockBreak(block);
         playerTotals.blockBreak();
     }
     
@@ -298,8 +298,8 @@ public class OnlineSession implements PlayerSession {
      * @param location Location of the block
      * @param block BlockState of the block
      */
-    public void blockPlace(Location location, BlockState block) {
-        ((BlocksData) getData(DataStoreType.Blocks)).blockPlace(location, block);
+    public void blockPlace(BlockState block) {
+        ((BlocksData) getData(DataStoreType.Blocks)).blockPlace(block);
         playerTotals.blockPlace();
     }
     

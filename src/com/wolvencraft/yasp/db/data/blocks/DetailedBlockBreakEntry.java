@@ -20,6 +20,9 @@
 
 package com.wolvencraft.yasp.db.data.blocks;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 
@@ -35,26 +38,25 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class DetailedBlockBrokenEntry extends DetailedData {
+@Getter(AccessLevel.PUBLIC)
+public class DetailedBlockBreakEntry extends DetailedData {
     
     private BlockState block;
-    private Location location;
     private long timestamp;
     
     /**
      * <b>Default constructor</b><br />
      * Creates a new DetailedDestroyedBlocksEntry based on the data provided
-     * @param location Location of the block
      * @param block BlockState of the block
      */
-    public DetailedBlockBrokenEntry(Location location, BlockState block) {
+    public DetailedBlockBreakEntry(BlockState block) {
         this.block = block;
-        this.location = location.clone();
         timestamp = Util.getTimestamp();
     }
 
     @Override
     public boolean pushData(int playerId) {
+        Location location = block.getLocation();
         return Query.table(DestroyedBlocks.TableName)
             .value(DestroyedBlocks.PlayerId, playerId)
             .value(DestroyedBlocks.MaterialId, MaterialCache.parse(block))

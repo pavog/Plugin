@@ -23,7 +23,7 @@ public class BlockHandlers {
         
         @Override
         public void run() {
-            OnlineSessionCache.fetch(player).blockBreak(block.getLocation(), block.getState());
+            OnlineSessionCache.fetch(player).blockBreak(block.getState());
         }
         
     }
@@ -41,7 +41,7 @@ public class BlockHandlers {
         
         @Override
         public void run() {
-            OnlineSessionCache.fetch(player).blockPlace(block.getLocation(), block.getState());
+            OnlineSessionCache.fetch(player).blockPlace(block.getState());
         }
         
     }

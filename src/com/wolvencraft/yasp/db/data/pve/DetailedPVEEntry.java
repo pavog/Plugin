@@ -20,6 +20,9 @@
 
 package com.wolvencraft.yasp.db.data.pve;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -38,6 +41,7 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
+@Getter(AccessLevel.PUBLIC)
 public class DetailedPVEEntry extends DetailedData {
     
     private EntityType creatureType;

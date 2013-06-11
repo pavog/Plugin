@@ -48,8 +48,7 @@ public class TrackedItemPickupEvent extends StatisticsPlayerEvent {
 
     @Override
     public String getParameterString() {
-        // TODO Auto-generated method stub
-        return null;
+        return data.getStack().getTypeId() + ":" + data.getStack().getDurability();
     }
     
 }

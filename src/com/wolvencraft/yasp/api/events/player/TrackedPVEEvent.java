@@ -48,8 +48,7 @@ public class TrackedPVEEvent extends StatisticsPlayerEvent {
 
     @Override
     public String getParameterString() {
-        // TODO Auto-generated method stub
-        return null;
+        return data.isPlayerKilled() + "";
     }
     
 }
