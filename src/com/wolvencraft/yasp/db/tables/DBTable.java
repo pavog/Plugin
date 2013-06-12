@@ -26,4 +26,12 @@ package com.wolvencraft.yasp.db.tables;
  * @author bitWolfy
  *
  */
-public interface DBTable { }
+public interface DBTable {
+    
+    /**
+     * Returns the name of the column
+     * @return Column name
+     */
+    public String getColumnName();
+    
+}

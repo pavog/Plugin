@@ -20,6 +20,10 @@
 
 package com.wolvencraft.yasp.db.tables;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Represents any non-detailed tables in the database.<br >
  * Stores table and column names, so that they can be safely used from the plugin
@@ -33,17 +37,14 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum SettingsTable implements DBTable {
-        TableName("settings"),
-        Key("key"),
-        Value("value");
-        
-        SettingsTable (String columnName) { this.columnName = columnName; }
+        TableName       ("settings"),
+        Key             ("key"),
+        Value           ("value");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -51,17 +52,14 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum ServerStatsTable implements DBTable {
-        TableName("server_statistics"),
-        Key("key"),
-        Value("value");
-        
-        ServerStatsTable (String columnName) { this.columnName = columnName; }
+        TableName       ("server_statistics"),
+        Key             ("key"),
+        Value           ("value");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -69,22 +67,19 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum DistancePlayersTable implements DBTable {
-        TableName("distances"),
-        PlayerId("player_id"),
-        Foot("foot"),
-        Swim("swim"),
-        Flight("flight"),
-        Boat("boat"),
-        Minecart("minecart"),
-        Pig("pig");
-        
-        DistancePlayersTable (String columnName) { this.columnName = columnName; }
+        TableName       ("distances"),
+        PlayerId        ("player_id"),
+        Foot            ("foot"),
+        Swim            ("swim"),
+        Flight          ("flight"),
+        Boat            ("boat"),
+        Minecart        ("minecart"),
+        Pig             ("pig");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -92,23 +87,20 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum PlayersTable implements DBTable {
-        TableName("players"),
-        PlayerId("player_id"),
-        Name("name"),
-        Online("online"),
-        LoginTime("login_time"),
-        Playtime("playtime"),
-        FirstLogin("first_login"),
-        LongestSession("longest_session"),
-        Logins("logins");
-        
-        PlayersTable (String columnName) { this.columnName = columnName; }
+        TableName       ("players"),
+        PlayerId        ("player_id"),
+        Name            ("name"),
+        Online          ("online"),
+        LoginTime       ("login_time"),
+        Playtime        ("playtime"),
+        FirstLogin      ("first_login"),
+        LongestSession  ("longest_session"),
+        Logins          ("logins");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -116,39 +108,36 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum MiscInfoPlayersTable implements DBTable {
-        TableName("misc_info_players"),
-        PlayerId("player_id"),
-        IsOp("is_op"),
-        IsBanned("is_banned"),
-        PlayerIp("player_ip"),
-        Gamemode("gamemode"),
-        ExperiencePercent("exp_perc"),
-        ExperienceTotal("exp_total"),
-        ExperienceLevel("exp_level"),
-        FoodLevel("food_level"),
-        HealthLevel("health"),
-        ArmorLevel("armor_rating"),
-        FishCaught("fish_caught"),
-        TimesKicked("times_kicked"),
-        EggsThrown("eggs_thrown"),
-        FoodEaten("food_eaten"),
-        ArrowsShot("arrows_shot"),
-        DamageTaken("damage_taken"),
-        TimesJumped("times_jumped"),
-        BedsEntered("beds_entered"),
-        PortalsEntered("portals_entered"),
-        WordsSaid("words_said"),
-        CommandsSent("commands_sent"),
-        CurKillStreak("kill_streak"),
-        MaxKillStreak("max_kill_streak");
-        
-        MiscInfoPlayersTable (String columnName) { this.columnName = columnName; }
+        TableName       ("misc_info_players"),
+        PlayerId        ("player_id"),
+        IsOp            ("is_op"),
+        IsBanned        ("is_banned"),
+        PlayerIp        ("player_ip"),
+        Gamemode        ("gamemode"),
+        ExpPercent      ("exp_perc"),
+        ExpTotal        ("exp_total"),
+        ExpLevel        ("exp_level"),
+        FoodLevel       ("food_level"),
+        HealthLevel     ("health"),
+        ArmorLevel      ("armor_rating"),
+        FishCaught      ("fish_caught"),
+        TimesKicked     ("times_kicked"),
+        EggsThrown      ("eggs_thrown"),
+        FoodEaten       ("food_eaten"),
+        ArrowsShot      ("arrows_shot"),
+        DamageTaken     ("damage_taken"),
+        TimesJumped     ("times_jumped"),
+        BedsEntered     ("beds_entered"),
+        PortalsEntered  ("portals_entered"),
+        WordsSaid       ("words_said"),
+        CommandsSent    ("commands_sent"),
+        CurKillStreak   ("kill_streak"),
+        MaxKillStreak   ("max_kill_streak");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -156,22 +145,19 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum PlayersInv implements DBTable {
-        TableName("player_inventories"),
-        PlayerId("player_id"),
-        Hotbar("hotbar"),
-        RowOne("row_one"),
-        RowTwo("row_two"),
-        RowThree("row_three"),
-        Armor("armor"),
-        PotionEffects("potion_effects");
-        
-        PlayersInv (String columnName) { this.columnName = columnName; }
+        TableName       ("player_inventories"),
+        PlayerId        ("player_id"),
+        Hotbar          ("hotbar"),
+        RowOne          ("row_one"),
+        RowTwo          ("row_two"),
+        RowThree        ("row_three"),
+        Armor           ("armor"),
+        PotionEffects   ("potion_effects");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -179,19 +165,16 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum TotalBlocksTable implements DBTable {
-        TableName("total_blocks"),
-        MaterialId("material_id"),
-        PlayerId("player_id"),
-        Destroyed("destroyed"),
-        Placed("placed");
-        
-        TotalBlocksTable (String columnName) { this.columnName = columnName; }
+        TableName       ("total_blocks"),
+        MaterialId      ("material_id"),
+        PlayerId        ("player_id"),
+        Destroyed       ("destroyed"),
+        Placed          ("placed");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -199,25 +182,22 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum TotalItemsTable implements DBTable {
-        TableName("total_items"),
-        MaterialId("material_id"),
-        PlayerId("player_id"),
-        Dropped("dropped"),
-        PickedUp("picked_up"),
-        Used("used"),
-        Crafted("crafted"),
-        Smelted("smelted"),
-        Broken("broken"),
-        Enchanted("enchanted"),
-        Repaired("repaired");
-        
-        TotalItemsTable (String columnName) { this.columnName = columnName;}
+        TableName       ("total_items"),
+        MaterialId      ("material_id"),
+        PlayerId        ("player_id"),
+        Dropped         ("dropped"),
+        PickedUp        ("picked_up"),
+        Used            ("used"),
+        Crafted         ("crafted"),
+        Smelted         ("smelted"),
+        Broken          ("broken"),
+        Enchanted       ("enchanted"),
+        Repaired        ("repaired");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -225,18 +205,15 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum TotalDeathPlayersTable implements DBTable {
-        TableName("total_deaths"),
-        PlayerId("player_id"),
-        Cause("cause"),
-        Times("times");
-        
-        TotalDeathPlayersTable (String columnName) { this.columnName = columnName; }
+        TableName       ("total_deaths"),
+        PlayerId        ("player_id"),
+        Cause           ("cause"),
+        Times           ("times");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -244,20 +221,17 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum TotalPVEKillsTable implements DBTable {
-        TableName("total_pve_kills"),
-        MaterialId("material_id"),
-        CreatureId("entity_id"),
-        PlayerId("player_id"),
-        PlayerKilled("player_killed"),
-        CreatureKilled("creature_killed");
-        
-        TotalPVEKillsTable (String columnName) { this.columnName = columnName; }
+        TableName       ("total_pve_kills"),
+        MaterialId      ("material_id"),
+        CreatureId      ("entity_id"),
+        PlayerId        ("player_id"),
+        PlayerKilled    ("player_killed"),
+        CreatureKilled  ("creature_killed");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -265,19 +239,16 @@ public class Normal {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum TotalPVPKillsTable implements DBTable {
-        TableName("total_pvp_kills"),
-        MaterialId("material_id"),
-        PlayerId("player_id"),
-        VictimId("victim_id"),
-        Times("times");
-        
-        TotalPVPKillsTable (String columnName) { this.columnName = columnName; }
+        TableName       ("total_pvp_kills"),
+        MaterialId      ("material_id"),
+        PlayerId        ("player_id"),
+        VictimId        ("victim_id"),
+        Times           ("times");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
 }

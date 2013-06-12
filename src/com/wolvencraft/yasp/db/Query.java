@@ -55,7 +55,7 @@ public class Query {
      * @return Database query
      */
     public static DatabaseQuery table(DBTable table) {
-        return instance.new DatabaseQuery(table.toString());
+        return instance.new DatabaseQuery(table.getColumnName());
     }
     
     /**
@@ -148,8 +148,8 @@ public class Query {
          * @param column Columns to include
          * @return Database query
          */
-        public DatabaseQuery column(DBTable... column) {
-            for(DBTable col : column) this.columns.add(col.toString());
+        public DatabaseQuery column(DBTable... columns) {
+            for(DBTable column : columns) this.columns.add(column.getColumnName());
             return instance;
         }
         
@@ -181,8 +181,8 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(DBTable key, String value) {
-            this.conditions.add("`" + key.toString() + "`='" + value + "'");
+        public DatabaseQuery condition(DBTable column, String value) {
+            this.conditions.add("`" + column.getColumnName() + "`='" + value + "'");
             return instance;
         }
 
@@ -192,8 +192,8 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(DBTable key, Integer value) {
-            this.conditions.add("`" + key.toString() + "`=" + value);
+        public DatabaseQuery condition(DBTable column, Integer value) {
+            this.conditions.add("`" + column.getColumnName() + "`=" + value);
             return instance;
         }
 
@@ -203,8 +203,8 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(DBTable key, Double value) {
-            this.conditions.add("`" + key.toString() + "`=" + value);
+        public DatabaseQuery condition(DBTable column, Double value) {
+            this.conditions.add("`" + column.getColumnName() + "`=" + value);
             return instance;
         }
 
@@ -214,8 +214,8 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(DBTable key, Long value) {
-            this.conditions.add("`" + key.toString() + "`=" + value);
+        public DatabaseQuery condition(DBTable column, Long value) {
+            this.conditions.add("`" + column.getColumnName() + "`=" + value);
             return instance;
         }
 
@@ -225,9 +225,9 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery condition(DBTable key, Boolean value) {
-            if(value) this.conditions.add("`" + key.toString() + "`=1");
-            else this.conditions.add("`" + key.toString() + "`=0");
+        public DatabaseQuery condition(DBTable column, Boolean value) {
+            if(value) this.conditions.add("`" + column.getColumnName() + "`=1");
+            else this.conditions.add("`" + column.getColumnName() + "`=0");
             return instance;
         }
 
@@ -258,8 +258,8 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery value(DBTable key, Object value) {
-            this.values.put(key.toString(), value);
+        public DatabaseQuery value(DBTable column, Object value) {
+            this.values.put(column.getColumnName(), value);
             return instance;
         }
         
@@ -269,9 +269,9 @@ public class Query {
          * @param value Column value
          * @return Database query
          */
-        public DatabaseQuery value(DBTable key, boolean value) {
-            if(value) values.put(key.toString(), 1);
-            else values.put(key.toString(), 0);
+        public DatabaseQuery value(DBTable column, boolean value) {
+            if(value) values.put(column.getColumnName(), 1);
+            else values.put(column.getColumnName(), 0);
             return instance;
         }
         
@@ -542,7 +542,7 @@ public class Query {
          * @return <b>String</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public String asString(DBTable column) {
-            return asString(column.toString());
+            return asString(column.getColumnName());
         }
         
         /**
@@ -560,7 +560,7 @@ public class Query {
          * @return <b>boolean</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public boolean asBoolean(DBTable column) {
-            return asBoolean(column.toString());
+            return asBoolean(column.getColumnName());
         }
         
         /**
@@ -578,7 +578,7 @@ public class Query {
          * @return <b>int</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public int asInt(DBTable column) {
-            return asInt(column.toString());
+            return asInt(column.getColumnName());
         }
         
         /**
@@ -597,7 +597,7 @@ public class Query {
          * @return <b>long</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public long asLong(DBTable column) {
-            return asLong(column.toString());
+            return asLong(column.getColumnName());
         }
         
         /**
@@ -616,7 +616,7 @@ public class Query {
          * @return <b>double</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public double asDouble(DBTable column) {
-            return asDouble(column.toString());
+            return asDouble(column.getColumnName());
         }
         
         /**

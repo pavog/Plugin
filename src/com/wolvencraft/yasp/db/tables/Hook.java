@@ -20,6 +20,10 @@
 
 package com.wolvencraft.yasp.db.tables;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Represents all plugin hook tables in the database.<br >
  * Stores table and column names, so that they can be safely used from the plugin
@@ -33,18 +37,15 @@ public class Hook {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum VaultTable implements DBTable {
-        TableName("vaults"),
-        PlayerId("player_id"),
-        GroupName("group"),
-        Balance("balance");
-        
-        VaultTable (String columnName) { this.columnName = columnName; }
+        TableName       ("vaults"),
+        PlayerId        ("player_id"),
+        GroupName       ("group"),
+        Balance         ("balance");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -52,18 +53,15 @@ public class Hook {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum WorldGuardTable implements DBTable {
-        TableName("wg_regions"),
-        PlayerId("player_id"),
-        RegionName("regions"),
-        RegionFlags("flags");
-        
-        WorldGuardTable (String columnName) { this.columnName = columnName; }
+        TableName       ("wg_regions"),
+        PlayerId        ("player_id"),
+        RegionName      ("regions"),
+        RegionFlags     ("flags");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -71,22 +69,19 @@ public class Hook {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum FactionsTable implements DBTable {
-        TableName("hook_factions"),
-        PlayerId("player_id"),
-        FactionName("faction_name"),
-        CurrentlyIn("current_position"),
-        CurrentPower("current_power"),
-        MaximumPower("max_power"),
-        FactionRole("role"),
-        Title("title");
-        
-        FactionsTable (String columnName) { this.columnName = columnName; }
+        TableName       ("hook_factions"),
+        PlayerId        ("player_id"),
+        FactionName     ("faction_name"),
+        CurrentlyIn     ("current_position"),
+        CurrentPower    ("current_power"),
+        MaximumPower    ("max_power"),
+        FactionRole     ("role"),
+        Title           ("title");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -94,6 +89,8 @@ public class Hook {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum VotifierTotalsTable implements DBTable {
         
         TableName       ("votifier_totals"),
@@ -101,12 +98,7 @@ public class Hook {
         ServiceName     ("service_name"),
         Votes           ("votes");
         
-        VotifierTotalsTable (String columnName) { this.columnName = columnName; }
-        
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
     /**
@@ -114,6 +106,8 @@ public class Hook {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum DetailedVotifierTable implements DBTable {
         
         TableName       ("votifier_detailed"),
@@ -121,12 +115,7 @@ public class Hook {
         ServiceName     ("service_name"),
         Timestamp       ("time");
         
-        DetailedVotifierTable (String columnName) { this.columnName = columnName; }
-        
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
     }
     
 }

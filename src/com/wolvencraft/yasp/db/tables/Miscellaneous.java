@@ -20,6 +20,10 @@
 
 package com.wolvencraft.yasp.db.tables;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Represents any miscellaneous tables in the database.<br >
  * Stores table and column names, so that they can be safely used from the plugin.
@@ -33,18 +37,14 @@ public class Miscellaneous {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum MaterialsTable implements DBTable {
-        TableName("materials"),
-        MaterialId("material_id"),
-        TpName("tp_name");
-        
-        MaterialsTable (String columnName) { this.columnName = columnName; }
+        TableName       ("materials"),
+        MaterialId      ("material_id"),
+        TpName          ("tp_name");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
-        
     }
     
     /**
@@ -52,18 +52,14 @@ public class Miscellaneous {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum EntitiesTable implements DBTable {
-        TableName("entities"),
-        EntityId("entity_id"),
-        TpName("tp_name");
-        
-        EntitiesTable (String columnName) { this.columnName = columnName; }
+        TableName       ("entities"),
+        EntityId        ("entity_id"),
+        TpName          ("tp_name");
         
         private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
-        
     }
     
 }

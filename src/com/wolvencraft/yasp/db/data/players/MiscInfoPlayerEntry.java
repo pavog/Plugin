@@ -63,9 +63,9 @@ public class MiscInfoPlayerEntry extends NormalData {
         values.put(MiscInfoPlayersTable.PlayerIp, player.getAddress().getAddress().getHostAddress());
         
         values.put(MiscInfoPlayersTable.Gamemode, player.getGameMode().getValue());
-        values.put(MiscInfoPlayersTable.ExperiencePercent, player.getExp());
-        values.put(MiscInfoPlayersTable.ExperienceTotal, player.getTotalExperience());
-        values.put(MiscInfoPlayersTable.ExperienceLevel, player.getLevel());
+        values.put(MiscInfoPlayersTable.ExpPercent, player.getExp());
+        values.put(MiscInfoPlayersTable.ExpTotal, player.getTotalExperience());
+        values.put(MiscInfoPlayersTable.ExpLevel, player.getLevel());
         values.put(MiscInfoPlayersTable.FoodLevel, player.getFoodLevel());
         values.put(MiscInfoPlayersTable.HealthLevel, player.getHealth());
         values.put(MiscInfoPlayersTable.ArmorLevel, Util.getArmorRating(player.getInventory()));
@@ -161,9 +161,9 @@ public class MiscInfoPlayerEntry extends NormalData {
         values.put(MiscInfoPlayersTable.PlayerIp, player.getAddress().getAddress().getHostAddress());
         
         values.put(MiscInfoPlayersTable.Gamemode, player.getGameMode().getValue());
-        values.put(MiscInfoPlayersTable.ExperiencePercent, player.getExp());
-        values.put(MiscInfoPlayersTable.ExperienceTotal, player.getTotalExperience());
-        values.put(MiscInfoPlayersTable.ExperienceLevel, player.getLevel());
+        values.put(MiscInfoPlayersTable.ExpPercent, player.getExp());
+        values.put(MiscInfoPlayersTable.ExpTotal, player.getTotalExperience());
+        values.put(MiscInfoPlayersTable.ExpLevel, player.getLevel());
         values.put(MiscInfoPlayersTable.FoodLevel, player.getFoodLevel());
         values.put(MiscInfoPlayersTable.HealthLevel, player.getHealth());
         values.put(MiscInfoPlayersTable.ArmorLevel, Util.getArmorRating(player.getInventory()));
