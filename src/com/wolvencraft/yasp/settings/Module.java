@@ -24,6 +24,7 @@ import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 
 /**
@@ -146,24 +147,24 @@ public enum Module {
             stateKey = "hook." + KEY;
             
             String versionKey = "version." + KEY;
-            if(Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).exists()) {
-                try { version = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select().asInt("value"); }
-                catch (Throwable t) { version = 0; }
-            } else {
+            QueryResult versionResult = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select();
+            if(versionResult == null) {
                 Query.table(SettingsTable.TableName).value("key", versionKey).value("value", 0).insert();
                 version = 0;
+            } else {
+                version = versionResult.asInt("value");
             }
         } else {
             stateKey = "module." + KEY;
             version = -1;
         }
         
-        if(Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).exists()) {
-            try { enabled = Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).select().asBoolean("value"); }
-            catch (Throwable t) { enabled = false; }
-        } else {
+        QueryResult enabledResult = Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).select();
+        if(enabledResult == null) {
             Query.table(SettingsTable.TableName).value("key", stateKey).value("value", false).insert();
             enabled = true;
+        } else {
+            enabled = enabledResult.asBoolean("value");
         }
     }
     

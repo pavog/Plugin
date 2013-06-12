@@ -115,11 +115,8 @@ public enum RemoteConfiguration {
      * Fetches the configuration data from the database
      */
     private void refresh() {
-        if(Query.table(SettingsTable.TableName).column("value").condition("key", key).exists()) {
-            try { entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select(); }
-            catch (Throwable t) { entry = null; }
-            refreshScheduled = false;
-        } else entry = null;
+        entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select();
+        refreshScheduled = false;
     }
     
     /**
