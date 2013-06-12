@@ -48,7 +48,7 @@ import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
+import com.wolvencraft.yasp.util.PatchManager.PatchType;
 
 /**
  * Represents a running database instance.<br />

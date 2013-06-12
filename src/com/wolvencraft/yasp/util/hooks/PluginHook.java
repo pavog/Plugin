@@ -26,7 +26,7 @@ import lombok.Getter;
 import com.wolvencraft.yasp.HookManager.ApplicableHook;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.util.ExceptionHandler;
-import com.wolvencraft.yasp.util.PatchFetcher;
+import com.wolvencraft.yasp.util.PatchManager;
 
 @Getter(AccessLevel.PUBLIC)
 public abstract class PluginHook {
@@ -43,7 +43,7 @@ public abstract class PluginHook {
      */
     public void onEnable() {
         try {
-            PatchFetcher.fetch(type.getPatch());
+            PatchManager.fetch(type.getPatch());
             Database.patchModule(false, type.getModule());
         } catch (Throwable t) {
             ExceptionHandler.handle(t);

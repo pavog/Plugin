@@ -52,7 +52,7 @@ import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchFetcher;
+import com.wolvencraft.yasp.util.PatchManager;
 import com.wolvencraft.yasp.util.cache.CachedData;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
@@ -108,7 +108,7 @@ public class Statistics extends JavaPlugin {
             return;
         }
         
-        new PatchFetcher();
+        new PatchManager();
         new Query();
         
         try { new Database(); }

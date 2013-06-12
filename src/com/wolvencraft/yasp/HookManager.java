@@ -33,7 +33,7 @@ import com.wolvencraft.yasp.events.plugin.HookInitEvent;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchFetcher.PatchType;
+import com.wolvencraft.yasp.util.PatchManager.PatchType;
 import com.wolvencraft.yasp.util.hooks.AdminCmdHook;
 import com.wolvencraft.yasp.util.hooks.AwardmentsHook;
 import com.wolvencraft.yasp.util.hooks.BanHammerHook;
