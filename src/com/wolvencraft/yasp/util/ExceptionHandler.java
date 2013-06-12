@@ -50,7 +50,7 @@ public class ExceptionHandler {
         if(debug && !LocalConfiguration.Debug.asBoolean()) return;
         
         if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
-        else lastError = t.getLocalizedMessage();
+        else lastError = t.getClass().getName();
         
         PluginDescriptionFile description = Statistics.getInstance().getDescription();
         Message.log(
@@ -88,7 +88,7 @@ public class ExceptionHandler {
      */
     public static void handle(Throwable t, CommandSender sender, CommandPair command) {
         if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
-        else lastError = t.getLocalizedMessage();
+        else lastError = t.getClass().getName();
         
         Message.send(sender, ChatColor.RED + "An internal error occurred while executing the command");
         
