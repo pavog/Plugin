@@ -23,6 +23,9 @@ package com.wolvencraft.yasp.session;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -62,15 +65,16 @@ import com.wolvencraft.yasp.util.cache.PlayerCache;
  *
  */
 @SuppressWarnings("rawtypes")
+@Getter(AccessLevel.PUBLIC)
 public class OnlineSession implements PlayerSession {
     
     private final int id;
     private final String name;
+    private PlayerTotals playerTotals;
     
     private PlayersData playersData;
     private List<AdvancedDataStore> dataStores;
     
-    private PlayerTotals playerTotals;
     private Scoreboard scoreboard;
     
     /**
@@ -111,27 +115,17 @@ public class OnlineSession implements PlayerSession {
     }
     
     @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public boolean isOnline() {
         if(Bukkit.getPlayerExact(name) == null) return false;
         return true;
     }
     
     /**
-     * Returns the total playtime for the player
-     * @return Total playtime
+     * Returns the Bukkit player object associated with this session
+     * @return Player object
      */
-    public long getPlaytime() {
-        return playersData.getGeneralData().getTotalPlaytime();
+    public Player getBukkitPlayer() {
+        return Bukkit.getPlayerExact(name);
     }
     
     /**
@@ -139,7 +133,7 @@ public class OnlineSession implements PlayerSession {
      * @param type Data store type
      * @return Data store, or <b>null</b> if the type is not valid
      */
-    public AdvancedDataStore getData(DataStoreType type) {
+    public AdvancedDataStore getDataStore(DataStoreType type) {
         for(AdvancedDataStore store : dataStores) {
             if(store.getType().equals(type)) return store;
         }
@@ -161,14 +155,6 @@ public class OnlineSession implements PlayerSession {
      */
     public void dumpData() {
         for(AdvancedDataStore store : dataStores) store.dump();
-    }
-    
-    /**
-     * Returns the totals associated with this player
-     * @return Player totals
-     */
-    public PlayerTotals getTotals() {
-        return playerTotals;
     }
     
     /**
@@ -238,10 +224,10 @@ public class OnlineSession implements PlayerSession {
      * @param weapon Weapon used by killer
      */
     public void killedPlayer(Player victim, ItemStack weapon) {
-        ((PVPData) getData(DataStoreType.PVP)).playerKilledPlayer(victim, weapon);
+        ((PVPData) getDataStore(DataStoreType.PVP)).playerKilledPlayer(victim, weapon);
         playersData.getMiscData().killed(victim);
         playerTotals.pvpKill();
-        OnlineSessionCache.fetch(victim).getTotals().death();
+        OnlineSessionCache.fetch(victim).getPlayerTotals().death();
     }
     
     /**
@@ -250,7 +236,7 @@ public class OnlineSession implements PlayerSession {
      * @param weapon Weapon used by killer
      */
     public void killedCreature(Entity victim, ItemStack weapon) {
-        ((PVEData) getData(DataStoreType.PVE)).playerKilledCreature(victim, weapon);
+        ((PVEData) getDataStore(DataStoreType.PVE)).playerKilledCreature(victim, weapon);
         playerTotals.pveKill();
     }
     
@@ -260,7 +246,7 @@ public class OnlineSession implements PlayerSession {
      * @param weapon Weapon used by killer
      */
     public void killedByCreature(Entity killer, ItemStack weapon) {
-        ((PVEData) getData(DataStoreType.PVE)).creatureKilledPlayer(killer, weapon);
+        ((PVEData) getDataStore(DataStoreType.PVE)).creatureKilledPlayer(killer, weapon);
         died();
     }
     
@@ -270,7 +256,7 @@ public class OnlineSession implements PlayerSession {
      * @param cause Death cause
      */
     public void killedByEnvironment(Location location, DamageCause cause) {
-        ((DeathsData) getData(DataStoreType.Deaths)).playerDied(location, cause);
+        ((DeathsData) getDataStore(DataStoreType.Deaths)).playerDied(location, cause);
         died();
     }
     
@@ -289,7 +275,7 @@ public class OnlineSession implements PlayerSession {
      * @param block BlockState of the block
      */
     public void blockBreak(BlockState block) {
-        ((BlocksData) getData(DataStoreType.Blocks)).blockBreak(block);
+        ((BlocksData) getDataStore(DataStoreType.Blocks)).blockBreak(block);
         playerTotals.blockBreak();
     }
     
@@ -299,7 +285,7 @@ public class OnlineSession implements PlayerSession {
      * @param block BlockState of the block
      */
     public void blockPlace(BlockState block) {
-        ((BlocksData) getData(DataStoreType.Blocks)).blockPlace(block);
+        ((BlocksData) getDataStore(DataStoreType.Blocks)).blockPlace(block);
         playerTotals.blockPlace();
     }
     
@@ -309,7 +295,7 @@ public class OnlineSession implements PlayerSession {
      * @param itemStack Stack of items in question
      */
     public void itemDrop(Location location, ItemStack itemStack) {
-        ((ItemsData) getData(DataStoreType.Items)).itemDrop(location, itemStack);
+        ((ItemsData) getDataStore(DataStoreType.Items)).itemDrop(location, itemStack);
     }
     
     /**
@@ -318,7 +304,7 @@ public class OnlineSession implements PlayerSession {
      * @param itemStack Stack of items in question
      */
     public void itemPickUp(Location location, ItemStack itemStack) {
-        ((ItemsData) getData(DataStoreType.Items)).itemPickUp(location, itemStack);
+        ((ItemsData) getDataStore(DataStoreType.Items)).itemPickUp(location, itemStack);
     }
     
     /**
@@ -327,7 +313,7 @@ public class OnlineSession implements PlayerSession {
      * @param itemStack Stack of items in question
      */
     public void itemUse(Location location, ItemStack itemStack) {
-        ((ItemsData) getData(DataStoreType.Items)).itemUse(location, itemStack);
+        ((ItemsData) getDataStore(DataStoreType.Items)).itemUse(location, itemStack);
         playerTotals.snacksEaten();
     }
     
@@ -337,7 +323,7 @@ public class OnlineSession implements PlayerSession {
      * @param itemStack Stack of items in question
      */
     public void itemCraft(Location location, ItemStack itemStack) {
-        ((ItemsData) getData(DataStoreType.Items)).itemCraft(location, itemStack);
+        ((ItemsData) getDataStore(DataStoreType.Items)).itemCraft(location, itemStack);
         playerTotals.itemCraft();
     }
     
@@ -347,7 +333,7 @@ public class OnlineSession implements PlayerSession {
      * @param itemStack Stack of items in question
      */
     public void itemSmelt(Location location, ItemStack itemStack) {
-        ((ItemsData) getData(DataStoreType.Items)).itemSmelt(location, itemStack);
+        ((ItemsData) getDataStore(DataStoreType.Items)).itemSmelt(location, itemStack);
     }
     
     /**
@@ -356,7 +342,7 @@ public class OnlineSession implements PlayerSession {
      * @param itemStack Stack of items in question
      */
     public void itemBreak(Location location, ItemStack itemStack) {
-        ((ItemsData) getData(DataStoreType.Items)).itemBreak(location, itemStack);
+        ((ItemsData) getDataStore(DataStoreType.Items)).itemBreak(location, itemStack);
         playerTotals.toolBreak();
     }
     
@@ -366,7 +352,7 @@ public class OnlineSession implements PlayerSession {
      * @param itemStack Stack of items in question
      */
     public void itemEnchant(Location location, ItemStack itemStack) {
-        ((ItemsData) getData(DataStoreType.Items)).itemEnchant(location, itemStack);
+        ((ItemsData) getDataStore(DataStoreType.Items)).itemEnchant(location, itemStack);
     }
     
     /**
@@ -375,7 +361,7 @@ public class OnlineSession implements PlayerSession {
      * @param itemStack Stack of items in question
      */
     public void itemRepair(Location location, ItemStack itemStack) {
-        ((ItemsData) getData(DataStoreType.Items)).itemRepair(location, itemStack);
+        ((ItemsData) getDataStore(DataStoreType.Items)).itemRepair(location, itemStack);
     }
     
     /**

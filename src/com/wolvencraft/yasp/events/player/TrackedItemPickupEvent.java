@@ -1,5 +1,5 @@
 /*
- * TrackedDeathEvent.java
+ * TrackedItemPickupEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,26 +18,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.player;
+package com.wolvencraft.yasp.events.player;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.api.events.TrackedActionType;
-import com.wolvencraft.yasp.db.data.deaths.DetailedDeathEntry;
+import com.wolvencraft.yasp.db.data.items.DetailedItemPickupEntry;
+import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 @Getter(AccessLevel.PUBLIC)
-public class TrackedDeathEvent extends StatisticsPlayerEvent {
+public class TrackedItemPickupEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedDeathEntry data;
+    private DetailedItemPickupEntry data;
     
-    public TrackedDeathEvent(OnlineSession session, DetailedDeathEntry data) {
-        super(session, TrackedActionType.DEATH);
+    public TrackedItemPickupEvent(OnlineSession session, DetailedItemPickupEntry data) {
+        super(session, TrackedActionType.ITEM_PICKUP);
         this.data = data;
     }
 
@@ -48,7 +48,7 @@ public class TrackedDeathEvent extends StatisticsPlayerEvent {
 
     @Override
     public String getParameterString() {
-        return data.getCause().name();
+        return data.getStack().getTypeId() + ":" + data.getStack().getDurability();
     }
     
 }

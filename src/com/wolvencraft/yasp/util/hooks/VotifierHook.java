@@ -50,7 +50,7 @@ public class VotifierHook extends PluginHook implements Listener {
         Vote vote = event.getVote();
         Player player = Bukkit.getPlayerExact(vote.getUsername());
         if(player == null) return;
-        VotifierData dataStore = (VotifierData) OnlineSessionCache.fetch(player).getData(DataStoreType.Hook_Votifier);
+        VotifierData dataStore = (VotifierData) OnlineSessionCache.fetch(player).getDataStore(DataStoreType.Hook_Votifier);
         if(dataStore == null) return;
         dataStore.playerVoted(vote);
     }

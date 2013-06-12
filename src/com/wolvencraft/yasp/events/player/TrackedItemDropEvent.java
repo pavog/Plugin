@@ -1,5 +1,5 @@
 /*
- * DatabasePatchEvent.java
+ * TrackedItemDropEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,39 +18,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.plugin;
+package com.wolvencraft.yasp.events.player;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsEvent;
+import com.wolvencraft.yasp.db.data.items.DetailedItemDropEntry;
+import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
+import com.wolvencraft.yasp.session.OnlineSession;
 
-/**
- * Called when the plugin is being patched by the database
- * @author bitWolfy
- *
- */
 @Getter(AccessLevel.PUBLIC)
-public class DatabasePatchEvent extends StatisticsEvent implements Cancellable {
+public class TrackedItemDropEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-
-    @Setter(AccessLevel.PUBLIC)
-    private boolean cancelled;
-    private String patchId;
+    private DetailedItemDropEntry data;
     
-    public DatabasePatchEvent(String patchId) {
-        this.patchId = patchId;
-        this.cancelled = false;
+    public TrackedItemDropEvent(OnlineSession session, DetailedItemDropEntry data) {
+        super(session, TrackedActionType.ITEM_DROP);
+        this.data = data;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
+    }
+
+    @Override
+    public String getParameterString() {
+        return data.getStack().getTypeId() + ":" + data.getStack().getDurability();
     }
     
 }

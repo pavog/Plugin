@@ -27,11 +27,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.api.events.session.SessionCreateEvent;
-import com.wolvencraft.yasp.api.events.session.SessionRemoveEvent;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.events.session.SessionCreateEvent;
+import com.wolvencraft.yasp.events.session.SessionRemoveEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
@@ -81,7 +81,7 @@ public class OnlineSessionCache implements CachedDataProcess {
             removeSession(session);
             
             long delay = RemoteConfiguration.LogDelay.asInteger();
-            if(delay == 0 || session.getPlaytime() > delay) continue;
+            if(delay == 0 || session.getPlayersData().getGeneralData().getTotalPlaytime() > delay) continue;
             
             Query.table(Normal.PlayersTable.TableName)
                 .condition(PlayersTable.Name, session.getName())

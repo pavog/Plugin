@@ -1,5 +1,5 @@
 /*
- * SynchronizationCompletionEvent.java
+ * TrackedPVPKillEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,31 +18,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.plugin;
+package com.wolvencraft.yasp.events.player;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsEvent;
+import com.wolvencraft.yasp.db.data.pvp.DetailedPVPEntry;
+import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
+import com.wolvencraft.yasp.session.OnlineSession;
 
-/**
- * Called when the data has been synchronized with the database
- * @author bitWolfy
- *
- */
-@AllArgsConstructor(access=AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
-public class SynchronizationCompleteEvent extends StatisticsEvent {
+public class TrackedPVPEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private int processId;
+    private DetailedPVPEntry data;
     
+    public TrackedPVPEvent(OnlineSession session, DetailedPVPEntry data) {
+        super(session, TrackedActionType.PVP);
+        this.data = data;
+    }
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
+    }
+
+    @Override
+    public String getParameterString() {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

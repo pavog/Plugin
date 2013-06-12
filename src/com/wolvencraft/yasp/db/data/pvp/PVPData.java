@@ -24,8 +24,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.api.events.player.TrackedPVPEvent;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.events.player.TrackedPVPEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 

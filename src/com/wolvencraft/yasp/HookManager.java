@@ -29,7 +29,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
-import com.wolvencraft.yasp.api.events.plugin.HookInitEvent;
+import com.wolvencraft.yasp.events.plugin.HookInitEvent;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;

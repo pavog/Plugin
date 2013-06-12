@@ -18,16 +18,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.player;
+package com.wolvencraft.yasp.events.player;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.api.events.TrackedActionType;
 import com.wolvencraft.yasp.db.data.blocks.DetailedBlockPlaceEntry;
+import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 @Getter(AccessLevel.PUBLIC)

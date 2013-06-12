@@ -1,5 +1,5 @@
 /*
- * TrackedPVEKillEvent.java
+ * SessionCreateEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,29 +18,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.player;
-
-import lombok.AccessLevel;
-import lombok.Getter;
+package com.wolvencraft.yasp.events.session;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.api.events.TrackedActionType;
-import com.wolvencraft.yasp.db.data.pve.DetailedPVEEntry;
+import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-@Getter(AccessLevel.PUBLIC)
-public class TrackedPVEEvent extends StatisticsPlayerEvent {
+/**
+ * Called when a new player session is being created
+ * @author bitWolfy
+ *
+ */
+public class SessionCreateEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedPVEEntry data;
     
-    public TrackedPVEEvent(OnlineSession session, DetailedPVEEntry data) {
-        super(session, TrackedActionType.PVE);
-        this.data = data;
+    public SessionCreateEvent(OnlineSession session) {
+        super(session, TrackedActionType.LOGIN);
     }
-
+    
     @Override
     public HandlerList getHandlers() {
         return handlers;
@@ -48,7 +46,6 @@ public class TrackedPVEEvent extends StatisticsPlayerEvent {
 
     @Override
     public String getParameterString() {
-        return data.isPlayerKilled() + "";
+        return getSession().getName();
     }
-    
 }

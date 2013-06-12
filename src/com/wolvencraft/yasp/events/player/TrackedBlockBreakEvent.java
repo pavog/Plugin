@@ -1,5 +1,5 @@
 /*
- * SessionCreateEvent.java
+ * TrackedBlockBreakEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,27 +18,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.session;
+package com.wolvencraft.yasp.events.player;
+
+import lombok.Getter;
+import lombok.AccessLevel;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.api.events.TrackedActionType;
+import com.wolvencraft.yasp.db.data.blocks.DetailedBlockBreakEntry;
+import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-/**
- * Called when a new player session is being created
- * @author bitWolfy
- *
- */
-public class SessionCreateEvent extends StatisticsPlayerEvent {
+@Getter(AccessLevel.PUBLIC)
+public class TrackedBlockBreakEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
+    private DetailedBlockBreakEntry data;
     
-    public SessionCreateEvent(OnlineSession session) {
-        super(session, TrackedActionType.LOGIN);
+    public TrackedBlockBreakEvent(OnlineSession session, DetailedBlockBreakEntry data) {
+        super(session, TrackedActionType.BLOCK_BREAK);
+        this.data = data;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
@@ -46,6 +48,7 @@ public class SessionCreateEvent extends StatisticsPlayerEvent {
 
     @Override
     public String getParameterString() {
-        return getSession().getName();
+        return data.getBlock().getTypeId() + ":" + data.getBlock().getRawData();
     }
+    
 }

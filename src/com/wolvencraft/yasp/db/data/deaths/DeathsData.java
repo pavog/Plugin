@@ -24,8 +24,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.wolvencraft.yasp.api.events.player.TrackedDeathEvent;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.events.player.TrackedDeathEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 /**

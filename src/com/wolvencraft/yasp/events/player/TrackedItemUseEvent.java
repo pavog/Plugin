@@ -1,5 +1,5 @@
 /*
- * TrackedItemPickupEvent.java
+ * TrackedItemUseEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,26 +18,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.player;
+package com.wolvencraft.yasp.events.player;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.api.events.TrackedActionType;
-import com.wolvencraft.yasp.db.data.items.DetailedItemPickupEntry;
+import com.wolvencraft.yasp.db.data.items.DetailedItemUseEntry;
+import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 @Getter(AccessLevel.PUBLIC)
-public class TrackedItemPickupEvent extends StatisticsPlayerEvent {
+public class TrackedItemUseEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedItemPickupEntry data;
+    private DetailedItemUseEntry data;
     
-    public TrackedItemPickupEvent(OnlineSession session, DetailedItemPickupEntry data) {
-        super(session, TrackedActionType.ITEM_PICKUP);
+    public TrackedItemUseEvent(OnlineSession session, DetailedItemUseEntry data) {
+        super(session, TrackedActionType.ITEM_USE);
         this.data = data;
     }
 

@@ -23,8 +23,8 @@ package com.wolvencraft.yasp.util.tasks;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.api.events.plugin.SynchronizationCompleteEvent;
-import com.wolvencraft.yasp.api.events.plugin.SynchronizationEvent;
+import com.wolvencraft.yasp.events.plugin.SynchronizationCompleteEvent;
+import com.wolvencraft.yasp.events.plugin.SynchronizationEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
@@ -78,7 +78,7 @@ public class DatabaseTask implements Runnable {
         
         for(OnlineSession session : OnlineSessionCache.getSessions()) {
             session.pushData();
-            session.getTotals().fetchData();
+            session.getPlayerTotals().fetchData();
         }
         
         Statistics.getServerStatistics().pushData();

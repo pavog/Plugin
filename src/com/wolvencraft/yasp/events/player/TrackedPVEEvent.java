@@ -1,5 +1,5 @@
 /*
- * SessionRemoveEvent.java
+ * TrackedPVEKillEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,40 +18,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.session;
+package com.wolvencraft.yasp.events.player;
 
-import lombok.AllArgsConstructor;
 import lombok.AccessLevel;
+import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsEvent;
-import com.wolvencraft.yasp.api.events.TrackedActionType;
-import com.wolvencraft.yasp.session.DataSession;
+import com.wolvencraft.yasp.db.data.pve.DetailedPVEEntry;
+import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
+import com.wolvencraft.yasp.session.OnlineSession;
 
-/**
- * Called when the player session expires.<br />
- * This usually means that the player is offline
- * @author bitWolfy
- *
- */
-@AllArgsConstructor(access=AccessLevel.PUBLIC)
-public class SessionRemoveEvent extends StatisticsEvent {
+@Getter(AccessLevel.PUBLIC)
+public class TrackedPVEEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private static TrackedActionType actionType = TrackedActionType.LOGOUT;
-    private String playerName;
+    private DetailedPVEEntry data;
     
-    public DataSession getSession() {
-        return new DataSession(playerName);
+    public TrackedPVEEvent(OnlineSession session, DetailedPVEEntry data) {
+        super(session, TrackedActionType.PVE);
+        this.data = data;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-    
-    public TrackedActionType getActionType() {
-        return actionType;
+
+    @Override
+    public String getParameterString() {
+        return data.isPlayerKilled() + "";
     }
+    
 }

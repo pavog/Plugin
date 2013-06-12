@@ -1,5 +1,5 @@
 /*
- * TrackedItemDropEvent.java
+ * SynchronizationEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,37 +18,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.player;
+package com.wolvencraft.yasp.events.plugin;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.api.events.TrackedActionType;
-import com.wolvencraft.yasp.db.data.items.DetailedItemDropEntry;
-import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.events.StatisticsEvent;
 
+/**
+ * Called when the database synchronization is starting
+ * @author bitWolfy
+ *
+ */
 @Getter(AccessLevel.PUBLIC)
-public class TrackedItemDropEvent extends StatisticsPlayerEvent {
+public class SynchronizationEvent extends StatisticsEvent implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedItemDropEntry data;
+    private int processId;
+    @Setter(AccessLevel.PUBLIC)
+    private boolean cancelled;
     
-    public TrackedItemDropEvent(OnlineSession session, DetailedItemDropEntry data) {
-        super(session, TrackedActionType.ITEM_DROP);
-        this.data = data;
+    public SynchronizationEvent(int processId) {
+        this.processId = processId;
+        this.cancelled = false;
     }
-
+    
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-
-    @Override
-    public String getParameterString() {
-        return data.getStack().getTypeId() + ":" + data.getStack().getDurability();
-    }
-    
 }

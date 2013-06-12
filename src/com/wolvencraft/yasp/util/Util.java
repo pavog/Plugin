@@ -112,11 +112,11 @@ public class Util {
      */
     public static String parseVars(String str) {
         if(str == null) return "";
-        Map<String, Object> values = Statistics.getServerTotals().getValues();
-        Iterator<Entry<String, Object>> it = values.entrySet().iterator();
+        Map<VariableType, Object> values = Statistics.getServerTotals().getValues();
+        Iterator<Entry<VariableType, Object>> it = values.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String, Object> pairs = (Map.Entry<String, Object>)it.next();
-            str = str.replace("<" + pairs.getKey() + ">", pairs.getValue() + "");
+            Map.Entry<VariableType, Object> pairs = (Map.Entry<VariableType, Object>)it.next();
+            str = str.replace("<" + pairs.getKey().getAlias() + ">", pairs.getValue() + "");
             it.remove();
         }
         str = str.replace("<Y>", "");

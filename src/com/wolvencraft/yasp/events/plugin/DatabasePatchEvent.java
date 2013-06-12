@@ -1,5 +1,5 @@
 /*
- * HookInitEvent.java
+ * DatabasePatchEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.plugin;
+package com.wolvencraft.yasp.events.plugin;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,25 +27,24 @@ import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsEvent;
-import com.wolvencraft.yasp.settings.Module;
+import com.wolvencraft.yasp.events.StatisticsEvent;
 
 /**
- * Called when a plugin hook is being initialized by the plugin
+ * Called when the plugin is being patched by the database
  * @author bitWolfy
  *
  */
 @Getter(AccessLevel.PUBLIC)
-public class HookInitEvent extends StatisticsEvent implements Cancellable {
+public class DatabasePatchEvent extends StatisticsEvent implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
 
     @Setter(AccessLevel.PUBLIC)
     private boolean cancelled;
-    private Module module;
+    private String patchId;
     
-    public HookInitEvent(Module module) {
-        this.module = module;
+    public DatabasePatchEvent(String patchId) {
+        this.patchId = patchId;
         this.cancelled = false;
     }
     
@@ -53,5 +52,5 @@ public class HookInitEvent extends StatisticsEvent implements Cancellable {
     public HandlerList getHandlers() {
         return handlers;
     }
-
+    
 }

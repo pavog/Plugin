@@ -24,11 +24,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.api.events.player.TrackedItemDropEvent;
-import com.wolvencraft.yasp.api.events.player.TrackedItemPickupEvent;
-import com.wolvencraft.yasp.api.events.player.TrackedItemUseEvent;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
+import com.wolvencraft.yasp.events.player.TrackedItemDropEvent;
+import com.wolvencraft.yasp.events.player.TrackedItemPickupEvent;
+import com.wolvencraft.yasp.events.player.TrackedItemUseEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 /**

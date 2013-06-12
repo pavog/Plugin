@@ -1,5 +1,5 @@
 /*
- * TrackedBlockBreakEvent.java
+ * SynchronizationCompletionEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,37 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.player;
+package com.wolvencraft.yasp.events.plugin;
 
-import lombok.Getter;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.api.events.TrackedActionType;
-import com.wolvencraft.yasp.db.data.blocks.DetailedBlockBreakEntry;
-import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.events.StatisticsEvent;
 
+/**
+ * Called when the data has been synchronized with the database
+ * @author bitWolfy
+ *
+ */
+@AllArgsConstructor(access=AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
-public class TrackedBlockBreakEvent extends StatisticsPlayerEvent {
+public class SynchronizationCompleteEvent extends StatisticsEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedBlockBreakEntry data;
+    private int processId;
     
-    public TrackedBlockBreakEvent(OnlineSession session, DetailedBlockBreakEntry data) {
-        super(session, TrackedActionType.BLOCK_BREAK);
-        this.data = data;
-    }
-
     @Override
     public HandlerList getHandlers() {
         return handlers;
-    }
-
-    @Override
-    public String getParameterString() {
-        return data.getBlock().getTypeId() + ":" + data.getBlock().getRawData();
     }
     
 }

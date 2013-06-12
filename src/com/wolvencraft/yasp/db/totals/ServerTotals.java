@@ -31,6 +31,7 @@ import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
+import com.wolvencraft.yasp.util.VariableType;
 
 /**
  * Generic Server information used on DisplaySigns and books.
@@ -116,25 +117,30 @@ public class ServerTotals {
      * Bundles up the values into one Map for ease of access.
      * @return Map of values
      */
-    public Map<String, Object> getValues() {
-        Map<String, Object> values = new HashMap<String, Object>();
-        values.put("blBroken", blocksBroken);
-        values.put("blPlaced", blocksPlaced);
+    public Map<VariableType, Object> getValues() {
+        @SuppressWarnings("serial")
+        Map<VariableType, Object> values = new HashMap<VariableType, Object>()
+        {{
+            put(VariableType.BLOCKS_BROKEN, blocksBroken);
+            put(VariableType.BLOCKS_PLACED, blocksPlaced);
+            
+            put(VariableType.DISTANCE_TRAVELED, distanceTotal);
+            put(VariableType.DISTANCE_FOOT, distanceFoot);
+            put(VariableType.DISTANCE_PIG, distancePig);
+            put(VariableType.DISTANCE_CART, distanceMinecart);
+            put(VariableType.DISTANCE_BOAT, distanceBoat);
+            put(VariableType.DISTANCE_FLIGHT, distanceFlight);
+            put(VariableType.DISTANCE_SWIM, distanceSwim);
+            
+            put(VariableType.ITEMS_BROKEN, toolsBroken);
+            put(VariableType.ITEMS_CRAFTED, itemsCrafted);
+            put(VariableType.ITEMS_EATEN, snacksEaten);
+            
+            put(VariableType.PVP_KILLS, pvpKills);
+            put(VariableType.PVE_KILLS, pveKills);
+            put(VariableType.DEATHS, deaths);
+        }};
         
-        values.put("distTotal", distanceTotal);
-        values.put("distFoot", distanceFoot);
-        values.put("distPig", distancePig);
-        values.put("distCart", distanceMinecart);
-        values.put("distBoat", distanceBoat);
-        values.put("distFlight", distanceFlight);
-        values.put("distSwim", distanceSwim);
-        
-        values.put("itBroken", toolsBroken);
-        values.put("itCrafted", itemsCrafted);
-        values.put("itEaten", snacksEaten);
-        values.put("pvpKills", pvpKills);
-        values.put("pveKills", pveKills);
-        values.put("deaths", deaths);
         values.putAll(Statistics.getServerStatistics().getValueMap());
         return values;
     }

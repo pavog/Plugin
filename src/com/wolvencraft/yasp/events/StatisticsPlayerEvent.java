@@ -1,5 +1,5 @@
 /*
- * SynchronizationEvent.java
+ * StatisticsPlayerEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,37 +18,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.plugin;
+package com.wolvencraft.yasp.events;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.AccessLevel;
 
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
+import org.bukkit.Bukkit;
+import org.bukkit.event.player.PlayerEvent;
 
-import com.wolvencraft.yasp.api.events.StatisticsEvent;
+import com.wolvencraft.yasp.session.OnlineSession;
 
-/**
- * Called when the database synchronization is starting
- * @author bitWolfy
- *
- */
 @Getter(AccessLevel.PUBLIC)
-public class SynchronizationEvent extends StatisticsEvent implements Cancellable {
+public abstract class StatisticsPlayerEvent extends PlayerEvent {
     
-    private static final HandlerList handlers = new HandlerList();
-    private int processId;
-    @Setter(AccessLevel.PUBLIC)
-    private boolean cancelled;
+    private OnlineSession session;
+    private TrackedActionType actionType;
     
-    public SynchronizationEvent(int processId) {
-        this.processId = processId;
-        this.cancelled = false;
+    public StatisticsPlayerEvent(OnlineSession session, TrackedActionType actionType) {
+        super(Bukkit.getServer().getPlayer(session.getName()));
+        this.session = session;
+        this.actionType = actionType;
     }
     
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
+    /**
+     * Returns the data associated with the event as a parameter
+     * @deprecated Unsafe and unreliable
+     * @return Parameter String
+     */
+    public abstract String getParameterString();
+
 }

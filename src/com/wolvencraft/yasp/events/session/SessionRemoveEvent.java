@@ -1,5 +1,5 @@
 /*
- * TrackedItemUseEvent.java
+ * SessionRemoveEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,37 +18,40 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events.player;
+package com.wolvencraft.yasp.events.session;
 
+import lombok.AllArgsConstructor;
 import lombok.AccessLevel;
-import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.api.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.api.events.TrackedActionType;
-import com.wolvencraft.yasp.db.data.items.DetailedItemUseEntry;
-import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.events.StatisticsEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
+import com.wolvencraft.yasp.session.DataSession;
 
-@Getter(AccessLevel.PUBLIC)
-public class TrackedItemUseEvent extends StatisticsPlayerEvent {
+/**
+ * Called when the player session expires.<br />
+ * This usually means that the player is offline
+ * @author bitWolfy
+ *
+ */
+@AllArgsConstructor(access=AccessLevel.PUBLIC)
+public class SessionRemoveEvent extends StatisticsEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedItemUseEntry data;
+    private static TrackedActionType actionType = TrackedActionType.LOGOUT;
+    private String playerName;
     
-    public TrackedItemUseEvent(OnlineSession session, DetailedItemUseEntry data) {
-        super(session, TrackedActionType.ITEM_USE);
-        this.data = data;
+    public DataSession getSession() {
+        return new DataSession(playerName);
     }
-
+    
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-
-    @Override
-    public String getParameterString() {
-        return data.getStack().getTypeId() + ":" + data.getStack().getDurability();
-    }
     
+    public TrackedActionType getActionType() {
+        return actionType;
+    }
 }

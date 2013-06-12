@@ -1,5 +1,5 @@
 /*
- * StatisticsPlayerEvent.java
+ * TrackedDeathEvent.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,33 +18,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.api.events;
+package com.wolvencraft.yasp.events.player;
 
-import lombok.Getter;
 import lombok.AccessLevel;
+import lombok.Getter;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.HandlerList;
 
+import com.wolvencraft.yasp.db.data.deaths.DetailedDeathEntry;
+import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
+import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 @Getter(AccessLevel.PUBLIC)
-public abstract class StatisticsPlayerEvent extends PlayerEvent {
+public class TrackedDeathEvent extends StatisticsPlayerEvent {
     
-    private OnlineSession session;
-    private TrackedActionType actionType;
+    private static final HandlerList handlers = new HandlerList();
+    private DetailedDeathEntry data;
     
-    public StatisticsPlayerEvent(OnlineSession session, TrackedActionType actionType) {
-        super(Bukkit.getServer().getPlayer(session.getName()));
-        this.session = session;
-        this.actionType = actionType;
+    public TrackedDeathEvent(OnlineSession session, DetailedDeathEntry data) {
+        super(session, TrackedActionType.DEATH);
+        this.data = data;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    @Override
+    public String getParameterString() {
+        return data.getCause().name();
     }
     
-    /**
-     * Returns the data associated with the event as a parameter
-     * @deprecated Unsafe and unreliable
-     * @return Parameter String
-     */
-    public abstract String getParameterString();
-
 }

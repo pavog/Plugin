@@ -23,10 +23,10 @@ package com.wolvencraft.yasp.db.data.blocks;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 
-import com.wolvencraft.yasp.api.events.player.TrackedBlockBreakEvent;
-import com.wolvencraft.yasp.api.events.player.TrackedBlockPlaceEvent;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
+import com.wolvencraft.yasp.events.player.TrackedBlockBreakEvent;
+import com.wolvencraft.yasp.events.player.TrackedBlockPlaceEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
