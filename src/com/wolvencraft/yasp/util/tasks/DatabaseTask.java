@@ -25,10 +25,12 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.events.plugin.SynchronizationCompleteEvent;
 import com.wolvencraft.yasp.events.plugin.SynchronizationEvent;
+import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
@@ -52,7 +54,9 @@ public class DatabaseTask implements Runnable {
      * Wraps around <code>public static void commit();</code>
      */
     @Override
-    public void run() { commit(); }
+    public void run() {
+        commit();
+    }
     
     /**
      * Commits collected data to the database.<br />
@@ -78,6 +82,10 @@ public class DatabaseTask implements Runnable {
         
         for(OnlineSession session : OnlineSessionCache.getSessions()) {
             session.pushData();
+            session.getPlayerTotals().fetchData();
+        }
+        
+        for(OfflineSession session : OfflineSessionCache.getSessions()) {
             session.getPlayerTotals().fetchData();
         }
         

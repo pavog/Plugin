@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
+import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
@@ -39,18 +40,18 @@ public class StatisticsAPI {
      * @param player Player object
      * @return Player session
      */
-    public static OnlineSession getOnlinePlayer(Player player) {
+    public static OnlineSession getSession(Player player) {
         return OnlineSessionCache.fetch(player);
     }
     
     /**
-     * Returns the DataSession for the player with the specified username.<br />
+     * Returns the OfflineSession for the player with the specified username.<br />
      * The player might not be online, or not exist at all.
      * @param username Player's username
      * @return DataSession with player's totals
      */
-    public static OfflineSession getPlayer(String username) {
-        return new OfflineSession(username);
+    public static OfflineSession getSession(String username) {
+        return OfflineSessionCache.fetch(username);
     }
     
     /**

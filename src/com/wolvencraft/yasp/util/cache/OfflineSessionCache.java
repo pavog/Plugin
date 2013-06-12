@@ -34,14 +34,14 @@ import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 public class OfflineSessionCache implements CachedDataProcess {
 
     private final long REFRESH_RATE_TICKS = (long)(24 * 3600 * 20);
-    private static List<OfflineSession> players;
+    private static List<OfflineSession> sessions;
     
     /**
      * <b>Default constructor</b><br />
      * Creates an list of Offline sessions for storage
      */
     public OfflineSessionCache() {
-        players = new ArrayList<OfflineSession>();
+        sessions = new ArrayList<OfflineSession>();
     }
     
     @Override
@@ -51,8 +51,8 @@ public class OfflineSessionCache implements CachedDataProcess {
     
     @Override
     public void run() {
-        for(OfflineSession session : new ArrayList<OfflineSession>(players)) {
-            if(!session.isOnline()) players.remove(session);
+        for(OfflineSession session : new ArrayList<OfflineSession>(sessions)) {
+            if(!session.isOnline()) sessions.remove(session);
         }
     }
     
@@ -62,11 +62,19 @@ public class OfflineSessionCache implements CachedDataProcess {
      * @return Offline session
      */
     public static OfflineSession fetch(String username) {
-        for(OfflineSession session : players) {
+        for(OfflineSession session : sessions) {
             if(session.getName().equals(username)) return session;
         }
         OfflineSession session = new OfflineSession(username);
-        players.add(session);
+        sessions.add(session);
         return session;
+    }
+    
+    /**
+     * Returns all stored sessions.
+     * @return List of stored player sessions
+     */
+    public static List<OfflineSession> getSessions() {
+        return new ArrayList<OfflineSession>(sessions);
     }
 }

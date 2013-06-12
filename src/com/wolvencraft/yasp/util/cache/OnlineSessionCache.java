@@ -145,9 +145,7 @@ public class OnlineSessionCache implements CachedDataProcess {
      * @return List of stored player sessions
      */
     public static List<OnlineSession> getSessions() {
-        List<OnlineSession> tempList = new ArrayList<OnlineSession>();
-        for(OnlineSession session : sessions) tempList.add(session);
-        return tempList;
+        return new ArrayList<OnlineSession>(sessions);
     }
 
     
