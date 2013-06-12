@@ -25,7 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import com.wolvencraft.yasp.Statistics;
@@ -73,58 +72,51 @@ public class PlayerTotals {
         
         if(!Statistics.getInstance().isEnabled()) return;
         
-        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
-            
-            @Override
-            public void run() {
-                try { values.put(PlayerVariable.SESSION_START, Query.table(PlayersTable.TableName).column(PlayersTable.LoginTime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.LoginTime)); }
-                catch (NullPointerException ex) { values.put(PlayerVariable.SESSION_START, Util.getTimestamp()); }
-                
-                long sessionStart = (Long) values.get(PlayerVariable.SESSION_START);
-                long totalPlaytime = Query.table(PlayersTable.TableName).column(PlayersTable.Playtime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.Playtime);
-                values.put(PlayerVariable.SESSION_LENGTH, Util.parseTimestamp(Util.getTimestamp() - sessionStart));
-                values.put(PlayerVariable.SESSION_LENGTH_RAW, (Util.getTimestamp() - sessionStart));
-                values.put(PlayerVariable.TOTAL_PLAYTIME, Util.parseTimestamp(totalPlaytime));
-                values.put(PlayerVariable.TOTAL_PLAYTIME_RAW, totalPlaytime);
-                
-                values.put(PlayerVariable.BLOCKS_BROKEN, (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Destroyed).condition(TotalBlocksTable.PlayerId, playerId).sum());
-                values.put(PlayerVariable.BLOCKS_PLACED, (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Placed).condition(TotalBlocksTable.PlayerId, playerId).sum());
-                
-                values.put(PlayerVariable.DISTANCE_FOOT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).condition(DistancePlayersTable.PlayerId, playerId).sum());
-                values.put(PlayerVariable.DISTANCE_BOAT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Boat).condition(DistancePlayersTable.PlayerId, playerId).sum());
-                values.put(PlayerVariable.DISTANCE_CART, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Minecart).condition(DistancePlayersTable.PlayerId, playerId).sum());
-                values.put(PlayerVariable.DISTANCE_PIG, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Pig).condition(DistancePlayersTable.PlayerId, playerId).sum());
-                values.put(PlayerVariable.DISTANCE_SWIM, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Swim).condition(DistancePlayersTable.PlayerId, playerId).sum());
-                values.put(PlayerVariable.DISTANCE_FLIGHT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Flight).condition(DistancePlayersTable.PlayerId, playerId).sum());
-                
-                int totalDistance = ((Integer) values.get(PlayerVariable.DISTANCE_FOOT))
-                        + ((Integer) values.get(PlayerVariable.DISTANCE_BOAT))
-                        + ((Integer) values.get(PlayerVariable.DISTANCE_CART))
-                        + ((Integer) values.get(PlayerVariable.DISTANCE_PIG))
-                        + ((Integer) values.get(PlayerVariable.DISTANCE_SWIM))
-                        + ((Integer) values.get(PlayerVariable.DISTANCE_FLIGHT));
-                values.put(PlayerVariable.DISTANCE_TRAVELED, totalDistance);
-                
-                values.put(PlayerVariable.ITEMS_BROKEN, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Broken).condition(TotalItemsTable.PlayerId, playerId).sum());
-                values.put(PlayerVariable.ITEMS_CRAFTED, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Crafted).condition(TotalItemsTable.PlayerId, playerId).sum());
-                values.put(PlayerVariable.ITEMS_EATEN, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Used).condition(TotalItemsTable.PlayerId, playerId).sum());
-                
-                int pvpKills = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.PlayerId, playerId).sum();
-                values.put(PlayerVariable.PVP_KILLS, pvpKills);
-                values.put(PlayerVariable.PVE_KILLS, (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.CreatureKilled).condition(TotalPVEKillsTable.PlayerId, playerId).sum());
-                
-                int pvpDeaths = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.VictimId, playerId).sum();
-                int otherDeaths = (int) Query.table(TotalDeathPlayersTable.TableName).column(TotalDeathPlayersTable.Times).condition(TotalDeathPlayersTable.PlayerId, playerId).sum();
-                int deaths = pvpDeaths + otherDeaths;
-                values.put(PlayerVariable.DEATHS, deaths);
-                
-                double kdr = 1;
-                if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
-                else kdr = pvpKills;
-                values.put(PlayerVariable.KILL_DEATH_RATIO, kdr);
-            }
-            
-        });
+        try { values.put(PlayerVariable.SESSION_START, Query.table(PlayersTable.TableName).column(PlayersTable.LoginTime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.LoginTime)); }
+        catch (NullPointerException ex) { values.put(PlayerVariable.SESSION_START, Util.getTimestamp()); }
+        
+        long sessionStart = (Long) values.get(PlayerVariable.SESSION_START);
+        long totalPlaytime = Query.table(PlayersTable.TableName).column(PlayersTable.Playtime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.Playtime);
+        values.put(PlayerVariable.SESSION_LENGTH, Util.parseTimestamp(Util.getTimestamp() - sessionStart));
+        values.put(PlayerVariable.SESSION_LENGTH_RAW, (Util.getTimestamp() - sessionStart));
+        values.put(PlayerVariable.TOTAL_PLAYTIME, Util.parseTimestamp(totalPlaytime));
+        values.put(PlayerVariable.TOTAL_PLAYTIME_RAW, totalPlaytime);
+        
+        values.put(PlayerVariable.BLOCKS_BROKEN, (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Destroyed).condition(TotalBlocksTable.PlayerId, playerId).sum());
+        values.put(PlayerVariable.BLOCKS_PLACED, (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Placed).condition(TotalBlocksTable.PlayerId, playerId).sum());
+        
+        values.put(PlayerVariable.DISTANCE_FOOT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).condition(DistancePlayersTable.PlayerId, playerId).sum());
+        values.put(PlayerVariable.DISTANCE_BOAT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Boat).condition(DistancePlayersTable.PlayerId, playerId).sum());
+        values.put(PlayerVariable.DISTANCE_CART, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Minecart).condition(DistancePlayersTable.PlayerId, playerId).sum());
+        values.put(PlayerVariable.DISTANCE_PIG, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Pig).condition(DistancePlayersTable.PlayerId, playerId).sum());
+        values.put(PlayerVariable.DISTANCE_SWIM, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Swim).condition(DistancePlayersTable.PlayerId, playerId).sum());
+        values.put(PlayerVariable.DISTANCE_FLIGHT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Flight).condition(DistancePlayersTable.PlayerId, playerId).sum());
+        
+        int totalDistance = ((Integer) values.get(PlayerVariable.DISTANCE_FOOT))
+                + ((Integer) values.get(PlayerVariable.DISTANCE_BOAT))
+                + ((Integer) values.get(PlayerVariable.DISTANCE_CART))
+                + ((Integer) values.get(PlayerVariable.DISTANCE_PIG))
+                + ((Integer) values.get(PlayerVariable.DISTANCE_SWIM))
+                + ((Integer) values.get(PlayerVariable.DISTANCE_FLIGHT));
+        values.put(PlayerVariable.DISTANCE_TRAVELED, totalDistance);
+        
+        values.put(PlayerVariable.ITEMS_BROKEN, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Broken).condition(TotalItemsTable.PlayerId, playerId).sum());
+        values.put(PlayerVariable.ITEMS_CRAFTED, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Crafted).condition(TotalItemsTable.PlayerId, playerId).sum());
+        values.put(PlayerVariable.ITEMS_EATEN, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Used).condition(TotalItemsTable.PlayerId, playerId).sum());
+        
+        int pvpKills = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.PlayerId, playerId).sum();
+        values.put(PlayerVariable.PVP_KILLS, pvpKills);
+        values.put(PlayerVariable.PVE_KILLS, (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.CreatureKilled).condition(TotalPVEKillsTable.PlayerId, playerId).sum());
+        
+        int pvpDeaths = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.VictimId, playerId).sum();
+        int otherDeaths = (int) Query.table(TotalDeathPlayersTable.TableName).column(TotalDeathPlayersTable.Times).condition(TotalDeathPlayersTable.PlayerId, playerId).sum();
+        int deaths = pvpDeaths + otherDeaths;
+        values.put(PlayerVariable.DEATHS, deaths);
+        
+        double kdr = 1;
+        if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
+        else kdr = pvpKills;
+        values.put(PlayerVariable.KILL_DEATH_RATIO, kdr);
     }
     
     /**

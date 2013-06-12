@@ -27,7 +27,7 @@ import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.events.StatisticsEvent;
 import com.wolvencraft.yasp.events.TrackedActionType;
-import com.wolvencraft.yasp.session.DataSession;
+import com.wolvencraft.yasp.session.OfflineSession;
 
 /**
  * Called when the player session expires.<br />
@@ -42,8 +42,8 @@ public class SessionRemoveEvent extends StatisticsEvent {
     private static TrackedActionType actionType = TrackedActionType.LOGOUT;
     private String playerName;
     
-    public DataSession getSession() {
-        return new DataSession(playerName);
+    public OfflineSession getSession() {
+        return new OfflineSession(playerName);
     }
     
     @Override

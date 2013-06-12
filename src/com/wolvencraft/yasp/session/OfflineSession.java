@@ -1,5 +1,5 @@
 /*
- * OfflineSession.java
+ * DataSession.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -20,17 +20,21 @@
 
 package com.wolvencraft.yasp.session;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
- * A cut-down version of OnlineSession.<br />
- * The player might be offline, or not exist at all
+ * A simplistic representation of a player's session.<br />
+ * The player in question might be offline, or not exist at all.
  * @author bitWolfy
  *
  */
+@Getter(AccessLevel.PUBLIC)
 public class OfflineSession implements PlayerSession {
     
     private final int id;
@@ -40,38 +44,19 @@ public class OfflineSession implements PlayerSession {
     
     /**
      * <b>Default constructor</b><br />
-     * Attempts to create a new user session for the player with the specified name.
-     * @param name Player name
+     * Creates a new player data session based on the username
+     * @param name Player username
      */
     public OfflineSession(String name) {
         this.name = name;
         this.id = PlayerCache.get(name);
-        
         this.playerTotals = new PlayerTotals(id);
-    }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override
     public boolean isOnline() {
         if(Bukkit.getPlayerExact(name) == null) return false;
         return true;
-    }
-    
-    /**
-     * Returns the totals associated with this player
-     * @return Player totals
-     */
-    public PlayerTotals getTotals() {
-        return playerTotals;
     }
 
 }

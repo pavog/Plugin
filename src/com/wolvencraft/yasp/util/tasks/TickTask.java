@@ -20,6 +20,8 @@
 
 package com.wolvencraft.yasp.util.tasks;
 
+import com.wolvencraft.yasp.Statistics;
+
 /**
  * Measures the tick rate of the server.<br />
  * There can only be one instance of this method running in the plugin.
@@ -49,6 +51,7 @@ public class TickTask implements Runnable {
         else {
             currentSec = sec;
             ticksPerSecond = (ticksPerSecond == 0 ? ticks : ((ticksPerSecond + ticks) / 2));
+            Statistics.getServerStatistics().updateTPS(ticksPerSecond);
             ticks = 0;
             if((++delay % 300) == 0) { delay = 0; }
         }

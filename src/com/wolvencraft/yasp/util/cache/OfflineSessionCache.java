@@ -51,12 +51,7 @@ public class OfflineSessionCache implements CachedDataProcess {
     
     @Override
     public void run() {
-        List<OfflineSession> temp = new ArrayList<OfflineSession>();
-        for(OfflineSession session : players) {
-            temp.add(session);
-        }
-        
-        for(OfflineSession session : temp) {
+        for(OfflineSession session : new ArrayList<OfflineSession>(players)) {
             if(!session.isOnline()) players.remove(session);
         }
     }

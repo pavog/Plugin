@@ -22,7 +22,7 @@ package com.wolvencraft.yasp;
 
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.session.DataSession;
+import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
@@ -49,8 +49,8 @@ public class StatisticsAPI {
      * @param username Player's username
      * @return DataSession with player's totals
      */
-    public static DataSession getPlayer(String username) {
-        return new DataSession(username);
+    public static OfflineSession getPlayer(String username) {
+        return new OfflineSession(username);
     }
     
     /**

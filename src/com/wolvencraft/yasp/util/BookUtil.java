@@ -58,7 +58,7 @@ public class BookUtil {
      * @return Array of strings, each of them representing a new page in the book.
      */
     public static String[] getBookPages(String playerName) {
-        PlayerTotals stats = OfflineSessionCache.fetch(playerName).getTotals();
+        PlayerTotals stats = OfflineSessionCache.fetch(playerName).getPlayerTotals();
         return new String[] {
                 ChatColor.DARK_RED + "\n\n" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.BLACK + "Current session: \n\n" + stats.getValue(PlayerVariable.SESSION_LENGTH) + "\n\n" + 

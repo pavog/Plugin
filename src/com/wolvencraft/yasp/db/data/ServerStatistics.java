@@ -259,4 +259,12 @@ public class ServerStatistics {
         }};
         return values;
     }
+    
+    /**
+     * Updates the tickrate to the one specified
+     * @param ticksPerSecond Tickrate
+     */
+    public void updateTPS(int ticksPerSecond) {
+        this.ticksPerSecond = ticksPerSecond;
+    }
 }
