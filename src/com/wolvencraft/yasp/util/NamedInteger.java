@@ -20,15 +20,19 @@
 
 package com.wolvencraft.yasp.util;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 /**
  * Represents an integer that has a String attached to it
  * @author bitWolfy
  *
  */
+@Getter(AccessLevel.PUBLIC)
 public class NamedInteger {
     
     private String name;
-    private String[] names;
+    private String[] possibleNames;
     private Integer value;
     
     /**
@@ -38,7 +42,7 @@ public class NamedInteger {
     public NamedInteger() {
         name = "NO_NAME";
         value = -1;
-        names = new String[] {"NO_NAME"};
+        possibleNames = new String[] {"NO_NAME"};
     }
     
     /**
@@ -50,31 +54,7 @@ public class NamedInteger {
     public NamedInteger(String name, Integer value) {
         this.name = name;
         this.value = value;
-        names = new String[] { name };
-    }
-    
-    /**
-     * Returns the name of the Integer
-     * @return Name
-     */
-    public String getName() {
-        return name;
-    }
-    
-    /**
-     * Returns the value of the Integer
-     * @return Value
-     */
-    public Integer getValue() {
-        return value;
-    }
-    
-    /**
-     * Returns the list of alternative names for the Integer
-     * @return Names
-     */
-    public String[] getPossibleNames() {
-        return names;
+        possibleNames = new String[] { name };
     }
     
     /**
@@ -92,7 +72,7 @@ public class NamedInteger {
      * @param names Possible names
      */
     public void setPossibleNames(String... names) {
-        this.names = names;
+        this.possibleNames = names;
     }
     
 }

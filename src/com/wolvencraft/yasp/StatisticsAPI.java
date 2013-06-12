@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.session.DataSession;
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.util.VariableType;
+import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
@@ -58,7 +58,7 @@ public class StatisticsAPI {
      * @param type Variable type
      * @return Variable value
      */
-    public static Object getValue(VariableType type) {
+    public static Object getValue(ServerVariable type) {
         return Statistics.getServerTotals().getValues().get(type);
     }
     

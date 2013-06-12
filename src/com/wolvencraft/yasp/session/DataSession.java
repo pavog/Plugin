@@ -23,6 +23,7 @@ package com.wolvencraft.yasp.session;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
@@ -70,7 +71,7 @@ public class DataSession implements PlayerSession {
      * @return Player's session length
      */
     public long getSessionLength() {
-        return (Long) playerTotals.getValues().get("rawCurrentSession");
+        return (Long) playerTotals.getValue(PlayerVariable.SESSION_LENGTH_RAW);
     }
     
     /**
@@ -78,7 +79,7 @@ public class DataSession implements PlayerSession {
      * @return Player's total playtime
      */
     public long getTotalPlaytime() {
-        return (Long) playerTotals.getValues().get("rawTotalPlaytime");
+        return (Long) playerTotals.getValue(PlayerVariable.TOTAL_PLAYTIME_RAW);
     }
     
     /**
@@ -86,7 +87,7 @@ public class DataSession implements PlayerSession {
      * @return Number of blocks
      */
     public int getBlocksBroken() {
-        return (Integer) playerTotals.getValues().get("blocksBroken");
+        return (Integer) playerTotals.getValue(PlayerVariable.BLOCKS_BROKEN);
     }
     
     /**
@@ -94,7 +95,7 @@ public class DataSession implements PlayerSession {
      * @return Number of blocks
      */
     public int getBlocksPlaced() {
-        return (Integer) playerTotals.getValues().get("blocksPlaced");
+        return (Integer) playerTotals.getValue(PlayerVariable.BLOCKS_PLACED);
     }
     
     /**
@@ -102,7 +103,7 @@ public class DataSession implements PlayerSession {
      * @return Number of items
      */
     public int getToolsBroken() {
-        return (Integer) playerTotals.getValues().get("toolsBroken");
+        return (Integer) playerTotals.getValue(PlayerVariable.ITEMS_BROKEN);
     }
     
     /**
@@ -110,7 +111,7 @@ public class DataSession implements PlayerSession {
      * @return Number of items
      */
     public int getItemsCrafted() {
-        return (Integer) playerTotals.getValues().get("itemsCrafted");
+        return (Integer) playerTotals.getValue(PlayerVariable.ITEMS_CRAFTED);
     }
     
     /**
@@ -118,7 +119,7 @@ public class DataSession implements PlayerSession {
      * @return Number of items
      */
     public int getFoodEaten() {
-        return (Integer) playerTotals.getValues().get("snacksEaten");
+        return (Integer) playerTotals.getValue(PlayerVariable.ITEMS_EATEN);
     }
     
     /**
@@ -126,7 +127,7 @@ public class DataSession implements PlayerSession {
      * @return Number of kills
      */
     public int getPVPKills() {
-        return (Integer) playerTotals.getValues().get("pvpKills");
+        return (Integer) playerTotals.getValue(PlayerVariable.PVP_KILLS);
     }
     
     /**
@@ -134,7 +135,7 @@ public class DataSession implements PlayerSession {
      * @return Number of kills
      */
     public int getPVEKills() {
-        return (Integer) playerTotals.getValues().get("pveKills");
+        return (Integer) playerTotals.getValue(PlayerVariable.PVE_KILLS);
     }
     
     /**
@@ -142,7 +143,7 @@ public class DataSession implements PlayerSession {
      * @return Number of deaths
      */
     public int getDeaths() {
-        return (Integer) playerTotals.getValues().get("deaths");
+        return (Integer) playerTotals.getValue(PlayerVariable.DEATHS);
     }
     
     /**
@@ -150,7 +151,7 @@ public class DataSession implements PlayerSession {
      * @return Player's KDR
      */
     public double getKDR() {
-        return (Double) playerTotals.getValues().get("kdr");
+        return (Double) playerTotals.getValue(PlayerVariable.KILL_DEATH_RATIO);
     }
     
     /**
@@ -158,7 +159,7 @@ public class DataSession implements PlayerSession {
      * @return Distance traveled
      */
     public double getDistanceTotal() {
-        return (Double) playerTotals.getValues().get("distTotal");
+        return (Double) playerTotals.getValue(PlayerVariable.DISTANCE_TRAVELED);
     }
     
     /**
@@ -166,7 +167,7 @@ public class DataSession implements PlayerSession {
      * @return Distance traveled
      */
     public double getDistancePig() {
-        return (Double) playerTotals.getValues().get("distPiggybacked");
+        return (Double) playerTotals.getValue(PlayerVariable.DISTANCE_PIG);
     }
     
     /**
@@ -174,7 +175,7 @@ public class DataSession implements PlayerSession {
      * @return Distance traveled
      */
     public double getDistanceMinecart() {
-        return (Double) playerTotals.getValues().get("distMinecarted");
+        return (Double) playerTotals.getValue(PlayerVariable.DISTANCE_CART);
     }
     
     /**
@@ -182,7 +183,7 @@ public class DataSession implements PlayerSession {
      * @return Distance traveled
      */
     public double getDistanceBoat() {
-        return (Double) playerTotals.getValues().get("distBoated");
+        return (Double) playerTotals.getValue(PlayerVariable.DISTANCE_BOAT);
     }
     
     /**
@@ -190,7 +191,7 @@ public class DataSession implements PlayerSession {
      * @return Distance traveled
      */
     public double getDistanceFlight() {
-        return (Double) playerTotals.getValues().get("distFlight");
+        return (Double) playerTotals.getValue(PlayerVariable.DISTANCE_FLIGHT);
     }
     
     /**
@@ -198,7 +199,7 @@ public class DataSession implements PlayerSession {
      * @return Distance traveled
      */
     public double getDistanceSwam() {
-        return (Double) playerTotals.getValues().get("distSwam");
+        return (Double) playerTotals.getValue(PlayerVariable.DISTANCE_SWIM);
     }
 
 }

@@ -20,8 +20,6 @@
 
 package com.wolvencraft.yasp.util;
 
-import java.util.Map;
-
 import net.minecraft.server.v1_5_R3.NBTTagCompound;
 import net.minecraft.server.v1_5_R3.NBTTagList;
 import net.minecraft.server.v1_5_R3.NBTTagString;
@@ -31,6 +29,8 @@ import org.bukkit.craftbukkit.v1_5_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.db.totals.PlayerTotals;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 
 public class BookUtil {
@@ -73,37 +73,37 @@ public class BookUtil {
      * @return Array of strings, each of them representing a new page in the book.
      */
     public static String[] getBookPages(String playerName) {
-        Map<String, Object> stats = OfflineSessionCache.fetch(playerName).getTotals().getValues();
+        PlayerTotals stats = OfflineSessionCache.fetch(playerName).getTotals();
         return new String[] {
                 ChatColor.DARK_RED + "\n\n" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
-                ChatColor.BLACK + "Current session: \n\n" + stats.get("currentSession") + "\n\n" + 
-                ChatColor.BLACK + "Total playtime: \n\n" + stats.get("totalPlaytime"),
+                ChatColor.BLACK + "Current session: \n\n" + stats.getValue(PlayerVariable.SESSION_LENGTH) + "\n\n" + 
+                ChatColor.BLACK + "Total playtime: \n\n" + stats.getValue(PlayerVariable.TOTAL_PLAYTIME),
 
                 ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.BLACK + ChatColor.BOLD + "  Blocks and items \n" + 
                 ChatColor.RED + ChatColor.BOLD + " - Blocks " + ChatColor.RESET + "\n" + 
-                ChatColor.BLACK + " Broken: " + stats.get("blocksBroken") + "\n" + 
-                ChatColor.BLACK + " Placed: " + stats.get("blocksPlaced") + "\n\n" +
+                ChatColor.BLACK + " Broken: " + stats.getValue(PlayerVariable.BLOCKS_BROKEN) + "\n" + 
+                ChatColor.BLACK + " Placed: " + stats.getValue(PlayerVariable.BLOCKS_PLACED) + "\n\n" +
                 ChatColor.RED + ChatColor.BOLD + "- Items" + ChatColor.RESET + "\n" +
-                ChatColor.BLACK + " Crafted: " + stats.get("itemsCrafted") + "\n" + 
-                ChatColor.BLACK + " Broken: " + stats.get("toolsBroken") + "\n" + 
-                ChatColor.BLACK + " Eaten: " + stats.get("snacksEaten"),
+                ChatColor.BLACK + " Crafted: " + stats.getValue(PlayerVariable.ITEMS_CRAFTED) + "\n" + 
+                ChatColor.BLACK + " Broken: " + stats.getValue(PlayerVariable.ITEMS_BROKEN) + "\n" + 
+                ChatColor.BLACK + " Eaten: " + stats.getValue(PlayerVariable.ITEMS_EATEN),
                 
                 ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.RED + ChatColor.BOLD + "  Travel log \n" + 
-                ChatColor.BLACK + " Total: " + stats.get("distTotal") + "\n\n" + 
-                ChatColor.BLACK + " By foot: " + stats.get("distWalked") + "\n" +
-                ChatColor.BLACK + " Swimmed: " + stats.get("distSwam") + "\n" +
-                ChatColor.BLACK + " In minecart: " + stats.get("distMinecarted") + "\n" + 
-                ChatColor.BLACK + " In a boat: " + stats.get("distBoated") + "\n" + 
-                ChatColor.BLACK + " On a pig: " + stats.get("distPiggybacked"),
+                ChatColor.BLACK + " Total: " + stats.getValue(PlayerVariable.DISTANCE_TRAVELED) + "\n\n" + 
+                ChatColor.BLACK + " By foot: " + stats.getValue(PlayerVariable.DISTANCE_FOOT) + "\n" +
+                ChatColor.BLACK + " Swimmed: " + stats.getValue(PlayerVariable.DISTANCE_SWIM) + "\n" +
+                ChatColor.BLACK + " In minecart: " + stats.getValue(PlayerVariable.DISTANCE_CART) + "\n" + 
+                ChatColor.BLACK + " In a boat: " + stats.getValue(PlayerVariable.DISTANCE_BOAT) + "\n" + 
+                ChatColor.BLACK + " On a pig: " + stats.getValue(PlayerVariable.DISTANCE_PIG),
                 
                 ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.BLACK + ChatColor.BOLD + "  Kills and Deaths \n" + 
-                ChatColor.BLACK + " PVP Kills: " + stats.get("pvpKills") + "\n" + 
-                ChatColor.BLACK + " PVE kills: " + stats.get("pveKills") + "\n" + 
-                ChatColor.BLACK + " Deaths: " + stats.get("deaths") + "\n" + 
-                ChatColor.BLACK + " K/D: " + stats.get("kdr") + "\n\n"
+                ChatColor.BLACK + " PVP Kills: " + stats.getValue(PlayerVariable.PVP_KILLS) + "\n" + 
+                ChatColor.BLACK + " PVE kills: " + stats.getValue(PlayerVariable.PVE_KILLS) + "\n" + 
+                ChatColor.BLACK + " Deaths: " + stats.getValue(PlayerVariable.DEATHS) + "\n" + 
+                ChatColor.BLACK + " K/D: " + stats.getValue(PlayerVariable.KILL_DEATH_RATIO) + "\n\n"
         };
     }
     

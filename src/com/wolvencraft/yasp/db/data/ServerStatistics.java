@@ -32,7 +32,7 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.ServerStatsTable;
 import com.wolvencraft.yasp.util.Util;
-import com.wolvencraft.yasp.util.VariableType;
+import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 import com.wolvencraft.yasp.util.tasks.TickTask;
 
 /**
@@ -226,36 +226,36 @@ public class ServerStatistics {
      * Returns a map of variables and their values to replace variables on signs.
      * @return Map of statistical variables
      */
-    public Map<VariableType, Object> getValueMap() {
+    public Map<ServerVariable, Object> getValueMap() {
         @SuppressWarnings("serial")
-        Map<VariableType, Object> values = new HashMap<VariableType, Object>()
+        Map<ServerVariable, Object> values = new HashMap<ServerVariable, Object>()
         {{
-            put(VariableType.LAST_SYNC, lastSyncTime);
+            put(ServerVariable.LAST_SYNC, lastSyncTime);
             
-            put(VariableType.FIRST_STARTUP, firstStartup);
-            put(VariableType.LAST_STARTUP, lastStartup);
-            put(VariableType.CURRENT_UPTIME, currentUptime);
-            put(VariableType.TOTAL_UPTIME, totalUptime);
-            put(VariableType.LAST_SHUTDOWN, lastShutdown);
+            put(ServerVariable.FIRST_STARTUP, firstStartup);
+            put(ServerVariable.LAST_STARTUP, lastStartup);
+            put(ServerVariable.CURRENT_UPTIME, currentUptime);
+            put(ServerVariable.TOTAL_UPTIME, totalUptime);
+            put(ServerVariable.LAST_SHUTDOWN, lastShutdown);
 
-            put(VariableType.TOTAL_MEMORY, totalMemory);
-            put(VariableType.FREE_MEMORY, freeMemory);
-            put(VariableType.TICKS_PER_SECOND, ticksPerSecond);
+            put(ServerVariable.TOTAL_MEMORY, totalMemory);
+            put(ServerVariable.FREE_MEMORY, freeMemory);
+            put(ServerVariable.TICKS_PER_SECOND, ticksPerSecond);
 
-            put(VariableType.SERVER_IP, serverIP);
-            put(VariableType.SERVER_PORT, serverPort);
-            put(VariableType.SERVER_MOTD, serverMOTD);
-            put(VariableType.BUKKIT_VERSION, bukkitVersion);
-            put(VariableType.PLUGINS_COUNT, plugins);
+            put(ServerVariable.SERVER_IP, serverIP);
+            put(ServerVariable.SERVER_PORT, serverPort);
+            put(ServerVariable.SERVER_MOTD, serverMOTD);
+            put(ServerVariable.BUKKIT_VERSION, bukkitVersion);
+            put(ServerVariable.PLUGINS_COUNT, plugins);
 
-            put(VariableType.SERVER_TIME, serverTime);
-            put(VariableType.WEATHER, weather);
-            put(VariableType.WEATHER_DURATION, weatherDuration);
+            put(ServerVariable.SERVER_TIME, serverTime);
+            put(ServerVariable.WEATHER, weather);
+            put(ServerVariable.WEATHER_DURATION, weatherDuration);
             
-            put(VariableType.MAX_PLAYERS_ONLINE, maxPlayersOnline);
-            put(VariableType.MAX_PLAYERS_TIME, maxPlayersOnlineTime);
+            put(ServerVariable.MAX_PLAYERS_ONLINE, maxPlayersOnline);
+            put(ServerVariable.MAX_PLAYERS_TIME, maxPlayersOnlineTime);
             
-            put(VariableType.MAX_PLAYERS_ALLOWED, maxPlayersAllowed);
+            put(ServerVariable.MAX_PLAYERS_ALLOWED, maxPlayersAllowed);
         }};
         return values;
     }

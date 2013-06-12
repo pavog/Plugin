@@ -39,6 +39,7 @@ import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
 /**
  * Generic Player information used on DisplaySigns and books.
@@ -48,29 +49,7 @@ import com.wolvencraft.yasp.util.Util;
 public class PlayerTotals {
     
     private int playerId;
-    
-    private long sessionStart;
-    private long totalPlaytime;
-    
-    private int blocksBroken;
-    private int blocksPlaced;
-    
-    private double distWalked;
-    private double distBoated;
-    private double distMinecarted;
-    private double distPiggybacked;
-    private double distSwam;
-    private double distFlight;
-    private double distTotal;
-    
-    private int toolsBroken;
-    private int itemsCrafted;
-    private int snacksEaten;
-    
-    private int pvpKills;
-    private int pveKills;
-    private int deaths;
-    private double kdr;
+    private Map<PlayerVariable, Object> values;
     
     /**
      * <b>Default Constructor</b><br />
@@ -79,27 +58,9 @@ public class PlayerTotals {
     public PlayerTotals(int playerId) {
         this.playerId = playerId;
         
-        sessionStart = Util.getTimestamp();
-        totalPlaytime = 0;
-        
-        blocksBroken = 0;
-        blocksPlaced = 0;
-        
-        distWalked = 0;
-        distBoated = 0;
-        distMinecarted = 0;
-        distPiggybacked = 0;
-        distSwam = 0;
-        distTotal = 0;
-        
-        toolsBroken = 0;
-        itemsCrafted = 0;
-        snacksEaten = 0;
-        
-        pvpKills = 0;
-        pveKills = 0;
-        deaths = 0;
-        kdr = 1;
+        values = new HashMap<PlayerVariable, Object>();
+        values.put(PlayerVariable.SESSION_START, Util.getTimestamp());
+        values.put(PlayerVariable.KILL_DEATH_RATIO, 1);
         
         fetchData();
     }
@@ -116,90 +77,111 @@ public class PlayerTotals {
             
             @Override
             public void run() {
-                try { sessionStart = Query.table(PlayersTable.TableName).column(PlayersTable.LoginTime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.LoginTime); }
-                catch (NullPointerException ex) { sessionStart = Util.getTimestamp(); }
+                try { values.put(PlayerVariable.SESSION_START, Query.table(PlayersTable.TableName).column(PlayersTable.LoginTime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.LoginTime)); }
+                catch (NullPointerException ex) { values.put(PlayerVariable.SESSION_START, Util.getTimestamp()); }
                 
-                totalPlaytime = Query.table(PlayersTable.TableName).column(PlayersTable.Playtime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.Playtime);
+                long sessionStart = (Long) values.get(PlayerVariable.SESSION_START);
+                long totalPlaytime = Query.table(PlayersTable.TableName).column(PlayersTable.Playtime).condition(PlayersTable.PlayerId, playerId).select().asLong(PlayersTable.Playtime);
+                values.put(PlayerVariable.SESSION_LENGTH, Util.parseTimestamp(Util.getTimestamp() - sessionStart));
+                values.put(PlayerVariable.SESSION_LENGTH_RAW, (Util.getTimestamp() - sessionStart));
+                values.put(PlayerVariable.TOTAL_PLAYTIME, Util.parseTimestamp(totalPlaytime));
+                values.put(PlayerVariable.TOTAL_PLAYTIME_RAW, totalPlaytime);
                 
-                blocksBroken = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Destroyed).condition(TotalBlocksTable.PlayerId, playerId).sum();
-                blocksPlaced = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Placed).condition(TotalBlocksTable.PlayerId, playerId).sum();
+                values.put(PlayerVariable.BLOCKS_BROKEN, (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Destroyed).condition(TotalBlocksTable.PlayerId, playerId).sum());
+                values.put(PlayerVariable.BLOCKS_PLACED, (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Placed).condition(TotalBlocksTable.PlayerId, playerId).sum());
                 
-                distWalked = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).condition(DistancePlayersTable.PlayerId, playerId).sum();
-                distBoated = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Boat).condition(DistancePlayersTable.PlayerId, playerId).sum();
-                distMinecarted = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Minecart).condition(DistancePlayersTable.PlayerId, playerId).sum();
-                distPiggybacked = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Pig).condition(DistancePlayersTable.PlayerId, playerId).sum();
-                distSwam = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Swim).condition(DistancePlayersTable.PlayerId, playerId).sum();
-                distFlight = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Flight).condition(DistancePlayersTable.PlayerId, playerId).sum();
-                distTotal = distWalked + distBoated + distMinecarted + distPiggybacked + distSwam;
+                values.put(PlayerVariable.DISTANCE_FOOT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).condition(DistancePlayersTable.PlayerId, playerId).sum());
+                values.put(PlayerVariable.DISTANCE_BOAT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Boat).condition(DistancePlayersTable.PlayerId, playerId).sum());
+                values.put(PlayerVariable.DISTANCE_CART, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Minecart).condition(DistancePlayersTable.PlayerId, playerId).sum());
+                values.put(PlayerVariable.DISTANCE_PIG, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Pig).condition(DistancePlayersTable.PlayerId, playerId).sum());
+                values.put(PlayerVariable.DISTANCE_SWIM, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Swim).condition(DistancePlayersTable.PlayerId, playerId).sum());
+                values.put(PlayerVariable.DISTANCE_FLIGHT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Flight).condition(DistancePlayersTable.PlayerId, playerId).sum());
                 
-                toolsBroken = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Broken).condition(TotalItemsTable.PlayerId, playerId).sum();
-                itemsCrafted = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Crafted).condition(TotalItemsTable.PlayerId, playerId).sum();
-                snacksEaten = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Used).condition(TotalItemsTable.PlayerId, playerId).sum();
+                int totalDistance = ((Integer) values.get(PlayerVariable.DISTANCE_FOOT))
+                        + ((Integer) values.get(PlayerVariable.DISTANCE_BOAT))
+                        + ((Integer) values.get(PlayerVariable.DISTANCE_CART))
+                        + ((Integer) values.get(PlayerVariable.DISTANCE_PIG))
+                        + ((Integer) values.get(PlayerVariable.DISTANCE_SWIM))
+                        + ((Integer) values.get(PlayerVariable.DISTANCE_FLIGHT));
+                values.put(PlayerVariable.DISTANCE_TRAVELED, totalDistance);
                 
-                pvpKills = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.PlayerId, playerId).sum();
-                pveKills = (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.CreatureKilled).condition(TotalPVEKillsTable.PlayerId, playerId).sum();
+                values.put(PlayerVariable.ITEMS_BROKEN, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Broken).condition(TotalItemsTable.PlayerId, playerId).sum());
+                values.put(PlayerVariable.ITEMS_CRAFTED, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Crafted).condition(TotalItemsTable.PlayerId, playerId).sum());
+                values.put(PlayerVariable.ITEMS_EATEN, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Used).condition(TotalItemsTable.PlayerId, playerId).sum());
+                
+                int pvpKills = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.PlayerId, playerId).sum();
+                values.put(PlayerVariable.PVP_KILLS, pvpKills);
+                values.put(PlayerVariable.PVE_KILLS, (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.CreatureKilled).condition(TotalPVEKillsTable.PlayerId, playerId).sum());
+                
                 int pvpDeaths = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).condition(TotalPVPKillsTable.VictimId, playerId).sum();
                 int otherDeaths = (int) Query.table(TotalDeathPlayersTable.TableName).column(TotalDeathPlayersTable.Times).condition(TotalDeathPlayersTable.PlayerId, playerId).sum();
+                int deaths = pvpDeaths + otherDeaths;
+                values.put(PlayerVariable.DEATHS, deaths);
                 
-                deaths = pvpDeaths + otherDeaths;
+                double kdr = 1;
                 if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
                 else kdr = pvpKills;
+                values.put(PlayerVariable.KILL_DEATH_RATIO, kdr);
             }
             
         });
     }
     
     /**
-     * Bundles up the values into one Map for ease of access.
-     * @return Map of values
+     * Safely returns the value of the specified variable
+     * @param type Variable to return
+     * @return Variable value
      */
-    public Map<String, Object> getValues() {
-        if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
-        else kdr = pvpKills;
-        
-        Map<String, Object> values = new HashMap<String, Object>();
-        values.put("currentSession", Util.parseTimestamp(Util.getTimestamp() - sessionStart));
-        values.put("rawCurrentSession", (Util.getTimestamp() - sessionStart));
-        values.put("totalPlaytime", Util.parseTimestamp(totalPlaytime));
-        values.put("rawTotalPlaytime", totalPlaytime);
-        
-        values.put("blocksBroken", blocksBroken);
-        values.put("blocksPlaced", blocksPlaced);
-        
-        values.put("distWalked", distWalked);
-        values.put("distBoated", distBoated);
-        values.put("distMinecarted", distMinecarted);
-        values.put("distPiggybacked", distPiggybacked);
-        values.put("distSwam", distSwam);
-        values.put("distFlight", distFlight);
-        values.put("distTotal", distTotal);
-        
-        values.put("toolsBroken", toolsBroken);
-        values.put("itemsCrafted", itemsCrafted);
-        values.put("snacksEaten", snacksEaten);
-        
-        values.put("pvpKills", pvpKills);
-        values.put("pveKills", pveKills);
-        values.put("deaths", deaths);
-        values.put("kdr", kdr);
-        return values;
+    public Object getValue(PlayerVariable type) {
+        if(values.containsKey(type)) return values.get(type);
+        values.put(type, 0);
+        return 0;
+    }
+    
+    /**
+     * Safely increments the specified value by 1
+     * @param type Value to increment
+     */
+    public void incrementValue(PlayerVariable type) {
+        int value = (Integer) getValue(type);
+        values.put(type, ++value);
+    }
+    
+    /**
+     * Safely increments the specified value by 1
+     * @param type Value to increment
+     */
+    public void incrementValue(PlayerVariable type, int amount) {
+        int value = (Integer) getValue(type) + amount;
+        values.put(type, value);
+    }
+    
+    /**
+     * Safely increments the specified value by 1
+     * @param type Value to increment
+     */
+    public void incrementValue(PlayerVariable type, double amount) {
+        double value = (Double) getValue(type) + amount;
+        values.put(type, value);
     }
     
     /**
      * Bundles up the Named values into one Map for ease of access.
      * @return Map of named values
      */
+    @SuppressWarnings("serial")
     public List<NamedInteger> getNamedValues() {
-        List<NamedInteger> values = new LinkedList<NamedInteger>();
-        values.add(getBlocksBroken());
-        values.add(getBlocksPlaced());
-        values.add(getCurrentSession());
-        values.add(getTotalPlaytime());
-        values.add(getDeaths());
-        values.add(getPVPKills());
-        values.add(getPVEKills());
-        values.add(getDistance());
-        return values;
+        return new LinkedList<NamedInteger>()
+                {{
+                    add(getBlocksBroken());
+                    add(getBlocksPlaced());
+                    add(getCurrentSession());
+                    add(getTotalPlaytime());
+                    add(getDeaths());
+                    add(getPVPKills());
+                    add(getPVEKills());
+                    add(getDistance());
+                }};
     }
     
     /**
@@ -208,7 +190,7 @@ public class PlayerTotals {
      * @return Current session lenght
      */
     public NamedInteger getCurrentSession() {
-        long currentSession = Util.getTimestamp() - sessionStart;
+        long currentSession = Util.getTimestamp() - (Long) getValue(PlayerVariable.SESSION_START);
         NamedInteger value = new NamedInteger();
         if(currentSession < 60) {
             value.setData (ChatColor.GREEN + "Online (sec)", (int) (currentSession));
@@ -228,6 +210,7 @@ public class PlayerTotals {
      */
     public NamedInteger getTotalPlaytime() {
         NamedInteger value = new NamedInteger();
+        long totalPlaytime = (Long) getValue(PlayerVariable.TOTAL_PLAYTIME);
         if(totalPlaytime < 60) {
             value.setData (ChatColor.GREEN + "Playtime (sec)", (int) (totalPlaytime));
         } else if(totalPlaytime < 3600) {
@@ -246,6 +229,7 @@ public class PlayerTotals {
      */
     public NamedInteger getBlocksBroken() {
         NamedInteger value = new NamedInteger();
+        int blocksBroken = (Integer) getValue(PlayerVariable.BLOCKS_BROKEN);
         if(blocksBroken < 100000) {
             value.setData (ChatColor.GOLD + "Broken", blocksBroken);
         } else {
@@ -262,6 +246,7 @@ public class PlayerTotals {
      */
     public NamedInteger getBlocksPlaced() {
         NamedInteger value = new NamedInteger();
+        int blocksPlaced = (Integer) getValue(PlayerVariable.BLOCKS_PLACED);
         if(blocksPlaced < 100000) {
             value.setData (ChatColor.GOLD + "Placed", blocksPlaced);
         } else {
@@ -278,6 +263,7 @@ public class PlayerTotals {
      */
     public NamedInteger getDistance() {
         NamedInteger value = new NamedInteger();
+        int distTotal = (Integer) getValue(PlayerVariable.DISTANCE_TRAVELED);
         if(distTotal < 1000) {
             value.setData (ChatColor.BLUE + "Traveled (m)", (int) (distTotal));
         } else {
@@ -293,7 +279,7 @@ public class PlayerTotals {
      * @return Number of kills
      */
     public NamedInteger getPVPKills() {
-        return new NamedInteger (ChatColor.RED + "PVP Kills", pvpKills);
+        return new NamedInteger (ChatColor.RED + "PVP Kills", (Integer) getValue(PlayerVariable.PVP_KILLS));
     }
     
     /**
@@ -302,7 +288,7 @@ public class PlayerTotals {
      * @return Number of kills
      */
     public NamedInteger getPVEKills() {
-        return new NamedInteger (ChatColor.RED + "PVE Kills", pveKills);
+        return new NamedInteger (ChatColor.RED + "PVE Kills", (Integer) getValue(PlayerVariable.PVE_KILLS));
     }
     
     /**
@@ -311,14 +297,14 @@ public class PlayerTotals {
      * @return Number of deaths
      */
     public NamedInteger getDeaths() {
-        return new NamedInteger (ChatColor.RED + "Deaths", deaths);
+        return new NamedInteger (ChatColor.RED + "Deaths", (Integer) getValue(PlayerVariable.DEATHS));
     }
     
     /**
      * Registers a block being broken
      */
     public void blockBreak() {
-        blocksBroken++;
+        incrementValue(PlayerVariable.BLOCKS_BROKEN);
         Statistics.getServerTotals().blockBreak();
     }
     
@@ -326,7 +312,7 @@ public class PlayerTotals {
      * Registers a block being places
      */
     public void blockPlace() {
-        blocksPlaced++;
+        incrementValue(PlayerVariable.BLOCKS_PLACED);
         Statistics.getServerTotals().blockPlace();
     }
     
@@ -337,25 +323,25 @@ public class PlayerTotals {
      */
     public void addDistance(DistancePlayersTable type, double distance) {
         Statistics.getServerTotals().addDistance(type, distance);
-        distTotal += distance;
+        incrementValue(PlayerVariable.DISTANCE_TRAVELED, distance);
         switch(type) {
             case Foot:
-                distWalked += distance;
+                incrementValue(PlayerVariable.DISTANCE_FOOT, distance);
                 break;
             case Swim:
-                distSwam += distance;
+                incrementValue(PlayerVariable.DISTANCE_SWIM, distance);
                 break;
             case Flight:
-                distFlight += distance;
+                incrementValue(PlayerVariable.DISTANCE_FLIGHT, distance);
                 break;
             case Boat:
-                distBoated += distance;
+                incrementValue(PlayerVariable.DISTANCE_BOAT, distance);
                 break;
             case Minecart:
-                distMinecarted += distance;
+                incrementValue(PlayerVariable.DISTANCE_CART, distance);
                 break;
             case Pig:
-                distPiggybacked += distance;
+                incrementValue(PlayerVariable.DISTANCE_PIG, distance);
                 break;
             default:
                 break;
@@ -366,7 +352,7 @@ public class PlayerTotals {
      * Registers a tool being broken
      */
     public void toolBreak() {
-        toolsBroken++;
+        incrementValue(PlayerVariable.ITEMS_BROKEN);
         Statistics.getServerTotals().toolBreak();
     }
     
@@ -374,7 +360,7 @@ public class PlayerTotals {
      * Registers an item being crafted
      */
     public void itemCraft() {
-        itemsCrafted++;
+        incrementValue(PlayerVariable.ITEMS_CRAFTED);
         Statistics.getServerTotals().itemCraft();
     }
     
@@ -382,7 +368,7 @@ public class PlayerTotals {
      * Registers a food item being eaten
      */
     public void snacksEaten() {
-        snacksEaten++;
+        incrementValue(PlayerVariable.ITEMS_EATEN);
         Statistics.getServerTotals().snacksEaten();
     }
     
@@ -390,7 +376,13 @@ public class PlayerTotals {
      * Registers a player being killed in PvP
      */
     public void pvpKill() {
-        pvpKills++;
+        double kdr = 1;
+        int deaths = (Integer) values.get(PlayerVariable.DEATHS), pvpKills = (Integer) values.get(PlayerVariable.PVP_KILLS);
+        if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
+        else kdr = pvpKills;
+        values.put(PlayerVariable.KILL_DEATH_RATIO, kdr);
+        
+        incrementValue(PlayerVariable.PVP_KILLS);
         Statistics.getServerTotals().pvpKill();
     }
     
@@ -398,7 +390,13 @@ public class PlayerTotals {
      * Registers the player dying
      */
     public void death() {
-        deaths++;
+        double kdr = 1;
+        int deaths = (Integer) values.get(PlayerVariable.DEATHS), pvpKills = (Integer) values.get(PlayerVariable.PVP_KILLS);
+        if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
+        else kdr = pvpKills;
+        values.put(PlayerVariable.KILL_DEATH_RATIO, kdr);
+        
+        incrementValue(PlayerVariable.DEATHS);
         Statistics.getServerTotals().death();
     }
     
@@ -406,7 +404,7 @@ public class PlayerTotals {
      * Registers a player killing a mob
      */
     public void pveKill() {
-        pveKills++;
+        incrementValue(PlayerVariable.PVE_KILLS);
         Statistics.getServerTotals().pveKill();
     }
     

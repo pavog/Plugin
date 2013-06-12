@@ -44,6 +44,7 @@ import com.wolvencraft.yasp.db.data.pve.PVEData;
 import com.wolvencraft.yasp.db.data.pvp.PVPData;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Module;
+import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 
 /**
  * Utility class containing assorted methods that do not fit other categories
@@ -112,10 +113,10 @@ public class Util {
      */
     public static String parseVars(String str) {
         if(str == null) return "";
-        Map<VariableType, Object> values = Statistics.getServerTotals().getValues();
-        Iterator<Entry<VariableType, Object>> it = values.entrySet().iterator();
+        Map<ServerVariable, Object> values = Statistics.getServerTotals().getValues();
+        Iterator<Entry<ServerVariable, Object>> it = values.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<VariableType, Object> pairs = (Map.Entry<VariableType, Object>)it.next();
+            Map.Entry<ServerVariable, Object> pairs = (Map.Entry<ServerVariable, Object>)it.next();
             str = str.replace("<" + pairs.getKey().getAlias() + ">", pairs.getValue() + "");
             it.remove();
         }

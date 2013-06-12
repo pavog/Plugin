@@ -44,7 +44,6 @@ import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.blocks.BlocksData;
 import com.wolvencraft.yasp.db.data.deaths.DeathsData;
-import com.wolvencraft.yasp.db.data.items.ItemsData;
 import com.wolvencraft.yasp.db.data.players.PlayersData;
 import com.wolvencraft.yasp.db.data.pve.PVEData;
 import com.wolvencraft.yasp.db.data.pvp.PVPData;
@@ -287,81 +286,6 @@ public class OnlineSession implements PlayerSession {
     public void blockPlace(BlockState block) {
         ((BlocksData) getDataStore(DataStoreType.Blocks)).blockPlace(block);
         playerTotals.blockPlace();
-    }
-    
-    /**
-     * Registers the dropped item in the data stores
-     * @param location Location of the event
-     * @param itemStack Stack of items in question
-     */
-    public void itemDrop(Location location, ItemStack itemStack) {
-        ((ItemsData) getDataStore(DataStoreType.Items)).itemDrop(location, itemStack);
-    }
-    
-    /**
-     * Registers the picked up item in the data stores
-     * @param location Location of the event
-     * @param itemStack Stack of items in question
-     */
-    public void itemPickUp(Location location, ItemStack itemStack) {
-        ((ItemsData) getDataStore(DataStoreType.Items)).itemPickUp(location, itemStack);
-    }
-    
-    /**
-     * Registers the used item in the data stores
-     * @param location Location of the event
-     * @param itemStack Stack of items in question
-     */
-    public void itemUse(Location location, ItemStack itemStack) {
-        ((ItemsData) getDataStore(DataStoreType.Items)).itemUse(location, itemStack);
-        playerTotals.snacksEaten();
-    }
-    
-    /**
-     * Registers the crafted item in the data stores
-     * @param location Location of the event
-     * @param itemStack Stack of items in question
-     */
-    public void itemCraft(Location location, ItemStack itemStack) {
-        ((ItemsData) getDataStore(DataStoreType.Items)).itemCraft(location, itemStack);
-        playerTotals.itemCraft();
-    }
-    
-    /**
-     * Registers the smelted item in the data stores
-     * @param location Location of the event
-     * @param itemStack Stack of items in question
-     */
-    public void itemSmelt(Location location, ItemStack itemStack) {
-        ((ItemsData) getDataStore(DataStoreType.Items)).itemSmelt(location, itemStack);
-    }
-    
-    /**
-     * Registers the broken item in the data stores
-     * @param location Location of the event
-     * @param itemStack Stack of items in question
-     */
-    public void itemBreak(Location location, ItemStack itemStack) {
-        ((ItemsData) getDataStore(DataStoreType.Items)).itemBreak(location, itemStack);
-        playerTotals.toolBreak();
-    }
-    
-    /**
-     * Registers the enchanted item in the data stores
-     * @param location Location of the event
-     * @param itemStack Stack of items in question
-     */
-    public void itemEnchant(Location location, ItemStack itemStack) {
-        ((ItemsData) getDataStore(DataStoreType.Items)).itemEnchant(location, itemStack);
-    }
-    
-    /**
-     * Registers the reparied item in the data stores
-     * @param location Location of the event
-     * @param itemStack Stack of items in question
-     */
-    public void itemRepair(Location location, ItemStack itemStack) {
-        ((ItemsData) getDataStore(DataStoreType.Items)).itemRepair(location, itemStack);
     }
     
     /**

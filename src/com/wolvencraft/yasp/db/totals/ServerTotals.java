@@ -31,7 +31,7 @@ import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
 import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
-import com.wolvencraft.yasp.util.VariableType;
+import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 
 /**
  * Generic Server information used on DisplaySigns and books.
@@ -117,28 +117,28 @@ public class ServerTotals {
      * Bundles up the values into one Map for ease of access.
      * @return Map of values
      */
-    public Map<VariableType, Object> getValues() {
+    public Map<ServerVariable, Object> getValues() {
         @SuppressWarnings("serial")
-        Map<VariableType, Object> values = new HashMap<VariableType, Object>()
+        Map<ServerVariable, Object> values = new HashMap<ServerVariable, Object>()
         {{
-            put(VariableType.BLOCKS_BROKEN, blocksBroken);
-            put(VariableType.BLOCKS_PLACED, blocksPlaced);
+            put(ServerVariable.BLOCKS_BROKEN, blocksBroken);
+            put(ServerVariable.BLOCKS_PLACED, blocksPlaced);
             
-            put(VariableType.DISTANCE_TRAVELED, distanceTotal);
-            put(VariableType.DISTANCE_FOOT, distanceFoot);
-            put(VariableType.DISTANCE_PIG, distancePig);
-            put(VariableType.DISTANCE_CART, distanceMinecart);
-            put(VariableType.DISTANCE_BOAT, distanceBoat);
-            put(VariableType.DISTANCE_FLIGHT, distanceFlight);
-            put(VariableType.DISTANCE_SWIM, distanceSwim);
+            put(ServerVariable.DISTANCE_TRAVELED, distanceTotal);
+            put(ServerVariable.DISTANCE_FOOT, distanceFoot);
+            put(ServerVariable.DISTANCE_PIG, distancePig);
+            put(ServerVariable.DISTANCE_CART, distanceMinecart);
+            put(ServerVariable.DISTANCE_BOAT, distanceBoat);
+            put(ServerVariable.DISTANCE_FLIGHT, distanceFlight);
+            put(ServerVariable.DISTANCE_SWIM, distanceSwim);
             
-            put(VariableType.ITEMS_BROKEN, toolsBroken);
-            put(VariableType.ITEMS_CRAFTED, itemsCrafted);
-            put(VariableType.ITEMS_EATEN, snacksEaten);
+            put(ServerVariable.ITEMS_BROKEN, toolsBroken);
+            put(ServerVariable.ITEMS_CRAFTED, itemsCrafted);
+            put(ServerVariable.ITEMS_EATEN, snacksEaten);
             
-            put(VariableType.PVP_KILLS, pvpKills);
-            put(VariableType.PVE_KILLS, pveKills);
-            put(VariableType.DEATHS, deaths);
+            put(ServerVariable.PVP_KILLS, pvpKills);
+            put(ServerVariable.PVE_KILLS, pveKills);
+            put(ServerVariable.DEATHS, deaths);
         }};
         
         values.putAll(Statistics.getServerStatistics().getValueMap());
