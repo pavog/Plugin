@@ -24,18 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
 import com.wolvencraft.yasp.events.plugin.HookInitEvent;
-import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchManager.PatchType;
 import com.wolvencraft.yasp.util.hooks.AdminCmdHook;
-import com.wolvencraft.yasp.util.hooks.AwardmentsHook;
 import com.wolvencraft.yasp.util.hooks.BanHammerHook;
 import com.wolvencraft.yasp.util.hooks.CitizensHook;
 import com.wolvencraft.yasp.util.hooks.CommandBookHook;
@@ -69,25 +67,27 @@ public class HookManager {
                 );
         
         for(ApplicableHook hook : ApplicableHook.values()) {
-            if (plManager.getPlugin(hook.getPluginName()) == null) {
-                Message.log("|" + Message.centerString(hook.getPluginName() + " is not found", 34) + "|");
-            } else if (!hook.getModule().isEnabled()) {
-                Message.log("|" + Message.centerString(hook.getPluginName() + " is disabled", 34) + "|");
+            PluginHook hookObj;
+            try { hookObj = hook.getHook().newInstance(); }
+            catch (Throwable t) {
+                ExceptionHandler.handle(t);
+                continue;
+            }
+            
+            if (plManager.getPlugin(hookObj.getPluginName()) == null) {
+                Message.log("|" + Message.centerString(hookObj.getPluginName() + " is not found", 34) + "|");
+            } else if (!hookObj.getModule().isEnabled()) {
+                Message.log("|" + Message.centerString(hookObj.getPluginName() + " is disabled", 34) + "|");
             } else {
-                HookInitEvent event = new HookInitEvent(hook.getModule());
+                HookInitEvent event = new HookInitEvent(hookObj.getModule());
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 if(event.isCancelled()) {
-                    Message.log("|" + Message.centerString(hook.getPluginName() + " is cancelled", 34) + "|");
+                    Message.log("|" + Message.centerString(hookObj.getPluginName() + " is cancelled", 34) + "|");
                     continue;
                 }
 
-                Message.log("|" + Message.centerString(hook.getPluginName() + " has been enabled", 34) + "|");
-                PluginHook hookObj;
-                try { hookObj = hook.getHook().newInstance(); }
-                catch (Throwable t) {
-                    ExceptionHandler.handle(t);
-                    continue;
-                }
+                Message.log("|" + Message.centerString(hookObj.getPluginName() + " has been enabled", 34) + "|");
+                
                 hookObj.onEnable();
                 activeHooks.add(hookObj);
             }
@@ -105,43 +105,33 @@ public class HookManager {
         
         for(PluginHook hook : activeHooks) {
             hook.onDisable();
-            Message.log("|" + Message.centerString(hook.getType().getPluginName() + " is shutting down", 34) + "|");
+            Message.log("|" + Message.centerString(hook.getPluginName() + " is shutting down", 34) + "|");
         }
         
         Message.log("+----------------------------------+");
     }
     
     @Getter(AccessLevel.PUBLIC)
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
     public enum ApplicableHook {
         
-        ADMIN_CMD       (AdminCmdHook.class, Module.AdminCmd, PatchType.AdminCmd, "AdminCmd"),
-        AWARDMENTS      (AwardmentsHook.class, Module.Awardments, PatchType.Awardments, "Awardments"),
-        BAN_HAMMER      (BanHammerHook.class, Module.BanHammer, PatchType.BanHammer, "BanHammer"),
-        CITIZENS        (CitizensHook.class, Module.Citizens, PatchType.Citizens, "Citizens"),
-        COMMAND_BOOK    (CommandBookHook.class, Module.CommandBook, PatchType.CommandBook, "CommandBook"),
-        FACTIONS        (FactionsHook.class, Module.Factions, PatchType.Factions, "Factions"),
-        JOBS            (JobsHook.class, Module.Jobs, PatchType.Jobs, "Jobs"),
-        MCBANS          (MCBansHook.class, Module.McBans, PatchType.MCBans, "MCBans"),
-        MCMMO           (McMMOHook.class, Module.McMMO, PatchType.MCMMO, "McMMO"),
-        MOB_ARENA       (MobArenaHook.class, Module.MobArena, PatchType.MobArena, "MobArena"),
-        PVP_ARENA       (PvpArenaHook.class, Module.PvpArena, PatchType.PvpArena, "PVPArena"),
-        VANISH          (VanishHook.class, Module.Vanish, PatchType.Vanish, "VanishNoPacket"),
-        VAULT           (VaultHook.class, Module.Vault, PatchType.Vault, "Vault"),
-        VOTIFIER        (VotifierHook.class, Module.Votifier, PatchType.Votifier, "Votifier"),
-        WORLD_GUARD     (WorldGuardHook.class, Module.WorldGuard, PatchType.WorldGuard, "WorldGuard")
+        ADMIN_CMD       (AdminCmdHook.class),
+        BAN_HAMMER      (BanHammerHook.class),
+        CITIZENS        (CitizensHook.class),
+        COMMAND_BOOK    (CommandBookHook.class),
+        FACTIONS        (FactionsHook.class),
+        JOBS            (JobsHook.class),
+        MCBANS          (MCBansHook.class),
+        MCMMO           (McMMOHook.class),
+        MOB_ARENA       (MobArenaHook.class),
+        PVP_ARENA       (PvpArenaHook.class),
+        VANISH          (VanishHook.class),
+        VAULT           (VaultHook.class),
+        VOTIFIER        (VotifierHook.class),
+        WORLD_GUARD     (WorldGuardHook.class)
         ;
         
         @Getter(AccessLevel.PRIVATE) private Class<? extends PluginHook> hook;
-        private Module module;
-        private PatchType patch;
-        private String pluginName;
-        
-        ApplicableHook(Class<? extends PluginHook> hook, Module module, PatchType patch, String pluginName) {
-            this.hook = hook;
-            this.module = module;
-            this.patch = patch;
-            this.pluginName = pluginName;
-        }
         
     }
     

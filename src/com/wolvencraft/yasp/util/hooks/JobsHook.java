@@ -2,25 +2,24 @@ package com.wolvencraft.yasp.util.hooks;
 
 import me.zford.jobs.Jobs;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 
 public class JobsHook extends PluginHook {
     
     public JobsHook() {
-        super(ApplicableHook.JOBS);
+        super(Module.Jobs, "Jobs", "jobs");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof Jobs) {
-            type.getModule().setActive(true);
+            module.setActive(true);
         }
     }
     

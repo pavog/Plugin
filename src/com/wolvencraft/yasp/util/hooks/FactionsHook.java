@@ -29,7 +29,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 
 /**
  * Quick-and-dirty MobArena hook
@@ -43,17 +43,17 @@ public class FactionsHook extends PluginHook {
      * Connects to MobArena and sets up a plugin instance
      */
     public FactionsHook() {
-        super(ApplicableHook.FACTIONS);
+        super(Module.Factions, "Factions", "factions");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof Factions) {
-            type.getModule().setActive(true);
+            module.setActive(true);
         }
     }
     

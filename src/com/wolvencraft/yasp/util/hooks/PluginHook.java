@@ -21,21 +21,24 @@
 package com.wolvencraft.yasp.util.hooks;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
 import com.wolvencraft.yasp.db.Database;
+import com.wolvencraft.yasp.db.PatchManager;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
-import com.wolvencraft.yasp.util.PatchManager;
 
 @Getter(AccessLevel.PUBLIC)
+@AllArgsConstructor(access=AccessLevel.PUBLIC)
 public abstract class PluginHook {
     
-    protected ApplicableHook type;
-    
-    public PluginHook(ApplicableHook type) {
-        this.type = type;
-    }
+    protected Module module;
+    protected String patchExtension;
+    protected String pluginName;
     
     /**
      * Code that is to be executed when the hook is being enabled.<br />
@@ -43,8 +46,8 @@ public abstract class PluginHook {
      */
     public void onEnable() {
         try {
-            PatchManager.fetch(type.getPatch());
-            Database.patchModule(false, type.getModule());
+            PatchManager.fetch(patchExtension);
+            Database.patchModule(false, module);
         } catch (Throwable t) {
             ExceptionHandler.handle(t);
         }
@@ -56,6 +59,14 @@ public abstract class PluginHook {
      */
     public void onDisable() {
         // Do nothing
+    }
+    
+    /**
+     * Returns an instance of the plugin
+     * @return Plugin instance
+     */
+    public Plugin getPlugin() {
+        return Bukkit.getServer().getPluginManager().getPlugin(pluginName);
     }
     
 }

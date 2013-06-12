@@ -27,7 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 
 /**
  * Quick-and-dirty MobArena hook
@@ -41,17 +41,17 @@ public class PvpArenaHook extends PluginHook {
      * Connects to MobArena and sets up a plugin instance
      */
     public PvpArenaHook() {
-        super(ApplicableHook.PVP_ARENA);
+        super(Module.PvpArena, "PvpArena", "pvparena");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof PVPArena) {
-            type.getModule().setActive(true);
+            module.setActive(true);
         }
     }
     

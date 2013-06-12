@@ -34,6 +34,8 @@ import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
  */
 public enum Module {
     
+    YASPX       ("yaspx"),
+    
     Server      ("server"),
     Blocks      ("blocks"),
     Items       ("items"),
@@ -55,6 +57,8 @@ public enum Module {
     Vault       ("vault", true),
     Votifier    ("votifier", true),
     WorldGuard  ("worldguard", true),
+    
+    Dependency  ("dependency", true)
     ;
 
     public final String KEY;

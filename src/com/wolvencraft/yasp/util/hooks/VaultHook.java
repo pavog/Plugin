@@ -29,8 +29,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -48,7 +48,7 @@ public class VaultHook extends PluginHook {
      * Connects to Vault economy and permissions hooks
      */
     public VaultHook() {
-        super(ApplicableHook.VAULT);
+        super(Module.Vault, "Vault", "vault");
     }
     
     @Override
@@ -64,7 +64,7 @@ public class VaultHook extends PluginHook {
         catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); }
         
         if(economy != null && permissions != null) {
-            type.getModule().setActive(true);
+            module.setActive(true);
         }
     }
     

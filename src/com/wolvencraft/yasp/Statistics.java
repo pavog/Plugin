@@ -37,6 +37,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
+import com.wolvencraft.yasp.db.PatchManager;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.totals.ServerTotals;
@@ -52,7 +53,6 @@ import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchManager;
 import com.wolvencraft.yasp.util.cache.CachedData;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;

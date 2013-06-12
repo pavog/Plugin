@@ -31,23 +31,23 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 import belgium.Balor.Workers.AFKWorker;
 
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.serializable.BanRecordSerializable;
 
 public class AdminCmdHook extends PluginHook {
     
     public AdminCmdHook() {
-        super(ApplicableHook.ADMIN_CMD);
+        super(Module.AdminCmd, "AdminCmd", "admincmd");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
         
         if (plugin != null && plugin instanceof AdminCmd) {
-            type.getModule().setActive(true);
+            module.setActive(true);
         }
     }
     

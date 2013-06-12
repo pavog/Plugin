@@ -24,13 +24,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.serializable.FlagsSerializable;
 import com.wolvencraft.yasp.util.serializable.RegionsSerializable;
 
@@ -44,18 +43,18 @@ public class WorldGuardHook extends PluginHook {
     private static WorldGuardPlugin instance;
     
     public WorldGuardHook() {
-        super(ApplicableHook.WORLD_GUARD);
+        super(Module.WorldGuard, "WorldGuard", "worldguard");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof WorldGuardPlugin) {
             instance = (WorldGuardPlugin) plugin;
-            type.getModule().setActive(true);
+            module.setActive(true);
         }
     }
     

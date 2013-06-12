@@ -18,11 +18,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.util;
+package com.wolvencraft.yasp.db;
 
 import java.io.File;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.settings.Module;
+import com.wolvencraft.yasp.util.Message;
 
 /**
  * First copies the patch files from jar to the plugin directory. Then checks the download server for updates.
@@ -40,20 +42,20 @@ public class PatchManager {
     public PatchManager() {
         patchDir = new File(Statistics.getInstance().getDataFolder(), "patches");
         if(!patchDir.exists()) patchDir.mkdir();
-        fetch(PatchType.YASPX);
+        fetch(Module.YASPX.KEY);
     }
     
     /**
      * Fetches the patch of the specified type
-     * @param type Patch type
+     * @param extension Patch extension
      */
-    public static void fetch(PatchType type) {
+    public static void fetch(String extension) {
         Message.log("+------ [ Fetching Patches ] ------+");
         int j = 1;
-        while(Statistics.getInstance().getResource("patches/" + j + "." + type.EXTENSION + ".sql") != null) {
-            if(localFileExists(j + "." + type.EXTENSION + ".sql")) { j++; continue; }
-            Message.log("|" + Message.centerString("Copying " + j + "." + type.EXTENSION + ".sql", 34) + "|");
-            Statistics.getInstance().saveResource("patches/" + j + "." + type.EXTENSION + ".sql", false);
+        while(Statistics.getInstance().getResource("patches/" + j + "." + extension + ".sql") != null) {
+            if(localFileExists(j + "." + extension + ".sql")) { j++; continue; }
+            Message.log("|" + Message.centerString("Copying " + j + "." + extension + ".sql", 34) + "|");
+            Statistics.getInstance().saveResource("patches/" + j + "." + extension + ".sql", false);
             j++;
         }
         Message.log("|  All patch files are up to date  |");
@@ -67,41 +69,6 @@ public class PatchManager {
      */
     private static boolean localFileExists(String filename) {
         return new File(patchDir.getAbsoluteFile() + "/" + filename).exists();
-    }
-    
-    /**
-     * Specifies the different types of patches and their extensions
-     * @author bitWolfy
-     *
-     */
-    public enum PatchType {
-        YASPX           ("yaspx"),
-        
-        AdminCmd        ("admincmd"),
-        Awardments      ("awardments"),
-        BanHammer       ("banhammer"),
-        Citizens        ("citizens"),
-        CommandBook     ("commandbook"),
-        Factions        ("factions"),
-        Jobs            ("jobs"),
-        MCBans          ("mcbans"),
-        MCMMO           ("mcmmo"),
-        MobArena        ("mobarena"),
-        PvpArena        ("pvparena"),
-        Vanish          ("vanish"),
-        Vault           ("vault"),
-        Votifier        ("votifier"),
-        WorldGuard      ("worldguard");
-        
-        public final String EXTENSION;
-        
-        /**
-         * <b>Default constructor</b>
-         * @param extension Patch extension
-         */
-        PatchType(String extension) {
-            this.EXTENSION = extension;
-        }
     }
     
 }

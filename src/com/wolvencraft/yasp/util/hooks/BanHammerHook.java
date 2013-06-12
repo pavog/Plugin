@@ -26,10 +26,9 @@ import java.util.List;
 import name.richardson.james.bukkit.banhammer.BanHammer;
 import name.richardson.james.bukkit.banhammer.persistence.BanRecord;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.serializable.BanRecordSerializable;
 
 public class BanHammerHook extends PluginHook {
@@ -37,17 +36,17 @@ public class BanHammerHook extends PluginHook {
     private static BanHammer instance;
     
     public BanHammerHook() {
-        super(ApplicableHook.BAN_HAMMER);
+        super(Module.BanHammer, "BanHammer", "banhammer");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof BanHammer) {
-            type.getModule().setActive(true);
+            module.setActive(true);
             instance = (BanHammer) plugin;
         }
     }

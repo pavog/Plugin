@@ -1,25 +1,24 @@
 package com.wolvencraft.yasp.util.hooks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import com.mcbans.firestar.mcbans.MCBans;
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 
 public class MCBansHook extends PluginHook {
     
     public MCBansHook() {
-        super(ApplicableHook.MCBANS);
+        super(Module.McBans, "MCBans", "mcbans");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof MCBans) {
-            type.getModule().setActive(true);
+            module.setActive(true);
         }
     }
     

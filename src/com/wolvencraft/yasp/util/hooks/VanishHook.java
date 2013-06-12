@@ -20,28 +20,27 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.kitteh.vanish.VanishPlugin;
 
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 
 public class VanishHook extends PluginHook {
 
     private static VanishPlugin instance;
     
     public VanishHook() {
-        super(ApplicableHook.VANISH);
+        super(Module.Vanish, "VanishNoPacket", "vanish");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof VanishPlugin) {
-            type.getModule().setActive(true);
+            module.setActive(true);
             instance = (VanishPlugin) plugin;
         }
     }

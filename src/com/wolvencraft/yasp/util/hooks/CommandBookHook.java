@@ -20,13 +20,12 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.sk89q.commandbook.CommandBook;
 import com.sk89q.commandbook.GodComponent;
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 import com.zachsthings.libcomponents.ComponentManager;
 import com.zachsthings.libcomponents.bukkit.BukkitComponent;
 
@@ -36,17 +35,17 @@ public class CommandBookHook extends PluginHook {
     private static ComponentManager<BukkitComponent> componentManager;
     
     public CommandBookHook() {
-        super(ApplicableHook.COMMAND_BOOK);
+        super(Module.CommandBook, "CommandBook", "commandbook");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof CommandBook) {
-            type.getModule().setActive(true);
+            module.setActive(true);
             instance = (CommandBook) plugin;
             componentManager = instance.getComponentManager();
         }

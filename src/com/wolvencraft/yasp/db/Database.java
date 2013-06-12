@@ -48,7 +48,6 @@ import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.PatchManager.PatchType;
 
 /**
  * Represents a running database instance.<br />
@@ -103,7 +102,7 @@ public class Database {
         
         File patchFile = null;
         do {
-            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + PatchType.YASPX.EXTENSION + ".sql");
+            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + Module.YASPX.KEY + ".sql");
             if(patchFile.exists()) latestPatchVersion++;
             else break;
         } while(patchFile != null && patchFile.exists());
@@ -116,7 +115,7 @@ public class Database {
         Message.log("+-------] Database Patcher [-------+");
         for(; databaseVersion <= latestPatchVersion; databaseVersion++) {
             Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
-            executePatch(scriptRunner, databaseVersion + "." + PatchType.YASPX.EXTENSION);
+            executePatch(scriptRunner, databaseVersion + "." + Module.YASPX.KEY);
             RemoteConfiguration.DatabaseVersion.update(databaseVersion);
         }
         Message.log("+----------------------------------+");

@@ -2,25 +2,24 @@ package com.wolvencraft.yasp.util.hooks;
 
 import net.citizensnpcs.Citizens;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 
 public class CitizensHook extends PluginHook {
     
     public CitizensHook() {
-        super(ApplicableHook.CITIZENS);
+        super(Module.Citizens, "Citizens", "citizens");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof Citizens) {
-            type.getModule().setActive(true);
+            module.setActive(true);
         }
     }
     

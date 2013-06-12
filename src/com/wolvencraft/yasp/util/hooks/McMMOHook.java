@@ -1,25 +1,24 @@
 package com.wolvencraft.yasp.util.hooks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import com.gmail.nossr50.mcMMO;
-import com.wolvencraft.yasp.HookManager.ApplicableHook;
+import com.wolvencraft.yasp.settings.Module;
 
 public class McMMOHook extends PluginHook {
     
     public McMMOHook() {
-        super(ApplicableHook.MCMMO);
+        super(Module.McMMO, "mcMMO", "mcmmo");
     }
     
     @Override
     public void onEnable() {
         super.onEnable();
         
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(type.getPluginName());
+        Plugin plugin = getPlugin();
         
         if (plugin != null && plugin instanceof mcMMO) {
-            type.getModule().setActive(true);
+            module.setActive(true);
         }
     }
     
