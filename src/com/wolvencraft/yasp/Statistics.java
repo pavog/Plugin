@@ -136,7 +136,7 @@ public class Statistics extends JavaPlugin {
         new PlayerListener(this);
         new ServerListener(this);
         new SessionListener(this);
-        if(isCraftBukkitCompatible()) new StatsBookListener(this);
+        new StatsBookListener(this);
         new StatsSignListener(this);
         
         serverStatistics = new ServerStatistics();
@@ -186,16 +186,5 @@ public class Statistics extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return CommandManager.run(sender, args);
-    }
-    
-    /**
-     * Wraps around a BookUtils method to check if the server's bukkit version differs from the one
-     * the plugin was compiled with
-     * @return <b>true</b> if it is safe to proceed, <b>false</b> otherwise
-     */
-    public static boolean isCraftBukkitCompatible() {
-        try { com.wolvencraft.yasp.util.BookUtil.isBukkitCompatible(); }
-        catch (Throwable t) { return false; }
-        return true;
     }
 }

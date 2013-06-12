@@ -100,12 +100,6 @@ public class CommandManager {
         }
         Command properties = command.getProperties();
         
-        // Compatibility check
-        if(properties.unstable() && !Statistics.isCraftBukkitCompatible()) {
-            Message.sendFormattedError("This command is not compatible with the current version of CraftBukkit");
-            return false;
-        }
-        
         // Argument check
         if(arguments.size() < properties.minArgs()
                 || (properties.maxArgs() != -1 && arguments.size() > properties.maxArgs())) {
@@ -227,12 +221,6 @@ public class CommandManager {
          * @return Description string
          */
         public String description() default "";
-        
-        /**
-         * Checks if the command is compatible with the current version of CraftBukkit
-         * @return <b>true</b> if the command is prone to crashes with a wrong CB version, <b>false</b> otherwise
-         */
-        public boolean unstable() default false;
         
     }
     

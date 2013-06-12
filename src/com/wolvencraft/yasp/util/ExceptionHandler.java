@@ -112,8 +112,6 @@ public class ExceptionHandler {
                 "+--------------------------------------------+",
                 "| Command  : " + command.getCommand().getName(),
                 "| Alias    : " + alias,
-                "| Volatile : " + !command.getProperties().unstable(),
-                "| Bukkit-c : " + Statistics.isCraftBukkitCompatible(),
                 "+--------------------------------------------+",
                 "| The stack trace of the error follows: ",
                 "| "

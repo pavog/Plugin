@@ -37,7 +37,6 @@ public class PlayerCommands {
             maxArgs = 0,
             permission = "stats.cmd.book",
             allowConsole = false,
-            unstable = true,
             usage = "/stats book",
             description = "Get a book with all your statistical information"
             )
@@ -53,7 +52,6 @@ public class PlayerCommands {
             maxArgs = 0,
             permission = "stats.cmd.board",
             allowConsole = false,
-            unstable = true,
             usage = "/stats scoreboard",
             description = "Displays stats on a scoreboard"
             )

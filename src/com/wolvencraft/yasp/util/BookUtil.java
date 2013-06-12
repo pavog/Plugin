@@ -20,14 +20,10 @@
 
 package com.wolvencraft.yasp.util;
 
-import net.minecraft.server.v1_5_R3.NBTTagCompound;
-import net.minecraft.server.v1_5_R3.NBTTagList;
-import net.minecraft.server.v1_5_R3.NBTTagString;
-
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_5_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
 import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
@@ -44,26 +40,15 @@ public class BookUtil {
      * @return Book with player's statistics
      */
     public static ItemStack compileStatsBook (Player player) {
-        net.minecraft.server.v1_5_R3.ItemStack item = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(387, 1));
+        ItemStack bookStack = new ItemStack(387, 1);
+        BookMeta book = (BookMeta) bookStack.getItemMeta();
         
-        NBTTagCompound tags = item.getTag();
-        if (tags == null) {
-            tags = new NBTTagCompound();
-            item.setTag(tags);
-        }
+        book.setTitle(player.getPlayerListName() + " Statistics");
+        book.setAuthor("Statistics");
+        book.setPages(getBookPages(player.getPlayerListName()));
         
-        tags.setString("title", player.getPlayerListName() + " Statistics");
-        tags.setString("author", "Statistics");
-        
-        NBTTagList pages = new NBTTagList("pages");
-        String[] newPages = getBookPages(player.getPlayerListName());
-        
-        for(int i = 0; i < newPages.length; i++) {
-            pages.add(new NBTTagString("" + i + "", newPages[i]));
-        }
-        tags.set("pages", pages);
-        item.setTag(tags);
-        return CraftItemStack.asBukkitCopy(item);
+        bookStack.setItemMeta(book);
+        return bookStack;
     }
     
     /**
@@ -106,11 +91,4 @@ public class BookUtil {
                 ChatColor.BLACK + " K/D: " + stats.getValue(PlayerVariable.KILL_DEATH_RATIO) + "\n\n"
         };
     }
-    
-    /**
-     * Placeholder method. If it throws an error, server's CraftBukkit version differs from the one
-     * the plugin was compiled with.
-     */
-    public static void isBukkitCompatible() { }
-    
 }
