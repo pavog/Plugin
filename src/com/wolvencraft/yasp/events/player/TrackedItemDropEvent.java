@@ -27,8 +27,8 @@ import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.db.data.items.DetailedItemDropEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedItemDropEvent extends StatisticsPlayerEvent {
@@ -37,7 +37,7 @@ public class TrackedItemDropEvent extends StatisticsPlayerEvent {
     private DetailedItemDropEntry data;
     
     public TrackedItemDropEvent(OnlineSession session, DetailedItemDropEntry data) {
-        super(session, TrackedActionType.ITEM_DROP);
+        super(session, PlayerVariable.ITEMS_DROPPED);
         this.data = data;
     }
 

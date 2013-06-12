@@ -27,8 +27,8 @@ import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.db.data.items.DetailedItemPickupEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedItemPickupEvent extends StatisticsPlayerEvent {
@@ -37,7 +37,7 @@ public class TrackedItemPickupEvent extends StatisticsPlayerEvent {
     private DetailedItemPickupEntry data;
     
     public TrackedItemPickupEvent(OnlineSession session, DetailedItemPickupEntry data) {
-        super(session, TrackedActionType.ITEM_PICKUP);
+        super(session, PlayerVariable.ITEMS_PICKEDUP);
         this.data = data;
     }
 

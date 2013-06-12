@@ -27,8 +27,8 @@ import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.db.data.pve.DetailedPVEEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedPVEEvent extends StatisticsPlayerEvent {
@@ -37,7 +37,7 @@ public class TrackedPVEEvent extends StatisticsPlayerEvent {
     private DetailedPVEEntry data;
     
     public TrackedPVEEvent(OnlineSession session, DetailedPVEEntry data) {
-        super(session, TrackedActionType.PVE);
+        super(session, PlayerVariable.PVE_KILLS);
         this.data = data;
     }
 

@@ -27,8 +27,8 @@ import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.db.data.blocks.DetailedBlockPlaceEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedBlockPlaceEvent extends StatisticsPlayerEvent {
@@ -37,7 +37,7 @@ public class TrackedBlockPlaceEvent extends StatisticsPlayerEvent {
     private DetailedBlockPlaceEntry data;
     
     public TrackedBlockPlaceEvent(OnlineSession session, DetailedBlockPlaceEntry data) {
-        super(session, TrackedActionType.BLOCK_PLACE);
+        super(session, PlayerVariable.BLOCKS_PLACED);
         this.data = data;
     }
 

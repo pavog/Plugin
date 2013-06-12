@@ -27,8 +27,8 @@ import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.db.data.deaths.DetailedDeathEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedDeathEvent extends StatisticsPlayerEvent {
@@ -37,7 +37,7 @@ public class TrackedDeathEvent extends StatisticsPlayerEvent {
     private DetailedDeathEntry data;
     
     public TrackedDeathEvent(OnlineSession session, DetailedDeathEntry data) {
-        super(session, TrackedActionType.DEATH);
+        super(session, PlayerVariable.DEATHS);
         this.data = data;
     }
 

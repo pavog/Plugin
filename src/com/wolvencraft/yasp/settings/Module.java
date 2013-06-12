@@ -100,7 +100,7 @@ public enum Module {
      * @return <b>true</b> if the module is both enabled and active, <b>false</b> otherwise
      */
     public boolean isActive() {
-        return enabled && active;
+        return isEnabled() && active;
     }
     
     /**

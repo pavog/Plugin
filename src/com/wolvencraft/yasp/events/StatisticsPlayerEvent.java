@@ -27,14 +27,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerEvent;
 
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
 @Getter(AccessLevel.PUBLIC)
 public abstract class StatisticsPlayerEvent extends PlayerEvent {
     
     private OnlineSession session;
-    private TrackedActionType actionType;
+    private PlayerVariable actionType;
     
-    public StatisticsPlayerEvent(OnlineSession session, TrackedActionType actionType) {
+    public StatisticsPlayerEvent(OnlineSession session, PlayerVariable actionType) {
         super(Bukkit.getServer().getPlayer(session.getName()));
         this.session = session;
         this.actionType = actionType;

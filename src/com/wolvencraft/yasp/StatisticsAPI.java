@@ -22,8 +22,10 @@ package com.wolvencraft.yasp;
 
 import org.bukkit.entity.Player;
 
+import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
 import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
@@ -41,6 +43,7 @@ public class StatisticsAPI {
      * @return Player session
      */
     public static OnlineSession getSession(Player player) {
+        if(!isTracked(player)) return null;
         return OnlineSessionCache.fetch(player);
     }
     
@@ -52,6 +55,27 @@ public class StatisticsAPI {
      */
     public static OfflineSession getSession(String username) {
         return OfflineSessionCache.fetch(username);
+    }
+    
+    /**
+     * Returns the OfflineSession for the player with the specified username.<br />
+     * The player might not be online, or not exist at all.
+     * @param username Player's username
+     * @param cached <b>true</b> if you want the plugin to cache this session
+     * @return DataSession with player's totals
+     */
+    public static OfflineSession getSession(String username, boolean cached) {
+        if(cached) return getSession(username);
+        else return new OfflineSession(username);
+    }
+    
+    /**
+     * Checks if the player is tracked by the plugin
+     * @param player Player object
+     * @return <b>true</b> if the player is tracked, <b>false</b> otherwise
+     */
+    public static boolean isTracked(Player player) {
+        return HandlerManager.playerLookup(player, StatPerms.Statistics);
     }
     
     /**

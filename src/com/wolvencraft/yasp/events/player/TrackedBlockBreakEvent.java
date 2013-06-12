@@ -20,15 +20,15 @@
 
 package com.wolvencraft.yasp.events.player;
 
-import lombok.Getter;
 import lombok.AccessLevel;
+import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.db.data.blocks.DetailedBlockBreakEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
-import com.wolvencraft.yasp.events.TrackedActionType;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedBlockBreakEvent extends StatisticsPlayerEvent {
@@ -37,7 +37,7 @@ public class TrackedBlockBreakEvent extends StatisticsPlayerEvent {
     private DetailedBlockBreakEntry data;
     
     public TrackedBlockBreakEvent(OnlineSession session, DetailedBlockBreakEntry data) {
-        super(session, TrackedActionType.BLOCK_BREAK);
+        super(session, PlayerVariable.BLOCKS_BROKEN);
         this.data = data;
     }
 

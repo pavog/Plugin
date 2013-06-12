@@ -108,7 +108,7 @@ public class Statistics extends JavaPlugin {
             return;
         }
         
-        if(LocalConfiguration.FetchPatches.asBoolean()) new PatchFetcher();
+        new PatchFetcher();
         new Query();
         
         try { new Database(); }

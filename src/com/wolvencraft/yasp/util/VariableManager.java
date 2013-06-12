@@ -106,6 +106,8 @@ public class VariableManager {
         TOTAL_PLAYTIME      ("playtime"),
         TOTAL_PLAYTIME_RAW  ("playtimeRaw"),
         
+        LOGINS              ("logins"),
+        
         ;
         
         private String alias;
