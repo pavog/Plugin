@@ -55,7 +55,14 @@ public class DatabaseTask implements Runnable {
      */
     @Override
     public void run() {
-        commit();
+        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+           
+            @Override
+            public void run() {
+                commit();
+            }
+            
+        });
     }
     
     /**
