@@ -1,8 +1,31 @@
+/*
+ * BlockHandler.java
+ * 
+ * Statistics
+ * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.wolvencraft.yasp.listeners.handlers;
 
-import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
+import com.wolvencraft.yasp.db.data.AdvancedDataStore.DataStoreType;
+import com.wolvencraft.yasp.db.data.blocks.BlocksData;
+import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 import lombok.AccessLevel;
@@ -19,11 +42,13 @@ public class BlockHandlers {
     public static class BlockBreak implements Runnable {
         
         private Player player;
-        private Block block;
+        private BlockState block;
         
         @Override
         public void run() {
-            OnlineSessionCache.fetch(player).blockBreak(block.getState());
+            OnlineSession session = OnlineSessionCache.fetch(player);
+            ((BlocksData) session.getDataStore(DataStoreType.Blocks)).blockPlace(block);
+            session.getPlayerTotals().blockPlace();
         }
         
     }
@@ -37,11 +62,13 @@ public class BlockHandlers {
     public static class BlockPlace implements Runnable {
 
         private Player player;
-        private Block block;
+        private BlockState block;
         
         @Override
         public void run() {
-            OnlineSessionCache.fetch(player).blockPlace(block.getState());
+            OnlineSession session = OnlineSessionCache.fetch(player);
+            ((BlocksData) session.getDataStore(DataStoreType.Blocks)).blockBreak(block);
+            session.getPlayerTotals().blockBreak();
         }
         
     }

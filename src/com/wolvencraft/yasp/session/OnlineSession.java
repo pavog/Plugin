@@ -29,7 +29,6 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -42,7 +41,6 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore;
 import com.wolvencraft.yasp.db.data.AdvancedDataStore.DataStoreType;
-import com.wolvencraft.yasp.db.data.blocks.BlocksData;
 import com.wolvencraft.yasp.db.data.deaths.DeathsData;
 import com.wolvencraft.yasp.db.data.players.PlayersData;
 import com.wolvencraft.yasp.db.data.pve.PVEData;
@@ -266,26 +264,6 @@ public class OnlineSession implements PlayerSession {
     public void died() {
         playersData.getMiscData().died();
         playerTotals.death();
-    }
-    
-    /**
-     * Registers the broken block in the data stores
-     * @param location Location of the block
-     * @param block BlockState of the block
-     */
-    public void blockBreak(BlockState block) {
-        ((BlocksData) getDataStore(DataStoreType.Blocks)).blockBreak(block);
-        playerTotals.blockBreak();
-    }
-    
-    /**
-     * Registers the placed block in the data stores
-     * @param location Location of the block
-     * @param block BlockState of the block
-     */
-    public void blockPlace(BlockState block) {
-        ((BlocksData) getDataStore(DataStoreType.Blocks)).blockPlace(block);
-        playerTotals.blockPlace();
     }
     
     /**

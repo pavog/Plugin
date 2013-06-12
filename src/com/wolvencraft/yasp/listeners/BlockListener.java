@@ -49,7 +49,7 @@ public class BlockListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.BlockBreak)) return;
         
-        HandlerManager.runAsyncTask(new BlockBreak(player, event.getBlock()));
+        HandlerManager.runAsyncTask(new BlockBreak(player, event.getBlock().getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -57,6 +57,6 @@ public class BlockListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.BlockPlace)) return;
 
-        HandlerManager.runAsyncTask(new BlockPlace(player, event.getBlock()));
+        HandlerManager.runAsyncTask(new BlockPlace(player, event.getBlock().getState()));
     }
 }
