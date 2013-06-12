@@ -38,8 +38,6 @@ public enum LocalConfiguration {
     DBPrefix        ("database.prefix", true),
     DBConnect       ("jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
     LogPrefix       ("log-prefix", true),
-    FetchPatches    ("fetch-patches", true),
-    PatchServer     ("http://dl.mctrakr.com/files/patches/"),
     ;
     
     Object entry;
