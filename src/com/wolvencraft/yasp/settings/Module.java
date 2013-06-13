@@ -58,7 +58,7 @@ public enum Module {
     Votifier    ("votifier", true),
     WorldGuard  ("worldguard", true),
     
-    Dependency  ("dependency", true)
+    Unknown     ("unknown")
     ;
 
     public final String KEY;
