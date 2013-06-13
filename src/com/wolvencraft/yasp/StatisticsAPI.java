@@ -20,12 +20,28 @@
 
 package com.wolvencraft.yasp;
 
-import org.bukkit.entity.Player;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import com.wolvencraft.yasp.db.Database;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.ScriptRunner;
+import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
+import com.wolvencraft.yasp.events.plugin.DatabasePatchEvent;
+import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
+import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
 import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
+import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
@@ -87,4 +103,32 @@ public class StatisticsAPI {
         return Statistics.getServerTotals().getValues().get(type);
     }
     
+    /**
+     * Executes an external patch
+     * @param plugin Plugin instance
+     * @param path Path to the patch file (relative to your plugin's data folder), without the extension
+     * @return <b>true</b> if the patch was executed, <b>false</b> if the patching was cancelled
+     * @throws DatabaseConnectionException If an error occurred while executing a database patch
+     * @throws FileNotFoundException If the patch file could not be found
+     */
+    public static boolean executeExternalPatch(Plugin plugin, String path) throws DatabaseConnectionException, FileNotFoundException {
+        DatabasePatchEvent event = new DatabasePatchEvent(path);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        
+        if(event.isCancelled()) return false;
+        
+        InputStream is = new FileInputStream(plugin.getDataFolder() + "/" + path + ".sql");
+        Message.log(Level.FINE, "Executing external database patch: " + path + ".sql");
+        
+        ScriptRunner scriptRunner = new ScriptRunner(Database.getConnection());
+        try {scriptRunner.runScript(new InputStreamReader(is)); }
+        catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + path + ".sql", e); }
+        finally {
+            if(!Query.table(SettingsTable.TableName).condition("key", "patched").exists()) {
+                Query.table(SettingsTable.TableName).value("key", "patched").value("value", 1).insert();
+            }
+            Query.table(SettingsTable.TableName).value("value", 1).condition("key", "patched").update();
+        }
+        return true;
+    }
 }

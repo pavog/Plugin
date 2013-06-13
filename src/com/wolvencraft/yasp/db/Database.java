@@ -304,4 +304,12 @@ public class Database {
     public static boolean isClosed() {
         return connection == null;
     }
+    
+    /**
+     * Returns the connection instance
+     * @return Connection instance
+     */
+    public static Connection getConnection() {
+        return connection;
+    }
 }
