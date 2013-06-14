@@ -45,6 +45,9 @@ import com.wolvencraft.yasp.util.Message;
 
 public class CommandManager {
     
+    @Getter(AccessLevel.PUBLIC)
+    private static CommandManager instance;
+    
     /**
      * Registered command container classes
      * @author bitWolfy
@@ -69,6 +72,8 @@ public class CommandManager {
     @Getter(AccessLevel.PUBLIC) private static CommandSender sender = null;
     
     public CommandManager() {
+        instance = this;
+        
         Message.debug("Starting to register commands");
         commands = new ArrayList<CommandPair>();
         
