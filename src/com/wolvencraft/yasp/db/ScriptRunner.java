@@ -102,9 +102,9 @@ public class ScriptRunner {
                 BufferedReader lineReader = new BufferedReader(reader);
                 int i = 0;
                 String line = "";
-                String dbName = LocalConfiguration.DBName.asString();
-                String dbPrefix = LocalConfiguration.DBPrefix.asString();
-                boolean debug = LocalConfiguration.Debug.asBoolean();
+                String dbName = LocalConfiguration.DBName.toString();
+                String dbPrefix = LocalConfiguration.DBPrefix.toString();
+                boolean debug = LocalConfiguration.Debug.toBoolean();
                 while ((line = lineReader.readLine()) != null) {
                     line = StringUtils.replace(line, "$dbname", dbName);
                     line = StringUtils.replace(line, "$prefix_", dbPrefix);

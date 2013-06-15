@@ -86,7 +86,7 @@ public class Message {
      * @param message Message to be sent
      */
     public static void sendFormattedSuccess(CommandSender sender, String message) {
-        sendFormatted(sender, ChatColor.DARK_GREEN, LocalConfiguration.LogPrefix.asString(), message);
+        sendFormatted(sender, ChatColor.DARK_GREEN, LocalConfiguration.LogPrefix.toString(), message);
     }
     
     /**
@@ -97,7 +97,7 @@ public class Message {
      */
     public static void sendFormattedSuccess(String message) {
         CommandSender sender = CommandManager.getSender();
-        sendFormatted(sender, ChatColor.DARK_GREEN, LocalConfiguration.LogPrefix.asString(), message);
+        sendFormatted(sender, ChatColor.DARK_GREEN, LocalConfiguration.LogPrefix.toString(), message);
     }
     
     /**
@@ -106,7 +106,7 @@ public class Message {
      * @param message Message to be sent
      */
     public static void sendFormattedError(CommandSender sender, String message) {
-        sendFormatted(sender, ChatColor.DARK_RED, LocalConfiguration.LogPrefix.asString(), message);
+        sendFormatted(sender, ChatColor.DARK_RED, LocalConfiguration.LogPrefix.toString(), message);
     }
     
     /**
@@ -117,7 +117,7 @@ public class Message {
      */
     public static void sendFormattedError(String message) {
         CommandSender sender = CommandManager.getSender();
-        sendFormatted(sender, ChatColor.DARK_RED, LocalConfiguration.LogPrefix.asString(), message);
+        sendFormatted(sender, ChatColor.DARK_RED, LocalConfiguration.LogPrefix.toString(), message);
     }
     
     /**
@@ -126,7 +126,7 @@ public class Message {
      */
     public static void broadcast(String message) {
         for (Player p : Bukkit.getServer().getOnlinePlayers())
-            sendFormatted(p, ChatColor.DARK_GREEN, LocalConfiguration.LogPrefix.asString(), message);
+            sendFormatted(p, ChatColor.DARK_GREEN, LocalConfiguration.LogPrefix.toString(), message);
         log(Util.parseChatColors(message));
     }
     
@@ -153,7 +153,7 @@ public class Message {
      * @param message Message to be sent
      */
     public static void debug(String... message) {
-        if (LocalConfiguration.Debug.asBoolean()) log(message);
+        if (LocalConfiguration.Debug.toBoolean()) log(message);
     }
     
     /**
@@ -163,7 +163,7 @@ public class Message {
      * @param message Message to be sent
      */
     public static void debug(Level level, String... message) {
-        if (LocalConfiguration.Debug.asBoolean()) log(level, message);
+        if (LocalConfiguration.Debug.toBoolean()) log(level, message);
     }
     
     /**

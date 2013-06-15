@@ -70,9 +70,9 @@ public class Database {
         
         try {
             connection = DriverManager.getConnection(
-                LocalConfiguration.DBConnect.asString(),
-                LocalConfiguration.DBUser.asString(),
-                LocalConfiguration.DBPass.asString()
+                LocalConfiguration.DBConnect.toString(),
+                LocalConfiguration.DBUser.toString(),
+                LocalConfiguration.DBPass.toString()
             );
         } catch (SQLException e) { throw new DatabaseConnectionException(e); }
         
@@ -209,15 +209,15 @@ public class Database {
             }
             Message.log(Level.WARNING, "Attempting to re-connect to the database");
             connection = DriverManager.getConnection(
-                LocalConfiguration.DBConnect.asString(),
-                LocalConfiguration.DBUser.asString(),
-                LocalConfiguration.DBPass.asString()
+                LocalConfiguration.DBConnect.toString(),
+                LocalConfiguration.DBUser.toString(),
+                LocalConfiguration.DBPass.toString()
             );
             Message.log("Connection re-established. No data is lost.");
             return true;
         } catch (Exception e) {
             Message.log(Level.SEVERE, "Failed to re-connect to the database. Data is being stored locally.");
-            if (LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+            if (LocalConfiguration.Debug.toBoolean()) e.printStackTrace();
         }
         return false;
     }

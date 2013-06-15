@@ -52,6 +52,7 @@ import com.wolvencraft.yasp.listeners.StatsSignListener;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
+import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.CachedData;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
@@ -116,7 +117,7 @@ public class Statistics extends JavaPlugin {
             crashed = true;
             Message.log(Level.SEVERE, "Cannot establish a database connection!");
             Message.log(Level.SEVERE, "Is the plugin set up correctly?");
-            if (LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+            if (LocalConfiguration.Debug.toBoolean()) e.printStackTrace();
             this.setEnabled(false);
             return;
         }
@@ -179,7 +180,7 @@ public class Statistics extends JavaPlugin {
             Database.close();
         } catch (Throwable t) { 
             Message.log(Level.SEVERE, t.getMessage());
-            if(LocalConfiguration.Debug.asBoolean()) t.printStackTrace();
+            if(LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
         }
     }
     

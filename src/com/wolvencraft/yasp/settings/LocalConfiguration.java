@@ -21,6 +21,7 @@
 package com.wolvencraft.yasp.settings;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.util.ExceptionHandler;
 
 
 /**
@@ -29,72 +30,127 @@ import com.wolvencraft.yasp.Statistics;
  *
  */
 public enum LocalConfiguration {
-    Debug           ("debug", true),
-    DBHost          ("database.host", true),
-    DBPort          ("database.port", true),
-    DBName          ("database.name", true),
-    DBUser          ("database.user", true),
-    DBPass          ("database.pass", true),
-    DBPrefix        ("database.prefix", true),
-    DBConnect       ("jdbc:mysql://" + DBHost.asString() + ":" + DBPort.asInteger() + "/" + DBName.asString()),
-    LogPrefix       ("log-prefix", true),
+    Debug           ("debug"),
+    DBHost          ("database.host"),
+    DBPort          ("database.port"),
+    DBName          ("database.name"),
+    DBUser          ("database.user"),
+    DBPass          ("database.pass"),
+    DBPrefix        ("database.prefix"),
+    DBConnect       ("jdbc:mysql://" + DBHost.toString() + ":" + DBPort.toInteger() + "/" + DBName.toString(), true),
+    LogPrefix       ("log-prefix"),
     ;
     
-    Object entry;
+    private String node;
+    private boolean fixedValue;
+    private boolean cached;
+    private Object cachedValue;
     
     /**
-     * <b>Default constructor</b><br />
-     * Creates a new LocalConfiguration with the specified value
-     * @param entry Configuration value
+     * Default constructor
+     * Used to pull the configuration node values from config.yml
+     * @param node Configuration node
      */
-    LocalConfiguration(Object entry) {
-        this.entry = entry;
+    LocalConfiguration(String node) {
+        this.node = node;
+        this.fixedValue = false;
+        this.cached = false;
+        this.cachedValue = null;
+        
+        updateCache();
     }
     
     /**
-     * <b>Constructor</b><br />
-     * Creates a new LocalConfiguration entry with the value that can be pulled from <code>config.yml</code>.
-     * @param entry Configuration value or <code>config.yml</code> node
-     * @param fromFile If <b>true</b>, configuration values will be pulled from file, otherwise, the <code>entry</code> will be used
+     * Constructor
+     * Used to permanently store a default value
+     * @param value Value to store
+     * @param fixedValue <b>true</b> to finalize the value
      */
-    LocalConfiguration(Object entry, boolean fromFile) {
-        if(fromFile) this.entry = Statistics.getInstance().getConfig().get((String) entry);
-        else this.entry = entry;
+    LocalConfiguration(Object value, boolean fixedValue) {
+        if(fixedValue) {
+            this.node = "";
+            this.fixedValue = fixedValue;
+            this.cached = false;
+            this.cachedValue = value;
+        } else {
+            this.node = (String) value;
+            this.fixedValue = fixedValue;
+            this.cached = false;
+            this.cachedValue = null;
+            
+            updateCache();
+        }
     }
     
     /**
-     * Returns the configuration value as String
-     * @deprecated <code>asString();</code> should be used instead
-     * @return Configuration value
+     * Returns the cached value of the node, and updates the cache if necessary
+     * @return Node value
      */
-    @Override
+    private Object getCachedValue() {
+        if(!cached) updateCache();
+        return cachedValue;
+    }
+    
+    /**
+     * Returns the value of the node
+     * @return Node value
+     */
+    public Object getValue() {
+        if(fixedValue) return cachedValue;
+        else return getCachedValue();
+    }
+    
+    /**
+     * Returns the value of the node as a String
+     * @return Node value
+     */
     public String toString() {
-        return asString();
+        try { return (String) getValue(); }
+        catch(Throwable t) {
+            ExceptionHandler.handle(t);
+            return "";
+        }
     }
     
     /**
-     * Returns the configuration value as String
-     * @return Configuration value
+     * Returns the value of the node as a Boolean
+     * @return Node value
      */
-    public String asString() {
-        return (String) entry;
+    public Boolean toBoolean() {
+        try { return (Boolean) getValue(); }
+        catch(Throwable t) {
+            ExceptionHandler.handle(t);
+            return false;
+        }
     }
     
     /**
-     * Returns the configuration value as a boolean
-     * @return Configuration value
+     * Returns the value of the node as an Integer
+     * @return Node value
      */
-    public boolean asBoolean() {
-        try { return (Boolean) entry; }
-        catch (Throwable t) { return false; }
+    public Integer toInteger() {
+        try { return (Integer) getValue(); }
+        catch(Throwable t) {
+            ExceptionHandler.handle(t);
+            return 0;
+        }
     }
     
     /**
-     * Returns the configuration value as an integer
-     * @return Configuration value
+     * Updates the cached node value
      */
-    public int asInteger() {
-        try { return (Integer) entry; }
-        catch (Throwable t) { return 0; }
+    private void updateCache() {
+        cachedValue = Statistics.getInstance().getConfig().get(node);
+        cached = true;
     }
+    
+    /**
+     * Clears the cache for all nodes
+     */
+    public static void clearCache() {
+        for(LocalConfiguration configNode : LocalConfiguration.values()) {
+            configNode.cached = false;
+        }
+    }
+    
 }

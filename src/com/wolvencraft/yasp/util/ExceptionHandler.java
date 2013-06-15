@@ -47,7 +47,7 @@ public class ExceptionHandler {
      * @param debug If <b>true</b>, will perform a check to see if the debug mode is enabled
      */
     public static void handle(Throwable t, boolean debug) {
-        if(debug && !LocalConfiguration.Debug.asBoolean()) return;
+        if(debug && !LocalConfiguration.Debug.toBoolean()) return;
         
         if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
         else lastError = t.getClass().getName();

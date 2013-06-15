@@ -30,6 +30,7 @@ import java.util.logging.Level;
 
 import com.wolvencraft.yasp.db.tables.DBTable;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
+import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.Util;
 
@@ -77,10 +78,10 @@ public class Query {
         try {
             Message.debug(Level.FINEST, sql);
             return Database.executeUpdate(sql);
-        } catch (Exception e) {
+        } catch (Throwable t) {
             Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
-            Message.log(Level.SEVERE, e.getMessage());
-            if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+            Message.log(Level.SEVERE, t.getMessage());
+            if(LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
             return false;
         }
     }
@@ -95,10 +96,10 @@ public class Query {
         try {
             Message.debug(Level.FINEST, sql);
             return Database.executeQuery(sql);
-        } catch (Exception e) {
+        } catch (Throwable t) {
             Message.log(Level.SEVERE, "An error occurred while fetching data from the remote database.");
-            Message.log(Level.SEVERE, e.getMessage());
-            if(LocalConfiguration.Debug.asBoolean()) e.printStackTrace();
+            Message.log(Level.SEVERE, t.getMessage());
+            if(LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
             return new ArrayList<QueryResult>();
         }
     }    
@@ -319,7 +320,7 @@ public class Query {
                     columnString += "`" + str + "`";
                 }
             }
-            sql += columnString + " FROM `" + LocalConfiguration.DBPrefix.asString() + table + "`";
+            sql += columnString + " FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String conditionString = "";
             for(String str : instance.conditions) {
@@ -349,7 +350,7 @@ public class Query {
                     columnString += "`" + str + "`";
                 }
             }
-            sql += columnString + " FROM `" + LocalConfiguration.DBPrefix.asString() + table + "`";
+            sql += columnString + " FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String conditionString = "";
             for(String str : instance.conditions) {
@@ -384,7 +385,7 @@ public class Query {
                     else columnString += "`" + str + "`";
                 }
             }
-            sql += columnString + ") as `temp` FROM `" + LocalConfiguration.DBPrefix.asString() + table + "`";
+            sql += columnString + ") as `temp` FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String conditionString = "";
             for(String str : instance.conditions) {
@@ -402,7 +403,7 @@ public class Query {
          * @return <b>true</b> if the value was successfully inserted, <b>false</b> if an error occurred
          */
         public boolean insert() {
-            String sql = "INSERT INTO `" + LocalConfiguration.DBPrefix.asString() + table + "` (";
+            String sql = "INSERT INTO `" + LocalConfiguration.DBPrefix.toString() + table + "` (";
             
             String fieldString = "";
             String valueString = "";
@@ -433,7 +434,7 @@ public class Query {
          * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
          */
         public boolean update() {
-            String sql = "UPDATE `" + LocalConfiguration.DBPrefix.asString() + table + "`";
+            String sql = "UPDATE `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String valueString = "";
             Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
@@ -463,7 +464,7 @@ public class Query {
          */
         public boolean update(boolean merged) {
             if(!merged) return update();
-            String sql = "UPDATE `" + LocalConfiguration.DBPrefix.asString() + table + "`";
+            String sql = "UPDATE `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String valueString = "";
             Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
@@ -492,7 +493,7 @@ public class Query {
          * @return <b>true</b> if the row was deleted, <b>false</b> if an error occurred
          */
         public boolean delete() {
-            String sql = "DELETE FROM `" + LocalConfiguration.DBPrefix.asString() + table + "`";
+            String sql = "DELETE FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String conditionString = "";
             for(String str : instance.conditions) {
