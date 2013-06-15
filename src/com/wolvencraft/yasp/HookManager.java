@@ -35,7 +35,6 @@ import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.hooks.AdminCmdHook;
 import com.wolvencraft.yasp.util.hooks.BanHammerHook;
-import com.wolvencraft.yasp.util.hooks.CitizensHook;
 import com.wolvencraft.yasp.util.hooks.CommandBookHook;
 import com.wolvencraft.yasp.util.hooks.FactionsHook;
 import com.wolvencraft.yasp.util.hooks.JobsHook;
@@ -116,7 +115,6 @@ public class HookManager {
         
         ADMIN_CMD       (AdminCmdHook.class),
         BAN_HAMMER      (BanHammerHook.class),
-        CITIZENS        (CitizensHook.class),
         COMMAND_BOOK    (CommandBookHook.class),
         FACTIONS        (FactionsHook.class),
         JOBS            (JobsHook.class),
