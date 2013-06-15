@@ -39,7 +39,6 @@ import com.wolvencraft.yasp.util.hooks.CitizensHook;
 import com.wolvencraft.yasp.util.hooks.CommandBookHook;
 import com.wolvencraft.yasp.util.hooks.FactionsHook;
 import com.wolvencraft.yasp.util.hooks.JobsHook;
-import com.wolvencraft.yasp.util.hooks.MCBansHook;
 import com.wolvencraft.yasp.util.hooks.McMMOHook;
 import com.wolvencraft.yasp.util.hooks.MobArenaHook;
 import com.wolvencraft.yasp.util.hooks.PluginHook;
@@ -121,7 +120,6 @@ public class HookManager {
         COMMAND_BOOK    (CommandBookHook.class),
         FACTIONS        (FactionsHook.class),
         JOBS            (JobsHook.class),
-        MCBANS          (MCBansHook.class),
         MCMMO           (McMMOHook.class),
         MOB_ARENA       (MobArenaHook.class),
         PVP_ARENA       (PvpArenaHook.class),
