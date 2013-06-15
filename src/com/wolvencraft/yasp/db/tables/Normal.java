@@ -45,6 +45,9 @@ public class Normal {
         Value           ("value");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -60,6 +63,9 @@ public class Normal {
         Value           ("value");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -80,6 +86,9 @@ public class Normal {
         Pig             ("pig");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -101,6 +110,9 @@ public class Normal {
         Logins          ("logins");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -138,6 +150,9 @@ public class Normal {
         MaxKillStreak   ("max_kill_streak");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -158,6 +173,9 @@ public class Normal {
         PotionEffects   ("potion_effects");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -175,6 +193,9 @@ public class Normal {
         Placed          ("placed");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -198,6 +219,9 @@ public class Normal {
         Repaired        ("repaired");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -214,6 +238,9 @@ public class Normal {
         Times           ("times");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -232,6 +259,9 @@ public class Normal {
         CreatureKilled  ("creature_killed");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -249,6 +279,9 @@ public class Normal {
         Times           ("times");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
 }

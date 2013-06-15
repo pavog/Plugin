@@ -23,7 +23,6 @@ package com.wolvencraft.yasp.db;
 import java.io.File;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -32,7 +31,8 @@ import com.wolvencraft.yasp.util.Message;
  *
  */
 public class PatchManager {
-    
+
+    public static final String PATCH_KEY = "yaspx";
     private static File patchDir;
     
     /**
@@ -42,7 +42,7 @@ public class PatchManager {
     public PatchManager() {
         patchDir = new File(Statistics.getInstance().getDataFolder(), "patches");
         if(!patchDir.exists()) patchDir.mkdir();
-        fetch(Module.YASPX.KEY);
+        fetch(PATCH_KEY);
     }
     
     /**

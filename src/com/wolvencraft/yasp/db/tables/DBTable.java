@@ -34,4 +34,11 @@ public interface DBTable {
      */
     public String getColumnName();
     
+    /**
+     * Equivalent to <code>getColumnName();</code>.
+     * Required due to some gimmicks in the Query code.
+     * @return
+     */
+    public String toString();
+    
 }

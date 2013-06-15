@@ -50,6 +50,9 @@ public class Detailed {
         Timestamp       ("time");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -70,6 +73,9 @@ public class Detailed {
         Timestamp       ("time");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -90,6 +96,9 @@ public class Detailed {
         Timestamp       ("time");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -111,6 +120,9 @@ public class Detailed {
         Timestamp       ("time");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -131,6 +143,9 @@ public class Detailed {
         Timestamp       ("time");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -151,6 +166,9 @@ public class Detailed {
         IsLogin         ("is_login");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -171,6 +189,9 @@ public class Detailed {
         Timestamp       ("time");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -193,6 +214,9 @@ public class Detailed {
         PlayerKilled    ("player_killed");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -215,6 +239,9 @@ public class Detailed {
         Timestamp       ("time");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
 }

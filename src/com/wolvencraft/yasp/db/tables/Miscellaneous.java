@@ -45,6 +45,9 @@ public class Miscellaneous {
         TpName          ("tp_name");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -60,6 +63,9 @@ public class Miscellaneous {
         TpName          ("tp_name");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
 }

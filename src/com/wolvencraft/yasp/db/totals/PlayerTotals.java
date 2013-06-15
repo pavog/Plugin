@@ -92,12 +92,12 @@ public class PlayerTotals {
         values.put(PlayerVariable.DISTANCE_SWIM, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Swim).condition(DistancePlayersTable.PlayerId, playerId).sum());
         values.put(PlayerVariable.DISTANCE_FLIGHT, Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Flight).condition(DistancePlayersTable.PlayerId, playerId).sum());
         
-        int totalDistance = ((Integer) values.get(PlayerVariable.DISTANCE_FOOT))
-                + ((Integer) values.get(PlayerVariable.DISTANCE_BOAT))
-                + ((Integer) values.get(PlayerVariable.DISTANCE_CART))
-                + ((Integer) values.get(PlayerVariable.DISTANCE_PIG))
-                + ((Integer) values.get(PlayerVariable.DISTANCE_SWIM))
-                + ((Integer) values.get(PlayerVariable.DISTANCE_FLIGHT));
+        double totalDistance = ((Double) values.get(PlayerVariable.DISTANCE_FOOT))
+                + ((Double) values.get(PlayerVariable.DISTANCE_BOAT))
+                + ((Double) values.get(PlayerVariable.DISTANCE_CART))
+                + ((Double) values.get(PlayerVariable.DISTANCE_PIG))
+                + ((Double) values.get(PlayerVariable.DISTANCE_SWIM))
+                + ((Double) values.get(PlayerVariable.DISTANCE_FLIGHT));
         values.put(PlayerVariable.DISTANCE_TRAVELED, totalDistance);
         
         values.put(PlayerVariable.ITEMS_BROKEN, (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Broken).condition(TotalItemsTable.PlayerId, playerId).sum());

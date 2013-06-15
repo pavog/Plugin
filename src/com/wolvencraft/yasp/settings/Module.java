@@ -34,8 +34,6 @@ import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
  */
 public enum Module {
     
-    YASPX       ("yaspx"),
-    
     Server      ("server"),
     Blocks      ("blocks"),
     Items       ("items"),
@@ -75,7 +73,8 @@ public enum Module {
         this.isHook = false;
         this.KEY = key;
         
-        refresh();
+        try { refresh(); }
+        catch(Throwable t) { }
         
         active = true;
         refreshScheduled = false;
@@ -85,7 +84,8 @@ public enum Module {
         this.isHook = isHook;
         this.KEY = key;
         
-        refresh();
+        try { refresh(); }
+        catch(Throwable t) { }
         
         if(!isHook) active = true;
         refreshScheduled = false;

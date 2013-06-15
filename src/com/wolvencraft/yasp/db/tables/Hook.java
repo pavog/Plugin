@@ -46,6 +46,9 @@ public class Hook {
         Balance         ("balance");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -62,6 +65,9 @@ public class Hook {
         RegionFlags     ("flags");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -82,6 +88,9 @@ public class Hook {
         Title           ("title");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -99,6 +108,9 @@ public class Hook {
         Votes           ("votes");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
     /**
@@ -116,6 +128,9 @@ public class Hook {
         Timestamp       ("time");
         
         private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
     }
     
 }

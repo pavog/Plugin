@@ -102,7 +102,7 @@ public class Database {
         
         File patchFile = null;
         do {
-            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + Module.YASPX.KEY + ".sql");
+            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + PatchManager.PATCH_KEY + ".sql");
             if(patchFile.exists()) latestPatchVersion++;
             else break;
         } while(patchFile != null && patchFile.exists());
@@ -115,7 +115,7 @@ public class Database {
         Message.log("+-------] Database Patcher [-------+");
         for(; databaseVersion <= latestPatchVersion; databaseVersion++) {
             Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
-            executePatch(scriptRunner, databaseVersion + "." + Module.YASPX.KEY);
+            executePatch(scriptRunner, databaseVersion + "." + PatchManager.PATCH_KEY);
             RemoteConfiguration.DatabaseVersion.update(databaseVersion);
         }
         Message.log("+----------------------------------+");
