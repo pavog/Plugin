@@ -30,6 +30,7 @@ import be.Balor.Player.IBan;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 import belgium.Balor.Workers.AFKWorker;
+import belgium.Balor.Workers.InvisibleWorker;
 
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.serializable.BanRecordSerializable;
@@ -61,6 +62,15 @@ public class AdminCmdHook extends PluginHook {
     }
     
     /**
+     * Checks if the player is vanished
+     * @param player Player to look up
+     * @return <b>true</b> if the player is vanished, <b>false</b> otherwise
+     */
+    public static boolean isInvisible(Player player) {
+        return InvisibleWorker.getInstance().getAllInvisiblePlayers().contains(player);
+    }
+    
+    /**
      * Returns the ban data as a Json array
      * @param player Player to look up
      * @return Ban data, or an empty string
@@ -71,5 +81,4 @@ public class AdminCmdHook extends PluginHook {
         BanRecordSerializable banReason = new BanRecordSerializable(ban.getBanner(), ban.getReason(), ban.getDate().getTime() / 1000, -1L);
         return BanRecordSerializable.serialize(banReason);
     }
-    
 }

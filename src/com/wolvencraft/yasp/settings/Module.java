@@ -46,6 +46,7 @@ public enum Module {
     Citizens    ("citizens", true),
     CommandBook ("commandbook", true),
     Factions    ("factions", true),
+    Jail        ("jail", true),
     Jobs        ("jobs", true),
     McBans      ("mcbans", true),
     McMMO       ("mcmmo", true),

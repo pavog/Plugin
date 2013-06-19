@@ -20,7 +20,6 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -63,23 +62,19 @@ public class MobArenaHook extends PluginHook {
     
     /**
      * Checks if a player is participating in any of the arenas
-     * @param playerName Name of the player
+     * @param player Player object
      * @return <b>true</b> if a player is in the arena, <b>false</b> otherwise
      */
-    public static boolean isPlaying(String playerName) {
-        Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return false;
+    public static boolean isPlaying(Player player) {
         return instance.getArenaMaster().getAllPlayers().contains(player);
     }
     
     /**
      * Returns the name of the arena the player is currently in
-     * @param playerName Name of the player 
+     * @param player Player object
      * @return <b>String</b> name of the arena, or <b>null</b> if the player is not participating
      */
-    public static String getArenaName(String playerName) {
-        Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return null;
+    public static String getArenaName(Player player) {
         return instance.getArenaMaster().getArenaWithPlayer(player).arenaName();
     }
 }

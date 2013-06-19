@@ -33,6 +33,47 @@ import lombok.Getter;
 public class Hook {
     
     /**
+     * Represents the <i>admincmd</i> table.
+     * @author bitWolfy
+     *
+     */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum AdminCmdTable implements DBTable {
+        
+        TableName       ("admincmd"),
+        PlayerId        ("player_id"),
+        Afk             ("afk"),
+        BanReason       ("ban_reason"),
+        ;
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
+     * Represents the <i>banhammer</i> table.
+     * @author bitWolfy
+     *
+     */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum BanHammerTable implements DBTable {
+        
+        TableName       ("banhammer"),
+        PlayerId        ("player_id"),
+        Bans            ("bans")
+        ;
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
      * Represents the <i>hook_vault</i> table.
      * @author bitWolfy
      *
