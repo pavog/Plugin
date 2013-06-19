@@ -20,6 +20,10 @@
 
 package com.wolvencraft.yasp.settings;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -38,6 +42,8 @@ public class Constants {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum ItemsWithMetadata {
         Plank           (5, 0, 3),
         Sapling         (6, 0, 3),
@@ -62,46 +68,9 @@ public class Constants {
         MobEgg          (383, 50, 120),
         MobHead         (397, 0, 4);
         
-        int itemId;
-        int minMetaData;
-        int maxMetaData;
-        
-        /**
-         * <b>Default constructor</b><br />
-         * Sets up a constraint on item's metadata with the specified values
-         * @param itemId Item ID
-         * @param minMetaData Minimum allowed metadata
-         * @param maxMetaData Maximum allowed metadata
-         */
-        ItemsWithMetadata(int itemId, int minMetaData, int maxMetaData) {
-            this.itemId = itemId;
-            this.minMetaData = minMetaData;
-            this.maxMetaData = maxMetaData;
-        }
-        
-        /**
-         * Returns the item ID associated with this constraint
-         * @return Item ID
-         */
-        public int getId() {
-            return itemId;
-        }
-        
-        /**
-         * Returns the minimum metadata constraint for this item ID
-         * @return Minimum metadata
-         */
-        public int getMinData() {
-            return minMetaData;
-        }
-        
-        /**
-         * Returns the maximum metadata constraint for this item ID
-         * @return Maximum metadata
-         */
-        public int getMaxData() {
-            return maxMetaData;
-        }
+        private int id;
+        private int minData;
+        private int maxData;
         
         /**
          * Checks if the specified metadata is valid
@@ -109,7 +78,7 @@ public class Constants {
          * @return <b>true</b> if the data is valid, <b>false</b> otherwise
          */
         public boolean isDataValid(int data) {
-            if(data < minMetaData || data > maxMetaData) return false;
+            if(data < minData || data > maxData) return false;
             return true;
         }
         
@@ -119,9 +88,9 @@ public class Constants {
          * @param data Metadata to check
          * @return Resulting metadata
          */
-        public int getData(int data) {
-            if(data >= minMetaData && data <= maxMetaData) return data;
-            return minMetaData;
+        public int getValidData(int data) {
+            if(data >= minData && data <= maxData) return data;
+            return minData;
         }
         
         /**
@@ -129,7 +98,7 @@ public class Constants {
          * @param id Item ID
          * @return <b>true</b> if the item is in the list, <b>false</b> otherwise
          */
-        public static boolean checkAgainst(int id) {
+        public static boolean contains(int id) {
             for(ItemsWithMetadata entry : ItemsWithMetadata.values()) {
                 if(entry.getId() == id) return true;
             }
@@ -155,6 +124,8 @@ public class Constants {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     public enum StatPerms {
         
         Statistics      ("stats.track"),
@@ -177,29 +148,13 @@ public class Constants {
         DeathPVP        ("stats.track.death.pvp", Death),
         DeathPVE        ("stats.track.death.pve", Death),
         DeathOther      ("stats.track.death.other", Death);
+
+        private String node;
+        private StatPerms parent;
         
-        StatPerms parent;
-        String node;
-        
-        /**
-         * <b>Default constructor</b><br />
-         * Constructor for the parent nodes
-         * @param node Permissions node
-         */
         StatPerms(String node) {
             this.node = node;
             this.parent = null;
-        }
-        
-        /**
-         * <b>Constructor</b><br />
-         * Constructor for child nodes
-         * @param node Permissions node
-         * @param parent Parent node
-         */
-        StatPerms(String node, StatPerms parent) {
-            this.node = node;
-            this.parent = parent;
         }
         
         /**
@@ -210,7 +165,6 @@ public class Constants {
         public boolean has(Player player) {
             return player.isOp() || player.hasPermission(node);
         }
-        
     }
     
     /**
@@ -219,46 +173,23 @@ public class Constants {
      * @author bitWolfy
      *
      */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
     public enum ProjectileToItem {
         
-        Arrow           (EntityType.ARROW, 262),
-        Egg             (EntityType.EGG, 344),
-        EnderPearl      (EntityType.ENDER_PEARL, 368),
-        FishingHook     (EntityType.FISHING_HOOK, 346),
-        LargeFireball   (EntityType.FIREBALL, 385),
-        SmallFireball   (EntityType.SMALL_FIREBALL, 51),
-        Snowball        (EntityType.SNOWBALL, 332),
-        ThrownExpBottle (EntityType.THROWN_EXP_BOTTLE, 384),
-        ThrownPotion    (EntityType.SPLASH_POTION, 373),
-        WitherSkull     (EntityType.WITHER_SKULL, 397, (short) 1);
+        Arrow           (EntityType.ARROW, 262, 0),
+        Egg             (EntityType.EGG, 344, 0),
+        EnderPearl      (EntityType.ENDER_PEARL, 368, 0),
+        FishingHook     (EntityType.FISHING_HOOK, 346, 0),
+        LargeFireball   (EntityType.FIREBALL, 385, 0),
+        SmallFireball   (EntityType.SMALL_FIREBALL, 51, 0),
+        Snowball        (EntityType.SNOWBALL, 332, 0),
+        ThrownExpBottle (EntityType.THROWN_EXP_BOTTLE, 384, 0),
+        ThrownPotion    (EntityType.SPLASH_POTION, 373, 0),
+        WitherSkull     (EntityType.WITHER_SKULL, 397, 1);
         
         private EntityType type;
         private int itemId;
-        private short data;
-        
-        /**
-         * <b>Default constructor</b><br />
-         * Damage value defaults to 0.
-         * @param type Entity type
-         * @param itemId Item ID
-         */
-        ProjectileToItem(EntityType type, int itemId) {
-            this.type = type;
-            this.itemId = itemId;
-            this.data = 0;
-        }
-        
-        /**
-         * <b>Constructor</b>
-         * @param type Entity type
-         * @param itemId Item ID
-         * @param data Damage value
-         */
-        ProjectileToItem(EntityType type, int itemId, short data) {
-            this.type = type;
-            this.itemId = itemId;
-            this.data = data;
-        }
+        private int data;
         
         /**
          * Parses an EntityType and returns a corresponding ItemStack
@@ -268,12 +199,10 @@ public class Constants {
         public static ItemStack parse(EntityType type) {
             for(ProjectileToItem entry : ProjectileToItem.values()) {
                 if(type.equals(entry.type)) {
-                    return new ItemStack(entry.itemId, 1, entry.data);
+                    return new ItemStack(entry.itemId, 1, (short) entry.data);
                 }
             }
             return new ItemStack(Material.ARROW);
         }
-        
     }
-    
 }
