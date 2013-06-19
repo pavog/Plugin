@@ -33,15 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
-import com.wolvencraft.yasp.db.data.blocks.BlocksData;
-import com.wolvencraft.yasp.db.data.deaths.DeathsData;
-import com.wolvencraft.yasp.db.data.hooks.factions.FactionsData;
-import com.wolvencraft.yasp.db.data.hooks.vault.VaultData;
-import com.wolvencraft.yasp.db.data.hooks.worldguard.WorldGuardData;
-import com.wolvencraft.yasp.db.data.items.ItemsData;
-import com.wolvencraft.yasp.db.data.pve.PVEData;
-import com.wolvencraft.yasp.db.data.pvp.PVPData;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
@@ -70,14 +62,17 @@ public class Util {
      * @return List of modules
      */
     @SuppressWarnings("rawtypes")
-    public static List<AdvancedDataStore> getModules(OnlineSession session) {
-        List<AdvancedDataStore> dataStores = new ArrayList<AdvancedDataStore>();
-        if(Module.Blocks.isEnabled()) dataStores.add(new BlocksData(session));
-        if(Module.Items.isEnabled()) dataStores.add(new ItemsData(session));
-        if(Module.Deaths.isEnabled()) {
-            dataStores.add(new DeathsData(session));
-            dataStores.add(new PVEData(session));
-            dataStores.add(new PVPData(session));
+    public static List<DataStore> getModules(OnlineSession session) {
+        List<DataStore> dataStores = new ArrayList<DataStore>();
+        for(Module module : Module.values()) {
+            if(module.isHook() || !module.isActive()) continue;
+            for(Class<? extends DataStore> store : module.getDataStores()) {
+                DataStore storeObj = null;
+                try { storeObj = store.getDeclaredConstructor(OnlineSession.class).newInstance(session); }
+                catch (Throwable t) { ExceptionHandler.handle(t); }
+                if(storeObj == null) continue;
+                dataStores.add(storeObj);
+            }
         }
         return dataStores;
     }
@@ -88,11 +83,18 @@ public class Util {
      * @return List of plugin hooks
      */
     @SuppressWarnings("rawtypes")
-    public static List<AdvancedDataStore> getHooks(OnlineSession session) {
-        List<AdvancedDataStore> dataStores = new ArrayList<AdvancedDataStore>();
-        if(Module.Vault.isActive()) dataStores.add(new VaultData(session));
-        if(Module.WorldGuard.isActive()) dataStores.add(new WorldGuardData(session));
-        if(Module.Factions.isActive()) dataStores.add(new FactionsData(session));
+    public static List<DataStore> getHooks(OnlineSession session) {
+        List<DataStore> dataStores = new ArrayList<DataStore>();
+        for(Module module : Module.values()) {
+            if(!module.isHook() || !module.isActive()) continue;
+            for(Class<? extends DataStore> store : module.getDataStores()) {
+                DataStore storeObj = null;
+                try { storeObj = store.getDeclaredConstructor(OnlineSession.class).newInstance(session); }
+                catch (Throwable t) { ExceptionHandler.handle(t); }
+                if(storeObj == null) continue;
+                dataStores.add(storeObj);
+            }
+        }
         return dataStores;
     }
     

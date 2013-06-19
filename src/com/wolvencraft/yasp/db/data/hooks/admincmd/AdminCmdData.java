@@ -20,11 +20,11 @@
 
 package com.wolvencraft.yasp.db.data.hooks.admincmd;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-public class AdminCmdData extends AdvancedDataStore<AdminCmdPlayerEntry, DetailedData> {
+public class AdminCmdData extends DataStore<AdminCmdPlayerEntry, DetailedData> {
     
     public AdminCmdData(OnlineSession session) {
         super(session, DataStoreType.Hook_AdminCmd);

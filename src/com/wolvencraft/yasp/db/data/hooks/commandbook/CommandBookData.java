@@ -20,11 +20,11 @@
 
 package com.wolvencraft.yasp.db.data.hooks.commandbook;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-public class CommandBookData extends AdvancedDataStore<CommandBookPlayerEntry, DetailedData> {
+public class CommandBookData extends DataStore<CommandBookPlayerEntry, DetailedData> {
     
     public CommandBookData(OnlineSession session) {
         super(session, DataStoreType.Hook_CommandBook);

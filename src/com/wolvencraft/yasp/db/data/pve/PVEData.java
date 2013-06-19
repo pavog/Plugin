@@ -25,7 +25,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.events.player.TrackedPVEEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 
@@ -34,7 +34,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class PVEData extends AdvancedDataStore<TotalPVEEntry, DetailedPVEEntry> {
+public class PVEData extends DataStore<TotalPVEEntry, DetailedPVEEntry> {
     
     /**
      * <b>Default constructor</b><br />

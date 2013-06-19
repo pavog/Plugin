@@ -106,7 +106,7 @@ public class TotalBlocksEntry extends NormalData {
      * @return <b>true</b> if the conditions are met, <b>false</b> otherwise
      */
     public boolean equals(BlockState block) {
-        if(ItemsWithMetadata.checkAgainst(block.getTypeId())) {
+        if(ItemsWithMetadata.contains(block.getTypeId())) {
             return block.getType().equals(this.block.getType()) && block.getData().getData() == this.block.getData().getData();
         } else {
             return block.getType().equals(this.block.getType());

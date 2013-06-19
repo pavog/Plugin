@@ -21,10 +21,10 @@
 package com.wolvencraft.yasp.db.data.hooks.votifier;
 
 import com.vexsoftware.votifier.model.Vote;
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-public class VotifierData extends AdvancedDataStore<TotalVotifierEntry, DetailedVotifierEntry> {
+public class VotifierData extends DataStore<TotalVotifierEntry, DetailedVotifierEntry> {
     
     public VotifierData(OnlineSession session) {
         super(session, DataStoreType.Hook_Vanish);

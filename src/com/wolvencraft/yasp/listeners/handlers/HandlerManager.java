@@ -39,8 +39,7 @@ public class HandlerManager {
                 && RemoteConfiguration.VanishDisablesTracking.asBoolean()
                 && VanishHook.isVanished(player.getName())) return false;
         
-        if(Module.Citizens.isActive()
-                && player.hasMetadata("NPC")
+        if(player.hasMetadata("NPC")    // XXX Citizens fix
                 && player.getMetadata("NPC").get(0).asBoolean()) return false;
         
         if(!check.check(player)) return false;
@@ -55,8 +54,7 @@ public class HandlerManager {
                 && RemoteConfiguration.VanishDisablesTracking.asBoolean()
                 && VanishHook.isVanished(player.getName())) return false;
         
-        if(Module.Citizens.isActive()
-                && player.hasMetadata("NPC")
+        if(player.hasMetadata("NPC")    // XXX Citizens fix
                 && player.getMetadata("NPC").get(0).asBoolean()) return false;
         
         return permission.has(player);

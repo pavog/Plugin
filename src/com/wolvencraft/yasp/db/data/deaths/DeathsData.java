@@ -24,7 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.events.player.TrackedDeathEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 
@@ -33,7 +33,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class DeathsData extends AdvancedDataStore<TotalDeathsEntry, DetailedDeathEntry> {
+public class DeathsData extends DataStore<TotalDeathsEntry, DetailedDeathEntry> {
 
     /**
      * <b>Default constructor</b><br />

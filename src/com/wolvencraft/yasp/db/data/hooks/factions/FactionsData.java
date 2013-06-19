@@ -20,7 +20,7 @@
 
 package com.wolvencraft.yasp.db.data.hooks.factions;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
@@ -29,7 +29,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class FactionsData extends AdvancedDataStore<FactionsPlayerEntry, DetailedData> {
+public class FactionsData extends DataStore<FactionsPlayerEntry, DetailedData> {
     
     public FactionsData(OnlineSession session) {
         super(session, DataStoreType.Hook_Factions);

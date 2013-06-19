@@ -32,7 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore.DataStoreType;
+import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.items.ItemsData;
 import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.session.OnlineSession;

@@ -20,11 +20,11 @@
 
 package com.wolvencraft.yasp.db.data.hooks.mobarena;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-public class MobArenaData extends AdvancedDataStore<MobArenaPlayerEntry, DetailedData> {
+public class MobArenaData extends DataStore<MobArenaPlayerEntry, DetailedData> {
     
     public MobArenaData(OnlineSession session) {
         super(session, DataStoreType.Hook_MobArena);

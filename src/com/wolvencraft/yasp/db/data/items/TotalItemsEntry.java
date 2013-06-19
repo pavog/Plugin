@@ -153,7 +153,7 @@ public class TotalItemsEntry extends NormalData {
     public boolean equals(ItemStack stack) {
         if(stack.getType().equals(Material.POTION)) {
             return stack.getType().equals(this.stack.getType()) && stack.getDurability() == this.stack.getDurability();
-        } else if(ItemsWithMetadata.checkAgainst(stack.getTypeId())) {
+        } else if(ItemsWithMetadata.contains(stack.getTypeId())) {
             return stack.getType().equals(this.stack.getType()) && stack.getData().getData() == this.stack.getData().getData();
         } else {
             return stack.getType().equals(this.stack.getType());

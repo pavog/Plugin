@@ -20,11 +20,11 @@
 
 package com.wolvencraft.yasp.db.data.hooks.pvparena;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-public class PvpArenaData extends AdvancedDataStore<PvpArenaPlayerEntry, DetailedData> {
+public class PvpArenaData extends DataStore<PvpArenaPlayerEntry, DetailedData> {
     
     public PvpArenaData(OnlineSession session) {
         super(session, DataStoreType.Hook_PvpArena);

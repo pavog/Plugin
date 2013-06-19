@@ -23,7 +23,7 @@ package com.wolvencraft.yasp.listeners.handlers;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore.DataStoreType;
+import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.blocks.BlocksData;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;

@@ -23,7 +23,7 @@ package com.wolvencraft.yasp.db.data.blocks;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.events.player.TrackedBlockBreakEvent;
 import com.wolvencraft.yasp.events.player.TrackedBlockPlaceEvent;
@@ -34,7 +34,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class BlocksData extends AdvancedDataStore<TotalBlocksEntry, DetailedData> {
+public class BlocksData extends DataStore<TotalBlocksEntry, DetailedData> {
     
     public BlocksData(OnlineSession session) {
         super(session, DataStoreType.Blocks);

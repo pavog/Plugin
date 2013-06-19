@@ -24,7 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.events.player.TrackedItemDropEvent;
 import com.wolvencraft.yasp.events.player.TrackedItemPickupEvent;
@@ -36,7 +36,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class ItemsData extends AdvancedDataStore<TotalItemsEntry, DetailedData> {
+public class ItemsData extends DataStore<TotalItemsEntry, DetailedData> {
     
     public ItemsData(OnlineSession session) {
         super(session, DataStoreType.Items);

@@ -20,11 +20,11 @@
 
 package com.wolvencraft.yasp.db.data.hooks.jail;
 
-import com.wolvencraft.yasp.db.data.AdvancedDataStore;
+import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-public class JailData extends AdvancedDataStore<JailPlayerEntry, DetailedData> {
+public class JailData extends DataStore<JailPlayerEntry, DetailedData> {
     
     public JailData(OnlineSession session) {
         super(session, DataStoreType.Hook_Jail);

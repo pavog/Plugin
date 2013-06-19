@@ -29,7 +29,7 @@ import org.bukkit.event.Listener;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.model.VotifierEvent;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.data.AdvancedDataStore.DataStoreType;
+import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.hooks.votifier.VotifierData;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;

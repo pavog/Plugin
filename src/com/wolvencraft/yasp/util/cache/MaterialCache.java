@@ -74,8 +74,8 @@ public class MaterialCache implements CachedDataProcess {
     
         if(type == -1) return "-1:0";
         if(Material.getMaterial(type) == null) return "0:0";
-        if(!Constants.ItemsWithMetadata.checkAgainst(type)) material = type + ":" + "0";
-        else material = type + ":" + ItemsWithMetadata.get(type).getData(data);
+        if(!Constants.ItemsWithMetadata.contains(type)) material = type + ":" + "0";
+        else material = type + ":" + ItemsWithMetadata.get(type).getValidData(data);
         
         if(materials.contains(material)) return material;
         materials.add(material);

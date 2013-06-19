@@ -33,7 +33,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public abstract class AdvancedDataStore<N extends NormalData, D extends DetailedData> {
+public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     
     @Getter(AccessLevel.PUBLIC) private DataStoreType type;
     @Getter(AccessLevel.PUBLIC) protected OnlineSession session;
@@ -41,7 +41,7 @@ public abstract class AdvancedDataStore<N extends NormalData, D extends Detailed
     protected List<N> normalData;
     protected List<D> detailedData;
     
-    public AdvancedDataStore(OnlineSession session, DataStoreType type) {
+    public DataStore(OnlineSession session, DataStoreType type) {
         this.session = session;
         this.type = type;
         this.normalData = new ArrayList<N>();
