@@ -75,7 +75,7 @@ public class AdminCmdHook extends PluginHook {
      * @param player Player to look up
      * @return Ban data, or an empty string
      */
-    public String getBan(String playerName) {
+    public static String getBan(String playerName) {
         IBan ban = ACHelper.getInstance().getBan(playerName);
         if(ban == null) return BanRecordSerializable.serialize(new ArrayList<BanRecordSerializable>());
         BanRecordSerializable banReason = new BanRecordSerializable(ban.getBanner(), ban.getReason(), ban.getDate().getTime() / 1000, -1L);

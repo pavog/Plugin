@@ -44,6 +44,7 @@ public class Hook {
         TableName       ("hook_admincmd"),
         PlayerId        ("player_id"),
         Afk             ("afk"),
+        Vanished        ("vanished"),
         BanReason       ("ban_reason"),
         ;
         
@@ -210,7 +211,7 @@ public class Hook {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PVPArenaTable implements DBTable {
+    public enum PvpArenaTable implements DBTable {
         
         TableName       ("hook_pvparena"),
         PlayerId        ("player_id"),

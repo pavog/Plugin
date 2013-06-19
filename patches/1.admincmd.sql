@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_hook_admincmd` ;
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_hook_admincmd` (
   `player_id` INT NOT NULL ,
   `afk` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `vanished` TINYINT(1) NOT NULL DEFAULT 0 ,
   `ban_reason` TEXT NULL ,
   PRIMARY KEY (`player_id`) ,
   CONSTRAINT `fk_player_admcmd1`
