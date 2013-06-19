@@ -73,10 +73,10 @@ public class JailHook extends PluginHook {
      * @param playerName Player name
      * @return Remaining jail time
      */
-    public static double getRemainingTime(String playerName) {
+    public static int getRemainingTime(String playerName) {
         JailPrisoner prisoner = instance.getPrisoner(playerName);
         if(prisoner == null) return 0;
-        return prisoner.getRemainingTimeMinutes();
+        return prisoner.getRemainingTime();
     }
     
 }

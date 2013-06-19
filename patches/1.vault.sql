@@ -8,11 +8,11 @@ CREATE SCHEMA IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8 ;
 USE `$dbname` ;
 
 -- -----------------------------------------------------
--- Table `$dbname`.`$prefix_vaults`
+-- Table `$dbname`.`$prefix_hook_vaults`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_vaults` ;
+DROP TABLE IF EXISTS `$dbname`.`$prefix_hook_vault` ;
 
-CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_vaults` (
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_hook_vault` (
   `player_id` INT NOT NULL ,
   `group` TEXT NULL ,
   `balance` FLOAT NOT NULL DEFAULT 0.0 ,

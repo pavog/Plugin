@@ -8,15 +8,16 @@ CREATE SCHEMA IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8 ;
 USE `$dbname` ;
 
 -- -----------------------------------------------------
--- Table `$dbname`.`$prefix_hook_banhammer`
+-- Table `$dbname`.`$prefix_hook_mobarena`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_hook_banhammer` ;
+DROP TABLE IF EXISTS `$dbname`.`$prefix_hook_mobarena` ;
 
-CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_hook_banhammer` (
+CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_hook_mobarena` (
   `player_id` INT NOT NULL ,
-  `bans` TEXT NULL ,
+  `is_playing` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `current_arena` VARCHAR(16) NOT NULL ,
   PRIMARY KEY (`player_id`) ,
-  CONSTRAINT `fk_player_banhmr1`
+  CONSTRAINT `fk_player_id20`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE

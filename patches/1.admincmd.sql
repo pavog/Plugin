@@ -17,7 +17,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_hook_admincmd` (
   `afk` TINYINT(1) NOT NULL DEFAULT 0 ,
   `ban_reason` TEXT NULL ,
   PRIMARY KEY (`player_id`) ,
-  CONSTRAINT `fk_player_id20`
+  CONSTRAINT `fk_player_admcmd1`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )
     ON DELETE CASCADE

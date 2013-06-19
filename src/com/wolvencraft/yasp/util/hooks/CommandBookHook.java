@@ -25,6 +25,8 @@ import org.bukkit.plugin.Plugin;
 
 import com.sk89q.commandbook.CommandBook;
 import com.sk89q.commandbook.GodComponent;
+import com.sk89q.commandbook.session.SessionComponent;
+import com.sk89q.commandbook.session.UserSession;
 import com.wolvencraft.yasp.settings.Module;
 import com.zachsthings.libcomponents.ComponentManager;
 import com.zachsthings.libcomponents.bukkit.BukkitComponent;
@@ -65,6 +67,17 @@ public class CommandBookHook extends PluginHook {
     public static boolean isGodMode(Player player) {
         GodComponent component = ((GodComponent) componentManager.getComponent(GodComponent.class));
         return component.isEnabled() && component.hasGodMode(player);
+    }
+    
+    /**
+     * Returns the player's AFK status
+     * @param player Player to look up
+     * @return <b>true</b> if the player is AFK, <b>false</b> otherwise
+     */
+    public static boolean isAFK(Player player) {
+        SessionComponent sessions = componentManager.getComponent(SessionComponent.class);
+        UserSession session = sessions.getSession(UserSession.class, player);
+        return session.getIdleStatus() != null;
     }
     
 }
