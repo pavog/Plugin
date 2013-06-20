@@ -45,12 +45,15 @@ public class McMMOHook extends PluginHook {
     
     public McMMOHook() {
         super(Module.McMMO, "mcMMO");
-        
+    }
+    
+    @Override
+    public void onEnable() {
         ArrayList<String> names = Lists.newArrayList();
-
+        
         for (SkillType skill : SkillType.values())
             names.add(SkillUtils.getSkillName(skill));
-
+        
         Collections.sort(names);
         SKILL_NAMES = ImmutableList.copyOf(names);
     }
