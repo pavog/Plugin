@@ -41,8 +41,11 @@ import com.wolvencraft.yasp.util.serializable.ValueSerializable;
 
 public class McMMOHook extends PluginHook {
     
-    private static final List<String> SKILL_NAMES;
-    static {
+    private static List<String> SKILL_NAMES;
+    
+    public McMMOHook() {
+        super(Module.McMMO, "mcMMO");
+        
         ArrayList<String> names = Lists.newArrayList();
 
         for (SkillType skill : SkillType.values())
@@ -50,10 +53,6 @@ public class McMMOHook extends PluginHook {
 
         Collections.sort(names);
         SKILL_NAMES = ImmutableList.copyOf(names);
-    }
-    
-    public McMMOHook() {
-        super(Module.McMMO, "mcMMO");
     }
     
     /**
