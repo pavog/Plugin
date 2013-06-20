@@ -52,18 +52,19 @@ public class InventoryEntry extends NormalData {
     public InventoryEntry(int playerId, Player player) {
         this.playerName = player.getName();
         
-        if(!Query.table(PlayersInv.TableName)
-                .column(PlayersInv.PlayerId)
-                .condition(PlayersInv.PlayerId, playerId)
-                .exists())
-            Query.table(PlayersInv.TableName)
-                .value(PlayersInv.PlayerId, playerId)
-                .insert();
+        fetchData(playerId);
     }
     
     @Override
-    @Deprecated
-    public void fetchData(int playerId) { }
+    public void fetchData(int playerId) {
+        if(Query.table(PlayersInv.TableName)
+                .column(PlayersInv.PlayerId)
+                .condition(PlayersInv.PlayerId, playerId)
+                .exists()) return;
+        Query.table(PlayersInv.TableName)
+            .value(PlayersInv.PlayerId, playerId)
+            .insert();
+    }
     
     @Override
     @Deprecated
@@ -108,6 +109,7 @@ public class InventoryEntry extends NormalData {
             .value(PlayersInv.RowTwo, rowTwo)
             .value(PlayersInv.RowThree, rowThree)
             .value(PlayersInv.Hotbar, hotbar)
+            .value(PlayersInv.SelectedItem, inv.getHeldItemSlot())
             .value(PlayersInv.PotionEffects, potionEffects)
             .condition(PlayersInv.PlayerId, playerId)
             .update();

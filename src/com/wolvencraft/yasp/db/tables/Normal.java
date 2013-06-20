@@ -165,6 +165,7 @@ public class Normal {
     public enum PlayersInv implements DBTable {
         TableName       ("player_inventories"),
         PlayerId        ("player_id"),
+        SelectedItem    ("selected_item"),
         Hotbar          ("hotbar"),
         RowOne          ("row_one"),
         RowTwo          ("row_two"),

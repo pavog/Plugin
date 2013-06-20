@@ -17,7 +17,11 @@ INSERT INTO `$prefix_server_statistics` (`key` , `value`) VALUES ("java.vm.name"
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("hook.vanish.no_tracking", "0");
 INSERT INTO `$prefix_settings` (`key` , `value`) VALUES ("merged_data_tracking", "0");
 
--- Player location stats
+-- Alter existing tables
+
+ALTER TABLE `$prefix_player_inventories` ADD `selected_item` SMALLINT UNSIGNED NOT NULL DEFAULT 0;
+
+-- Create new tables
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
