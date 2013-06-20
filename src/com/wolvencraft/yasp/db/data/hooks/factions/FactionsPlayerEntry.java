@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.db.data.hooks.factions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.Query;
@@ -43,26 +44,32 @@ public class FactionsPlayerEntry extends NormalData {
                 .condition(FactionsTable.PlayerId, playerId)
                 .exists()) return;
         
+        Player player = Bukkit.getPlayerExact(playerName);
+        if(player == null) return;
+        
         Query.table(FactionsTable.TableName)
             .value(FactionsTable.PlayerId, playerId)
-            .value(FactionsTable.CurrentPower, FactionsHook.getPower(playerName))
-            .value(FactionsTable.MaximumPower, FactionsHook.getMaxPower(playerName))
-            .value(FactionsTable.CurrentlyIn, FactionsHook.getCurrentLocation(playerName))
-            .value(FactionsTable.FactionName, FactionsHook.getCurrentFaction(playerName))
-            .value(FactionsTable.Title, FactionsHook.getTitle(playerName))
-            .value(FactionsTable.FactionRole, FactionsHook.getRole(playerName))
+            .value(FactionsTable.CurrentPower, FactionsHook.getPower(player))
+            .value(FactionsTable.MaximumPower, FactionsHook.getMaxPower(player))
+            .value(FactionsTable.CurrentlyIn, FactionsHook.getCurrentLocation(player))
+            .value(FactionsTable.FactionName, FactionsHook.getCurrentFaction(player))
+            .value(FactionsTable.Title, FactionsHook.getTitle(player))
+            .value(FactionsTable.FactionRole, FactionsHook.getRole(player))
             .insert();
     }
 
     @Override
     public boolean pushData(int playerId) {
+        Player player = Bukkit.getPlayerExact(playerName);
+        if(player == null) return false;
+        
         return Query.table(FactionsTable.TableName)
-            .value(FactionsTable.CurrentPower, FactionsHook.getPower(playerName))
-            .value(FactionsTable.MaximumPower, FactionsHook.getMaxPower(playerName))
-            .value(FactionsTable.CurrentlyIn, FactionsHook.getCurrentLocation(playerName))
-            .value(FactionsTable.FactionName, FactionsHook.getCurrentFaction(playerName))
-            .value(FactionsTable.Title, FactionsHook.getTitle(playerName))
-            .value(FactionsTable.FactionRole, FactionsHook.getRole(playerName))
+            .value(FactionsTable.CurrentPower, FactionsHook.getPower(player))
+            .value(FactionsTable.MaximumPower, FactionsHook.getMaxPower(player))
+            .value(FactionsTable.CurrentlyIn, FactionsHook.getCurrentLocation(player))
+            .value(FactionsTable.FactionName, FactionsHook.getCurrentFaction(player))
+            .value(FactionsTable.Title, FactionsHook.getTitle(player))
+            .value(FactionsTable.FactionRole, FactionsHook.getRole(player))
             .condition(FactionsTable.PlayerId, playerId)
             .update();
     }

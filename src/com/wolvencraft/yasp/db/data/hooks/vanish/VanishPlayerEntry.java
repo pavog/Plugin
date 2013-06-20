@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.db.data.hooks.vanish;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.Query;
@@ -43,16 +44,22 @@ public class VanishPlayerEntry extends NormalData {
                 .condition(VanishTable.PlayerId, playerId)
                 .exists()) return;
         
+        Player player = Bukkit.getPlayerExact(playerName);
+        if(player == null) return;
+        
         Query.table(VanishTable.TableName)
             .value(VanishTable.PlayerId, playerId)
-            .value(VanishTable.IsVanished, VanishHook.isVanished(playerName))
+            .value(VanishTable.IsVanished, VanishHook.isVanished(player))
             .insert();
     }
 
     @Override
     public boolean pushData(int playerId) {
+        Player player = Bukkit.getPlayerExact(playerName);
+        if(player == null) return false;
+        
         return Query.table(VanishTable.TableName)
-            .value(VanishTable.IsVanished, VanishHook.isVanished(playerName))
+            .value(VanishTable.IsVanished, VanishHook.isVanished(player))
             .condition(VanishTable.PlayerId, playerId)
             .update();
     }

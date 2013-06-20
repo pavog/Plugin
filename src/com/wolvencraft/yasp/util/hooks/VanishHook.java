@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
+import org.bukkit.entity.Player;
 import org.kitteh.vanish.VanishPlugin;
 
 import com.wolvencraft.yasp.settings.Module;
@@ -44,10 +45,10 @@ public class VanishHook extends PluginHook {
     
     /**
      * Checks if the player is vanished or not
-     * @param playerName Player to look up
+     * @param player Player object
      * @return <b>true</b> if the player is vanished, <b>false</b> otherwise
      */
-    public static boolean isVanished(String playerName) {
-        return instance.getManager().isVanished(playerName);
+    public static boolean isVanished(Player player) {
+        return instance.getManager().isVanished(player);
     }
 }

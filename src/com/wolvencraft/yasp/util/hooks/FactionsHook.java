@@ -20,7 +20,6 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Board;
@@ -37,24 +36,20 @@ public class FactionsHook extends PluginHook {
     
     /**
      * Returns the name of the player's faction
-     * @param playerName Name of the player
+     * @param player Player object
      * @return Name of the faction
      */
-    public static String getCurrentFaction(String playerName) {
-        Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return null;
+    public static String getCurrentFaction(Player player) {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getFaction().getId();
     }
     
     /**
      * Returns the faction that owns the land the player is currently standing.
-     * @param playerName Name of the player
+     * @param player Player object
      * @return Name of the faction
      */
-    public static String getCurrentLocation(String playerName) {
-        Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return null;
+    public static String getCurrentLocation(Player player) {
         FPlayer fplayer = FPlayers.i.get(player);
         Faction factionAt = Board.getFactionAt(fplayer.getLastStoodAt());
         if(factionAt == null) return "none";
@@ -63,48 +58,40 @@ public class FactionsHook extends PluginHook {
     
     /**
      * Returns the player's current power
-     * @param playerName Name of the player
+     * @param player Player object
      * @return Player's power
      */
-    public static double getPower(String playerName) {
-        Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return -1;
+    public static double getPower(Player player) {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getPower();
     }
     
     /**
      * Returns the player's maximum power
-     * @param playerName Name of the player
+     * @param player Player object
      * @return Player's maximum power
      */
-    public static double getMaxPower(String playerName) {
-        Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return -1;
+    public static double getMaxPower(Player player) {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getPowerMax();
     }
     
     /**
      * Returns the player's role
-     * @param playerName Name of the player
+     * @param player Player object
      * @return Player's role
      */
-    public static String getRole(String playerName) {
-        Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return null;
+    public static String getRole(Player player) {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getRole().name();
     }
     
     /**
      * Returns the player's title
-     * @param playerName Name of the player
+     * @param player Player object
      * @return Player's title
      */
-    public static String getTitle(String playerName) {
-        Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return null;
+    public static String getTitle(Player player) {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getTitle();
     }
