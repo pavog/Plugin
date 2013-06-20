@@ -131,7 +131,8 @@ public class HookManager {
         WORLD_GUARD     (WorldGuardHook.class)
         ;
         
-        @Getter(AccessLevel.PRIVATE) private Class<? extends PluginHook> hook;
+        @Getter(AccessLevel.PRIVATE)
+        private Class<? extends PluginHook> hook;
         
     }
     

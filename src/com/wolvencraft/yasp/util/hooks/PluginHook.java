@@ -52,6 +52,10 @@ public abstract class PluginHook {
         this.patchExtension = patchExtension;
     }
     
+    /**
+     * Executes the hook enabling routine
+     * @return <b>true</b> if the plugin is present and was enabled, <b>false</b> otherwise
+     */
     public final boolean enable() {
         plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
         
@@ -68,24 +72,24 @@ public abstract class PluginHook {
         }
         
         onEnable();
-        
         return true;
     }
     
+    /**
+     * Executes the hook disabling routine
+     */
     public final void disable() {
-        plugin = null;
         onDisable();
+        plugin = null;
     }
     
     /**
-     * Code that is to be executed when the hook is being enabled.<br />
-     * This should include a database patch, if necessary
+     * Extra code to be executed after the hook is enabled
      */
     protected void onEnable() { }
     
-    /**
-     * Code that is to be executed when the hook is being disabled.<br />
-     * This should include a cleanup routine.
+     /**
+     * Extra code to be executed before the hook is disabled
      */
     protected void onDisable() { }
 }
