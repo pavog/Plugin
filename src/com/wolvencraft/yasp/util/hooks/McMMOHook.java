@@ -26,9 +26,7 @@ import java.util.List;
 
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.api.PartyAPI;
 import com.gmail.nossr50.datatypes.skills.SkillType;
@@ -43,32 +41,19 @@ import com.wolvencraft.yasp.util.serializable.ValueSerializable;
 
 public class McMMOHook extends PluginHook {
     
-    public static final List<String> SKILL_NAMES;
-
+    private static final List<String> SKILL_NAMES;
     static {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = Lists.newArrayList();
 
-        for (SkillType skill : SkillType.values()) {
+        for (SkillType skill : SkillType.values())
             names.add(SkillUtils.getSkillName(skill));
-        }
 
         Collections.sort(names);
         SKILL_NAMES = ImmutableList.copyOf(names);
     }
     
     public McMMOHook() {
-        super(Module.McMMO, "mcMMO", "mcmmo");
-    }
-    
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = getPlugin();
-        
-        if (plugin != null && plugin instanceof mcMMO) {
-            module.setActive(true);
-        }
+        super(Module.McMMO, "mcMMO");
     }
     
     /**

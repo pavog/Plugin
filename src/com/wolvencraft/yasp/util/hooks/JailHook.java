@@ -20,8 +20,6 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import org.bukkit.plugin.Plugin;
-
 import com.matejdro.bukkit.jail.Jail;
 import com.matejdro.bukkit.jail.JailAPI;
 import com.matejdro.bukkit.jail.JailPrisoner;
@@ -32,19 +30,17 @@ public class JailHook extends PluginHook {
     private static JailAPI instance;
     
     public JailHook() {
-        super(Module.Jail, "Jail", "jail");
+        super(Module.Jail, "Jail");
     }
     
     @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = getPlugin();
-        
-        if (plugin != null && plugin instanceof Jail) {
-            module.setActive(true);
-            instance = ((Jail) plugin).API;
-        }
+    protected void onEnable() {
+        instance = ((Jail) plugin).API;
+    }
+    
+    @Override
+    protected void onDisable() {
+        instance = null;
     }
     
     /**

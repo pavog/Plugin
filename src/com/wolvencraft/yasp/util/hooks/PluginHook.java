@@ -21,7 +21,6 @@
 package com.wolvencraft.yasp.util.hooks;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import org.bukkit.Bukkit;
@@ -33,40 +32,60 @@ import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 
 @Getter(AccessLevel.PUBLIC)
-@AllArgsConstructor(access=AccessLevel.PUBLIC)
 public abstract class PluginHook {
     
     protected Module module;
     protected String patchExtension;
     protected String pluginName;
     
-    /**
-     * Code that is to be executed when the hook is being enabled.<br />
-     * This should include a database patch, if necessary
-     */
-    public void onEnable() {
+    protected Plugin plugin;
+    
+    public PluginHook(Module module, String pluginName) {
+        this.module = module;
+        this.pluginName = pluginName;
+        this.patchExtension = pluginName.toLowerCase().replace(" ", "");
+    }
+    
+    public PluginHook(Module module, String pluginName, String patchExtension) {
+        this.module = module;
+        this.pluginName = pluginName;
+        this.patchExtension = patchExtension;
+    }
+    
+    public final boolean enable() {
+        plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
+        
+        if (plugin == null) return false;
+        module.setActive(true);
+        
         try {
             PatchManager.fetch(patchExtension);
             Database.patchModule(false, module);
         } catch (Throwable t) {
             ExceptionHandler.handle(t);
+            module.setActive(false);
+            return false;
         }
+        
+        onEnable();
+        
+        return true;
     }
+    
+    public final void disable() {
+        plugin = null;
+        onDisable();
+    }
+    
+    /**
+     * Code that is to be executed when the hook is being enabled.<br />
+     * This should include a database patch, if necessary
+     */
+    protected void onEnable() { }
     
     /**
      * Code that is to be executed when the hook is being disabled.<br />
      * This should include a cleanup routine.
      */
-    public void onDisable() {
-        // Do nothing
-    }
-    
-    /**
-     * Returns an instance of the plugin
-     * @return Plugin instance
-     */
-    public Plugin getPlugin() {
-        return Bukkit.getServer().getPluginManager().getPlugin(pluginName);
-    }
-    
+    protected void onDisable() { }
 }

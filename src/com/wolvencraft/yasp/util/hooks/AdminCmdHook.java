@@ -22,13 +22,10 @@ package com.wolvencraft.yasp.util.hooks;
 
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import be.Balor.Player.IBan;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.AdminCmd;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -38,18 +35,7 @@ import com.wolvencraft.yasp.util.serializable.BanRecordSerializable;
 public class AdminCmdHook extends PluginHook {
     
     public AdminCmdHook() {
-        super(Module.AdminCmd, "AdminCmd", "admincmd");
-    }
-    
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
-        
-        if (plugin != null && plugin instanceof AdminCmd) {
-            module.setActive(true);
-        }
+        super(Module.AdminCmd, "AdminCmd");
     }
     
     /**

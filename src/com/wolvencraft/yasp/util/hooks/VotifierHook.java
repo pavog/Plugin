@@ -37,11 +37,11 @@ import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 public class VotifierHook extends PluginHook implements Listener {
     
     public VotifierHook() {
-        super(Module.Votifier, "Votifier", "votifier");
+        super(Module.Votifier, "Votifier");
     }
     
     @Override
-    public void onEnable() {
+    protected void onEnable() {
         Bukkit.getServer().getPluginManager().registerEvents(this, Statistics.getInstance());
     }
     

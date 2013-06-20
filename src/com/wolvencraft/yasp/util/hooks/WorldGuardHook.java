@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -33,33 +32,21 @@ import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.serializable.FlagsSerializable;
 import com.wolvencraft.yasp.util.serializable.RegionsSerializable;
 
-/**
- * Simplistic WorldGuard hook
- * @author bitWolfy
- *
- */
 public class WorldGuardHook extends PluginHook {
     
     private static WorldGuardPlugin instance;
     
     public WorldGuardHook() {
-        super(Module.WorldGuard, "WorldGuard", "worldguard");
+        super(Module.WorldGuard, "WorldGuard");
     }
     
     @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = getPlugin();
-        
-        if (plugin != null && plugin instanceof WorldGuardPlugin) {
-            instance = (WorldGuardPlugin) plugin;
-            module.setActive(true);
-        }
+    protected void onEnable() {
+        instance = (WorldGuardPlugin) plugin;
     }
     
     @Override
-    public void onDisable() {
+    protected void onDisable() {
         instance = null;
     }
     

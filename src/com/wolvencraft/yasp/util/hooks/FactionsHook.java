@@ -22,39 +22,17 @@ package com.wolvencraft.yasp.util.hooks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Factions;
 import com.wolvencraft.yasp.settings.Module;
 
-/**
- * Quick-and-dirty MobArena hook
- * @author bitWolfy
- *
- */
 public class FactionsHook extends PluginHook {
     
-    /**
-     * <b>Default constructor</b><br />
-     * Connects to MobArena and sets up a plugin instance
-     */
     public FactionsHook() {
-        super(Module.Factions, "Factions", "factions");
-    }
-    
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = getPlugin();
-        
-        if (plugin != null && plugin instanceof Factions) {
-            module.setActive(true);
-        }
+        super(Module.Factions, "Factions");
     }
     
     /**

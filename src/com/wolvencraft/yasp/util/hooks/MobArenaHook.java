@@ -21,42 +21,25 @@
 package com.wolvencraft.yasp.util.hooks;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import com.garbagemule.MobArena.MobArena;
 import com.wolvencraft.yasp.settings.Module;
 
-/**
- * Quick-and-dirty MobArena hook
- * @author bitWolfy
- *
- */
 public class MobArenaHook extends PluginHook {
     
     private static MobArena instance;
     
-    /**
-     * <b>Default constructor</b><br />
-     * Connects to MobArena and sets up a plugin instance
-     */
     public MobArenaHook() {
-        super(Module.MobArena, "MobArena", "mobarena");
+        super(Module.MobArena, "MobArena");
     }
     
     @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = getPlugin();
-        
-        if (plugin != null && plugin instanceof MobArena) {
-            instance = (MobArena) plugin;
-            module.setActive(true);
-        }
+    protected void onEnable() {
+        instance = (MobArena) super.plugin;
     }
     
     @Override
-    public void onDisable() {
+    protected void onDisable() {
         instance = null;
     }
     

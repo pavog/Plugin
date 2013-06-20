@@ -20,38 +20,16 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.api.PVPArenaAPI;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import com.wolvencraft.yasp.settings.Module;
 
-/**
- * Quick-and-dirty MobArena hook
- * @author bitWolfy
- *
- */
 public class PvpArenaHook extends PluginHook {
     
-    /**
-     * <b>Default constructor</b><br />
-     * Connects to MobArena and sets up a plugin instance
-     */
     public PvpArenaHook() {
-        super(Module.PvpArena, "PvpArena", "pvparena");
-    }
-    
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = getPlugin();
-        
-        if (plugin != null && plugin instanceof PVPArena) {
-            module.setActive(true);
-        }
+        super(Module.PvpArena, "PvpArena");
     }
     
     /**

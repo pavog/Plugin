@@ -33,43 +33,28 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.Message;
 
-/**
- * Simplistic Vault hook
- * @author bitWolfy
- *
- */
 public class VaultHook extends PluginHook {
     
     private static Economy economy;
     private static Permission permissions;
     
-    /**
-     * <b>Default constructor</b><br />
-     * Connects to Vault economy and permissions hooks
-     */
     public VaultHook() {
-        super(Module.Vault, "Vault", "vault");
+        super(Module.Vault, "Vault");
     }
     
     @Override
-    public void onEnable() {
-        super.onEnable();
-        
+    protected void onEnable() {
         ServicesManager svm = Statistics.getInstance().getServer().getServicesManager();
         
         try { economy = ((RegisteredServiceProvider<Economy>)(svm.getRegistration(Economy.class))).getProvider();}
-        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing economy"); }
+        catch(Throwable t) { Message.log(Level.SEVERE, "An error occurred while initializing economy"); }
         
         try { permissions = ((RegisteredServiceProvider<Permission>)(svm.getRegistration(Permission.class))).getProvider(); }
-        catch(Exception ex) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); }
-        
-        if(economy != null && permissions != null) {
-            module.setActive(true);
-        }
+        catch(Throwable t) { Message.log(Level.SEVERE, "An error occurred while initializing permissions"); }
     }
     
     @Override
-    public void onDisable() {
+    protected void onDisable() {
         economy = null;
         permissions = null;
     }
@@ -81,6 +66,7 @@ public class VaultHook extends PluginHook {
      * @return Player's group
      */
     public static String getGroup(Player player) {
+        if(permissions == null) return "";
         return permissions.getPrimaryGroup(player);
     }
     
@@ -91,6 +77,7 @@ public class VaultHook extends PluginHook {
      * @return Player's group
      */
     public static String getGroup(String player, String world) {
+        if(permissions == null) return "";
         return permissions.getPrimaryGroup(world, player);
     }
     
@@ -100,6 +87,7 @@ public class VaultHook extends PluginHook {
      * @return Player's balance
      */
     public static double getBalance(String playerName) {
+        if(economy == null) return 0;
         return economy.getBalance(playerName);
     }
     

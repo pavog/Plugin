@@ -22,6 +22,7 @@ package com.wolvencraft.yasp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -56,7 +57,7 @@ public class HookManager {
     
     public void onEnable() {
         PluginManager plManager = Statistics.getInstance().getServer().getPluginManager();
-        
+        int hooksEnabled = 0;
         Message.log(
                 "+-------- [ Hook Manager ] --------+",
                 "|" + Message.centerString("Hook Manager starting up", 34) + "|",
@@ -72,9 +73,9 @@ public class HookManager {
             }
             
             if (plManager.getPlugin(hookObj.getPluginName()) == null) {
-                Message.log("|" + Message.centerString(hookObj.getPluginName() + " is not found", 34) + "|");
+                Message.debug(Level.FINER, "|" + Message.centerString(hookObj.getPluginName() + " is not found", 34) + "|");
             } else if (!hookObj.getModule().isEnabled()) {
-                Message.log("|" + Message.centerString(hookObj.getPluginName() + " is disabled", 34) + "|");
+                Message.debug(Level.FINER, "|" + Message.centerString(hookObj.getPluginName() + " is disabled", 34) + "|");
             } else {
                 HookInitEvent event = new HookInitEvent(hookObj.getModule());
                 Bukkit.getServer().getPluginManager().callEvent(event);
@@ -82,15 +83,20 @@ public class HookManager {
                     Message.log("|" + Message.centerString(hookObj.getPluginName() + " is cancelled", 34) + "|");
                     continue;
                 }
-
-                Message.log("|" + Message.centerString(hookObj.getPluginName() + " has been enabled", 34) + "|");
                 
-                hookObj.onEnable();
-                activeHooks.add(hookObj);
+                if(hookObj.enable()) {
+                    Message.log("|" + Message.centerString(hookObj.getPluginName() + " has been enabled", 34) + "|");
+                    activeHooks.add(hookObj);
+                    hooksEnabled++;
+                } else
+                    Message.log("|" + Message.centerString("Could not enable " + hookObj.getPluginName(), 34) + "|"); 
             }
         }
-        
-        Message.log("+----------------------------------+");
+        Message.log(
+                "|                                  |",
+                "|" + Message.centerString(hooksEnabled + " hooks enabled", 34) + "|",
+                "+----------------------------------+"
+                );
     }
     
     public void onDisable() {
@@ -101,7 +107,7 @@ public class HookManager {
                 );
         
         for(PluginHook hook : activeHooks) {
-            hook.onDisable();
+            hook.disable();
             Message.log("|" + Message.centerString(hook.getPluginName() + " is shutting down", 34) + "|");
         }
         

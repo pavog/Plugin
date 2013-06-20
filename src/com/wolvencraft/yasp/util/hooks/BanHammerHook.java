@@ -26,8 +26,6 @@ import java.util.List;
 import name.richardson.james.bukkit.banhammer.BanHammer;
 import name.richardson.james.bukkit.banhammer.persistence.BanRecord;
 
-import org.bukkit.plugin.Plugin;
-
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.serializable.BanRecordSerializable;
 
@@ -36,23 +34,16 @@ public class BanHammerHook extends PluginHook {
     private static BanHammer instance;
     
     public BanHammerHook() {
-        super(Module.BanHammer, "BanHammer", "banhammer");
+        super(Module.BanHammer, "BanHammer");
     }
     
     @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = getPlugin();
-        
-        if (plugin != null && plugin instanceof BanHammer) {
-            module.setActive(true);
-            instance = (BanHammer) plugin;
-        }
+    protected void onEnable() {
+        instance = (BanHammer) super.plugin;
     }
     
     @Override
-    public void onDisable() {
+    protected void onDisable() {
         instance = null;
     }
     

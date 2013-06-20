@@ -20,7 +20,6 @@
 
 package com.wolvencraft.yasp.util.hooks;
 
-import org.bukkit.plugin.Plugin;
 import org.kitteh.vanish.VanishPlugin;
 
 import com.wolvencraft.yasp.settings.Module;
@@ -34,19 +33,12 @@ public class VanishHook extends PluginHook {
     }
     
     @Override
-    public void onEnable() {
-        super.onEnable();
-        
-        Plugin plugin = getPlugin();
-        
-        if (plugin != null && plugin instanceof VanishPlugin) {
-            module.setActive(true);
-            instance = (VanishPlugin) plugin;
-        }
+    protected void onEnable() {
+        instance = (VanishPlugin) super.plugin;
     }
     
     @Override
-    public void onDisable() {
+    protected void onDisable() {
         instance = null;
     }
     
