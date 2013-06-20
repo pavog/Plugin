@@ -166,7 +166,7 @@ public class Statistics extends JavaPlugin {
         
         try {
             for(Player player : Bukkit.getOnlinePlayers()) {
-                OnlineSessionCache.fetch(player).logout(player.getLocation());
+                OnlineSessionCache.fetch(player).getPlayersData().addPlayerLog(player.getLocation(), false);
             }
             DatabaseTask.commit();
             serverStatistics.pluginShutdown();
