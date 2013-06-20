@@ -93,7 +93,7 @@ public class ItemsHandler {
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemsData) session.getDataStore(DataStoreType.Items)).itemUse(player.getLocation(), player.getItemInHand());
             session.getPlayerTotals().snacksEaten();
-            session.addMiscValue(MiscInfoPlayersTable.FoodEaten);
+            session.getPlayersData().getMiscData().incrementStat(MiscInfoPlayersTable.FoodEaten);
         }
     }
     

@@ -72,156 +72,37 @@ public class PlayerHandlers {
             } else {
                 OnlineSession session = OnlineSessionCache.fetch(player);
                 if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
-                    session.addMiscValue(MiscInfoPlayersTable.TimesJumped);
+                    session.getPlayersData().getMiscData().incrementStat(MiscInfoPlayersTable.TimesJumped);
                 OnlineSessionCache.fetch(player).addDistance(DistancePlayersTable.Foot, distance);
             }
         }
     }
-    
+
     /**
-     * Executed when a player has catches a fish
+     * Executed when a player's stat has to be incremented asynchronously
      * @author bitWolfy
      *
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class PlayerFish implements Runnable {
-        
+    public static class PlayerIncrementStat implements Runnable {
+
         private Player player;
+        private MiscInfoPlayersTable stat;
+        private int value;
+        
+        public PlayerIncrementStat(Player player, MiscInfoPlayersTable stat) {
+            this.player = player;
+            this.stat = stat;
+            this.value = 1;
+        }
         
         @Override
         public void run() {
-            OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.FishCaught);
+            OnlineSessionCache
+                .fetch(player)
+                .getPlayersData()
+                .getMiscData()
+                .incrementStat(stat, value);
         }
     }
-    
-    /**
-     * Executed when a player is kicked
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class PlayerKicked implements Runnable {
-        
-        private Player player;
-        
-        @Override
-        public void run() {
-            OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.TimesKicked);
-        }
-    }
-    
-    /**
-     * Executed when a player throws an egg
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class PlayerEggThrow implements Runnable {
-        
-        private Player player;
-        
-        @Override
-        public void run() {
-            OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.EggsThrown);
-        }
-    }
-    
-    /**
-     * Executed when a player shoots an error
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class PlayerArrowShoot implements Runnable {
-        
-        private Player player;
-        
-        @Override
-        public void run() {
-            OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.ArrowsShot);
-        }
-    }
-    
-    /**
-     * Executed when a player takes damage
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class PlayerDamage implements Runnable {
-        
-        private Player player;
-        private int damage;
-        
-        @Override
-        public void run() {
-            OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.DamageTaken, damage);
-        }
-    }
-    
-    /**
-     * Executed when a player enters a bed
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class PlayerBedEnter implements Runnable {
-        
-        private Player player;
-        
-        @Override
-        public void run() {
-            OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.BedsEntered);
-        }
-    }
-    
-    /**
-     * Executed when a player enters a portal
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class PlayerPortalEnter implements Runnable {
-        
-        private Player player;
-        
-        @Override
-        public void run() {
-            OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.PortalsEntered);
-        }
-    }
-    
-    /**
-     * Executed when a player sends a message in chat
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class PlayerChatMessage implements Runnable {
-        
-        private Player player;
-        private String message;
-        
-        @Override
-        public void run() {
-            OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.WordsSaid, message.split(" ").length);
-        }
-    }
-    
-    /**
-     * Executed when a player sends a command
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class PlayerCommandSend implements Runnable {
-        
-        private Player player;
-        
-        @Override
-        public void run() {
-            OnlineSessionCache.fetch(player).addMiscValue(MiscInfoPlayersTable.CommandsSent);
-        }
-    }
-    
 }

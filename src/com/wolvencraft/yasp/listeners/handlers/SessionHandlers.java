@@ -43,7 +43,7 @@ public class SessionHandlers {
         @Override
         public void run() {
             Statistics.getServerStatistics().playerLogin();
-            OnlineSessionCache.fetch(player, true).login(player.getLocation());
+            OnlineSessionCache.fetch(player, true).getPlayersData().addPlayerLog(player.getLocation(), true);
         }
     }
     
@@ -59,7 +59,7 @@ public class SessionHandlers {
         
         @Override
         public void run() {
-            OnlineSessionCache.fetch(player).logout(player.getLocation());
+            OnlineSessionCache.fetch(player).getPlayersData().addPlayerLog(player.getLocation(), false);
         }
     }
     

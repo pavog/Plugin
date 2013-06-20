@@ -46,7 +46,6 @@ import com.wolvencraft.yasp.db.data.players.PlayersData;
 import com.wolvencraft.yasp.db.data.pve.PVEData;
 import com.wolvencraft.yasp.db.data.pvp.PVPData;
 import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
-import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
 import com.wolvencraft.yasp.util.NamedInteger;
@@ -91,24 +90,11 @@ public class OnlineSession implements PlayerSession {
         
         this.playerTotals = new PlayerTotals(id);
         this.scoreboard = null;
-    }
-    
-    /**
-     * <b>Constructor</b><Br />
-     * Creates a new online session from an offline session
-     * @param session Session to inherit
-     * @throws InstantiationException Thrown if the player is not currently online
-     */
-    public OnlineSession(OfflineSession session) throws InstantiationException {
-        id = session.getId();
-        name = session.getName();
         
-        Player player = Bukkit.getPlayerExact(name);
-        if(player == null) throw new InstantiationException("Player " + name + " is not online!");
-
-        this.playersData = new PlayersData(player, id);
-        this.dataStores = Util.getModules(this);
-        this.playerTotals = new PlayerTotals(id);
+        Query.table(PlayersTable.TableName)
+            .value(PlayersTable.Online, true)
+            .condition(PlayersTable.PlayerId, id)
+            .update();
     }
     
     @Override
@@ -154,34 +140,8 @@ public class OnlineSession implements PlayerSession {
         for(DataStore store : dataStores) store.dump();
     }
     
-    /**
-     * Player has logged in
-     * @param location Location on login
-     */
-    public void login(Location location) {
-        playersData.addPlayerLog(location, true);
-        Query.table(PlayersTable.TableName)
-            .value(PlayersTable.Online, true)
-            .condition(PlayersTable.PlayerId, id)
-            .update();
-    }
-    
-    /**
-     * Player has logged out, but the logout event was not caught
-     */
-    public void logout() {
-        Query.table(PlayersTable.TableName)
-            .value(PlayersTable.Online, false)
-            .condition(PlayersTable.PlayerId, id)
-            .update();
-    }
-    
-    /**
-     * Player has logged out
-     * @param location Location on logout
-     */
-    public void logout(Location location) {
-        playersData.addPlayerLog(location, false);
+    @Override
+    public void finalize() {
         Query.table(PlayersTable.TableName)
             .value(PlayersTable.Online, false)
             .condition(PlayersTable.PlayerId, id)
@@ -196,23 +156,6 @@ public class OnlineSession implements PlayerSession {
     public void addDistance(DistancePlayersTable type, double distance) {
         playersData.getDistanceData().addDistance(type, distance);
         playerTotals.addDistance(type, distance);
-    }
-    
-    /**
-     * Sets the value of a miscellaneous value
-     * @param type Value type
-     * @param value Value
-     */
-    public void addMiscValue(MiscInfoPlayersTable type, int value) {
-        playersData.getMiscData().incrementStat(type, value);
-    }
-    
-    /**
-     * Sets the value of a miscellaneous value
-     * @param type Value type
-     */
-    public void addMiscValue(MiscInfoPlayersTable type) {
-        playersData.getMiscData().incrementStat(type);
     }
     
     /**
