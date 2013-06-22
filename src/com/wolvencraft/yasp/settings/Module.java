@@ -101,7 +101,7 @@ public enum Module {
         this.hook = isHook;
         this.KEY = key;
         
-        try { refresh(); }
+        try { updateCache(); }
         catch(Throwable t) { }
         
         if(dataStores.length == 0) this.dataStores = Lists.newArrayList();
@@ -116,7 +116,7 @@ public enum Module {
      * @return <b>true</b> if the module is enabled, <b>false</b> if it is not
      */
     public boolean isEnabled() {
-        if(refreshScheduled) refreshAsynchronously();
+        if(refreshScheduled) updateCacheAsynchronously();
         return enabled;
     }
 
@@ -142,7 +142,7 @@ public enum Module {
      * @return Module version
      */
     public int getVersion() {
-        if(refreshScheduled) refreshAsynchronously();
+        if(refreshScheduled) updateCacheAsynchronously();
         return version;
     }
     
@@ -152,7 +152,7 @@ public enum Module {
      * @param version New version
      */
     public void setVersion(int version) {
-        if(refreshScheduled) refreshAsynchronously();
+        if(refreshScheduled) updateCacheAsynchronously();
         this.version = version;
         if(!hook) return;
         String versionKey = "version." + KEY;
@@ -165,7 +165,7 @@ public enum Module {
     /**
      * Fetches the module variables from the database
      */
-    private void refresh() {
+    private void updateCache() {
         String stateKey = "";
         if(hook) {
             stateKey = "hook." + KEY;
@@ -195,11 +195,11 @@ public enum Module {
     /**
      * Fetches the module variables from the database asynchronously
      */
-    private void refreshAsynchronously() {
+    private void updateCacheAsynchronously() {
         if(!Statistics.getInstance().isEnabled()) return;
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             @Override
-            public void run() { refresh(); }
+            public void run() { updateCache(); }
         });
     }
     

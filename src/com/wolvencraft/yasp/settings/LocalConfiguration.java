@@ -30,6 +30,7 @@ import com.wolvencraft.yasp.util.ExceptionHandler;
  *
  */
 public enum LocalConfiguration {
+    
     Debug           ("debug"),
     DBHost          ("database.host"),
     DBPort          ("database.port"),

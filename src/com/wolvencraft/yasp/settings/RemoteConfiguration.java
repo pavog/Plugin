@@ -34,6 +34,7 @@ import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
  *
  */
 public enum RemoteConfiguration {
+    
     DatabaseVersion             ("version"),
     
     Ping                        ("ping"),
@@ -59,7 +60,7 @@ public enum RemoteConfiguration {
     RemoteConfiguration(String key) {
         refreshScheduled = false;
         this.key = key;
-        refresh();
+        updateCache();
     }
     
     /**
@@ -77,7 +78,7 @@ public enum RemoteConfiguration {
      * @return Configuration value
      */
     public String asString() {
-        if(refreshScheduled) refreshAsynchronously();
+        if(refreshScheduled) updateCacheAsynchronously();
         try { return entry.asString("value"); }
         catch (Throwable t) { return ""; }
     }
@@ -87,7 +88,7 @@ public enum RemoteConfiguration {
      * @return Configuration value
      */
     public int asInteger() { 
-        if(refreshScheduled) refreshAsynchronously();
+        if(refreshScheduled) updateCacheAsynchronously();
         try { return entry.asInt("value"); }
         catch (Throwable t) { com.wolvencraft.yasp.util.Message.log("Entry is null (" + t.getMessage() + ")"); return 0; }
     }
@@ -97,7 +98,7 @@ public enum RemoteConfiguration {
      * @return Configuration value
      */
     public boolean asBoolean() {
-        if(refreshScheduled) refreshAsynchronously();
+        if(refreshScheduled) updateCacheAsynchronously();
         try { return entry.asBoolean("value"); }
         catch (Throwable t) { return false; }
     }
@@ -114,19 +115,22 @@ public enum RemoteConfiguration {
     /**
      * Fetches the configuration data from the database
      */
-    private void refresh() {
-        entry = Query.table(SettingsTable.TableName).column("value").condition("key", key).select();
+    private void updateCache() {
+        entry = Query.table(SettingsTable.TableName)
+                .column("value")
+                .condition("key", key)
+                .select();
         refreshScheduled = false;
     }
     
     /**
      * Fetches the configuration data from the database asynchronously
      */
-    private void refreshAsynchronously() {
+    private void updateCacheAsynchronously() {
         if(!Statistics.getInstance().isEnabled()) return;
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             @Override
-            public void run() { refresh(); }
+            public void run() { updateCache(); }
         });
     }
     
