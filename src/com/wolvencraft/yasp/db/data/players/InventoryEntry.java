@@ -108,7 +108,7 @@ public class InventoryEntry extends NormalData {
             .value(PlayerInv.RowTwo, rowTwo)
             .value(PlayerInv.RowThree, rowThree)
             .value(PlayerInv.Hotbar, hotbar)
-            .value(PlayerInv.SelectedItem, inv.getHeldItemSlot())
+//          .value(PlayerInv.SelectedItem, inv.getHeldItemSlot())
             .value(PlayerInv.PotionEffects, potionEffects)
             .condition(PlayerInv.PlayerId, playerId)
             .update();
