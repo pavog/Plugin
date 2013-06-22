@@ -112,6 +112,7 @@ public class ScriptRunner {
                     i++;
                     if(i % 50 == 0 && debug) Message.log(Level.FINEST, "Executing line " + i);
                 }
+                Message.log(Level.FINER, "Executed " + i + " lines total");
                 this.commitConnection();
                 this.checkForMissingLineTerminator(command);
             } catch (Exception e) {
