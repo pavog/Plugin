@@ -25,7 +25,7 @@ import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.db.data.items.DetailedItemUseEntry;
+import com.wolvencraft.yasp.db.data.items.DetailedItemStats.ItemConsumeEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
@@ -34,9 +34,9 @@ import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 public class TrackedItemUseEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedItemUseEntry data;
+    private ItemConsumeEntry data;
     
-    public TrackedItemUseEvent(OnlineSession session, DetailedItemUseEntry data) {
+    public TrackedItemUseEvent(OnlineSession session, ItemConsumeEntry data) {
         super(session, PlayerVariable.ITEMS_EATEN);
         this.data = data;
     }

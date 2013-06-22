@@ -33,8 +33,8 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.DataStore;
-import com.wolvencraft.yasp.db.data.blocks.BlocksData;
-import com.wolvencraft.yasp.db.data.deaths.DeathsData;
+import com.wolvencraft.yasp.db.data.blocks.BlockData;
+import com.wolvencraft.yasp.db.data.deaths.DeathData;
 import com.wolvencraft.yasp.db.data.hooks.admincmd.AdminCmdData;
 import com.wolvencraft.yasp.db.data.hooks.banhammer.BanHammerData;
 import com.wolvencraft.yasp.db.data.hooks.commandbook.CommandBookData;
@@ -47,10 +47,10 @@ import com.wolvencraft.yasp.db.data.hooks.vanish.VanishData;
 import com.wolvencraft.yasp.db.data.hooks.vault.VaultData;
 import com.wolvencraft.yasp.db.data.hooks.votifier.VotifierData;
 import com.wolvencraft.yasp.db.data.hooks.worldguard.WorldGuardData;
-import com.wolvencraft.yasp.db.data.items.ItemsData;
+import com.wolvencraft.yasp.db.data.items.ItemData;
 import com.wolvencraft.yasp.db.data.pve.PVEData;
 import com.wolvencraft.yasp.db.data.pvp.PVPData;
-import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
+import com.wolvencraft.yasp.db.tables.Miscellaneous.SettingsTable;
 
 /**
  * Represents the different plugin modules
@@ -61,9 +61,9 @@ import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
 public enum Module {
     
     Server      ("server", false),
-    Blocks      ("blocks", false, BlocksData.class),
-    Items       ("items", false, ItemsData.class),
-    Deaths      ("deaths", false, DeathsData.class, PVEData.class, PVPData.class),
+    Blocks      ("blocks", false, BlockData.class),
+    Items       ("items", false, ItemData.class),
+    Deaths      ("deaths", false, DeathData.class, PVEData.class, PVPData.class),
     Inventory   ("inventory", false),
     
     AdminCmd    ("admincmd", true, AdminCmdData.class),

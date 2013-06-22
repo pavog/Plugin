@@ -32,7 +32,7 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
@@ -58,11 +58,11 @@ public class DatabaseCommands {
             public void run() {
                 DatabaseTask.commit();
                 
-                List<QueryResult> results= Query.table(PlayersTable.TableName).column(PlayersTable.Name).condition(PlayersTable.Online, true).selectAll();
+                List<QueryResult> results= Query.table(PlayerStats.TableName).column(PlayerStats.Name).condition(PlayerStats.Online, true).selectAll();
                 for(QueryResult result : results) {
-                    String playerName = result.asString(PlayersTable.Name);
+                    String playerName = result.asString(PlayerStats.Name);
                     if(Bukkit.getPlayerExact(playerName) == null)
-                        Query.table(PlayersTable.TableName).value(PlayersTable.Online, false).condition(PlayersTable.Name, playerName).update();
+                        Query.table(PlayerStats.TableName).value(PlayerStats.Online, false).condition(PlayerStats.Name, playerName).update();
                 }
                 
                 Bukkit.getScheduler().runTask(Statistics.getInstance(), new Runnable() {

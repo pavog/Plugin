@@ -33,49 +33,13 @@ import lombok.Getter;
 public class Normal {
     
     /**
-     * Represents the <i>settings</i> table.
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    @Getter(AccessLevel.PUBLIC)
-    public enum SettingsTable implements DBTable {
-        TableName       ("settings"),
-        Key             ("key"),
-        Value           ("value");
-        
-        private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
-    }
-    
-    /**
-     * Represents the <i>server_statistics</i> table.
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    @Getter(AccessLevel.PUBLIC)
-    public enum ServerStatsTable implements DBTable {
-        TableName       ("server_statistics"),
-        Key             ("key"),
-        Value           ("value");
-        
-        private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
-    }
-    
-    /**
      * Represents the <i>distances</i> table.
      * @author bitWolfy
      *
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DistancePlayersTable implements DBTable {
+    public enum PlayerDistance implements DBTable {
         TableName       ("distances"),
         PlayerId        ("player_id"),
         Foot            ("foot"),
@@ -98,7 +62,7 @@ public class Normal {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PlayersTable implements DBTable {
+    public enum PlayerStats implements DBTable {
         TableName       ("players"),
         PlayerId        ("player_id"),
         Name            ("name"),
@@ -122,7 +86,7 @@ public class Normal {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum MiscInfoPlayersTable implements DBTable {
+    public enum PlayerData implements DBTable {
         TableName       ("misc_info_players"),
         PlayerId        ("player_id"),
         IsOp            ("is_op"),
@@ -162,7 +126,7 @@ public class Normal {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PlayersInv implements DBTable {
+    public enum PlayerInv implements DBTable {
         TableName       ("player_inventories"),
         PlayerId        ("player_id"),
         SelectedItem    ("selected_item"),
@@ -186,7 +150,7 @@ public class Normal {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum TotalBlocksTable implements DBTable {
+    public enum BlockTotals implements DBTable {
         TableName       ("total_blocks"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -206,7 +170,7 @@ public class Normal {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum TotalItemsTable implements DBTable {
+    public enum ItemTotals implements DBTable {
         TableName       ("total_items"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -232,7 +196,7 @@ public class Normal {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum TotalDeathPlayersTable implements DBTable {
+    public enum DeathTotals implements DBTable {
         TableName       ("total_deaths"),
         PlayerId        ("player_id"),
         Cause           ("cause"),
@@ -251,7 +215,7 @@ public class Normal {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum TotalPVEKillsTable implements DBTable {
+    public enum PVETotals implements DBTable {
         TableName       ("total_pve_kills"),
         MaterialId      ("material_id"),
         CreatureId      ("entity_id"),
@@ -272,7 +236,7 @@ public class Normal {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum TotalPVPKillsTable implements DBTable {
+    public enum PVPTotals implements DBTable {
         TableName       ("total_pvp_kills"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -292,7 +256,7 @@ public class Normal {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PlayersLocations implements DBTable {
+    public enum PlayerLocations implements DBTable {
         TableName       ("player_locations"),
         PlayerId        ("player_id"),
         World           ("world"),
@@ -308,5 +272,4 @@ public class Normal {
         @Override
         public String toString() { return columnName; }
     }
-    
 }

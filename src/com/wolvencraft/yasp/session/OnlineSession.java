@@ -41,12 +41,12 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
-import com.wolvencraft.yasp.db.data.deaths.DeathsData;
+import com.wolvencraft.yasp.db.data.deaths.DeathData;
 import com.wolvencraft.yasp.db.data.players.PlayersData;
 import com.wolvencraft.yasp.db.data.pve.PVEData;
 import com.wolvencraft.yasp.db.data.pvp.PVPData;
-import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
-import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
@@ -91,9 +91,9 @@ public class OnlineSession implements PlayerSession {
         this.playerTotals = new PlayerTotals(id);
         this.scoreboard = null;
         
-        Query.table(PlayersTable.TableName)
-            .value(PlayersTable.Online, true)
-            .condition(PlayersTable.PlayerId, id)
+        Query.table(PlayerStats.TableName)
+            .value(PlayerStats.Online, true)
+            .condition(PlayerStats.PlayerId, id)
             .update();
     }
     
@@ -142,9 +142,9 @@ public class OnlineSession implements PlayerSession {
     
     @Override
     public void finalize() {
-        Query.table(PlayersTable.TableName)
-            .value(PlayersTable.Online, false)
-            .condition(PlayersTable.PlayerId, id)
+        Query.table(PlayerStats.TableName)
+            .value(PlayerStats.Online, false)
+            .condition(PlayerStats.PlayerId, id)
             .update();
     }
     
@@ -153,7 +153,7 @@ public class OnlineSession implements PlayerSession {
      * @param type Travel type
      * @param distance Distance traveled
      */
-    public void addDistance(DistancePlayersTable type, double distance) {
+    public void addDistance(PlayerDistance type, double distance) {
         playersData.getDistanceData().addDistance(type, distance);
         playerTotals.addDistance(type, distance);
     }
@@ -196,7 +196,7 @@ public class OnlineSession implements PlayerSession {
      * @param cause Death cause
      */
     public void killedByEnvironment(Location location, DamageCause cause) {
-        ((DeathsData) getDataStore(DataStoreType.Deaths)).playerDied(location, cause);
+        ((DeathData) getDataStore(DataStoreType.Deaths)).playerDied(location, cause);
         died();
     }
     

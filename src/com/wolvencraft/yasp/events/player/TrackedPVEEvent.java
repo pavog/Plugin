@@ -25,7 +25,7 @@ import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.db.data.pve.DetailedPVEEntry;
+import com.wolvencraft.yasp.db.data.pve.DetailedPVEStats.PVEEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
@@ -34,9 +34,9 @@ import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 public class TrackedPVEEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedPVEEntry data;
+    private PVEEntry data;
     
-    public TrackedPVEEvent(OnlineSession session, DetailedPVEEntry data) {
+    public TrackedPVEEvent(OnlineSession session, PVEEntry data) {
         super(session, PlayerVariable.PVE_KILLS);
         this.data = data;
     }

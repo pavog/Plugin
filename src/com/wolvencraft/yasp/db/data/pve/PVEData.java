@@ -26,21 +26,17 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.data.DataStore;
+import com.wolvencraft.yasp.db.data.pve.DetailedPVEStats.PVEEntry;
 import com.wolvencraft.yasp.events.player.TrackedPVEEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
- * Data collector that records all PVE statistics on the server for a specific player.
+ * Data store that handles all PVE statistics on the server
  * @author bitWolfy
  *
  */
-public class PVEData extends DataStore<TotalPVEEntry, DetailedPVEEntry> {
+public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
     
-    /**
-     * <b>Default constructor</b><br />
-     * Creates an empty data store to save the statistics until database synchronization.
-     * @param session Player session
-     */
     public PVEData(OnlineSession session) {
         super(session, DataStoreType.PVE);
     }
@@ -52,11 +48,11 @@ public class PVEData extends DataStore<TotalPVEEntry, DetailedPVEEntry> {
      * @param weapon Weapon used in the event
      * @return Corresponding entry
      */
-    public TotalPVEEntry getNormalData(EntityType type, ItemStack weapon) {
-        for(TotalPVEEntry entry : normalData) {
+    public TotalPVEStats getNormalData(EntityType type, ItemStack weapon) {
+        for(TotalPVEStats entry : normalData) {
             if(entry.equals(type, weapon)) return entry;
         }
-        TotalPVEEntry entry = new TotalPVEEntry(session.getId(), type, weapon);
+        TotalPVEStats entry = new TotalPVEStats(session.getId(), type, weapon);
         normalData.add(entry);
         return entry;
     }
@@ -68,7 +64,7 @@ public class PVEData extends DataStore<TotalPVEEntry, DetailedPVEEntry> {
      */
     public void playerKilledCreature(Entity victim, ItemStack weapon) {
         getNormalData(victim.getType(), weapon).addCreatureDeaths();
-        DetailedPVEEntry detailedEntry = new DetailedPVEEntry(victim.getType(), victim.getLocation(), weapon);
+        PVEEntry detailedEntry = new PVEEntry(victim.getType(), victim.getLocation(), weapon);
         detailedData.add(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(session, detailedEntry));
@@ -81,7 +77,7 @@ public class PVEData extends DataStore<TotalPVEEntry, DetailedPVEEntry> {
      */
     public void creatureKilledPlayer(Entity killer, ItemStack weapon) {
         getNormalData(killer.getType(), weapon).addPlayerDeaths();
-        DetailedPVEEntry detailedEntry = new DetailedPVEEntry(killer.getType(), killer.getLocation());
+        PVEEntry detailedEntry = new PVEEntry(killer.getType(), killer.getLocation());
         detailedData.add(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(session, detailedEntry));

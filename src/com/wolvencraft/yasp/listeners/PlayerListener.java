@@ -38,7 +38,7 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.tables.Normal.MiscInfoPlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
 import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
 import com.wolvencraft.yasp.listeners.handlers.PlayerHandlers.PlayerMove;
 import com.wolvencraft.yasp.listeners.handlers.PlayerHandlers.PlayerIncrementStat;
@@ -72,7 +72,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
         
-        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, MiscInfoPlayersTable.FishCaught));
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.FishCaught));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -80,7 +80,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
         
-        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, MiscInfoPlayersTable.TimesKicked));
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.TimesKicked));
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
@@ -88,7 +88,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
-        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, MiscInfoPlayersTable.EggsThrown));
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.EggsThrown));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -98,7 +98,7 @@ public class PlayerListener implements Listener {
         Player player = (Player) event.getEntity();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
-        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, MiscInfoPlayersTable.ArrowsShot));
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.ArrowsShot));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -108,7 +108,7 @@ public class PlayerListener implements Listener {
         Player player = (Player) event.getEntity();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
-        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, MiscInfoPlayersTable.DamageTaken, event.getDamage()));
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.DamageTaken, event.getDamage()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -116,7 +116,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
-        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, MiscInfoPlayersTable.BedsEntered));
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.BedsEntered));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -124,7 +124,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
-        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, MiscInfoPlayersTable.PortalsEntered));
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.PortalsEntered));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -132,7 +132,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
-        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, MiscInfoPlayersTable.WordsSaid, event.getMessage().split(" ").length));
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.WordsSaid, event.getMessage().split(" ").length));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -140,6 +140,6 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
         
-        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, MiscInfoPlayersTable.CommandsSent));
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.CommandsSent));
     }
 }

@@ -28,7 +28,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.DeathTotals;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
 /**
@@ -38,12 +38,12 @@ import com.wolvencraft.yasp.settings.RemoteConfiguration;
  *
  */
 @Getter(AccessLevel.PUBLIC) 
-public class TotalDeathsEntry extends NormalData {
+public class TotalDeathStats extends NormalData {
     
     private DamageCause cause;
     private int times;
     
-    public TotalDeathsEntry(int playerId, DamageCause cause) {
+    public TotalDeathStats(int playerId, DamageCause cause) {
         this.cause = cause;
         times = 0;
         
@@ -57,29 +57,29 @@ public class TotalDeathsEntry extends NormalData {
             return;
         }
         
-        QueryResult result = Query.table(TotalDeathPlayersTable.TableName)
-                .column(TotalDeathPlayersTable.Times)
-                .condition(TotalDeathPlayersTable.PlayerId, playerId)
-                .condition(TotalDeathPlayersTable.Cause, cause.name())
+        QueryResult result = Query.table(DeathTotals.TableName)
+                .column(DeathTotals.Times)
+                .condition(DeathTotals.PlayerId, playerId)
+                .condition(DeathTotals.Cause, cause.name())
                 .select();
         
         if(result == null) {
-            Query.table(TotalDeathPlayersTable.TableName)
-                .value(TotalDeathPlayersTable.PlayerId, playerId)
-                .value(TotalDeathPlayersTable.Cause, cause.name())
-                .value(TotalDeathPlayersTable.Times, times)
+            Query.table(DeathTotals.TableName)
+                .value(DeathTotals.PlayerId, playerId)
+                .value(DeathTotals.Cause, cause.name())
+                .value(DeathTotals.Times, times)
                 .insert();
         } else {
-            times = result.asInt(TotalDeathPlayersTable.Times);
+            times = result.asInt(DeathTotals.Times);
         }
     }
 
     @Override
     public boolean pushData(int playerId) {
-        boolean result = Query.table(TotalDeathPlayersTable.TableName)
-                .value(TotalDeathPlayersTable.Times, times)
-                .condition(TotalDeathPlayersTable.PlayerId, playerId)
-                .condition(TotalDeathPlayersTable.Cause, cause.name())
+        boolean result = Query.table(DeathTotals.TableName)
+                .value(DeathTotals.Times, times)
+                .condition(DeathTotals.PlayerId, playerId)
+                .condition(DeathTotals.Cause, cause.name())
                 .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(playerId);
         return result;

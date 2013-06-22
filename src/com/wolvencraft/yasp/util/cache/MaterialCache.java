@@ -26,6 +26,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Miscellaneous.MaterialsTable;
@@ -95,6 +96,15 @@ public class MaterialCache implements CachedDataProcess {
      */
     public static String parse(ItemStack stack) {
         return parse(stack.getTypeId(), stack.getDurability(), stack.getType().name().toLowerCase());
+    }
+    
+    /**
+     * Parses the material data and returns a String representation of the material
+     * @param stack Material data
+     * @return Material string
+     */
+    public static String parse(MaterialData material) {
+        return parse(material.getItemTypeId(), material.getData(), material.getItemType().name().toLowerCase());
     }
     
     /**

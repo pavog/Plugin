@@ -26,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
+import com.wolvencraft.yasp.db.tables.Normal.PVETotals;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.EntityCache;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
@@ -37,7 +37,7 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class TotalPVEEntry extends NormalData {
+public class TotalPVEStats extends NormalData {
     
     private EntityType creatureType;
     private ItemStack weapon;
@@ -51,7 +51,7 @@ public class TotalPVEEntry extends NormalData {
      * @param creatureType Creature in question
      * @param weapon Weapon used
      */
-    public TotalPVEEntry(int playerId, EntityType creatureType, ItemStack weapon) {
+    public TotalPVEStats(int playerId, EntityType creatureType, ItemStack weapon) {
         this.creatureType = creatureType;
         this.weapon = weapon.clone();
         this.weapon.setAmount(1);
@@ -68,35 +68,35 @@ public class TotalPVEEntry extends NormalData {
             return;
         }
         
-        QueryResult result = Query.table(TotalPVEKillsTable.TableName)
-                .column(TotalPVEKillsTable.PlayerKilled)
-                .column(TotalPVEKillsTable.CreatureKilled)
-                .condition(TotalPVEKillsTable.PlayerId, playerId)
-                .condition(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
-                .condition(TotalPVEKillsTable.MaterialId, MaterialCache.parse(weapon))
+        QueryResult result = Query.table(PVETotals.TableName)
+                .column(PVETotals.PlayerKilled)
+                .column(PVETotals.CreatureKilled)
+                .condition(PVETotals.PlayerId, playerId)
+                .condition(PVETotals.CreatureId, EntityCache.parse(creatureType))
+                .condition(PVETotals.MaterialId, MaterialCache.parse(weapon))
                 .select();
         if(result == null) {
-            Query.table(TotalPVEKillsTable.TableName)
-                .value(TotalPVEKillsTable.PlayerId, playerId)
-                .value(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
-                .value(TotalPVEKillsTable.MaterialId, MaterialCache.parse(weapon))
-                .value(TotalPVEKillsTable.PlayerKilled, playerDeaths)
-                .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
+            Query.table(PVETotals.TableName)
+                .value(PVETotals.PlayerId, playerId)
+                .value(PVETotals.CreatureId, EntityCache.parse(creatureType))
+                .value(PVETotals.MaterialId, MaterialCache.parse(weapon))
+                .value(PVETotals.PlayerKilled, playerDeaths)
+                .value(PVETotals.CreatureKilled, creatureDeaths)
                 .insert();
         } else {
-            playerDeaths = result.asInt(TotalPVEKillsTable.PlayerKilled);
-            creatureDeaths = result.asInt(TotalPVEKillsTable.CreatureKilled);
+            playerDeaths = result.asInt(PVETotals.PlayerKilled);
+            creatureDeaths = result.asInt(PVETotals.CreatureKilled);
         }
     }
 
     @Override
     public boolean pushData(int playerId) {
-        boolean result = Query.table(TotalPVEKillsTable.TableName)
-                .value(TotalPVEKillsTable.PlayerKilled, playerDeaths)
-                .value(TotalPVEKillsTable.CreatureKilled, creatureDeaths)
-                .condition(TotalPVEKillsTable.PlayerId, playerId)
-                .condition(TotalPVEKillsTable.CreatureId, EntityCache.parse(creatureType))
-                .condition(TotalPVEKillsTable.MaterialId, MaterialCache.parse(weapon))
+        boolean result = Query.table(PVETotals.TableName)
+                .value(PVETotals.PlayerKilled, playerDeaths)
+                .value(PVETotals.CreatureKilled, creatureDeaths)
+                .condition(PVETotals.PlayerId, playerId)
+                .condition(PVETotals.CreatureId, EntityCache.parse(creatureType))
+                .condition(PVETotals.MaterialId, MaterialCache.parse(weapon))
                 .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(playerId);
         return result;

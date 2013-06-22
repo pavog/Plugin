@@ -30,7 +30,7 @@ import org.bukkit.World;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Normal.ServerStatsTable;
+import com.wolvencraft.yasp.db.tables.Miscellaneous.ServerStatsTable;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 import com.wolvencraft.yasp.util.tasks.TickTask;

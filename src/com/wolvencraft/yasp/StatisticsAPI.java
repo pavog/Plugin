@@ -33,7 +33,7 @@ import org.bukkit.plugin.Plugin;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.ScriptRunner;
-import com.wolvencraft.yasp.db.tables.Normal.SettingsTable;
+import com.wolvencraft.yasp.db.tables.Miscellaneous.SettingsTable;
 import com.wolvencraft.yasp.events.plugin.DatabasePatchEvent;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;

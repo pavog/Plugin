@@ -33,6 +33,42 @@ import lombok.Getter;
 public class Miscellaneous {
     
     /**
+     * Represents the <i>settings</i> table.
+     * @author bitWolfy
+     *
+     */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum SettingsTable implements DBTable {
+        TableName       ("settings"),
+        Key             ("key"),
+        Value           ("value");
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
+     * Represents the <i>server_statistics</i> table.
+     * @author bitWolfy
+     *
+     */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum ServerStatsTable implements DBTable {
+        TableName       ("server_statistics"),
+        Key             ("key"),
+        Value           ("value");
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
      * Represents the <i>materials</i> table.
      * @author bitWolfy
      *

@@ -25,12 +25,12 @@ import java.util.Map;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
-import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
-import com.wolvencraft.yasp.db.tables.Normal.TotalDeathPlayersTable;
-import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
-import com.wolvencraft.yasp.db.tables.Normal.TotalPVEKillsTable;
-import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
+import com.wolvencraft.yasp.db.tables.Normal.BlockTotals;
+import com.wolvencraft.yasp.db.tables.Normal.DeathTotals;
+import com.wolvencraft.yasp.db.tables.Normal.ItemTotals;
+import com.wolvencraft.yasp.db.tables.Normal.PVETotals;
+import com.wolvencraft.yasp.db.tables.Normal.PVPTotals;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 
 /**
@@ -90,26 +90,26 @@ public class ServerTotals {
 
         if(!Statistics.getInstance().isEnabled()) return;
         
-        blocksBroken = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Destroyed).sum();
-        blocksPlaced = (int) Query.table(TotalBlocksTable.TableName).column(TotalBlocksTable.Placed).sum();
+        blocksBroken = (int) Query.table(BlockTotals.TableName).column(BlockTotals.Destroyed).sum();
+        blocksPlaced = (int) Query.table(BlockTotals.TableName).column(BlockTotals.Placed).sum();
         
-        distanceFoot = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
-        distancePig = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
-        distanceMinecart = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
-        distanceBoat = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
-        distanceFlight = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
-        distanceSwim = Query.table(DistancePlayersTable.TableName).column(DistancePlayersTable.Foot).sum();
+        distanceFoot = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
+        distancePig = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
+        distanceMinecart = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
+        distanceBoat = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
+        distanceFlight = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
+        distanceSwim = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
         distanceTotal = distanceFoot + distancePig + distanceMinecart + distanceBoat + distanceFlight + distanceSwim;
         
-        toolsBroken = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Broken).sum();
-        itemsCrafted = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Crafted).sum();
-        snacksEaten = (int) Query.table(TotalItemsTable.TableName).column(TotalItemsTable.Used).sum();
+        toolsBroken = (int) Query.table(ItemTotals.TableName).column(ItemTotals.Broken).sum();
+        itemsCrafted = (int) Query.table(ItemTotals.TableName).column(ItemTotals.Crafted).sum();
+        snacksEaten = (int) Query.table(ItemTotals.TableName).column(ItemTotals.Used).sum();
         
-        pvpKills = (int) Query.table(TotalPVPKillsTable.TableName).column(TotalPVPKillsTable.Times).sum();
-        pveKills = (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.CreatureKilled).sum();
+        pvpKills = (int) Query.table(PVPTotals.TableName).column(PVPTotals.Times).sum();
+        pveKills = (int) Query.table(PVETotals.TableName).column(PVETotals.CreatureKilled).sum();
         
-        int pveDeaths = (int) Query.table(TotalPVEKillsTable.TableName).column(TotalPVEKillsTable.PlayerKilled).sum();
-        int otherKills = (int) Query.table(TotalDeathPlayersTable.TableName).column(TotalDeathPlayersTable.Times).sum();
+        int pveDeaths = (int) Query.table(PVETotals.TableName).column(PVETotals.PlayerKilled).sum();
+        int otherKills = (int) Query.table(DeathTotals.TableName).column(DeathTotals.Times).sum();
         deaths = pveDeaths + otherKills;
     }
     
@@ -166,7 +166,7 @@ public class ServerTotals {
      * @param type Travel type
      * @param distance Distance traveled
      */
-    public void addDistance(DistancePlayersTable type, double distance) {
+    public void addDistance(PlayerDistance type, double distance) {
         distanceTotal += distance;
         switch(type) {
             case Foot:

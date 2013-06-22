@@ -25,7 +25,7 @@ import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.db.data.items.DetailedItemDropEntry;
+import com.wolvencraft.yasp.db.data.items.DetailedItemStats.ItemDropEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
@@ -34,9 +34,9 @@ import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 public class TrackedItemDropEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedItemDropEntry data;
+    private ItemDropEntry data;
     
-    public TrackedItemDropEvent(OnlineSession session, DetailedItemDropEntry data) {
+    public TrackedItemDropEvent(OnlineSession session, ItemDropEntry data) {
         super(session, PlayerVariable.ITEMS_DROPPED);
         this.data = data;
     }

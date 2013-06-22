@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.util.Util;
 
 /**
@@ -39,7 +39,7 @@ import com.wolvencraft.yasp.util.Util;
  */
 public class PlayerEntry extends NormalData {
     
-    private String username;
+    private final String username;
     private long lastSync;
     
     @Getter(AccessLevel.PUBLIC) private long longestSession;
@@ -57,31 +57,31 @@ public class PlayerEntry extends NormalData {
         long firstLogin = lastSync;
         int logins = 0;
         
-        QueryResult result = Query.table(PlayersTable.TableName)
-            .column(PlayersTable.Logins)
-            .column(PlayersTable.FirstLogin)
-            .column(PlayersTable.Playtime)
-            .column(PlayersTable.LongestSession)
-            .condition(PlayersTable.PlayerId, playerId)
+        QueryResult result = Query.table(PlayerStats.TableName)
+            .column(PlayerStats.Logins)
+            .column(PlayerStats.FirstLogin)
+            .column(PlayerStats.Playtime)
+            .column(PlayerStats.LongestSession)
+            .condition(PlayerStats.PlayerId, playerId)
             .select();
         
         if(result == null) {
-            Query.table(PlayersTable.TableName)
-                 .value(PlayersTable.Name, username)
+            Query.table(PlayerStats.TableName)
+                 .value(PlayerStats.Name, username)
                  .insert();
         } else {
-            firstLogin = result.asLong(PlayersTable.FirstLogin);
+            firstLogin = result.asLong(PlayerStats.FirstLogin);
             if(firstLogin == -1) { firstLogin = lastSync; }
-            logins = result.asInt(PlayersTable.Logins);
-            this.totalPlaytime = result.asLong(PlayersTable.Playtime);
-            longestSession = result.asLong(PlayersTable.LongestSession);
+            logins = result.asInt(PlayerStats.Logins);
+            this.totalPlaytime = result.asLong(PlayerStats.Playtime);
+            longestSession = result.asLong(PlayerStats.LongestSession);
         }
         
-        Query.table(PlayersTable.TableName)
-            .value(PlayersTable.LoginTime, lastSync)
-            .value(PlayersTable.FirstLogin, firstLogin)
-            .value(PlayersTable.Logins, ++logins)
-            .condition(PlayersTable.PlayerId, playerId)
+        Query.table(PlayerStats.TableName)
+            .value(PlayerStats.LoginTime, lastSync)
+            .value(PlayerStats.FirstLogin, firstLogin)
+            .value(PlayerStats.Logins, ++logins)
+            .condition(PlayerStats.PlayerId, playerId)
             .update();
     }
     
@@ -100,10 +100,10 @@ public class PlayerEntry extends NormalData {
         totalPlaytime += Util.getTimestamp() - lastSync;
         lastSync = Util.getTimestamp();
         
-        return Query.table(PlayersTable.TableName)
-            .value(PlayersTable.Playtime, totalPlaytime)
-            .value(PlayersTable.LongestSession, longestSession)
-            .condition(PlayersTable.PlayerId, playerId)
+        return Query.table(PlayerStats.TableName)
+            .value(PlayerStats.Playtime, totalPlaytime)
+            .value(PlayerStats.LongestSession, longestSession)
+            .condition(PlayerStats.PlayerId, playerId)
             .update();
     }
     

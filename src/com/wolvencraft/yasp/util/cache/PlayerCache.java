@@ -26,7 +26,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Normal.PlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.util.Message;
 
 /**
@@ -64,18 +64,18 @@ public class PlayerCache {
         
         int playerId = -1;
         do {
-            QueryResult playerRow = Query.table(PlayersTable.TableName)
-                    .column(PlayersTable.PlayerId)
-                    .condition(PlayersTable.Name, username)
+            QueryResult playerRow = Query.table(PlayerStats.TableName)
+                    .column(PlayerStats.PlayerId)
+                    .condition(PlayerStats.Name, username)
                     .select();
             
             if(playerRow == null) {
-                Query.table(PlayersTable.TableName)
-                    .value(PlayersTable.Name, username)
+                Query.table(PlayerStats.TableName)
+                    .value(PlayerStats.Name, username)
                     .insert();
                 continue;
             }
-            playerId = playerRow.asInt(PlayersTable.PlayerId);
+            playerId = playerRow.asInt(PlayerStats.PlayerId);
         } while (playerId == -1);
         Message.debug("User ID found: " + playerId);
         return playerId;

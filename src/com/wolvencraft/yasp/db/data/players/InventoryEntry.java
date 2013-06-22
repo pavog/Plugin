@@ -30,7 +30,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.PlayersInv;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerInv;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.serializable.EffectsSerializable;
 import com.wolvencraft.yasp.util.serializable.InventorySerializable;
@@ -42,7 +42,7 @@ import com.wolvencraft.yasp.util.serializable.InventorySerializable;
  */
 public class InventoryEntry extends NormalData {
     
-    String playerName;
+    private final String playerName;
     
     /**
      * <b>Default constructor</b><br />
@@ -51,18 +51,17 @@ public class InventoryEntry extends NormalData {
      */
     public InventoryEntry(int playerId, Player player) {
         this.playerName = player.getName();
-        
         fetchData(playerId);
     }
     
     @Override
     public void fetchData(int playerId) {
-        if(Query.table(PlayersInv.TableName)
-                .column(PlayersInv.PlayerId)
-                .condition(PlayersInv.PlayerId, playerId)
+        if(Query.table(PlayerInv.TableName)
+                .column(PlayerInv.PlayerId)
+                .condition(PlayerInv.PlayerId, playerId)
                 .exists()) return;
-        Query.table(PlayersInv.TableName)
-            .value(PlayersInv.PlayerId, playerId)
+        Query.table(PlayerInv.TableName)
+            .value(PlayerInv.PlayerId, playerId)
             .insert();
     }
     
@@ -103,15 +102,15 @@ public class InventoryEntry extends NormalData {
         
         String potionEffects = EffectsSerializable.serialize(player.getActivePotionEffects());
         
-        Query.table(PlayersInv.TableName)
-            .value(PlayersInv.Armor, armor)
-            .value(PlayersInv.RowOne, rowOne)
-            .value(PlayersInv.RowTwo, rowTwo)
-            .value(PlayersInv.RowThree, rowThree)
-            .value(PlayersInv.Hotbar, hotbar)
-            .value(PlayersInv.SelectedItem, inv.getHeldItemSlot())
-            .value(PlayersInv.PotionEffects, potionEffects)
-            .condition(PlayersInv.PlayerId, playerId)
+        Query.table(PlayerInv.TableName)
+            .value(PlayerInv.Armor, armor)
+            .value(PlayerInv.RowOne, rowOne)
+            .value(PlayerInv.RowTwo, rowTwo)
+            .value(PlayerInv.RowThree, rowThree)
+            .value(PlayerInv.Hotbar, hotbar)
+            .value(PlayerInv.SelectedItem, inv.getHeldItemSlot())
+            .value(PlayerInv.PotionEffects, potionEffects)
+            .condition(PlayerInv.PlayerId, playerId)
             .update();
         return false;
     }

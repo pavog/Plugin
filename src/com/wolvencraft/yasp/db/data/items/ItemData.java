@@ -26,6 +26,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
+import com.wolvencraft.yasp.db.data.items.DetailedItemStats.ItemConsumeEntry;
+import com.wolvencraft.yasp.db.data.items.DetailedItemStats.ItemDropEntry;
+import com.wolvencraft.yasp.db.data.items.DetailedItemStats.ItemPickupEntry;
 import com.wolvencraft.yasp.events.player.TrackedItemDropEvent;
 import com.wolvencraft.yasp.events.player.TrackedItemPickupEvent;
 import com.wolvencraft.yasp.events.player.TrackedItemUseEvent;
@@ -36,9 +39,9 @@ import com.wolvencraft.yasp.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class ItemsData extends DataStore<TotalItemsEntry, DetailedData> {
+public class ItemData extends DataStore<TotalItemStats, DetailedData> {
     
-    public ItemsData(OnlineSession session) {
+    public ItemData(OnlineSession session) {
         super(session, DataStoreType.Items);
     }
 
@@ -48,11 +51,11 @@ public class ItemsData extends DataStore<TotalItemsEntry, DetailedData> {
      * @param itemStack Item stack
      * @return Corresponding entry
      */
-    public TotalItemsEntry getNormalData(ItemStack itemStack) {
-        for(TotalItemsEntry entry : normalData) {
+    public TotalItemStats getNormalData(ItemStack itemStack) {
+        for(TotalItemStats entry : normalData) {
             if(entry.equals(itemStack)) return entry;
         }
-        TotalItemsEntry entry = new TotalItemsEntry(session.getId(), itemStack);
+        TotalItemStats entry = new TotalItemStats(session.getId(), itemStack);
         normalData.add(entry);
         return entry;
     }
@@ -66,7 +69,7 @@ public class ItemsData extends DataStore<TotalItemsEntry, DetailedData> {
         int amount = itemStack.getAmount();
         getNormalData(itemStack).addDropped(amount);
         for(int i = 0; i < amount; i++) {
-            DetailedItemDropEntry detailedEntry = new DetailedItemDropEntry(location, itemStack);
+            ItemDropEntry detailedEntry = new ItemDropEntry(location, itemStack);
             detailedData.add(detailedEntry);
             
             Bukkit.getServer().getPluginManager().callEvent(new TrackedItemDropEvent(session, detailedEntry));
@@ -82,7 +85,7 @@ public class ItemsData extends DataStore<TotalItemsEntry, DetailedData> {
         int amount = itemStack.getAmount();
         getNormalData(itemStack).addPickedUp(amount);
         for(int i = 0; i < amount; i++) {
-            DetailedItemPickupEntry detailedEntry = new DetailedItemPickupEntry(location, itemStack);
+            ItemPickupEntry detailedEntry = new ItemPickupEntry(location, itemStack);
             detailedData.add(detailedEntry);
             
             Bukkit.getServer().getPluginManager().callEvent(new TrackedItemPickupEvent(session, detailedEntry));
@@ -98,7 +101,7 @@ public class ItemsData extends DataStore<TotalItemsEntry, DetailedData> {
         int amount = itemStack.getAmount();
         getNormalData(itemStack).addUsed(amount);
         for(int i = 0; i < amount; i++) {
-            DetailedItemUseEntry detailedEntry = new DetailedItemUseEntry(location, itemStack);
+            ItemConsumeEntry detailedEntry = new ItemConsumeEntry(location, itemStack);
             detailedData.add(detailedEntry);
             
             Bukkit.getServer().getPluginManager().callEvent(new TrackedItemUseEvent(session, detailedEntry));

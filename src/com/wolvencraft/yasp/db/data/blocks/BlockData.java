@@ -1,5 +1,5 @@
 /*
- * BlocksData.java
+ * BlockData.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -25,18 +25,20 @@ import org.bukkit.block.BlockState;
 
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
+import com.wolvencraft.yasp.db.data.blocks.DetailedBlockStats.BlockBreakEntry;
+import com.wolvencraft.yasp.db.data.blocks.DetailedBlockStats.BlockPlaceEntry;
 import com.wolvencraft.yasp.events.player.TrackedBlockBreakEvent;
 import com.wolvencraft.yasp.events.player.TrackedBlockPlaceEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
- * Data store that records all block interactions on the server.
+ * Data store that handles all block interactions on the server
  * @author bitWolfy
  *
  */
-public class BlocksData extends DataStore<TotalBlocksEntry, DetailedData> {
+public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
     
-    public BlocksData(OnlineSession session) {
+    public BlockData(OnlineSession session) {
         super(session, DataStoreType.Blocks);
     }
 
@@ -46,11 +48,11 @@ public class BlocksData extends DataStore<TotalBlocksEntry, DetailedData> {
      * @param block BlockState of the block
      * @return Corresponding entry
      */
-    private TotalBlocksEntry getNormalData(BlockState block) {
-        for(TotalBlocksEntry entry : normalData) {
+    private TotalBlockStats getNormalData(BlockState block) {
+        for(TotalBlockStats entry : normalData) {
             if(entry.equals(block)) return entry;
         }
-        TotalBlocksEntry entry = new TotalBlocksEntry(session.getId(), block);
+        TotalBlockStats entry = new TotalBlockStats(session.getId(), block);
         normalData.add(entry);
         return entry;
     }
@@ -61,7 +63,7 @@ public class BlocksData extends DataStore<TotalBlocksEntry, DetailedData> {
      */
     public void blockBreak(BlockState block) {
         getNormalData(block).addBroken();
-        DetailedBlockBreakEntry detailedEntry = new DetailedBlockBreakEntry(block);
+        BlockBreakEntry detailedEntry = new BlockBreakEntry(block);
         detailedData.add(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockBreakEvent(session, detailedEntry));
@@ -73,7 +75,7 @@ public class BlocksData extends DataStore<TotalBlocksEntry, DetailedData> {
      */
     public void blockPlace(BlockState block) {
         getNormalData(block).addPlaced();
-        DetailedBlockPlaceEntry detailedEntry = new DetailedBlockPlaceEntry(block);
+        BlockPlaceEntry detailedEntry = new BlockPlaceEntry(block);
         detailedData.add(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlaceEvent(session, detailedEntry));

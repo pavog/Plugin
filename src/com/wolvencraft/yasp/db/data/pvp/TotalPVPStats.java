@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.TotalPVPKillsTable;
+import com.wolvencraft.yasp.db.tables.Normal.PVPTotals;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
@@ -35,7 +35,7 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class TotalPVPEntry extends NormalData {
+public class TotalPVPStats extends NormalData {
     
     private int victimId;
     private ItemStack weapon;
@@ -48,7 +48,7 @@ public class TotalPVPEntry extends NormalData {
      * @param victimId Player who was killed
      * @param weapon Weapon used
      */
-    public TotalPVPEntry(int playerId, int victimId, ItemStack weapon) {
+    public TotalPVPStats(int playerId, int victimId, ItemStack weapon) {
         this.victimId = victimId;
         this.weapon = weapon.clone();
         this.weapon.setAmount(1);
@@ -64,31 +64,31 @@ public class TotalPVPEntry extends NormalData {
             return;
         }
         
-        QueryResult result = Query.table(TotalPVPKillsTable.TableName)
-                .column(TotalPVPKillsTable.Times)
-                .condition(TotalPVPKillsTable.PlayerId, killerId)
-                .condition(TotalPVPKillsTable.VictimId, victimId)
-                .condition(TotalPVPKillsTable.MaterialId, MaterialCache.parse(weapon))
+        QueryResult result = Query.table(PVPTotals.TableName)
+                .column(PVPTotals.Times)
+                .condition(PVPTotals.PlayerId, killerId)
+                .condition(PVPTotals.VictimId, victimId)
+                .condition(PVPTotals.MaterialId, MaterialCache.parse(weapon))
                 .select();
         if(result == null) {
-            Query.table(TotalPVPKillsTable.TableName)
-                .value(TotalPVPKillsTable.PlayerId, killerId)
-                .value(TotalPVPKillsTable.VictimId, victimId)
-                .value(TotalPVPKillsTable.MaterialId, MaterialCache.parse(weapon))
-                .value(TotalPVPKillsTable.Times, times)
+            Query.table(PVPTotals.TableName)
+                .value(PVPTotals.PlayerId, killerId)
+                .value(PVPTotals.VictimId, victimId)
+                .value(PVPTotals.MaterialId, MaterialCache.parse(weapon))
+                .value(PVPTotals.Times, times)
                 .insert();
         } else {
-            times = result.asInt(TotalPVPKillsTable.Times);
+            times = result.asInt(PVPTotals.Times);
         }
     }
 
     @Override
     public boolean pushData(int killerId) {
-        boolean result = Query.table(TotalPVPKillsTable.TableName)
-                .value(TotalPVPKillsTable.Times, times)
-                .condition(TotalPVPKillsTable.PlayerId, killerId)
-                .condition(TotalPVPKillsTable.VictimId, victimId)
-                .condition(TotalPVPKillsTable.MaterialId, MaterialCache.parse(weapon))
+        boolean result = Query.table(PVPTotals.TableName)
+                .value(PVPTotals.Times, times)
+                .condition(PVPTotals.PlayerId, killerId)
+                .condition(PVPTotals.VictimId, victimId)
+                .condition(PVPTotals.MaterialId, MaterialCache.parse(weapon))
                 .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(killerId);
         return result;

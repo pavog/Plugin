@@ -25,7 +25,7 @@ import org.bukkit.block.BlockState;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.TotalBlocksTable;
+import com.wolvencraft.yasp.db.tables.Normal.BlockTotals;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
@@ -36,7 +36,7 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class TotalBlocksEntry extends NormalData {
+public class TotalBlockStats extends NormalData {
     
     private BlockState block;
     private int broken;
@@ -47,7 +47,7 @@ public class TotalBlocksEntry extends NormalData {
      * Creates a new TotalItemsEntry based on the data provided
      * @param block BlockState of the block
      */
-    public TotalBlocksEntry(int playerId, BlockState block) {
+    public TotalBlockStats(int playerId, BlockState block) {
         this.block = block;
         broken = 0;
         placed = 0;
@@ -62,33 +62,33 @@ public class TotalBlocksEntry extends NormalData {
             return;
         }
         
-        QueryResult result = Query.table(TotalBlocksTable.TableName)
-                .column(TotalBlocksTable.Destroyed)
-                .column(TotalBlocksTable.Placed)
-                .condition(TotalBlocksTable.PlayerId, playerId)
-                .condition(TotalBlocksTable.MaterialId, MaterialCache.parse(block))
+        QueryResult result = Query.table(BlockTotals.TableName)
+                .column(BlockTotals.Destroyed)
+                .column(BlockTotals.Placed)
+                .condition(BlockTotals.PlayerId, playerId)
+                .condition(BlockTotals.MaterialId, MaterialCache.parse(block))
                 .select();
         
         if(result == null) {
-            Query.table(TotalBlocksTable.TableName)
-                .value(TotalBlocksTable.PlayerId, playerId)
-                .value(TotalBlocksTable.MaterialId, MaterialCache.parse(block))
-                .value(TotalBlocksTable.Destroyed, broken)
-                .value(TotalBlocksTable.Placed, placed)
+            Query.table(BlockTotals.TableName)
+                .value(BlockTotals.PlayerId, playerId)
+                .value(BlockTotals.MaterialId, MaterialCache.parse(block))
+                .value(BlockTotals.Destroyed, broken)
+                .value(BlockTotals.Placed, placed)
                 .insert();
         } else {
-            broken = result.asInt(TotalBlocksTable.Destroyed);
-            placed = result.asInt(TotalBlocksTable.Placed);
+            broken = result.asInt(BlockTotals.Destroyed);
+            placed = result.asInt(BlockTotals.Placed);
         }
     }
 
     @Override
     public boolean pushData(int playerId) {
-        boolean result = Query.table(TotalBlocksTable.TableName)
-            .value(TotalBlocksTable.Destroyed, broken)
-            .value(TotalBlocksTable.Placed, placed)
-            .condition(TotalBlocksTable.PlayerId, playerId)
-            .condition(TotalBlocksTable.MaterialId, MaterialCache.parse(block))
+        boolean result = Query.table(BlockTotals.TableName)
+            .value(BlockTotals.Destroyed, broken)
+            .value(BlockTotals.Placed, placed)
+            .condition(BlockTotals.PlayerId, playerId)
+            .condition(BlockTotals.MaterialId, MaterialCache.parse(block))
             .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(playerId);
         return result;

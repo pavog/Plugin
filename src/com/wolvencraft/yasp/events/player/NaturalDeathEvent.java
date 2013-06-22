@@ -25,18 +25,18 @@ import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.db.data.deaths.DetailedDeathEntry;
+import com.wolvencraft.yasp.db.data.deaths.DetailedDeathStats.NaturalDeathEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
 @Getter(AccessLevel.PUBLIC)
-public class TrackedDeathEvent extends StatisticsPlayerEvent {
+public class NaturalDeathEvent extends StatisticsPlayerEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private DetailedDeathEntry data;
+    private NaturalDeathEntry data;
     
-    public TrackedDeathEvent(OnlineSession session, DetailedDeathEntry data) {
+    public NaturalDeathEvent(OnlineSession session, NaturalDeathEntry data) {
         super(session, PlayerVariable.DEATHS);
         this.data = data;
     }

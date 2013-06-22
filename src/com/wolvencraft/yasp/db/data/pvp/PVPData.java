@@ -25,22 +25,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.data.DataStore;
+import com.wolvencraft.yasp.db.data.pvp.DetailedPVPStats.PVPEntry;
 import com.wolvencraft.yasp.events.player.TrackedPVPEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
- * Data collector that records all PVP statistics on the server for a specific player.
+ * Data store that handles all PVP statistics on the server
  * @author bitWolfy
  *
  */
-public class PVPData extends DataStore<TotalPVPEntry, DetailedPVPEntry> {
+public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
     
-    /**
-     * <b>Default constructor</b><br />
-     * Creates an empty data store to save the statistics until database synchronization.
-     * @param session Player session
-     */
     public PVPData(OnlineSession session) {
         super(session, DataStoreType.PVP);
     }
@@ -52,11 +48,11 @@ public class PVPData extends DataStore<TotalPVPEntry, DetailedPVPEntry> {
      * @param weapon Weapon used in the event
      * @return Corresponding entry
      */
-    public TotalPVPEntry getNormalData(int victimId, ItemStack weapon) {
-        for(TotalPVPEntry entry : normalData) {
+    public TotalPVPStats getNormalData(int victimId, ItemStack weapon) {
+        for(TotalPVPStats entry : normalData) {
             if(entry.equals(victimId, weapon)) return entry;
         }
-        TotalPVPEntry entry = new TotalPVPEntry(session.getId(), victimId, weapon);
+        TotalPVPStats entry = new TotalPVPStats(session.getId(), victimId, weapon);
         normalData.add(entry);
         return entry;
     }
@@ -69,7 +65,7 @@ public class PVPData extends DataStore<TotalPVPEntry, DetailedPVPEntry> {
     public void playerKilledPlayer(Player victim, ItemStack weapon) {
         int victimId = PlayerCache.get(victim);
         getNormalData(victimId, weapon).addTimes();
-        DetailedPVPEntry detailedEntry = new DetailedPVPEntry(victim.getLocation(), victimId, weapon);
+        PVPEntry detailedEntry = new PVPEntry(victim.getLocation(), victimId, weapon);
         detailedData.add(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVPEvent(session, detailedEntry));

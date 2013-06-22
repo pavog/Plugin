@@ -26,7 +26,7 @@ import lombok.Getter;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.DistancePlayersTable;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
 /**
@@ -68,45 +68,45 @@ public class DistancePlayerEntry extends NormalData {
             return;
         }
         
-        QueryResult result = Query.table(DistancePlayersTable.TableName)
-                .column(DistancePlayersTable.Foot)
-                .column(DistancePlayersTable.Swim)
-                .column(DistancePlayersTable.Flight)
-                .column(DistancePlayersTable.Boat)
-                .column(DistancePlayersTable.Minecart)
-                .column(DistancePlayersTable.Pig)
-                .condition(DistancePlayersTable.PlayerId, playerId)
+        QueryResult result = Query.table(PlayerDistance.TableName)
+                .column(PlayerDistance.Foot)
+                .column(PlayerDistance.Swim)
+                .column(PlayerDistance.Flight)
+                .column(PlayerDistance.Boat)
+                .column(PlayerDistance.Minecart)
+                .column(PlayerDistance.Pig)
+                .condition(PlayerDistance.PlayerId, playerId)
                 .select();
         if(result == null) {
-            Query.table(DistancePlayersTable.TableName)
-                .value(DistancePlayersTable.PlayerId, playerId)
-                .value(DistancePlayersTable.Foot, foot)
-                .value(DistancePlayersTable.Swim, swim)
-                .value(DistancePlayersTable.Flight, flight)
-                .value(DistancePlayersTable.Boat, boat)
-                .value(DistancePlayersTable.Minecart, minecart)
-                .value(DistancePlayersTable.Pig, pig)
+            Query.table(PlayerDistance.TableName)
+                .value(PlayerDistance.PlayerId, playerId)
+                .value(PlayerDistance.Foot, foot)
+                .value(PlayerDistance.Swim, swim)
+                .value(PlayerDistance.Flight, flight)
+                .value(PlayerDistance.Boat, boat)
+                .value(PlayerDistance.Minecart, minecart)
+                .value(PlayerDistance.Pig, pig)
                 .insert();
         } else {
-            foot = result.asInt(DistancePlayersTable.Foot);
-            swim = result.asInt(DistancePlayersTable.Swim);
-            flight = result.asInt(DistancePlayersTable.Flight);
-            boat = result.asInt(DistancePlayersTable.Boat);
-            minecart = result.asInt(DistancePlayersTable.Minecart);
-            pig = result.asInt(DistancePlayersTable.Pig);
+            foot = result.asInt(PlayerDistance.Foot);
+            swim = result.asInt(PlayerDistance.Swim);
+            flight = result.asInt(PlayerDistance.Flight);
+            boat = result.asInt(PlayerDistance.Boat);
+            minecart = result.asInt(PlayerDistance.Minecart);
+            pig = result.asInt(PlayerDistance.Pig);
         }
     }
 
     @Override
     public boolean pushData(int playerId) {
-        boolean result = Query.table(DistancePlayersTable.TableName)
-            .value(DistancePlayersTable.Foot, foot)
-            .value(DistancePlayersTable.Swim, swim)
-            .value(DistancePlayersTable.Flight, flight)
-            .value(DistancePlayersTable.Boat, boat)
-            .value(DistancePlayersTable.Minecart, minecart)
-            .value(DistancePlayersTable.Pig, pig)
-            .condition(DistancePlayersTable.PlayerId, playerId)
+        boolean result = Query.table(PlayerDistance.TableName)
+            .value(PlayerDistance.Foot, foot)
+            .value(PlayerDistance.Swim, swim)
+            .value(PlayerDistance.Flight, flight)
+            .value(PlayerDistance.Boat, boat)
+            .value(PlayerDistance.Minecart, minecart)
+            .value(PlayerDistance.Pig, pig)
+            .condition(PlayerDistance.PlayerId, playerId)
             .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         return result;
     }
@@ -126,7 +126,7 @@ public class DistancePlayerEntry extends NormalData {
      * @param type Travel type
      * @param distance Distance travelled
      */
-    public void addDistance(DistancePlayersTable type, double distance) {
+    public void addDistance(PlayerDistance type, double distance) {
         switch(type) {
             case Foot:
                 foot += distance;

@@ -26,7 +26,7 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.PlayersLocations;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerLocations;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,11 +34,10 @@ import lombok.Getter;
 @Getter(AccessLevel.PUBLIC)
 public class LocationPlayerEntry extends NormalData {
     
-    String playerName;
+    private final String playerName;
     
     public LocationPlayerEntry(int playerId, String playerName) {
         this.playerName = playerName;
-        
         fetchData(playerId);
     }
 
@@ -49,19 +48,19 @@ public class LocationPlayerEntry extends NormalData {
         
         Location location = player.getLocation();
         
-        if(!Query.table(PlayersLocations.TableName)
-                .column(PlayersLocations.PlayerId)
-                .condition(PlayersLocations.PlayerId, playerId)
+        if(!Query.table(PlayerLocations.TableName)
+                .column(PlayerLocations.PlayerId)
+                .condition(PlayerLocations.PlayerId, playerId)
                 .exists())
             
-            Query.table(PlayersLocations.TableName)
-                .value(PlayersLocations.PlayerId, playerId)
-                .value(PlayersLocations.World, location.getWorld().getName())
-                .value(PlayersLocations.XCoord, location.getBlockX())
-                .value(PlayersLocations.YCoord, location.getBlockY())
-                .value(PlayersLocations.ZCoord, location.getBlockZ())
-                .value(PlayersLocations.Biome, location.getWorld().getBiome(location.getBlockX(), location.getBlockZ()).name())
-                .value(PlayersLocations.Humidity, location.getWorld().getHumidity(location.getBlockX(), location.getBlockZ()))
+            Query.table(PlayerLocations.TableName)
+                .value(PlayerLocations.PlayerId, playerId)
+                .value(PlayerLocations.World, location.getWorld().getName())
+                .value(PlayerLocations.XCoord, location.getBlockX())
+                .value(PlayerLocations.YCoord, location.getBlockY())
+                .value(PlayerLocations.ZCoord, location.getBlockZ())
+                .value(PlayerLocations.Biome, location.getWorld().getBiome(location.getBlockX(), location.getBlockZ()).name())
+                .value(PlayerLocations.Humidity, location.getWorld().getHumidity(location.getBlockX(), location.getBlockZ()))
                 .insert();
     }
 
@@ -72,14 +71,14 @@ public class LocationPlayerEntry extends NormalData {
         
         Location location = player.getLocation();
         
-        return Query.table(PlayersLocations.TableName)
-                .value(PlayersLocations.World, location.getWorld().getName())
-                .value(PlayersLocations.XCoord, location.getBlockX())
-                .value(PlayersLocations.YCoord, location.getBlockY())
-                .value(PlayersLocations.ZCoord, location.getBlockZ())
-                .value(PlayersLocations.Biome, location.getWorld().getBiome(location.getBlockX(), location.getBlockZ()).name())
-                .value(PlayersLocations.Humidity, location.getWorld().getHumidity(location.getBlockX(), location.getBlockZ()))
-                .condition(PlayersLocations.PlayerId, playerId)
+        return Query.table(PlayerLocations.TableName)
+                .value(PlayerLocations.World, location.getWorld().getName())
+                .value(PlayerLocations.XCoord, location.getBlockX())
+                .value(PlayerLocations.YCoord, location.getBlockY())
+                .value(PlayerLocations.ZCoord, location.getBlockZ())
+                .value(PlayerLocations.Biome, location.getWorld().getBiome(location.getBlockX(), location.getBlockZ()).name())
+                .value(PlayerLocations.Humidity, location.getWorld().getHumidity(location.getBlockX(), location.getBlockZ()))
+                .condition(PlayerLocations.PlayerId, playerId)
                 .update();
     }
 

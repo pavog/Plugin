@@ -26,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.TotalItemsTable;
+import com.wolvencraft.yasp.db.tables.Normal.ItemTotals;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
@@ -37,7 +37,7 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
  * @author bitWolfy
  *
  */
-public class TotalItemsEntry extends NormalData {
+public class TotalItemStats extends NormalData {
     
     private ItemStack stack;
     private int dropped;
@@ -54,7 +54,7 @@ public class TotalItemsEntry extends NormalData {
      * Creates a new TotalItemsEntry based on the data provided
      * @param stack Item stack
      */
-    public TotalItemsEntry(int playerId, ItemStack stack) {
+    public TotalItemStats(int playerId, ItemStack stack) {
         this.stack = stack.clone();
         this.stack.setAmount(1);
         
@@ -77,57 +77,57 @@ public class TotalItemsEntry extends NormalData {
             return;
         }
         
-        QueryResult result = Query.table(TotalItemsTable.TableName)
-                .column(TotalItemsTable.Dropped)
-                .column(TotalItemsTable.PickedUp)
-                .column(TotalItemsTable.Used)
-                .column(TotalItemsTable.Crafted)
-                .column(TotalItemsTable.Broken)
-                .column(TotalItemsTable.Smelted)
-                .column(TotalItemsTable.Enchanted)
-                .column(TotalItemsTable.Repaired)
-                .condition(TotalItemsTable.PlayerId, playerId)
-                .condition(TotalItemsTable.MaterialId, MaterialCache.parse(stack))
+        QueryResult result = Query.table(ItemTotals.TableName)
+                .column(ItemTotals.Dropped)
+                .column(ItemTotals.PickedUp)
+                .column(ItemTotals.Used)
+                .column(ItemTotals.Crafted)
+                .column(ItemTotals.Broken)
+                .column(ItemTotals.Smelted)
+                .column(ItemTotals.Enchanted)
+                .column(ItemTotals.Repaired)
+                .condition(ItemTotals.PlayerId, playerId)
+                .condition(ItemTotals.MaterialId, MaterialCache.parse(stack))
                 .select();
         
         if(result == null) {
-            Query.table(TotalItemsTable.TableName)
-                .value(TotalItemsTable.PlayerId, playerId)
-                .value(TotalItemsTable.MaterialId, MaterialCache.parse(stack))
-                .value(TotalItemsTable.Dropped, dropped)
-                .value(TotalItemsTable.PickedUp, pickedUp)
-                .value(TotalItemsTable.Used, used)
-                .value(TotalItemsTable.Crafted, crafted)
-                .value(TotalItemsTable.Broken, broken)
-                .value(TotalItemsTable.Smelted, smelted)
-                .value(TotalItemsTable.Enchanted, enchanted)
-                .value(TotalItemsTable.Repaired, repaired)
+            Query.table(ItemTotals.TableName)
+                .value(ItemTotals.PlayerId, playerId)
+                .value(ItemTotals.MaterialId, MaterialCache.parse(stack))
+                .value(ItemTotals.Dropped, dropped)
+                .value(ItemTotals.PickedUp, pickedUp)
+                .value(ItemTotals.Used, used)
+                .value(ItemTotals.Crafted, crafted)
+                .value(ItemTotals.Broken, broken)
+                .value(ItemTotals.Smelted, smelted)
+                .value(ItemTotals.Enchanted, enchanted)
+                .value(ItemTotals.Repaired, repaired)
                 .insert();
         } else {
-            dropped = result.asInt(TotalItemsTable.Dropped);
-            pickedUp = result.asInt(TotalItemsTable.PickedUp);
-            used = result.asInt(TotalItemsTable.Used);
-            crafted = result.asInt(TotalItemsTable.Crafted);
-            broken = result.asInt(TotalItemsTable.Broken);
-            smelted = result.asInt(TotalItemsTable.Smelted);
-            enchanted = result.asInt(TotalItemsTable.Enchanted);
-            repaired = result.asInt(TotalItemsTable.Repaired);
+            dropped = result.asInt(ItemTotals.Dropped);
+            pickedUp = result.asInt(ItemTotals.PickedUp);
+            used = result.asInt(ItemTotals.Used);
+            crafted = result.asInt(ItemTotals.Crafted);
+            broken = result.asInt(ItemTotals.Broken);
+            smelted = result.asInt(ItemTotals.Smelted);
+            enchanted = result.asInt(ItemTotals.Enchanted);
+            repaired = result.asInt(ItemTotals.Repaired);
         }
     }
 
     @Override
     public boolean pushData(int playerId) {
-        boolean result = Query.table(TotalItemsTable.TableName)
-                .value(TotalItemsTable.Dropped, dropped)
-                .value(TotalItemsTable.PickedUp, pickedUp)
-                .value(TotalItemsTable.Used, used)
-                .value(TotalItemsTable.Crafted, crafted)
-                .value(TotalItemsTable.Broken, broken)
-                .value(TotalItemsTable.Smelted, smelted)
-                .value(TotalItemsTable.Enchanted, enchanted)
-                .value(TotalItemsTable.Repaired, repaired)
-                .condition(TotalItemsTable.PlayerId, playerId)
-                .condition(TotalItemsTable.MaterialId, MaterialCache.parse(stack))
+        boolean result = Query.table(ItemTotals.TableName)
+                .value(ItemTotals.Dropped, dropped)
+                .value(ItemTotals.PickedUp, pickedUp)
+                .value(ItemTotals.Used, used)
+                .value(ItemTotals.Crafted, crafted)
+                .value(ItemTotals.Broken, broken)
+                .value(ItemTotals.Smelted, smelted)
+                .value(ItemTotals.Enchanted, enchanted)
+                .value(ItemTotals.Repaired, repaired)
+                .condition(ItemTotals.PlayerId, playerId)
+                .condition(ItemTotals.MaterialId, MaterialCache.parse(stack))
                 .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(playerId);
         return result;

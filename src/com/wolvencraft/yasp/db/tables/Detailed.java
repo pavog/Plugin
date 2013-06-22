@@ -39,7 +39,7 @@ public class Detailed {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DestroyedBlocks implements DBTable {
+    public enum BlocksBroken implements DBTable {
         TableName       ("detailed_destroyed_blocks"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -62,7 +62,7 @@ public class Detailed {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PlacedBlocks implements DBTable {
+    public enum BlocksPlaced implements DBTable {
         TableName       ("detailed_placed_blocks"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -85,7 +85,7 @@ public class Detailed {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DroppedItems implements DBTable {
+    public enum ItemsDropped implements DBTable {
         TableName       ("detailed_dropped_items"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -108,7 +108,7 @@ public class Detailed {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PickedupItems implements DBTable {
+    public enum ItemsPickedUp implements DBTable {
         TableName       ("detailed_pickedup_items"),
         EntryId         ("detailed_pickedup_items_id"),
         Material        ("material_id"),
@@ -132,7 +132,7 @@ public class Detailed {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum UsedItems implements DBTable {
+    public enum ItemsConsumed implements DBTable {
         TableName       ("detailed_used_items"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -155,7 +155,7 @@ public class Detailed {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum LogPlayers implements DBTable {
+    public enum PlayerLog implements DBTable {
         TableName       ("detailed_log_players"),
         PlayerId        ("player_id"),
         Timestamp       ("time"),
@@ -178,7 +178,7 @@ public class Detailed {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DeathPlayers implements DBTable {
+    public enum PlayerDeaths implements DBTable {
         TableName       ("detailed_death_players"),
         PlayerId        ("player_id"),
         Cause           ("cause"),
@@ -201,7 +201,7 @@ public class Detailed {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PVEKills implements DBTable {
+    public enum PlayerKillsPVE implements DBTable {
         TableName       ("detailed_pve_kills"),
         MaterialId      ("material_id"),
         CreatureId      ("entity_id"),
@@ -226,7 +226,7 @@ public class Detailed {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PVPKills implements DBTable {
+    public enum PlayerKillsPVP implements DBTable {
         TableName       ("detailed_pvp_kills"),
         MaterialId      ("material_id"),
         KillerId        ("player_id"),

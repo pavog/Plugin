@@ -1,5 +1,5 @@
 /*
- * DeathsData.java
+ * DeathData.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -25,22 +25,23 @@ import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.db.data.DataStore;
-import com.wolvencraft.yasp.events.player.TrackedDeathEvent;
+import com.wolvencraft.yasp.db.data.deaths.DetailedDeathStats.NaturalDeathEntry;
+import com.wolvencraft.yasp.events.player.NaturalDeathEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
- * Data collector that records all item statistics on the server for a specific player.
+ * Data store that handles all natural deaths on the server
  * @author bitWolfy
  *
  */
-public class DeathsData extends DataStore<TotalDeathsEntry, DetailedDeathEntry> {
+public class DeathData extends DataStore<TotalDeathStats, NaturalDeathEntry> {
 
     /**
      * <b>Default constructor</b><br />
      * Creates an empty data store to save the statistics until database synchronization.
      * @param session Player session
      */
-    public DeathsData(OnlineSession session) {
+    public DeathData(OnlineSession session) {
         super(session, DataStoreType.Deaths);
     }
     
@@ -50,21 +51,21 @@ public class DeathsData extends DataStore<TotalDeathsEntry, DetailedDeathEntry> 
      * @param cause Death cause
      */
     public void playerDied(Location location, DamageCause cause) {
-        TotalDeathsEntry entry = null;
-        for(TotalDeathsEntry testEntry : normalData) {
+        TotalDeathStats entry = null;
+        for(TotalDeathStats testEntry : normalData) {
             if(testEntry.getCause().equals(cause)) entry = testEntry;
         }
         
         if(entry == null) {
-            entry = new TotalDeathsEntry(session.getId(), cause);
+            entry = new TotalDeathStats(session.getId(), cause);
             normalData.add(entry);
         }
         
         entry.addTimes();
-        DetailedDeathEntry detailedEntry = new DetailedDeathEntry(location, cause);
+        NaturalDeathEntry detailedEntry = new NaturalDeathEntry(location, cause);
         detailedData.add(detailedEntry);
         
-        Bukkit.getServer().getPluginManager().callEvent(new TrackedDeathEvent(session, detailedEntry));
+        Bukkit.getServer().getPluginManager().callEvent(new NaturalDeathEvent(session, detailedEntry));
     }
     
 }

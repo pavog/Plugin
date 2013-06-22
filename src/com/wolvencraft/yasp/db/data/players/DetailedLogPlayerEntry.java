@@ -27,27 +27,21 @@ import org.bukkit.Location;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.LogPlayers;
+import com.wolvencraft.yasp.db.tables.Detailed.PlayerLog;
 import com.wolvencraft.yasp.util.Util;
 
 /**
- * Tracks player's login and logout locations
+ * An immutable player login / logout entry
  * @author bitWolfy
  *
  */
 @Getter(AccessLevel.PUBLIC)
 public class DetailedLogPlayerEntry extends DetailedData {
     
-    private long time;
-    private boolean isLogin;
-    private Location location;
-     
-    /**
-     * <b>Default constructor</b><br />
-     * Creates a new DetailedLogPlayersEntry object based on arguments provided
-     * @param location Location of the event
-     * @param isLogin <b>true</b> if the player has logged in, <b>false</b> if he logged off
-     */
+    private final long time;
+    private final boolean isLogin;
+    private final Location location;
+    
     public DetailedLogPlayerEntry(Location location, boolean isLogin) {
         time = Util.getTimestamp();
         this.isLogin = isLogin;
@@ -56,14 +50,14 @@ public class DetailedLogPlayerEntry extends DetailedData {
      
     @Override
     public boolean pushData(int playerId) {
-        return Query.table(LogPlayers.TableName)
-                .value(LogPlayers.PlayerId, playerId)
-                .value(LogPlayers.Timestamp, time)
-                .value(LogPlayers.IsLogin, isLogin)
-                .value(LogPlayers.World, location.getWorld().getName())
-                .value(LogPlayers.XCoord, location.getBlockX())
-                .value(LogPlayers.YCoord, location.getBlockY())
-                .value(LogPlayers.ZCoord, location.getBlockZ())
+        return Query.table(PlayerLog.TableName)
+                .value(PlayerLog.PlayerId, playerId)
+                .value(PlayerLog.Timestamp, time)
+                .value(PlayerLog.IsLogin, isLogin)
+                .value(PlayerLog.World, location.getWorld().getName())
+                .value(PlayerLog.XCoord, location.getBlockX())
+                .value(PlayerLog.YCoord, location.getBlockY())
+                .value(PlayerLog.ZCoord, location.getBlockZ())
                 .insert();
     }
  
