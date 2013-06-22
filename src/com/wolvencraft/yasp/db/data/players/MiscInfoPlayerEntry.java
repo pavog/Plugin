@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.db.data.players;
 
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +61,10 @@ public class MiscInfoPlayerEntry extends NormalData {
         else values.put(MiscInfoPlayersTable.IsOp, 0);
         if(player.isBanned()) values.put(MiscInfoPlayersTable.IsBanned, 1);
         else values.put(MiscInfoPlayersTable.IsBanned, 0);
-        values.put(MiscInfoPlayersTable.PlayerIp, player.getAddress().getAddress().getHostAddress());
+        
+        InetAddress playerIp = player.getAddress().getAddress();
+        if(playerIp == null) values.put(MiscInfoPlayersTable.PlayerIp, "192.168.0.1");
+        else values.put(MiscInfoPlayersTable.PlayerIp, playerIp.getHostAddress());
         
         values.put(MiscInfoPlayersTable.Gamemode, player.getGameMode().getValue());
         values.put(MiscInfoPlayersTable.ExpPercent, player.getExp());
