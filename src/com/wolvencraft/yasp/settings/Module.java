@@ -116,7 +116,7 @@ public enum Module {
      * @return <b>true</b> if the module is enabled, <b>false</b> if it is not
      */
     public boolean isEnabled() {
-        if(refreshScheduled) refresh();
+        if(refreshScheduled) refreshAsynchronously();
         return enabled;
     }
 
