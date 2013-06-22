@@ -47,8 +47,8 @@ public class DetailedDeathEntry extends DetailedData {
     /**
      * <b>Default constructor</b><br />
      * Creates a new DetailedDeathPlayersEntry based on the data provided
-     * @param location
-     * @param deathCause
+     * @param location Death location
+     * @param cause Damage cause
      */
     public DetailedDeathEntry(Location location, DamageCause cause) {
         this.cause = cause;

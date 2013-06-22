@@ -49,7 +49,7 @@ public class BanHammerHook extends PluginHook {
     
     /**
      * Returns the ban data as a Json array
-     * @param player Player to look up
+     * @param playerName Player to look up
      * @return Ban data, or an empty string
      */
     public static String getBan(String playerName) {
