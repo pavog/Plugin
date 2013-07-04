@@ -25,7 +25,7 @@ public class VariableManager {
         
         DISTANCE_TRAVELED   ("distTotal"),
         DISTANCE_FOOT       ("distFoot"),
-        DISTANCE_PIG        ("distPig"),
+        DISTANCE_RIDE       ("distRide"),
         DISTANCE_CART       ("distCart"),
         DISTANCE_BOAT       ("distBoat"),
         DISTANCE_FLIGHT     ("distFlight"),
@@ -83,7 +83,7 @@ public class VariableManager {
         
         DISTANCE_TRAVELED   ("distTotal"),
         DISTANCE_FOOT       ("distFoot"),
-        DISTANCE_PIG        ("distPig"),
+        DISTANCE_RIDE       ("distRide"),
         DISTANCE_CART       ("distCart"),
         DISTANCE_BOAT       ("distBoat"),
         DISTANCE_FLIGHT     ("distFlight"),

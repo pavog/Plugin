@@ -43,7 +43,7 @@ public class DistancePlayerEntry extends NormalData {
     private double flight;
     private double boat;
     private double minecart;
-    private double pig;
+    private double ride;
     
     /**
      * Default constructor. Takes in the Player object and pulls corresponding values from the remote database.<br />
@@ -56,7 +56,7 @@ public class DistancePlayerEntry extends NormalData {
         flight = 0;
         boat = 0;
         minecart = 0;
-        pig = 0;
+        ride = 0;
         
         fetchData(playerId);
     }
@@ -74,7 +74,7 @@ public class DistancePlayerEntry extends NormalData {
                 .column(PlayerDistance.Flight)
                 .column(PlayerDistance.Boat)
                 .column(PlayerDistance.Minecart)
-                .column(PlayerDistance.Pig)
+                .column(PlayerDistance.Ride)
                 .condition(PlayerDistance.PlayerId, playerId)
                 .select();
         if(result == null) {
@@ -85,7 +85,7 @@ public class DistancePlayerEntry extends NormalData {
                 .value(PlayerDistance.Flight, flight)
                 .value(PlayerDistance.Boat, boat)
                 .value(PlayerDistance.Minecart, minecart)
-                .value(PlayerDistance.Pig, pig)
+                .value(PlayerDistance.Ride, ride)
                 .insert();
         } else {
             foot = result.asInt(PlayerDistance.Foot);
@@ -93,7 +93,7 @@ public class DistancePlayerEntry extends NormalData {
             flight = result.asInt(PlayerDistance.Flight);
             boat = result.asInt(PlayerDistance.Boat);
             minecart = result.asInt(PlayerDistance.Minecart);
-            pig = result.asInt(PlayerDistance.Pig);
+            ride = result.asInt(PlayerDistance.Ride);
         }
     }
 
@@ -105,7 +105,7 @@ public class DistancePlayerEntry extends NormalData {
             .value(PlayerDistance.Flight, flight)
             .value(PlayerDistance.Boat, boat)
             .value(PlayerDistance.Minecart, minecart)
-            .value(PlayerDistance.Pig, pig)
+            .value(PlayerDistance.Ride, ride)
             .condition(PlayerDistance.PlayerId, playerId)
             .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         return result;
@@ -118,7 +118,7 @@ public class DistancePlayerEntry extends NormalData {
         flight = 0;
         boat = 0;
         minecart = 0;
-        pig = 0;
+        ride = 0;
     }
     
     /**
@@ -143,8 +143,8 @@ public class DistancePlayerEntry extends NormalData {
             case Minecart:
                 minecart += distance;
                 break;
-            case Pig:
-                pig += distance;
+            case Ride:
+                ride += distance;
                 break;
             default:
                 break;

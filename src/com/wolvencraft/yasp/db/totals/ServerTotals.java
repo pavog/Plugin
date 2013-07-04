@@ -50,7 +50,7 @@ public class ServerTotals {
         
         distanceTotal = 0;
         distanceFoot = 0;
-        distancePig = 0;
+        distanceRide = 0;
         distanceMinecart = 0;
         distanceBoat = 0;
         distanceFlight = 0;
@@ -68,7 +68,7 @@ public class ServerTotals {
     
     private double distanceTotal;
     private double distanceFoot;
-    private double distancePig;
+    private double distanceRide;
     private double distanceMinecart;
     private double distanceBoat;
     private double distanceFlight;
@@ -94,12 +94,12 @@ public class ServerTotals {
         blocksPlaced = (int) Query.table(BlockTotals.TableName).column(BlockTotals.Placed).sum();
         
         distanceFoot = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
-        distancePig = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
+        distanceRide = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
         distanceMinecart = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
         distanceBoat = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
         distanceFlight = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
         distanceSwim = Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).sum();
-        distanceTotal = distanceFoot + distancePig + distanceMinecart + distanceBoat + distanceFlight + distanceSwim;
+        distanceTotal = distanceFoot + distanceRide + distanceMinecart + distanceBoat + distanceFlight + distanceSwim;
         
         toolsBroken = (int) Query.table(ItemTotals.TableName).column(ItemTotals.Broken).sum();
         itemsCrafted = (int) Query.table(ItemTotals.TableName).column(ItemTotals.Crafted).sum();
@@ -126,7 +126,7 @@ public class ServerTotals {
             
             put(ServerVariable.DISTANCE_TRAVELED, distanceTotal);
             put(ServerVariable.DISTANCE_FOOT, distanceFoot);
-            put(ServerVariable.DISTANCE_PIG, distancePig);
+            put(ServerVariable.DISTANCE_RIDE, distanceRide);
             put(ServerVariable.DISTANCE_CART, distanceMinecart);
             put(ServerVariable.DISTANCE_BOAT, distanceBoat);
             put(ServerVariable.DISTANCE_FLIGHT, distanceFlight);
@@ -184,8 +184,8 @@ public class ServerTotals {
             case Minecart:
                 distanceMinecart += distance;
                 break;
-            case Pig:
-                distancePig += distance;
+            case Ride:
+                distanceRide += distance;
                 break;
             default:
                 break;

@@ -76,12 +76,12 @@ public class BookUtil {
                 
                 ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.RED + ChatColor.BOLD + "  Travel log \n" + 
-                ChatColor.BLACK + " Total: " + stats.getValue(PlayerVariable.DISTANCE_TRAVELED) + "\n\n" + 
-                ChatColor.BLACK + " By foot: " + stats.getValue(PlayerVariable.DISTANCE_FOOT) + "\n" +
-                ChatColor.BLACK + " Swimmed: " + stats.getValue(PlayerVariable.DISTANCE_SWIM) + "\n" +
-                ChatColor.BLACK + " In minecart: " + stats.getValue(PlayerVariable.DISTANCE_CART) + "\n" + 
-                ChatColor.BLACK + " In a boat: " + stats.getValue(PlayerVariable.DISTANCE_BOAT) + "\n" + 
-                ChatColor.BLACK + " On a pig: " + stats.getValue(PlayerVariable.DISTANCE_PIG),
+                ChatColor.BLACK + " Total       : " + stats.getValue(PlayerVariable.DISTANCE_TRAVELED) + "\n\n" + 
+                ChatColor.BLACK + " By foot     : " + stats.getValue(PlayerVariable.DISTANCE_FOOT) + "\n" +
+                ChatColor.BLACK + " Swimmed     : " + stats.getValue(PlayerVariable.DISTANCE_SWIM) + "\n" +
+                ChatColor.BLACK + " In minecart : " + stats.getValue(PlayerVariable.DISTANCE_CART) + "\n" + 
+                ChatColor.BLACK + " In a boat   : " + stats.getValue(PlayerVariable.DISTANCE_BOAT) + "\n" + 
+                ChatColor.BLACK + " In a saddle : " + stats.getValue(PlayerVariable.DISTANCE_RIDE),
                 
                 ChatColor.DARK_RED + "" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.BLACK + ChatColor.BOLD + "  Kills and Deaths \n" + 

@@ -26,9 +26,9 @@ import lombok.AllArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Vehicle;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
@@ -56,14 +56,14 @@ public class PlayerHandlers {
             if(!playerLocation.getWorld().equals(event.getTo().getWorld())) return;
             double distance = playerLocation.distance(event.getTo());
             if(player.isInsideVehicle()) {
-                Vehicle vehicle = (Vehicle) player.getVehicle();
+                Entity vehicle = player.getVehicle();
                 distance = vehicle.getLocation().distance(event.getTo());
                 if(vehicle.getType().equals(EntityType.MINECART)) {
                     OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Minecart, distance);
                 } else if(vehicle.getType().equals(EntityType.BOAT)) {
                     OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Boat, distance);
-                } else if(vehicle.getType().equals(EntityType.PIG)) {
-                    OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Pig, distance);
+                } else if(vehicle.getType().equals(EntityType.PIG) || vehicle.getType().equals(EntityType.HORSE)) {
+                    OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Ride, distance);
                 }
             } else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
                 OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Swim, distance);

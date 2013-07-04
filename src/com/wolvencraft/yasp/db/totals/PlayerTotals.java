@@ -88,14 +88,14 @@ public class PlayerTotals {
         values.put(PlayerVariable.DISTANCE_FOOT, Query.table(PlayerDistance.TableName).column(PlayerDistance.Foot).condition(PlayerDistance.PlayerId, playerId).sum());
         values.put(PlayerVariable.DISTANCE_BOAT, Query.table(PlayerDistance.TableName).column(PlayerDistance.Boat).condition(PlayerDistance.PlayerId, playerId).sum());
         values.put(PlayerVariable.DISTANCE_CART, Query.table(PlayerDistance.TableName).column(PlayerDistance.Minecart).condition(PlayerDistance.PlayerId, playerId).sum());
-        values.put(PlayerVariable.DISTANCE_PIG, Query.table(PlayerDistance.TableName).column(PlayerDistance.Pig).condition(PlayerDistance.PlayerId, playerId).sum());
+        values.put(PlayerVariable.DISTANCE_RIDE, Query.table(PlayerDistance.TableName).column(PlayerDistance.Ride).condition(PlayerDistance.PlayerId, playerId).sum());
         values.put(PlayerVariable.DISTANCE_SWIM, Query.table(PlayerDistance.TableName).column(PlayerDistance.Swim).condition(PlayerDistance.PlayerId, playerId).sum());
         values.put(PlayerVariable.DISTANCE_FLIGHT, Query.table(PlayerDistance.TableName).column(PlayerDistance.Flight).condition(PlayerDistance.PlayerId, playerId).sum());
         
         double totalDistance = ((Double) values.get(PlayerVariable.DISTANCE_FOOT))
                 + ((Double) values.get(PlayerVariable.DISTANCE_BOAT))
                 + ((Double) values.get(PlayerVariable.DISTANCE_CART))
-                + ((Double) values.get(PlayerVariable.DISTANCE_PIG))
+                + ((Double) values.get(PlayerVariable.DISTANCE_RIDE))
                 + ((Double) values.get(PlayerVariable.DISTANCE_SWIM))
                 + ((Double) values.get(PlayerVariable.DISTANCE_FLIGHT));
         values.put(PlayerVariable.DISTANCE_TRAVELED, totalDistance);
@@ -332,8 +332,8 @@ public class PlayerTotals {
             case Minecart:
                 incrementValue(PlayerVariable.DISTANCE_CART, distance);
                 break;
-            case Pig:
-                incrementValue(PlayerVariable.DISTANCE_PIG, distance);
+            case Ride:
+                incrementValue(PlayerVariable.DISTANCE_RIDE, distance);
                 break;
             default:
                 break;

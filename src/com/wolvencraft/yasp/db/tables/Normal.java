@@ -47,7 +47,7 @@ public class Normal {
         Flight          ("flight"),
         Boat            ("boat"),
         Minecart        ("minecart"),
-        Pig             ("pig");
+        Ride            ("ride");
         
         private String columnName;
         
