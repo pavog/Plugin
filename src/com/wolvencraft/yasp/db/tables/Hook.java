@@ -226,6 +226,26 @@ public class Hook {
     }
     
     /**
+     * Represents the <i>hook_towny</i> table.
+     * @author bitWolfy
+     *
+     */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum TownyTable implements DBTable {
+        
+        TableName       ("hook_towny"),
+        PlayerId        ("player_id"),
+        PlayerData      ("player_data"),
+        ;
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
      * Represents the <i>hook_vanish</i> table.
      * @author bitWolfy
      *

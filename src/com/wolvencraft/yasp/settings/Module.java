@@ -43,6 +43,7 @@ import com.wolvencraft.yasp.db.data.hooks.jail.JailData;
 import com.wolvencraft.yasp.db.data.hooks.mcmmo.McMMOData;
 import com.wolvencraft.yasp.db.data.hooks.mobarena.MobArenaData;
 import com.wolvencraft.yasp.db.data.hooks.pvparena.PvpArenaData;
+import com.wolvencraft.yasp.db.data.hooks.towny.TownyData;
 import com.wolvencraft.yasp.db.data.hooks.vanish.VanishData;
 import com.wolvencraft.yasp.db.data.hooks.vault.VaultData;
 import com.wolvencraft.yasp.db.data.hooks.votifier.VotifierData;
@@ -75,6 +76,7 @@ public enum Module {
     McMMO       ("mcmmo", true, McMMOData.class),
     MobArena    ("mobarena", true, MobArenaData.class),
     PvpArena    ("pvparena", true, PvpArenaData.class),
+    Towny       ("towny", true, TownyData.class),
     Vanish      ("vanishnopacket", true, VanishData.class),
     Vault       ("vault", true, VaultData.class),
     Votifier    ("votifier", true, VotifierData.class),

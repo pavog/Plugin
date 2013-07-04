@@ -112,6 +112,7 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         Hook_McMMO,
         Hook_MobArena,
         Hook_PvpArena,
+        Hook_Towny,
         Hook_Vanish,
         Hook_Vault,
         Hook_Votifier,
