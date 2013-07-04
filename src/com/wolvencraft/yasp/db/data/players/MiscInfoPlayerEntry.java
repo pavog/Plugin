@@ -179,7 +179,12 @@ public class MiscInfoPlayerEntry extends NormalData {
      */
     public void incrementStat(PlayerData type) {
         double value = 1;
-        if(values.containsKey(type)) value = ((Double) values.get(type)).doubleValue() + 1;
+        if(values.containsKey(type)) {
+            Object valueObj = values.get(type);
+            if(valueObj instanceof Double)
+                value = ((Double) valueObj).doubleValue() + 1;
+            else value = ((Integer) valueObj).doubleValue() + 1;
+        }
         values.put(type, value);
     }
     
@@ -189,7 +194,12 @@ public class MiscInfoPlayerEntry extends NormalData {
      * @param value Amount
      */
     public void incrementStat(PlayerData type, double value) {
-        if(values.containsKey(type)) value += ((Double) values.get(type)).doubleValue();
+        if(values.containsKey(type)) {
+            Object valueObj = values.get(type);
+            if(valueObj instanceof Double)
+                value += ((Double) valueObj).doubleValue();
+            else value += ((Integer) valueObj).doubleValue();
+        }
         values.put(type, value);
     }
     

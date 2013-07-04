@@ -135,16 +135,13 @@ public class PlayerTotals {
      * @param type Value to increment
      */
     public void incrementValue(PlayerVariable type) {
-        int value = (Integer) getValue(type);
-        values.put(type, ++value);
-    }
-    
-    /**
-     * Safely increments the specified value by 1
-     * @param type Value to increment
-     */
-    public void incrementValue(PlayerVariable type, int amount) {
-        int value = (Integer) getValue(type) + amount;
+        int value = 1;
+        if(values.containsKey(type)) {
+            Object valueObj = values.get(type);
+            if(valueObj instanceof Double)
+                value += ((Double) valueObj).doubleValue();
+            else value += ((Integer) valueObj).doubleValue();
+        }
         values.put(type, value);
     }
     
@@ -152,8 +149,13 @@ public class PlayerTotals {
      * Safely increments the specified value by 1
      * @param type Value to increment
      */
-    public void incrementValue(PlayerVariable type, double amount) {
-        double value = (Double) getValue(type) + amount;
+    public void incrementValue(PlayerVariable type, double value) {
+        if(values.containsKey(type)) {
+            Object valueObj = values.get(type);
+            if(valueObj instanceof Double)
+                value += ((Double) valueObj).doubleValue();
+            else value += ((Integer) valueObj).doubleValue();
+        }
         values.put(type, value);
     }
     
