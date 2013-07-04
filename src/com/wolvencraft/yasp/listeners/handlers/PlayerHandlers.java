@@ -88,7 +88,7 @@ public class PlayerHandlers {
 
         private Player player;
         private PlayerData stat;
-        private int value;
+        private double value;
         
         public PlayerIncrementStat(Player player, PlayerData stat) {
             this.player = player;
