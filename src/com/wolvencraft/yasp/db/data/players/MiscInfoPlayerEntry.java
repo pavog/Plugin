@@ -113,7 +113,7 @@ public class MiscInfoPlayerEntry extends NormalData {
             values.put(PlayerData.EggsThrown, result.asInt(PlayerData.EggsThrown));
             values.put(PlayerData.FoodEaten, result.asInt(PlayerData.FoodEaten));
             values.put(PlayerData.ArrowsShot, result.asInt(PlayerData.ArrowsShot));
-            values.put(PlayerData.DamageTaken, result.asInt(PlayerData.DamageTaken));
+            values.put(PlayerData.DamageTaken, result.asDouble(PlayerData.DamageTaken));
             values.put(PlayerData.BedsEntered, result.asInt(PlayerData.BedsEntered));
             values.put(PlayerData.PortalsEntered, result.asInt(PlayerData.PortalsEntered));
             values.put(PlayerData.WordsSaid, result.asInt(PlayerData.WordsSaid));
