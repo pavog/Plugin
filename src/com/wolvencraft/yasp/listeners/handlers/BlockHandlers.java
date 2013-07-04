@@ -26,7 +26,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.blocks.BlockData;
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,7 @@ public class BlockHandlers {
         
         @Override
         public void run() {
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockPlace(block);
             session.getPlayerTotals().blockPlace();
         }
@@ -66,7 +66,7 @@ public class BlockHandlers {
         
         @Override
         public void run() {
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockBreak(block);
             session.getPlayerTotals().blockBreak();
         }

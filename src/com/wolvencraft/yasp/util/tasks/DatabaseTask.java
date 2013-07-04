@@ -31,8 +31,7 @@ import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 /**
  * Synchronizes the collected data to the database
@@ -88,12 +87,12 @@ public class DatabaseTask implements Runnable {
         
         Message.debug("Database synchronization in progress");
         
-        for(OnlineSession session : OnlineSessionCache.getSessions()) {
+        for(OnlineSession session : SessionCache.getOnlineSessions()) {
             session.pushData();
             session.getPlayerTotals().fetchData();
         }
         
-        for(OfflineSession session : OfflineSessionCache.getSessions()) {
+        for(OfflineSession session : SessionCache.getOfflineSessions()) {
             session.getPlayerTotals().fetchData();
         }
         

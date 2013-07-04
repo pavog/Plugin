@@ -34,7 +34,7 @@ import com.wolvencraft.yasp.db.tables.DBTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Util;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 /**
  * Represents all the miscellaneous information that does not fit any other category
@@ -208,7 +208,7 @@ public class MiscInfoPlayerEntry extends NormalData {
      * @param player Player that was killed
      */
     public void killed(Player player) {
-        OnlineSessionCache.fetch(player).died();
+        SessionCache.fetch(player).died();
         int curKillStreak = ((Integer) values.get(PlayerData.CurKillStreak)).intValue() + 1;
         int maxKillStreak = ((Integer) values.get(PlayerData.MaxKillStreak)).intValue();
         values.put(PlayerData.CurKillStreak, curKillStreak);

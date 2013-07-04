@@ -27,33 +27,37 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.CacheManager.Type;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.events.session.SessionCreateEvent;
 import com.wolvencraft.yasp.events.session.SessionRemoveEvent;
+import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
 /**
  * Caches Online player sessions server-side
  * @author bitWolfy
  *
  */
-public class OnlineSessionCache implements CachedDataProcess {
-
-    private final long REFRESH_RATE_TICKS = (long)(5 * 60 * 20);
-    private static List<OnlineSession> sessions;
+public class SessionCache extends CachedData {
+    
+    private static List<OnlineSession> onlineSessions;
+    private static List<OfflineSession> offlineSessions;
     
     /**
      * <b>Default constructor</b><br />
      * Creates a List for data storage and loads the online players into the list at a delay
      */
-    public OnlineSessionCache() {
-        sessions = new ArrayList<OnlineSession>();
+    public SessionCache() {
+        super(Type.SESSION, (long)(5 * 60 * 20));
+        
+        onlineSessions = new ArrayList<OnlineSession>();
+        offlineSessions = new ArrayList<OfflineSession>();
         
         Bukkit.getScheduler().runTaskLaterAsynchronously(Statistics.getInstance(), new Runnable() {
             
@@ -69,13 +73,8 @@ public class OnlineSessionCache implements CachedDataProcess {
     }
     
     @Override
-    public long getRefreshRate() {
-        return REFRESH_RATE_TICKS;
-    }
-    
-    @Override
-    public void run() {
-        for(OnlineSession session : getSessions()) {
+    public void clearCache() {
+        for(OnlineSession session : getOnlineSessions()) {
             if(session.isOnline()) continue;
             session.finalize();
             session.pushData();
@@ -88,6 +87,10 @@ public class OnlineSessionCache implements CachedDataProcess {
                 .condition(PlayerStats.Name, session.getName())
                 .delete();
         }
+        
+        for(OfflineSession session : new ArrayList<OfflineSession>(offlineSessions)) {
+            if(!session.isOnline()) offlineSessions.remove(session);
+        }
     }
     
     /**
@@ -98,7 +101,7 @@ public class OnlineSessionCache implements CachedDataProcess {
      * @return OnlineSession associated with the player
      */
     public static OnlineSession fetch(Player player, boolean login) {
-        for(OnlineSession session : sessions) {
+        for(OnlineSession session : onlineSessions) {
             if(session.getName().equals(player.getName())) {
                 if(login && RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
                     Message.send(player, RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName()));
@@ -106,9 +109,9 @@ public class OnlineSessionCache implements CachedDataProcess {
                 return session;
             }
         }
-        Message.debug("Creating a new user session for " + player.getName() + "(#" + sessions.size() + ")");
+        Message.debug("Creating a new user session for " + player.getName() + "(#" + onlineSessions.size() + ")");
         OnlineSession newSession = new OnlineSession(player);
-        sessions.add(newSession);
+        onlineSessions.add(newSession);
         
         if(login && RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
             Message.send(
@@ -132,21 +135,43 @@ public class OnlineSessionCache implements CachedDataProcess {
     }
     
     /**
+     * Fetches the OfflineSession from the cache
+     * @param username Player name
+     * @return Offline session
+     */
+    public static OfflineSession fetch(String username) {
+        for(OfflineSession session : offlineSessions) {
+            if(session.getName().equals(username)) return session;
+        }
+        OfflineSession session = new OfflineSession(username);
+        offlineSessions.add(session);
+        return session;
+    }
+    
+    /**
      * Removes the specified session
      * @param session Session to remove
      */
     private static void removeSession(OnlineSession session) {
         Message.debug("Removing a user session for " + session.getName());
         Bukkit.getServer().getPluginManager().callEvent(new SessionRemoveEvent(session.getName()));
-        sessions.remove(session);
+        onlineSessions.remove(session);
     }
     
     /**
      * Returns all stored sessions.
      * @return List of stored player sessions
      */
-    public static List<OnlineSession> getSessions() {
-        return new ArrayList<OnlineSession>(sessions);
+    public static List<OnlineSession> getOnlineSessions() {
+        return new ArrayList<OnlineSession>(onlineSessions);
+    }
+    
+    /**
+     * Returns all stored sessions.
+     * @return List of stored player sessions
+     */
+    public static List<OfflineSession> getOfflineSessions() {
+        return new ArrayList<OfflineSession>(offlineSessions);
     }
 
     
@@ -155,11 +180,13 @@ public class OnlineSessionCache implements CachedDataProcess {
      * After that, clears the session list.
      */
     public static void dumpSessions() {
-        for(OnlineSession session : getSessions()) {
+        for(OnlineSession session : getOnlineSessions()) {
             session.dumpData();
             removeSession(session);
         }
-        sessions.clear();
+        onlineSessions.clear();
+        
+        offlineSessions.clear();
     }
     
 }

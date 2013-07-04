@@ -35,7 +35,7 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
 
@@ -104,7 +104,7 @@ public class DatabaseCommands {
                 catch (Exception ex) { Message.sendFormattedError(sender, "Patch failed!"); }
                 finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                        if(StatPerms.Statistics.has(player)) OnlineSessionCache.fetch(player);
+                        if(StatPerms.Statistics.has(player)) SessionCache.fetch(player);
                     }
                     Statistics.getServerStatistics().pushStaticData();
                     Message.sendFormattedSuccess(sender, "Patching finished.");
@@ -129,7 +129,7 @@ public class DatabaseCommands {
     public static boolean repatch(List<String> args) {
         final CommandSender sender = CommandManager.getSender();
         Message.sendFormattedSuccess(sender, "Attempting to patch the database...");
-        OnlineSessionCache.dumpSessions();
+        SessionCache.dumpSessions();
         Statistics.setPaused(true);
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
 
@@ -139,7 +139,7 @@ public class DatabaseCommands {
                 catch (Exception ex) { Message.sendFormattedError(sender, "Patch failed!"); }
                 finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                        if(StatPerms.Statistics.has(player)) OnlineSessionCache.fetch(player);
+                        if(StatPerms.Statistics.has(player)) SessionCache.fetch(player);
                     }
                     Statistics.getServerStatistics().pushStaticData();
                     Message.sendFormattedSuccess(sender, "Patching finished.");
@@ -181,7 +181,7 @@ public class DatabaseCommands {
             description = "Dumps the locally stored data"
             )
     public static boolean dump(List<String> args) {
-        OnlineSessionCache.dumpSessions();
+        SessionCache.dumpSessions();
         Message.sendFormattedSuccess(CommandManager.getSender(), "The local data has been dumped");
         return true;
     }

@@ -41,14 +41,7 @@ import com.wolvencraft.yasp.util.Util;
  */
 public class Query {
     
-    private static Query instance;
-    
-    /**
-     * Creates a new QueryFactory instance. Should be used once, on plugin startup
-     */
-    public Query() {
-        instance = this;
-    }
+    private Query() { }
     
     /**
      * Returns a database query based on the table name provided
@@ -56,7 +49,7 @@ public class Query {
      * @return Database query
      */
     public static DatabaseQuery table(DBTable table) {
-        return instance.new DatabaseQuery(table.getColumnName());
+        return new DatabaseQuery(table.getColumnName());
     }
     
     /**
@@ -65,7 +58,7 @@ public class Query {
      * @return <b>QueryResult</b> desired result
      */
     public static QueryResult toQueryResult(Map<String, String> map) {
-        return instance.new QueryResult(map);
+        return new QueryResult(map);
     }
     
     /**
@@ -110,7 +103,7 @@ public class Query {
      * @author bitWolfy
      *
      */
-    public class DatabaseQuery {
+    public static class DatabaseQuery {
         
         private DatabaseQuery instance;
         private String table;
@@ -516,7 +509,7 @@ public class Query {
      * @author bitWolfy
      *
      */
-    public class QueryResult {
+    public static class QueryResult {
         private Map<String, String> fields;
         
         /**

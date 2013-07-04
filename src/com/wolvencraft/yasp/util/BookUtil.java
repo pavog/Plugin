@@ -27,7 +27,7 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
 import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
-import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 public class BookUtil {
     
@@ -58,7 +58,7 @@ public class BookUtil {
      * @return Array of strings, each of them representing a new page in the book.
      */
     public static String[] getBookPages(String playerName) {
-        PlayerTotals stats = OfflineSessionCache.fetch(playerName).getPlayerTotals();
+        PlayerTotals stats = SessionCache.fetch(playerName).getPlayerTotals();
         return new String[] {
                 ChatColor.DARK_RED + "\n\n" + " + " + ChatColor.BOLD + ChatColor.UNDERLINE + playerName + ChatColor.RESET + " + \n\n" + 
                 ChatColor.BLACK + "Current session: \n\n" + stats.getValue(PlayerVariable.SESSION_LENGTH) + "\n\n" + 

@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.CommandManager.Command;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 public class PlayerCommands {
     
@@ -57,7 +57,7 @@ public class PlayerCommands {
             )
     public static boolean scoreboard(List<String> args) {
         Player player = (Player) CommandManager.getSender();
-        if(OnlineSessionCache.fetch(player).toggleScoreboard()) Message.sendFormattedSuccess("Displaying a scoreboard");
+        if(SessionCache.fetch(player).toggleScoreboard()) Message.sendFormattedSuccess("Displaying a scoreboard");
         else Message.sendFormattedSuccess("Scoreboard disabled");
         return true;
     }

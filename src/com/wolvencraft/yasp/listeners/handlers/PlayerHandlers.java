@@ -34,7 +34,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 public class PlayerHandlers {
     
@@ -59,21 +59,21 @@ public class PlayerHandlers {
                 Entity vehicle = player.getVehicle();
                 distance = vehicle.getLocation().distance(event.getTo());
                 if(vehicle.getType().equals(EntityType.MINECART)) {
-                    OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Minecart, distance);
+                    SessionCache.fetch(player).addDistance(PlayerDistance.Minecart, distance);
                 } else if(vehicle.getType().equals(EntityType.BOAT)) {
-                    OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Boat, distance);
+                    SessionCache.fetch(player).addDistance(PlayerDistance.Boat, distance);
                 } else if(vehicle.getType().equals(EntityType.PIG) || vehicle.getType().equals(EntityType.HORSE)) {
-                    OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Ride, distance);
+                    SessionCache.fetch(player).addDistance(PlayerDistance.Ride, distance);
                 }
             } else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
-                OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Swim, distance);
+                SessionCache.fetch(player).addDistance(PlayerDistance.Swim, distance);
             } else if (player.isFlying()) {
-                OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Flight, distance);
+                SessionCache.fetch(player).addDistance(PlayerDistance.Flight, distance);
             } else {
-                OnlineSession session = OnlineSessionCache.fetch(player);
+                OnlineSession session = SessionCache.fetch(player);
                 if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
                     session.getPlayersData().getMiscData().incrementStat(PlayerData.TimesJumped);
-                OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Foot, distance);
+                SessionCache.fetch(player).addDistance(PlayerDistance.Foot, distance);
             }
         }
     }
@@ -98,7 +98,7 @@ public class PlayerHandlers {
         
         @Override
         public void run() {
-            OnlineSessionCache
+            SessionCache
                 .fetch(player)
                 .getPlayersData()
                 .getMiscData()

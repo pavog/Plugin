@@ -38,7 +38,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.PatchManager;
-import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.totals.ServerTotals;
 import com.wolvencraft.yasp.listeners.BlockListener;
@@ -54,8 +53,7 @@ import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.cache.CachedData;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
 import com.wolvencraft.yasp.util.tasks.RefreshTask;
 import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
@@ -110,7 +108,7 @@ public class Statistics extends JavaPlugin {
         }
         
         new PatchManager();
-        new Query();
+        new CacheManager();
         
         try { new Database(); }
         catch (Exception e) {
@@ -151,7 +149,7 @@ public class Statistics extends JavaPlugin {
         }
         catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
         
-        CachedData.startAll();
+        CacheManager.startAll();
         
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseTask(), (ping / 2), ping);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTask(), 0L, 20L);
@@ -166,12 +164,14 @@ public class Statistics extends JavaPlugin {
         
         try {
             for(Player player : Bukkit.getOnlinePlayers()) {
-                OnlineSessionCache.fetch(player).getPlayersData().addPlayerLog(player.getLocation(), false);
+                SessionCache.fetch(player).getPlayersData().addPlayerLog(player.getLocation(), false);
             }
             DatabaseTask.commit();
             serverStatistics.pluginShutdown();
-            OnlineSessionCache.dumpSessions();
-            CachedData.stopAll();
+            SessionCache.dumpSessions();
+            
+            CacheManager.clearCache();
+            CacheManager.stopAll();
             
             Bukkit.getScheduler().cancelTasks(this);
             

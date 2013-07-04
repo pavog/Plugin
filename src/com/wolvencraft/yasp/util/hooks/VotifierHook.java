@@ -32,7 +32,7 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.hooks.votifier.VotifierData;
 import com.wolvencraft.yasp.settings.Module;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 public class VotifierHook extends PluginHook implements Listener {
     
@@ -50,7 +50,7 @@ public class VotifierHook extends PluginHook implements Listener {
         Vote vote = event.getVote();
         Player player = Bukkit.getPlayerExact(vote.getUsername());
         if(player == null) return;
-        VotifierData dataStore = (VotifierData) OnlineSessionCache.fetch(player).getDataStore(DataStoreType.Hook_Votifier);
+        VotifierData dataStore = (VotifierData) SessionCache.fetch(player).getDataStore(DataStoreType.Hook_Votifier);
         if(dataStore == null) return;
         dataStore.playerVoted(vote);
     }

@@ -40,7 +40,7 @@ import org.bukkit.inventory.ItemStack;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Constants;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 public class DeathHandler {
     
@@ -73,46 +73,46 @@ public class DeathHandler {
                 // | + Player shot by Player
                         Player killer = (Player) projectile.getShooter();
                         if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(player)) return;
-                        OnlineSession session = OnlineSessionCache.fetch(killer);
+                        OnlineSession session = SessionCache.fetch(killer);
                         session.killedPlayer(player, Constants.ProjectileToItem.parse(projectile.getType()));
                     } else if (projectile.getShooter() instanceof Creature) {
                 // | + Player was shot by a monster
                         if(!StatPerms.DeathPVE.has(player)) return;
                         Entity killer = (Entity) projectile.getShooter();
-                        OnlineSession session = OnlineSessionCache.fetch(player);
+                        OnlineSession session = SessionCache.fetch(player);
                         session.killedByCreature(killer, Constants.ProjectileToItem.parse(projectile.getType()));
                     }
                 } else if (killerEntity instanceof Player) {
                 // + Player killed Player
                     Player killer = (Player) killerEntity;
                     if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(player)) return;
-                    OnlineSession session = OnlineSessionCache.fetch(killer);
+                    OnlineSession session = SessionCache.fetch(killer);
                     session.killedPlayer(player, killer.getItemInHand());
                 } else if (killerEntity instanceof Creature) {
                 // + Creature killed Player
                     if(!StatPerms.DeathPVE.has(player)) return;
-                    OnlineSession session = OnlineSessionCache.fetch(player);
+                    OnlineSession session = SessionCache.fetch(player);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else if (killerEntity instanceof Slime) {
                 // + Slime killed player
                     if(!StatPerms.DeathPVE.has(player)) return;
-                    OnlineSession session = OnlineSessionCache.fetch(player);
+                    OnlineSession session = SessionCache.fetch(player);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else if (killerEntity instanceof EnderDragon) {
                 // + Ender Dragon killed player
                     if(!StatPerms.DeathPVE.has(player)) return;
-                    OnlineSession session = OnlineSessionCache.fetch(player);
+                    OnlineSession session = SessionCache.fetch(player);
                     session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                 } else {
                 // + Player died
                     if(!StatPerms.DeathOther.has(player)) return;
-                    OnlineSession session = OnlineSessionCache.fetch(player);
+                    OnlineSession session = SessionCache.fetch(player);
                     session.killedByEnvironment(player.getLocation(), cause);
                 }
             } else {
                 // Player killed by other means
                 if(!StatPerms.DeathOther.has(player)) return;
-                OnlineSession session = OnlineSessionCache.fetch(player);
+                OnlineSession session = SessionCache.fetch(player);
                 session.killedByEnvironment(player.getLocation(), cause);
             }
         }
@@ -147,13 +147,13 @@ public class DeathHandler {
                 if(!StatPerms.DeathPVE.has(killer)) return;
                 if (victim instanceof Creature) {
                     // + Player shot Creature
-                    OnlineSessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
+                    SessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
                 } else if (victim instanceof Slime) {
                     // + Player shot Slime
-                    OnlineSessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
+                    SessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
                 } else if (victim instanceof EnderDragon) {
                     // + Player shot EnderDragon
-                    OnlineSessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
+                    SessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
                 }
             } else if (killerEntity instanceof Player) {
                 // Player killed an entity
@@ -161,13 +161,13 @@ public class DeathHandler {
                 if(!StatPerms.DeathPVE.has(killer)) return;
                 if (victim instanceof Creature) {
                     // + Player killed Creature
-                    OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
+                    SessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
                 } else if (victim instanceof Slime) {
                     // + Player killed Slime
-                    OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
+                    SessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
                 } else if (victim instanceof EnderDragon) {
                     // + Player killed an EnderDragon
-                    OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
+                    SessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
                 }
             }
         }

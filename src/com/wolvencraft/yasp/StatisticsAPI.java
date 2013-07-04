@@ -43,8 +43,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
-import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 /**
  * Simple API for servers statistics
@@ -60,7 +59,7 @@ public class StatisticsAPI {
      */
     public static OnlineSession getSession(Player player) {
         if(!isTracked(player)) return null;
-        return OnlineSessionCache.fetch(player);
+        return SessionCache.fetch(player);
     }
     
     /**
@@ -70,7 +69,7 @@ public class StatisticsAPI {
      * @return DataSession with player's totals
      */
     public static OfflineSession getSession(String username) {
-        return OfflineSessionCache.fetch(username);
+        return SessionCache.fetch(username);
     }
     
     /**

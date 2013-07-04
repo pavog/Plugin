@@ -20,113 +20,55 @@
 
 package com.wolvencraft.yasp.util.cache;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.CacheManager.Type;
 
 /**
- * Handles all the processes that refresh the plugin cache
+ * Cached data handler
  * @author bitWolfy
  *
  */
-public class CachedData {
+public abstract class CachedData implements Runnable {
     
-    private static Map<CachedDataType, Integer> tasks = new HashMap<CachedDataType, Integer>();
+    public final long REFRESH_RATE_TICKS;
+    public final Type TYPE;
+    private BukkitTask process;
+    
+    public CachedData(Type type, long refreshRate) {
+        TYPE = type;
+        REFRESH_RATE_TICKS = refreshRate;
+    }
+    
+    @Override
+    public final void run() { clearCache(); }
     
     /**
-     * Starts the specified process, as long as it is not running
-     * @param type Process to start
-     * @return <b>true</b> if the process has been started, <b>false</b> if an error occurred
+     * Starts up the task associated with the data cache
+     * @return <b>true</b> if the task was started, <b>false</b> otherwise
      */
-    public static boolean startProcess(CachedDataType type) {
-        if(tasks.containsKey(type)) return false;
-        int processId = Bukkit.getScheduler().runTaskTimerAsynchronously(
-                Statistics.getInstance(),
-                type.process,
-                0,
-                type.process.getRefreshRate()
-        ).getTaskId();
-        tasks.put(type, processId);
+    public boolean startTask() {
+        if(process != null) return false;
+        process = Bukkit.getScheduler().runTaskTimerAsynchronously(Statistics.getInstance(), this, 60 * 20L, REFRESH_RATE_TICKS);
         return true;
     }
     
     /**
-     * Stops the specified process (if it is running)
-     * @param type Process to stop
-     * @return <b>true</b> if the process has been stopped, <b>false</b> if an error occurred
+     * Stops up the task associated with the data cache
+     * @return <b>true</b> if the task was stopped, <b>false</b> otherwise
      */
-    public static boolean stopProcess(CachedDataType type) {
-        if(!tasks.containsKey(type)) return false;
-        Bukkit.getScheduler().cancelTask(tasks.get(type));
+    public boolean stopTask() {
+        if(process == null) return false;
+        process.cancel();
+        process = null;
         return true;
     }
     
     /**
-     * Starts all processes, as long as they have not been started yet
-     * @return <b>true</b> if all processes have been started, <b>false</b> if an error occurred
+     * Clears the data cache of existing entries
      */
-    public static boolean startAll() {
-        boolean result = true;
-        for(CachedDataType type : CachedDataType.values()) {
-            if(tasks.containsKey(type)) continue;
-            result = result && startProcess(type);
-        }
-        return result;
-    }
-    
-    /**
-     * Stops all processes, as long as they are running
-     * @return <b>true</b> if all processes have been stopped, <b>false</b> if an error occurred
-     */
-    public static boolean stopAll() {
-        boolean result = true;
-        for(CachedDataType type : CachedDataType.values()) {
-            if(tasks.containsKey(type)) continue;
-            result = result && stopProcess(type);
-        }
-        return result;
-    }
-    
-    /**
-     * Public interface for all cached data processes
-     * @author bitWolfy
-     *
-     */
-    public interface CachedDataProcess extends Runnable {
-        
-        /**
-         * Returns the cache refresh rate.
-         * @return Cache refresh rate (in ticks)
-         */
-        public long getRefreshRate();
-        
-    }
-    
-    /**
-     * Denotes different cached data types
-     * @author bitWolfy
-     *
-     */
-    public enum CachedDataType {
-        Entity(EntityCache.class),
-        Material(MaterialCache.class),
-        OfflineSession(OfflineSessionCache.class),
-        OnlineSession(OnlineSessionCache.class);
-        
-        private CachedDataProcess process;
-        
-        CachedDataType(Class<?> process) {
-            try { this.process = (CachedDataProcess) process.newInstance(); }
-            catch (InstantiationException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " InstantiationException)"); return; }
-            catch (IllegalAccessException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " IllegalAccessException)"); return; }
-            catch (Exception e)                 { Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " " + e.getMessage() + ")"); return; }
-        }
-    }
+    public abstract void clearCache();
     
 }
-

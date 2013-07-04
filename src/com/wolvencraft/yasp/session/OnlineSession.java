@@ -50,7 +50,7 @@ import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
@@ -167,7 +167,7 @@ public class OnlineSession implements PlayerSession {
         ((PVPData) getDataStore(DataStoreType.PVP)).playerKilledPlayer(victim, weapon);
         playersData.getMiscData().killed(victim);
         playerTotals.pvpKill();
-        OnlineSessionCache.fetch(victim).getPlayerTotals().death();
+        SessionCache.fetch(victim).getPlayerTotals().death();
     }
     
     /**

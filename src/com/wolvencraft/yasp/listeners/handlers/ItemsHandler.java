@@ -36,7 +36,7 @@ import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.items.ItemData;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.util.cache.SessionCache;
 
 public class ItemsHandler {
     
@@ -54,7 +54,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemPickUp(location, itemStack);
         }
     }
@@ -73,7 +73,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemDrop(location, itemStack);
         }
     }
@@ -90,7 +90,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemUse(player.getLocation(), player.getItemInHand());
             session.getPlayerTotals().snacksEaten();
             session.getPlayersData().getMiscData().incrementStat(PlayerData.FoodEaten);
@@ -111,7 +111,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemCraft(location, itemStack);
             session.getPlayerTotals().itemCraft();
         }
@@ -131,7 +131,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemSmelt(location, itemStack);
         }
     }
@@ -150,7 +150,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemBreak(location, itemStack);
             session.getPlayerTotals().toolBreak();
         }
@@ -170,7 +170,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemEnchant(location, itemStack);
         }
     }
@@ -213,7 +213,7 @@ public class ItemsHandler {
             int repairCost = repairable.getRepairCost();
             if(player.getLevel() < repairCost) return;
 
-            OnlineSession session = OnlineSessionCache.fetch(player);
+            OnlineSession session = SessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemRepair(player.getLocation(), resultSlot);
         }
     }

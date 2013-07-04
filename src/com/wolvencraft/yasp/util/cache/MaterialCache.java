@@ -28,20 +28,19 @@ import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import com.wolvencraft.yasp.CacheManager.Type;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Miscellaneous.MaterialsTable;
 import com.wolvencraft.yasp.settings.Constants;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
-import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
 /**
  * Caches material IDs server-side
  * @author bitWolfy
  *
  */
-public class MaterialCache implements CachedDataProcess {
-
-    private final long REFRESH_RATE_TICKS = (long)(24 * 3600 * 20);
+public class MaterialCache extends CachedData {
+    
     private static List<String> materials;
     
     /**
@@ -49,16 +48,12 @@ public class MaterialCache implements CachedDataProcess {
      * Creates a new List for data storage
      */
     public MaterialCache() {
+        super(Type.MATERIAL, (long)(24 * 3600 * 20));
         materials = new ArrayList<String>();
     }
     
     @Override
-    public long getRefreshRate() {
-        return REFRESH_RATE_TICKS;
-    }
-    
-    @Override
-    public void run() {
+    public void clearCache() {
         materials.clear();
     }
     
