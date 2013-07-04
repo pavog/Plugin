@@ -31,8 +31,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.managers.CommandManager;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
 

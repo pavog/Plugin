@@ -28,8 +28,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.managers.CommandManager;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
 
 /**

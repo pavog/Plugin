@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp;
+package com.wolvencraft.yasp.managers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.events.plugin.HookInitEvent;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;

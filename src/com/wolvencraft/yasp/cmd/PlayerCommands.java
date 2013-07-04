@@ -24,8 +24,8 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.CommandManager.Command;
+import com.wolvencraft.yasp.managers.CommandManager;
+import com.wolvencraft.yasp.managers.CommandManager.Command;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 

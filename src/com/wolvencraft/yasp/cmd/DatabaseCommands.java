@@ -26,13 +26,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.wolvencraft.yasp.CommandManager;
-import com.wolvencraft.yasp.CommandManager.Command;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
+import com.wolvencraft.yasp.managers.CommandManager;
+import com.wolvencraft.yasp.managers.CommandManager.Command;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.SessionCache;

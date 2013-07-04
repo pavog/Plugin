@@ -25,9 +25,9 @@ import java.util.List;
 
 import org.bukkit.entity.EntityType;
 
-import com.wolvencraft.yasp.CacheManager.Type;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Miscellaneous.EntitiesTable;
+import com.wolvencraft.yasp.managers.CacheManager.Type;
 
 /**
  * Caches entity IDs server-side

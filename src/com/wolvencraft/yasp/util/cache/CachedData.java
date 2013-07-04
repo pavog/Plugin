@@ -24,7 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.CacheManager.Type;
+import com.wolvencraft.yasp.managers.CacheManager.Type;
 
 /**
  * Cached data handler

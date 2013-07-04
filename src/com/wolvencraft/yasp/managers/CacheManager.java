@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp;
+package com.wolvencraft.yasp.managers;
 
 import java.util.List;
 

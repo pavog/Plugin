@@ -25,7 +25,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import com.wolvencraft.yasp.CommandManager.CommandPair;
+import com.wolvencraft.yasp.managers.CommandManager.CommandPair;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.Statistics;
 
