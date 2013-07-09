@@ -30,6 +30,7 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.ConfigTables.ModulesTable;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
 @Getter(AccessLevel.PUBLIC)
@@ -47,15 +48,40 @@ public class ConfigLock implements Runnable {
     public ConfigLock(String moduleName) {
         this.moduleName = moduleName;
         this.hook = false;
-        run();
-        Bukkit.getScheduler().runTaskTimerAsynchronously(Statistics.getInstance(), this, 0L, RemoteConfiguration.Ping.asLong());
+        init();
+    }
+    
+    public ConfigLock(DataStoreType moduleName) {
+        this.moduleName = moduleName.getAlias();
+        this.hook = false;
+        init();
     }
     
     public ConfigLock(String moduleName, boolean hook) {
         this.moduleName = moduleName;
         this.hook = hook;
+        init();
+    }
+    
+    public ConfigLock(DataStoreType moduleName, boolean hook) {
+        this.moduleName = moduleName.getAlias();
+        this.hook = hook;
+        init();
+    }
+    
+    /**
+     * Initializes the scheduled task
+     */
+    private void init() {
         run();
-        Bukkit.getScheduler().runTaskTimerAsynchronously(Statistics.getInstance(), this, 0L, RemoteConfiguration.Ping.asLong());
+        
+        if(process == null)
+        process = Bukkit.getScheduler().runTaskTimerAsynchronously(
+            Statistics.getInstance(),
+            this,
+            0L,
+            RemoteConfiguration.Ping.asLong()
+        );
     }
     
     @Override

@@ -44,7 +44,6 @@ import com.wolvencraft.yasp.util.hooks.MobArenaHook;
 import com.wolvencraft.yasp.util.hooks.PluginHook;
 import com.wolvencraft.yasp.util.hooks.PvpArenaHook;
 import com.wolvencraft.yasp.util.hooks.VanishHook;
-import com.wolvencraft.yasp.util.hooks.VaultHook;
 import com.wolvencraft.yasp.util.hooks.VotifierHook;
 import com.wolvencraft.yasp.util.hooks.WorldGuardHook;
 
@@ -75,10 +74,8 @@ public class HookManager {
             
             if (plManager.getPlugin(hookObj.getPluginName()) == null) {
                 Message.debug(Level.FINER, "|" + Message.centerString(hookObj.getPluginName() + " is not found", 34) + "|");
-            } else if (!hookObj.getModule().isEnabled()) {
-                Message.debug(Level.FINER, "|" + Message.centerString(hookObj.getPluginName() + " is disabled", 34) + "|");
             } else {
-                HookInitEvent event = new HookInitEvent(hookObj.getModule());
+                HookInitEvent event = new HookInitEvent(hookObj.getPatchExtension());
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 if(event.isCancelled()) {
                     Message.log("|" + Message.centerString(hookObj.getPluginName() + " is cancelled", 34) + "|");
@@ -127,7 +124,6 @@ public class HookManager {
         MOB_ARENA       (MobArenaHook.class),
         PVP_ARENA       (PvpArenaHook.class),
         VANISH          (VanishHook.class),
-        VAULT           (VaultHook.class),
         VOTIFIER        (VotifierHook.class),
         WORLD_GUARD     (WorldGuardHook.class)
         ;

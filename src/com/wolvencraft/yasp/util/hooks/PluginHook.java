@@ -26,28 +26,23 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import com.wolvencraft.yasp.db.Database;
-import com.wolvencraft.yasp.db.PatchManager;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 
 @Getter(AccessLevel.PUBLIC)
 public abstract class PluginHook {
     
-    protected Module module;
     protected String patchExtension;
     protected String pluginName;
     
     protected Plugin plugin;
     
     public PluginHook(Module module, String pluginName) {
-        this.module = module;
         this.pluginName = pluginName;
         this.patchExtension = pluginName.toLowerCase().replace(" ", "");
     }
     
     public PluginHook(Module module, String pluginName, String patchExtension) {
-        this.module = module;
         this.pluginName = pluginName;
         this.patchExtension = patchExtension;
     }
@@ -60,14 +55,10 @@ public abstract class PluginHook {
         plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
         
         if (plugin == null) return false;
-        module.setActive(true);
         
-        try {
-            PatchManager.fetch(patchExtension);
-            Database.patchModule(false, module);
-        } catch (Throwable t) {
+        try { patch(); }
+        catch (Throwable t) {
             ExceptionHandler.handle(t);
-            module.setActive(false);
             return false;
         }
         
@@ -92,4 +83,9 @@ public abstract class PluginHook {
      * Extra code to be executed before the hook is disabled
      */
     protected void onDisable() { }
+    
+    /**
+     * Executes the necessary database patch on hook startup
+     */
+    protected void patch() { }
 }

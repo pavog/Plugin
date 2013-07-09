@@ -38,7 +38,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
     
-    public static ConfigLock lock = new ConfigLock(Type.PVE.getAlias());
+    public static ConfigLock lock = new ConfigLock(Type.PVE);
     
     public PVEData(OnlineSession session) {
         super(session, Type.PVE);

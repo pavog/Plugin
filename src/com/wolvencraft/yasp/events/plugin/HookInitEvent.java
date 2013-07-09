@@ -28,7 +28,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.events.StatisticsEvent;
-import com.wolvencraft.yasp.settings.Module;
 
 /**
  * Called when a plugin hook is being initialized by the plugin
@@ -42,9 +41,9 @@ public class HookInitEvent extends StatisticsEvent implements Cancellable {
 
     @Setter(AccessLevel.PUBLIC)
     private boolean cancelled;
-    private Module module;
+    private String module;
     
-    public HookInitEvent(Module module) {
+    public HookInitEvent(String module) {
         this.module = module;
         this.cancelled = false;
     }

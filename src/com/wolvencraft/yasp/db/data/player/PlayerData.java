@@ -35,7 +35,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class PlayerData extends DataStore<BasicPlayerStats, PlayerLogin> {
     
-    public static ConfigLock lock = new ConfigLock(Type.Player.getAlias());
+    public static ConfigLock lock = new ConfigLock(Type.Player);
     
     public PlayerData(OnlineSession session) {
         super(session, Type.Player);

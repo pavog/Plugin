@@ -51,7 +51,7 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         detailedData = new ArrayList<D>();
     }
     
-    public DataStore(OnlineSession session, Type type) {
+    public DataStore(OnlineSession session, DataStoreType type) {
         this.session = session;
         
         this.type = type.getAlias();
@@ -140,6 +140,21 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     }
     
     /**
+     * Generic data store type.
+     * @author bitWolfy
+     *
+     */
+    public static interface DataStoreType {
+        
+        /**
+         * Returns the type alias
+         * @return Data store alias
+         */
+        public String getAlias();
+        
+    }
+    
+    /**
      * Represents different types of built-in modules.
      * Exists for convenience purposes only
      * @author bitWolfy
@@ -147,7 +162,7 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
      */
     @Getter(AccessLevel.PUBLIC)
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public enum Type {
+    public enum Type implements DataStoreType {
         
         Blocks          ("blocks"),
         Deaths          ("deaths"),

@@ -46,7 +46,6 @@ import com.wolvencraft.yasp.db.data.hooks.mobarena.MobArenaData;
 import com.wolvencraft.yasp.db.data.hooks.pvparena.PvpArenaData;
 import com.wolvencraft.yasp.db.data.hooks.towny.TownyData;
 import com.wolvencraft.yasp.db.data.hooks.vanish.VanishData;
-import com.wolvencraft.yasp.db.data.hooks.vault.VaultData;
 import com.wolvencraft.yasp.db.data.hooks.votifier.VotifierData;
 import com.wolvencraft.yasp.db.data.hooks.worldguard.WorldGuardData;
 import com.wolvencraft.yasp.db.data.items.ItemData;
@@ -78,7 +77,6 @@ public enum Module {
     PvpArena    ("pvparena", true, PvpArenaData.class),
     Towny       ("towny", true, TownyData.class),
     Vanish      ("vanishnopacket", true, VanishData.class),
-    Vault       ("vault", true, VaultData.class),
     Votifier    ("votifier", true, VotifierData.class),
     WorldGuard  ("worldguard", true, WorldGuardData.class),
     
