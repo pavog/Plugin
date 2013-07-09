@@ -27,6 +27,6 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class VanishData extends DataStore<VanishPlayerEntry, DetailedData> {
     
     public VanishData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Vanish);
+        super(session, "vanish");
     }
 }

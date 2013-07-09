@@ -42,7 +42,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class ItemData extends DataStore<TotalItemStats, DetailedData> {
     
     public ItemData(OnlineSession session) {
-        super(session, DataStoreType.Items);
+        super(session, "items");
     }
 
     /**
@@ -55,7 +55,7 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
         for(TotalItemStats entry : normalData) {
             if(entry.equals(itemStack)) return entry;
         }
-        TotalItemStats entry = new TotalItemStats(session.getId(), itemStack);
+        TotalItemStats entry = new TotalItemStats(getSession().getId(), itemStack);
         normalData.add(entry);
         return entry;
     }
@@ -72,7 +72,7 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
             ItemDropEntry detailedEntry = new ItemDropEntry(location, itemStack);
             detailedData.add(detailedEntry);
             
-            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemDropEvent(session, detailedEntry));
+            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemDropEvent(getSession(), detailedEntry));
         }
     }
     
@@ -88,7 +88,7 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
             ItemPickupEntry detailedEntry = new ItemPickupEntry(location, itemStack);
             detailedData.add(detailedEntry);
             
-            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemPickupEvent(session, detailedEntry));
+            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemPickupEvent(getSession(), detailedEntry));
         }
     }
     
@@ -104,7 +104,7 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
             ItemConsumeEntry detailedEntry = new ItemConsumeEntry(location, itemStack);
             detailedData.add(detailedEntry);
             
-            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemUseEvent(session, detailedEntry));
+            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemUseEvent(getSession(), detailedEntry));
         }
     }
     

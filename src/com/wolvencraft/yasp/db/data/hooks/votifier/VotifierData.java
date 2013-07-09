@@ -27,7 +27,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class VotifierData extends DataStore<TotalVotifierEntry, DetailedVotifierEntry> {
     
     public VotifierData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Vanish);
+        super(session, "vanish");
     }
     
     public void playerVoted(Vote vote) {
@@ -40,7 +40,7 @@ public class VotifierData extends DataStore<TotalVotifierEntry, DetailedVotifier
         }
         
         if(entry == null) {
-            entry = new TotalVotifierEntry(session.getId(), vote);
+            entry = new TotalVotifierEntry(getSession().getId(), vote);
             normalData.add(entry);
         }
         

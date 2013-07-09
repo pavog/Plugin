@@ -27,7 +27,6 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Normal.BlockTotals;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
@@ -39,8 +38,7 @@ import com.wolvencraft.yasp.util.cache.MaterialCache;
 public class TotalBlockStats extends NormalData {
     
     private BlockState block;
-    private int broken;
-    private int placed;
+    private int broken, placed;
 
     /**
      * <b>Default constructor</b><br />
@@ -57,11 +55,6 @@ public class TotalBlockStats extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         QueryResult result = Query.table(BlockTotals.TableName)
                 .column(BlockTotals.Destroyed)
                 .column(BlockTotals.Placed)
@@ -89,15 +82,10 @@ public class TotalBlockStats extends NormalData {
             .value(BlockTotals.Placed, placed)
             .condition(BlockTotals.PlayerId, playerId)
             .condition(BlockTotals.MaterialId, MaterialCache.parse(block))
-            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+            .update();
+        
         fetchData(playerId);
         return result;
-    }
-    
-    @Override
-    public void clearData(int playerId) {
-        broken = 0;
-        placed = 0;
     }
     
     /**
@@ -114,16 +102,16 @@ public class TotalBlockStats extends NormalData {
     }
     
     /**
-     * Increments the number of blocks to the total number of blocks destroyed
+     * Increments the number of blocks to the total number of blocks broken
      */
     public void addBroken() {
-        broken ++;
+        broken++;
     }
     
     /**
      * Increments the number of blocks to the total number of blocks placed
      */
     public void addPlaced() {
-        placed ++;
+        placed++;
     }
 }

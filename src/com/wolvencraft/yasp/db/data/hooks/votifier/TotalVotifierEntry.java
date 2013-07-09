@@ -28,7 +28,6 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Hook.VotifierTotalsTable;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
 @Getter(AccessLevel.PUBLIC) 
 public class TotalVotifierEntry extends NormalData {
@@ -45,11 +44,6 @@ public class TotalVotifierEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         QueryResult result = Query.table(VotifierTotalsTable.TableName)
                 .column(VotifierTotalsTable.Votes)
                 .condition(VotifierTotalsTable.PlayerId, playerId)
@@ -73,11 +67,6 @@ public class TotalVotifierEntry extends NormalData {
                 .value(VotifierTotalsTable.ServiceName, serviceName)
                 .value(VotifierTotalsTable.Votes, votes)
                 .insert();
-    }
-
-    @Override
-    public void clearData(int playerId) {
-        votes = 0;
     }
     
     public void addVote() {

@@ -27,6 +27,6 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class McMMOData extends DataStore<McMMOPlayerEntry, DetailedData> {
     
     public McMMOData(OnlineSession session) {
-        super(session, DataStoreType.Hook_McMMO);
+        super(session, "mcmmo");
     }
 }

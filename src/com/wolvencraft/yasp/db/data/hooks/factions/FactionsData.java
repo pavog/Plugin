@@ -32,7 +32,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class FactionsData extends DataStore<FactionsPlayerEntry, DetailedData> {
     
     public FactionsData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Factions);
+        super(session, "factions");
     }
     
 }

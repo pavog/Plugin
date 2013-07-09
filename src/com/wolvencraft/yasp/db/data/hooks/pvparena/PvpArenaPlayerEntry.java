@@ -65,9 +65,5 @@ public class PvpArenaPlayerEntry extends NormalData {
             .condition(PvpArenaTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

@@ -60,9 +60,5 @@ public class JailPlayerEntry extends NormalData {
             .condition(JailTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

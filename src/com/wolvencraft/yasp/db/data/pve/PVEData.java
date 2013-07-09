@@ -38,7 +38,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
     
     public PVEData(OnlineSession session) {
-        super(session, DataStoreType.PVE);
+        super(session, Type.PVE);
     }
     
     /**
@@ -52,7 +52,7 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
         for(TotalPVEStats entry : normalData) {
             if(entry.equals(type, weapon)) return entry;
         }
-        TotalPVEStats entry = new TotalPVEStats(session.getId(), type, weapon);
+        TotalPVEStats entry = new TotalPVEStats(getSession().getId(), type, weapon);
         normalData.add(entry);
         return entry;
     }
@@ -67,7 +67,7 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
         PVEEntry detailedEntry = new PVEEntry(victim.getType(), victim.getLocation(), weapon);
         detailedData.add(detailedEntry);
         
-        Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(session, detailedEntry));
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(getSession(), detailedEntry));
     }
     
     /**
@@ -80,7 +80,7 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
         PVEEntry detailedEntry = new PVEEntry(killer.getType(), killer.getLocation());
         detailedData.add(detailedEntry);
         
-        Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(session, detailedEntry));
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(getSession(), detailedEntry));
     }
     
 }

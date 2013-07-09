@@ -451,36 +451,6 @@ public class Query {
         }
         
         /**
-         * Builds and runs the UPDATE query.
-         * @param merged If <b>false</b>, old values will be overwritten
-         * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
-         */
-        public boolean update(boolean merged) {
-            if(!merged) return update();
-            String sql = "UPDATE `" + LocalConfiguration.DBPrefix.toString() + table + "`";
-            
-            String valueString = "";
-            Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
-                if(!valueString.equals("")) valueString += ", ";
-                
-                valueString += "`" + pairs.getKey().toString() + "` = `" + pairs.getKey().toString() + "` + '" + pairs.getValue().toString() + "'";
-                it.remove();
-            }
-            sql += " SET " + valueString;
-            
-            String conditionString = "";
-            for(String str : instance.conditions) {
-                if(!conditionString.equals("")) conditionString += " AND ";
-                conditionString += str;
-            }
-            if(!conditionString.equals("")) sql += " WHERE " + conditionString;
-            
-            return executeUpdate(sql + ";");
-        }
-        
-        /**
          * Deletes a row from the database
          * This method is dangerous and should not be used in normal circumstances
          * @return <b>true</b> if the row was deleted, <b>false</b> if an error occurred

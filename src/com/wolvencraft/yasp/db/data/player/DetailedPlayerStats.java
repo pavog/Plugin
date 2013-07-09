@@ -1,5 +1,5 @@
 /*
- * DetailedLogPlayerEntry.java
+ * DetailedPlayerStats.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.players;
+package com.wolvencraft.yasp.db.data.player;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -36,29 +36,34 @@ import com.wolvencraft.yasp.util.Util;
  *
  */
 @Getter(AccessLevel.PUBLIC)
-public class DetailedLogPlayerEntry extends DetailedData {
+public class DetailedPlayerStats {
     
-    private final long time;
-    private final boolean isLogin;
-    private final Location location;
-    
-    public DetailedLogPlayerEntry(Location location, boolean isLogin) {
-        time = Util.getTimestamp();
-        this.isLogin = isLogin;
-        this.location = location.clone();
-    }
+    @Getter(AccessLevel.PUBLIC)
+    public static class PlayerLogin extends DetailedData {
+        
+        private final long time;
+        private final boolean isLogin;
+        private final Location location;
+        
+        public PlayerLogin(Location location, boolean isLogin) {
+            time = Util.getTimestamp();
+            this.isLogin = isLogin;
+            this.location = location.clone();
+        }
+         
+        @Override
+        public boolean pushData(int playerId) {
+            return Query.table(PlayerLog.TableName)
+                    .value(PlayerLog.PlayerId, playerId)
+                    .value(PlayerLog.Timestamp, time)
+                    .value(PlayerLog.IsLogin, isLogin)
+                    .value(PlayerLog.World, location.getWorld().getName())
+                    .value(PlayerLog.XCoord, location.getBlockX())
+                    .value(PlayerLog.YCoord, location.getBlockY())
+                    .value(PlayerLog.ZCoord, location.getBlockZ())
+                    .insert();
+        }
      
-    @Override
-    public boolean pushData(int playerId) {
-        return Query.table(PlayerLog.TableName)
-                .value(PlayerLog.PlayerId, playerId)
-                .value(PlayerLog.Timestamp, time)
-                .value(PlayerLog.IsLogin, isLogin)
-                .value(PlayerLog.World, location.getWorld().getName())
-                .value(PlayerLog.XCoord, location.getBlockX())
-                .value(PlayerLog.YCoord, location.getBlockY())
-                .value(PlayerLog.ZCoord, location.getBlockZ())
-                .insert();
     }
  
 }

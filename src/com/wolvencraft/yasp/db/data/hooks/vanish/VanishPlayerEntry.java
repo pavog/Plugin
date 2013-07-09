@@ -63,9 +63,5 @@ public class VanishPlayerEntry extends NormalData {
             .condition(VanishTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

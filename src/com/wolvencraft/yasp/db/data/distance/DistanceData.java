@@ -1,5 +1,5 @@
 /*
- * BanHammerData.java
+ * DistanceData.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,15 +18,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.hooks.banhammer;
+package com.wolvencraft.yasp.db.data.distance;
 
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-public class BanHammerData extends DataStore<BanHammerPlayerEntry, DetailedData> {
+/**
+ * Data store that handles player travel distances
+ * @author bitWolfy
+ *
+ */
+public class DistanceData extends DataStore<TotalDistanceStats, DetailedData> {
     
-    public BanHammerData(OnlineSession session) {
-        super(session, "banhammer");
+    public DistanceData(OnlineSession session) {
+        super(session, Type.Distance);
+        normalData.add(new TotalDistanceStats(session.getId()));
     }
+    
+    /**
+     * Increments the distance of the specified type by the amount
+     * @param type Travel type
+     * @param distance Distance travelled
+     */
+    public void playerTravel(PlayerDistance type, double distance) {
+        TotalDistanceStats stats = normalData.get(0);
+        stats.addDistance(type, distance);
+    }
+    
 }

@@ -29,7 +29,6 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Normal.DeathTotals;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
 /**
  * Represents the total number of times a player died of a particular cause.<br />
@@ -52,11 +51,6 @@ public class TotalDeathStats extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         QueryResult result = Query.table(DeathTotals.TableName)
                 .column(DeathTotals.Times)
                 .condition(DeathTotals.PlayerId, playerId)
@@ -80,14 +74,9 @@ public class TotalDeathStats extends NormalData {
                 .value(DeathTotals.Times, times)
                 .condition(DeathTotals.PlayerId, playerId)
                 .condition(DeathTotals.Cause, cause.name())
-                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+                .update();
         fetchData(playerId);
         return result;
-    }
-    
-    @Override
-    public void clearData(int playerId) {
-        times = 0;
     }
     
     /**

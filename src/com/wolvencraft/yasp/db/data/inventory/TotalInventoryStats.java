@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.players;
+package com.wolvencraft.yasp.db.data.inventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ import com.wolvencraft.yasp.util.serializable.InventorySerializable;
  * @author bitWolfy
  *
  */
-public class InventoryEntry extends NormalData {
+public class TotalInventoryStats extends NormalData {
     
     private final String playerName;
     
@@ -49,7 +49,7 @@ public class InventoryEntry extends NormalData {
      * Creates a new InventoryData object based on arguments provided
      * @param playerId Player ID
      */
-    public InventoryEntry(int playerId, Player player) {
+    public TotalInventoryStats(int playerId, Player player) {
         this.playerName = player.getName();
         fetchData(playerId);
     }
@@ -64,10 +64,6 @@ public class InventoryEntry extends NormalData {
             .value(PlayerInv.PlayerId, playerId)
             .insert();
     }
-    
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
     @Override
     public boolean pushData(int playerId) {

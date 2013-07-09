@@ -1,5 +1,5 @@
 /*
- * DistancePlayerEntry.java
+ * TotalDistanceStats.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.players;
+package com.wolvencraft.yasp.db.data.distance;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,7 +27,6 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
 /**
  * Represents the distances a player traveled.
@@ -36,7 +35,7 @@ import com.wolvencraft.yasp.settings.RemoteConfiguration;
  *
  */
 @Getter(AccessLevel.PUBLIC)
-public class DistancePlayerEntry extends NormalData {
+public class TotalDistanceStats extends NormalData {
     
     private double foot;
     private double swim;
@@ -50,7 +49,7 @@ public class DistancePlayerEntry extends NormalData {
      * If no data is found in the database, the default values are inserted.
      * @param playerId ID of the tracked player
      */
-    public DistancePlayerEntry(int playerId) {
+    public TotalDistanceStats(int playerId) {
         foot = 0;
         swim = 0;
         flight = 0;
@@ -63,11 +62,6 @@ public class DistancePlayerEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         QueryResult result = Query.table(PlayerDistance.TableName)
                 .column(PlayerDistance.Foot)
                 .column(PlayerDistance.Swim)
@@ -107,18 +101,9 @@ public class DistancePlayerEntry extends NormalData {
             .value(PlayerDistance.Minecart, minecart)
             .value(PlayerDistance.Ride, ride)
             .condition(PlayerDistance.PlayerId, playerId)
-            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+            .update();
+        fetchData(playerId);
         return result;
-    }
-    
-    @Override
-    public void clearData(int playerId) {
-        foot = 0;
-        swim = 0;
-        flight = 0;
-        boat = 0;
-        minecart = 0;
-        ride = 0;
     }
     
     /**

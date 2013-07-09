@@ -39,7 +39,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
     
     public BlockData(OnlineSession session) {
-        super(session, DataStoreType.Blocks);
+        super(session, Type.Blocks);
     }
 
     /**
@@ -52,7 +52,7 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
         for(TotalBlockStats entry : normalData) {
             if(entry.equals(block)) return entry;
         }
-        TotalBlockStats entry = new TotalBlockStats(session.getId(), block);
+        TotalBlockStats entry = new TotalBlockStats(getSession().getId(), block);
         normalData.add(entry);
         return entry;
     }
@@ -66,7 +66,7 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
         BlockBreakEntry detailedEntry = new BlockBreakEntry(block);
         detailedData.add(detailedEntry);
         
-        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockBreakEvent(session, detailedEntry));
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockBreakEvent(getSession(), detailedEntry));
     }
     
     /**
@@ -78,7 +78,7 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
         BlockPlaceEntry detailedEntry = new BlockPlaceEntry(block);
         detailedData.add(detailedEntry);
         
-        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlaceEvent(session, detailedEntry));
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlaceEvent(getSession(), detailedEntry));
     }
     
 }

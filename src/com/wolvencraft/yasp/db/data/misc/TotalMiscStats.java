@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.players;
+package com.wolvencraft.yasp.db.data.misc;
 
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -32,7 +32,6 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.DBTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 
@@ -41,7 +40,7 @@ import com.wolvencraft.yasp.util.cache.SessionCache;
  * @author bitWolfy
  *
  */
-public class MiscInfoPlayerEntry extends NormalData {
+public class TotalMiscStats extends NormalData {
 
     private final String playerName;
     private Map<DBTable, Object> values;
@@ -52,7 +51,7 @@ public class MiscInfoPlayerEntry extends NormalData {
      * @param playerId Player ID
      * @param player Player object
      */
-    public MiscInfoPlayerEntry(int playerId, Player player) {
+    public TotalMiscStats(int playerId, Player player) {
         playerName = player.getName();
         
         values = new HashMap<DBTable, Object>();
@@ -94,11 +93,6 @@ public class MiscInfoPlayerEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         QueryResult result = Query.table(PlayerData.TableName)
             .condition(PlayerData.PlayerId, playerId)
             .select();
@@ -129,7 +123,7 @@ public class MiscInfoPlayerEntry extends NormalData {
         boolean result = Query.table(PlayerData.TableName)
             .valueRaw(values)
             .condition(PlayerData.PlayerId, playerId)
-            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+            .update();
         fetchData(playerId);
         return result;
     }

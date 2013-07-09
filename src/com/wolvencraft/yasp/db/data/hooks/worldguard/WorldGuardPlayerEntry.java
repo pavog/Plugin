@@ -67,11 +67,5 @@ public class WorldGuardPlayerEntry extends NormalData {
              .condition(WorldGuardTable.PlayerId, playerId)
              .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
-    
-    
     
 }

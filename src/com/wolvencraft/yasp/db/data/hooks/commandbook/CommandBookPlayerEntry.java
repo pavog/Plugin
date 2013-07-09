@@ -65,9 +65,5 @@ public class CommandBookPlayerEntry extends NormalData {
             .condition(CommandBookTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

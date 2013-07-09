@@ -25,7 +25,6 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Hook.VaultTable;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.hooks.VaultHook;
 import com.wolvencraft.yasp.util.serializable.GroupsSerializable;
 
@@ -57,11 +56,6 @@ public class VaultPlayerEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         groups = GroupsSerializable.serialize(playerName);
         balance = VaultHook.getBalance(playerName);
         
@@ -84,9 +78,5 @@ public class VaultPlayerEntry extends NormalData {
             .condition(VaultTable.PlayerId, playerId)
             .update();
     }
-    
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

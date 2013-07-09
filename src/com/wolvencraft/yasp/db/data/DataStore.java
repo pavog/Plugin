@@ -1,5 +1,5 @@
 /*
- * AdvancedDataStore.java
+ * DataStore.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.wolvencraft.yasp.session.OnlineSession;
@@ -35,17 +36,41 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     
-    @Getter(AccessLevel.PUBLIC) private DataStoreType type;
-    @Getter(AccessLevel.PUBLIC) protected OnlineSession session;
+    @Getter(AccessLevel.PUBLIC) private OnlineSession session;
+    @Getter(AccessLevel.PUBLIC) private ConfigLock lock;
+    
+    @Getter(AccessLevel.PUBLIC) private String type;
     
     protected List<N> normalData;
     protected List<D> detailedData;
     
-    public DataStore(OnlineSession session, DataStoreType type) {
+    public DataStore(OnlineSession session, String type) {
         this.session = session;
-        this.type = type;
-        this.normalData = new ArrayList<N>();
-        this.detailedData = new ArrayList<D>();
+        
+        this.type = type.replace(" ", "_");
+        lock = new ConfigLock(this.type);
+        
+        normalData = new ArrayList<N>();
+        detailedData = new ArrayList<D>();
+    }
+    
+    public DataStore(OnlineSession session, Type type) {
+        this.session = session;
+        
+        this.type = type.getAlias();
+        lock = new ConfigLock(this.type);
+        
+        normalData = new ArrayList<N>();
+        detailedData = new ArrayList<D>();
+    }
+    
+    public DataStore(OnlineSession session, String type, boolean versioned) {
+        this.session = session;
+        
+        lock = new ConfigLock(type.replace(" ", "_"), versioned);
+        
+        normalData = new ArrayList<N>();
+        detailedData = new ArrayList<D>();
     }
     
     /**
@@ -70,6 +95,8 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
      * If an entry was not synchronized, it will not be removed.
      */
     public void pushData() {
+        if(!lock.isEnabled()) return;
+        
         for(N entry : getNormalData()) {
             if(((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
         }
@@ -92,31 +119,23 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         }
     }
     
-    /**
-     * Represents the data store type
-     * @author bitWolfy
-     *
-     */
-    public enum DataStoreType {
-        Blocks,
-        Items,
-        Deaths,
-        PVE,
-        PVP,
+    @Getter(AccessLevel.PUBLIC)
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    public enum Type {
         
-        Hook_AdminCmd,
-        Hook_BanHammer,
-        Hook_CommandBook,
-        Hook_Factions,
-        Hook_Jail,
-        Hook_McMMO,
-        Hook_MobArena,
-        Hook_PvpArena,
-        Hook_Towny,
-        Hook_Vanish,
-        Hook_Vault,
-        Hook_Votifier,
-        Hook_WorldGuard;
+        Blocks          ("blocks"),
+        Deaths          ("deaths"),
+        Distance        ("distance"),
+        Inventory       ("inventory"),
+        Items           ("items"),
+        Misc            ("misc"),
+        Player          ("player"),
+        PVE             ("pve"),
+        PVP             ("pvp"),
+        ;
+        
+        private String alias;
+        
     }
-
+    
 }

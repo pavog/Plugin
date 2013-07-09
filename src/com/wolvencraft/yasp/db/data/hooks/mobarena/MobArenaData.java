@@ -27,6 +27,6 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class MobArenaData extends DataStore<MobArenaPlayerEntry, DetailedData> {
     
     public MobArenaData(OnlineSession session) {
-        super(session, DataStoreType.Hook_MobArena);
+        super(session, "mobarena");
     }
 }

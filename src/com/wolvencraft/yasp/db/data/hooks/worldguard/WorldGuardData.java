@@ -32,7 +32,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class WorldGuardData extends DataStore<WorldGuardPlayerEntry, DetailedData> {
     
     public WorldGuardData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Vault);
+        super(session, "worldguard");
     }
 
 }

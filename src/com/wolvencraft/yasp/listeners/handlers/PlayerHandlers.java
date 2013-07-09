@@ -31,8 +31,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
+import com.wolvencraft.yasp.db.data.DataStore.Type;
+import com.wolvencraft.yasp.db.data.misc.MiscData;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 
@@ -72,7 +74,7 @@ public class PlayerHandlers {
             } else {
                 OnlineSession session = SessionCache.fetch(player);
                 if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
-                    session.getPlayersData().getMiscData().incrementStat(PlayerData.TimesJumped);
+                    ((MiscData) session.getDataStore(Type.Misc)).get().incrementStat(PlayerData.TimesJumped);
                 SessionCache.fetch(player).addDistance(PlayerDistance.Foot, distance);
             }
         }
@@ -98,11 +100,7 @@ public class PlayerHandlers {
         
         @Override
         public void run() {
-            SessionCache
-                .fetch(player)
-                .getPlayersData()
-                .getMiscData()
-                .incrementStat(stat, value);
+            ((MiscData) SessionCache.fetch(player).getDataStore(Type.Misc)).get().incrementStat(stat, value);
         }
     }
 }

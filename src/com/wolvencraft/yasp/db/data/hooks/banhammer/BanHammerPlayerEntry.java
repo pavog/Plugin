@@ -56,9 +56,5 @@ public class BanHammerPlayerEntry extends NormalData {
             .condition(BanHammerTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

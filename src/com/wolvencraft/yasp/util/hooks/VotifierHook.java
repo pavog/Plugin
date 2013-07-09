@@ -29,7 +29,6 @@ import org.bukkit.event.Listener;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.model.VotifierEvent;
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.hooks.votifier.VotifierData;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.cache.SessionCache;
@@ -50,7 +49,7 @@ public class VotifierHook extends PluginHook implements Listener {
         Vote vote = event.getVote();
         Player player = Bukkit.getPlayerExact(vote.getUsername());
         if(player == null) return;
-        VotifierData dataStore = (VotifierData) SessionCache.fetch(player).getDataStore(DataStoreType.Hook_Votifier);
+        VotifierData dataStore = (VotifierData) SessionCache.fetch(player).getDataStore("votifier");
         if(dataStore == null) return;
         dataStore.playerVoted(vote);
     }

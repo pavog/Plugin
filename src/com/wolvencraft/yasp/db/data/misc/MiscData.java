@@ -1,5 +1,5 @@
 /*
- * StatisticsPlayerEvent.java
+ * MiscData.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,34 +18,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.events;
+package com.wolvencraft.yasp.db.data.misc;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-
-import org.bukkit.Bukkit;
-import org.bukkit.event.player.PlayerEvent;
-
+import com.wolvencraft.yasp.db.data.DataStore;
+import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
 
-@Getter(AccessLevel.PUBLIC)
-public abstract class StatisticsPlayerEvent extends PlayerEvent {
+/**
+ * Data store that records miscellaneous statistics.
+ * Very peculiar data holder - only holds one item.
+ * @author bitWolfy
+ *
+ */
+public class MiscData extends DataStore<TotalMiscStats, DetailedData> {
     
-    private OnlineSession session;
-    private PlayerVariable actionType;
-    
-    public StatisticsPlayerEvent(OnlineSession session, PlayerVariable actionType) {
-        super(Bukkit.getServer().getPlayer(session.getName()));
-        this.session = session;
-        this.actionType = actionType;
+    public MiscData(OnlineSession session) {
+        super(session, Type.Misc);
+        
+        normalData.add(new TotalMiscStats(session.getId(), session.getBukkitPlayer()));
     }
     
     /**
-     * Returns the data associated with the event as a parameter
-     * @deprecated Unsafe and unreliable
-     * @return Parameter String
+     * Returns the only item this data store holds
+     * @return Data storage unit
      */
-    public abstract String getParameterString();
-
+    public TotalMiscStats get() {
+        return normalData.get(0);
+    }
+    
 }

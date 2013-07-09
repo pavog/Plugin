@@ -67,9 +67,5 @@ public class McMMOPlayerEntry extends NormalData {
             .condition(McMMOTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

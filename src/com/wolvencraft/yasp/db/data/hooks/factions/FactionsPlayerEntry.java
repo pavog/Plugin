@@ -73,9 +73,5 @@ public class FactionsPlayerEntry extends NormalData {
             .condition(FactionsTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

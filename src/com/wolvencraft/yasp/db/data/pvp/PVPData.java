@@ -38,7 +38,7 @@ import com.wolvencraft.yasp.util.cache.PlayerCache;
 public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
     
     public PVPData(OnlineSession session) {
-        super(session, DataStoreType.PVP);
+        super(session, Type.PVP);
     }
     
     /**
@@ -52,7 +52,7 @@ public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
         for(TotalPVPStats entry : normalData) {
             if(entry.equals(victimId, weapon)) return entry;
         }
-        TotalPVPStats entry = new TotalPVPStats(session.getId(), victimId, weapon);
+        TotalPVPStats entry = new TotalPVPStats(getSession().getId(), victimId, weapon);
         normalData.add(entry);
         return entry;
     }
@@ -68,7 +68,7 @@ public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
         PVPEntry detailedEntry = new PVPEntry(victim.getLocation(), victimId, weapon);
         detailedData.add(detailedEntry);
         
-        Bukkit.getServer().getPluginManager().callEvent(new TrackedPVPEvent(session, detailedEntry));
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedPVPEvent(getSession(), detailedEntry));
     }
     
 }

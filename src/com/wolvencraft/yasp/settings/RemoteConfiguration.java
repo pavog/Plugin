@@ -45,7 +45,6 @@ public enum RemoteConfiguration {
     FirstJoinMessage            ("first_join_message"),
     
     VanishDisablesTracking      ("hook.vanish.no_tracking"),
-    MergedDataTracking          ("merged_data_tracking"),
     ;
     
     String key;
@@ -90,6 +89,16 @@ public enum RemoteConfiguration {
     public int asInteger() { 
         if(refreshScheduled) updateCacheAsynchronously();
         try { return entry.asInt("value"); }
+        catch (Throwable t) { com.wolvencraft.yasp.util.Message.log("Entry is null (" + t.getMessage() + ")"); return 0; }
+    }
+    
+    /**
+     * Returns the configuration value as a long
+     * @return Configuration value
+     */
+    public long asLong() { 
+        if(refreshScheduled) updateCacheAsynchronously();
+        try { return entry.asLong("value"); }
         catch (Throwable t) { com.wolvencraft.yasp.util.Message.log("Entry is null (" + t.getMessage() + ")"); return 0; }
     }
     

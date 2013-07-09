@@ -42,7 +42,7 @@ public class DeathData extends DataStore<TotalDeathStats, NaturalDeathEntry> {
      * @param session Player session
      */
     public DeathData(OnlineSession session) {
-        super(session, DataStoreType.Deaths);
+        super(session, Type.Deaths);
     }
     
     /**
@@ -57,7 +57,7 @@ public class DeathData extends DataStore<TotalDeathStats, NaturalDeathEntry> {
         }
         
         if(entry == null) {
-            entry = new TotalDeathStats(session.getId(), cause);
+            entry = new TotalDeathStats(getSession().getId(), cause);
             normalData.add(entry);
         }
         
@@ -65,7 +65,7 @@ public class DeathData extends DataStore<TotalDeathStats, NaturalDeathEntry> {
         NaturalDeathEntry detailedEntry = new NaturalDeathEntry(location, cause);
         detailedData.add(detailedEntry);
         
-        Bukkit.getServer().getPluginManager().callEvent(new NaturalDeathEvent(session, detailedEntry));
+        Bukkit.getServer().getPluginManager().callEvent(new NaturalDeathEvent(getSession(), detailedEntry));
     }
     
 }

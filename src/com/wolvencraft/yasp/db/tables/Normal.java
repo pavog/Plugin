@@ -249,27 +249,4 @@ public class Normal {
         public String toString() { return columnName; }
     }
     
-    /**
-     * Represents the <i>player_locations</i> table.
-     * @author bitWolfy
-     *
-     */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    @Getter(AccessLevel.PUBLIC)
-    public enum PlayerLocations implements DBTable {
-        TableName       ("player_locations"),
-        PlayerId        ("player_id"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        Biome           ("biome"),
-        Humidity        ("humidity")
-        ;
-        
-        private String columnName;
-        
-        @Override
-        public String toString() { return columnName; }
-    }
 }

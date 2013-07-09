@@ -29,13 +29,13 @@ import org.bukkit.ChatColor;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.db.tables.Normal.BlockTotals;
 import com.wolvencraft.yasp.db.tables.Normal.DeathTotals;
 import com.wolvencraft.yasp.db.tables.Normal.ItemTotals;
 import com.wolvencraft.yasp.db.tables.Normal.PVETotals;
 import com.wolvencraft.yasp.db.tables.Normal.PVPTotals;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
+import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;

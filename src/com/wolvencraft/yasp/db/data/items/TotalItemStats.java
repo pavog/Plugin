@@ -28,7 +28,6 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Normal.ItemTotals;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
@@ -72,11 +71,6 @@ public class TotalItemStats extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         QueryResult result = Query.table(ItemTotals.TableName)
                 .column(ItemTotals.Dropped)
                 .column(ItemTotals.PickedUp)
@@ -128,21 +122,9 @@ public class TotalItemStats extends NormalData {
                 .value(ItemTotals.Repaired, repaired)
                 .condition(ItemTotals.PlayerId, playerId)
                 .condition(ItemTotals.MaterialId, MaterialCache.parse(stack))
-                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+                .update();
         fetchData(playerId);
         return result;
-    }
-    
-    @Override
-    public void clearData(int playerId) {
-        dropped = 0;
-        pickedUp = 0;
-        used = 0;
-        crafted = 0;
-        broken = 0;
-        smelted = 0;
-        enchanted = 0;
-        repaired = 0;
     }
     
     /**

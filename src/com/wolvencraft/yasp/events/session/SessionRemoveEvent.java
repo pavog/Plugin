@@ -20,8 +20,8 @@
 
 package com.wolvencraft.yasp.events.session;
 
-import lombok.AllArgsConstructor;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
 import org.bukkit.event.HandlerList;
 

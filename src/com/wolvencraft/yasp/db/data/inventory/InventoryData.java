@@ -1,5 +1,5 @@
 /*
- * BanHammerData.java
+ * InventoryData.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,15 +18,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.data.hooks.banhammer;
+package com.wolvencraft.yasp.db.data.inventory;
 
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
-public class BanHammerData extends DataStore<BanHammerPlayerEntry, DetailedData> {
+/**
+ * Data store that handles player inventory
+ * @author bitWolfy
+ *
+ */
+public class InventoryData extends DataStore<TotalInventoryStats, DetailedData> {
     
-    public BanHammerData(OnlineSession session) {
-        super(session, "banhammer");
+    public InventoryData(OnlineSession session) {
+        super(session, Type.Inventory);
+        normalData.add(new TotalInventoryStats(session.getId(), session.getBukkitPlayer()));
     }
+    
 }

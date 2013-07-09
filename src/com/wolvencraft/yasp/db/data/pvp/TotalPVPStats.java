@@ -26,7 +26,6 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.Normal.PVPTotals;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**
@@ -59,11 +58,6 @@ public class TotalPVPStats extends NormalData {
     
     @Override
     public void fetchData(int killerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(killerId);
-            return;
-        }
-        
         QueryResult result = Query.table(PVPTotals.TableName)
                 .column(PVPTotals.Times)
                 .condition(PVPTotals.PlayerId, killerId)
@@ -89,14 +83,9 @@ public class TotalPVPStats extends NormalData {
                 .condition(PVPTotals.PlayerId, killerId)
                 .condition(PVPTotals.VictimId, victimId)
                 .condition(PVPTotals.MaterialId, MaterialCache.parse(weapon))
-                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+                .update();
         fetchData(killerId);
         return result;
-    }
-    
-    @Override
-    public void clearData(int playerId) {
-        times = 0;
     }
     
     /**

@@ -32,7 +32,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class VaultData extends DataStore<VaultPlayerEntry, DetailedData> {
     
     public VaultData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Vault);
+        super(session, "vault");
     }
     
 }

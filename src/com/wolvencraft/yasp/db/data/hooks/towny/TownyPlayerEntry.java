@@ -60,9 +60,5 @@ public class TownyPlayerEntry extends NormalData {
             .condition(TownyTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

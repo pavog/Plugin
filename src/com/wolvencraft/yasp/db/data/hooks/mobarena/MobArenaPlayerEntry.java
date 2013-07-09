@@ -65,9 +65,5 @@ public class MobArenaPlayerEntry extends NormalData {
             .condition(MobArenaTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }

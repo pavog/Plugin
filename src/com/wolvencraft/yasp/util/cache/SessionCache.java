@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.data.player.PlayerData;
 import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.events.session.SessionCreateEvent;
@@ -65,7 +66,9 @@ public class SessionCache extends CachedData {
             public void run() {
                 for(Player player : Bukkit.getServer().getOnlinePlayers()) {
                     if(StatPerms.Statistics.has(player))
-                        fetch(player).getPlayersData().addPlayerLog(player.getLocation(), true);
+                        ((PlayerData) fetch(player, true)
+                                .getDataStore(com.wolvencraft.yasp.db.data.DataStore.Type.Player))
+                                .addPlayerLog(player.getLocation(), true);
                 }
             }
             
@@ -81,7 +84,10 @@ public class SessionCache extends CachedData {
             removeSession(session);
             
             long delay = RemoteConfiguration.LogDelay.asInteger();
-            if(delay == 0 || session.getPlayersData().getGeneralData().getTotalPlaytime() > delay) continue;
+            
+            if(delay == 0) continue;
+            long totalPlaytime = ((PlayerData) session.getDataStore(com.wolvencraft.yasp.db.data.DataStore.Type.Player)).get().getTotalPlaytime();
+            if(totalPlaytime > delay) continue;
             
             Query.table(Normal.PlayerStats.TableName)
                 .condition(PlayerStats.Name, session.getName())

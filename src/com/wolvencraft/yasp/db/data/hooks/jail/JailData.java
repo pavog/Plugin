@@ -27,6 +27,6 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public class JailData extends DataStore<JailPlayerEntry, DetailedData> {
     
     public JailData(OnlineSession session) {
-        super(session, DataStoreType.Hook_Jail);
+        super(session, "jail");
     }
 }

@@ -63,8 +63,8 @@ public enum Module {
     
     Server      ("server", false),
     Blocks      ("blocks", false, BlockData.class),
-    Items       ("items", false, ItemData.class),
     Deaths      ("deaths", false, DeathData.class, PVEData.class, PVPData.class),
+    Items       ("items", false, ItemData.class),
     Inventory   ("inventory", false),
     
     AdminCmd    ("admincmd", true, AdminCmdData.class),

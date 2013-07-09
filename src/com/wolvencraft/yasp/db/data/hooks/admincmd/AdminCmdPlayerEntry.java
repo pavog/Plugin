@@ -67,9 +67,5 @@ public class AdminCmdPlayerEntry extends NormalData {
             .condition(AdminCmdTable.PlayerId, playerId)
             .update();
     }
-
-    @Override
-    @Deprecated
-    public void clearData(int playerId) { }
     
 }
