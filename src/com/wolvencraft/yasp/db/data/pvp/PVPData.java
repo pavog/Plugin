@@ -24,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.db.data.ConfigLock;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.pvp.DetailedPVPStats.PVPEntry;
 import com.wolvencraft.yasp.events.player.TrackedPVPEvent;
@@ -37,8 +38,15 @@ import com.wolvencraft.yasp.util.cache.PlayerCache;
  */
 public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
     
+    public static ConfigLock lock = new ConfigLock(Type.PVP);
+    
     public PVPData(OnlineSession session) {
         super(session, Type.PVP);
+    }
+    
+    @Override
+    public boolean onDataSync() {
+        return lock.isEnabled();
     }
     
     /**
@@ -49,11 +57,11 @@ public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
      * @return Corresponding entry
      */
     public TotalPVPStats getNormalData(int victimId, ItemStack weapon) {
-        for(TotalPVPStats entry : normalData) {
+        for(TotalPVPStats entry : getNormalData()) {
             if(entry.equals(victimId, weapon)) return entry;
         }
         TotalPVPStats entry = new TotalPVPStats(getSession().getId(), victimId, weapon);
-        normalData.add(entry);
+        addNormalDataEntry(entry);
         return entry;
     }
     
@@ -66,7 +74,7 @@ public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
         int victimId = PlayerCache.get(victim);
         getNormalData(victimId, weapon).addTimes();
         PVPEntry detailedEntry = new PVPEntry(victim.getLocation(), victimId, weapon);
-        detailedData.add(detailedEntry);
+        addDetailedDataEntry(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVPEvent(getSession(), detailedEntry));
     }

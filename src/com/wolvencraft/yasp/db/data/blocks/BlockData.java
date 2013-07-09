@@ -23,6 +23,7 @@ package com.wolvencraft.yasp.db.data.blocks;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 
+import com.wolvencraft.yasp.db.data.ConfigLock;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.db.data.blocks.DetailedBlockStats.BlockBreakEntry;
@@ -38,10 +39,17 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
     
+    public static ConfigLock lock = new ConfigLock(Type.Blocks);
+    
     public BlockData(OnlineSession session) {
         super(session, Type.Blocks);
     }
-
+    
+    @Override
+    public boolean onDataSync() {
+        return lock.isEnabled();
+    }
+    
     /**
      * Returns the specific entry from the data store.<br />
      * If the entry does not exist, it will be created.
@@ -49,11 +57,11 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
      * @return Corresponding entry
      */
     private TotalBlockStats getNormalData(BlockState block) {
-        for(TotalBlockStats entry : normalData) {
+        for(TotalBlockStats entry : getNormalData()) {
             if(entry.equals(block)) return entry;
         }
         TotalBlockStats entry = new TotalBlockStats(getSession().getId(), block);
-        normalData.add(entry);
+        addNormalDataEntry(entry);
         return entry;
     }
     
@@ -64,7 +72,7 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
     public void blockBreak(BlockState block) {
         getNormalData(block).addBroken();
         BlockBreakEntry detailedEntry = new BlockBreakEntry(block);
-        detailedData.add(detailedEntry);
+        addDetailedDataEntry(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockBreakEvent(getSession(), detailedEntry));
     }
@@ -76,7 +84,7 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
     public void blockPlace(BlockState block) {
         getNormalData(block).addPlaced();
         BlockPlaceEntry detailedEntry = new BlockPlaceEntry(block);
-        detailedData.add(detailedEntry);
+        addDetailedDataEntry(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlaceEvent(getSession(), detailedEntry));
     }

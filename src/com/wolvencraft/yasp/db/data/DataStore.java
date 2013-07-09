@@ -37,18 +37,15 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     
     @Getter(AccessLevel.PUBLIC) private OnlineSession session;
-    @Getter(AccessLevel.PUBLIC) private ConfigLock lock;
-    
     @Getter(AccessLevel.PUBLIC) private String type;
     
-    protected List<N> normalData;
-    protected List<D> detailedData;
+    private List<N> normalData;
+    private List<D> detailedData;
     
     public DataStore(OnlineSession session, String type) {
         this.session = session;
         
         this.type = type.replace(" ", "_");
-        lock = new ConfigLock(this.type);
         
         normalData = new ArrayList<N>();
         detailedData = new ArrayList<D>();
@@ -58,7 +55,6 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         this.session = session;
         
         this.type = type.getAlias();
-        lock = new ConfigLock(this.type);
         
         normalData = new ArrayList<N>();
         detailedData = new ArrayList<D>();
@@ -66,8 +62,6 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     
     public DataStore(OnlineSession session, String type, boolean versioned) {
         this.session = session;
-        
-        lock = new ConfigLock(type.replace(" ", "_"), versioned);
         
         normalData = new ArrayList<N>();
         detailedData = new ArrayList<D>();
@@ -78,24 +72,50 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
      * Asynchronous method; changes to the returned List will not affect the data store.
      * @return Dynamic entries in the data store
      */
-    public List<N> getNormalData() {
+    public final List<N> getNormalData() {
         return new ArrayList<N>(normalData);
+    }
+    
+    /**
+     * Adds a new entry to the normal datastore
+     * @param entry Entry to add
+     */
+    public final void addNormalDataEntry(N entry) {
+        normalData.add(entry);
     }
     
     /**
      * Returns the static entries in the data store.
      * @return Static entries in the data store
      */
-    public List<D> getDetailedData() {
+    public final List<D> getDetailedData() {
         return new ArrayList<D>(detailedData);
+    }
+    
+    /**
+     * Adds a new entry to the detailed datastore
+     * @param entry Entry to add
+     */
+    public final void addDetailedDataEntry(D entry) {
+        detailedData.add(entry);
+    }
+    
+    /**
+     * Check before the synchronization starts.
+     * Return <b>true</b> to perform a synch, or <b>false</b> to cancel it.
+     * No data will be lost.
+     * @return <b>true</b> to perform a synch, or <b>false</b> to cancel it.
+     */
+    public boolean onDataSync() {
+        return true;
     }
     
     /**
      * Synchronizes the data from the data store to the database, then removes it from local storage<br />
      * If an entry was not synchronized, it will not be removed.
      */
-    public void pushData() {
-        if(!lock.isEnabled()) return;
+    public final void pushData() {
+        if(!onDataSync()) return;
         
         for(N entry : getNormalData()) {
             if(((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
@@ -109,7 +129,7 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     /**
      * Clears the data store of all locally stored data.
      */
-    public void dump() {
+    public final void dump() {
         for(N entry : getNormalData()) {
             normalData.remove(entry);
         }
@@ -119,6 +139,12 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         }
     }
     
+    /**
+     * Represents different types of built-in modules.
+     * Exists for convenience purposes only
+     * @author bitWolfy
+     *
+     */
     @Getter(AccessLevel.PUBLIC)
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     public enum Type {

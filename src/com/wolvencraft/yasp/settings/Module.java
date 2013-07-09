@@ -30,9 +30,9 @@ import org.bukkit.Bukkit;
 
 import com.google.common.collect.Lists;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.blocks.BlockData;
 import com.wolvencraft.yasp.db.data.deaths.DeathData;

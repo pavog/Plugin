@@ -1,3 +1,23 @@
+/*
+ * ConfigLock.java
+ * 
+ * Statistics
+ * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.wolvencraft.yasp.db.data;
 
 import lombok.AccessLevel;
@@ -7,145 +27,63 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.db.ConfigTables.ModulesTable;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
+import com.wolvencraft.yasp.db.data.DataStore.Type;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
+@Getter(AccessLevel.PUBLIC)
 public class ConfigLock implements Runnable {
     
+    @Getter(AccessLevel.NONE)
     private BukkitTask process;
     
-    private String configKey;
-    private boolean refreshScheduled;
+    private String moduleName;
     private boolean enabled;
-    
-    @Getter(AccessLevel.PUBLIC)
-    private boolean versioned;
+    private int loadOrder;
     private int version;
     
-    /**
-     * Default constructor
-     * @param configKey Configuration key
-     */
-    public ConfigLock(String configKey) {
-        this.configKey = configKey;
-        this.versioned = false;
-        
-        enabled = false;
-        version = 0;
-        
-        try { updateCacheAsynchronously(); }
-        catch(Throwable t) { }
-        
-        refreshScheduled = false;
-        
-        process = Bukkit.getScheduler().runTaskTimerAsynchronously(Statistics.getInstance(), this, 0L, RemoteConfiguration.Ping.asLong());
+    public ConfigLock(Type moduleName) {
+        this.moduleName = moduleName.getAlias();
+        run();
+        Bukkit.getScheduler().runTaskTimerAsynchronously(Statistics.getInstance(), this, 0L, RemoteConfiguration.Ping.asLong());
     }
     
-    /**
-     * Constructor
-     * @param configKey Configuration key
-     * @param versioned Should the version be checked?
-     */
-    public ConfigLock(String configKey, boolean versioned) {
-        this.configKey = configKey;
-        this.versioned = versioned;
-        
-        enabled = false;
-        version = 0;
-        
-        try { updateCache(); }
-        catch(Throwable t) { }
-        
-        refreshScheduled = false;
-        
-        process = Bukkit.getScheduler().runTaskTimerAsynchronously(Statistics.getInstance(), this, 0L, RemoteConfiguration.Ping.asLong());
+    public ConfigLock(String moduleName) {
+        this.moduleName = moduleName;
+        run();
+        Bukkit.getScheduler().runTaskTimerAsynchronously(Statistics.getInstance(), this, 0L, RemoteConfiguration.Ping.asLong());
     }
     
-    /**
-     * Schedules all the modules to refresh
-     */
     @Override
     public void run() {
-        refreshScheduled = true;
-    }
-
-    /**
-     * Returns the state of the module specified in the configuration.
-     * @return <b>true</b> if the module is enabled, <b>false</b> if it is not
-     */
-    public boolean isEnabled() {
-        if(refreshScheduled) updateCacheAsynchronously();
-        return enabled;
-    }
-
-    /**
-     * Returns the version of the module.<br />
-     * Only relevant if the module is a plugin hook.
-     * @return Module version
-     */
-    public int getVersion() {
-        if(refreshScheduled) updateCacheAsynchronously();
-        return version;
-    }
-    
-    /**
-     * Sets the new version of the module.<br />
-     * Updates the version in the database if the module is a hook
-     * @param version New version
-     */
-    public void setVersion(int version) {
-        if(refreshScheduled) updateCacheAsynchronously();
-        this.version = version;
-        if(!versioned) return;
-        String versionKey = "version." + configKey;
-        Query.table(SettingsTable.TableName)
-             .value("value", version)
-             .condition("key", versionKey)
-             .update();
-    }
-    
-    /**
-     * Fetches the module variables from the database
-     */
-    private void updateCache() {
-        String stateKey = "module." + configKey;
-        if(versioned) {
-            
-            String versionKey = "version." + configKey;
-            QueryResult versionResult = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select();
-            if(versionResult == null) {
-                Query.table(SettingsTable.TableName).value("key", versionKey).value("value", 0).insert();
-                version = 0;
-            } else {
-                version = versionResult.asInt("value");
-            }
-        } else version = 0;
+        QueryResult result = Query.table(ModulesTable.TableName)
+            .column(ModulesTable.IsEnabled, ModulesTable.LoadOrder, ModulesTable.Version)
+            .condition(ModulesTable.Name, moduleName)
+            .select();
         
-        QueryResult enabledResult = Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).select();
-        if(enabledResult == null) {
-            Query.table(SettingsTable.TableName).value("key", stateKey).value("value", false).insert();
+        if(result == null) {
             enabled = true;
+            loadOrder = 0;
+            version = 0;
+            
+            Query.table(ModulesTable.TableName)
+                .value(ModulesTable.Name, moduleName)
+                .value(ModulesTable.IsEnabled, enabled)
+                .value(ModulesTable.LoadOrder, loadOrder)
+                .value(ModulesTable.Version, version)
+                .insert();
         } else {
-            enabled = enabledResult.asBoolean("value");
+            enabled = result.asBoolean(ModulesTable.IsEnabled);
+            loadOrder = result.asInt(ModulesTable.LoadOrder);
+            version = result.asInt(ModulesTable.Version);
         }
-    }
-    
-    /**
-     * Fetches the module variables from the database asynchronously
-     */
-    private void updateCacheAsynchronously() {
-        if(!Statistics.getInstance().isEnabled()) return;
-        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
-            @Override
-            public void run() { updateCache(); }
-        });
     }
     
     @Override
     public void finalize() {
-        process.cancel();
+        if(process != null) process.cancel();
     }
     
 }

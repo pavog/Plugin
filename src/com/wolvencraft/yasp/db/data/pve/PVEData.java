@@ -25,6 +25,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.db.data.ConfigLock;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.pve.DetailedPVEStats.PVEEntry;
 import com.wolvencraft.yasp.events.player.TrackedPVEEvent;
@@ -37,8 +38,15 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
     
+    public static ConfigLock lock = new ConfigLock(Type.PVE);
+    
     public PVEData(OnlineSession session) {
         super(session, Type.PVE);
+    }
+    
+    @Override
+    public boolean onDataSync() {
+        return lock.isEnabled();
     }
     
     /**
@@ -49,11 +57,11 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
      * @return Corresponding entry
      */
     public TotalPVEStats getNormalData(EntityType type, ItemStack weapon) {
-        for(TotalPVEStats entry : normalData) {
+        for(TotalPVEStats entry : getNormalData()) {
             if(entry.equals(type, weapon)) return entry;
         }
         TotalPVEStats entry = new TotalPVEStats(getSession().getId(), type, weapon);
-        normalData.add(entry);
+        addNormalDataEntry(entry);
         return entry;
     }
     
@@ -65,7 +73,7 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
     public void playerKilledCreature(Entity victim, ItemStack weapon) {
         getNormalData(victim.getType(), weapon).addCreatureDeaths();
         PVEEntry detailedEntry = new PVEEntry(victim.getType(), victim.getLocation(), weapon);
-        detailedData.add(detailedEntry);
+        addDetailedDataEntry(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(getSession(), detailedEntry));
     }
@@ -78,7 +86,7 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
     public void creatureKilledPlayer(Entity killer, ItemStack weapon) {
         getNormalData(killer.getType(), weapon).addPlayerDeaths();
         PVEEntry detailedEntry = new PVEEntry(killer.getType(), killer.getLocation());
-        detailedData.add(detailedEntry);
+        addDetailedDataEntry(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(getSession(), detailedEntry));
     }

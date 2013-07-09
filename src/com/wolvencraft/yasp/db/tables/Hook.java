@@ -20,11 +20,11 @@
 
 package com.wolvencraft.yasp.db.tables;
 
-import com.wolvencraft.yasp.db.DBTable;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import com.wolvencraft.yasp.db.DBTable;
 
 /**
  * Represents all plugin hook tables in the database.<br >

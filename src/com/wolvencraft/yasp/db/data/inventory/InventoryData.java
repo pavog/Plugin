@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.db.data.inventory;
 
+import com.wolvencraft.yasp.db.data.ConfigLock;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
@@ -31,9 +32,16 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class InventoryData extends DataStore<TotalInventoryStats, DetailedData> {
     
+    public static ConfigLock lock = new ConfigLock(Type.Distance);
+    
     public InventoryData(OnlineSession session) {
         super(session, Type.Inventory);
-        normalData.add(new TotalInventoryStats(session.getId(), session.getBukkitPlayer()));
+        getNormalData().add(new TotalInventoryStats(session.getId(), session.getBukkitPlayer()));
+    }
+    
+    @Override
+    public boolean onDataSync() {
+        return lock.isEnabled();
     }
     
 }

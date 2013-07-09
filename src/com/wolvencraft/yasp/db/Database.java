@@ -38,8 +38,8 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
+import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.events.plugin.DatabasePatchEvent;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;

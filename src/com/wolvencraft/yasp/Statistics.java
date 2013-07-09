@@ -38,8 +38,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.PatchManager;
-import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.data.DataStore.Type;
+import com.wolvencraft.yasp.db.data.ServerStatistics;
 import com.wolvencraft.yasp.db.data.player.PlayerData;
 import com.wolvencraft.yasp.db.totals.ServerTotals;
 import com.wolvencraft.yasp.listeners.BlockListener;

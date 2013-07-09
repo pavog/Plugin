@@ -45,7 +45,29 @@ public class ConfigTables {
     public enum SettingsTable implements DBTable {
         TableName       ("settings"),
         Key             ("key"),
-        Value           ("value");
+        Value           ("value"),
+        ;
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
+     * Represents the <i>settings</i> table.
+     * @author bitWolfy
+     *
+     */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum ModulesTable implements DBTable {
+        TableName       ("modules"),
+        Name            ("module_name"),
+        IsEnabled       ("is_enabled"),
+        LoadOrder       ("load_order"),
+        Version         ("version"),
+        ;
         
         private String columnName;
         
@@ -63,7 +85,8 @@ public class ConfigTables {
     public enum ServerStatsTable implements DBTable {
         TableName       ("server_statistics"),
         Key             ("key"),
-        Value           ("value");
+        Value           ("value"),
+        ;
         
         private String columnName;
         
@@ -81,7 +104,8 @@ public class ConfigTables {
     public enum MaterialsTable implements DBTable {
         TableName       ("materials"),
         MaterialId      ("material_id"),
-        TpName          ("tp_name");
+        TpName          ("tp_name"),
+        ;
         
         private String columnName;
         
@@ -99,7 +123,8 @@ public class ConfigTables {
     public enum EntitiesTable implements DBTable {
         TableName       ("entities"),
         EntityId        ("entity_id"),
-        TpName          ("tp_name");
+        TpName          ("tp_name"),
+        ;
         
         private String columnName;
         

@@ -30,10 +30,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.ScriptRunner;
-import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
 import com.wolvencraft.yasp.events.plugin.DatabasePatchEvent;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;

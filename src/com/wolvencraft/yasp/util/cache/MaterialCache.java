@@ -28,8 +28,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.ConfigTables.MaterialsTable;
+import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.managers.CacheManager.Type;
 import com.wolvencraft.yasp.settings.Constants;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;

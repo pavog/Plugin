@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.db.data.distance;
 
+import com.wolvencraft.yasp.db.data.ConfigLock;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.db.data.distance.Tables.PlayerDistance;
@@ -32,9 +33,16 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class DistanceData extends DataStore<TotalDistanceStats, DetailedData> {
     
+    public static ConfigLock lock = new ConfigLock(Type.Distance);
+    
     public DistanceData(OnlineSession session) {
         super(session, Type.Distance);
-        normalData.add(new TotalDistanceStats(session.getId()));
+        addNormalDataEntry(new TotalDistanceStats(session.getId()));
+    }
+    
+    @Override
+    public boolean onDataSync() {
+        return lock.isEnabled();
     }
     
     /**
@@ -43,8 +51,7 @@ public class DistanceData extends DataStore<TotalDistanceStats, DetailedData> {
      * @param distance Distance travelled
      */
     public void playerTravel(PlayerDistance type, double distance) {
-        TotalDistanceStats stats = normalData.get(0);
-        stats.addDistance(type, distance);
+        getNormalData().get(0).addDistance(type, distance);
     }
     
 }

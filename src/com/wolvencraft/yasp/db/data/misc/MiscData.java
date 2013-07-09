@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.db.data.misc;
 
+import com.wolvencraft.yasp.db.data.ConfigLock;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
@@ -32,10 +33,17 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class MiscData extends DataStore<TotalMiscStats, DetailedData> {
     
+    public static ConfigLock lock = new ConfigLock(Type.Misc);
+    
     public MiscData(OnlineSession session) {
         super(session, Type.Misc);
         
-        normalData.add(new TotalMiscStats(session.getId(), session.getBukkitPlayer()));
+        addNormalDataEntry(new TotalMiscStats(session.getId(), session.getBukkitPlayer()));
+    }
+    
+    @Override
+    public boolean onDataSync() {
+        return lock.isEnabled();
     }
     
     /**
@@ -43,7 +51,7 @@ public class MiscData extends DataStore<TotalMiscStats, DetailedData> {
      * @return Data storage unit
      */
     public TotalMiscStats get() {
-        return normalData.get(0);
+        return getNormalData().get(0);
     }
     
 }

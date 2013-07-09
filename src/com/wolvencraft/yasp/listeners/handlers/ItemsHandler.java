@@ -33,9 +33,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
 import com.wolvencraft.yasp.db.data.DataStore.Type;
+import com.wolvencraft.yasp.db.data.items.ItemData;
 import com.wolvencraft.yasp.db.data.misc.MiscData;
 import com.wolvencraft.yasp.db.data.misc.Tables.PlayerData;
-import com.wolvencraft.yasp.db.data.items.ItemData;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 

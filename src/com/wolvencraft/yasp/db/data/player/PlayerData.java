@@ -22,6 +22,7 @@ package com.wolvencraft.yasp.db.data.player;
 
 import org.bukkit.Location;
 
+import com.wolvencraft.yasp.db.data.ConfigLock;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.player.DetailedPlayerStats.PlayerLogin;
 import com.wolvencraft.yasp.db.data.player.TotalPlayerStats.BasicPlayerStats;
@@ -34,10 +35,17 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class PlayerData extends DataStore<BasicPlayerStats, PlayerLogin> {
     
+    public static ConfigLock lock = new ConfigLock(Type.Player);
+    
     public PlayerData(OnlineSession session) {
         super(session, Type.Player);
         
-        normalData.add(new BasicPlayerStats(session.getId(), session.getBukkitPlayer()));
+        addNormalDataEntry(new BasicPlayerStats(session.getId(), session.getBukkitPlayer()));
+    }
+    
+    @Override
+    public boolean onDataSync() {
+        return lock.isEnabled();
     }
     
     /**
@@ -46,11 +54,11 @@ public class PlayerData extends DataStore<BasicPlayerStats, PlayerLogin> {
      * @param isLogin <b>true</b> if the player has logged in, <b>false</b> otherwise
      */
     public void addPlayerLog(Location location, boolean isLogin) {
-        detailedData.add(new PlayerLogin(location, isLogin));
+        addDetailedDataEntry(new PlayerLogin(location, isLogin));
     }
     
     public BasicPlayerStats get() {
-        return normalData.get(0);
+        return getNormalData().get(0);
     }
     
 }

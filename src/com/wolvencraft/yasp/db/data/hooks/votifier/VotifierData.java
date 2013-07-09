@@ -32,7 +32,7 @@ public class VotifierData extends DataStore<TotalVotifierEntry, DetailedVotifier
     
     public void playerVoted(Vote vote) {
         TotalVotifierEntry entry = null;
-        for(TotalVotifierEntry testEntry : normalData) {
+        for(TotalVotifierEntry testEntry : getNormalData()) {
             if(testEntry.getServiceName().equals(vote.getServiceName())) {
                 entry = testEntry;
                 break;
@@ -41,11 +41,11 @@ public class VotifierData extends DataStore<TotalVotifierEntry, DetailedVotifier
         
         if(entry == null) {
             entry = new TotalVotifierEntry(getSession().getId(), vote);
-            normalData.add(entry);
+            addNormalDataEntry(entry);
         }
         
         entry.addVote();
-        detailedData.add(new DetailedVotifierEntry(vote));
+        addDetailedDataEntry(new DetailedVotifierEntry(vote));
     }
     
 }
