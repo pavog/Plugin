@@ -42,7 +42,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class ItemData extends DataStore<TotalItemStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(Type.Items);
+    public static ConfigLock lock = new ConfigLock(Type.Items.getAlias());
     
     public ItemData(OnlineSession session) {
         super(session, Type.Items);

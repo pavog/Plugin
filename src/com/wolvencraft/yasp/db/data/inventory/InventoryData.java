@@ -32,7 +32,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class InventoryData extends DataStore<TotalInventoryStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(Type.Distance);
+    public static ConfigLock lock = new ConfigLock(Type.Distance.getAlias());
     
     public InventoryData(OnlineSession session) {
         super(session, Type.Inventory);

@@ -33,7 +33,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class DistanceData extends DataStore<TotalDistanceStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(Type.Distance);
+    public static ConfigLock lock = new ConfigLock(Type.Distance.getAlias());
     
     public DistanceData(OnlineSession session) {
         super(session, Type.Distance);

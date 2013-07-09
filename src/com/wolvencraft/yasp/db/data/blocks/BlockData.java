@@ -39,7 +39,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(Type.Blocks);
+    public static ConfigLock lock = new ConfigLock(Type.Blocks.getAlias());
     
     public BlockData(OnlineSession session) {
         super(session, Type.Blocks);

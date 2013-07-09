@@ -38,7 +38,7 @@ import com.wolvencraft.yasp.util.cache.PlayerCache;
  */
 public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
     
-    public static ConfigLock lock = new ConfigLock(Type.PVP);
+    public static ConfigLock lock = new ConfigLock(Type.PVP.getAlias());
     
     public PVPData(OnlineSession session) {
         super(session, Type.PVP);

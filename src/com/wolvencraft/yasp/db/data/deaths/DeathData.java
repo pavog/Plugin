@@ -37,7 +37,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class DeathData extends DataStore<TotalDeathStats, NaturalDeathEntry> {
     
-    public static ConfigLock lock = new ConfigLock(Type.Deaths);
+    public static ConfigLock lock = new ConfigLock(Type.Deaths.getAlias());
     
     public DeathData(OnlineSession session) {
         super(session, Type.Deaths);

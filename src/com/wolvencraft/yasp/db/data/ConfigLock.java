@@ -30,7 +30,6 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.ConfigTables.ModulesTable;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.data.DataStore.Type;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
 @Getter(AccessLevel.PUBLIC)
@@ -41,17 +40,20 @@ public class ConfigLock implements Runnable {
     
     private String moduleName;
     private boolean enabled;
+    private boolean hook;
     private int loadOrder;
     private int version;
     
-    public ConfigLock(Type moduleName) {
-        this.moduleName = moduleName.getAlias();
+    public ConfigLock(String moduleName) {
+        this.moduleName = moduleName;
+        this.hook = false;
         run();
         Bukkit.getScheduler().runTaskTimerAsynchronously(Statistics.getInstance(), this, 0L, RemoteConfiguration.Ping.asLong());
     }
     
-    public ConfigLock(String moduleName) {
+    public ConfigLock(String moduleName, boolean hook) {
         this.moduleName = moduleName;
+        this.hook = hook;
         run();
         Bukkit.getScheduler().runTaskTimerAsynchronously(Statistics.getInstance(), this, 0L, RemoteConfiguration.Ping.asLong());
     }

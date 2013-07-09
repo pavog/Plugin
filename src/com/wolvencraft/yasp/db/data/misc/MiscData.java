@@ -33,7 +33,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
  */
 public class MiscData extends DataStore<TotalMiscStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(Type.Misc);
+    public static ConfigLock lock = new ConfigLock(Type.Misc.getAlias());
     
     public MiscData(OnlineSession session) {
         super(session, Type.Misc);
