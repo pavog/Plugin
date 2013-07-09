@@ -20,11 +20,11 @@
 
 package com.wolvencraft.yasp.listeners;
 
-import net.minecraft.server.v1_6_R1.NBTTagCompound;
-import net.minecraft.server.v1_6_R1.NBTTagList;
-import net.minecraft.server.v1_6_R1.NBTTagString;
+import net.minecraft.server.v1_6_R2.NBTTagCompound;
+import net.minecraft.server.v1_6_R2.NBTTagList;
+import net.minecraft.server.v1_6_R2.NBTTagString;
 
-import org.bukkit.craftbukkit.v1_6_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_6_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -60,7 +60,7 @@ public class StatsBookListener implements Listener {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !event.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
         ItemStack craftItem = event.getItem();
         if(craftItem == null || (craftItem.getTypeId() != 387 && craftItem.getTypeId() != 340)) return;
-        net.minecraft.server.v1_6_R1.ItemStack item = CraftItemStack.asNMSCopy(craftItem);
+        net.minecraft.server.v1_6_R2.ItemStack item = CraftItemStack.asNMSCopy(craftItem);
         
         NBTTagCompound tags = item.getTag();
         if (tags == null) {
