@@ -26,8 +26,8 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.data.DataStore.Type;
-import com.wolvencraft.yasp.db.data.player.PlayerData;
+import com.wolvencraft.yasp.db.data.DataStore.ModuleType;
+import com.wolvencraft.yasp.db.data.player.PlayerDataStore;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 
 public class SessionHandlers {
@@ -45,7 +45,7 @@ public class SessionHandlers {
         @Override
         public void run() {
             Statistics.getServerStatistics().playerLogin();
-            ((PlayerData) SessionCache.fetch(player, true).getDataStore(Type.Player)).addPlayerLog(player.getLocation(), true);
+            ((PlayerDataStore) SessionCache.fetch(player, true).getDataStore(ModuleType.Player)).addPlayerLog(player.getLocation(), true);
         }
     }
     
@@ -61,7 +61,7 @@ public class SessionHandlers {
         
         @Override
         public void run() {
-            ((PlayerData) SessionCache.fetch(player, true).getDataStore(Type.Player)).addPlayerLog(player.getLocation(), false);
+            ((PlayerDataStore) SessionCache.fetch(player, true).getDataStore(ModuleType.Player)).addPlayerLog(player.getLocation(), false);
         }
     }
     

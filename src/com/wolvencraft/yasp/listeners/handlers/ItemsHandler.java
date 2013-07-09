@@ -32,10 +32,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-import com.wolvencraft.yasp.db.data.DataStore.Type;
-import com.wolvencraft.yasp.db.data.items.ItemData;
-import com.wolvencraft.yasp.db.data.misc.MiscData;
-import com.wolvencraft.yasp.db.data.misc.Tables.PlayerData;
+import com.wolvencraft.yasp.db.data.DataStore.ModuleType;
+import com.wolvencraft.yasp.db.data.items.ItemsDataStore;
+import com.wolvencraft.yasp.db.data.misc.MiscDataStore;
+import com.wolvencraft.yasp.db.data.misc.Tables.MiscInfoTable;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 
@@ -56,7 +56,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemData) session.getDataStore(Type.Items)).itemPickUp(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemPickUp(location, itemStack);
         }
     }
     
@@ -75,7 +75,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemData) session.getDataStore(Type.Items)).itemDrop(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemDrop(location, itemStack);
         }
     }
     
@@ -92,9 +92,9 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemData) session.getDataStore(Type.Items)).itemUse(player.getLocation(), player.getItemInHand());
+            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemUse(player.getLocation(), player.getItemInHand());
             session.getPlayerTotals().snacksEaten();
-            ((MiscData) session.getDataStore(Type.Misc)).get().incrementStat(PlayerData.FoodEaten);
+            ((MiscDataStore) session.getDataStore(ModuleType.Misc)).get().incrementStat(MiscInfoTable.FoodEaten);
         }
     }
     
@@ -113,7 +113,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemData) session.getDataStore(Type.Items)).itemCraft(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemCraft(location, itemStack);
             session.getPlayerTotals().itemCraft();
         }
     }
@@ -133,7 +133,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemData) session.getDataStore(Type.Items)).itemSmelt(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemSmelt(location, itemStack);
         }
     }
     
@@ -152,7 +152,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemData) session.getDataStore(Type.Items)).itemBreak(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemBreak(location, itemStack);
             session.getPlayerTotals().toolBreak();
         }
     }
@@ -172,7 +172,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemData) session.getDataStore(Type.Items)).itemEnchant(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemEnchant(location, itemStack);
         }
     }
     
@@ -215,7 +215,7 @@ public class ItemsHandler {
             if(player.getLevel() < repairCost) return;
 
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemData) session.getDataStore(Type.Items)).itemRepair(player.getLocation(), resultSlot);
+            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemRepair(player.getLocation(), resultSlot);
         }
     }
     

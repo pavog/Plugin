@@ -25,7 +25,7 @@ import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.db.data.blocks.DetailedBlockStats.BlockBreakEntry;
+import com.wolvencraft.yasp.db.data.blocks.BlocksDetailedStats.BlockBreakEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;

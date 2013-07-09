@@ -38,9 +38,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.PatchManager;
-import com.wolvencraft.yasp.db.data.DataStore.Type;
+import com.wolvencraft.yasp.db.data.DataStore.ModuleType;
 import com.wolvencraft.yasp.db.data.ServerStatistics;
-import com.wolvencraft.yasp.db.data.player.PlayerData;
+import com.wolvencraft.yasp.db.data.player.PlayerDataStore;
 import com.wolvencraft.yasp.db.totals.ServerTotals;
 import com.wolvencraft.yasp.listeners.BlockListener;
 import com.wolvencraft.yasp.listeners.DeathListener;
@@ -53,8 +53,8 @@ import com.wolvencraft.yasp.listeners.StatsSignListener;
 import com.wolvencraft.yasp.managers.CacheManager;
 import com.wolvencraft.yasp.managers.CommandManager;
 import com.wolvencraft.yasp.managers.HookManager;
+import com.wolvencraft.yasp.managers.ModuleManager;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
-import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
@@ -82,8 +82,6 @@ public class Statistics extends JavaPlugin {
     private static boolean crashed;
     
     @Getter(AccessLevel.PUBLIC) private static Gson gson;
-    
-    private static HookManager hookManager;
 
     @Getter(AccessLevel.PUBLIC) private static ServerTotals serverTotals;
     @Getter(AccessLevel.PUBLIC) private static ServerStatistics serverStatistics;
@@ -127,16 +125,17 @@ public class Statistics extends JavaPlugin {
         
         Message.log("Database connection established.");
         
-        hookManager = new HookManager();
-        hookManager.onEnable();
+        HookManager.onEnable();
+        
+        new ModuleManager();
 
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
         
         new CommandManager();
 
-        if(Module.Blocks.isEnabled()) new BlockListener(this);
-        if(Module.Deaths.isEnabled()) new DeathListener(this);
-        if(Module.Items.isEnabled()) new ItemListener(this);
+        new BlockListener(this);
+        new DeathListener(this);
+        new ItemListener(this);
         new PlayerListener(this);
         new ServerListener(this);
         new SessionListener(this);
@@ -169,7 +168,7 @@ public class Statistics extends JavaPlugin {
         
         try {
             for(Player player : Bukkit.getOnlinePlayers()) {
-                ((PlayerData) SessionCache.fetch(player).getDataStore(Type.Player)).addPlayerLog(player.getLocation(), false);
+                ((PlayerDataStore) SessionCache.fetch(player).getDataStore(ModuleType.Player)).addPlayerLog(player.getLocation(), false);
             }
             DatabaseTask.commit();
             serverStatistics.pluginShutdown();
@@ -180,7 +179,7 @@ public class Statistics extends JavaPlugin {
             
             Bukkit.getScheduler().cancelTasks(this);
             
-            hookManager.onDisable();
+            HookManager.onDisable();
 
             Database.close();
         } catch (Throwable t) { 

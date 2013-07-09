@@ -28,8 +28,8 @@ import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.data.player.PlayerData;
-import com.wolvencraft.yasp.db.data.player.Tables.PlayerStats;
+import com.wolvencraft.yasp.db.data.player.PlayerDataStore;
+import com.wolvencraft.yasp.db.data.player.Tables.PlayersTable;
 import com.wolvencraft.yasp.events.session.SessionCreateEvent;
 import com.wolvencraft.yasp.events.session.SessionRemoveEvent;
 import com.wolvencraft.yasp.managers.CacheManager.Type;
@@ -65,8 +65,8 @@ public class SessionCache extends CachedData {
             public void run() {
                 for(Player player : Bukkit.getServer().getOnlinePlayers()) {
                     if(StatPerms.Statistics.has(player))
-                        ((PlayerData) fetch(player, true)
-                                .getDataStore(com.wolvencraft.yasp.db.data.DataStore.Type.Player))
+                        ((PlayerDataStore) fetch(player, true)
+                                .getDataStore(com.wolvencraft.yasp.db.data.DataStore.ModuleType.Player))
                                 .addPlayerLog(player.getLocation(), true);
                 }
             }
@@ -85,11 +85,11 @@ public class SessionCache extends CachedData {
             long delay = RemoteConfiguration.LogDelay.asInteger();
             
             if(delay == 0) continue;
-            long totalPlaytime = ((PlayerData) session.getDataStore(com.wolvencraft.yasp.db.data.DataStore.Type.Player)).get().getTotalPlaytime();
+            long totalPlaytime = ((PlayerDataStore) session.getDataStore(com.wolvencraft.yasp.db.data.DataStore.ModuleType.Player)).get().getTotalPlaytime();
             if(totalPlaytime > delay) continue;
             
-            Query.table(PlayerStats.TableName)
-                .condition(PlayerStats.Name, session.getName())
+            Query.table(PlayersTable.TableName)
+                .condition(PlayersTable.Name, session.getName())
                 .delete();
         }
         

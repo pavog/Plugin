@@ -37,24 +37,15 @@ import com.wolvencraft.yasp.session.OnlineSession;
 public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     
     @Getter(AccessLevel.PUBLIC) private OnlineSession session;
-    @Getter(AccessLevel.PUBLIC) private String type;
+    @Getter(AccessLevel.PUBLIC) private DataStoreType type;
     
     private List<N> normalData;
     private List<D> detailedData;
     
-    public DataStore(OnlineSession session, String type) {
-        this.session = session;
-        
-        this.type = type.replace(" ", "_");
-        
-        normalData = new ArrayList<N>();
-        detailedData = new ArrayList<D>();
-    }
-    
     public DataStore(OnlineSession session, DataStoreType type) {
         this.session = session;
         
-        this.type = type.getAlias();
+        this.type = type;
         
         normalData = new ArrayList<N>();
         detailedData = new ArrayList<D>();
@@ -65,6 +56,14 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         
         normalData = new ArrayList<N>();
         detailedData = new ArrayList<D>();
+    }
+    
+    /**
+     * Returns the configuration lock
+     * @return Config lock, or <b>null</b> if there isn't one
+     */
+    public ConfigLock getLock() {
+        return null;
     }
     
     /**
@@ -101,21 +100,11 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     }
     
     /**
-     * Check before the synchronization starts.
-     * Return <b>true</b> to perform a synch, or <b>false</b> to cancel it.
-     * No data will be lost.
-     * @return <b>true</b> to perform a synch, or <b>false</b> to cancel it.
-     */
-    public boolean onDataSync() {
-        return true;
-    }
-    
-    /**
      * Synchronizes the data from the data store to the database, then removes it from local storage<br />
      * If an entry was not synchronized, it will not be removed.
      */
     public final void pushData() {
-        if(!onDataSync()) return;
+        if(getLock() != null && !getLock().isEnabled()) return;
         
         for(N entry : getNormalData()) {
             if(((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
@@ -162,7 +151,7 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
      */
     @Getter(AccessLevel.PUBLIC)
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public enum Type implements DataStoreType {
+    public enum ModuleType implements DataStoreType {
         
         Blocks          ("blocks"),
         Deaths          ("deaths"),
@@ -176,7 +165,34 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         ;
         
         private String alias;
+    }
+    
+    /**
+     * Represents different types of hook modules.
+     * Exists for convenience purposes only
+     * @author bitWolfy
+     *
+     */
+    @Getter(AccessLevel.PUBLIC)
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    public enum HookType implements DataStoreType {
+
+        AdminCmd        ("admincmd"),
+        BanHammer       ("banhammer"),
+        CommandBook     ("commandbook"),
+        Factions        ("factions"),
+        Jail            ("jail"),
+        McMMO           ("mcmmo"),
+        MobArena        ("mobarena"),
+        PvpArena        ("pvparena"),
+        Towny           ("towny"),
+        Vanish          ("vanish"),
+        Vault           ("vault"),
+        Votifier        ("votifier"),
+        WorldGuard      ("worldguard"),
+        ;
         
+        private String alias;
     }
     
 }

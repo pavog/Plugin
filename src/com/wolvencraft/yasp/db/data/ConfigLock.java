@@ -39,32 +39,20 @@ public class ConfigLock implements Runnable {
     @Getter(AccessLevel.NONE)
     private BukkitTask process;
     
-    private String moduleName;
+    private DataStoreType type;
     private boolean enabled;
     private boolean hook;
     private int loadOrder;
     private int version;
     
-    public ConfigLock(String moduleName) {
-        this.moduleName = moduleName;
+    public ConfigLock(DataStoreType type) {
+        this.type = type;
         this.hook = false;
         init();
     }
     
-    public ConfigLock(DataStoreType moduleName) {
-        this.moduleName = moduleName.getAlias();
-        this.hook = false;
-        init();
-    }
-    
-    public ConfigLock(String moduleName, boolean hook) {
-        this.moduleName = moduleName;
-        this.hook = hook;
-        init();
-    }
-    
-    public ConfigLock(DataStoreType moduleName, boolean hook) {
-        this.moduleName = moduleName.getAlias();
+    public ConfigLock(DataStoreType type, boolean hook) {
+        this.type = type;
         this.hook = hook;
         init();
     }
@@ -88,7 +76,7 @@ public class ConfigLock implements Runnable {
     public void run() {
         QueryResult result = Query.table(ModulesTable.TableName)
             .column(ModulesTable.IsEnabled, ModulesTable.LoadOrder, ModulesTable.Version)
-            .condition(ModulesTable.Name, moduleName)
+            .condition(ModulesTable.Name, type.getAlias())
             .select();
         
         if(result == null) {
@@ -97,7 +85,7 @@ public class ConfigLock implements Runnable {
             version = 0;
             
             Query.table(ModulesTable.TableName)
-                .value(ModulesTable.Name, moduleName)
+                .value(ModulesTable.Name, type.getAlias())
                 .value(ModulesTable.IsEnabled, enabled)
                 .value(ModulesTable.LoadOrder, loadOrder)
                 .value(ModulesTable.Version, version)
@@ -107,6 +95,13 @@ public class ConfigLock implements Runnable {
             loadOrder = result.asInt(ModulesTable.LoadOrder);
             version = result.asInt(ModulesTable.Version);
         }
+    }
+    
+    public void setVersion(int version) {
+        Query.table(ModulesTable.TableName)
+            .value(ModulesTable.Version, version)
+            .condition(ModulesTable.Name, type.getAlias())
+            .update();
     }
     
     @Override

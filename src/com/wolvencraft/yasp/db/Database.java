@@ -40,11 +40,11 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
 import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.data.ConfigLock;
 import com.wolvencraft.yasp.events.plugin.DatabasePatchEvent;
 import com.wolvencraft.yasp.exceptions.DatabaseConnectionException;
 import com.wolvencraft.yasp.exceptions.RuntimeSQLException;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
-import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
@@ -84,7 +84,6 @@ public class Database {
         Statistics.setPaused(false);
         
         RemoteConfiguration.clearCache();
-        Module.clearCache();
     }
     
     /**
@@ -130,15 +129,15 @@ public class Database {
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
-    public static boolean patchModule(boolean force, Module module) throws DatabaseConnectionException {
+    public static boolean patchModule(boolean force, ConfigLock lock) throws DatabaseConnectionException {
         int moduleVersion;
         if(force) { moduleVersion = 0; }
-        else { moduleVersion = module.getVersion(); }
+        else { moduleVersion = lock.getVersion(); }
         int latestPatchVersion = moduleVersion;
         
         File patchFile = null;
         do {
-            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + module.KEY + ".sql");
+            patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + lock.getType().getAlias() + ".sql");
             if(patchFile.exists()) latestPatchVersion++;
             else break;
         } while(patchFile != null && patchFile.exists());
@@ -149,11 +148,11 @@ public class Database {
         
         ScriptRunner scriptRunner = new ScriptRunner(connection);
         Message.log("+-------] Database Patcher [-------+");
-        Message.log("|" + Message.centerString("Patching " + module.name(), 34) + "|");
+        Message.log("|" + Message.centerString("Patching " + lock.getType().getAlias(), 34) + "|");
         for(; moduleVersion <= latestPatchVersion; moduleVersion++) {
             Message.log("|       Applying patch " + moduleVersion + " / " + latestPatchVersion + "       |");
             executePatch(scriptRunner, moduleVersion + ".yasp");
-            module.setVersion(moduleVersion);
+            lock.setVersion(moduleVersion);
         }
         Message.log("+----------------------------------+");
         return true;

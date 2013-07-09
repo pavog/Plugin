@@ -40,17 +40,17 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DataStore;
-import com.wolvencraft.yasp.db.data.DataStore.Type;
-import com.wolvencraft.yasp.db.data.deaths.DeathData;
-import com.wolvencraft.yasp.db.data.distance.DistanceData;
-import com.wolvencraft.yasp.db.data.distance.Tables.PlayerDistance;
-import com.wolvencraft.yasp.db.data.misc.MiscData;
-import com.wolvencraft.yasp.db.data.player.Tables.PlayerStats;
-import com.wolvencraft.yasp.db.data.pve.PVEData;
-import com.wolvencraft.yasp.db.data.pvp.PVPData;
+import com.wolvencraft.yasp.db.data.DataStore.ModuleType;
+import com.wolvencraft.yasp.db.data.deaths.DeathsDataStore;
+import com.wolvencraft.yasp.db.data.distance.DistancesDataStore;
+import com.wolvencraft.yasp.db.data.distance.Tables.DistancesTable;
+import com.wolvencraft.yasp.db.data.misc.MiscDataStore;
+import com.wolvencraft.yasp.db.data.player.Tables.PlayersTable;
+import com.wolvencraft.yasp.db.data.pve.PveDataStore;
+import com.wolvencraft.yasp.db.data.pvp.PvpDataStore;
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
+import com.wolvencraft.yasp.managers.ModuleManager;
 import com.wolvencraft.yasp.util.NamedInteger;
-import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 
@@ -83,15 +83,14 @@ public class OnlineSession implements PlayerSession {
         id = PlayerCache.get(player);
         
         this.dataStores = new ArrayList<DataStore>();
-        this.dataStores.addAll(Util.getModules(this));
-        this.dataStores.addAll(Util.getHooks(this));
+        this.dataStores.addAll(ModuleManager.getModules(this));
         
         this.playerTotals = new PlayerTotals(id);
         this.scoreboard = null;
         
-        Query.table(PlayerStats.TableName)
-            .value(PlayerStats.Online, true)
-            .condition(PlayerStats.PlayerId, id)
+        Query.table(PlayersTable.TableName)
+            .value(PlayersTable.Online, true)
+            .condition(PlayersTable.PlayerId, id)
             .update();
     }
     
@@ -114,7 +113,7 @@ public class OnlineSession implements PlayerSession {
      * @param type Data store type
      * @return Data store, or <b>null</b> if the type is not valid
      */
-    public DataStore getDataStore(Type type) {
+    public DataStore getDataStore(ModuleType type) {
         return getDataStore(type.getAlias());
     }
     
@@ -147,9 +146,9 @@ public class OnlineSession implements PlayerSession {
     
     @Override
     public void finalize() {
-        Query.table(PlayerStats.TableName)
-            .value(PlayerStats.Online, false)
-            .condition(PlayerStats.PlayerId, id)
+        Query.table(PlayersTable.TableName)
+            .value(PlayersTable.Online, false)
+            .condition(PlayersTable.PlayerId, id)
             .update();
     }
     
@@ -158,8 +157,8 @@ public class OnlineSession implements PlayerSession {
      * @param type Travel type
      * @param distance Distance traveled
      */
-    public void addDistance(PlayerDistance type, double distance) {
-        ((DistanceData) getDataStore(Type.Distance)).playerTravel(type, distance);
+    public void addDistance(DistancesTable type, double distance) {
+        ((DistancesDataStore) getDataStore(ModuleType.Distance)).playerTravel(type, distance);
         playerTotals.addDistance(type, distance);
     }
     
@@ -169,8 +168,8 @@ public class OnlineSession implements PlayerSession {
      * @param weapon Weapon used by killer
      */
     public void killedPlayer(Player victim, ItemStack weapon) {
-        ((PVPData) getDataStore(Type.PVP)).playerKilledPlayer(victim, weapon);
-        ((MiscData) getDataStore(Type.Misc)).get().killed(victim);
+        ((PvpDataStore) getDataStore(ModuleType.PVP)).playerKilledPlayer(victim, weapon);
+        ((MiscDataStore) getDataStore(ModuleType.Misc)).get().killed(victim);
         playerTotals.pvpKill();
         SessionCache.fetch(victim).getPlayerTotals().death();
     }
@@ -181,7 +180,7 @@ public class OnlineSession implements PlayerSession {
      * @param weapon Weapon used by killer
      */
     public void killedCreature(Entity victim, ItemStack weapon) {
-        ((PVEData) getDataStore(Type.PVE)).playerKilledCreature(victim, weapon);
+        ((PveDataStore) getDataStore(ModuleType.PVE)).playerKilledCreature(victim, weapon);
         playerTotals.pveKill();
     }
     
@@ -191,7 +190,7 @@ public class OnlineSession implements PlayerSession {
      * @param weapon Weapon used by killer
      */
     public void killedByCreature(Entity killer, ItemStack weapon) {
-        ((PVEData) getDataStore(Type.PVE)).creatureKilledPlayer(killer, weapon);
+        ((PveDataStore) getDataStore(ModuleType.PVE)).creatureKilledPlayer(killer, weapon);
         died();
     }
     
@@ -201,7 +200,7 @@ public class OnlineSession implements PlayerSession {
      * @param cause Death cause
      */
     public void killedByEnvironment(Location location, DamageCause cause) {
-        ((DeathData) getDataStore(Type.Deaths)).playerDied(location, cause);
+        ((DeathsDataStore) getDataStore(ModuleType.Deaths)).playerDied(location, cause);
         died();
     }
     
@@ -210,7 +209,7 @@ public class OnlineSession implements PlayerSession {
      * This method is for internal use; you do not need to run it from listener
      */
     public void died() {
-        ((MiscData) getDataStore(Type.Misc)).get().died();
+        ((MiscDataStore) getDataStore(ModuleType.Misc)).get().died();
         playerTotals.death();
     }
     

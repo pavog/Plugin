@@ -30,10 +30,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.wolvencraft.yasp.db.data.DataStore.Type;
-import com.wolvencraft.yasp.db.data.distance.Tables.PlayerDistance;
-import com.wolvencraft.yasp.db.data.misc.MiscData;
-import com.wolvencraft.yasp.db.data.misc.Tables.PlayerData;
+import com.wolvencraft.yasp.db.data.DataStore.ModuleType;
+import com.wolvencraft.yasp.db.data.distance.Tables.DistancesTable;
+import com.wolvencraft.yasp.db.data.misc.MiscDataStore;
+import com.wolvencraft.yasp.db.data.misc.Tables.MiscInfoTable;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 
@@ -60,21 +60,21 @@ public class PlayerHandlers {
                 EntityType vehicle = player.getVehicle().getType();
                 distance = player.getVehicle().getLocation().distance(event.getTo());
                 if(vehicle.equals(EntityType.MINECART)) {
-                    SessionCache.fetch(player).addDistance(PlayerDistance.Minecart, distance);
+                    SessionCache.fetch(player).addDistance(DistancesTable.Minecart, distance);
                 } else if(vehicle.equals(EntityType.BOAT)) {
-                    SessionCache.fetch(player).addDistance(PlayerDistance.Boat, distance);
+                    SessionCache.fetch(player).addDistance(DistancesTable.Boat, distance);
                 } else if(vehicle.equals(EntityType.PIG) || vehicle.equals(EntityType.HORSE)) {
-                    SessionCache.fetch(player).addDistance(PlayerDistance.Ride, distance);
+                    SessionCache.fetch(player).addDistance(DistancesTable.Ride, distance);
                 }
             } else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
-                SessionCache.fetch(player).addDistance(PlayerDistance.Swim, distance);
+                SessionCache.fetch(player).addDistance(DistancesTable.Swim, distance);
             } else if (player.isFlying()) {
-                SessionCache.fetch(player).addDistance(PlayerDistance.Flight, distance);
+                SessionCache.fetch(player).addDistance(DistancesTable.Flight, distance);
             } else {
                 OnlineSession session = SessionCache.fetch(player);
                 if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
-                    ((MiscData) session.getDataStore(Type.Misc)).get().incrementStat(PlayerData.TimesJumped);
-                SessionCache.fetch(player).addDistance(PlayerDistance.Foot, distance);
+                    ((MiscDataStore) session.getDataStore(ModuleType.Misc)).get().incrementStat(MiscInfoTable.TimesJumped);
+                SessionCache.fetch(player).addDistance(DistancesTable.Foot, distance);
             }
         }
     }
@@ -88,10 +88,10 @@ public class PlayerHandlers {
     public static class PlayerIncrementStat implements Runnable {
 
         private Player player;
-        private PlayerData stat;
+        private MiscInfoTable stat;
         private double value;
         
-        public PlayerIncrementStat(Player player, PlayerData stat) {
+        public PlayerIncrementStat(Player player, MiscInfoTable stat) {
             this.player = player;
             this.stat = stat;
             this.value = 1;
@@ -99,7 +99,7 @@ public class PlayerHandlers {
         
         @Override
         public void run() {
-            ((MiscData) SessionCache.fetch(player).getDataStore(Type.Misc)).get().incrementStat(stat, value);
+            ((MiscDataStore) SessionCache.fetch(player).getDataStore(ModuleType.Misc)).get().incrementStat(stat, value);
         }
     }
 }

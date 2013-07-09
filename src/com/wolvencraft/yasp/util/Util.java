@@ -21,7 +21,6 @@
 package com.wolvencraft.yasp.util;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +32,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.data.DataStore;
-import com.wolvencraft.yasp.session.OnlineSession;
-import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 
 /**
@@ -54,48 +50,6 @@ public class Util {
         str = StringEscapeUtils.escapeSql(str);
         
         return str;
-    }
-    
-    /**
-     * Composes a list of active modules for the player
-     * @param session Player session
-     * @return List of modules
-     */
-    @SuppressWarnings("rawtypes")
-    public static List<DataStore> getModules(OnlineSession session) {
-        List<DataStore> dataStores = new ArrayList<DataStore>();
-        for(Module module : Module.values()) {
-            if(module.isHook() || !module.isActive()) continue;
-            for(Class<? extends DataStore> store : module.getDataStores()) {
-                DataStore storeObj = null;
-                try { storeObj = store.getDeclaredConstructor(OnlineSession.class).newInstance(session); }
-                catch (Throwable t) { ExceptionHandler.handle(t); }
-                if(storeObj == null) continue;
-                dataStores.add(storeObj);
-            }
-        }
-        return dataStores;
-    }
-    
-    /**
-     * Composes a list of active plugin hooks for the player
-     * @param session Player session
-     * @return List of plugin hooks
-     */
-    @SuppressWarnings("rawtypes")
-    public static List<DataStore> getHooks(OnlineSession session) {
-        List<DataStore> dataStores = new ArrayList<DataStore>();
-        for(Module module : Module.values()) {
-            if(!module.isHook() || !module.isActive()) continue;
-            for(Class<? extends DataStore> store : module.getDataStores()) {
-                DataStore storeObj = null;
-                try { storeObj = store.getDeclaredConstructor(OnlineSession.class).newInstance(session); }
-                catch (Throwable t) { ExceptionHandler.handle(t); }
-                if(storeObj == null) continue;
-                dataStores.add(storeObj);
-            }
-        }
-        return dataStores;
     }
     
     /**

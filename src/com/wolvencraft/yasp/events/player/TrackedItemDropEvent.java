@@ -25,7 +25,7 @@ import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.wolvencraft.yasp.db.data.items.DetailedItemStats.ItemDropEntry;
+import com.wolvencraft.yasp.db.data.items.ItemsDetailedStats.ItemDropEntry;
 import com.wolvencraft.yasp.events.StatisticsPlayerEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;

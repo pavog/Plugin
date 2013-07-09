@@ -25,21 +25,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.db.data.DataStore.HookType;
+import com.wolvencraft.yasp.db.hooks.vanish.VanishHook;
+import com.wolvencraft.yasp.managers.HookManager;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
-import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
-import com.wolvencraft.yasp.util.hooks.VanishHook;
 
 public class HandlerManager {
     
     public static boolean playerLookup(Player player, ExtraChecks check) {
         if(Statistics.isPaused()) return false;
         
-        if(Module.Vanish.isActive()
-                && RemoteConfiguration.VanishDisablesTracking.asBoolean()
-                && VanishHook.isVanished(player)) return false;
+        if(RemoteConfiguration.VanishDisablesTracking.asBoolean()) {
+            VanishHook hook = (VanishHook) HookManager.getHook(HookType.Vanish);
+            if(hook != null && hook.isVanished(player)) return false;
+        }
         
-        if(player.hasMetadata("NPC")    // XXX Citizens fix
+        if(player.hasMetadata("NPC")    // Citizens fix
                 && player.getMetadata("NPC").get(0).asBoolean()) return false;
         
         if(!check.check(player)) return false;
@@ -49,12 +51,13 @@ public class HandlerManager {
     
     public static boolean playerLookup(Player player, StatPerms permission) {
         if(Statistics.isPaused()) return false;
+
+        if(RemoteConfiguration.VanishDisablesTracking.asBoolean()) {
+            VanishHook hook = (VanishHook) HookManager.getHook(HookType.Vanish);
+            if(hook != null && hook.isVanished(player)) return false;
+        }
         
-        if(Module.Vanish.isActive()
-                && RemoteConfiguration.VanishDisablesTracking.asBoolean()
-                && VanishHook.isVanished(player)) return false;
-        
-        if(player.hasMetadata("NPC")    // XXX Citizens fix
+        if(player.hasMetadata("NPC")    // Citizens fix
                 && player.getMetadata("NPC").get(0).asBoolean()) return false;
         
         return permission.has(player);

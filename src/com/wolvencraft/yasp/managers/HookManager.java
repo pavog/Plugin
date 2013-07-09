@@ -32,30 +32,33 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
+import com.wolvencraft.yasp.db.hooks.PluginHook;
+import com.wolvencraft.yasp.db.hooks.admincmd.AdminCmdHook;
+import com.wolvencraft.yasp.db.hooks.banhammer.BanHammerHook;
+import com.wolvencraft.yasp.db.hooks.commandbook.CommandBookHook;
+import com.wolvencraft.yasp.db.hooks.factions.FactionsHook;
+import com.wolvencraft.yasp.db.hooks.mcmmo.McMMOHook;
+import com.wolvencraft.yasp.db.hooks.mobarena.MobArenaHook;
+import com.wolvencraft.yasp.db.hooks.pvparena.PvpArenaHook;
+import com.wolvencraft.yasp.db.hooks.vanish.VanishHook;
+import com.wolvencraft.yasp.db.hooks.vault.VaultHook;
+import com.wolvencraft.yasp.db.hooks.votifier.VotifierHook;
+import com.wolvencraft.yasp.db.hooks.worldguard.WorldGuardHook;
 import com.wolvencraft.yasp.events.plugin.HookInitEvent;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
-import com.wolvencraft.yasp.util.hooks.AdminCmdHook;
-import com.wolvencraft.yasp.util.hooks.BanHammerHook;
-import com.wolvencraft.yasp.util.hooks.CommandBookHook;
-import com.wolvencraft.yasp.util.hooks.FactionsHook;
-import com.wolvencraft.yasp.util.hooks.McMMOHook;
-import com.wolvencraft.yasp.util.hooks.MobArenaHook;
-import com.wolvencraft.yasp.util.hooks.PluginHook;
-import com.wolvencraft.yasp.util.hooks.PvpArenaHook;
-import com.wolvencraft.yasp.util.hooks.VanishHook;
-import com.wolvencraft.yasp.util.hooks.VotifierHook;
-import com.wolvencraft.yasp.util.hooks.WorldGuardHook;
 
 public class HookManager {
     
-    private List<PluginHook> activeHooks;
+    private static List<PluginHook> activeHooks = new ArrayList<PluginHook>();
     
-    public HookManager() {
-        activeHooks = new ArrayList<PluginHook>();
-    }
+    public HookManager() { }
     
-    public void onEnable() {
+    /**
+     * Starts up the necessary hooks
+     */
+    public static void onEnable() {
         PluginManager plManager = Statistics.getInstance().getServer().getPluginManager();
         int hooksEnabled = 0;
         Message.log(
@@ -75,7 +78,7 @@ public class HookManager {
             if (plManager.getPlugin(hookObj.getPluginName()) == null) {
                 Message.debug(Level.FINER, "|" + Message.centerString(hookObj.getPluginName() + " is not found", 34) + "|");
             } else {
-                HookInitEvent event = new HookInitEvent(hookObj.getPatchExtension());
+                HookInitEvent event = new HookInitEvent(hookObj.getLock().getType().getAlias());
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 if(event.isCancelled()) {
                     Message.log("|" + Message.centerString(hookObj.getPluginName() + " is cancelled", 34) + "|");
@@ -97,7 +100,10 @@ public class HookManager {
                 );
     }
     
-    public void onDisable() {
+    /**
+     * Executes hook shutdown
+     */
+    public static void onDisable() {
         Message.log(
                 "+-------- [ Hook Manager ] --------+",
                 "|" + Message.centerString("Hook Manager shutting down", 34) + "|",
@@ -112,9 +118,21 @@ public class HookManager {
         Message.log("+----------------------------------+");
     }
     
+    /**
+     * Returns a hook with the specified type
+     * @param type Hook type
+     * @return Hook, or <b>null</b> if it isn't active
+     */
+    public static PluginHook getHook(DataStoreType type) {
+        for(PluginHook hook : activeHooks) {
+            if(hook.getLock().getType() == type) return hook;
+        }
+        return null;
+    }
+    
     @Getter(AccessLevel.PUBLIC)
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public enum ApplicableHook {
+    private enum ApplicableHook {
         
         ADMIN_CMD       (AdminCmdHook.class),
         BAN_HAMMER      (BanHammerHook.class),
@@ -123,6 +141,7 @@ public class HookManager {
         MCMMO           (McMMOHook.class),
         MOB_ARENA       (MobArenaHook.class),
         PVP_ARENA       (PvpArenaHook.class),
+        VAULT           (VaultHook.class),
         VANISH          (VanishHook.class),
         VOTIFIER        (VotifierHook.class),
         WORLD_GUARD     (WorldGuardHook.class)

@@ -28,7 +28,6 @@ import com.wolvencraft.yasp.events.plugin.SynchronizationEvent;
 import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
-import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.SessionCache;
@@ -99,7 +98,6 @@ public class DatabaseTask implements Runnable {
         Statistics.getServerStatistics().pushData();
         Statistics.getServerTotals().fetchData();
         
-        Module.clearCache();
         RemoteConfiguration.clearCache();
         LocalConfiguration.clearCache();
         

@@ -1,3 +1,23 @@
+/*
+ * Tables.java
+ * 
+ * Statistics
+ * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.wolvencraft.yasp.db.data.blocks;
 
 import lombok.AccessLevel;
@@ -17,7 +37,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum BlockTotals implements DBTable {
+    public enum TotalBlocksTable implements DBTable {
         TableName       ("total_blocks"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -37,7 +57,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum BlocksBroken implements DBTable {
+    public enum DetailedBrokenBlocksTable implements DBTable {
         TableName       ("detailed_destroyed_blocks"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -60,7 +80,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum BlocksPlaced implements DBTable {
+    public enum DetailedPlacedBlocksTable implements DBTable {
         TableName       ("detailed_placed_blocks"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
