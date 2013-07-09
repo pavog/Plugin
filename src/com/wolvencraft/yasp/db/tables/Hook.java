@@ -20,6 +20,8 @@
 
 package com.wolvencraft.yasp.db.tables;
 
+import com.wolvencraft.yasp.db.DBTable;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

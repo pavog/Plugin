@@ -28,9 +28,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.ItemsConsumed;
-import com.wolvencraft.yasp.db.tables.Detailed.ItemsDropped;
-import com.wolvencraft.yasp.db.tables.Detailed.ItemsPickedUp;
+import com.wolvencraft.yasp.db.data.items.Tables.ItemsConsumed;
+import com.wolvencraft.yasp.db.data.items.Tables.ItemsDropped;
+import com.wolvencraft.yasp.db.data.items.Tables.ItemsPickedUp;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 

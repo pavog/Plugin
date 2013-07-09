@@ -25,7 +25,7 @@ import org.bukkit.block.BlockState;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.BlockTotals;
+import com.wolvencraft.yasp.db.data.blocks.Tables.BlockTotals;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 

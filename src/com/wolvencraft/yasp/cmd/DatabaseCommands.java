@@ -30,7 +30,7 @@ import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Database;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
+import com.wolvencraft.yasp.db.data.player.Tables.PlayerStats;
 import com.wolvencraft.yasp.managers.CommandManager;
 import com.wolvencraft.yasp.managers.CommandManager.Command;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;

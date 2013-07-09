@@ -29,8 +29,7 @@ import org.bukkit.entity.Player;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.player.PlayerData;
-import com.wolvencraft.yasp.db.tables.Normal;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
+import com.wolvencraft.yasp.db.data.player.Tables.PlayerStats;
 import com.wolvencraft.yasp.events.session.SessionCreateEvent;
 import com.wolvencraft.yasp.events.session.SessionRemoveEvent;
 import com.wolvencraft.yasp.managers.CacheManager.Type;
@@ -89,7 +88,7 @@ public class SessionCache extends CachedData {
             long totalPlaytime = ((PlayerData) session.getDataStore(com.wolvencraft.yasp.db.data.DataStore.Type.Player)).get().getTotalPlaytime();
             if(totalPlaytime > delay) continue;
             
-            Query.table(Normal.PlayerStats.TableName)
+            Query.table(PlayerStats.TableName)
                 .condition(PlayerStats.Name, session.getName())
                 .delete();
         }

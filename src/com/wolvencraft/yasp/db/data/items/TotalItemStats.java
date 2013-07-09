@@ -26,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.ItemTotals;
+import com.wolvencraft.yasp.db.data.items.Tables.ItemTotals;
 import com.wolvencraft.yasp.settings.Constants.ItemsWithMetadata;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 

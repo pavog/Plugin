@@ -22,7 +22,7 @@ package com.wolvencraft.yasp.db.data.distance;
 
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
+import com.wolvencraft.yasp.db.data.distance.Tables.PlayerDistance;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 /**

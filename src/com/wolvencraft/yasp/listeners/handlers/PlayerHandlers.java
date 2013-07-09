@@ -31,9 +31,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.wolvencraft.yasp.db.data.DataStore.Type;
+import com.wolvencraft.yasp.db.data.distance.Tables.PlayerDistance;
 import com.wolvencraft.yasp.db.data.misc.MiscData;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
+import com.wolvencraft.yasp.db.data.misc.Tables.PlayerData;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 

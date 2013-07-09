@@ -26,7 +26,7 @@ import lombok.Getter;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
+import com.wolvencraft.yasp.db.data.distance.Tables.PlayerDistance;
 
 /**
  * Represents the distances a player traveled.

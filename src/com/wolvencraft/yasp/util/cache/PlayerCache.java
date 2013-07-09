@@ -26,7 +26,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
+import com.wolvencraft.yasp.db.data.player.Tables.PlayerStats;
 import com.wolvencraft.yasp.util.Message;
 
 /**

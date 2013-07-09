@@ -28,8 +28,8 @@ import org.bukkit.block.BlockState;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.BlocksBroken;
-import com.wolvencraft.yasp.db.tables.Detailed.BlocksPlaced;
+import com.wolvencraft.yasp.db.data.blocks.Tables.BlocksBroken;
+import com.wolvencraft.yasp.db.data.blocks.Tables.BlocksPlaced;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 

@@ -31,7 +31,7 @@ import org.bukkit.material.MaterialData;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.PlayerKillsPVE;
+import com.wolvencraft.yasp.db.data.pve.Tables.PlayerKillsPVE;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.EntityCache;
 import com.wolvencraft.yasp.util.cache.MaterialCache;

@@ -1,5 +1,5 @@
 /*
- * Miscellaenous.java
+ * ConfigTables.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -18,7 +18,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.tables;
+package com.wolvencraft.yasp.db;
+
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,9 @@ import lombok.Getter;
  * @author bitWolfy
  *
  */
-public class Miscellaneous {
+public class ConfigTables {
+    
+    private ConfigTables() { }
     
     /**
      * Represents the <i>settings</i> table.

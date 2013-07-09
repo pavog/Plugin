@@ -26,7 +26,7 @@ import java.util.List;
 import org.bukkit.entity.EntityType;
 
 import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.tables.Miscellaneous.EntitiesTable;
+import com.wolvencraft.yasp.db.ConfigTables.EntitiesTable;
 import com.wolvencraft.yasp.managers.CacheManager.Type;
 
 /**

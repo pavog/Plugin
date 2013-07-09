@@ -27,7 +27,7 @@ import org.bukkit.Location;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.PlayerLog;
+import com.wolvencraft.yasp.db.data.player.Tables.PlayerLog;
 import com.wolvencraft.yasp.util.Util;
 
 /**

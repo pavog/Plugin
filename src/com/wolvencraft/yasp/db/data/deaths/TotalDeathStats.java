@@ -28,7 +28,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.DeathTotals;
+import com.wolvencraft.yasp.db.data.deaths.Tables.DeathTotals;
 
 /**
  * Represents the total number of times a player died of a particular cause.<br />

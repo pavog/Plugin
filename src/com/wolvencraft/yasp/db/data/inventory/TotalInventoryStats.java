@@ -30,7 +30,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerInv;
+import com.wolvencraft.yasp.db.data.inventory.Tables.PlayerInv;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.util.serializable.EffectsSerializable;
 import com.wolvencraft.yasp.util.serializable.InventorySerializable;

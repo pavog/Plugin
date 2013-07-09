@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitTask;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Miscellaneous.SettingsTable;
+import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 
 public class ConfigLock implements Runnable {

@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.Normal.PVPTotals;
+import com.wolvencraft.yasp.db.data.pvp.Tables.PVPTotals;
 import com.wolvencraft.yasp.util.cache.MaterialCache;
 
 /**

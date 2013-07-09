@@ -27,11 +27,11 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import com.wolvencraft.yasp.db.DBTable;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
-import com.wolvencraft.yasp.db.tables.DBTable;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
+import com.wolvencraft.yasp.db.data.misc.Tables.PlayerData;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.SessionCache;
 

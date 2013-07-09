@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import com.wolvencraft.yasp.db.tables.DBTable;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;

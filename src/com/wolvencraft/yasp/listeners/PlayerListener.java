@@ -38,7 +38,7 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
+import com.wolvencraft.yasp.db.data.misc.Tables.PlayerData;
 import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
 import com.wolvencraft.yasp.listeners.handlers.PlayerHandlers.PlayerIncrementStat;
 import com.wolvencraft.yasp.listeners.handlers.PlayerHandlers.PlayerMove;

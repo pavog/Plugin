@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.wolvencraft.yasp.db.tables;
+package com.wolvencraft.yasp.db;
 
 /**
  * Common interface for database tables.<br />

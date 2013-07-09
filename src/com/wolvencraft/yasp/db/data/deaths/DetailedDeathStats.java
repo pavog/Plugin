@@ -28,7 +28,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
-import com.wolvencraft.yasp.db.tables.Detailed.PlayerDeaths;
+import com.wolvencraft.yasp.db.data.deaths.Tables.PlayerDeaths;
 import com.wolvencraft.yasp.util.Util;
 
 public class DetailedDeathStats {

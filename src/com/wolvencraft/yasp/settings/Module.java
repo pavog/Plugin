@@ -32,6 +32,7 @@ import com.google.common.collect.Lists;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.blocks.BlockData;
 import com.wolvencraft.yasp.db.data.deaths.DeathData;
@@ -51,7 +52,6 @@ import com.wolvencraft.yasp.db.data.hooks.worldguard.WorldGuardData;
 import com.wolvencraft.yasp.db.data.items.ItemData;
 import com.wolvencraft.yasp.db.data.pve.PVEData;
 import com.wolvencraft.yasp.db.data.pvp.PVPData;
-import com.wolvencraft.yasp.db.tables.Miscellaneous.SettingsTable;
 
 /**
  * Represents the different plugin modules

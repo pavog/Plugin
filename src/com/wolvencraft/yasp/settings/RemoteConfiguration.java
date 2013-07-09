@@ -25,7 +25,7 @@ import org.bukkit.Bukkit;
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
-import com.wolvencraft.yasp.db.tables.Miscellaneous.SettingsTable;
+import com.wolvencraft.yasp.db.ConfigTables.SettingsTable;
 
 /**
  * Represents the configuration pulled from the database.<br />
