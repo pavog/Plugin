@@ -26,8 +26,10 @@ import org.bukkit.entity.Player;
 
 import com.mctrakr.managers.CommandManager;
 import com.mctrakr.managers.CommandManager.Command;
+import com.mctrakr.session.OnlineSession;
 import com.mctrakr.util.Message;
 import com.mctrakr.util.cache.SessionCache;
+import com.mctrakr.util.tasks.ScoreboardProcess;
 
 public class PlayerCommands {
     
@@ -57,8 +59,14 @@ public class PlayerCommands {
             )
     public static boolean scoreboard(List<String> args) {
         Player player = (Player) CommandManager.getSender();
-        if(SessionCache.fetch(player).toggleScoreboard()) Message.sendFormattedSuccess("Displaying a scoreboard");
-        else Message.sendFormattedSuccess("Scoreboard disabled");
+        OnlineSession session = SessionCache.fetch(player);
+        if(ScoreboardProcess.isDisplayed(session)) {
+            ScoreboardProcess.addPlayer(session);
+            Message.sendFormattedSuccess("Scoreboard disabled");
+        } else {
+            ScoreboardProcess.removePlayer(session);
+            Message.sendFormattedSuccess("Displaying a scoreboard");
+        }
         return true;
     }
     

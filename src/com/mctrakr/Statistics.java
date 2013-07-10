@@ -60,7 +60,7 @@ import com.mctrakr.util.ExceptionHandler;
 import com.mctrakr.util.Message;
 import com.mctrakr.util.cache.SessionCache;
 import com.mctrakr.util.tasks.DatabaseTask;
-import com.mctrakr.util.tasks.RefreshTask;
+import com.mctrakr.util.tasks.ScoreboardProcess;
 import com.mctrakr.util.tasks.SignRefreshTask;
 import com.mctrakr.util.tasks.SignRefreshTask.StatsSign;
 import com.mctrakr.util.tasks.TickTask;
@@ -156,7 +156,7 @@ public class Statistics extends JavaPlugin {
         CacheManager.startAll();
         
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseTask(), (ping / 2), ping);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTask(), 0L, 20L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ScoreboardProcess(), 20L, 20L);
         
         Bukkit.getScheduler().runTaskTimer(this, new SignRefreshTask(), ping, ping);
         Bukkit.getScheduler().runTaskTimer(this, new TickTask(), 0L, 1L);

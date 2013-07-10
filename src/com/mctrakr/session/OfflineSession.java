@@ -23,9 +23,6 @@ package com.mctrakr.session;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-import org.bukkit.Bukkit;
-
-import com.mctrakr.db.totals.PlayerTotals;
 import com.mctrakr.util.cache.PlayerCache;
 
 /**
@@ -35,28 +32,10 @@ import com.mctrakr.util.cache.PlayerCache;
  *
  */
 @Getter(AccessLevel.PUBLIC)
-public class OfflineSession implements PlayerSession {
+public class OfflineSession extends PlayerSession {
     
-    private final int id;
-    private final String name;
-    
-    private PlayerTotals playerTotals;
-    
-    /**
-     * <b>Default constructor</b><br />
-     * Creates a new player data session based on the username
-     * @param name Player username
-     */
     public OfflineSession(String name) {
-        this.name = name;
-        this.id = PlayerCache.get(name);
-        this.playerTotals = new PlayerTotals(id);
-    }
-
-    @Override
-    public boolean isOnline() {
-        if(Bukkit.getPlayerExact(name) == null) return false;
-        return true;
+        super(PlayerCache.get(name), name);
     }
 
 }

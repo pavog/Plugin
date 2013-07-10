@@ -20,29 +20,28 @@
 
 package com.mctrakr.session;
 
-/**
- * Player session interface
- * @author bitWolfy
- *
- */
-public interface PlayerSession {
+import org.bukkit.Bukkit;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+
+import com.mctrakr.db.totals.PlayerTotals;
+
+@Getter(AccessLevel.PUBLIC)
+public abstract class PlayerSession {
     
-    /**
-     * Returns the stored player ID
-     * @return Player ID
-     */
-    public int getId();
+    protected final int id;
+    protected final String name;
+    protected PlayerTotals playerTotals;
     
-    /**
-     * Returns the player name
-     * @return Player name
-     */
-    public String getName();
+    public PlayerSession(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.playerTotals = new PlayerTotals(id);
+    }
     
-    /**
-     * Checks if the player is online
-     * @return <b>true</b> if the player is online, <b>false</b> otherwise
-     */
-    public boolean isOnline();
+    public boolean isOnline() {
+        return Bukkit.getPlayerExact(name) != null;
+    }
     
 }
