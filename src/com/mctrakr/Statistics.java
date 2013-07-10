@@ -191,4 +191,5 @@ public class Statistics extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return CommandManager.run(sender, args);
     }
+    
 }

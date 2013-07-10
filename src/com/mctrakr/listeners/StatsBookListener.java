@@ -20,11 +20,6 @@
 
 package com.mctrakr.listeners;
 
-import net.minecraft.server.v1_6_R2.NBTTagCompound;
-import net.minecraft.server.v1_6_R2.NBTTagList;
-import net.minecraft.server.v1_6_R2.NBTTagString;
-
-import org.bukkit.craftbukkit.v1_6_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,6 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 import com.mctrakr.Statistics;
 import com.mctrakr.util.BookUtil;
@@ -58,35 +54,18 @@ public class StatsBookListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBookOpen(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !event.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
-        ItemStack craftItem = event.getItem();
-        if(craftItem == null || (craftItem.getTypeId() != 387 && craftItem.getTypeId() != 340)) return;
-        net.minecraft.server.v1_6_R2.ItemStack item = CraftItemStack.asNMSCopy(craftItem);
+        ItemStack bookStack = event.getItem();
+        if(bookStack == null || (bookStack.getTypeId() != 387 && bookStack.getTypeId() != 340)) return;
+        BookMeta book = (BookMeta) bookStack.getItemMeta();
         
-        NBTTagCompound tags = item.getTag();
-        if (tags == null) {
-            tags = new NBTTagCompound();
-            item.setTag(tags);
-        }
-        
-        String author = tags.getString("author");
-        String title = tags.getString("title");
         Player player = event.getPlayer();
-        if(!(author.equals("Statistics"))) return;
-        Message.debug("Player " + player.getPlayerListName() + " read the book '" + title + "' by " + author);
-        String playerName = title.split(" ")[0];
         
-        NBTTagList pages = new NBTTagList("pages");
-        String[] newPages = BookUtil.getBookPages(playerName);
+        if(!book.getAuthor().equals("Statisitcs")) return;
         
-        for(int i = 0; i < newPages.length; i++) {
-            pages.add(new NBTTagString("" + i + "", newPages[i]));
-        }
-        tags.set("pages", pages);
-        item.setTag(tags);
+        book.setPages(BookUtil.getBookPages(player.getName()));
         
-        player.getInventory().remove(player.getItemInHand());
-        ItemStack newItem = CraftItemStack.asBukkitCopy(item);
-        player.getInventory().setItemInHand(newItem);
+        bookStack.setItemMeta(book);
+        player.getInventory().setItemInHand(bookStack);
         Message.debug("Refreshed the book contents");
     }
     
