@@ -33,7 +33,7 @@ import com.mctrakr.db.Query;
 import com.mctrakr.db.Query.QueryResult;
 import com.mctrakr.util.Util;
 import com.mctrakr.util.VariableManager.ServerVariable;
-import com.mctrakr.util.tasks.TickTask;
+import com.mctrakr.util.tasks.TickProcess;
 
 /**
  * Data collector that stores server-specific information.
@@ -88,7 +88,7 @@ public class ServerStatistics {
         Runtime runtime = Runtime.getRuntime();
         totalMemory = runtime.totalMemory();
         freeMemory = runtime.freeMemory();
-        ticksPerSecond = TickTask.getTicksPerSecond();
+        ticksPerSecond = TickProcess.getTicksPerSecond();
         availableProcessors = runtime.availableProcessors();
 
         serverIP = Bukkit.getIp();
@@ -140,7 +140,7 @@ public class ServerStatistics {
         Runtime runtime = Runtime.getRuntime();
         totalMemory = runtime.totalMemory();
         freeMemory = runtime.freeMemory();
-        ticksPerSecond = TickTask.getTicksPerSecond();
+        ticksPerSecond = TickProcess.getTicksPerSecond();
         
         Query.table(ServerStatsTable.TableName).value("value", currentUptime).condition("key", "current_uptime").update();
         Query.table(ServerStatsTable.TableName).value("value", totalUptime).condition("key", "total_uptime").update();

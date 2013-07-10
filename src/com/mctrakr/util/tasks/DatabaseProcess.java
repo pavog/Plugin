@@ -37,14 +37,14 @@ import com.mctrakr.util.cache.SessionCache;
  * @author bitWolfy
  *
  */
-public class DatabaseTask implements Runnable {
+public class DatabaseProcess implements Runnable {
     
     private static int iteration;
 
     /**
      * <b>Default constructor.</b>
      */
-    public DatabaseTask() {
+    public DatabaseProcess() {
         iteration = 0;
     }
     

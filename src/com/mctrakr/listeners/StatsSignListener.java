@@ -34,7 +34,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.mctrakr.Statistics;
 import com.mctrakr.managers.CommandManager;
 import com.mctrakr.util.Message;
-import com.mctrakr.util.tasks.SignRefreshTask;
+import com.mctrakr.util.tasks.SignProcess;
 
 /**
  * Handles StatsSign events
@@ -62,15 +62,15 @@ public class StatsSignListener implements Listener {
         if(!(block.getState() instanceof Sign)) return;
         
         Sign sign = (Sign) block.getState();
-        if(SignRefreshTask.isValid(sign)) {
+        if(SignProcess.isValid(sign)) {
             Message.debug("Stats sign found at the location!");
             return;
         }
         
         if(!sign.getLines()[0].startsWith("<Y>")) return;
-        SignRefreshTask.add(sign);
+        SignProcess.add(sign);
         Message.sendFormattedSuccess(CommandManager.getSender(), "A new StatsSign has been added");
-        SignRefreshTask.updateAll();
+        SignProcess.updateAll();
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -78,9 +78,9 @@ public class StatsSignListener implements Listener {
         BlockState blockState = event.getBlock().getState();
         if(!(blockState instanceof Sign)) return;
         Sign sign = (Sign) blockState;
-        if(!SignRefreshTask.isValid(sign)) return;
+        if(!SignProcess.isValid(sign)) return;
         Message.debug("Stats sign found at the location!");
-        SignRefreshTask.remove(sign);
+        SignProcess.remove(sign);
         Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
     }
     

@@ -36,8 +36,8 @@ import com.mctrakr.managers.CommandManager.Command;
 import com.mctrakr.settings.Constants.StatPerms;
 import com.mctrakr.util.Message;
 import com.mctrakr.util.cache.SessionCache;
-import com.mctrakr.util.tasks.DatabaseTask;
-import com.mctrakr.util.tasks.SignRefreshTask;
+import com.mctrakr.util.tasks.DatabaseProcess;
+import com.mctrakr.util.tasks.SignProcess;
 
 public class DatabaseCommands {
     
@@ -56,7 +56,7 @@ public class DatabaseCommands {
 
             @Override
             public void run() {
-                DatabaseTask.commit();
+                DatabaseProcess.commit();
                 
                 List<QueryResult> results= Query.table(PlayersTable.TableName).column(PlayersTable.Name).condition(PlayersTable.Online, true).selectAll();
                 for(QueryResult result : results) {
@@ -69,7 +69,7 @@ public class DatabaseCommands {
                     
                     @Override
                     public void run() {
-                        SignRefreshTask.updateAll();
+                        SignProcess.updateAll();
                     }
                     
                 });

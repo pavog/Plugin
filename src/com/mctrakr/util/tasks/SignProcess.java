@@ -51,16 +51,16 @@ import com.mctrakr.util.Util;
  * @author bitWolfy
  *
  */
-public class SignRefreshTask implements Runnable {
+public class SignProcess implements Runnable {
     
     private static List<StatsSign> signs;
-    private static SignRefreshTask instance;
+    private static SignProcess instance;
     
     /**
      * <b>Default constructor</b><br />
      * Creates a list of active signs and loads stored sign information from file
      */
-    public SignRefreshTask() {
+    public SignProcess() {
         instance = this;
         signs = new ArrayList<StatsSign>();
         File signFolder = new File(Statistics.getInstance().getDataFolder(), "signs");

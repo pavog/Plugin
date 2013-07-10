@@ -28,13 +28,13 @@ import com.mctrakr.Statistics;
  * @author bitWolfy
  *
  */
-public class TickTask implements Runnable {
+public class TickProcess implements Runnable {
     
     /**
      * <b>Default constructor.</b><br />
      * Creates a new tracker to record ticks per second.
      */
-    public TickTask() {
+    public TickProcess() {
         ticksPerSecond = 0;
     }
     

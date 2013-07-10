@@ -59,11 +59,11 @@ import com.mctrakr.settings.RemoteConfiguration;
 import com.mctrakr.util.ExceptionHandler;
 import com.mctrakr.util.Message;
 import com.mctrakr.util.cache.SessionCache;
-import com.mctrakr.util.tasks.DatabaseTask;
+import com.mctrakr.util.tasks.DatabaseProcess;
 import com.mctrakr.util.tasks.ScoreboardProcess;
-import com.mctrakr.util.tasks.SignRefreshTask;
-import com.mctrakr.util.tasks.SignRefreshTask.StatsSign;
-import com.mctrakr.util.tasks.TickTask;
+import com.mctrakr.util.tasks.SignProcess;
+import com.mctrakr.util.tasks.SignProcess.StatsSign;
+import com.mctrakr.util.tasks.TickProcess;
 
 /**
  * <b>Main plugin class</b><br />
@@ -155,11 +155,11 @@ public class Statistics extends JavaPlugin {
         
         CacheManager.startAll();
         
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseTask(), (ping / 2), ping);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseProcess(), (ping / 2), ping);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ScoreboardProcess(), 20L, 20L);
         
-        Bukkit.getScheduler().runTaskTimer(this, new SignRefreshTask(), ping, ping);
-        Bukkit.getScheduler().runTaskTimer(this, new TickTask(), 0L, 1L);
+        Bukkit.getScheduler().runTaskTimer(this, new SignProcess(), ping, ping);
+        Bukkit.getScheduler().runTaskTimer(this, new TickProcess(), 0L, 1L);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class Statistics extends JavaPlugin {
             for(Player player : Bukkit.getOnlinePlayers()) {
                 ((PlayerDataStore) SessionCache.fetch(player).getDataStore(ModuleType.Player)).addPlayerLog(player.getLocation(), false);
             }
-            DatabaseTask.commit();
+            DatabaseProcess.commit();
             serverStatistics.pluginShutdown();
             SessionCache.dumpSessions();
             
