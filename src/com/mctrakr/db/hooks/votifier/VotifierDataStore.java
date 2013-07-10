@@ -20,9 +20,10 @@
 
 package com.mctrakr.db.hooks.votifier;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.HookType;
 import com.vexsoftware.votifier.model.Vote;
 
 public class VotifierDataStore extends LargeDataStore<VotifierTotalStats, VotifierDetailedStats> {

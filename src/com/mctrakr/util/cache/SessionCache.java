@@ -28,7 +28,6 @@ import org.bukkit.entity.Player;
 
 import com.mctrakr.Statistics;
 import com.mctrakr.db.Query;
-import com.mctrakr.db.data.DataStore.ModuleType;
 import com.mctrakr.db.data.player.PlayerDataStore;
 import com.mctrakr.db.data.player.Tables.PlayersTable;
 import com.mctrakr.events.session.SessionCreateEvent;
@@ -36,6 +35,7 @@ import com.mctrakr.events.session.SessionRemoveEvent;
 import com.mctrakr.managers.CacheManager.Type;
 import com.mctrakr.session.OfflineSession;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.settings.Constants.StatPerms;
 import com.mctrakr.settings.RemoteConfiguration;
 import com.mctrakr.util.Message;
@@ -67,7 +67,7 @@ public class SessionCache extends CachedData {
                 for(Player player : Bukkit.getServer().getOnlinePlayers()) {
                     if(StatPerms.Statistics.has(player))
                         ((PlayerDataStore) fetch(player, true)
-                                .getDataStore(ModuleType.Player))
+                                .getDataStore(PrimaryType.Player))
                                 .addPlayerLog(player.getLocation(), true);
                 }
             }
@@ -86,7 +86,7 @@ public class SessionCache extends CachedData {
             long delay = RemoteConfiguration.LogDelay.asInteger();
             
             if(delay == 0) continue;
-            long totalPlaytime = ((PlayerDataStore) session.getDataStore(ModuleType.Player)).getNormalData().getTotalPlaytime();
+            long totalPlaytime = ((PlayerDataStore) session.getDataStore(PrimaryType.Player)).getNormalData().getTotalPlaytime();
             if(totalPlaytime > delay) continue;
             
             Query.table(PlayersTable.TableName)

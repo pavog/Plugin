@@ -32,7 +32,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.db.data.DataStore.DataStoreType;
 import com.mctrakr.db.hooks.PluginHook;
 import com.mctrakr.db.hooks.admincmd.AdminCmdHook;
 import com.mctrakr.db.hooks.banhammer.BanHammerHook;
@@ -46,6 +45,7 @@ import com.mctrakr.db.hooks.vault.VaultHook;
 import com.mctrakr.db.hooks.votifier.VotifierHook;
 import com.mctrakr.db.hooks.worldguard.WorldGuardHook;
 import com.mctrakr.events.plugin.HookInitEvent;
+import com.mctrakr.settings.ConfigLock.ModuleType;
 import com.mctrakr.util.ExceptionHandler;
 import com.mctrakr.util.Message;
 
@@ -123,7 +123,7 @@ public class HookManager {
      * @param type Hook type
      * @return Hook, or <b>null</b> if it isn't active
      */
-    public static PluginHook getHook(DataStoreType type) {
+    public static PluginHook getHook(ModuleType type) {
         for(PluginHook hook : activeHooks) {
             if(hook.getLock().getType() == type) return hook;
         }

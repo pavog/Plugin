@@ -26,9 +26,9 @@ import lombok.AllArgsConstructor;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
-import com.mctrakr.db.data.DataStore.ModuleType;
 import com.mctrakr.db.data.blocks.BlocksDataStore;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.util.cache.SessionCache;
 
 public class BlockHandlers {
@@ -47,7 +47,7 @@ public class BlockHandlers {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((BlocksDataStore) session.getDataStore(ModuleType.Blocks)).blockPlace(block);
+            ((BlocksDataStore) session.getDataStore(PrimaryType.Blocks)).blockPlace(block);
             session.getPlayerTotals().blockPlace();
         }
         
@@ -67,7 +67,7 @@ public class BlockHandlers {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((BlocksDataStore) session.getDataStore(ModuleType.Blocks)).blockBreak(block);
+            ((BlocksDataStore) session.getDataStore(PrimaryType.Blocks)).blockBreak(block);
             session.getPlayerTotals().blockBreak();
         }
         

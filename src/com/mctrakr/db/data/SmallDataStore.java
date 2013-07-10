@@ -24,13 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock.ModuleType;
 
 public abstract class SmallDataStore<N extends NormalData, D extends DetailedData> extends DataStore {
     
     private N normalData;
     private List<D> detailedData;
     
-    public SmallDataStore(OnlineSession session, DataStoreType type) {
+    public SmallDataStore(OnlineSession session, ModuleType type) {
         super(session, type);
         
         normalData = null;

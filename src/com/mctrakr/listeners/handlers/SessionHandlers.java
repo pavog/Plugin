@@ -26,8 +26,8 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.db.data.DataStore.ModuleType;
 import com.mctrakr.db.data.player.PlayerDataStore;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.util.cache.SessionCache;
 
 public class SessionHandlers {
@@ -45,7 +45,7 @@ public class SessionHandlers {
         @Override
         public void run() {
             Statistics.getServerStatistics().playerLogin();
-            ((PlayerDataStore) SessionCache.fetch(player, true).getDataStore(ModuleType.Player)).addPlayerLog(player.getLocation(), true);
+            ((PlayerDataStore) SessionCache.fetch(player, true).getDataStore(PrimaryType.Player)).addPlayerLog(player.getLocation(), true);
         }
     }
     
@@ -61,7 +61,7 @@ public class SessionHandlers {
         
         @Override
         public void run() {
-            ((PlayerDataStore) SessionCache.fetch(player, true).getDataStore(ModuleType.Player)).addPlayerLog(player.getLocation(), false);
+            ((PlayerDataStore) SessionCache.fetch(player, true).getDataStore(PrimaryType.Player)).addPlayerLog(player.getLocation(), false);
         }
     }
     

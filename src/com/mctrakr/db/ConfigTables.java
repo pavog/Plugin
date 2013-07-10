@@ -65,6 +65,7 @@ public class ConfigTables {
         TableName       ("modules"),
         Name            ("module_name"),
         IsEnabled       ("is_enabled"),
+        Type            ("module_type"),
         LoadOrder       ("load_order"),
         Version         ("version"),
         ;

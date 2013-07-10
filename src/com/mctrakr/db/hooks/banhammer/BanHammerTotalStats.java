@@ -21,11 +21,11 @@
 package com.mctrakr.db.hooks.banhammer;
 
 import com.mctrakr.db.Query;
-import com.mctrakr.db.data.DataStore.HookType;
 import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.hooks.banhammer.Tables.BanHammerTable;
 import com.mctrakr.managers.HookManager;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock.HookType;
 
 public class BanHammerTotalStats extends NormalData {
     

@@ -24,11 +24,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.mctrakr.db.Query;
-import com.mctrakr.db.data.DataStore.HookType;
 import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.hooks.admincmd.Tables.AdminCmdTable;
 import com.mctrakr.managers.HookManager;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock.HookType;
 
 public class AdminCmdTotalStats extends NormalData {
     

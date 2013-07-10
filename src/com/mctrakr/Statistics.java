@@ -38,7 +38,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mctrakr.db.Database;
 import com.mctrakr.db.PatchManager;
-import com.mctrakr.db.data.DataStore.ModuleType;
 import com.mctrakr.db.data.ServerStatistics;
 import com.mctrakr.db.data.player.PlayerDataStore;
 import com.mctrakr.db.totals.ServerTotals;
@@ -56,6 +55,7 @@ import com.mctrakr.managers.HookManager;
 import com.mctrakr.managers.ModuleManager;
 import com.mctrakr.settings.LocalConfiguration;
 import com.mctrakr.settings.RemoteConfiguration;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.util.ExceptionHandler;
 import com.mctrakr.util.Message;
 import com.mctrakr.util.cache.SessionCache;
@@ -168,7 +168,7 @@ public class Statistics extends JavaPlugin {
         
         try {
             for(Player player : Bukkit.getOnlinePlayers()) {
-                ((PlayerDataStore) SessionCache.fetch(player).getDataStore(ModuleType.Player)).addPlayerLog(player.getLocation(), false);
+                ((PlayerDataStore) SessionCache.fetch(player).getDataStore(PrimaryType.Player)).addPlayerLog(player.getLocation(), false);
             }
             DatabaseProcess.commit();
             serverStatistics.pluginShutdown();

@@ -27,7 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import com.mctrakr.db.PatchManager;
-import com.mctrakr.db.data.ConfigLock;
+import com.mctrakr.settings.ConfigLock;
 import com.mctrakr.util.ExceptionHandler;
 
 @Getter(AccessLevel.PUBLIC)

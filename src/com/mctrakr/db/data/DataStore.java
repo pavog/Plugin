@@ -25,13 +25,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.ModuleType;
 
 @Getter(AccessLevel.PUBLIC)
 @AllArgsConstructor(access=AccessLevel.PUBLIC)
 public abstract class DataStore {
     
     private OnlineSession session;
-    private DataStoreType type;
+    private ModuleType type;
     
     /**
      * Returns the configuration lock
@@ -51,72 +53,5 @@ public abstract class DataStore {
      * Clears the data store of all locally stored data.
      */
     public abstract void dump();
-    
-    /**
-     * Generic data store type.
-     * @author bitWolfy
-     *
-     */
-    public static interface DataStoreType {
-        
-        /**
-         * Returns the type alias
-         * @return Data store alias
-         */
-        public String getAlias();
-        
-    }
-    
-    /**
-     * Represents different types of built-in modules.
-     * Exists for convenience purposes only
-     * @author bitWolfy
-     *
-     */
-    @Getter(AccessLevel.PUBLIC)
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public enum ModuleType implements DataStoreType {
-        
-        Blocks          ("blocks"),
-        Deaths          ("deaths"),
-        Distance        ("distance"),
-        Inventory       ("inventory"),
-        Items           ("items"),
-        Misc            ("misc"),
-        Player          ("player"),
-        PVE             ("pve"),
-        PVP             ("pvp"),
-        ;
-        
-        private String alias;
-    }
-    
-    /**
-     * Represents different types of hook modules.
-     * Exists for convenience purposes only
-     * @author bitWolfy
-     *
-     */
-    @Getter(AccessLevel.PUBLIC)
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public enum HookType implements DataStoreType {
-
-        AdminCmd        ("admincmd"),
-        BanHammer       ("banhammer"),
-        CommandBook     ("commandbook"),
-        Factions        ("factions"),
-        Jail            ("jail"),
-        McMMO           ("mcmmo"),
-        MobArena        ("mobarena"),
-        PvpArena        ("pvparena"),
-        Towny           ("towny"),
-        Vanish          ("vanish"),
-        Vault           ("vault"),
-        Votifier        ("votifier"),
-        WorldGuard      ("worldguard"),
-        ;
-        
-        private String alias;
-    }
 
 }

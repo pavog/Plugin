@@ -20,11 +20,12 @@
 
 package com.mctrakr.db.data.distance;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.DetailedData;
 import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.db.data.distance.Tables.DistancesTable;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 
 /**
  * Data store that handles player travel distances
@@ -33,10 +34,10 @@ import com.mctrakr.session.OnlineSession;
  */
 public class DistancesDataStore extends LargeDataStore<DistancesTotalStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(ModuleType.Distance);
+    public static ConfigLock lock = new ConfigLock(PrimaryType.Distance);
     
     public DistancesDataStore(OnlineSession session) {
-        super(session, ModuleType.Distance);
+        super(session, PrimaryType.Distance);
         addNormalDataEntry(new DistancesTotalStats(session.getId()));
     }
     

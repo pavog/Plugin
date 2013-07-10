@@ -32,11 +32,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-import com.mctrakr.db.data.DataStore.ModuleType;
 import com.mctrakr.db.data.items.ItemsDataStore;
 import com.mctrakr.db.data.misc.MiscDataStore;
 import com.mctrakr.db.data.misc.Tables.MiscInfoTable;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.util.cache.SessionCache;
 
 public class ItemsHandler {
@@ -56,7 +56,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemPickUp(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(PrimaryType.Items)).itemPickUp(location, itemStack);
         }
     }
     
@@ -75,7 +75,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemDrop(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(PrimaryType.Items)).itemDrop(location, itemStack);
         }
     }
     
@@ -92,9 +92,9 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemUse(player.getLocation(), player.getItemInHand());
+            ((ItemsDataStore) session.getDataStore(PrimaryType.Items)).itemUse(player.getLocation(), player.getItemInHand());
             session.getPlayerTotals().snacksEaten();
-            ((MiscDataStore) session.getDataStore(ModuleType.Misc)).getNormalData().incrementStat(MiscInfoTable.FoodEaten);
+            ((MiscDataStore) session.getDataStore(PrimaryType.Misc)).getNormalData().incrementStat(MiscInfoTable.FoodEaten);
         }
     }
     
@@ -113,7 +113,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemCraft(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(PrimaryType.Items)).itemCraft(location, itemStack);
             session.getPlayerTotals().itemCraft();
         }
     }
@@ -133,7 +133,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemSmelt(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(PrimaryType.Items)).itemSmelt(location, itemStack);
         }
     }
     
@@ -152,7 +152,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemBreak(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(PrimaryType.Items)).itemBreak(location, itemStack);
             session.getPlayerTotals().toolBreak();
         }
     }
@@ -172,7 +172,7 @@ public class ItemsHandler {
         @Override
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemEnchant(location, itemStack);
+            ((ItemsDataStore) session.getDataStore(PrimaryType.Items)).itemEnchant(location, itemStack);
         }
     }
     
@@ -215,7 +215,7 @@ public class ItemsHandler {
             if(player.getLevel() < repairCost) return;
 
             OnlineSession session = SessionCache.fetch(player);
-            ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemRepair(player.getLocation(), resultSlot);
+            ((ItemsDataStore) session.getDataStore(PrimaryType.Items)).itemRepair(player.getLocation(), resultSlot);
         }
     }
     

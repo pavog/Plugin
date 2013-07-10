@@ -24,11 +24,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.db.data.pvp.PvpDetailedStats.PVPEntry;
 import com.mctrakr.events.player.TrackedPVPEvent;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.util.cache.PlayerCache;
 
 /**
@@ -38,10 +39,10 @@ import com.mctrakr.util.cache.PlayerCache;
  */
 public class PvpDataStore extends LargeDataStore<PvpTotalStats, PVPEntry> {
     
-    public static ConfigLock lock = new ConfigLock(ModuleType.PVP);
+    public static ConfigLock lock = new ConfigLock(PrimaryType.PVP);
     
     public PvpDataStore(OnlineSession session) {
-        super(session, ModuleType.PVP);
+        super(session, PrimaryType.PVP);
     }
     
     @Override

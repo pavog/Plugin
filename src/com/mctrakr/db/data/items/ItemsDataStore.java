@@ -24,7 +24,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.DetailedData;
 import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.db.data.items.ItemsDetailedStats.ItemConsumeEntry;
@@ -34,6 +33,8 @@ import com.mctrakr.events.player.TrackedItemDropEvent;
 import com.mctrakr.events.player.TrackedItemPickupEvent;
 import com.mctrakr.events.player.TrackedItemUseEvent;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 
 /**
  * Data store that records all item interactions on the server.
@@ -42,10 +43,10 @@ import com.mctrakr.session.OnlineSession;
  */
 public class ItemsDataStore extends LargeDataStore<ItemsTotalStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(ModuleType.Items);
+    public static ConfigLock lock = new ConfigLock(PrimaryType.Items);
     
     public ItemsDataStore(OnlineSession session) {
-        super(session, ModuleType.Items);
+        super(session, PrimaryType.Items);
     }
     
     @Override

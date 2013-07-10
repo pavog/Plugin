@@ -38,7 +38,6 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import com.mctrakr.db.Query;
 import com.mctrakr.db.data.DataStore;
-import com.mctrakr.db.data.DataStore.ModuleType;
 import com.mctrakr.db.data.deaths.DeathsDataStore;
 import com.mctrakr.db.data.distance.DistancesDataStore;
 import com.mctrakr.db.data.distance.Tables.DistancesTable;
@@ -47,6 +46,8 @@ import com.mctrakr.db.data.player.Tables.PlayersTable;
 import com.mctrakr.db.data.pve.PveDataStore;
 import com.mctrakr.db.data.pvp.PvpDataStore;
 import com.mctrakr.managers.ModuleManager;
+import com.mctrakr.settings.ConfigLock.ModuleType;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.util.cache.PlayerCache;
 import com.mctrakr.util.cache.SessionCache;
 
@@ -136,7 +137,7 @@ public class OnlineSession extends PlayerSession {
      * @param distance Distance traveled
      */
     public void addDistance(DistancesTable type, double distance) {
-        ((DistancesDataStore) getDataStore(ModuleType.Distance)).playerTravel(type, distance);
+        ((DistancesDataStore) getDataStore(PrimaryType.Distance)).playerTravel(type, distance);
         playerTotals.addDistance(type, distance);
     }
     
@@ -146,8 +147,8 @@ public class OnlineSession extends PlayerSession {
      * @param weapon Weapon used by killer
      */
     public void killedPlayer(Player victim, ItemStack weapon) {
-        ((PvpDataStore) getDataStore(ModuleType.PVP)).playerKilledPlayer(victim, weapon);
-        ((MiscDataStore) getDataStore(ModuleType.Misc)).getNormalData().killed(victim);
+        ((PvpDataStore) getDataStore(PrimaryType.PVP)).playerKilledPlayer(victim, weapon);
+        ((MiscDataStore) getDataStore(PrimaryType.Misc)).getNormalData().killed(victim);
         playerTotals.pvpKill();
         SessionCache.fetch(victim).getPlayerTotals().death();
     }
@@ -158,7 +159,7 @@ public class OnlineSession extends PlayerSession {
      * @param weapon Weapon used by killer
      */
     public void killedCreature(Entity victim, ItemStack weapon) {
-        ((PveDataStore) getDataStore(ModuleType.PVE)).playerKilledCreature(victim, weapon);
+        ((PveDataStore) getDataStore(PrimaryType.PVE)).playerKilledCreature(victim, weapon);
         playerTotals.pveKill();
     }
     
@@ -168,7 +169,7 @@ public class OnlineSession extends PlayerSession {
      * @param weapon Weapon used by killer
      */
     public void killedByCreature(Entity killer, ItemStack weapon) {
-        ((PveDataStore) getDataStore(ModuleType.PVE)).creatureKilledPlayer(killer, weapon);
+        ((PveDataStore) getDataStore(PrimaryType.PVE)).creatureKilledPlayer(killer, weapon);
         died();
     }
     
@@ -178,7 +179,7 @@ public class OnlineSession extends PlayerSession {
      * @param cause Death cause
      */
     public void killedByEnvironment(Location location, DamageCause cause) {
-        ((DeathsDataStore) getDataStore(ModuleType.Deaths)).playerDied(location, cause);
+        ((DeathsDataStore) getDataStore(PrimaryType.Deaths)).playerDied(location, cause);
         died();
     }
     
@@ -187,7 +188,7 @@ public class OnlineSession extends PlayerSession {
      * This method is for internal use; you do not need to run it from listener
      */
     public void died() {
-        ((MiscDataStore) getDataStore(ModuleType.Misc)).getNormalData().died();
+        ((MiscDataStore) getDataStore(PrimaryType.Misc)).getNormalData().died();
         playerTotals.death();
     }
     

@@ -20,10 +20,11 @@
 
 package com.mctrakr.db.hooks.admincmd;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.DetailedData;
 import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.HookType;
 
 public class AdminCmdDataStore extends SmallDataStore<AdminCmdTotalStats, DetailedData> {
     

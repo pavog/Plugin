@@ -25,11 +25,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.db.data.pve.PveDetailedStats.PVEEntry;
 import com.mctrakr.events.player.TrackedPVEEvent;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 
 /**
  * Data store that handles all PVE statistics on the server
@@ -38,10 +39,10 @@ import com.mctrakr.session.OnlineSession;
  */
 public class PveDataStore extends LargeDataStore<PveTotalStats, PVEEntry> {
     
-    public static ConfigLock lock = new ConfigLock(ModuleType.PVE);
+    public static ConfigLock lock = new ConfigLock(PrimaryType.PVE);
     
     public PveDataStore(OnlineSession session) {
-        super(session, ModuleType.PVE);
+        super(session, PrimaryType.PVE);
     }
     
     @Override

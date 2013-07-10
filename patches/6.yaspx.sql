@@ -16,7 +16,7 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_modules` (
   `module_id` INT NOT NULL AUTO_INCREMENT ,
   `module_name` VARCHAR(16) NOT NULL ,
   `is_enabled` TINYINT(1) NOT NULL DEFAULT 0 ,
-  `is_hook` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `module_type` VARCHAR(16) NOT NULL ,
   `load_order` TINYINT(1) NOT NULL DEFAULT 0 ,
   `version` INT(11) NULL DEFAULT 0 ,
   PRIMARY KEY (`module_id`),

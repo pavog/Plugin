@@ -18,9 +18,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.mctrakr.db.data;
+package com.mctrakr.settings;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import org.bukkit.Bukkit;
@@ -30,8 +31,6 @@ import com.mctrakr.Statistics;
 import com.mctrakr.db.ConfigTables.ModulesTable;
 import com.mctrakr.db.Query;
 import com.mctrakr.db.Query.QueryResult;
-import com.mctrakr.db.data.DataStore.DataStoreType;
-import com.mctrakr.settings.RemoteConfiguration;
 
 @Getter(AccessLevel.PUBLIC)
 public class ConfigLock implements Runnable {
@@ -39,19 +38,19 @@ public class ConfigLock implements Runnable {
     @Getter(AccessLevel.NONE)
     private BukkitTask process;
     
-    private DataStoreType type;
+    private ModuleType type;
     private boolean enabled;
     private boolean hook;
     private int loadOrder;
     private int version;
     
-    public ConfigLock(DataStoreType type) {
+    public ConfigLock(ModuleType type) {
         this.type = type;
         this.hook = false;
         init();
     }
     
-    public ConfigLock(DataStoreType type, boolean hook) {
+    public ConfigLock(ModuleType type, boolean hook) {
         this.type = type;
         this.hook = hook;
         init();
@@ -84,10 +83,16 @@ public class ConfigLock implements Runnable {
             loadOrder = 0;
             version = 0;
             
+            String moduleType = "module";
+            if(type instanceof PrimaryType) moduleType = "module";
+            else if(type instanceof HookType) moduleType = "hook";
+            else moduleType = "property";
+            
             Query.table(ModulesTable.TableName)
                 .value(ModulesTable.Name, type.getAlias())
                 .value(ModulesTable.IsEnabled, enabled)
                 .value(ModulesTable.LoadOrder, loadOrder)
+                .value(ModulesTable.Type, moduleType)
                 .value(ModulesTable.Version, version)
                 .insert();
         } else {
@@ -109,4 +114,89 @@ public class ConfigLock implements Runnable {
         if(process != null) process.cancel();
     }
     
+    /**
+     * Generic data store type.
+     * @author bitWolfy
+     *
+     */
+    public static interface ModuleType {
+        
+        /**
+         * Returns the type alias
+         * @return Data store alias
+         */
+        public String getAlias();
+        
+    }
+    
+    /**
+     * Represents different types of built-in modules.
+     * Exists for convenience purposes only
+     * @author bitWolfy
+     *
+     */
+    @Getter(AccessLevel.PUBLIC)
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    public enum PrimaryType implements ModuleType {
+        
+        Blocks          ("blocks"),
+        Deaths          ("deaths"),
+        Distance        ("distance"),
+        Inventory       ("inventory"),
+        Items           ("items"),
+        Misc            ("misc"),
+        Player          ("player"),
+        PVE             ("pve"),
+        PVP             ("pvp"),
+        ;
+        
+        private String alias;
+    }
+    
+    /**
+     * Represents different types of hook modules.
+     * Exists for convenience purposes only
+     * @author bitWolfy
+     *
+     */
+    @Getter(AccessLevel.PUBLIC)
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    public enum HookType implements ModuleType {
+
+        AdminCmd        ("admincmd"),
+        BanHammer       ("banhammer"),
+        CommandBook     ("commandbook"),
+        Factions        ("factions"),
+        Jail            ("jail"),
+        McMMO           ("mcmmo"),
+        MobArena        ("mobarena"),
+        PvpArena        ("pvparena"),
+        Towny           ("towny"),
+        Vanish          ("vanish"),
+        Vault           ("vault"),
+        Votifier        ("votifier"),
+        WorldGuard      ("worldguard"),
+        ;
+        
+        private String alias;
+    }
+    
+    /**
+     * Represents different types of hook modules.
+     * Exists for convenience purposes only
+     * @author bitWolfy
+     *
+     */
+    @Getter(AccessLevel.PUBLIC)
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    public enum PropertyType implements ModuleType {
+        
+        Scoreboards     ("scoreboards"),
+        Signs           ("signs"),
+        ;
+        
+        private String alias;
+    }
+    
 }
+

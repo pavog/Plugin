@@ -20,10 +20,11 @@
 
 package com.mctrakr.db.hooks.commandbook;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.DetailedData;
 import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.HookType;
 
 public class CommandBookDataStore extends SmallDataStore<CommandBookTotalStats, DetailedData> {
     

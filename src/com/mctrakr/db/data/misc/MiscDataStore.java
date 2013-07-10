@@ -20,10 +20,11 @@
 
 package com.mctrakr.db.data.misc;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.DetailedData;
 import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 
 /**
  * Data store that records miscellaneous statistics.
@@ -33,10 +34,10 @@ import com.mctrakr.session.OnlineSession;
  */
 public class MiscDataStore extends SmallDataStore<MiscStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(ModuleType.Misc);
+    public static ConfigLock lock = new ConfigLock(PrimaryType.Misc);
     
     public MiscDataStore(OnlineSession session) {
-        super(session, ModuleType.Misc);
+        super(session, PrimaryType.Misc);
         setNormalData(new MiscStats(session.getId(), session.getBukkitPlayer()));
     }
     

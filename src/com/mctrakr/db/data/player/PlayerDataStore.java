@@ -22,11 +22,12 @@ package com.mctrakr.db.data.player;
 
 import org.bukkit.Location;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.db.data.player.PlayerDetailedStats.PlayerLogin;
 import com.mctrakr.db.data.player.PlayerTotalStats.BasicPlayerStats;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 
 /**
  * Holds generic player stats, plus login/logout times
@@ -35,10 +36,10 @@ import com.mctrakr.session.OnlineSession;
  */
 public class PlayerDataStore extends SmallDataStore<BasicPlayerStats, PlayerLogin> {
     
-    public static ConfigLock lock = new ConfigLock(ModuleType.Player);
+    public static ConfigLock lock = new ConfigLock(PrimaryType.Player);
     
     public PlayerDataStore(OnlineSession session) {
-        super(session, ModuleType.Player);
+        super(session, PrimaryType.Player);
         
         setNormalData(new BasicPlayerStats(session.getId(), session.getBukkitPlayer()));
     }

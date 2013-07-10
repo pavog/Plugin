@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock.ModuleType;
 
 /**
  * Common interface for all data stores
@@ -35,7 +36,7 @@ public abstract class LargeDataStore<N extends NormalData, D extends DetailedDat
     private List<N> normalData;
     private List<D> detailedData;
     
-    public LargeDataStore(OnlineSession session, DataStoreType type) {
+    public LargeDataStore(OnlineSession session, ModuleType type) {
         super(session, type);
         
         normalData = new ArrayList<N>();

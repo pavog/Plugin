@@ -24,11 +24,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.mctrakr.db.data.ConfigLock;
 import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.db.data.deaths.DeathsDetailedStats.NaturalDeathEntry;
 import com.mctrakr.events.player.NaturalDeathEvent;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 
 /**
  * Data store that handles all natural deaths on the server
@@ -37,10 +38,10 @@ import com.mctrakr.session.OnlineSession;
  */
 public class DeathsDataStore extends LargeDataStore<DeathsTotalStats, NaturalDeathEntry> {
     
-    public static ConfigLock lock = new ConfigLock(ModuleType.Deaths);
+    public static ConfigLock lock = new ConfigLock(PrimaryType.Deaths);
     
     public DeathsDataStore(OnlineSession session) {
-        super(session, ModuleType.Deaths);
+        super(session, PrimaryType.Deaths);
     }
     
     @Override
