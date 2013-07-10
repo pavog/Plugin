@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class JailDataStore extends SmallDataStore<JailPlayerStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.Jail, true);
+    public static ConfigLock lock = new ConfigLock(HookType.Jail);
     
     public JailDataStore(OnlineSession session) {
         super(session, HookType.Jail);

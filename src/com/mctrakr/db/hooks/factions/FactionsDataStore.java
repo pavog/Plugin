@@ -26,14 +26,9 @@ import com.mctrakr.session.OnlineSession;
 import com.mctrakr.settings.ConfigLock;
 import com.mctrakr.settings.ConfigLock.HookType;
 
-/**
- * Hooks into Factions to track its statistics
- * @author bitWolfy
- *
- */
 public class FactionsDataStore extends SmallDataStore<FactionsPlayerStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.Factions, true);
+    public static ConfigLock lock = new ConfigLock(HookType.Factions);
     
     public FactionsDataStore(OnlineSession session) {
         super(session, HookType.Factions);

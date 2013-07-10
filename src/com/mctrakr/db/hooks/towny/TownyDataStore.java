@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class TownyDataStore extends SmallDataStore<TownyPlayerStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.Towny, true);
+    public static ConfigLock lock = new ConfigLock(HookType.Towny);
     
     public TownyDataStore(OnlineSession session) {
         super(session, HookType.Towny);

@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class BanHammerDataStore extends SmallDataStore<BanHammerTotalStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.BanHammer, true);
+    public static ConfigLock lock = new ConfigLock(HookType.BanHammer);
     
     public BanHammerDataStore(OnlineSession session) {
         super(session, HookType.BanHammer);

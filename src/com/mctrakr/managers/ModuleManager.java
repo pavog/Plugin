@@ -52,6 +52,7 @@ import com.mctrakr.db.hooks.vault.VaultDataStore;
 import com.mctrakr.db.hooks.votifier.VotifierDataStore;
 import com.mctrakr.db.hooks.worldguard.WorldGuardDataStore;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock.ModuleKind;
 import com.mctrakr.util.ExceptionHandler;
 
 public class ModuleManager {
@@ -72,7 +73,7 @@ public class ModuleManager {
             if(storeObj == null) continue;
             if(!storeObj.getLock().isEnabled()) continue;
             
-            if(storeObj.getLock().isHook()) {
+            if(storeObj.getLock().getKind() == ModuleKind.Hook) {
                 PluginHook hook = HookManager.getHook(storeObj.getType());
                 if(hook == null || !hook.isEnabled()) continue;
             }

@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class VanishDataStore extends SmallDataStore<VanishPlayerStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.Vanish, true);
+    public static ConfigLock lock = new ConfigLock(HookType.Vanish);
     
     public VanishDataStore(OnlineSession session) {
         super(session, HookType.Vanish);

@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class PvpArenaDataStore extends SmallDataStore<PvpArenaPlayerStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.PvpArena, true);
+    public static ConfigLock lock = new ConfigLock(HookType.PvpArena);
     
     public PvpArenaDataStore(OnlineSession session) {
         super(session, HookType.PvpArena);

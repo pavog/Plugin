@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class VaultDataStore extends SmallDataStore<VaultPlayerStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.Vault, true);
+    public static ConfigLock lock = new ConfigLock(HookType.Vault);
     
     public VaultDataStore(OnlineSession session) {
         super(session, HookType.Vault);

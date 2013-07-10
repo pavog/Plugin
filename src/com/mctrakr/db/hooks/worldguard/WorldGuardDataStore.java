@@ -33,7 +33,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
  */
 public class WorldGuardDataStore extends SmallDataStore<WorldGuardPlayerStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.WorldGuard, true);
+    public static ConfigLock lock = new ConfigLock(HookType.WorldGuard);
     
     public WorldGuardDataStore(OnlineSession session) {
         super(session, HookType.WorldGuard);

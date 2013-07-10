@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class AdminCmdDataStore extends SmallDataStore<AdminCmdTotalStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.AdminCmd, true);
+    public static ConfigLock lock = new ConfigLock(HookType.AdminCmd);
     
     public AdminCmdDataStore(OnlineSession session) {
         super(session, HookType.AdminCmd);

@@ -39,27 +39,18 @@ public class ConfigLock implements Runnable {
     private BukkitTask process;
     
     private ModuleType type;
+    private ModuleKind kind;
     private boolean enabled;
-    private boolean hook;
     private int loadOrder;
     private int version;
     
     public ConfigLock(ModuleType type) {
         this.type = type;
-        this.hook = false;
-        init();
-    }
-    
-    public ConfigLock(ModuleType type, boolean hook) {
-        this.type = type;
-        this.hook = hook;
-        init();
-    }
-    
-    /**
-     * Initializes the scheduled task
-     */
-    private void init() {
+        
+        if(type instanceof PrimaryType) kind = ModuleKind.Module;
+        else if(type instanceof HookType) kind = ModuleKind.Hook;
+        else kind = ModuleKind.Property;
+        
         run();
         
         if(process == null)
@@ -83,16 +74,11 @@ public class ConfigLock implements Runnable {
             loadOrder = 0;
             version = 0;
             
-            String moduleType = "module";
-            if(type instanceof PrimaryType) moduleType = "module";
-            else if(type instanceof HookType) moduleType = "hook";
-            else moduleType = "property";
-            
             Query.table(ModulesTable.TableName)
                 .value(ModulesTable.Name, type.getAlias())
                 .value(ModulesTable.IsEnabled, enabled)
                 .value(ModulesTable.LoadOrder, loadOrder)
-                .value(ModulesTable.Type, moduleType)
+                .value(ModulesTable.Type, kind.getAlias())
                 .value(ModulesTable.Version, version)
                 .insert();
         } else {
@@ -112,6 +98,26 @@ public class ConfigLock implements Runnable {
     @Override
     public void finalize() {
         if(process != null) process.cancel();
+    }
+    
+    /**
+     * This is insane, okay?
+     * Represents a kind of a module type.
+     * No, I have no idea what this means. Go away, I am drunk.
+     * @author bitWolfy
+     *
+     */
+    @Getter(AccessLevel.PUBLIC)
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    public enum ModuleKind {
+        
+        Module          ("module"),
+        Hook            ("hook"),
+        Property        ("property"),
+        ;
+        
+        private String alias;
+        
     }
     
     /**

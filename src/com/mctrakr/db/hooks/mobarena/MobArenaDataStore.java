@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class MobArenaDataStore extends SmallDataStore<MobArenaPlayerStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.MobArena, true);
+    public static ConfigLock lock = new ConfigLock(HookType.MobArena);
     
     public MobArenaDataStore(OnlineSession session) {
         super(session, HookType.MobArena);

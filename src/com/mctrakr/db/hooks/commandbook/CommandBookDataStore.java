@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class CommandBookDataStore extends SmallDataStore<CommandBookTotalStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.CommandBook, true);
+    public static ConfigLock lock = new ConfigLock(HookType.CommandBook);
     
     public CommandBookDataStore(OnlineSession session) {
         super(session, HookType.CommandBook);

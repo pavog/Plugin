@@ -28,7 +28,7 @@ import com.vexsoftware.votifier.model.Vote;
 
 public class VotifierDataStore extends LargeDataStore<VotifierTotalStats, VotifierDetailedStats> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.Votifier, true);
+    public static ConfigLock lock = new ConfigLock(HookType.Votifier);
     
     public VotifierDataStore(OnlineSession session) {
         super(session, HookType.Votifier);

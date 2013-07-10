@@ -28,7 +28,7 @@ import com.mctrakr.settings.ConfigLock.HookType;
 
 public class McMMODataStore extends SmallDataStore<McMMOPlayerStats, DetailedData> {
     
-    public static ConfigLock lock = new ConfigLock(HookType.McMMO, true);
+    public static ConfigLock lock = new ConfigLock(HookType.McMMO);
     
     public McMMODataStore(OnlineSession session) {
         super(session, HookType.McMMO);
