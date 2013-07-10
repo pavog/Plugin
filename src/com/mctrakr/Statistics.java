@@ -125,13 +125,15 @@ public class Statistics extends JavaPlugin {
         
         Message.log("Database connection established.");
         
+        serverStatistics = new ServerStatistics();
+        serverTotals = new ServerTotals();
+        
         HookManager.onEnable();
         
         new ModuleManager();
-
-        ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
-        
         new CommandManager();
+        
+        ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
 
         new BlockListener(this);
         new DeathListener(this);
@@ -141,9 +143,6 @@ public class Statistics extends JavaPlugin {
         new SessionListener(this);
         new StatsBookListener(this);
         new StatsSignListener(this);
-        
-        serverStatistics = new ServerStatistics();
-        serverTotals = new ServerTotals();
         
         long ping = RemoteConfiguration.Ping.asInteger() * 20;
         
