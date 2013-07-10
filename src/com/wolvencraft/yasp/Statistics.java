@@ -126,7 +126,10 @@ public class Statistics extends JavaPlugin {
         
         hookManager = new HookManager();
         hookManager.onEnable();
-
+        
+        serverStatistics = new ServerStatistics();
+        serverTotals = new ServerTotals();
+        
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
         
         new CommandManager();
@@ -139,9 +142,6 @@ public class Statistics extends JavaPlugin {
         new SessionListener(this);
         new StatsBookListener(this);
         new StatsSignListener(this);
-        
-        serverStatistics = new ServerStatistics();
-        serverTotals = new ServerTotals();
         
         long ping = RemoteConfiguration.Ping.asInteger() * 20;
         if(ping < (20 * 60)) ping = 20 * 60;

@@ -62,7 +62,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerDistances)) return;
         
-        HandlerManager.runAsyncTask(new PlayerMove(event));
+        HandlerManager.runAsyncTask(new PlayerMove(player, event.getFrom(), event.getTo()));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

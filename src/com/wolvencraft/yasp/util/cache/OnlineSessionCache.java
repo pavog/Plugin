@@ -46,15 +46,13 @@ import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 public class OnlineSessionCache implements CachedDataProcess {
 
     private final long REFRESH_RATE_TICKS = (long)(5 * 60 * 20);
-    private static List<OnlineSession> sessions;
+    private static List<OnlineSession> sessions = new ArrayList<OnlineSession>();
     
     /**
      * <b>Default constructor</b><br />
      * Creates a List for data storage and loads the online players into the list at a delay
      */
     public OnlineSessionCache() {
-        sessions = new ArrayList<OnlineSession>();
-        
         Bukkit.getScheduler().runTaskLaterAsynchronously(Statistics.getInstance(), new Runnable() {
             
             @Override
@@ -160,6 +158,11 @@ public class OnlineSessionCache implements CachedDataProcess {
             removeSession(session);
         }
         sessions.clear();
+    }
+    
+    @Override
+    public void finalize() {
+        dumpSessions();
     }
     
 }

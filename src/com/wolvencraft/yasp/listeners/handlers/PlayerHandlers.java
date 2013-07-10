@@ -29,7 +29,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
@@ -46,18 +45,17 @@ public class PlayerHandlers {
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     public static class PlayerMove implements Runnable {
         
-        private PlayerMoveEvent event;
+        private Player player;
+        private Location from;
+        private Location to;
         
         @Override
         public void run() {
-            Player player = event.getPlayer();
-            
-            Location playerLocation = player.getLocation();
-            if(!playerLocation.getWorld().equals(event.getTo().getWorld())) return;
-            double distance = playerLocation.distance(event.getTo());
+            if(!from.getWorld().equals(to.getWorld())) return;
+            double distance = from.distance(to);
             if(player.isInsideVehicle()) {
                 Entity vehicle = player.getVehicle();
-                distance = vehicle.getLocation().distance(event.getTo());
+                distance = vehicle.getLocation().distance(to);
                 if(vehicle.getType().equals(EntityType.MINECART)) {
                     OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Minecart, distance);
                 } else if(vehicle.getType().equals(EntityType.BOAT)) {
@@ -65,13 +63,13 @@ public class PlayerHandlers {
                 } else if(vehicle.getType().equals(EntityType.PIG) || vehicle.getType().equals(EntityType.HORSE)) {
                     OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Ride, distance);
                 }
-            } else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
+            } else if (from.getBlock().getType().equals(Material.WATER) || from.getBlock().getType().equals(Material.STATIONARY_WATER)) {
                 OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Swim, distance);
             } else if (player.isFlying()) {
                 OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Flight, distance);
             } else {
                 OnlineSession session = OnlineSessionCache.fetch(player);
-                if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
+                if(from.getY() < to.getY() && to.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
                     session.getPlayersData().getMiscData().incrementStat(PlayerData.TimesJumped);
                 OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Foot, distance);
             }
