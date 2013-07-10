@@ -144,6 +144,8 @@ public class Statistics extends JavaPlugin {
         serverTotals = new ServerTotals();
         
         long ping = RemoteConfiguration.Ping.asInteger() * 20;
+        if(ping < (20 * 60)) ping = 20 * 60;
+        
         
         try {
             metrics = new PluginMetrics(this);

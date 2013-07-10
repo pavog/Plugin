@@ -34,6 +34,7 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
+import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 import com.wolvencraft.yasp.util.tasks.DatabaseTask;
@@ -101,8 +102,10 @@ public class DatabaseCommands {
             @Override
             public void run() {
                 try { Database.executePatch(patchId); }
-                catch (Exception ex) { Message.sendFormattedError(sender, "Patch failed!"); }
-                finally {
+                catch (Throwable t) {
+                    ExceptionHandler.handle(t);
+                    Message.sendFormattedError(sender, "Patch failed!");
+                } finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
                         if(StatPerms.Statistics.has(player)) OnlineSessionCache.fetch(player);
                     }
@@ -136,8 +139,10 @@ public class DatabaseCommands {
             @Override
             public void run() {
                 try { Database.patchDatabase(true); }
-                catch (Exception ex) { Message.sendFormattedError(sender, "Patch failed!"); }
-                finally {
+                catch (Throwable t) {
+                    ExceptionHandler.handle(t);
+                    Message.sendFormattedError(sender, "Patch failed!");
+                } finally {
                     for(Player player : Bukkit.getServer().getOnlinePlayers()) {
                         if(StatPerms.Statistics.has(player)) OnlineSessionCache.fetch(player);
                     }
