@@ -43,6 +43,8 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.util.Vector;
 
 import com.mctrakr.Statistics;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.PropertyType;
 import com.mctrakr.util.Message;
 import com.mctrakr.util.Util;
 
@@ -52,7 +54,8 @@ import com.mctrakr.util.Util;
  *
  */
 public class SignProcess implements Runnable {
-    
+
+    private static ConfigLock lock = new ConfigLock(PropertyType.Signs);
     private static List<StatsSign> signs;
     private static SignProcess instance;
     
@@ -85,6 +88,7 @@ public class SignProcess implements Runnable {
     
     @Override
     public void run() {
+        if(!lock.isEnabled()) return;
         updateAll();
     }
     

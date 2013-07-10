@@ -29,16 +29,21 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock;
+import com.mctrakr.settings.ConfigLock.PropertyType;
 import com.mctrakr.util.NamedInteger;
 
 public class ScoreboardProcess implements Runnable {
     
+    private static ConfigLock lock = new ConfigLock(PropertyType.Scoreboards);
     private static List<OnlineSession> sessions = new ArrayList<OnlineSession>();
     
     public ScoreboardProcess() { }
     
     @Override
     public void run() {
+        if(!lock.isEnabled()) return;
+        
         for(OnlineSession session : new ArrayList<OnlineSession>(sessions)) {
             if(!session.isOnline()) {
                 sessions.remove(session);
