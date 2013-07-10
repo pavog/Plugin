@@ -24,19 +24,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.mctrakr.db.Query;
-import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.data.DataStore.HookType;
+import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.hooks.factions.Tables.FactionsTable;
 import com.mctrakr.managers.HookManager;
+import com.mctrakr.session.OnlineSession;
 
 public class FactionsPlayerStats extends NormalData {
     
     private String playerName;
     
-    public FactionsPlayerStats (Player player, int playerId) {
-        this.playerName = player.getName();
-        
-        fetchData(playerId);
+    public FactionsPlayerStats(OnlineSession session) {
+        this.playerName = session.getName();
+        fetchData(session.getId());
     }
     
     @Override

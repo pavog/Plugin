@@ -27,8 +27,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.db.Query;
 import com.mctrakr.db.ConfigTables.ModulesTable;
+import com.mctrakr.db.Query;
 import com.mctrakr.db.Query.QueryResult;
 import com.mctrakr.db.data.DataStore.DataStoreType;
 import com.mctrakr.settings.RemoteConfiguration;

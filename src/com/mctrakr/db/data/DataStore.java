@@ -20,43 +20,18 @@
 
 package com.mctrakr.db.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.mctrakr.session.OnlineSession;
 
-/**
- * Common interface for all data stores
- * @author bitWolfy
- *
- */
-public abstract class DataStore<N extends NormalData, D extends DetailedData> {
+@Getter(AccessLevel.PUBLIC)
+@AllArgsConstructor(access=AccessLevel.PUBLIC)
+public abstract class DataStore {
     
-    @Getter(AccessLevel.PUBLIC) private OnlineSession session;
-    @Getter(AccessLevel.PUBLIC) private DataStoreType type;
-    
-    private List<N> normalData;
-    private List<D> detailedData;
-    
-    public DataStore(OnlineSession session, DataStoreType type) {
-        this.session = session;
-        
-        this.type = type;
-        
-        normalData = new ArrayList<N>();
-        detailedData = new ArrayList<D>();
-    }
-    
-    public DataStore(OnlineSession session, String type, boolean versioned) {
-        this.session = session;
-        
-        normalData = new ArrayList<N>();
-        detailedData = new ArrayList<D>();
-    }
+    private OnlineSession session;
+    private DataStoreType type;
     
     /**
      * Returns the configuration lock
@@ -67,66 +42,15 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     }
     
     /**
-     * Returns the dynamic entries in the data store.<br />
-     * Asynchronous method; changes to the returned List will not affect the data store.
-     * @return Dynamic entries in the data store
-     */
-    public final List<N> getNormalData() {
-        return new ArrayList<N>(normalData);
-    }
-    
-    /**
-     * Adds a new entry to the normal datastore
-     * @param entry Entry to add
-     */
-    public final void addNormalDataEntry(N entry) {
-        normalData.add(entry);
-    }
-    
-    /**
-     * Returns the static entries in the data store.
-     * @return Static entries in the data store
-     */
-    public final List<D> getDetailedData() {
-        return new ArrayList<D>(detailedData);
-    }
-    
-    /**
-     * Adds a new entry to the detailed datastore
-     * @param entry Entry to add
-     */
-    public final void addDetailedDataEntry(D entry) {
-        detailedData.add(entry);
-    }
-    
-    /**
      * Synchronizes the data from the data store to the database, then removes it from local storage<br />
      * If an entry was not synchronized, it will not be removed.
      */
-    public final void pushData() {
-        if(getLock() != null && !getLock().isEnabled()) return;
-        
-        for(N entry : getNormalData()) {
-            if(((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
-        }
-        
-        for(D entry : getDetailedData()) {
-            if(((DetailedData) entry).pushData(session.getId())) detailedData.remove(entry);
-        }
-    }
+    public abstract void pushData();
     
     /**
      * Clears the data store of all locally stored data.
      */
-    public final void dump() {
-        for(N entry : getNormalData()) {
-            normalData.remove(entry);
-        }
-        
-        for(D entry : getDetailedData()) {
-            detailedData.remove(entry);
-        }
-    }
+    public abstract void dump();
     
     /**
      * Generic data store type.
@@ -194,5 +118,5 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         
         private String alias;
     }
-    
+
 }

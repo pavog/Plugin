@@ -54,7 +54,6 @@ import com.mctrakr.db.hooks.worldguard.WorldGuardDataStore;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.util.ExceptionHandler;
 
-@SuppressWarnings("rawtypes")
 public class ModuleManager {
     
     private static List<Class<? extends DataStore>> modules;

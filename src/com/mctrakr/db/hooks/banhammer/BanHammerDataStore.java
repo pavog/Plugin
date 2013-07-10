@@ -21,16 +21,17 @@
 package com.mctrakr.db.hooks.banhammer;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-public class BanHammerDataStore extends DataStore<BanHammerTotalStats, DetailedData> {
+public class BanHammerDataStore extends SmallDataStore<BanHammerTotalStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.BanHammer, true);
     
     public BanHammerDataStore(OnlineSession session) {
         super(session, HookType.BanHammer);
+        setNormalData(new BanHammerTotalStats(session));
     }
     
     @Override

@@ -21,16 +21,17 @@
 package com.mctrakr.db.hooks.pvparena;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-public class PvpArenaDataStore extends DataStore<PvpArenaPlayerStats, DetailedData> {
+public class PvpArenaDataStore extends SmallDataStore<PvpArenaPlayerStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.PvpArena, true);
     
     public PvpArenaDataStore(OnlineSession session) {
         super(session, HookType.PvpArena);
+        setNormalData(new PvpArenaPlayerStats(session));
     }
     
     @Override

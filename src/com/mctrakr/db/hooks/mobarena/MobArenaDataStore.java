@@ -21,16 +21,17 @@
 package com.mctrakr.db.hooks.mobarena;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-public class MobArenaDataStore extends DataStore<MobArenaPlayerStats, DetailedData> {
+public class MobArenaDataStore extends SmallDataStore<MobArenaPlayerStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.MobArena, true);
     
     public MobArenaDataStore(OnlineSession session) {
         super(session, HookType.MobArena);
+        setNormalData(new MobArenaPlayerStats(session));
     }
     
     @Override

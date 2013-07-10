@@ -20,22 +20,20 @@
 
 package com.mctrakr.db.hooks.banhammer;
 
-import org.bukkit.entity.Player;
-
 import com.mctrakr.db.Query;
-import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.data.DataStore.HookType;
+import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.hooks.banhammer.Tables.BanHammerTable;
 import com.mctrakr.managers.HookManager;
+import com.mctrakr.session.OnlineSession;
 
 public class BanHammerTotalStats extends NormalData {
     
     private String playerName;
     
-    public BanHammerTotalStats (Player player, int playerId) {
-        this.playerName = player.getName();
-        
-        fetchData(playerId);
+    public BanHammerTotalStats(OnlineSession session) {
+        this.playerName = session.getName();
+        fetchData(session.getId());
     }
     
     @Override

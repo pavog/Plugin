@@ -94,7 +94,7 @@ public class ItemsHandler {
             OnlineSession session = SessionCache.fetch(player);
             ((ItemsDataStore) session.getDataStore(ModuleType.Items)).itemUse(player.getLocation(), player.getItemInHand());
             session.getPlayerTotals().snacksEaten();
-            ((MiscDataStore) session.getDataStore(ModuleType.Misc)).get().incrementStat(MiscInfoTable.FoodEaten);
+            ((MiscDataStore) session.getDataStore(ModuleType.Misc)).getNormalData().incrementStat(MiscInfoTable.FoodEaten);
         }
     }
     

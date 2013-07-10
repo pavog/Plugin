@@ -21,8 +21,8 @@
 package com.mctrakr.db.hooks.worldguard;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
 /**
@@ -30,12 +30,13 @@ import com.mctrakr.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class WorldGuardDataStore extends DataStore<WorldGuardPlayerStats, DetailedData> {
+public class WorldGuardDataStore extends SmallDataStore<WorldGuardPlayerStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.WorldGuard, true);
     
     public WorldGuardDataStore(OnlineSession session) {
         super(session, HookType.WorldGuard);
+        setNormalData(new WorldGuardPlayerStats(session));
     }
     
     @Override

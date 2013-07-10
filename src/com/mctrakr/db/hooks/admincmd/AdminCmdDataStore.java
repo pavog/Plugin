@@ -21,16 +21,17 @@
 package com.mctrakr.db.hooks.admincmd;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-public class AdminCmdDataStore extends DataStore<AdminCmdTotalStats, DetailedData> {
+public class AdminCmdDataStore extends SmallDataStore<AdminCmdTotalStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.AdminCmd, true);
     
     public AdminCmdDataStore(OnlineSession session) {
         super(session, HookType.AdminCmd);
+        setNormalData(new AdminCmdTotalStats(session));
     }
     
     @Override

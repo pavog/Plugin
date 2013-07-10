@@ -21,16 +21,17 @@
 package com.mctrakr.db.hooks.vanish;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-public class VanishDataStore extends DataStore<VanishPlayerStats, DetailedData> {
+public class VanishDataStore extends SmallDataStore<VanishPlayerStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.Vanish, true);
     
     public VanishDataStore(OnlineSession session) {
         super(session, HookType.Vanish);
+        setNormalData(new VanishPlayerStats(session));
     }
     
     @Override

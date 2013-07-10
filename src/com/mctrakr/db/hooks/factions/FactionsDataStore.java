@@ -21,8 +21,8 @@
 package com.mctrakr.db.hooks.factions;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
 /**
@@ -30,12 +30,13 @@ import com.mctrakr.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class FactionsDataStore extends DataStore<FactionsPlayerStats, DetailedData> {
+public class FactionsDataStore extends SmallDataStore<FactionsPlayerStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.Factions, true);
     
     public FactionsDataStore(OnlineSession session) {
         super(session, HookType.Factions);
+        setNormalData(new FactionsPlayerStats(session));
     }
     
     @Override

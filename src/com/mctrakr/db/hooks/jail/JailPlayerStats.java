@@ -20,22 +20,20 @@
 
 package com.mctrakr.db.hooks.jail;
 
-import org.bukkit.entity.Player;
-
 import com.mctrakr.db.Query;
-import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.data.DataStore.HookType;
+import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.hooks.jail.Tables.JailTable;
 import com.mctrakr.managers.HookManager;
+import com.mctrakr.session.OnlineSession;
 
 public class JailPlayerStats extends NormalData {
     
     private String playerName;
     
-    public JailPlayerStats (Player player, int playerId) {
-        this.playerName = player.getName();
-        
-        fetchData(playerId);
+    public JailPlayerStats(OnlineSession session) {
+        this.playerName = session.getName();
+        fetchData(session.getId());
     }
     
     @Override

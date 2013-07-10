@@ -24,8 +24,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.db.data.blocks.BlocksDetailedStats.BlockBreakEntry;
 import com.mctrakr.db.data.blocks.BlocksDetailedStats.BlockPlaceEntry;
 import com.mctrakr.events.player.TrackedBlockBreakEvent;
@@ -37,7 +37,7 @@ import com.mctrakr.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class BlocksDataStore extends DataStore<BlocksTotalStats, DetailedData> {
+public class BlocksDataStore extends LargeDataStore<BlocksTotalStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(ModuleType.Blocks);
     

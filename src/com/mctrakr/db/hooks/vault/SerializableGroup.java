@@ -26,7 +26,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
-import com.mctrakr.managers.HookManager;
 import com.mctrakr.util.Util;
 
 /**

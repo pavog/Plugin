@@ -21,23 +21,17 @@
 package com.mctrakr.db.hooks.vault;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-/**
- * Hooks into Vault to track its statistics
- * @author bitWolfy
- *
- */
-public class VaultDataStore extends DataStore<VaultPlayerStats, DetailedData> {
+public class VaultDataStore extends SmallDataStore<VaultPlayerStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.Vault, true);
     
     public VaultDataStore(OnlineSession session) {
         super(session, HookType.Vault);
-        
-        addNormalDataEntry(new VaultPlayerStats(session.getBukkitPlayer(), session.getId()));
+        setNormalData(new VaultPlayerStats(session));
     }
     
     @Override

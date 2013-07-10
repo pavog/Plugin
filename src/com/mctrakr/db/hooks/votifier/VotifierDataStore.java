@@ -21,11 +21,11 @@
 package com.mctrakr.db.hooks.votifier;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
+import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.session.OnlineSession;
 import com.vexsoftware.votifier.model.Vote;
 
-public class VotifierDataStore extends DataStore<VotifierTotalStats, VotifierDetailedStats> {
+public class VotifierDataStore extends LargeDataStore<VotifierTotalStats, VotifierDetailedStats> {
     
     public static ConfigLock lock = new ConfigLock(HookType.Votifier, true);
     

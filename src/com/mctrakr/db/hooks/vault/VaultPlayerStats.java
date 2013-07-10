@@ -20,32 +20,20 @@
 
 package com.mctrakr.db.hooks.vault;
 
-import org.bukkit.entity.Player;
-
 import com.mctrakr.db.Query;
-import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.data.DataStore.HookType;
+import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.hooks.vault.Tables.VaultTable;
 import com.mctrakr.managers.HookManager;
+import com.mctrakr.session.OnlineSession;
 
-/**
- * Represents the information about player's group and balance
- * @author bitWolfy
- *
- */
 public class VaultPlayerStats extends NormalData {
     
     private String playerName;
     
-    /**
-     * <b>Default constructor</b><br />
-     * Creates a new normal table for the player
-     * @param player Player object
-     * @param playerId Player ID
-     */
-    public VaultPlayerStats(Player player, int playerId) {
-        this.playerName = player.getName();
-        fetchData(playerId);
+    public VaultPlayerStats(OnlineSession session) {
+        this.playerName = session.getName();
+        fetchData(session.getId());
     }
     
     @Override

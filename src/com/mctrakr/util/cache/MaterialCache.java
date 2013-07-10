@@ -28,8 +28,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import com.mctrakr.db.Query;
 import com.mctrakr.db.ConfigTables.MaterialsTable;
+import com.mctrakr.db.Query;
 import com.mctrakr.managers.CacheManager.Type;
 import com.mctrakr.settings.Constants;
 import com.mctrakr.settings.Constants.ItemsWithMetadata;

@@ -25,7 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
+import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.db.data.deaths.DeathsDetailedStats.NaturalDeathEntry;
 import com.mctrakr.events.player.NaturalDeathEvent;
 import com.mctrakr.session.OnlineSession;
@@ -35,7 +35,7 @@ import com.mctrakr.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class DeathsDataStore extends DataStore<DeathsTotalStats, NaturalDeathEntry> {
+public class DeathsDataStore extends LargeDataStore<DeathsTotalStats, NaturalDeathEntry> {
     
     public static ConfigLock lock = new ConfigLock(ModuleType.Deaths);
     

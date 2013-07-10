@@ -28,8 +28,8 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
-import com.mctrakr.db.Query;
 import com.mctrakr.db.ConfigTables.ServerStatsTable;
+import com.mctrakr.db.Query;
 import com.mctrakr.db.Query.QueryResult;
 import com.mctrakr.util.Util;
 import com.mctrakr.util.VariableManager.ServerVariable;

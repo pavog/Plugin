@@ -25,8 +25,8 @@ import java.util.List;
 
 import org.bukkit.entity.EntityType;
 
-import com.mctrakr.db.Query;
 import com.mctrakr.db.ConfigTables.EntitiesTable;
+import com.mctrakr.db.Query;
 import com.mctrakr.managers.CacheManager.Type;
 
 /**

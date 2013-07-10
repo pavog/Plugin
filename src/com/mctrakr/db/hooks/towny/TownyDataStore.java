@@ -21,16 +21,17 @@
 package com.mctrakr.db.hooks.towny;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-public class TownyDataStore extends DataStore<TownyPlayerStats, DetailedData> {
+public class TownyDataStore extends SmallDataStore<TownyPlayerStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.Towny, true);
     
     public TownyDataStore(OnlineSession session) {
         super(session, HookType.Towny);
+        setNormalData(new TownyPlayerStats(session));
     }
 
     @Override

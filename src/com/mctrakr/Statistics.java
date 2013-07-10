@@ -38,8 +38,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mctrakr.db.Database;
 import com.mctrakr.db.PatchManager;
-import com.mctrakr.db.data.ServerStatistics;
 import com.mctrakr.db.data.DataStore.ModuleType;
+import com.mctrakr.db.data.ServerStatistics;
 import com.mctrakr.db.data.player.PlayerDataStore;
 import com.mctrakr.db.totals.ServerTotals;
 import com.mctrakr.listeners.BlockListener;
@@ -62,8 +62,8 @@ import com.mctrakr.util.cache.SessionCache;
 import com.mctrakr.util.tasks.DatabaseTask;
 import com.mctrakr.util.tasks.RefreshTask;
 import com.mctrakr.util.tasks.SignRefreshTask;
-import com.mctrakr.util.tasks.TickTask;
 import com.mctrakr.util.tasks.SignRefreshTask.StatsSign;
+import com.mctrakr.util.tasks.TickTask;
 
 /**
  * <b>Main plugin class</b><br />

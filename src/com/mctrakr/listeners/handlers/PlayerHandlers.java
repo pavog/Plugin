@@ -73,7 +73,7 @@ public class PlayerHandlers {
             } else {
                 OnlineSession session = SessionCache.fetch(player);
                 if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
-                    ((MiscDataStore) session.getDataStore(ModuleType.Misc)).get().incrementStat(MiscInfoTable.TimesJumped);
+                    ((MiscDataStore) session.getDataStore(ModuleType.Misc)).getNormalData().incrementStat(MiscInfoTable.TimesJumped);
                 SessionCache.fetch(player).addDistance(DistancesTable.Foot, distance);
             }
         }
@@ -99,7 +99,7 @@ public class PlayerHandlers {
         
         @Override
         public void run() {
-            ((MiscDataStore) SessionCache.fetch(player).getDataStore(ModuleType.Misc)).get().incrementStat(stat, value);
+            ((MiscDataStore) SessionCache.fetch(player).getDataStore(ModuleType.Misc)).getNormalData().incrementStat(stat, value);
         }
     }
 }

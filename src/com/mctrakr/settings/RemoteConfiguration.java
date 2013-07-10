@@ -23,8 +23,8 @@ package com.mctrakr.settings;
 import org.bukkit.Bukkit;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.db.Query;
 import com.mctrakr.db.ConfigTables.SettingsTable;
+import com.mctrakr.db.Query;
 import com.mctrakr.db.Query.QueryResult;
 
 /**

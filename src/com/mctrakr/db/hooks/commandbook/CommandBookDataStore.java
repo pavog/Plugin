@@ -21,16 +21,17 @@
 package com.mctrakr.db.hooks.commandbook;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-public class CommandBookDataStore extends DataStore<CommandBookTotalStats, DetailedData> {
+public class CommandBookDataStore extends SmallDataStore<CommandBookTotalStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.CommandBook, true);
     
     public CommandBookDataStore(OnlineSession session) {
         super(session, HookType.CommandBook);
+        setNormalData(new CommandBookTotalStats(session));
     }
     
     @Override

@@ -21,16 +21,17 @@
 package com.mctrakr.db.hooks.mcmmo;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-public class McMMODataStore extends DataStore<McMMOPlayerStats, DetailedData> {
+public class McMMODataStore extends SmallDataStore<McMMOPlayerStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.McMMO, true);
     
     public McMMODataStore(OnlineSession session) {
         super(session, HookType.McMMO);
+        setNormalData(new McMMOPlayerStats(session));
     }
     
     @Override

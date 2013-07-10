@@ -24,10 +24,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.mctrakr.db.Query;
-import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.data.DataStore.HookType;
+import com.mctrakr.db.data.NormalData;
 import com.mctrakr.db.hooks.worldguard.Tables.WorldGuardTable;
 import com.mctrakr.managers.HookManager;
+import com.mctrakr.session.OnlineSession;
 
 /**
  * Tracks the information about player's current position in the region and its flags
@@ -38,10 +39,9 @@ public class WorldGuardPlayerStats extends NormalData {
     
     private String playerName;
     
-    public WorldGuardPlayerStats(int playerId, Player player) {
-        playerName = player.getName();
-        
-        fetchData(playerId);
+    public WorldGuardPlayerStats(OnlineSession session) {
+        this.playerName = session.getName();
+        fetchData(session.getId());
     }
     
     @Override

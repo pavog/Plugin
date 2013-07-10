@@ -28,8 +28,8 @@ import com.mctrakr.Statistics;
 import com.mctrakr.db.data.DataStore.HookType;
 import com.mctrakr.db.hooks.vanish.VanishHook;
 import com.mctrakr.managers.HookManager;
-import com.mctrakr.settings.RemoteConfiguration;
 import com.mctrakr.settings.Constants.StatPerms;
+import com.mctrakr.settings.RemoteConfiguration;
 
 public class HandlerManager {
     

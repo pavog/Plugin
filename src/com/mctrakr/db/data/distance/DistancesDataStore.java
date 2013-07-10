@@ -21,8 +21,8 @@
 package com.mctrakr.db.data.distance;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.db.data.distance.Tables.DistancesTable;
 import com.mctrakr.session.OnlineSession;
 
@@ -31,7 +31,7 @@ import com.mctrakr.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class DistancesDataStore extends DataStore<DistancesTotalStats, DetailedData> {
+public class DistancesDataStore extends LargeDataStore<DistancesTotalStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(ModuleType.Distance);
     

@@ -23,7 +23,7 @@ package com.mctrakr.db.data.player;
 import org.bukkit.Location;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.db.data.player.PlayerDetailedStats.PlayerLogin;
 import com.mctrakr.db.data.player.PlayerTotalStats.BasicPlayerStats;
 import com.mctrakr.session.OnlineSession;
@@ -33,14 +33,14 @@ import com.mctrakr.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class PlayerDataStore extends DataStore<BasicPlayerStats, PlayerLogin> {
+public class PlayerDataStore extends SmallDataStore<BasicPlayerStats, PlayerLogin> {
     
     public static ConfigLock lock = new ConfigLock(ModuleType.Player);
     
     public PlayerDataStore(OnlineSession session) {
         super(session, ModuleType.Player);
         
-        addNormalDataEntry(new BasicPlayerStats(session.getId(), session.getBukkitPlayer()));
+        setNormalData(new BasicPlayerStats(session.getId(), session.getBukkitPlayer()));
     }
     
     @Override
@@ -55,10 +55,6 @@ public class PlayerDataStore extends DataStore<BasicPlayerStats, PlayerLogin> {
      */
     public void addPlayerLog(Location location, boolean isLogin) {
         addDetailedDataEntry(new PlayerLogin(location, isLogin));
-    }
-    
-    public BasicPlayerStats get() {
-        return getNormalData().get(0);
     }
     
 }

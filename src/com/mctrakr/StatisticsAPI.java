@@ -30,10 +30,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.mctrakr.db.ConfigTables.SettingsTable;
 import com.mctrakr.db.Database;
 import com.mctrakr.db.Query;
 import com.mctrakr.db.ScriptRunner;
-import com.mctrakr.db.ConfigTables.SettingsTable;
 import com.mctrakr.events.plugin.DatabasePatchEvent;
 import com.mctrakr.exceptions.DatabaseConnectionException;
 import com.mctrakr.exceptions.RuntimeSQLException;

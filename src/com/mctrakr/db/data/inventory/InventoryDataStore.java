@@ -21,8 +21,8 @@
 package com.mctrakr.db.data.inventory;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
 /**
@@ -30,13 +30,13 @@ import com.mctrakr.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class InventoryDataStore extends DataStore<InventoryContents, DetailedData> {
+public class InventoryDataStore extends SmallDataStore<InventoryContents, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(ModuleType.Distance);
     
     public InventoryDataStore(OnlineSession session) {
         super(session, ModuleType.Inventory);
-        getNormalData().add(new InventoryContents(session.getId(), session.getBukkitPlayer()));
+        setNormalData(new InventoryContents(session.getId(), session.getBukkitPlayer()));
     }
     
     @Override

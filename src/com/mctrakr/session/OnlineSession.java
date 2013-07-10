@@ -61,7 +61,6 @@ import com.mctrakr.util.cache.SessionCache;
  * @author bitWolfy
  *
  */
-@SuppressWarnings("rawtypes")
 @Getter(AccessLevel.PUBLIC)
 public class OnlineSession implements PlayerSession {
     
@@ -169,7 +168,7 @@ public class OnlineSession implements PlayerSession {
      */
     public void killedPlayer(Player victim, ItemStack weapon) {
         ((PvpDataStore) getDataStore(ModuleType.PVP)).playerKilledPlayer(victim, weapon);
-        ((MiscDataStore) getDataStore(ModuleType.Misc)).get().killed(victim);
+        ((MiscDataStore) getDataStore(ModuleType.Misc)).getNormalData().killed(victim);
         playerTotals.pvpKill();
         SessionCache.fetch(victim).getPlayerTotals().death();
     }
@@ -209,7 +208,7 @@ public class OnlineSession implements PlayerSession {
      * This method is for internal use; you do not need to run it from listener
      */
     public void died() {
-        ((MiscDataStore) getDataStore(ModuleType.Misc)).get().died();
+        ((MiscDataStore) getDataStore(ModuleType.Misc)).getNormalData().died();
         playerTotals.death();
     }
     

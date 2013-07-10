@@ -21,16 +21,17 @@
 package com.mctrakr.db.hooks.jail;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
-public class JailDataStore extends DataStore<JailPlayerStats, DetailedData> {
+public class JailDataStore extends SmallDataStore<JailPlayerStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(HookType.Jail, true);
     
     public JailDataStore(OnlineSession session) {
         super(session, HookType.Jail);
+        setNormalData(new JailPlayerStats(session));
     }
     
     @Override

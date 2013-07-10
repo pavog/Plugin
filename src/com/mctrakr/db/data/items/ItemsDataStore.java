@@ -25,8 +25,8 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.LargeDataStore;
 import com.mctrakr.db.data.items.ItemsDetailedStats.ItemConsumeEntry;
 import com.mctrakr.db.data.items.ItemsDetailedStats.ItemDropEntry;
 import com.mctrakr.db.data.items.ItemsDetailedStats.ItemPickupEntry;
@@ -40,7 +40,7 @@ import com.mctrakr.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class ItemsDataStore extends DataStore<ItemsTotalStats, DetailedData> {
+public class ItemsDataStore extends LargeDataStore<ItemsTotalStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(ModuleType.Items);
     

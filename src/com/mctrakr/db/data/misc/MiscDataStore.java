@@ -21,8 +21,8 @@
 package com.mctrakr.db.data.misc;
 
 import com.mctrakr.db.data.ConfigLock;
-import com.mctrakr.db.data.DataStore;
 import com.mctrakr.db.data.DetailedData;
+import com.mctrakr.db.data.SmallDataStore;
 import com.mctrakr.session.OnlineSession;
 
 /**
@@ -31,27 +31,18 @@ import com.mctrakr.session.OnlineSession;
  * @author bitWolfy
  *
  */
-public class MiscDataStore extends DataStore<MiscStats, DetailedData> {
+public class MiscDataStore extends SmallDataStore<MiscStats, DetailedData> {
     
     public static ConfigLock lock = new ConfigLock(ModuleType.Misc);
     
     public MiscDataStore(OnlineSession session) {
         super(session, ModuleType.Misc);
-        
-        addNormalDataEntry(new MiscStats(session.getId(), session.getBukkitPlayer()));
+        setNormalData(new MiscStats(session.getId(), session.getBukkitPlayer()));
     }
     
     @Override
     public ConfigLock getLock() {
         return lock;
-    }
-    
-    /**
-     * Returns the only item this data store holds
-     * @return Data storage unit
-     */
-    public MiscStats get() {
-        return getNormalData().get(0);
     }
     
 }

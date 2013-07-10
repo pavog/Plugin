@@ -28,9 +28,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.listeners.handlers.HandlerManager;
 import com.mctrakr.listeners.handlers.BlockHandlers.BlockBreak;
 import com.mctrakr.listeners.handlers.BlockHandlers.BlockPlace;
+import com.mctrakr.listeners.handlers.HandlerManager;
 import com.mctrakr.settings.Constants.StatPerms;
 
 /**
