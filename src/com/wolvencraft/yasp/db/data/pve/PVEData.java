@@ -49,7 +49,7 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
      * @return Corresponding entry
      */
     public TotalPVEStats getNormalData(EntityType type, ItemStack weapon) {
-        for(TotalPVEStats entry : normalData) {
+        for(TotalPVEStats entry : getNormalData()) {
             if(entry.equals(type, weapon)) return entry;
         }
         TotalPVEStats entry = new TotalPVEStats(session.getId(), type, weapon);

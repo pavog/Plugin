@@ -52,7 +52,7 @@ public class DeathData extends DataStore<TotalDeathStats, NaturalDeathEntry> {
      */
     public void playerDied(Location location, DamageCause cause) {
         TotalDeathStats entry = null;
-        for(TotalDeathStats testEntry : normalData) {
+        for(TotalDeathStats testEntry : getNormalData()) {
             if(testEntry.getCause().equals(cause)) entry = testEntry;
         }
         

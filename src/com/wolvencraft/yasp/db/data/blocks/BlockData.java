@@ -49,7 +49,7 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
      * @return Corresponding entry
      */
     private TotalBlockStats getNormalData(BlockState block) {
-        for(TotalBlockStats entry : normalData) {
+        for(TotalBlockStats entry : getNormalData()) {
             if(entry.equals(block)) return entry;
         }
         TotalBlockStats entry = new TotalBlockStats(session.getId(), block);

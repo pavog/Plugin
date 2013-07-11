@@ -49,7 +49,7 @@ public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
      * @return Corresponding entry
      */
     public TotalPVPStats getNormalData(int victimId, ItemStack weapon) {
-        for(TotalPVPStats entry : normalData) {
+        for(TotalPVPStats entry : getNormalData()) {
             if(entry.equals(victimId, weapon)) return entry;
         }
         TotalPVPStats entry = new TotalPVPStats(session.getId(), victimId, weapon);

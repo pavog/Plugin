@@ -52,7 +52,7 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
      * @return Corresponding entry
      */
     public TotalItemStats getNormalData(ItemStack itemStack) {
-        for(TotalItemStats entry : normalData) {
+        for(TotalItemStats entry : getNormalData()) {
             if(entry.equals(itemStack)) return entry;
         }
         TotalItemStats entry = new TotalItemStats(session.getId(), itemStack);
