@@ -101,8 +101,19 @@ public class Statistics extends JavaPlugin {
     @Override
     public void onEnable() {
         
+        // Starting up the plugin
+        Message.log(
+                "+-------------[ Statistics ]-------------+",
+                "| [+] Statistics starting up             |"
+                );
+        
+        // Check if the config file is present
         if(!new File(getDataFolder(), "config.yml").exists()) {
-            Message.log("Config.yml not found. Creating a one for you.");
+            Message.log(
+                    "| [+] Could not find a valid config file |",
+                    "|     Creating one for you.              |",
+                    "+----------------------------------------+"
+                    );
             getConfig().options().copyDefaults(true);
             saveConfig();
             crashed = true;
@@ -110,31 +121,61 @@ public class Statistics extends JavaPlugin {
             return;
         }
         
-        new PatchManager();
-        new CacheManager();
-        
-        try { new Database(); }
-        catch (Exception e) {
+        // Attempt to connect to the database
+        try {
+            Message.log("| [+] Connecting to the database         |");
+            new Database();
+        } catch(Throwable t) {
+            Message.log(
+                    "| [-] Could not establish a connection!  |",
+                    "|     Is the plugin configuration valid? |",
+                    "+----------------------------------------+",
+                    ""
+                    );
+            ExceptionHandler.handle(t);
             crashed = true;
-            Message.log(Level.SEVERE, "Cannot establish a database connection!");
-            Message.log(Level.SEVERE, "Is the plugin set up correctly?");
-            if (LocalConfiguration.Debug.toBoolean()) e.printStackTrace();
             this.setEnabled(false);
             return;
         }
         
-        Message.log("Database connection established.");
+        // Fetch patches from the jarfile
+        Message.log(
+                "| [+] Database connection established    |",
+                "| [+] Copying database patches           |"
+                );
+        PatchManager.fetch(PatchManager.PATCH_KEY);
         
-        serverStatistics = new ServerStatistics();
-        serverTotals = new ServerTotals();
+        // Attempt to patch the database
+        try {
+            Database.patchDatabase(false);
+            Message.log(
+                    "| [+] The database is up to date!        |"
+                    );
+        } catch (Throwable t) {
+            Message.log(
+                    "| [-] An error occurred while patching   |",
+                    "+----------------------------------------+",
+                    ""
+                    );
+            ExceptionHandler.handle(t);
+            crashed = true;
+            this.setEnabled(false);
+            return;
+        }
         
-        HookManager.onEnable();
-        
+        // Start up the managers
+        new HookManager();
         new ModuleManager();
         new CommandManager();
         
+        // Starting up some generic server stats
+        serverStatistics = new ServerStatistics();
+        serverTotals = new ServerTotals();
+        
+        // Register serializable classes
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
-
+        
+        // Start up event listeners
         new BlockListener(this);
         new DeathListener(this);
         new ItemListener(this);
@@ -144,21 +185,34 @@ public class Statistics extends JavaPlugin {
         new StatsBookListener(this);
         new StatsSignListener(this);
         
+        // XXX Bogus fix - sometimes, ping ends up being 0 for whatever reason
         long ping = RemoteConfiguration.Ping.asInteger() * 20;
+        if(ping < 600) ping = 600;
         
+        // Start up plugin metrics
         try {
             metrics = new PluginMetrics(this);
             if(!metrics.isOptOut()) metrics.start();
-        }
-        catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
-        
+        } catch (IOException e) { }
+
+        // Creating and starting up data caches
+        new CacheManager();
+        RemoteConfiguration.clearCache();
         CacheManager.startAll();
         
+        // Starting up event tasks
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseProcess(), (ping / 2), ping);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ScoreboardProcess(), 20L, 20L);
         
         Bukkit.getScheduler().runTaskTimer(this, new SignProcess(), ping, ping);
         Bukkit.getScheduler().runTaskTimer(this, new TickProcess(), 0L, 1L);
+        
+        // Unpause the statistics
+        Statistics.setPaused(false);
+        Message.log(
+                "| [+] Statistics is now running          |",
+                "+----------------------------------------+"
+                );
     }
 
     @Override

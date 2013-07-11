@@ -158,13 +158,9 @@ public class CommandManager {
      * @param commandClass Command class
      */
     private void load(Class<?> commandClass) {
-        Message.debug("Scanning " + commandClass.getName() + " for command methods (" + commandClass.getMethods().length  + " total)");
         for(Method method : commandClass.getMethods()) {
             Command cmd = method.getAnnotation(Command.class);
-            if(cmd != null) {
-                Message.debug("Registering a command with alias: " + cmd.alias()[0]);
-                commands.add(new CommandPair(commandClass, method, cmd));
-            }
+            if(cmd != null) commands.add(new CommandPair(commandClass, method, cmd));
         }
         
     }

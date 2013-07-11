@@ -33,33 +33,28 @@ import com.mctrakr.util.Message;
 public class PatchManager {
 
     public static final String PATCH_KEY = "yaspx";
-    private static File patchDir;
-    
-    /**
-     * <b>Default constructor</b><br />
-     * Copies the patch files to the plugin directory
-     */
-    public PatchManager() {
-        patchDir = new File(Statistics.getInstance().getDataFolder(), "patches");
+    private static File patchDir = new File(Statistics.getInstance().getDataFolder(), "patches");
+    static {
         if(!patchDir.exists()) patchDir.mkdir();
-        fetch(PATCH_KEY);
     }
+    
+    private PatchManager() { }
     
     /**
      * Fetches the patch of the specified type
      * @param extension Patch extension
      */
     public static void fetch(String extension) {
-        Message.log("+------ [ Fetching Patches ] ------+");
-        int j = 1;
-        while(Statistics.getInstance().getResource("patches/" + j + "." + extension + ".sql") != null) {
-            if(localFileExists(j + "." + extension + ".sql")) { j++; continue; }
-            Message.log("|" + Message.centerString("Copying " + j + "." + extension + ".sql", 34) + "|");
-            Statistics.getInstance().saveResource("patches/" + j + "." + extension + ".sql", false);
-            j++;
+        int i = 1;
+        while(Statistics.getInstance().getResource("patches/" + i + "." + extension + ".sql") != null) {
+            if(localFileExists(i + "." + extension + ".sql")) {
+                i++;
+                continue;
+            }
+            Message.log("|  |-- Copying " + Message.fillString(i + "." + extension + ".sql", 26) + "|");
+            Statistics.getInstance().saveResource("patches/" + i + "." + extension + ".sql", false);
+            i++;
         }
-        Message.log("|  All patch files are up to date  |");
-        Message.log("+----------------------------------+");
     }
     
     /**

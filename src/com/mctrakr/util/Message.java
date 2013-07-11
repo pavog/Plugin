@@ -216,8 +216,13 @@ public class Message {
      * @return New String
      */
     public static String centerString(String str, int length) {
-        while(str.length() < length) { str = " " + str + " "; }
+        while(str.length() < length) str = " " + str + " ";
         if(str.length() > length) str = str.substring(1);
+        return str;
+    }
+    
+    public static String fillString(String str, int length) {
+        while(str.length() < length) str += " ";
         return str;
     }
 }

@@ -39,10 +39,10 @@ import com.mctrakr.util.ExceptionHandler;
  */
 public class CacheManager {
     
-    private static List<CachedData> cache;
+    private static List<CachedData> cache = Lists.newArrayList();
     
     public CacheManager() {
-        cache = Lists.newArrayList();
+        cache.clear();
         for(Type type : Type.values()) cache.add(type.getInstance());
     }
     

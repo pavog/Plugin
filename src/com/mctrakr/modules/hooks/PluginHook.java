@@ -26,9 +26,11 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import com.mctrakr.database.Database;
 import com.mctrakr.database.PatchManager;
 import com.mctrakr.settings.ConfigLock;
 import com.mctrakr.util.ExceptionHandler;
+import com.mctrakr.util.Message;
 
 @Getter(AccessLevel.PUBLIC)
 public abstract class PluginHook {
@@ -53,10 +55,8 @@ public abstract class PluginHook {
         
         if (plugin == null) return false;
         
-        try {
-            PatchManager.fetch(lock.getType().getAlias());
-//            Database.patchModule(false, module);
-        } catch (Throwable t) {
+        try { patch(); }
+        catch (Throwable t) {
             ExceptionHandler.handle(t);
             return false;
         }
@@ -73,6 +73,18 @@ public abstract class PluginHook {
         onDisable();
         enabled = false;
         plugin = null;
+    }
+    
+    public void patch() {
+        PatchManager.fetch(lock.getType().getAlias());
+        try {
+            Database.patchModule(false, lock);
+        } catch (Throwable t) {
+            Message.log(
+                    "|  |-- An error occurred while patching  |"
+                    );
+            ExceptionHandler.handle(t);
+        }
     }
     
     /**

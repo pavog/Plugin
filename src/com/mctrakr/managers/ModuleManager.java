@@ -57,10 +57,10 @@ import com.mctrakr.util.ExceptionHandler;
 
 public class ModuleManager {
     
-    private static List<Class<? extends DataStore>> modules;
+    private static List<Class<? extends DataStore>> modules = new ArrayList<Class<? extends DataStore>>();
     
     public ModuleManager() {
-        modules = new ArrayList<Class<? extends DataStore>>();
+        modules.clear();
         for(Module module : Module.values()) modules.add(module.getModule());
     }
     

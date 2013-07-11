@@ -22,7 +22,6 @@ package com.mctrakr.managers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -53,18 +52,10 @@ public class HookManager {
     
     private static List<PluginHook> activeHooks = new ArrayList<PluginHook>();
     
-    public HookManager() { }
-    
-    /**
-     * Starts up the necessary hooks
-     */
-    public static void onEnable() {
+    public HookManager() {
         PluginManager plManager = Statistics.getInstance().getServer().getPluginManager();
-        int hooksEnabled = 0;
         Message.log(
-                "+-------- [ Hook Manager ] --------+",
-                "|" + Message.centerString("Hook Manager starting up", 34) + "|",
-                "|" + Message.centerString("", 34) + "|"
+                "| [+] Loading plugin hooks               |"
                 );
         
         for(ApplicableHook hook : ApplicableHook.values()) {
@@ -75,29 +66,20 @@ public class HookManager {
                 continue;
             }
             
-            if (plManager.getPlugin(hookObj.getPluginName()) == null) {
-                Message.debug(Level.FINER, "|" + Message.centerString(hookObj.getPluginName() + " is not found", 34) + "|");
-            } else {
+            if (plManager.getPlugin(hookObj.getPluginName()) == null) continue;
+            else {
                 HookInitEvent event = new HookInitEvent(hookObj.getLock().getType().getAlias());
                 Bukkit.getServer().getPluginManager().callEvent(event);
-                if(event.isCancelled()) {
-                    Message.log("|" + Message.centerString(hookObj.getPluginName() + " is cancelled", 34) + "|");
-                    continue;
-                }
+                if(event.isCancelled()) continue;
                 
                 if(hookObj.enable()) {
-                    Message.log("|" + Message.centerString(hookObj.getPluginName() + " has been enabled", 34) + "|");
+                    Message.log(
+                            "|  |- Hooked into " + Message.fillString(hookObj.getPluginName(), 23) + "|"
+                            );
                     activeHooks.add(hookObj);
-                    hooksEnabled++;
-                } else
-                    Message.log("|" + Message.centerString("Could not enable " + hookObj.getPluginName(), 34) + "|"); 
+                } 
             }
         }
-        Message.log(
-                "|                                  |",
-                "|" + Message.centerString(hooksEnabled + " hooks enabled", 34) + "|",
-                "+----------------------------------+"
-                );
     }
     
     /**

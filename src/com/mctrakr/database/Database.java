@@ -78,12 +78,6 @@ public class Database {
         
         try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
         catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
-        
-        if(!patchDatabase(false)) Message.log("Target database is up to date");
-        
-        Statistics.setPaused(false);
-        
-        RemoteConfiguration.clearCache();
     }
     
     /**
@@ -107,17 +101,19 @@ public class Database {
         } while(patchFile != null && patchFile.exists());
         
         if(databaseVersion >= latestPatchVersion) { return true; }
-        Message.debug("Current version: " + databaseVersion + ", latest version: " + latestPatchVersion);
+        Message.log(
+                "| [+] Patching the database: " + Message.fillString(databaseVersion + " -> " + latestPatchVersion + "      ", 12) + "|"
+                );
         databaseVersion++;
         
         ScriptRunner scriptRunner = new ScriptRunner(connection);
-        Message.log("+-------] Database Patcher [-------+");
         for(; databaseVersion <= latestPatchVersion; databaseVersion++) {
-            Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
+            Message.log(
+                    "|  |-- Running " + Message.fillString(databaseVersion + PatchManager.PATCH_KEY + ".sql", 26) + "|"
+                    );
             executePatch(scriptRunner, databaseVersion + "." + PatchManager.PATCH_KEY);
             RemoteConfiguration.DatabaseVersion.update(databaseVersion);
         }
-        Message.log("+----------------------------------+");
         return true;
     }
     
@@ -147,14 +143,14 @@ public class Database {
         moduleVersion++;
         
         ScriptRunner scriptRunner = new ScriptRunner(connection);
-        Message.log("+-------] Database Patcher [-------+");
         Message.log("|" + Message.centerString("Patching " + lock.getType().getAlias(), 34) + "|");
         for(; moduleVersion <= latestPatchVersion; moduleVersion++) {
-            Message.log("|       Applying patch " + moduleVersion + " / " + latestPatchVersion + "       |");
-            executePatch(scriptRunner, moduleVersion + ".yasp");
+            Message.log(
+                    "|  |-- Running " + Message.fillString(moduleVersion + lock.getType().getAlias() + ".sql", 26) + "|"
+                    );
+            executePatch(scriptRunner, moduleVersion + lock.getType().getAlias());
             lock.setVersion(moduleVersion);
         }
-        Message.log("+----------------------------------+");
         return true;
     }
     
