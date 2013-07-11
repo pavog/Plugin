@@ -27,15 +27,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.db.Database;
-import com.mctrakr.db.Query;
-import com.mctrakr.db.Query.QueryResult;
-import com.mctrakr.db.data.player.Tables.PlayersTable;
+import com.mctrakr.cache.SessionCache;
+import com.mctrakr.database.Database;
+import com.mctrakr.database.Query;
+import com.mctrakr.database.Query.QueryResult;
 import com.mctrakr.managers.CommandManager;
 import com.mctrakr.managers.CommandManager.Command;
+import com.mctrakr.modules.stats.player.Tables.PlayersTable;
 import com.mctrakr.settings.Constants.StatPerms;
 import com.mctrakr.util.Message;
-import com.mctrakr.util.cache.SessionCache;
 import com.mctrakr.util.tasks.DatabaseProcess;
 import com.mctrakr.util.tasks.SignProcess;
 

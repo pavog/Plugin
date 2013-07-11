@@ -24,11 +24,11 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import com.mctrakr.cache.SessionCache;
 import com.mctrakr.managers.CommandManager;
 import com.mctrakr.managers.CommandManager.Command;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.util.Message;
-import com.mctrakr.util.cache.SessionCache;
 import com.mctrakr.util.tasks.ScoreboardProcess;
 
 public class PlayerCommands {

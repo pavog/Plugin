@@ -37,10 +37,10 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.mctrakr.cache.SessionCache;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.settings.Constants;
 import com.mctrakr.settings.Constants.StatPerms;
-import com.mctrakr.util.cache.SessionCache;
 
 public class DeathHandler {
     

@@ -23,6 +23,7 @@ package com.mctrakr.util.tasks;
 import org.bukkit.Bukkit;
 
 import com.mctrakr.Statistics;
+import com.mctrakr.cache.SessionCache;
 import com.mctrakr.events.plugin.SynchronizationCompleteEvent;
 import com.mctrakr.events.plugin.SynchronizationEvent;
 import com.mctrakr.session.OfflineSession;
@@ -30,7 +31,6 @@ import com.mctrakr.session.OnlineSession;
 import com.mctrakr.settings.LocalConfiguration;
 import com.mctrakr.settings.RemoteConfiguration;
 import com.mctrakr.util.Message;
-import com.mctrakr.util.cache.SessionCache;
 
 /**
  * Synchronizes the collected data to the database

@@ -23,7 +23,7 @@ package com.mctrakr.session;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-import com.mctrakr.util.cache.PlayerCache;
+import com.mctrakr.cache.PlayerCache;
 
 /**
  * A simplistic representation of a player's session.<br />

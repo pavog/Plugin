@@ -38,10 +38,10 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.db.data.misc.Tables.MiscInfoTable;
 import com.mctrakr.listeners.handlers.HandlerManager;
 import com.mctrakr.listeners.handlers.PlayerHandlers.PlayerIncrementStat;
 import com.mctrakr.listeners.handlers.PlayerHandlers.PlayerMove;
+import com.mctrakr.modules.stats.misc.Tables.MiscInfoTable;
 import com.mctrakr.settings.Constants.StatPerms;
 
 /**

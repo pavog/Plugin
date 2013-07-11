@@ -25,7 +25,7 @@ import org.bukkit.Bukkit;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-import com.mctrakr.db.totals.PlayerTotals;
+import com.mctrakr.modules.totals.PlayerTotals;
 
 @Getter(AccessLevel.PUBLIC)
 public abstract class PlayerSession {

@@ -28,9 +28,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.db.ConfigTables.ModulesTable;
-import com.mctrakr.db.Query;
-import com.mctrakr.db.Query.QueryResult;
+import com.mctrakr.database.Query;
+import com.mctrakr.database.ConfigTables.ModulesTable;
+import com.mctrakr.database.Query.QueryResult;
 
 @Getter(AccessLevel.PUBLIC)
 public class ConfigLock implements Runnable {
@@ -154,6 +154,7 @@ public class ConfigLock implements Runnable {
         Player          ("player"),
         PVE             ("pve"),
         PVP             ("pvp"),
+        Server          ("server"),
         ;
         
         private String alias;

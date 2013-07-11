@@ -26,11 +26,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 import com.google.common.collect.Lists;
+import com.mctrakr.cache.CachedData;
+import com.mctrakr.cache.EntityCache;
+import com.mctrakr.cache.MaterialCache;
+import com.mctrakr.cache.SessionCache;
 import com.mctrakr.util.ExceptionHandler;
-import com.mctrakr.util.cache.CachedData;
-import com.mctrakr.util.cache.EntityCache;
-import com.mctrakr.util.cache.MaterialCache;
-import com.mctrakr.util.cache.SessionCache;
 
 /**
  * Handles different data caches

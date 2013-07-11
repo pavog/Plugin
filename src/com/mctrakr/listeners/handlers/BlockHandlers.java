@@ -26,10 +26,10 @@ import lombok.AllArgsConstructor;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
-import com.mctrakr.db.data.blocks.BlocksDataStore;
+import com.mctrakr.cache.SessionCache;
+import com.mctrakr.modules.stats.blocks.BlocksDataStore;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.settings.ConfigLock.PrimaryType;
-import com.mctrakr.util.cache.SessionCache;
 
 public class BlockHandlers {
     

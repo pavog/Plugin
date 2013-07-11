@@ -26,9 +26,9 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.db.data.player.PlayerDataStore;
+import com.mctrakr.cache.SessionCache;
+import com.mctrakr.modules.stats.player.PlayerDataStore;
 import com.mctrakr.settings.ConfigLock.PrimaryType;
-import com.mctrakr.util.cache.SessionCache;
 
 public class SessionHandlers {
     

@@ -36,20 +36,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import com.mctrakr.db.Query;
-import com.mctrakr.db.data.DataStore;
-import com.mctrakr.db.data.deaths.DeathsDataStore;
-import com.mctrakr.db.data.distance.DistancesDataStore;
-import com.mctrakr.db.data.distance.Tables.DistancesTable;
-import com.mctrakr.db.data.misc.MiscDataStore;
-import com.mctrakr.db.data.player.Tables.PlayersTable;
-import com.mctrakr.db.data.pve.PveDataStore;
-import com.mctrakr.db.data.pvp.PvpDataStore;
+import com.mctrakr.cache.PlayerCache;
+import com.mctrakr.cache.SessionCache;
+import com.mctrakr.database.Query;
 import com.mctrakr.managers.ModuleManager;
+import com.mctrakr.modules.DataStore;
+import com.mctrakr.modules.stats.deaths.DeathsDataStore;
+import com.mctrakr.modules.stats.distance.DistancesDataStore;
+import com.mctrakr.modules.stats.distance.Tables.DistancesTable;
+import com.mctrakr.modules.stats.misc.MiscDataStore;
+import com.mctrakr.modules.stats.player.Tables.PlayersTable;
+import com.mctrakr.modules.stats.pve.PveDataStore;
+import com.mctrakr.modules.stats.pvp.PvpDataStore;
 import com.mctrakr.settings.ConfigLock.ModuleType;
 import com.mctrakr.settings.ConfigLock.PrimaryType;
-import com.mctrakr.util.cache.PlayerCache;
-import com.mctrakr.util.cache.SessionCache;
 
 /**
  * Represents a player session that is created when a player logs into the server.<br />

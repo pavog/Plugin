@@ -30,10 +30,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import com.mctrakr.db.ConfigTables.SettingsTable;
-import com.mctrakr.db.Database;
-import com.mctrakr.db.Query;
-import com.mctrakr.db.ScriptRunner;
+import com.mctrakr.cache.SessionCache;
+import com.mctrakr.database.Database;
+import com.mctrakr.database.Query;
+import com.mctrakr.database.ScriptRunner;
+import com.mctrakr.database.ConfigTables.SettingsTable;
 import com.mctrakr.events.plugin.DatabasePatchEvent;
 import com.mctrakr.exceptions.DatabaseConnectionException;
 import com.mctrakr.exceptions.RuntimeSQLException;
@@ -43,7 +44,6 @@ import com.mctrakr.session.OnlineSession;
 import com.mctrakr.settings.Constants.StatPerms;
 import com.mctrakr.util.Message;
 import com.mctrakr.util.VariableManager.ServerVariable;
-import com.mctrakr.util.cache.SessionCache;
 
 /**
  * Simple API for servers statistics

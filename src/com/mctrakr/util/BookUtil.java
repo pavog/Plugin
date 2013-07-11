@@ -25,9 +25,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-import com.mctrakr.db.totals.PlayerTotals;
+import com.mctrakr.cache.SessionCache;
+import com.mctrakr.modules.totals.PlayerTotals;
 import com.mctrakr.util.VariableManager.PlayerVariable;
-import com.mctrakr.util.cache.SessionCache;
 
 public class BookUtil {
     

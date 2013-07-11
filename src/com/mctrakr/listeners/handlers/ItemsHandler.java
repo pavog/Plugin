@@ -32,12 +32,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-import com.mctrakr.db.data.items.ItemsDataStore;
-import com.mctrakr.db.data.misc.MiscDataStore;
-import com.mctrakr.db.data.misc.Tables.MiscInfoTable;
+import com.mctrakr.cache.SessionCache;
+import com.mctrakr.modules.stats.items.ItemsDataStore;
+import com.mctrakr.modules.stats.misc.MiscDataStore;
+import com.mctrakr.modules.stats.misc.Tables.MiscInfoTable;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.settings.ConfigLock.PrimaryType;
-import com.mctrakr.util.cache.SessionCache;
 
 public class ItemsHandler {
     

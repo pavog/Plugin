@@ -30,12 +30,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.mctrakr.db.data.distance.Tables.DistancesTable;
-import com.mctrakr.db.data.misc.MiscDataStore;
-import com.mctrakr.db.data.misc.Tables.MiscInfoTable;
+import com.mctrakr.cache.SessionCache;
+import com.mctrakr.modules.stats.distance.Tables.DistancesTable;
+import com.mctrakr.modules.stats.misc.MiscDataStore;
+import com.mctrakr.modules.stats.misc.Tables.MiscInfoTable;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.settings.ConfigLock.PrimaryType;
-import com.mctrakr.util.cache.SessionCache;
 
 public class PlayerHandlers {
     

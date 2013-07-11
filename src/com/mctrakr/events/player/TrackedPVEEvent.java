@@ -25,8 +25,8 @@ import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.mctrakr.db.data.pve.PveDetailedStats.PVEEntry;
 import com.mctrakr.events.StatisticsPlayerEvent;
+import com.mctrakr.modules.stats.pve.PveDetailedStats.PVEEntry;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.util.VariableManager.PlayerVariable;
 

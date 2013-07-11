@@ -25,8 +25,8 @@ import lombok.Getter;
 
 import org.bukkit.event.HandlerList;
 
-import com.mctrakr.db.data.blocks.BlocksDetailedStats.BlockPlaceEntry;
 import com.mctrakr.events.StatisticsPlayerEvent;
+import com.mctrakr.modules.stats.blocks.BlocksDetailedStats.BlockPlaceEntry;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.util.VariableManager.PlayerVariable;
 
