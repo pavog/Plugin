@@ -63,7 +63,7 @@ public class EntityCache implements CachedDataProcess {
      * @return Entity ID
      */
     public static String parse(EntityType type) {
-        String typeId = type.getTypeId() + ":0"; // TODO Use the correct metadata
+        String typeId = type.getTypeId() + ""; // TODO Use the correct metadata
         if(entities.contains(typeId)) return typeId;
         entities.add(typeId);
         if(!Query.table(EntitiesTable.TableName).condition(EntitiesTable.EntityId, typeId).exists()) {
