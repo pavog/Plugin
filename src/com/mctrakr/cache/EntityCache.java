@@ -36,7 +36,7 @@ import com.mctrakr.managers.CacheManager.Type;
  */
 public class EntityCache extends CachedData {
     
-    private static List<Integer> entities;
+    private static List<String> entities;
     
     /**
      * <b>Default constructor</b><br />
@@ -44,7 +44,7 @@ public class EntityCache extends CachedData {
      */
     public EntityCache() {
         super(Type.ENTITY, (long)(24 * 3600 * 20));
-        entities = new ArrayList<Integer>();
+        entities = new ArrayList<String>();
     }
     
     @Override
@@ -58,8 +58,8 @@ public class EntityCache extends CachedData {
      * @return Entity ID
      */
     public static String parse(EntityType type) {
-        int typeId = type.getTypeId();
-        if(entities.contains(typeId)) return typeId + "";
+        String typeId = type.getTypeId() + ":0"; // TODO Use the correct metadata value
+        if(entities.contains(typeId)) return typeId;
         entities.add(typeId);
         if(!Query.table(EntitiesTable.TableName).condition(EntitiesTable.EntityId, typeId).exists()) {
             Query.table(EntitiesTable.TableName)
