@@ -28,11 +28,6 @@ import com.mctrakr.modules.DataStore.NormalData;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.settings.ConfigLock.ModuleType;
 
-/**
- * Common interface for all data stores
- * @author bitWolfy
- *
- */
 public abstract class LargeDataStore<N extends NormalData, D extends DetailedData> extends DataStore {
     
     private List<N> normalData;

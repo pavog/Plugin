@@ -52,21 +52,6 @@ public class BlocksDataStore extends LargeDataStore<BlocksTotalStats, DetailedDa
     }
     
     /**
-     * Returns the specific entry from the data store.<br />
-     * If the entry does not exist, it will be created.
-     * @param block BlockState of the block
-     * @return Corresponding entry
-     */
-    private BlocksTotalStats getNormalData(BlockState block) {
-        for(BlocksTotalStats entry : getNormalData()) {
-            if(entry.equals(block)) return entry;
-        }
-        BlocksTotalStats entry = new BlocksTotalStats(session, block);
-        addNormalDataEntry(entry);
-        return entry;
-    }
-    
-    /**
      * Registers the broken block in the data stores
      * @param block BlockState of the block
      */
@@ -88,6 +73,21 @@ public class BlocksDataStore extends LargeDataStore<BlocksTotalStats, DetailedDa
         addDetailedDataEntry(detailedEntry);
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlaceEvent(getSession(), detailedEntry));
+    }
+    
+    /**
+     * Returns the specific entry from the data store.<br />
+     * If the entry does not exist, it will be created.
+     * @param block BlockState of the block
+     * @return Corresponding entry
+     */
+    private BlocksTotalStats getNormalData(BlockState block) {
+        for(BlocksTotalStats entry : getNormalData()) {
+            if(entry.equals(block)) return entry;
+        }
+        BlocksTotalStats entry = new BlocksTotalStats(session, block);
+        addNormalDataEntry(entry);
+        return entry;
     }
     
 }
