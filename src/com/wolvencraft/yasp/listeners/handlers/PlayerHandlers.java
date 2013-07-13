@@ -26,7 +26,6 @@ import lombok.AllArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -54,13 +53,12 @@ public class PlayerHandlers {
             if(!from.getWorld().equals(to.getWorld())) return;
             double distance = from.distance(to);
             if(player.isInsideVehicle()) {
-                Entity vehicle = player.getVehicle();
-                distance = vehicle.getLocation().distance(to);
-                if(vehicle.getType().equals(EntityType.MINECART)) {
+                EntityType vehicle = player.getVehicle().getType();
+                if(vehicle.equals(EntityType.MINECART)) {
                     OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Minecart, distance);
-                } else if(vehicle.getType().equals(EntityType.BOAT)) {
+                } else if(vehicle.equals(EntityType.BOAT)) {
                     OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Boat, distance);
-                } else if(vehicle.getType().equals(EntityType.PIG) || vehicle.getType().equals(EntityType.HORSE)) {
+                } else if(vehicle.equals(EntityType.PIG) || vehicle.equals(EntityType.HORSE)) {
                     OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Ride, distance);
                 }
             } else if (from.getBlock().getType().equals(Material.WATER) || from.getBlock().getType().equals(Material.STATIONARY_WATER)) {
