@@ -37,14 +37,14 @@ import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 public class EntityCache implements CachedDataProcess {
     
     private final long REFRESH_RATE_TICKS = (long)(24 * 3600 * 20);
-    private static List<Integer> entities;
+    private static List<String> entities;
     
     /**
      * <b>Default constructor</b><br />
      * Creates a new List for data storage
      */
     public EntityCache() {
-        entities = new ArrayList<Integer>();
+        entities = new ArrayList<String>();
     }
     
     @Override
@@ -63,8 +63,8 @@ public class EntityCache implements CachedDataProcess {
      * @return Entity ID
      */
     public static String parse(EntityType type) {
-        int typeId = type.getTypeId();
-        if(entities.contains(typeId)) return typeId + "";
+        String typeId = type.getTypeId() + ":0"; // TODO Use the correct metadata
+        if(entities.contains(typeId)) return typeId;
         entities.add(typeId);
         if(!Query.table(EntitiesTable.TableName).condition(EntitiesTable.EntityId, typeId).exists()) {
             Query.table(EntitiesTable.TableName)
