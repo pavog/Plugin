@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mctrakr.settings.LocalConfiguration;
 import com.mctrakr.util.ExceptionHandler;
 import com.mctrakr.util.Message;
@@ -52,15 +54,6 @@ public class Query {
     }
     
     /**
-     * Safely casts a Map to QueryResult
-     * @param map Map to apply the cast to
-     * @return <b>QueryResult</b> desired result
-     */
-    public static QueryResult toQueryResult(Map<String, String> map) {
-        return new QueryResult(map);
-    }
-    
-    /**
      * Safely pushes data to the remote database. <br />
      * Wraps around the corresponding Database method and handles any errors that might occur in it.
      * @param sql SQL query
@@ -73,7 +66,7 @@ public class Query {
         } catch (Throwable t) {
             Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
             Message.log(Level.SEVERE, t.getMessage());
-            if(LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
+            ExceptionHandler.handle(t, true);
             return false;
         }
     }
@@ -91,7 +84,7 @@ public class Query {
         } catch (Throwable t) {
             Message.log(Level.SEVERE, "An error occurred while fetching data from the remote database.");
             Message.log(Level.SEVERE, t.getMessage());
-            if(LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
+            ExceptionHandler.handle(t, true);
             return new ArrayList<QueryResult>();
         }
     }    
@@ -104,188 +97,182 @@ public class Query {
      */
     public static class DatabaseQuery {
         
-        private DatabaseQuery instance;
         private String table;
-        private List<String> columns;
-        private Map<Object, Object> values;
-        private List<String> conditions;
         
-        /**
-         * <b>Default constructor</b><br />
-         * Creates a new DatabaseQuery instance with the specified table name.<br />
-         * While it is possible to create an instance of this class manually, it is recommended to use the table(String table) method in the Query class.
-         * @param table
-         */
+        private List<String> columns = new ArrayList<String>();
+        private Map<Object, Object> values = new HashMap<Object, Object>();
+        private List<String> conditions = new ArrayList<String>();
+        
         public DatabaseQuery(String table) {
-            this.instance = this;
             this.table = table;
-            this.columns = new ArrayList<String>();
-            this.values = new HashMap<Object, Object>();
-            this.conditions = new ArrayList<String>();
+            
+            columns = Lists.newArrayList();
+            values = Maps.newHashMap();
+            conditions = Lists.newArrayList();
         }
         
         /**
          * Defines which columns to return.<br />
          * If no columns are selected, returns everything
          * @param column Columns to include
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery column(String... column) {
             for(String col : column) this.columns.add(col);
-            return instance;
+            return this;
         }
         
         /**
          * Defines which columns to return.<br />
          * If no columns are selected, returns everything
          * @param column Columns to include
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery column(DBTable... columns) {
             for(DBTable column : columns) this.columns.add(column.getColumnName());
-            return instance;
+            return this;
         }
         
         /**
          * Defines which columns to return.<br />
          * If no columns are selected, returns everything
          * @param column Columns to include
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery columns(String[] column) {
             for(String col : column) this.columns.add(col);
-            return instance;
+            return this;
         }
         
         /**
          * Applies a condition to the query
          * @param key Column name
          * @param value Column value
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery condition(String key, Object value) {
             this.conditions.add("`" + key + "`='" + value.toString() + "'");
-            return instance;
+            return this;
         }
         
         /**
          * Applies a condition to the query
          * @param key Column name
          * @param value Column value
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery condition(DBTable column, String value) {
             this.conditions.add("`" + column.getColumnName() + "`='" + value + "'");
-            return instance;
+            return this;
         }
 
         /**
          * Applies a condition to the query
          * @param key Column name
          * @param value Column value
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery condition(DBTable column, Integer value) {
             this.conditions.add("`" + column.getColumnName() + "`=" + value);
-            return instance;
+            return this;
         }
 
         /**
          * Applies a condition to the query
          * @param key Column name
          * @param value Column value
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery condition(DBTable column, Double value) {
             this.conditions.add("`" + column.getColumnName() + "`=" + value);
-            return instance;
+            return this;
         }
 
         /**
          * Applies a condition to the query
          * @param key Column name
          * @param value Column value
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery condition(DBTable column, Long value) {
             this.conditions.add("`" + column.getColumnName() + "`=" + value);
-            return instance;
+            return this;
         }
 
         /**
          * Applies a condition to the query
          * @param key Column name
          * @param value Column value
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery condition(DBTable column, Boolean value) {
             if(value) this.conditions.add("`" + column.getColumnName() + "`=1");
             else this.conditions.add("`" + column.getColumnName() + "`=0");
-            return instance;
+            return this;
         }
 
         /**
          * Applies a set of conditions to the query
          * @param list List of conditions
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery condition(List<String> list) {
             this.conditions.addAll(list);
-            return instance;
+            return this;
         }
         
         /**
          * Adds a value to be inserted into the database
          * @param key Column name
          * @param value Column value
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery value(String key, Object value) {
             this.values.put(key, value);
-            return instance;
+            return this;
         }
         
         /**
          * Adds a value to be inserted into the database
          * @param key Column name
          * @param value Column value
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery value(DBTable column, Object value) {
             this.values.put(column.getColumnName(), value);
-            return instance;
+            return this;
         }
         
         /**
          * Adds a value to be inserted into the database
          * @param key Column name
          * @param value Column value
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery value(DBTable column, boolean value) {
             if(value) values.put(column.getColumnName(), 1);
             else values.put(column.getColumnName(), 0);
-            return instance;
+            return this;
         }
         
         /**
          * Adds values to be inserted into the database
          * @param values Map of values to be added to the database
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery value(Map<Object, Object> values) {
             this.values.putAll(values);
-            return instance;
+            return this;
         }
         
         /**
          * Adds values to be inserted into the database
          * @param values Map of values to be added to the database
-         * @return Database query
+         * @return DatabaseQuery object for chaining
          */
         public DatabaseQuery valueRaw(Map<DBTable, Object> values) {
             this.values.putAll(values);
-            return instance;
+            return this;
         }
         
         /**
@@ -305,9 +292,9 @@ public class Query {
             String sql = "SELECT ";
             
             String columnString = "";
-            if(instance.columns.isEmpty()) columnString = "*";
+            if(columns.isEmpty()) columnString = "*";
             else {
-                for(String str : instance.columns) {
+                for(String str : columns) {
                     if(!columnString.equals("")) columnString += ", ";
                     columnString += "`" + str + "`";
                 }
@@ -315,7 +302,7 @@ public class Query {
             sql += columnString + " FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String conditionString = "";
-            for(String str : instance.conditions) {
+            for(String str : conditions) {
                 if(!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
@@ -335,9 +322,9 @@ public class Query {
             String sql = "SELECT ";
             
             String columnString = "";
-            if(instance.columns.isEmpty()) columnString = "*";
+            if(columns.isEmpty()) columnString = "*";
             else {
-                for(String str : instance.columns) {
+                for(String str : columns) {
                     if(!columnString.equals("")) columnString += ", ";
                     columnString += "`" + str + "`";
                 }
@@ -345,7 +332,7 @@ public class Query {
             sql += columnString + " FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String conditionString = "";
-            for(String str : instance.conditions) {
+            for(String str : conditions) {
                 if(!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
@@ -370,9 +357,9 @@ public class Query {
             String sql = "SELECT sum(";
             
             String columnString = "";
-            if(instance.columns.isEmpty()) columnString = "*";
+            if(columns.isEmpty()) columnString = "*";
             else {
-                for(String str : instance.columns) {
+                for(String str : columns) {
                     if(!columnString.equals("")) columnString += ", ";
                     else columnString += "`" + str + "`";
                 }
@@ -380,7 +367,7 @@ public class Query {
             sql += columnString + ") as `temp` FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String conditionString = "";
-            for(String str : instance.conditions) {
+            for(String str : conditions) {
                 if(!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
@@ -399,7 +386,7 @@ public class Query {
             
             String fieldString = "";
             String valueString = "";
-            Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
+            Iterator<Entry<Object, Object>> it = values.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
                 if(!fieldString.equals("")) fieldString += ", ";
@@ -412,7 +399,7 @@ public class Query {
             sql += fieldString + ") VALUES (" + valueString + ")";
             
             String conditionString = "";
-            for(String str : instance.conditions) {
+            for(String str : conditions) {
                 if(!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
@@ -429,7 +416,7 @@ public class Query {
             String sql = "UPDATE `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String valueString = "";
-            Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
+            Iterator<Entry<Object, Object>> it = values.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
                 if(!valueString.equals("")) valueString += ", ";
@@ -440,7 +427,7 @@ public class Query {
             sql += " SET " + valueString;
             
             String conditionString = "";
-            for(String str : instance.conditions) {
+            for(String str : conditions) {
                 if(!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
@@ -458,7 +445,7 @@ public class Query {
             String sql = "DELETE FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String conditionString = "";
-            for(String str : instance.conditions) {
+            for(String str : conditions) {
                 if(!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }

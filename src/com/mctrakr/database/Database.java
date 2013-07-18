@@ -264,7 +264,7 @@ public class Database {
                 for (int x = 1; x <= rs.getMetaData().getColumnCount(); ++x) {
                     rowToAdd.put(rs.getMetaData().getColumnName(x), rs.getString(x));
                 }
-                colData.add(Query.toQueryResult(rowToAdd));
+                colData.add(new QueryResult(rowToAdd));
             }
         } catch (Throwable t) {
             ExceptionHandler.handle(t);
