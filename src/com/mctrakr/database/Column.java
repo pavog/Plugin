@@ -1,5 +1,5 @@
 /*
- * DBTable.java
+ * Column.java
  * 
  * Statistics
  * Copyright (C) 2013 bitWolfy <http://www.wolvencraft.com> and contributors
@@ -26,7 +26,7 @@ package com.mctrakr.database;
  * @author bitWolfy
  *
  */
-public interface DBTable {
+public interface Column {
     
     /**
      * Returns the name of the column

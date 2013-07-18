@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.mctrakr.database;
+package com.mctrakr.managers;
 
 import java.io.File;
 

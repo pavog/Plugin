@@ -24,7 +24,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.mctrakr.database.DBTable;
+import com.mctrakr.database.Column;
 
 public class Tables {
     
@@ -37,7 +37,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum VotifierTotalsTable implements DBTable {
+    public enum VotifierTotalsTable implements Column {
         
         TableName       ("hook_votifier_totals"),
         PlayerId        ("player_id"),
@@ -57,7 +57,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DetailedVotifierTable implements DBTable {
+    public enum DetailedVotifierTable implements Column {
         
         TableName       ("hook_votifier_detailed"),
         PlayerId        ("player_id"),

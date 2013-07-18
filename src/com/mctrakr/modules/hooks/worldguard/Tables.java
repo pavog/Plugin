@@ -24,7 +24,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.mctrakr.database.DBTable;
+import com.mctrakr.database.Column;
 
 public class Tables {
     
@@ -37,7 +37,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum WorldGuardTable implements DBTable {
+    public enum WorldGuardTable implements Column {
         
         TableName       ("hook_worldguard"),
         PlayerId        ("player_id"),

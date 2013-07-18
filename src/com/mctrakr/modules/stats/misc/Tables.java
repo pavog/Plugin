@@ -24,7 +24,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.mctrakr.database.DBTable;
+import com.mctrakr.database.Column;
 
 public class Tables {
     
@@ -37,7 +37,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum MiscInfoTable implements DBTable {
+    public enum MiscInfoTable implements Column {
         TableName       ("misc_info_players"),
         PlayerId        ("player_id"),
         IsOp            ("is_op"),

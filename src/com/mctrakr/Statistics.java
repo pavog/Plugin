@@ -38,7 +38,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mctrakr.cache.SessionCache;
 import com.mctrakr.database.Database;
-import com.mctrakr.database.PatchManager;
 import com.mctrakr.listeners.BlockListener;
 import com.mctrakr.listeners.DeathListener;
 import com.mctrakr.listeners.ItemListener;
@@ -51,6 +50,7 @@ import com.mctrakr.managers.CacheManager;
 import com.mctrakr.managers.CommandManager;
 import com.mctrakr.managers.HookManager;
 import com.mctrakr.managers.ModuleManager;
+import com.mctrakr.managers.PatchManager;
 import com.mctrakr.modules.stats.player.PlayerDataStore;
 import com.mctrakr.modules.stats.server.ServerStatistics;
 import com.mctrakr.modules.totals.ServerTotals;

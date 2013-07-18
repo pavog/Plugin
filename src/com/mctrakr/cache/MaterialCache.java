@@ -29,9 +29,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import com.mctrakr.database.Query;
-import com.mctrakr.database.ConfigTables.MaterialsTable;
 import com.mctrakr.managers.CacheManager.Type;
 import com.mctrakr.settings.Constants;
+import com.mctrakr.settings.ConfigTables.MaterialsTable;
 import com.mctrakr.settings.Constants.ItemsWithMetadata;
 
 /**

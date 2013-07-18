@@ -18,8 +18,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.mctrakr.database;
+package com.mctrakr.settings;
 
+
+import com.mctrakr.database.Column;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,13 +44,13 @@ public class ConfigTables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum SettingsTable implements DBTable {
+    public enum SettingsTable implements Column {
         TableName       ("settings"),
         Key             ("key"),
         Value           ("value"),
         ;
         
-        private String columnName;
+        private final String columnName;
         
         @Override
         public String toString() { return columnName; }
@@ -61,7 +63,7 @@ public class ConfigTables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum ModulesTable implements DBTable {
+    public enum ModulesTable implements Column {
         TableName       ("modules"),
         Name            ("module_name"),
         IsEnabled       ("is_enabled"),
@@ -83,7 +85,7 @@ public class ConfigTables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum ServerStatsTable implements DBTable {
+    public enum ServerStatsTable implements Column {
         TableName       ("server_statistics"),
         Key             ("key"),
         Value           ("value"),
@@ -102,7 +104,7 @@ public class ConfigTables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum MaterialsTable implements DBTable {
+    public enum MaterialsTable implements Column {
         TableName       ("materials"),
         MaterialId      ("material_id"),
         TpName          ("tp_name"),
@@ -121,7 +123,7 @@ public class ConfigTables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum EntitiesTable implements DBTable {
+    public enum EntitiesTable implements Column {
         TableName       ("entities"),
         EntityId        ("entity_id"),
         TpName          ("tp_name"),

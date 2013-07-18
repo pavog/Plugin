@@ -29,8 +29,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.mctrakr.Statistics;
 import com.mctrakr.database.Query;
-import com.mctrakr.database.ConfigTables.ModulesTable;
 import com.mctrakr.database.Query.QueryResult;
+import com.mctrakr.settings.ConfigTables.ModulesTable;
 
 @Getter(AccessLevel.PUBLIC)
 public class ConfigLock implements Runnable {

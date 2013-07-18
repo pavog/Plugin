@@ -24,7 +24,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.mctrakr.database.DBTable;
+import com.mctrakr.database.Column;
 
 public class Tables {
     
@@ -37,7 +37,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum TotalItemsTable implements DBTable {
+    public enum TotalItemsTable implements Column {
         TableName       ("total_items"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -63,7 +63,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DetailedItemsDroppedTable implements DBTable {
+    public enum DetailedItemsDroppedTable implements Column {
         TableName       ("detailed_dropped_items"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -86,7 +86,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DetailedItemsPickedUpTable implements DBTable {
+    public enum DetailedItemsPickedUpTable implements Column {
         TableName       ("detailed_pickedup_items"),
         EntryId         ("detailed_pickedup_items_id"),
         Material        ("material_id"),
@@ -110,7 +110,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DetailedItemsConsumedTable implements DBTable {
+    public enum DetailedItemsConsumedTable implements Column {
         TableName       ("detailed_used_items"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),

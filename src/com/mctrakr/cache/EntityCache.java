@@ -26,8 +26,8 @@ import java.util.List;
 import org.bukkit.entity.EntityType;
 
 import com.mctrakr.database.Query;
-import com.mctrakr.database.ConfigTables.EntitiesTable;
 import com.mctrakr.managers.CacheManager.Type;
+import com.mctrakr.settings.ConfigTables.EntitiesTable;
 
 /**
  * Caches entity IDs server-side

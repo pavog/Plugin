@@ -27,7 +27,7 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 
 import com.mctrakr.cache.SessionCache;
-import com.mctrakr.database.DBTable;
+import com.mctrakr.database.Column;
 import com.mctrakr.database.Query;
 import com.mctrakr.database.Query.QueryResult;
 import com.mctrakr.modules.DataStore.NormalData;
@@ -42,7 +42,7 @@ import com.mctrakr.util.Util;
  */
 public class MiscStats extends NormalData {
     
-    private Map<DBTable, Object> values;
+    private Map<Column, Object> values;
     
     /**
      * <b>Default constructor</b><br />
@@ -56,7 +56,7 @@ public class MiscStats extends NormalData {
         if(!session.isOnline()) return;
         Player player = session.getBukkitPlayer();
         
-        values = new HashMap<DBTable, Object>();
+        values = new HashMap<Column, Object>();
         
         if(player.isOp()) values.put(MiscInfoTable.IsOp, 1);
         else values.put(MiscInfoTable.IsOp, 0);

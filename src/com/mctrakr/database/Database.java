@@ -38,14 +38,15 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.database.ConfigTables.SettingsTable;
 import com.mctrakr.database.Query.QueryResult;
 import com.mctrakr.database.exceptions.DatabaseConnectionException;
 import com.mctrakr.database.exceptions.RuntimeSQLException;
 import com.mctrakr.events.plugin.DatabasePatchEvent;
+import com.mctrakr.managers.PatchManager;
 import com.mctrakr.settings.ConfigLock;
 import com.mctrakr.settings.LocalConfiguration;
 import com.mctrakr.settings.RemoteConfiguration;
+import com.mctrakr.settings.ConfigTables.SettingsTable;
 import com.mctrakr.util.ExceptionHandler;
 import com.mctrakr.util.Message;
 

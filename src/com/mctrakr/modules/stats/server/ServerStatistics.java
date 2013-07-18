@@ -29,11 +29,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import com.mctrakr.database.Query;
-import com.mctrakr.database.ConfigTables.ServerStatsTable;
 import com.mctrakr.database.Query.QueryResult;
 import com.mctrakr.modules.Module;
 import com.mctrakr.settings.ConfigLock;
 import com.mctrakr.settings.ConfigLock.PrimaryType;
+import com.mctrakr.settings.ConfigTables.ServerStatsTable;
 import com.mctrakr.util.Util;
 import com.mctrakr.util.VariableManager.ServerVariable;
 import com.mctrakr.util.tasks.TickProcess;

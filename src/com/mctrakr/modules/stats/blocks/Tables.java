@@ -24,7 +24,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.mctrakr.database.DBTable;
+import com.mctrakr.database.Column;
 
 public class Tables {
     
@@ -37,7 +37,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum TotalBlocksTable implements DBTable {
+    public enum TotalBlocksTable implements Column {
         TableName       ("total_blocks"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -57,7 +57,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DetailedBrokenBlocksTable implements DBTable {
+    public enum DetailedBrokenBlocksTable implements Column {
         TableName       ("detailed_destroyed_blocks"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),
@@ -80,7 +80,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum DetailedPlacedBlocksTable implements DBTable {
+    public enum DetailedPlacedBlocksTable implements Column {
         TableName       ("detailed_placed_blocks"),
         MaterialId      ("material_id"),
         PlayerId        ("player_id"),

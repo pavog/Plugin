@@ -27,7 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import com.mctrakr.database.Database;
-import com.mctrakr.database.PatchManager;
+import com.mctrakr.managers.PatchManager;
 import com.mctrakr.settings.ConfigLock;
 import com.mctrakr.util.ExceptionHandler;
 import com.mctrakr.util.Message;

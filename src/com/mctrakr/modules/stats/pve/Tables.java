@@ -24,7 +24,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.mctrakr.database.DBTable;
+import com.mctrakr.database.Column;
 
 public class Tables {
     
@@ -37,7 +37,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PveTotalsTable implements DBTable {
+    public enum PveTotalsTable implements Column {
         TableName       ("total_pve_kills"),
         MaterialId      ("material_id"),
         CreatureId      ("entity_id"),
@@ -58,7 +58,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PveDetailsTable implements DBTable {
+    public enum PveDetailsTable implements Column {
         TableName       ("detailed_pve_kills"),
         MaterialId      ("material_id"),
         CreatureId      ("entity_id"),

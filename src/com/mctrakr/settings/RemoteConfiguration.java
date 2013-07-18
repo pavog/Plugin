@@ -24,8 +24,8 @@ import org.bukkit.Bukkit;
 
 import com.mctrakr.Statistics;
 import com.mctrakr.database.Query;
-import com.mctrakr.database.ConfigTables.SettingsTable;
 import com.mctrakr.database.Query.QueryResult;
+import com.mctrakr.settings.ConfigTables.SettingsTable;
 
 /**
  * Represents the configuration pulled from the database.<br />

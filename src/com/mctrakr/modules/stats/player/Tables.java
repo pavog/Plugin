@@ -24,7 +24,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.mctrakr.database.DBTable;
+import com.mctrakr.database.Column;
 
 public class Tables {
     
@@ -37,7 +37,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PlayersTable implements DBTable {
+    public enum PlayersTable implements Column {
         TableName       ("players"),
         PlayerId        ("player_id"),
         Name            ("name"),
@@ -61,7 +61,7 @@ public class Tables {
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    public enum PlayersLogTable implements DBTable {
+    public enum PlayersLogTable implements Column {
         TableName       ("detailed_log_players"),
         PlayerId        ("player_id"),
         Timestamp       ("time"),
