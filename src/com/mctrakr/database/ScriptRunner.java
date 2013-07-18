@@ -20,6 +20,7 @@
  * Changelog:
  * 
  * Cut down on unused code and generally optimized for desired tasks.
+ * Removed the ability to change the delimiter - we do not need that.
  * - bitWolfy
  * 
  * Added the ability to change the delimiter so you can run scripts that 
@@ -34,16 +35,15 @@ package com.mctrakr.database;
 
 import java.io.BufferedReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.mctrakr.exceptions.RuntimeSQLException;
+import com.mctrakr.database.exceptions.RuntimeSQLException;
 import com.mctrakr.settings.LocalConfiguration;
+import com.mctrakr.util.ExceptionHandler;
 import com.mctrakr.util.Message;
 
 /**
@@ -54,169 +54,94 @@ import com.mctrakr.util.Message;
  *
  */
 public class ScriptRunner {
-
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
-    private static final String DEFAULT_DELIMITER = ";";
-
-    private Connection connection;
-
-    private String delimiter = ScriptRunner.DEFAULT_DELIMITER;
-    private boolean fullLineDelimiter = false;
     
-    /**
-     * <b>Constructor</b><br />
-     * Creates a new ScriptRunner instance
-     * @param connection Database connection instance
-     */
+    private static final String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
+    private static final String DELIMITER = ";";
+    
+    private String dbName = LocalConfiguration.DBName.toString();
+    private String dbPrefix = LocalConfiguration.DBPrefix.toString();
+    private boolean debug = LocalConfiguration.Debug.toBoolean();
+    
+    private Connection connection;
+    
     public ScriptRunner(Connection connection) {
         this.connection = connection;
     }
     
     /**
-     * Sets a custom delimiter
-     * @param delimiter Delimiter to set
-     */
-    public void setDelimiter(String delimiter) {
-        this.delimiter = delimiter;
-    }
-    
-    /**
-     * Sets a custom full line delimiter
-     * @param fullLineDelimiter Delimiter to set
-     */
-    public void setFullLineDelimiter(boolean fullLineDelimiter) {
-        this.fullLineDelimiter = fullLineDelimiter;
-    }
-    
-    /**
      * Executes a database script
      * @param reader Reader
-     * @throws RuntimeSQLException thrown if an error occurs while executing a line
      */
-    public void runScript(Reader reader) throws RuntimeSQLException {
-        Message.log(Level.FINER, "Executing a database script");
+    public void runScript(Reader reader) {
+        Message.log(Level.FINER, "| [X] Executing database script          |");
+        
+        StringBuilder command = new StringBuilder();
+        BufferedReader lineReader = new BufferedReader(reader);
+        int i = 0;
+        String line = "";
 
         try {
-            StringBuilder command = new StringBuilder();
-            try {
-                BufferedReader lineReader = new BufferedReader(reader);
-                int i = 0;
-                String line = "";
-                String dbName = LocalConfiguration.DBName.toString();
-                String dbPrefix = LocalConfiguration.DBPrefix.toString();
-                boolean debug = LocalConfiguration.Debug.toBoolean();
-                while ((line = lineReader.readLine()) != null) {
-                    line = StringUtils.replace(line, "$dbname", dbName);
-                    line = StringUtils.replace(line, "$prefix_", dbPrefix);
+            do {
+                try {
+                    line = lineReader.readLine();
                     command = this.handleLine(command, line);
-                    i++;
-                    if(i % 50 == 0 && debug) Message.log(Level.FINEST, "Executing line " + i);
+                } catch (Throwable t) {
+                    Message.log(Level.FINER,
+                            "|  |-- An error on line " + Message.fillString(i + "! Skipping.", 17) + "|",
+                            "|      Stack trace is available in the   |",
+                            "|      server log file.                  |"
+                            );
+                    ExceptionHandler.handle(t, true);
                 }
-                Message.log(Level.FINER, "Executed " + i + " lines total");
-                this.commitConnection();
-                this.checkForMissingLineTerminator(command);
-            } catch (Exception e) {
-                String message = "Error executing: " + command + ".  Cause: " + e;
-                throw new RuntimeSQLException(message, e);
+                i++;
+                if(i % 50 == 0 && debug) Message.log(Level.FINEST, "|  |-- Executing line " + Message.fillString(i + "", 19) + "|");
+            } while (line != null);
+            Message.log(Level.FINER, "|  |-- Executed " + Message.fillString(i + " lines total", 25) + "|");
+            
+            try { this.connection.commit(); }
+            catch (Throwable t) { throw new RuntimeSQLException("Could not commit transaction. Cause: " + t, t); }
+            
+            if (command != null && command.toString().trim().length() > 0) {
+                throw new RuntimeSQLException("Line missing end-of-line terminator (" + DELIMITER + ") => " + command);
             }
-        }
-        finally { this.rollbackConnection(); }
-    }
-    
-    /**
-     * Closes the database connection
-     */
-    public void closeConnection() {
-        try { this.connection.close(); }
-        catch (Exception e) { }
-    }
-    
-    /**
-     * Commits the changes to the database
-     * @throws RuntimeSQLException thrown if unable to commit the transaction.
-     */
-    private void commitConnection() throws RuntimeSQLException {
-        try { this.connection.commit(); }
-        catch (Throwable t) { throw new RuntimeSQLException("Could not commit transaction. Cause: " + t, t); }
-    }
-    
-    /**
-     * Rolls back the connection
-     */
-    private void rollbackConnection() {
-        try { this.connection.rollback(); }
-        catch (Throwable t) { }
-    }
-    
-    /**
-     * Checks for the missing line terminator
-     * @param command Line to check
-     * @throws RuntimeSQLException Thrown if the line is missing a terminator
-     */
-    private void checkForMissingLineTerminator(StringBuilder command) throws RuntimeSQLException {
-        if (command != null && command.toString().trim().length() > 0) {
-            throw new RuntimeSQLException("Line missing end-of-line terminator (" + this.delimiter + ") => " + command);
+            
+        } finally {
+            try { this.connection.rollback(); }
+            catch (Throwable t) { }
         }
     }
     
     /**
-     * Handles the individual line
-     * @param command
-     * @param line
-     * @return Parsed string
-     * @throws SQLException
-     * @throws UnsupportedEncodingException
+     * Parses the SQL script lines and executes the statement once it is complete
+     * @param command Combined command string that is passed from one iteration to another
+     * @param line A new line to add to the statement
+     * @return Combined command to be passed to the next iteration
+     * @throws RuntimeSQLException Thrown if an error occurred while executing a statement
      */
-    private StringBuilder handleLine(StringBuilder command, String line) throws SQLException, UnsupportedEncodingException {
+    private StringBuilder handleLine(StringBuilder command, String line) throws RuntimeSQLException {
         String trimmedLine = line.trim();
-        if (trimmedLine.toLowerCase().startsWith("delimiter")) {
-            this.setDelimiter(trimmedLine.substring(10));
-        } else if (this.lineIsComment(trimmedLine)) {
-        } else if (this.commandReadyToExecute(trimmedLine)) {
-            command.append(line.substring(0, line.lastIndexOf(this.delimiter)));
+        if (trimmedLine.startsWith("//") || trimmedLine.startsWith("--")) {
+            // Skip the comments
+        } else if (trimmedLine.endsWith(DELIMITER)) {
+            command.append(line.substring(0, line.lastIndexOf(DELIMITER)));
             command.append(ScriptRunner.LINE_SEPARATOR);
-            this.executeStatement(command.toString());
-            command.setLength(0);
+            
+            try {
+                Statement statement = connection.createStatement();
+                String sql = command.toString();
+                sql = StringUtils.replace(sql, "\r\n", "\n");
+                sql = StringUtils.replace(sql, "$dbname", dbName);
+                sql = StringUtils.replace(sql, "$prefix_", dbPrefix);
+                statement.execute(sql);
+                statement.close();
+            } catch (Throwable t) {
+                throw new RuntimeSQLException("An error occurred while executing a script line", t);
+            } finally { command.setLength(0); }
         } else if (trimmedLine.length() > 0) {
             command.append(line);
             command.append(ScriptRunner.LINE_SEPARATOR);
         }
         return command;
-    }
-    
-    /**
-     * Checks if the specified line is a comment
-     * @param trimmedLine Line to check
-     * @return <b>true</b> if the line is a comment, <b>false</b> otherwise
-     */
-    private boolean lineIsComment(String trimmedLine) {
-        return trimmedLine.startsWith("//") || trimmedLine.startsWith("--");
-    }
-    
-    /**
-     * Checks if the specified line is ready to be executed
-     * @param trimmedLine Line to check
-     * @return <b>true</b> if the line is ready to be executed, <b>false</b> otherwise
-     */
-    private boolean commandReadyToExecute(String trimmedLine) {
-        return !this.fullLineDelimiter && trimmedLine.endsWith(this.delimiter) || this.fullLineDelimiter && trimmedLine.equals(this.delimiter);
-    }
-    
-    /**
-     * Executes the specified command
-     * @param command Command to execute
-     * @throws SQLException
-     * @throws UnsupportedEncodingException
-     */
-    private void executeStatement(String command) throws SQLException, UnsupportedEncodingException {
-        Statement statement = this.connection.createStatement();
-        String sql = command;
-        sql = sql.replaceAll("\r\n", "\n");
-        
-        statement.execute(sql);
-        
-        try { statement.close(); }
-        catch (Exception e) { }
     }
     
 }

@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.mctrakr.exceptions;
+package com.mctrakr.database.exceptions;
 
 /**
  * Exception thrown when an error occurs while connecting to the database
