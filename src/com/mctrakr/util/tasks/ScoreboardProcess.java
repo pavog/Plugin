@@ -50,7 +50,7 @@ public class ScoreboardProcess implements Runnable {
                 continue;
             }
             
-            Scoreboard board = session.getScoreboard();
+            Scoreboard board = session.getBukkitPlayer().getScoreboard();
             if(board == null) continue;
             
             Objective objective = session.getObjective();

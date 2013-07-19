@@ -25,6 +25,7 @@ import org.bukkit.Bukkit;
 import lombok.AccessLevel;
 import lombok.Getter;
 
+import com.mctrakr.cache.SessionCache;
 import com.mctrakr.modules.totals.PlayerTotals;
 
 @Getter(AccessLevel.PUBLIC)
@@ -34,10 +35,16 @@ public abstract class PlayerSession {
     protected final String name;
     protected PlayerTotals playerTotals;
     
-    public PlayerSession(int id, String name) {
-        this.id = id;
-        this.name = name;
-        this.playerTotals = new PlayerTotals(id);
+    public PlayerSession(String playerName) {
+        id = SessionCache.getPlayerId(playerName);
+        name = playerName;
+        playerTotals = new PlayerTotals(id);
+    }
+    
+    public PlayerSession(String playerName, int playerId) {
+        id = playerId;
+        name = playerName;
+        playerTotals = new PlayerTotals(playerId);
     }
     
     public boolean isOnline() {

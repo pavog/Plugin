@@ -35,7 +35,6 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.listeners.handlers.HandlerManager;
 import com.mctrakr.listeners.handlers.ItemsHandler.FoodConsume;
 import com.mctrakr.listeners.handlers.ItemsHandler.ItemCraft;
 import com.mctrakr.listeners.handlers.ItemsHandler.ItemDrop;
@@ -44,6 +43,7 @@ import com.mctrakr.listeners.handlers.ItemsHandler.ItemPickup;
 import com.mctrakr.listeners.handlers.ItemsHandler.ItemRepair;
 import com.mctrakr.listeners.handlers.ItemsHandler.ItemSmelt;
 import com.mctrakr.listeners.handlers.ItemsHandler.ToolBreak;
+import com.mctrakr.managers.HandlerManager;
 import com.mctrakr.settings.Constants.StatPerms;
 
 /**

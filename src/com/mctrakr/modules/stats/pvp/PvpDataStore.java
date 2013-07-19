@@ -24,7 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mctrakr.cache.PlayerCache;
+import com.mctrakr.cache.SessionCache;
 import com.mctrakr.events.player.TrackedPVPEvent;
 import com.mctrakr.modules.LargeDataStore;
 import com.mctrakr.modules.stats.pvp.PvpDetailedStats.PVPEntry;
@@ -72,7 +72,7 @@ public class PvpDataStore extends LargeDataStore<PvpTotalStats, PVPEntry> {
      * @param weapon Weapon used by killer
      */
     public void playerKilledPlayer(Player victim, ItemStack weapon) {
-        int victimId = PlayerCache.get(victim);
+        int victimId = SessionCache.getPlayerId(victim);
         getNormalData(victimId, weapon).addTimes();
         PVPEntry detailedEntry = new PVPEntry(session, victim.getLocation(), victimId, weapon);
         addDetailedDataEntry(detailedEntry);

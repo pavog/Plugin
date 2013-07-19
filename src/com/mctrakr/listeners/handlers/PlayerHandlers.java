@@ -31,6 +31,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.mctrakr.cache.SessionCache;
+import com.mctrakr.modules.stats.distance.DistancesDataStore;
 import com.mctrakr.modules.stats.distance.Tables.DistancesTable;
 import com.mctrakr.modules.stats.misc.MiscDataStore;
 import com.mctrakr.modules.stats.misc.Tables.MiscInfoTable;
@@ -52,6 +53,7 @@ public class PlayerHandlers {
         @Override
         public void run() {
             Player player = event.getPlayer();
+            OnlineSession session = SessionCache.fetch(player);
             
             Location playerLocation = player.getLocation();
             if(!playerLocation.getWorld().equals(event.getTo().getWorld())) return;
@@ -60,22 +62,32 @@ public class PlayerHandlers {
                 EntityType vehicle = player.getVehicle().getType();
                 distance = player.getVehicle().getLocation().distance(event.getTo());
                 if(vehicle.equals(EntityType.MINECART)) {
-                    SessionCache.fetch(player).addDistance(DistancesTable.Minecart, distance);
+                    addDistance(session, DistancesTable.Minecart, distance);
                 } else if(vehicle.equals(EntityType.BOAT)) {
-                    SessionCache.fetch(player).addDistance(DistancesTable.Boat, distance);
+                    addDistance(session, DistancesTable.Boat, distance);
                 } else if(vehicle.equals(EntityType.PIG) || vehicle.equals(EntityType.HORSE)) {
-                    SessionCache.fetch(player).addDistance(DistancesTable.Ride, distance);
+                    addDistance(session, DistancesTable.Ride, distance);
                 }
             } else if (playerLocation.getBlock().getType().equals(Material.WATER) || playerLocation.getBlock().getType().equals(Material.STATIONARY_WATER)) {
-                SessionCache.fetch(player).addDistance(DistancesTable.Swim, distance);
+                addDistance(session, DistancesTable.Swim, distance);
             } else if (player.isFlying()) {
-                SessionCache.fetch(player).addDistance(DistancesTable.Flight, distance);
+                addDistance(session, DistancesTable.Flight, distance);
             } else {
-                OnlineSession session = SessionCache.fetch(player);
                 if(playerLocation.getY() < event.getTo().getY() && event.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
                     ((MiscDataStore) session.getDataStore(PrimaryType.Misc)).getNormalData().incrementStat(MiscInfoTable.TimesJumped);
-                SessionCache.fetch(player).addDistance(DistancesTable.Foot, distance);
+                addDistance(session, DistancesTable.Foot, distance);
             }
+        }
+        
+        /**
+         * Add distance of the specified type to the statistics
+         * @param session Player session
+         * @param type Travel type
+         * @param distance Distance traveled
+         */
+        private static void addDistance(OnlineSession session, DistancesTable type, double distance) {
+            ((DistancesDataStore) session.getDataStore(PrimaryType.Distance)).playerTravel(type, distance);
+            session.getPlayerTotals().addDistance(type, distance);
         }
     }
 

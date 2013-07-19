@@ -20,22 +20,16 @@
 
 package com.mctrakr.session;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-
-import com.mctrakr.cache.PlayerCache;
-
 /**
  * A simplistic representation of a player's session.<br />
  * The player in question might be offline, or not exist at all.
  * @author bitWolfy
  *
  */
-@Getter(AccessLevel.PUBLIC)
 public class OfflineSession extends PlayerSession {
     
     public OfflineSession(String name) {
-        super(PlayerCache.get(name), name);
+        super(name);
     }
 
 }

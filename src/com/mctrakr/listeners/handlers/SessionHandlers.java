@@ -28,7 +28,10 @@ import org.bukkit.entity.Player;
 import com.mctrakr.Statistics;
 import com.mctrakr.cache.SessionCache;
 import com.mctrakr.modules.stats.player.PlayerDataStore;
+import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.RemoteConfiguration;
 import com.mctrakr.settings.ConfigLock.PrimaryType;
+import com.mctrakr.util.Message;
 
 public class SessionHandlers {
     
@@ -45,7 +48,14 @@ public class SessionHandlers {
         @Override
         public void run() {
             Statistics.getServerStatistics().playerLogin();
-            ((PlayerDataStore) SessionCache.fetch(player, true).getDataStore(PrimaryType.Player)).addPlayerLog(player.getLocation(), true);
+            OnlineSession session = SessionCache.fetch(player);
+            ((PlayerDataStore) session.getDataStore(PrimaryType.Player)).addPlayerLog(player.getLocation(), true);
+            
+            if(session.isFirstJoin() && RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
+                Message.send(player, RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName()));
+            } else if(RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
+                Message.send(player, RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getName()));
+            }
         }
     }
     
@@ -61,7 +71,7 @@ public class SessionHandlers {
         
         @Override
         public void run() {
-            ((PlayerDataStore) SessionCache.fetch(player, true).getDataStore(PrimaryType.Player)).addPlayerLog(player.getLocation(), false);
+            ((PlayerDataStore) SessionCache.fetch(player).getDataStore(PrimaryType.Player)).addPlayerLog(player.getLocation(), false);
         }
     }
     

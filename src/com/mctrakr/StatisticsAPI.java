@@ -37,9 +37,10 @@ import com.mctrakr.database.ScriptRunner;
 import com.mctrakr.database.exceptions.DatabaseConnectionException;
 import com.mctrakr.database.exceptions.RuntimeSQLException;
 import com.mctrakr.events.plugin.DatabasePatchEvent;
-import com.mctrakr.listeners.handlers.HandlerManager;
+import com.mctrakr.managers.HandlerManager;
 import com.mctrakr.session.OfflineSession;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.session.PlayerSession;
 import com.mctrakr.settings.ConfigTables.SettingsTable;
 import com.mctrakr.settings.Constants.StatPerms;
 import com.mctrakr.util.Message;
@@ -63,31 +64,39 @@ public class StatisticsAPI {
     }
     
     /**
-     * Returns the OfflineSession for the player with the specified username.<br />
-     * The player might not be online, or not exist at all.
-     * @param username Player's username
-     * @return DataSession with player's totals
+     * Returns the PlayerSession for the specified username.
+     * If the player is online and has an OnlineSession associated with him, returns the OnlineSession.
+     * Otherwise, returns an OfflineSession.
+     * <br /><b>Description copied from {@link SessionCache#fetch(String)}
+     * @param username Player name
+     * @return Player session
      */
-    public static OfflineSession getSession(String username) {
+    public static PlayerSession getSession(String username) {
         return SessionCache.fetch(username);
     }
     
     /**
-     * Returns the OfflineSession for the player with the specified username.<br />
-     * The player might not be online, or not exist at all.
-     * @param username Player's username
-     * @param cached <b>true</b> if you want the plugin to cache this session
-     * @return DataSession with player's totals
+     * Returns the PlayerSession for the specified username.
+     * If the player is online and has an OnlineSession associated with him, returns the OnlineSession.
+     * Otherwise, returns an OfflineSession.
+     * <br /><b>Description copied from {@link SessionCache#fetch(String)}
+     * <br />If <code>cached</code> is set to <b>false</b>, the plugin will not cache the requested
+     * session. This also means that the data for this session will never be updated.
+     * @param username Player name
+     * @param cahced Set to <b>false</b> if you do not want Statistics to cache the requested session
+     * @return Player session
      */
-    public static OfflineSession getSession(String username, boolean cached) {
+    public static PlayerSession getSession(String username, boolean cached) {
         if(cached) return getSession(username);
         else return new OfflineSession(username);
     }
     
     /**
-     * Checks if the player is tracked by the plugin
-     * @param player Player object
-     * @return <b>true</b> if the player is tracked, <b>false</b> otherwise
+     * Checks if the player should be tracked or not.
+     * Performs the plugin and hook checkes.
+     * <br /><b>Decription copied from {@link HandlerManager#playerLookup(Player)}
+     * @param player Player to look up
+     * @return <b>true</b> if the player should be tracked, <b>false</b> otherwise
      */
     public static boolean isTracked(Player player) {
         return HandlerManager.playerLookup(player, StatPerms.Statistics);
@@ -104,7 +113,7 @@ public class StatisticsAPI {
     
     /**
      * Executes an external patch
-     * @param plugin Plugin instance
+     * @param plugin Your plugin instance
      * @param path Path to the patch file (relative to your plugin's data folder), without the extension
      * @return <b>true</b> if the patch was executed, <b>false</b> if the patching was cancelled
      * @throws DatabaseConnectionException If an error occurred while executing a database patch

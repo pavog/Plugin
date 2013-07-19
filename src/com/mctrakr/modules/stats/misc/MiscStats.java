@@ -33,6 +33,7 @@ import com.mctrakr.database.Query.QueryResult;
 import com.mctrakr.modules.DataStore.NormalData;
 import com.mctrakr.modules.stats.misc.Tables.MiscInfoTable;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.util.Util;
 
 /**
@@ -203,7 +204,10 @@ public class MiscStats extends NormalData {
      * @param player Player that was killed
      */
     public void killed(Player player) {
-        SessionCache.fetch(player).died();
+        OnlineSession victim = SessionCache.fetch(player);
+        ((MiscDataStore) victim.getDataStore(PrimaryType.Misc)).getNormalData().died();
+        victim.getPlayerTotals().death();
+        
         int curKillStreak = ((Integer) values.get(MiscInfoTable.CurKillStreak)).intValue() + 1;
         int maxKillStreak = ((Integer) values.get(MiscInfoTable.MaxKillStreak)).intValue();
         values.put(MiscInfoTable.CurKillStreak, curKillStreak);

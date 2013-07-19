@@ -25,9 +25,11 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import com.mctrakr.Statistics;
 import com.mctrakr.database.Query;
+import com.mctrakr.database.Query.QueryResult;
 import com.mctrakr.events.session.SessionCreateEvent;
 import com.mctrakr.events.session.SessionRemoveEvent;
 import com.mctrakr.managers.CacheManager.Type;
@@ -35,6 +37,7 @@ import com.mctrakr.modules.stats.player.PlayerDataStore;
 import com.mctrakr.modules.stats.player.Tables.PlayersTable;
 import com.mctrakr.session.OfflineSession;
 import com.mctrakr.session.OnlineSession;
+import com.mctrakr.session.PlayerSession;
 import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.settings.Constants.StatPerms;
 import com.mctrakr.settings.RemoteConfiguration;
@@ -66,9 +69,7 @@ public class SessionCache extends CachedData {
             public void run() {
                 for(Player player : Bukkit.getServer().getOnlinePlayers()) {
                     if(StatPerms.Statistics.has(player))
-                        ((PlayerDataStore) fetch(player, true)
-                                .getDataStore(PrimaryType.Player))
-                                .addPlayerLog(player.getLocation(), true);
+                        ((PlayerDataStore) fetch(player).getDataStore(PrimaryType.Player)).addPlayerLog(player.getLocation(), true);
                 }
             }
             
@@ -103,52 +104,36 @@ public class SessionCache extends CachedData {
      * Returns the OnlineSession associated with the specified player.<br />
      * If no session is found, it will be created.
      * @param player Tracked player
-     * @param login login event
      * @return OnlineSession associated with the player
      */
-    public static OnlineSession fetch(Player player, boolean login) {
+    public static OnlineSession fetch(Player player) {
         for(OnlineSession session : onlineSessions) {
-            if(session.getName().equals(player.getName())) {
-                if(login && RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
-                    Message.send(player, RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName()));
-                }
-                return session;
-            }
+            if(session.getName().equals(player.getName())) return session;
         }
         Message.debug("Creating a new user session for " + player.getName() + "(#" + onlineSessions.size() + ")");
-        OnlineSession newSession = new OnlineSession(player);
+        OnlineSession newSession = new OnlineSession(player, true);
         onlineSessions.add(newSession);
-        
-        if(login && RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
-            Message.send(
-                player,
-                RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
-            );
-        }
         
         Bukkit.getServer().getPluginManager().callEvent(new SessionCreateEvent(newSession));
         return newSession;
     }
     
     /**
-     * Returns the OnlineSession associated with the specified player.<br />
-     * If no session is found, it will be created.
-     * @param player Tracked player
-     * @return OnlineSession associated with the player.
-     */
-    public static OnlineSession fetch(Player player) {
-        return fetch(player, false);
-    }
-    
-    /**
-     * Fetches the OfflineSession from the cache
+     * Returns the PlayerSession for the specified username.
+     * If the player is online and has an OnlineSession associated with him, returns the OnlineSession.
+     * Otherwise, returns an OfflineSession.
      * @param username Player name
-     * @return Offline session
+     * @return Player session
      */
-    public static OfflineSession fetch(String username) {
+    public static PlayerSession fetch(String username) {
+        for(OnlineSession session : onlineSessions) {
+            if(session.getName().equals(username)) return session;
+        }
+        
         for(OfflineSession session : offlineSessions) {
             if(session.getName().equals(username)) return session;
         }
+        
         OfflineSession session = new OfflineSession(username);
         offlineSessions.add(session);
         return session;
@@ -193,6 +178,49 @@ public class SessionCache extends CachedData {
         onlineSessions.clear();
         
         offlineSessions.clear();
+    }
+    
+    /**
+     * Returns the ID of the player
+     * @param player Player to look up
+     * @return Player ID
+     */
+    public static int getPlayerId(Player player) {
+        if(player.hasMetadata("stats_id")) {
+            return player.getMetadata("stats_id").get(0).asInt();
+        } else {
+            int playerId = getPlayerId(player.getName());
+            player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
+            return playerId;
+        }
+    }
+    
+    /**
+     * Returns the player ID based on his name.<br />
+     * Very resource-heavy; if possible, use <code>get(Player player);</code>
+     * @param username Player name to look up
+     * @return Player ID
+     */
+    public static int getPlayerId(String username) {
+        Message.debug("Retrieving a player ID for " + username);
+        
+        int playerId = -1;
+        do {
+            QueryResult playerRow = Query.table(PlayersTable.TableName)
+                    .column(PlayersTable.PlayerId)
+                    .condition(PlayersTable.Name, username)
+                    .select();
+            
+            if(playerRow == null) {
+                Query.table(PlayersTable.TableName)
+                    .value(PlayersTable.Name, username)
+                    .insert();
+                continue;
+            }
+            playerId = playerRow.asInt(PlayersTable.PlayerId);
+        } while (playerId == -1);
+        Message.debug("User ID found: " + playerId);
+        return playerId;
     }
     
 }

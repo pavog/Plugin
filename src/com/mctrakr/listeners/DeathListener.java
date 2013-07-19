@@ -30,7 +30,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import com.mctrakr.Statistics;
 import com.mctrakr.listeners.handlers.DeathHandler.MonsterDeath;
 import com.mctrakr.listeners.handlers.DeathHandler.PlayerDeath;
-import com.mctrakr.listeners.handlers.HandlerManager;
+import com.mctrakr.managers.HandlerManager;
 import com.mctrakr.settings.Constants.StatPerms;
 
 /**

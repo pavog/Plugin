@@ -28,28 +28,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import com.mctrakr.cache.PlayerCache;
 import com.mctrakr.cache.SessionCache;
 import com.mctrakr.database.Query;
 import com.mctrakr.managers.ModuleManager;
 import com.mctrakr.modules.DataStore;
-import com.mctrakr.modules.stats.deaths.DeathsDataStore;
-import com.mctrakr.modules.stats.distance.DistancesDataStore;
-import com.mctrakr.modules.stats.distance.Tables.DistancesTable;
-import com.mctrakr.modules.stats.misc.MiscDataStore;
 import com.mctrakr.modules.stats.player.Tables.PlayersTable;
-import com.mctrakr.modules.stats.pve.PveDataStore;
-import com.mctrakr.modules.stats.pvp.PvpDataStore;
 import com.mctrakr.settings.ConfigLock.ModuleType;
-import com.mctrakr.settings.ConfigLock.PrimaryType;
 
 /**
  * Represents a player session that is created when a player logs into the server.<br />
@@ -62,16 +50,33 @@ import com.mctrakr.settings.ConfigLock.PrimaryType;
 public class OnlineSession extends PlayerSession {
     
     private List<DataStore> dataStores;
+    private boolean firstJoin;
     
     private Scoreboard scoreboard;
     @Setter(AccessLevel.PUBLIC)
     private Objective objective;
     
     public OnlineSession(Player player) {
-        super(PlayerCache.get(player), player.getName());
+        super(player.getName(), SessionCache.getPlayerId(player));
         
-        this.dataStores = new ArrayList<DataStore>();
-        this.dataStores.addAll(ModuleManager.getModules(this));
+        dataStores = new ArrayList<DataStore>();
+        dataStores.addAll(ModuleManager.getModules(this));
+        
+        firstJoin = false;
+        
+        Query.table(PlayersTable.TableName)
+            .value(PlayersTable.Online, true)
+            .condition(PlayersTable.PlayerId, id)
+            .update();
+    }
+    
+    public OnlineSession(Player player, boolean firstJoin) {
+        super(player.getName(), SessionCache.getPlayerId(player));
+        
+        dataStores = new ArrayList<DataStore>();
+        dataStores.addAll(ModuleManager.getModules(this));
+        
+        this.firstJoin = firstJoin;
         
         Query.table(PlayersTable.TableName)
             .value(PlayersTable.Online, true)
@@ -129,67 +134,6 @@ public class OnlineSession extends PlayerSession {
             .value(PlayersTable.Online, false)
             .condition(PlayersTable.PlayerId, id)
             .update();
-    }
-    
-    /**
-     * Add distance of the specified type to the statistics
-     * @param type Travel type
-     * @param distance Distance traveled
-     */
-    public void addDistance(DistancesTable type, double distance) {
-        ((DistancesDataStore) getDataStore(PrimaryType.Distance)).playerTravel(type, distance);
-        playerTotals.addDistance(type, distance);
-    }
-    
-    /**
-     * Registers the player death in the data store
-     * @param victim Player who was killed 
-     * @param weapon Weapon used by killer
-     */
-    public void killedPlayer(Player victim, ItemStack weapon) {
-        ((PvpDataStore) getDataStore(PrimaryType.PVP)).playerKilledPlayer(victim, weapon);
-        ((MiscDataStore) getDataStore(PrimaryType.Misc)).getNormalData().killed(victim);
-        playerTotals.pvpKill();
-        SessionCache.fetch(victim).getPlayerTotals().death();
-    }
-    
-    /**
-     * Registers the creature death in the data store
-     * @param victim Creature killed
-     * @param weapon Weapon used by killer
-     */
-    public void killedCreature(Entity victim, ItemStack weapon) {
-        ((PveDataStore) getDataStore(PrimaryType.PVE)).playerKilledCreature(victim, weapon);
-        playerTotals.pveKill();
-    }
-    
-    /**
-     * Registers the player death in the data store
-     * @param killer Creature that killed the player
-     * @param weapon Weapon used by killer
-     */
-    public void killedByCreature(Entity killer, ItemStack weapon) {
-        ((PveDataStore) getDataStore(PrimaryType.PVE)).creatureKilledPlayer(killer, weapon);
-        died();
-    }
-    
-    /**
-     * Runs when the session owner was killed by the environment
-     * @param location Location of the death
-     * @param cause Death cause
-     */
-    public void killedByEnvironment(Location location, DamageCause cause) {
-        ((DeathsDataStore) getDataStore(PrimaryType.Deaths)).playerDied(location, cause);
-        died();
-    }
-    
-    /**
-     * Runs when the player dies (any cause).<br />
-     * This method is for internal use; you do not need to run it from listener
-     */
-    public void died() {
-        ((MiscDataStore) getDataStore(PrimaryType.Misc)).getNormalData().died();
-        playerTotals.death();
     }
     
     public void setScoreboard(Scoreboard scoreboard) {

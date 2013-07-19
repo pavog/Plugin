@@ -28,9 +28,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.listeners.handlers.HandlerManager;
 import com.mctrakr.listeners.handlers.SessionHandlers.PlayerLogin;
 import com.mctrakr.listeners.handlers.SessionHandlers.PlayerLogout;
+import com.mctrakr.managers.HandlerManager;
 import com.mctrakr.settings.Constants.StatPerms;
 
 public class SessionListener implements Listener {

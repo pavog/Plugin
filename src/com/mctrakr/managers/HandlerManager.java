@@ -18,22 +18,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.mctrakr.listeners.handlers;
+package com.mctrakr.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.mctrakr.Statistics;
-import com.mctrakr.managers.HookManager;
 import com.mctrakr.modules.hooks.vanish.VanishHook;
 import com.mctrakr.settings.ConfigLock.HookType;
 import com.mctrakr.settings.Constants.StatPerms;
 import com.mctrakr.settings.RemoteConfiguration;
 
+/**
+ * Handles the handlers - har har har.
+ * In actuality, this is nothing but a bunch of static methods
+ * used by the handlers.
+ * @author bitWolfy
+ *
+ */
 public class HandlerManager {
     
-    public static boolean playerLookup(Player player, ExtraChecks check) {
+    /**
+     * Checks if the player should be tracked or not.
+     * Performs the plugin and hook checkes.
+     * @param player Player to look up
+     * @return <b>true</b> if the player should be tracked, <b>false</b> otherwise
+     */
+    public static boolean playerLookup(Player player) {
         if(Statistics.isPaused()) return false;
         
         if(RemoteConfiguration.VanishDisablesTracking.asBoolean()) {
@@ -41,32 +53,21 @@ public class HandlerManager {
             if(hook != null && hook.isVanished(player)) return false;
         }
         
-        if(player.hasMetadata("NPC")    // Citizens fix
-                && player.getMetadata("NPC").get(0).asBoolean()) return false;
-        
-        if(!check.check(player)) return false;
+        // Citizens fix - ensures that the spawned NPCs are not tracked
+        if(player.hasMetadata("NPC") && player.getMetadata("NPC").get(0).asBoolean()) return false;
         
         return true;
     }
     
+    /**
+     * Checks if the player should be tracked or not.
+     * Identical in functionality to {@link #playerLookup(Player)}, but also checks the permission
+     * @param player Player to look up
+     * @param StatPerms permission Permission to check for
+     * @return <b>true</b> if the player should be tracked, <b>false</b> otherwise
+     */
     public static boolean playerLookup(Player player, StatPerms permission) {
-        if(Statistics.isPaused()) return false;
-
-        if(RemoteConfiguration.VanishDisablesTracking.asBoolean()) {
-            VanishHook hook = (VanishHook) HookManager.getHook(HookType.Vanish);
-            if(hook != null && hook.isVanished(player)) return false;
-        }
-        
-        if(player.hasMetadata("NPC")    // Citizens fix
-                && player.getMetadata("NPC").get(0).asBoolean()) return false;
-        
-        return permission.has(player);
-    }
-    
-    public static interface ExtraChecks {
-        
-        public boolean check(Player player);
-        
+        return playerLookup(player) && permission.has(player);
     }
     
     public static BukkitTask runTask(Runnable task) {
