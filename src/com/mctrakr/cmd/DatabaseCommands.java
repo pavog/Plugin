@@ -33,11 +33,11 @@ import com.mctrakr.database.Query;
 import com.mctrakr.database.Query.QueryResult;
 import com.mctrakr.managers.CommandManager;
 import com.mctrakr.managers.CommandManager.Command;
-import com.mctrakr.modules.stats.player.Tables.PlayersTable;
+import com.mctrakr.modules.data.stats.player.Tables.PlayersTable;
+import com.mctrakr.modules.signs.SignProcess;
 import com.mctrakr.settings.Constants.StatPerms;
 import com.mctrakr.util.Message;
 import com.mctrakr.util.tasks.DatabaseProcess;
-import com.mctrakr.util.tasks.SignProcess;
 
 public class DatabaseCommands {
     

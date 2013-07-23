@@ -35,8 +35,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import com.mctrakr.cache.SessionCache;
 import com.mctrakr.database.Query;
 import com.mctrakr.managers.ModuleManager;
-import com.mctrakr.modules.DataStore;
-import com.mctrakr.modules.stats.player.Tables.PlayersTable;
+import com.mctrakr.modules.data.DataStore;
+import com.mctrakr.modules.data.stats.player.Tables.PlayersTable;
 import com.mctrakr.settings.ConfigLock.ModuleType;
 
 /**
@@ -108,7 +108,7 @@ public class OnlineSession extends PlayerSession {
      */
     public DataStore getDataStore(String type) {
         for(DataStore store : dataStores) {
-            if(store.getType().equals(type)) return store;
+            if(store.getType().getAlias().equals(type)) return store;
         }
         return null;
     }

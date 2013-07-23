@@ -25,12 +25,12 @@ import java.util.Map;
 
 import com.mctrakr.Statistics;
 import com.mctrakr.database.Query;
-import com.mctrakr.modules.stats.blocks.Tables.TotalBlocksTable;
-import com.mctrakr.modules.stats.deaths.Tables.TotalDeathsTable;
-import com.mctrakr.modules.stats.distance.Tables.DistancesTable;
-import com.mctrakr.modules.stats.items.Tables.TotalItemsTable;
-import com.mctrakr.modules.stats.pve.Tables.PveTotalsTable;
-import com.mctrakr.modules.stats.pvp.Tables.PvpTotalsTable;
+import com.mctrakr.modules.data.stats.blocks.Tables.TotalBlocksTable;
+import com.mctrakr.modules.data.stats.deaths.Tables.TotalDeathsTable;
+import com.mctrakr.modules.data.stats.distance.Tables.DistancesTable;
+import com.mctrakr.modules.data.stats.items.Tables.TotalItemsTable;
+import com.mctrakr.modules.data.stats.pve.Tables.PveTotalsTable;
+import com.mctrakr.modules.data.stats.pvp.Tables.PvpTotalsTable;
 import com.mctrakr.util.VariableManager.ServerVariable;
 
 /**

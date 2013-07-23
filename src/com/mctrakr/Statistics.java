@@ -38,31 +38,34 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mctrakr.cache.SessionCache;
 import com.mctrakr.database.Database;
-import com.mctrakr.listeners.BlockListener;
-import com.mctrakr.listeners.DeathListener;
-import com.mctrakr.listeners.ItemListener;
-import com.mctrakr.listeners.PlayerListener;
-import com.mctrakr.listeners.ServerListener;
-import com.mctrakr.listeners.SessionListener;
-import com.mctrakr.listeners.StatsBookListener;
-import com.mctrakr.listeners.StatsSignListener;
 import com.mctrakr.managers.CacheManager;
 import com.mctrakr.managers.CommandManager;
 import com.mctrakr.managers.HookManager;
 import com.mctrakr.managers.ModuleManager;
 import com.mctrakr.managers.PatchManager;
-import com.mctrakr.modules.stats.player.PlayerDataStore;
-import com.mctrakr.modules.stats.server.ServerStatistics;
+import com.mctrakr.modules.books.StatsBookListener;
+import com.mctrakr.modules.data.stats.blocks.BlocksEventListener;
+import com.mctrakr.modules.data.stats.deaths.DeathsEventListener;
+import com.mctrakr.modules.data.stats.distance.DistancesEventListener;
+import com.mctrakr.modules.data.stats.items.ItemsEventListener;
+import com.mctrakr.modules.data.stats.misc.MiscEventListener;
+import com.mctrakr.modules.data.stats.player.PlayerDataStore;
+import com.mctrakr.modules.data.stats.player.SessionEventListener;
+import com.mctrakr.modules.data.stats.pve.PveEventListener;
+import com.mctrakr.modules.data.stats.pvp.PvpEventListener;
+import com.mctrakr.modules.data.stats.server.ServerListener;
+import com.mctrakr.modules.data.stats.server.ServerStatistics;
+import com.mctrakr.modules.scoreboards.ScoreboardProcess;
+import com.mctrakr.modules.signs.SignProcess;
+import com.mctrakr.modules.signs.StatsSignListener;
+import com.mctrakr.modules.signs.SignProcess.StatsSign;
 import com.mctrakr.modules.totals.ServerTotals;
+import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.settings.LocalConfiguration;
 import com.mctrakr.settings.RemoteConfiguration;
-import com.mctrakr.settings.ConfigLock.PrimaryType;
 import com.mctrakr.util.ExceptionHandler;
 import com.mctrakr.util.Message;
 import com.mctrakr.util.tasks.DatabaseProcess;
-import com.mctrakr.util.tasks.ScoreboardProcess;
-import com.mctrakr.util.tasks.SignProcess;
-import com.mctrakr.util.tasks.SignProcess.StatsSign;
 import com.mctrakr.util.tasks.TickProcess;
 
 /**
@@ -176,12 +179,16 @@ public class Statistics extends JavaPlugin {
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
         
         // Start up event listeners
-        new BlockListener(this);
-        new DeathListener(this);
-        new ItemListener(this);
-        new PlayerListener(this);
+        new BlocksEventListener();
+        new DeathsEventListener();
+        new DistancesEventListener(this);
+        new ItemsEventListener();
+        new MiscEventListener();
+        new PveEventListener();
+        new PvpEventListener();
         new ServerListener(this);
-        new SessionListener(this);
+        new SessionEventListener(this);
+        
         new StatsBookListener(this);
         new StatsSignListener(this);
         

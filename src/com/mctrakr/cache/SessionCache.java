@@ -33,8 +33,8 @@ import com.mctrakr.database.Query.QueryResult;
 import com.mctrakr.events.session.SessionCreateEvent;
 import com.mctrakr.events.session.SessionRemoveEvent;
 import com.mctrakr.managers.CacheManager.Type;
-import com.mctrakr.modules.stats.player.PlayerDataStore;
-import com.mctrakr.modules.stats.player.Tables.PlayersTable;
+import com.mctrakr.modules.data.stats.player.PlayerDataStore;
+import com.mctrakr.modules.data.stats.player.Tables.PlayersTable;
 import com.mctrakr.session.OfflineSession;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.session.PlayerSession;
@@ -175,8 +175,8 @@ public class SessionCache extends CachedData {
             session.dumpData();
             removeSession(session);
         }
-        onlineSessions.clear();
         
+        onlineSessions.clear();
         offlineSessions.clear();
     }
     

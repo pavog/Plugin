@@ -27,9 +27,9 @@ import org.bukkit.entity.Player;
 import com.mctrakr.cache.SessionCache;
 import com.mctrakr.managers.CommandManager;
 import com.mctrakr.managers.CommandManager.Command;
+import com.mctrakr.modules.scoreboards.ScoreboardProcess;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.util.Message;
-import com.mctrakr.util.tasks.ScoreboardProcess;
 
 public class PlayerCommands {
     
@@ -44,7 +44,7 @@ public class PlayerCommands {
             )
     public static boolean book(List<String> args) {
         Player player = (Player) CommandManager.getSender();
-        player.getInventory().addItem(com.mctrakr.util.BookUtil.compileStatsBook(player));
+        player.getInventory().addItem(com.mctrakr.modules.books.BookUtil.compileStatsBook(player));
         return false;
     }
     

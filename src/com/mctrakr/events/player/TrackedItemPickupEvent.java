@@ -26,7 +26,7 @@ import lombok.Getter;
 import org.bukkit.event.HandlerList;
 
 import com.mctrakr.events.StatisticsPlayerEvent;
-import com.mctrakr.modules.stats.items.ItemsDetailedStats.ItemPickupEntry;
+import com.mctrakr.modules.data.stats.items.ItemsDetailedStats.ItemPickupEntry;
 import com.mctrakr.session.OnlineSession;
 import com.mctrakr.util.VariableManager.PlayerVariable;
 
