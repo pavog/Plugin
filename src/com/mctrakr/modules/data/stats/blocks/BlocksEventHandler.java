@@ -49,8 +49,8 @@ public class BlocksEventHandler {
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
             BlocksDataStore blocks = ((BlocksDataStore) session.getDataStore(PrimaryType.Blocks));
-            if(blocks != null) blocks.blockPlace(block);
-            session.getPlayerTotals().blockPlace();
+            if(blocks != null) blocks.blockBreak(block);
+            session.getPlayerTotals().blockBreak();
         }
         
     }
@@ -70,8 +70,8 @@ public class BlocksEventHandler {
         public void run() {
             OnlineSession session = SessionCache.fetch(player);
             BlocksDataStore blocks = ((BlocksDataStore) session.getDataStore(PrimaryType.Blocks));
-            if(blocks != null) blocks.blockBreak(block);
-            session.getPlayerTotals().blockBreak();
+            if(blocks != null) blocks.blockPlace(block);
+            session.getPlayerTotals().blockPlace();
         }
         
     }
