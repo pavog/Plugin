@@ -8,7 +8,7 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("38:4", "tuli
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("38:5", "tulip_orange") ON DUPLICATE KEY UPDATE `tp_name` = "tulip_orange";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("38:6", "tulip_white") ON DUPLICATE KEY UPDATE `tp_name` = "tulip_white";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("38:7", "tulip_pink") ON DUPLICATE KEY UPDATE `tp_name` = "tulip_pink";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("38:8", "oxye_daisy") ON DUPLICATE KEY UPDATE `tp_name` = "oxye_daisy";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("38:8", "oxeye_daisy") ON DUPLICATE KEY UPDATE `tp_name` = "oxeye_daisy";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("175:0", "sunflower") ON DUPLICATE KEY UPDATE `tp_name` = "sunflower";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("175:1", "lilac") ON DUPLICATE KEY UPDATE `tp_name` = "lilac";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("175:2", "double_tall_grass") ON DUPLICATE KEY UPDATE `tp_name` = "double_tall_grass";
@@ -70,3 +70,4 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("164:0", "woo
 -- Other Blocks
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("3:2", "podzol") ON DUPLICATE KEY UPDATE `tp_name` = "podzol";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("12:1", "sand_red") ON DUPLICATE KEY UPDATE `tp_name` = "sand_red";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("174:0", "packed_ice") ON DUPLICATE KEY UPDATE `tp_name` = "packed_ice";
