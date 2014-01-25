@@ -80,7 +80,7 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
      * Registers the picked up item in the data stores
      * @param location Location of the event
      * @param itemStack Stack of items in question
-     * @param amount Amoutn of picked up items
+     * @param amount Amount of picked up items
      */
     public void itemPickUp(Location location, ItemStack itemStack, int amount) {
         getNormalData(itemStack).addPickedUp(amount);
