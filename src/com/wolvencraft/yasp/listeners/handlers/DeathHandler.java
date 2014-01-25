@@ -30,6 +30,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Slime;
+import org.bukkit.entity.Ambient;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -154,6 +155,9 @@ public class DeathHandler {
                 } else if (victim instanceof EnderDragon) {
                     // + Player shot EnderDragon
                     OnlineSessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
+                } else if (victim instanceof Ambient) {
+                    // + Player shot Bat
+                    OnlineSessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
                 }
             } else if (killerEntity instanceof Player) {
                 // Player killed an entity
@@ -167,6 +171,9 @@ public class DeathHandler {
                     OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
                 } else if (victim instanceof EnderDragon) {
                     // + Player killed an EnderDragon
+                    OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
+                } else if (victim instanceof Ambient) {
+                    // + Player killed an Bat
                     OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
                 }
             }

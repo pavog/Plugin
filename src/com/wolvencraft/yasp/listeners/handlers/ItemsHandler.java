@@ -40,7 +40,7 @@ import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 public class ItemsHandler {
     
-    /**
+	 /**
      * Executed when player picks up an item
      * @author bitWolfy
      *
@@ -51,11 +51,12 @@ public class ItemsHandler {
         private Player player;
         private Location location;
         private ItemStack itemStack;
+        private int amount;
         
         @Override
         public void run() {
             OnlineSession session = OnlineSessionCache.fetch(player);
-            ((ItemData) session.getDataStore(DataStoreType.Items)).itemPickUp(location, itemStack);
+            ((ItemData) session.getDataStore(DataStoreType.Items)).itemPickUp(location, itemStack, amount);
         }
     }
     

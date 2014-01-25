@@ -62,12 +62,12 @@ public class ItemListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
     
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemPickup(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.ItemPickUp)) return;
         
-        HandlerManager.runAsyncTask(new ItemPickup(player, player.getLocation(), event.getItem().getItemStack()));
+        HandlerManager.runAsyncTask(new ItemPickup(player, player.getLocation(), event.getItem().getItemStack(), event.getItem().getItemStack().getAmount()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
