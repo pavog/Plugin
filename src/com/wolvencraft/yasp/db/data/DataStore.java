@@ -27,6 +27,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.Message;
 
 /**
  * Common interface for all data stores
@@ -71,11 +72,20 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
      */
     public void pushData() {
         for(N entry : getNormalData()) {
-            if(((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
-        }
-        
+           try{
+                 if(((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
+           } catch(NullPointerException e ){
+                 Message.debug("NPE occurred while saving NormalData: "+ ((NormalData) entry));
+                 normalData.remove(entry);
+           }
+        }   
         for(D entry : getDetailedData()) {
-            if(((DetailedData) entry).pushData(session.getId())) detailedData.remove(entry);
+            try{
+                 if(((DetailedData) entry).pushData(session.getId())) detailedData.remove(entry);
+            } catch(NullPointerException e ){
+                 Message.debug("NPE occurred while saving DetailedData: "+ ((DetailedData) entry));
+                 detailedData.remove(entry);
+            }
         }
     }
     
