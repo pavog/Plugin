@@ -96,7 +96,7 @@ public class PlayerEntry extends NormalData {
     @Override
     public boolean pushData(int playerId) {
         currentSession += Util.getTimestamp() - lastSync;
-        if(longestSession > currentSession) longestSession = currentSession;
+        if(longestSession < currentSession) longestSession = currentSession;
         totalPlaytime += Util.getTimestamp() - lastSync;
         lastSync = Util.getTimestamp();
         
