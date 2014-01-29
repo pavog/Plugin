@@ -204,7 +204,7 @@ public class PlayerTotals {
      */
     public NamedInteger getTotalPlaytime() {
         NamedInteger value = new NamedInteger();
-        long totalPlaytime = (Long) getValue(PlayerVariable.TOTAL_PLAYTIME);
+        long totalPlaytime = (Long) getValue(PlayerVariable.TOTAL_PLAYTIME_RAW);
         if(totalPlaytime < 60) {
             value.setData (ChatColor.GREEN + "Playtime (sec)", (int) (totalPlaytime));
         } else if(totalPlaytime < 3600) {
@@ -257,7 +257,7 @@ public class PlayerTotals {
      */
     public NamedInteger getDistance() {
         NamedInteger value = new NamedInteger();
-        int distTotal = (Integer) getValue(PlayerVariable.DISTANCE_TRAVELED);
+        double distTotal = (Double) getValue(PlayerVariable.DISTANCE_TRAVELED);
         if(distTotal < 1000) {
             value.setData (ChatColor.BLUE + "Traveled (m)", (int) (distTotal));
         } else {
