@@ -68,12 +68,9 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
     public void itemDrop(Location location, ItemStack itemStack) {
         int amount = itemStack.getAmount();
         getNormalData(itemStack).addDropped(amount);
-        for(int i = 0; i < amount; i++) {
-            ItemDropEntry detailedEntry = new ItemDropEntry(location, itemStack);
-            detailedData.add(detailedEntry);
-            
-            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemDropEvent(session, detailedEntry));
-        }
+        ItemDropEntry detailedEntry = new ItemDropEntry(location, itemStack);
+        detailedData.add(detailedEntry);      
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedItemDropEvent(session, detailedEntry));
     }
     
     /**
@@ -84,12 +81,9 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
      */
     public void itemPickUp(Location location, ItemStack itemStack, int amount) {
         getNormalData(itemStack).addPickedUp(amount);
-        for(int i = 0; i < amount; i++) {
-            ItemPickupEntry detailedEntry = new ItemPickupEntry(location, itemStack);
-            detailedData.add(detailedEntry);
-            
-            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemPickupEvent(session, detailedEntry));
-        }
+        ItemPickupEntry detailedEntry = new ItemPickupEntry(location, itemStack, amount);
+        detailedData.add(detailedEntry);   
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedItemPickupEvent(session, detailedEntry));
     }
     
     /**

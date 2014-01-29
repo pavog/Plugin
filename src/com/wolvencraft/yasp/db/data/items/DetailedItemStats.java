@@ -50,7 +50,7 @@ public class DetailedItemStats {
         
         public ItemDropEntry(Location location, ItemStack stack) {
             this.stack = stack.clone();
-            this.stack.setAmount(1);
+            //this.stack.setAmount(1);
             this.location = location.clone();
             timestamp = Util.getTimestamp();
         }
@@ -60,6 +60,7 @@ public class DetailedItemStats {
             return Query.table(ItemsDropped.TableName)
                     .value(ItemsDropped.PlayerId, playerId)
                     .value(ItemsDropped.MaterialId, MaterialCache.parse(stack))
+                    .value(ItemsDropped.Amount, stack.getAmount())
                     .value(ItemsDropped.World, location.getWorld().getName())
                     .value(ItemsDropped.XCoord, location.getBlockX())
                     .value(ItemsDropped.YCoord, location.getBlockY())
@@ -78,12 +79,13 @@ public class DetailedItemStats {
     public static class ItemPickupEntry extends DetailedData {
         
         private final ItemStack stack;
+        private final int amount;
         private final Location location;
         private final long timestamp;
         
-        public ItemPickupEntry(Location location, ItemStack stack) {
+        public ItemPickupEntry(Location location, ItemStack stack, int amount) {
             this.stack = stack.clone();
-            this.stack.setAmount(1);
+            this.amount = amount;
             this.location = location.clone();
             timestamp = Util.getTimestamp();
         }
@@ -93,6 +95,7 @@ public class DetailedItemStats {
             return Query.table(ItemsPickedUp.TableName)
                     .value(ItemsPickedUp.PlayerId, playerId)
                     .value(ItemsPickedUp.Material, MaterialCache.parse(stack))
+                    .value(ItemsDropped.Amount, this.amount)
                     .value(ItemsPickedUp.World, location.getWorld().getName())
                     .value(ItemsPickedUp.XCoord, location.getBlockX())
                     .value(ItemsPickedUp.YCoord, location.getBlockY())
