@@ -251,13 +251,8 @@ public class OnlineSession implements PlayerSession {
      */
     public void clearScoreboard() {
         if(scoreboard == null) return;
-        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.RED + "PVP Kills"));
-        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.RED + "PVE Kills"));
-        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.RED + "Deaths"));
-        
-        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.AQUA + "Blocks Broken"));
-        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.AQUA + "Blocks Placed"));
-
-        scoreboard.resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Travelled"));
+        for(NamedInteger value : playerTotals.getNamedValues()) {
+           for(String name : value.getPossibleNames()) scoreboard.resetScores(Bukkit.getOfflinePlayer(name));
+        }
     }
 }
