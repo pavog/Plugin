@@ -37,6 +37,7 @@ import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
+import java.text.DecimalFormat;
 
 /**
  * Utility class containing assorted methods that do not fit other categories
@@ -153,12 +154,13 @@ public class Util {
      */
     public static String parseTimestamp(long timestamp) {
         String result = "";
+        DecimalFormat f = new DecimalFormat ("00");
         int days = (int) (timestamp / 86400);
         int hours = (int) ((timestamp - (days * 86400)) / 3600);
         int minutes = (int) ((timestamp - (days * 86400) - (hours * 3600)) / 60);
-        int seconds = (int) ((timestamp - (days * 86400) - (hours * 3600) - (minutes * 60)) - minutes);
+        int seconds = (int) (timestamp - (days * 86400) - (hours * 3600) - (minutes * 60));
         if(days != 0) result += days + " days, ";
-        result += hours + ":" + minutes + ":" + seconds;
+        result += f.format(hours) + ":" + f.format(minutes) + ":" + f.format(seconds);
         return result;
     }
     
