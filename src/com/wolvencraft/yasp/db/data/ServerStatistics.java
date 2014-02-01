@@ -31,6 +31,7 @@ import org.bukkit.World;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Miscellaneous.ServerStatsTable;
+import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 import com.wolvencraft.yasp.util.tasks.TickTask;
@@ -185,11 +186,12 @@ public class ServerStatistics {
     }
     
     /**
-     * Indicates that the plugin is shutting down and registers the current shutdown time.
+     * Indicates that the plugin is shutting down and registers the current shutdown time and set all online players to offline.
      */
     public void pluginShutdown() {
         Query.table(ServerStatsTable.TableName).value("value", Util.getTimestamp()).condition("key", "last_shutdown").update();
         Query.table(ServerStatsTable.TableName).value("value", 0).condition("key", "current_uptime").update();
+        Query.table(Normal.PlayerStats.TableName).value(Normal.PlayerStats.Online, false).condition(Normal.PlayerStats.Online, true).update();
     }
     
     /**
