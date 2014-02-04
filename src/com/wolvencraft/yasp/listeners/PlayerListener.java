@@ -47,6 +47,7 @@ import com.wolvencraft.yasp.settings.Constants.StatPerms;
 /**
  * Listens to miscellaneous player events on the server and reports them to the plugin.
  * @author bitWolfy
+ * @param player Player object
  *
  */
 public class PlayerListener implements Listener {
@@ -62,7 +63,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerDistances)) return;
         
-        HandlerManager.runAsyncTask(new PlayerMove(player, event.getFrom(), event.getTo()));
+        HandlerManager.runTask(new PlayerMove(player, event.getFrom(), event.getTo()));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
