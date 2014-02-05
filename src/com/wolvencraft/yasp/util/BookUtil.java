@@ -43,9 +43,9 @@ public class BookUtil {
         ItemStack bookStack = new ItemStack(387, 1);
         BookMeta book = (BookMeta) bookStack.getItemMeta();
         
-        book.setTitle(player.getPlayerListName() + " Statistics");
+        book.setTitle(player.getName() + " Statistics");
         book.setAuthor("Statistics");
-        book.setPages(getBookPages(player.getPlayerListName()));
+        book.setPages(getBookPages(player.getName()));
         
         bookStack.setItemMeta(book);
         return bookStack;
