@@ -55,7 +55,7 @@ public class StatsBookListener implements Listener {
     public void onBookOpen(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !event.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
         ItemStack bookStack = event.getItem();
-        if(bookStack == null || (bookStack.getTypeId() != 387 && bookStack.getTypeId() != 340)) return;
+        if(bookStack == null || bookStack.getTypeId() != 387) return;
         BookMeta book = (BookMeta) bookStack.getItemMeta();
         
         Player player = event.getPlayer();
