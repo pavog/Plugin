@@ -1,5 +1,5 @@
 <plugin>
-	<version>1.2</version>
+	<version>1.2.1</version>
 	<bukkit>CB 1.7.2-R0.2</bukkit>
-	<type>RECOMMENDED</type>
+	<type>DEVELOPMENT</type>
 </plugin>
