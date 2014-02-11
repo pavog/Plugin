@@ -151,12 +151,10 @@ public class TotalItemStats extends NormalData {
      * @return b>true</b> if the data matches, <b>false</b> otherwise.
      */
     public boolean equals(ItemStack stack) {
-        if(stack.getType().equals(Material.POTION)) {
-            return stack.getType().equals(this.stack.getType()) && stack.getDurability() == this.stack.getDurability();
-        } else if(ItemsWithMetadata.contains(stack.getTypeId())) {
-            return stack.getType().equals(this.stack.getType()) && stack.getData().getData() == this.stack.getData().getData();
+        if(stack.isSimilar(this.stack)) {
+            return true;
         } else {
-            return stack.getType().equals(this.stack.getType());
+            return false;
         }
     }
     
