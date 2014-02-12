@@ -57,7 +57,6 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            Message.debug("ItemPickup");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemPickUp(location, itemStack, amount);
         }
@@ -77,7 +76,6 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            Message.debug("ItemDrop");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemDrop(location, itemStack);
         }
@@ -96,7 +94,6 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            Message.debug("ItemConsume");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemConsume(player.getLocation(), itemStack);
             if(ConsumableItems.isFood(itemStack.getTypeId())){
@@ -120,7 +117,6 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            Message.debug("ItemCraft");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemCraft(location, itemStack);
             session.getPlayerTotals().itemCraft();
@@ -141,7 +137,6 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            Message.debug("ItemSmelt");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemSmelt(location, itemStack);
         }
@@ -161,7 +156,6 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            Message.debug("ToolBreak");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemBreak(location, itemStack);
             session.getPlayerTotals().toolBreak();
@@ -182,7 +176,6 @@ public class ItemsHandler {
         
         @Override
         public void run() {
-            Message.debug("ItemEnchant");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemEnchant(location, itemStack);
         }
