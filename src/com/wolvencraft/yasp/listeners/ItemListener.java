@@ -32,11 +32,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
-import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.FoodConsume;
+import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemConsume;
 import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemCraft;
 import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemDrop;
 import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemEnchant;
@@ -66,6 +67,7 @@ public class ItemListener implements Listener {
     public void onItemPickup(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.ItemPickUp)) return;
+        if(event.getItem().getItemStack().getAmount() == 0) return;
         
         HandlerManager.runAsyncTask(new ItemPickup(player, player.getLocation(), event.getItem().getItemStack(), event.getItem().getItemStack().getAmount()));
     }
@@ -74,18 +76,17 @@ public class ItemListener implements Listener {
     public void onItemDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.ItemDrop)) return;
+        if(event.getItemDrop().getItemStack().getAmount() == 0) return;
 
         HandlerManager.runAsyncTask(new ItemDrop(player, player.getLocation(), event.getItemDrop().getItemStack()));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onFoodConsume(FoodLevelChangeEvent event) {
-        if(!(event.getEntity() instanceof Player)) return;
-        
-        Player player = (Player) event.getEntity();
+    public void onItemConsume(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.ItemUse)) return;
 
-        HandlerManager.runAsyncTask(new FoodConsume(player));
+        HandlerManager.runAsyncTask(new ItemConsume(player, event.getItem()));
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

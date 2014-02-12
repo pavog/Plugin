@@ -217,4 +217,31 @@ public class Constants {
             return new ItemStack(Material.ARROW);
         }
     }
+    
+     /**
+     * A hard-coded list of items that can be consumbed but are no food.<br />
+     * This is really bogus, but until we have a better solution, it will have to do.
+     * @author bitWolfy
+     *
+     */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum ConsumableItems {
+        Potion            (373),
+        Milk_Bukket       (335);
+        
+        private int id;
+        
+        /**
+         * Checks if the specified ID is in the list
+         * @param id Item ID
+         * @return <b>true</b> if the item is in the list, <b>false</b> otherwise
+         */
+        public static boolean isFood(int id) {
+            for(ConsumableItems entry : ConsumableItems.values()) {
+                if(entry.getId() == id) return false;
+            }
+            return true;
+        }
+    }
 }

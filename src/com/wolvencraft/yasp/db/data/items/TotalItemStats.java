@@ -42,7 +42,7 @@ public class TotalItemStats extends NormalData {
     private ItemStack stack;
     private int dropped;
     private int pickedUp;
-    private int used;
+    private int consumed;
     private int crafted;
     private int broken;
     private int smelted;
@@ -60,7 +60,7 @@ public class TotalItemStats extends NormalData {
         
         dropped = 0;
         pickedUp = 0;
-        used = 0;
+        consumed = 0;
         crafted = 0;
         broken = 0;
         smelted = 0;
@@ -96,7 +96,7 @@ public class TotalItemStats extends NormalData {
                 .value(ItemTotals.MaterialId, MaterialCache.parse(stack))
                 .value(ItemTotals.Dropped, dropped)
                 .value(ItemTotals.PickedUp, pickedUp)
-                .value(ItemTotals.Used, used)
+                .value(ItemTotals.Used, consumed)
                 .value(ItemTotals.Crafted, crafted)
                 .value(ItemTotals.Broken, broken)
                 .value(ItemTotals.Smelted, smelted)
@@ -106,7 +106,7 @@ public class TotalItemStats extends NormalData {
         } else {
             dropped = result.asInt(ItemTotals.Dropped);
             pickedUp = result.asInt(ItemTotals.PickedUp);
-            used = result.asInt(ItemTotals.Used);
+            consumed = result.asInt(ItemTotals.Used);
             crafted = result.asInt(ItemTotals.Crafted);
             broken = result.asInt(ItemTotals.Broken);
             smelted = result.asInt(ItemTotals.Smelted);
@@ -120,7 +120,7 @@ public class TotalItemStats extends NormalData {
         boolean result = Query.table(ItemTotals.TableName)
                 .value(ItemTotals.Dropped, dropped)
                 .value(ItemTotals.PickedUp, pickedUp)
-                .value(ItemTotals.Used, used)
+                .value(ItemTotals.Used, consumed)
                 .value(ItemTotals.Crafted, crafted)
                 .value(ItemTotals.Broken, broken)
                 .value(ItemTotals.Smelted, smelted)
@@ -137,7 +137,7 @@ public class TotalItemStats extends NormalData {
     public void clearData(int playerId) {
         dropped = 0;
         pickedUp = 0;
-        used = 0;
+        consumed = 0;
         crafted = 0;
         broken = 0;
         smelted = 0;
@@ -179,8 +179,8 @@ public class TotalItemStats extends NormalData {
      * Currently only tracks food consumption
      * @param amount Number of items
      */
-    public void addUsed(int amount) {
-        used += amount;
+    public void addConsumed() {
+        consumed += 1;
     }
     
     /**

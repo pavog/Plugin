@@ -36,7 +36,9 @@ import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.db.data.items.ItemData;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import com.wolvencraft.yasp.settings.Constants.ConsumableItems;
 
 public class ItemsHandler {
     
@@ -55,6 +57,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
+            Message.debug("ItemPickup");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemPickUp(location, itemStack, amount);
         }
@@ -74,6 +77,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
+            Message.debug("ItemDrop");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemDrop(location, itemStack);
         }
@@ -85,16 +89,20 @@ public class ItemsHandler {
      *
      */
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
-    public static class FoodConsume implements Runnable {
+    public static class ItemConsume implements Runnable {
         
         private Player player;
+        private ItemStack itemStack;
         
         @Override
         public void run() {
+            Message.debug("ItemConsume");
             OnlineSession session = OnlineSessionCache.fetch(player);
-            ((ItemData) session.getDataStore(DataStoreType.Items)).itemUse(player.getLocation(), player.getItemInHand());
+            ((ItemData) session.getDataStore(DataStoreType.Items)).itemConsume(player.getLocation(), itemStack);
+            if(ConsumableItems.isFood(itemStack.getTypeId())){
             session.getPlayerTotals().snacksEaten();
             session.getPlayersData().getMiscData().incrementStat(PlayerData.FoodEaten);
+            }
         }
     }
     
@@ -112,6 +120,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
+            Message.debug("ItemCraft");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemCraft(location, itemStack);
             session.getPlayerTotals().itemCraft();
@@ -132,6 +141,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
+            Message.debug("ItemSmelt");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemSmelt(location, itemStack);
         }
@@ -151,6 +161,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
+            Message.debug("ToolBreak");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemBreak(location, itemStack);
             session.getPlayerTotals().toolBreak();
@@ -171,6 +182,7 @@ public class ItemsHandler {
         
         @Override
         public void run() {
+            Message.debug("ItemEnchant");
             OnlineSession session = OnlineSessionCache.fetch(player);
             ((ItemData) session.getDataStore(DataStoreType.Items)).itemEnchant(location, itemStack);
         }

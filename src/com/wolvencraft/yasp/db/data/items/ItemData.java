@@ -91,15 +91,14 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
      * @param location Location of the event
      * @param itemStack Stack of items in question
      */
-    public void itemUse(Location location, ItemStack itemStack) {
-        int amount = itemStack.getAmount();
-        getNormalData(itemStack).addUsed(amount);
-        for(int i = 0; i < amount; i++) {
+    public void itemConsume(Location location, ItemStack itemStack) {
+            getNormalData(itemStack).addConsumed();
+        
             ItemConsumeEntry detailedEntry = new ItemConsumeEntry(location, itemStack);
             detailedData.add(detailedEntry);
             
             Bukkit.getServer().getPluginManager().callEvent(new TrackedItemUseEvent(session, detailedEntry));
-        }
+        
     }
     
     /**
@@ -126,7 +125,7 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
      * @param itemStack Stack of items in question
      */
     public void itemBreak(Location location, ItemStack itemStack) {
-        getNormalData(itemStack).addBroken(itemStack.getAmount());
+        getNormalData(itemStack).addBroken(1);
     }
     
     /**
