@@ -93,7 +93,8 @@ public class ItemListener implements Listener {
     public void onItemCraft(CraftItemEvent event) {
         Player player = (Player) event.getWhoClicked();
         if(!HandlerManager.playerLookup(player, StatPerms.ItemCraft)) return;
-
+        
+        //The metod of tracken the amount of craftet items in bukkit is returns wrong amount of items on shift + klick an workaround for this would be to complicated at the moment
         HandlerManager.runAsyncTask(new ItemCraft(player, player.getLocation(), event.getCurrentItem()));
     }
 
@@ -101,8 +102,9 @@ public class ItemListener implements Listener {
     public void onItemSmelt(FurnaceExtractEvent event) {
         Player player = event.getPlayer();
         if(!HandlerManager.playerLookup(player, StatPerms.ItemMisc)) return;
-
-        HandlerManager.runAsyncTask(new ItemSmelt(player, player.getLocation(), new ItemStack(event.getItemType())));
+        
+        //Disabled for the mombent because the FurnaceExtractEvent is fired twice on shift + click in the same tick wich causes dublicate database entries 
+        //HandlerManager.runAsyncTask(new ItemSmelt(player, player.getLocation(), new ItemStack(event.getItemType())));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

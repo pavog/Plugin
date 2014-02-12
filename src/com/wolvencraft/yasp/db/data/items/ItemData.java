@@ -134,7 +134,7 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
      * @param itemStack Stack of items in question
      */
     public void itemEnchant(Location location, ItemStack itemStack) {
-        getNormalData(itemStack).addEnchanted(itemStack.getAmount());
+        getNormalData(itemStack).addEnchanted(1);
     }
     
     /**
