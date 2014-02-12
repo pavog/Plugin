@@ -25,7 +25,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -33,7 +32,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
@@ -43,7 +41,6 @@ import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemDrop;
 import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemEnchant;
 import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemPickup;
 import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemRepair;
-import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ItemSmelt;
 import com.wolvencraft.yasp.listeners.handlers.ItemsHandler.ToolBreak;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 
