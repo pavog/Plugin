@@ -89,6 +89,10 @@ public class DatabaseTask implements Runnable {
         Message.debug("Database synchronization in progress");
         
         for(OnlineSession session : OnlineSessionCache.getSessions()) {
+            if(!session.isOnline()){
+                Message.debug("Skipping player "+session.getName());
+                continue;
+            }
             Message.debug("Saving online player data: "+session.getName()+ " ID:" + session.getId());
             session.pushData();
             session.getPlayerTotals().fetchData();
