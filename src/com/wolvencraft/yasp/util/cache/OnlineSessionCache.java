@@ -74,8 +74,10 @@ public class OnlineSessionCache implements CachedDataProcess {
     @Override
     public void run() {
         for(OnlineSession session : getSessions()) {
+            Message.debug("Refreshing Online Sesseion Cache.");
             if(session.isOnline()) continue;
             session.finalize();
+            Message.debug("Saving online player data: "+session.getName()+ " ID:" + session.getId() +" (offline)");
             session.pushData();
             removeSession(session);
             
