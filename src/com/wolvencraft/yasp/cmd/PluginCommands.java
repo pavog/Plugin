@@ -28,7 +28,15 @@ import com.wolvencraft.yasp.CommandManager;
 import com.wolvencraft.yasp.CommandManager.Command;
 import com.wolvencraft.yasp.CommandManager.CommandPair;
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.Query.QueryResult;
+import com.wolvencraft.yasp.db.tables.Normal;
+import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
+
+import com.wolvencraft.yasp.util.PlayerUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 public class PluginCommands {
     
@@ -67,6 +75,52 @@ public class PluginCommands {
             Statistics.setPaused(true);
             Message.send("Data collection is paused");
         }
+        return true;
+    }
+    
+    @Command(
+            alias = "remove",
+            minArgs = 1,
+            maxArgs = 1,
+            permission = "stats.cmd.remove",
+            allowConsole = true,
+            usage = "/stats remove <player>",
+            description = "Removes an player from the database"
+            )
+    public static boolean remove(List<String> args) {
+        final CommandSender sender = CommandManager.getSender();
+        final String player = args.get(0);
+        
+        Message.sendFormattedSuccess("Attempting to remove player (" + player + ")");
+        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+
+            @Override
+            public void run() {
+                if(!Bukkit.getServer().getOfflinePlayer(player).isOnline()) {
+                    
+                    QueryResult playerRow = Query.table(Normal.PlayerStats.TableName)
+                    .column(Normal.PlayerStats.PlayerId)
+                    .condition(Normal.PlayerStats.Name, player)
+                    .select();
+                    
+                    if(playerRow != null){
+                        try { PlayerUtil.remove(player); }
+                        catch (Throwable t) {
+                            ExceptionHandler.handle(t);
+                            Message.sendFormattedError(sender, "Removing failed!");
+                        } finally {
+                            Message.sendFormattedSuccess(sender, "Successfully removed player "+player+" from database.");
+                        }
+                    } else {
+                        Message.sendFormattedError(sender, "Player not found in database!");
+                    }
+                } else {
+                    Message.sendFormattedError(sender, "Can't remove an online player!");
+                }
+            }
+            
+        });
+        
         return true;
     }
     
