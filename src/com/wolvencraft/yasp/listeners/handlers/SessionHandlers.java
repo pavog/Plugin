@@ -26,7 +26,9 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class SessionHandlers {
     
@@ -60,6 +62,12 @@ public class SessionHandlers {
         @Override
         public void run() {
             OnlineSessionCache.fetch(player).getPlayersData().addPlayerLog(player.getLocation(), false);
+            
+            //set Metadata to -1 (This player will probably get removed form the databaes later)
+            long delay = RemoteConfiguration.LogDelay.asInteger();
+            if(delay != 0 && OnlineSessionCache.fetch(player).getPlayersData().getGeneralData().getTotalPlaytime() < delay){
+                player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), -1));
+            }
         }
     }
     

@@ -45,7 +45,14 @@ public class PlayerCache {
      */
     public static int get(Player player) {
         if(player.hasMetadata("stats_id")) {
-            return player.getMetadata("stats_id").get(0).asInt();
+            int playerId = player.getMetadata("stats_id").get(0).asInt();
+            if (playerId != -1){
+                return playerId;
+            } else {
+                playerId = get(player.getName());
+                player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
+                return playerId;  
+            }
         } else {
             int playerId = get(player.getName());
             player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
