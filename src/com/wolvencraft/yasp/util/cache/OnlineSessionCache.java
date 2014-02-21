@@ -36,6 +36,7 @@ import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
+import com.wolvencraft.yasp.util.PlayerUtil;
 import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
 
 /**
@@ -84,9 +85,8 @@ public class OnlineSessionCache implements CachedDataProcess {
             long delay = RemoteConfiguration.LogDelay.asInteger();
             if(delay == 0 || session.getPlayersData().getGeneralData().getTotalPlaytime() > delay) continue;
             
-            Query.table(Normal.PlayerStats.TableName)
-                .condition(PlayerStats.Name, session.getName())
-                .delete();
+            //removes the Player from the database
+            PlayerUtil.remove(session.getName());
         }
     }
     
