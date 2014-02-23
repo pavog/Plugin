@@ -286,6 +286,27 @@ public class Hook {
     }
     
     /**
+     * Represents the <i>detailed_hook_vault</i> table.
+     * @author Mario
+     *
+     */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum DetailedVaultTable implements DBTable {
+        
+        TableName       ("detailed_hook_vault"),
+        PlayerId        ("player_id"),
+        GroupName       ("group"),
+        Balance         ("balance"),
+        Time            ("time");
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
+    
+    /**
      * Represents the <i>hook_votifier_totals</i> table.
      * @author bitWolfy
      *
