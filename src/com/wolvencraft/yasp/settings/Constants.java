@@ -159,7 +159,9 @@ public class Constants {
         Death           ("stats.track.death"),
         DeathPVP        ("stats.track.death.pvp", Death),
         DeathPVE        ("stats.track.death.pve", Death),
-        DeathOther      ("stats.track.death.other", Death);
+        DeathOther      ("stats.track.death.other", Death),
+        Hook            ("stats.track.hook"),
+        HookVault       ("stats.track.hook.vault", Hook);
 
         private String node;
         private StatPerms parent;

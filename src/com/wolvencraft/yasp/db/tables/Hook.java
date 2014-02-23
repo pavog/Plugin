@@ -298,7 +298,7 @@ public class Hook {
         PlayerId        ("player_id"),
         GroupName       ("group"),
         Balance         ("balance"),
-        Time            ("time");
+        TimeStamp       ("time");
         
         private String columnName;
         

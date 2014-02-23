@@ -61,6 +61,7 @@ import com.wolvencraft.yasp.util.tasks.RefreshTask;
 import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
 import com.wolvencraft.yasp.util.tasks.SignRefreshTask.StatsSign;
 import com.wolvencraft.yasp.util.tasks.TickTask;
+import com.wolvencraft.yasp.util.tasks.HookRefreshTask;
 
 /**
  * <b>Main plugin class</b><br />
@@ -157,6 +158,9 @@ public class Statistics extends JavaPlugin {
         
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new DatabaseTask(), (ping / 2), ping);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTask(), 0L, 20L);
+        
+        //Run task every 10 minuts
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new HookRefreshTask(), 600L, 1200L);
         
         Bukkit.getScheduler().runTaskTimer(this, new SignRefreshTask(), ping, ping);
         Bukkit.getScheduler().runTaskTimer(this, new TickTask(), 0L, 1L);

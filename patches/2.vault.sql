@@ -14,7 +14,6 @@ DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_hook_vault` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_hook_vault` (
   `player_id` INT NOT NULL ,
-  `group` TEXT NULL ,
   `balance` FLOAT NOT NULL DEFAULT 0.0 ,
   `time` INT(11) NOT NULL,
   PRIMARY KEY (`player_id`) ,
