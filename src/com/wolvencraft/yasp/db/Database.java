@@ -152,7 +152,7 @@ public class Database {
         Message.log("|" + Message.centerString("Patching " + module.name(), 34) + "|");
         for(; moduleVersion <= latestPatchVersion; moduleVersion++) {
             Message.log("|       Applying patch " + moduleVersion + " / " + latestPatchVersion + "       |");
-            executePatch(scriptRunner, moduleVersion + ".yasp");
+            executePatch(scriptRunner, moduleVersion + "." + module.name().toLowerCase());
             module.setVersion(moduleVersion);
         }
         Message.log("+----------------------------------+");

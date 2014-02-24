@@ -24,6 +24,9 @@ import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
+import com.wolvencraft.yasp.db.data.hooks.vault.DetailedVaultEntry;
+import com.wolvencraft.yasp.db.data.hooks.vault.VaultPlayerEntry;
+
 /**
  * Hooks into Vault to track its statistics
  * @author bitWolfy
@@ -35,4 +38,11 @@ public class VaultData extends DataStore<VaultPlayerEntry, DetailedData> {
         super(session, DataStoreType.Hook_Vault);
     }
     
+    public void VaultEntry() {
+        VaultPlayerEntry entry = new VaultPlayerEntry(session.getBukkitPlayer(),session.getId());
+        normalData.add(entry);
+        
+        DetailedVaultEntry detailedentry = new DetailedVaultEntry(session.getBukkitPlayer(),session.getId());
+        detailedData.add(detailedentry);
+    }
 }

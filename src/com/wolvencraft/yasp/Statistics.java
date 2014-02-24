@@ -160,7 +160,7 @@ public class Statistics extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTask(), 0L, 20L);
         
         //Run task every 10 minuts
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new HookRefreshTask(), 600L, 1200L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new HookRefreshTask(), 6000L, 12000L);
         
         Bukkit.getScheduler().runTaskTimer(this, new SignRefreshTask(), ping, ping);
         Bukkit.getScheduler().runTaskTimer(this, new TickTask(), 0L, 1L);

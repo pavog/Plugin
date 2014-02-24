@@ -13,10 +13,12 @@ USE `$dbname` ;
 DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_hook_vault` ;
 
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_hook_vault` (
+  `detailed_vault_id` INT NOT NULL AUTO_INCREMENT ,
   `player_id` INT NOT NULL ,
   `balance` FLOAT NOT NULL DEFAULT 0.0 ,
   `time` INT(11) NOT NULL,
-  PRIMARY KEY (`player_id`) ,
+  PRIMARY KEY (`detailed_vault_id`) ,
+  INDEX `fk_player_vault2_idx` (`player_id` ASC) ,
   CONSTRAINT `fk_player_vault2`
     FOREIGN KEY (`player_id` )
     REFERENCES `$dbname`.`$prefix_players` (`player_id` )

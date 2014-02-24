@@ -1,6 +1,6 @@
 name: Statistics
 main: com.wolvencraft.yasp.Statistics
-version: 1.2
+version: 1.2.1
 description: Extremely detailed player/server statistic tracking with web portal
 website: http://dev.bukkit.org/bukkit-mods/Statistics/
 authors: [bitWolfy, Dazzel_]
@@ -45,6 +45,10 @@ permissions:
       stats.track.death.pvp: true
       stats.track.death.pve: true
       stats.track.death.other: true
+  stats.track.hook:
+    description: Track data from plugin hooks
+    children:
+      stats.track.hook.vault: true
   stats.cmd:
     description: Access to all statistics commands
     default: op

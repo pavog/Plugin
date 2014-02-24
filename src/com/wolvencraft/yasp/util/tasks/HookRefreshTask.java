@@ -20,7 +20,7 @@ package com.wolvencraft.yasp.util.tasks;
 import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.db.data.DataStore;
-import com.wolvencraft.yasp.db.data.hooks.vault;
+import com.wolvencraft.yasp.db.data.hooks.vault.VaultData;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.session.OnlineSession;
@@ -42,9 +42,8 @@ public class HookRefreshTask implements Runnable {
     public void run() {
         for(OnlineSession session : OnlineSessionCache.getSessions()) {
             if(session.isOnline()){
-                if(Module.Vault.isActive() && StatPerms.HookVault.has(Bukkit.getPlayer(session.getName()))){
-                    ((VaultData) session.getDataStore(DataStore.DataStoreType.Hook_Vault)).VaultPlayerEntry(session.getName(), session.getId());
-                    ((VaultData) session.getDataStore(DataStore.DataStoreType.Hook_Vault)).DetailedVaultEntry(session.getName(), session.getId()); 
+                if(Module.Vault.isActive() && StatPerms.HookVault.has(session.getBukkitPlayer())){
+                    ((VaultData) session.getDataStore(DataStore.DataStoreType.Hook_Vault)).VaultEntry();
                 }         
             }
         }

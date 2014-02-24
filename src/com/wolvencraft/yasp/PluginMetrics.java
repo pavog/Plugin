@@ -54,7 +54,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
 
-public class Metrics {
+public class PluginMetrics {
 
     /**
      * The current revision number
@@ -116,7 +116,7 @@ public class Metrics {
      */
     private volatile BukkitTask task = null;
 
-    public Metrics(final Plugin plugin) throws IOException {
+    public PluginMetrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
@@ -328,7 +328,7 @@ public class Metrics {
     private void postPlugin(final boolean isPing) throws IOException {
         // Server software specific section
         PluginDescriptionFile description = plugin.getDescription();
-        String pluginName = description.getName();
+        String pluginName = "YASP";
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
         String pluginVersion = description.getVersion();
         String serverVersion = Bukkit.getVersion();
