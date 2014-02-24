@@ -18,6 +18,7 @@ permissions:
       stats.track.item: true
       stats.track.player: true
       stats.track.death: true
+      stats.track.hook: true
   stats.track.block:
     description: Track player's block statistics
     children:
@@ -56,3 +57,4 @@ permissions:
       stats.cmd.book: true
       stats.cmd.scoreboard: true
       stats.cmd.debug: true
+      stats.cmd.remove: true

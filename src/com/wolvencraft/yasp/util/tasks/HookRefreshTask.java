@@ -17,7 +17,6 @@
 
 package com.wolvencraft.yasp.util.tasks;
 
-import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.hooks.vault.VaultData;
