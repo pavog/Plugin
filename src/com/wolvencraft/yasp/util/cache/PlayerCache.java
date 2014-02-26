@@ -44,18 +44,31 @@ public class PlayerCache {
      * @return Player ID
      */
     public static int get(Player player) {
+        long start = System.currentTimeMillis();
         if(player.hasMetadata("stats_id")) {
             int playerId = player.getMetadata("stats_id").get(0).asInt();
             if (playerId != -1){
+                                
+                long stop = System.currentTimeMillis();
+                Message.debug("Took "+(stop-start)+"ms to retrieve " + player.getName()+"'s ID from cache.");
+                
                 return playerId;
             } else {
                 playerId = get(player.getName());
                 player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
+                
+                long stop = System.currentTimeMillis();
+                Message.debug("Took "+(stop-start)+"ms to retrieve " + player.getName()+"'s ID from database.");
+                
                 return playerId;  
             }
         } else {
             int playerId = get(player.getName());
             player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
+                            
+            long stop = System.currentTimeMillis();
+            Message.debug("Took "+(stop-start)+"ms to retrieve " + player.getName()+"'s ID from database.");
+                
             return playerId;
         }
     }
@@ -70,7 +83,9 @@ public class PlayerCache {
         Message.debug("Retrieving a player ID for " + username);
         
         int playerId = -1;
+        int tries = 0;
         do {
+            tries++;
             QueryResult playerRow = Query.table(PlayerStats.TableName)
                     .column(PlayerStats.PlayerId)
                     .condition(PlayerStats.Name, username)
@@ -84,7 +99,7 @@ public class PlayerCache {
             }
             playerId = playerRow.asInt(PlayerStats.PlayerId);
         } while (playerId == -1);
-        Message.debug("User ID found: " + playerId);
+        Message.debug("User ID (" + playerId +") after "+tries +" tries found.");
         return playerId;
     }
 }
