@@ -62,6 +62,7 @@ import com.wolvencraft.yasp.util.tasks.SignRefreshTask;
 import com.wolvencraft.yasp.util.tasks.SignRefreshTask.StatsSign;
 import com.wolvencraft.yasp.util.tasks.TickTask;
 import com.wolvencraft.yasp.util.tasks.HookRefreshTask;
+import java.util.HashSet;
 
 /**
  * <b>Main plugin class</b><br />
@@ -85,6 +86,8 @@ public class Statistics extends JavaPlugin {
 
     @Getter(AccessLevel.PUBLIC) private static ServerTotals serverTotals;
     @Getter(AccessLevel.PUBLIC) private static ServerStatistics serverStatistics;
+    
+    private static final HashSet<String> working = new HashSet<>();
     
     /**
      * <b>Default constructor</b><br />
@@ -194,4 +197,20 @@ public class Statistics extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return CommandManager.run(sender, args);
     }
+    
+    //Database Syncronisation
+        
+    public synchronized void setWorking(final String thread, final boolean working) {
+	if (working) this.working.add(thread);
+	else this.working.remove(thread);
+    }
+
+    public synchronized boolean isWorking() {
+	return working.size() > 0;
+    }
+
+    public static synchronized boolean isWorking(final String thread) {
+	return working.contains(thread);
+    }
+        
 }

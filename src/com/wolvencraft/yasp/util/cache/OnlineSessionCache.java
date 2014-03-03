@@ -74,6 +74,11 @@ public class OnlineSessionCache implements CachedDataProcess {
     
     @Override
     public void run() {
+        if (Statistics.getInstance().isWorking(this.getClass().getSimpleName())) {
+            Message.debug("Cache refreshing already started!");
+            return;
+        }
+        Statistics.getInstance().setWorking(this.getClass().getSimpleName(),true);
         Message.debug("Refreshing Online Sesseion Cache.");
         for(OnlineSession session : getSessions()) {
             if(session.isOnline()) continue;
@@ -88,6 +93,7 @@ public class OnlineSessionCache implements CachedDataProcess {
             //removes the Player from the database
             PlayerUtil.remove(session.getName());
         }
+      Statistics.getInstance().setWorking(this.getClass().getSimpleName(),false);  
     }
     
     /**
