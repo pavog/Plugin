@@ -50,26 +50,29 @@ public class PlayerHandlers {
         
         @Override
         public void run() {
-            if(!from.getWorld().equals(to.getWorld())) return;
-            double distance = from.distance(to);
-            if(player.isInsideVehicle()) {
-                EntityType vehicle = player.getVehicle().getType();
-                if(vehicle.equals(EntityType.MINECART)) {
-                    OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Minecart, distance);
-                } else if(vehicle.equals(EntityType.BOAT)) {
-                    OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Boat, distance);
-                } else if(vehicle.equals(EntityType.PIG) || vehicle.equals(EntityType.HORSE)) {
-                    OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Ride, distance);
+            OnlineSession session = OnlineSessionCache.fetch(player);
+            //Skip data tracking if not all players data is read from database
+            if(session.isReady()){
+                if(!from.getWorld().equals(to.getWorld())) return;
+                double distance = from.distance(to);
+                if(player.isInsideVehicle()) {
+                    EntityType vehicle = player.getVehicle().getType();
+                    if(vehicle.equals(EntityType.MINECART)) {
+                        session.addDistance(PlayerDistance.Minecart, distance);
+                    } else if(vehicle.equals(EntityType.BOAT)) {
+                        session.addDistance(PlayerDistance.Boat, distance);
+                    } else if(vehicle.equals(EntityType.PIG) || vehicle.equals(EntityType.HORSE)) {
+                        session.addDistance(PlayerDistance.Ride, distance);
+                    }
+                } else if (from.getBlock().getType().equals(Material.WATER) || from.getBlock().getType().equals(Material.STATIONARY_WATER)) {
+                    session.addDistance(PlayerDistance.Swim, distance);
+                } else if (player.isFlying()) {
+                    session.addDistance(PlayerDistance.Flight, distance);
+                } else {
+                    if(from.getY() < to.getY() && to.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
+                        session.getPlayersData().getMiscData().incrementStat(PlayerData.TimesJumped);
+                        session.addDistance(PlayerDistance.Foot, distance);
                 }
-            } else if (from.getBlock().getType().equals(Material.WATER) || from.getBlock().getType().equals(Material.STATIONARY_WATER)) {
-                OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Swim, distance);
-            } else if (player.isFlying()) {
-                OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Flight, distance);
-            } else {
-                OnlineSession session = OnlineSessionCache.fetch(player);
-                if(from.getY() < to.getY() && to.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
-                    session.getPlayersData().getMiscData().incrementStat(PlayerData.TimesJumped);
-                OnlineSessionCache.fetch(player).addDistance(PlayerDistance.Foot, distance);
             }
         }
     }

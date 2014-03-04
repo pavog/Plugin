@@ -46,9 +46,12 @@ public class BlockHandlers {
         
         @Override
         public void run() {
+            //Skip data tracking if not all players data is read from database
             OnlineSession session = OnlineSessionCache.fetch(player);
-            ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockBreak(block);
-            session.getPlayerTotals().blockBreak();
+            if(session.isReady()){       
+                ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockBreak(block);
+                session.getPlayerTotals().blockBreak();
+            }
         }
         
     }
@@ -67,8 +70,11 @@ public class BlockHandlers {
         @Override
         public void run() {
             OnlineSession session = OnlineSessionCache.fetch(player);
-            ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockPlace(block);
-            session.getPlayerTotals().blockPlace();
+            //Skip data tracking if not all players data is read from database
+            if(session.isReady()){
+                ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockPlace(block);
+                session.getPlayerTotals().blockPlace();
+            }
         }
         
     }

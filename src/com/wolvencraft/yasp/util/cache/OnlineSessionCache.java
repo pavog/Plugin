@@ -60,7 +60,10 @@ public class OnlineSessionCache implements CachedDataProcess {
             public void run() {
                 for(Player player : Bukkit.getServer().getOnlinePlayers()) {
                     if(StatPerms.Statistics.has(player))
-                        fetch(player).getPlayersData().addPlayerLog(player.getLocation(), true);
+                        //Skip data tracking if not all players data is read from database
+                        if(OnlineSessionCache.fetch(player).isReady()){
+                            OnlineSessionCache.fetch(player).getPlayersData().addPlayerLog(player.getLocation(), true);
+                        }
                 }
             }
             

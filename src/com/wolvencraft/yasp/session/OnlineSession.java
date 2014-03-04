@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.session;
 
+import com.wolvencraft.yasp.Statistics;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,7 @@ import com.wolvencraft.yasp.db.data.pvp.PVPData;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerDistance;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
+import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
@@ -66,6 +68,7 @@ public class OnlineSession implements PlayerSession {
     
     private final int id;
     private final String name;
+    private boolean isready;
     private PlayerTotals playerTotals;
     
     private PlayersData playersData;
@@ -79,22 +82,64 @@ public class OnlineSession implements PlayerSession {
      * @param player Player object
      */
     public OnlineSession(Player player) {
-        name = player.getName();
-        id = PlayerCache.get(player);
-        
-        this.playersData = new PlayersData(player, id);
+        final Player tmp_player = player;
+        name = tmp_player.getName();
+        id = PlayerCache.get(tmp_player);       
+        this.isready = false;
         
         this.dataStores = new ArrayList<DataStore>();
         this.dataStores.addAll(Util.getModules(this));
         this.dataStores.addAll(Util.getHooks(this));
         
-        this.playerTotals = new PlayerTotals(id);
         this.scoreboard = null;
         
-        Query.table(PlayerStats.TableName)
-            .value(PlayerStats.Online, true)
-            .condition(PlayerStats.PlayerId, id)
-            .update();
+        //Run all dtabase queries async to reduce lag on player join
+        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+            @Override
+            public void run(){
+                        
+                     try {
+                        Thread.sleep(5000);
+                     } catch (InterruptedException ie) {
+                        Message.debug("connection delay sleep interrupted" + ie);
+                    }
+                
+                    playersData = new PlayersData(tmp_player, id);
+                    
+                    //If player is still online add an login location to the database
+                    if(tmp_player.isOnline()){
+                        playersData.addPlayerLog(tmp_player.getLocation(), true);
+                    }
+                    
+                    setPlayersData(playersData);
+                    playerTotals = new PlayerTotals(id);
+                    setPlayersTotals(playerTotals);
+        
+                    Query.table(PlayerStats.TableName)
+                    .value(PlayerStats.Online, true)
+                    .condition(PlayerStats.PlayerId, id)
+                    .update();  
+                    
+                    setReady();
+            }
+        });
+    }
+    
+    private synchronized void setReady(){
+        Message.debug("Session is ready!");
+        this.isready = true;        
+    }
+    
+    private synchronized void setPlayersTotals(PlayerTotals data){
+        this.playerTotals = data;        
+    }
+    
+    private synchronized void setPlayersData(PlayersData data){
+        this.playersData = data;        
+    }
+    
+    public boolean isReady() {
+        return this.isready;
     }
     
     @Override

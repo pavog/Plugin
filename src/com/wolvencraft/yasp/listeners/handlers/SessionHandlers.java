@@ -26,7 +26,9 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
+import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -44,8 +46,11 @@ public class SessionHandlers {
         
         @Override
         public void run() {
+            long start = System.currentTimeMillis();
             Statistics.getServerStatistics().playerLogin();
-            OnlineSessionCache.fetch(player, true).getPlayersData().addPlayerLog(player.getLocation(), true);
+            OnlineSessionCache.fetch(player, true);
+            long stop = System.currentTimeMillis();
+            Message.debug("Took "+(stop-start)+"ms to execute the PlayerJoin event.");
         }
     }
     
@@ -61,13 +66,16 @@ public class SessionHandlers {
         
         @Override
         public void run() {
-            OnlineSessionCache.fetch(player).getPlayersData().addPlayerLog(player.getLocation(), false);
-            
-            //set Metadata to -1 (This player will probably get removed form the databaes later)
-            long delay = RemoteConfiguration.LogDelay.asInteger();
-            if(delay != 0 && OnlineSessionCache.fetch(player).getPlayersData().getGeneralData().getTotalPlaytime() < delay){
-                player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), -1));
+            OnlineSession session = OnlineSessionCache.fetch(player);
+            if(session.isReady()){
+                session.getPlayersData().addPlayerLog(player.getLocation(), false);     
+                //set Metadata to -1 (This player will probably get removed form the databaes later)
+                long delay = RemoteConfiguration.LogDelay.asInteger();
+                if(delay != 0 && OnlineSessionCache.fetch(player).getPlayersData().getGeneralData().getTotalPlaytime() < delay){
+                    player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), -1));
+                }
             }
+            else player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), -1));
         }
     }
     

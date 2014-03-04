@@ -40,7 +40,7 @@ public class HookRefreshTask implements Runnable {
     @Override
     public void run() {
         for(OnlineSession session : OnlineSessionCache.getSessions()) {
-            if(session.isOnline()){
+            if(session.isOnline() && session.isReady()){
                 if(Module.Vault.isActive() && StatPerms.HookVault.has(session.getBukkitPlayer())){
                     ((VaultData) session.getDataStore(DataStore.DataStoreType.Hook_Vault)).VaultEntry();
                 }         
