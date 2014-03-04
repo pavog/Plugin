@@ -98,12 +98,6 @@ public class OnlineSession implements PlayerSession {
             @Override
             public void run(){
                         
-                     try {
-                        Thread.sleep(5000);
-                     } catch (InterruptedException ie) {
-                        Message.debug("connection delay sleep interrupted" + ie);
-                    }
-                
                     playersData = new PlayersData(tmp_player, id);
                     
                     //If player is still online add an login location to the database
