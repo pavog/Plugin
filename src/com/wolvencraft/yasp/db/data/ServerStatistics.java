@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.db.data;
 
+import com.wolvencraft.yasp.Statistics;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
@@ -211,9 +212,13 @@ public class ServerStatistics {
     public void weatherChange(boolean isStorming, int duration) {
         weather = isStorming;
         weatherDuration = duration;
-        
-        Query.table(ServerStatsTable.TableName).value("value", weather).condition("key", "weather").update();
-        Query.table(ServerStatsTable.TableName).value("value", weatherDuration).condition("key", "weather_duration").update();
+        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+            @Override
+            public void run(){
+                Query.table(ServerStatsTable.TableName).value("value", weather).condition("key", "weather").update();
+                Query.table(ServerStatsTable.TableName).value("value", weatherDuration).condition("key", "weather_duration").update();
+           }
+        });
     }
     
     /**
