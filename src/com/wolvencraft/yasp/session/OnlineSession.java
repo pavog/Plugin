@@ -93,7 +93,7 @@ public class OnlineSession implements PlayerSession {
         
         this.scoreboard = null;
         
-        //Run all dtabase queries async to reduce lag on player join
+        //Run all database queries async to reduce lag on player join
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             @Override
             public void run(){

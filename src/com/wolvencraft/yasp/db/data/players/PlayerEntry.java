@@ -40,6 +40,7 @@ import com.wolvencraft.yasp.util.Util;
 public class PlayerEntry extends NormalData {
     
     private final String username;
+    private final String uuid;
     private long lastSync;
     
     @Getter(AccessLevel.PUBLIC) private long longestSession;
@@ -49,6 +50,7 @@ public class PlayerEntry extends NormalData {
     
     public PlayerEntry (int playerId, Player player) {
         username = player.getName();
+        uuid = player.getUniqueId().toString();
         lastSync = Util.getTimestamp();
         
         currentSession = 0;
@@ -68,6 +70,7 @@ public class PlayerEntry extends NormalData {
         if(result == null) {
             Query.table(PlayerStats.TableName)
                  .value(PlayerStats.Name, username)
+                 .value(PlayerStats.UUID, uuid)
                  .insert();
         } else {
             firstLogin = result.asLong(PlayerStats.FirstLogin);

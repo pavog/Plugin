@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.session;
 
+
 /**
  * Player session interface
  * @author bitWolfy
@@ -32,7 +33,7 @@ public interface PlayerSession {
      * @return Player ID
      */
     public int getId();
-    
+        
     /**
      * Returns the player name
      * @return Player name

@@ -29,6 +29,9 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.util.Message;
 
+import java.util.UUID;
+import org.bukkit.Bukkit;
+
 /**
  * Caches player names and IDs server-side
  * @author bitWolfy
@@ -54,7 +57,7 @@ public class PlayerCache {
                 
                 return playerId;
             } else {
-                playerId = get(player.getName());
+                playerId = get(player.getName(),player.getUniqueId());
                 player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
                 
                 long stop = System.currentTimeMillis();
@@ -63,7 +66,7 @@ public class PlayerCache {
                 return playerId;  
             }
         } else {
-            int playerId = get(player.getName());
+            int playerId = get(player.getName(),player.getUniqueId());
             player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
                             
             long stop = System.currentTimeMillis();
@@ -76,26 +79,89 @@ public class PlayerCache {
     /**
      * Returns the player ID based on his name.<br />
      * Very resource-heavy; if possible, use <code>get(Player player);</code>
+     * This method is only left for compatibility it shouldn't be uses anymore
      * @param username Player name to look up
-     * @return Player ID
+     * @return Player ID or -1 if players wasn#t found
      */
     public static int get(String username) {
         Message.debug("Retrieving a player ID for " + username);
         
         int playerId = -1;
+        
+        QueryResult playerRow = Query.table(PlayerStats.TableName)
+                                     .column(PlayerStats.PlayerId)
+                                     .condition(PlayerStats.Name, username)
+                                     .select();      
+        if(playerRow == null) {
+            Message.debug("User ID of Player "+username+" not found.");
+            return -1;
+        }
+        playerId = playerRow.asInt(PlayerStats.PlayerId);
+        Message.debug("User ID (" + playerId +") found.");
+        return playerId;
+    }
+
+
+    /**
+     * Returns the player ID based on his uuid.<br />
+     * Very resource-heavy; if possible, use <code>get(Player player);</code>
+     * @param username_ Player name to look up
+     * @param uuid_ Players uuid to look up
+     * @return Player ID or -1 if players wasn#t found
+     */
+    public static int get(String username_, UUID uuid_) {
+        final String username = username_; 
+        final UUID uuid = uuid_;
+        int playerId = -1;
         int tries = 0;
+        
+        Message.debug("Retrieving a player ID for " + username);
         do {
             tries++;
             QueryResult playerRow = Query.table(PlayerStats.TableName)
                     .column(PlayerStats.PlayerId)
-                    .condition(PlayerStats.Name, username)
+                    .condition(PlayerStats.UUID, uuid.toString())
                     .select();
             
             if(playerRow == null) {
-                Query.table(PlayerStats.TableName)
+                
+                //Try if a player with the given name already exists in the database
+                playerId = get(username);
+                //If the player exists updtae his UUID
+                if(playerId != -1){
+                    
+                    Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+                        @Override
+                        public void run(){
+                            Query.table(PlayerStats.TableName)
+                            .value(PlayerStats.UUID, uuid)
+                            .condition(PlayerStats.Name, username)
+                            .update();
+                        }
+                    });
+                    
+                    break;
+                //If the player does not exist creat a new entry in the database    
+                } else {
+                    
+                    Query.table(PlayerStats.TableName)
                     .value(PlayerStats.Name, username)
+                    .value(PlayerStats.UUID, uuid)
                     .insert();
-                continue;
+                    
+                continue;    
+                }              
+            } else {
+                //If an player with the given UUID exists in the database updatehis name
+                Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+                    @Override
+                    public void run(){
+                        Query.table(PlayerStats.TableName)
+                        .value(PlayerStats.Name, username)
+                        .condition(PlayerStats.UUID, uuid.toString())
+                        .update();
+                    }
+                });               
             }
             playerId = playerRow.asInt(PlayerStats.PlayerId);
         } while (playerId == -1);

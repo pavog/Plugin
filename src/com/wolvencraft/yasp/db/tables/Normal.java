@@ -64,6 +64,7 @@ public class Normal {
     @Getter(AccessLevel.PUBLIC)
     public enum PlayerStats implements DBTable {
         TableName       ("players"),
+        UUID            ("uuid"),
         PlayerId        ("player_id"),
         Name            ("name"),
         Online          ("online"),
