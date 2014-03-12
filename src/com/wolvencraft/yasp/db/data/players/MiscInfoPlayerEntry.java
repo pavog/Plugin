@@ -68,12 +68,12 @@ public class MiscInfoPlayerEntry extends NormalData {
         
         values.put(PlayerData.Gamemode, player.getGameMode().getValue());
         values.put(PlayerData.ExpPercent, player.getExp());
-        values.put(PlayerData.ExpTotal, player.getTotalExperience());
         values.put(PlayerData.ExpLevel, player.getLevel());
         values.put(PlayerData.FoodLevel, player.getFoodLevel());
         values.put(PlayerData.HealthLevel, player.getHealth());
         values.put(PlayerData.ArmorLevel, Util.getArmorRating(player.getInventory()));
         
+        values.put(PlayerData.ExpTotal,0);
         values.put(PlayerData.FishCaught, 0);
         values.put(PlayerData.TimesKicked, 0);
         values.put(PlayerData.EggsThrown, 0);
@@ -108,6 +108,7 @@ public class MiscInfoPlayerEntry extends NormalData {
                 .valueRaw(values)
                 .insert();
         } else {
+            values.put(PlayerData.ExpTotal, result.asInt(PlayerData.ExpTotal));
             values.put(PlayerData.FishCaught, result.asInt(PlayerData.FishCaught));
             values.put(PlayerData.TimesKicked, result.asInt(PlayerData.TimesKicked));
             values.put(PlayerData.EggsThrown, result.asInt(PlayerData.EggsThrown));
@@ -135,6 +136,7 @@ public class MiscInfoPlayerEntry extends NormalData {
     }
     
     public void clearData(int playerId) {
+        values.put(PlayerData.ExpTotal, 0);
         values.put(PlayerData.FishCaught, 0);
         values.put(PlayerData.TimesKicked, 0);
         values.put(PlayerData.EggsThrown, 0);
@@ -166,7 +168,6 @@ public class MiscInfoPlayerEntry extends NormalData {
         
         values.put(PlayerData.Gamemode, player.getGameMode().getValue());
         values.put(PlayerData.ExpPercent, player.getExp());
-        values.put(PlayerData.ExpTotal, player.getTotalExperience());
         values.put(PlayerData.ExpLevel, player.getLevel());
         values.put(PlayerData.FoodLevel, player.getFoodLevel());
         values.put(PlayerData.HealthLevel, player.getHealth());

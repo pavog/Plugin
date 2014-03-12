@@ -43,6 +43,7 @@ import com.wolvencraft.yasp.listeners.handlers.HandlerManager;
 import com.wolvencraft.yasp.listeners.handlers.PlayerHandlers.PlayerMove;
 import com.wolvencraft.yasp.listeners.handlers.PlayerHandlers.PlayerIncrementStat;
 import com.wolvencraft.yasp.settings.Constants.StatPerms;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 
 /**
  * Listens to miscellaneous player events on the server and reports them to the plugin.
@@ -142,5 +143,14 @@ public class PlayerListener implements Listener {
         if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
         
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.CommandsSent));
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void PlayerExpChangeEvent(PlayerExpChangeEvent event) {
+        Player player = event.getPlayer();
+        int amount = event.getAmount();
+        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+        
+        HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.ExpTotal, amount));
     }
 }
