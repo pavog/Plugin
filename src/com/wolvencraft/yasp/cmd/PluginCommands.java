@@ -96,8 +96,8 @@ public class PluginCommands {
 
             @Override
             public void run() {
-                if(!Bukkit.getServer().getOfflinePlayer(player).isOnline()) {
-                    
+                /*if(!Bukkit.getServer().getOfflinePlayer(player).isOnline()) {
+                                        
                     QueryResult playerRow = Query.table(Normal.PlayerStats.TableName)
                     .column(Normal.PlayerStats.PlayerId)
                     .condition(Normal.PlayerStats.Name, player)
@@ -116,7 +116,9 @@ public class PluginCommands {
                     }
                 } else {
                     Message.sendFormattedError(sender, "Can't remove an online player!");
-                }
+                    
+                }*/
+                Message.sendFormattedError(sender, "Command disabled for now! It will be readded in the future.");
             }
             
         });

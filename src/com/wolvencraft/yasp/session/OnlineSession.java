@@ -54,6 +54,7 @@ import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
+import java.util.UUID;
 
 /**
  * Represents a player session that is created when a player logs into the server.<br />
@@ -68,6 +69,7 @@ public class OnlineSession implements PlayerSession {
     
     private final int id;
     private final String name;
+    private final UUID uuid;
     private boolean isready;
     private PlayerTotals playerTotals;
     
@@ -83,6 +85,7 @@ public class OnlineSession implements PlayerSession {
      */
     public OnlineSession(Player player) {
         final Player tmp_player = player;
+        this.uuid = tmp_player.getUniqueId();
         name = tmp_player.getName();
         id = PlayerCache.get(tmp_player);       
         this.isready = false;
@@ -140,6 +143,11 @@ public class OnlineSession implements PlayerSession {
     public boolean isOnline() {
         if(Bukkit.getPlayerExact(name) == null) return false;
         return true;
+    }
+    
+    @Override
+    public UUID getUUID() {
+        return this.uuid;
     }
     
     /**

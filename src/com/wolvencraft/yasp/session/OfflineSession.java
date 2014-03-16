@@ -27,6 +27,7 @@ import org.bukkit.Bukkit;
 
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
+import java.util.UUID;
 
 /**
  * A simplistic representation of a player's session.<br />
@@ -39,16 +40,19 @@ public class OfflineSession implements PlayerSession {
     
     private final int id;
     private final String name;
+    private final UUID uuid;
     
     private PlayerTotals playerTotals;
     
     /**
      * <b>Default constructor</b><br />
-     * Creates a new player data session based on the username
+     * Creates a new player data session based on the username and uuid
      * @param name Player username
      */
     public OfflineSession(String name) {
-        this.name = name;
+        //I hope there is an way to get the uuid form an offlien player in the future without using sending requests to the mc auth server
+        this.uuid = null;
+        this.name = name;  
         this.id = PlayerCache.get(name);
         this.playerTotals = new PlayerTotals(id);
     }
@@ -57,6 +61,11 @@ public class OfflineSession implements PlayerSession {
     public boolean isOnline() {
         if(Bukkit.getPlayerExact(name) == null) return false;
         return true;
+    }
+    
+    @Override
+    public UUID getUUID() {
+        return this.uuid;
     }
 
 }

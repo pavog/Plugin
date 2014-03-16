@@ -104,6 +104,8 @@ public class PlayerCache {
 
     /**
      * Returns the player ID based on his uuid.<br />
+     * If the no player is found with the given uuid searches for an player by the given name in the database and updates the uuid.
+     * This is needen to support also pre 1.8 databases with no uuid's at all.
      * Very resource-heavy; if possible, use <code>get(Player player);</code>
      * @param username_ Player name to look up
      * @param uuid_ Players uuid to look up
@@ -152,7 +154,7 @@ public class PlayerCache {
                 continue;    
                 }              
             } else {
-                //If an player with the given UUID exists in the database updatehis name
+                //If an player with the given UUID exists in the database update his name
                 Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
                     @Override
                     public void run(){

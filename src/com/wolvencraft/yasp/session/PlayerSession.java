@@ -20,6 +20,8 @@
 
 package com.wolvencraft.yasp.session;
 
+import java.util.UUID;
+
 
 /**
  * Player session interface
@@ -39,6 +41,12 @@ public interface PlayerSession {
      * @return Player name
      */
     public String getName();
+    
+    /**
+     * Returns the player uuid
+     * @return UUID uuid
+     */
+    public UUID getUUID();
     
     /**
      * Checks if the player is online

@@ -27,9 +27,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
-import com.wolvencraft.yasp.db.Query;
-import com.wolvencraft.yasp.db.tables.Normal;
-import com.wolvencraft.yasp.db.tables.Normal.PlayerStats;
 import com.wolvencraft.yasp.events.session.SessionCreateEvent;
 import com.wolvencraft.yasp.events.session.SessionRemoveEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
@@ -88,13 +85,14 @@ public class OnlineSessionCache implements CachedDataProcess {
             session.finalize();
             Message.debug("Saving online player data: "+session.getName()+ " ID:" + session.getId() +" (offline)");
             session.pushData();
-            removeSession(session);
-            
+                   
             long delay = RemoteConfiguration.LogDelay.asInteger();
             if(delay == 0 || session.getPlayersData().getGeneralData().getTotalPlaytime() > delay) continue;
             
             //removes the Player from the database
-            PlayerUtil.remove(session.getName());
+            PlayerUtil.remove(session.getUUID());
+            
+            removeSession(session);
         }
       Statistics.getInstance().setWorking(this.getClass().getSimpleName(),false);  
     }
@@ -108,7 +106,7 @@ public class OnlineSessionCache implements CachedDataProcess {
      */
     public static OnlineSession fetch(Player player, boolean login) {
         for(OnlineSession session : sessions) {
-            if(session.getName().equals(player.getName())) {
+            if(session.getUUID().equals(player.getUniqueId())) {
                 if(login && RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
                     Message.send(player, RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName()));
                 }

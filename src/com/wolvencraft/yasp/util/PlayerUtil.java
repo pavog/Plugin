@@ -9,6 +9,7 @@ package com.wolvencraft.yasp.util;
 
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.tables.Normal;
+import java.util.UUID;
 
 
 public class PlayerUtil {
@@ -16,13 +17,13 @@ public class PlayerUtil {
 /**
  *
  * @author Mario
- * @param name Player name
+ * @param uuid Player uuid
  * @return TRUE on success
  */
-    public static boolean remove(String name){
+    public static boolean remove(UUID uuid){
              
            return Query.table(Normal.PlayerStats.TableName)
-                        .condition(Normal.PlayerStats.Name, name)
+                        .condition(Normal.PlayerStats.UUID, uuid.toString())
                         .delete();  
         
     }
