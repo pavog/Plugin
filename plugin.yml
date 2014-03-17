@@ -1,6 +1,6 @@
 name: Statistics
 main: com.wolvencraft.yasp.Statistics
-version: 1.2.1
+version: 1.2.2
 description: Extremely detailed player/server statistic tracking with web portal
 website: http://dev.bukkit.org/bukkit-mods/Statistics/
 authors: [bitWolfy, Dazzel_]
