@@ -10,7 +10,7 @@ CREATE UNIQUE INDEX `uuid` ON `$prefix_players` (`uuid`);
 
 -- prepare misc_info_players tabe to store total XP
 
-ALTER TABLE `$prfix_misc_info_players` MODIFY `exp_total` bigint(20);
+ALTER TABLE `$prefix_misc_info_players` MODIFY `exp_total` bigint(20);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
