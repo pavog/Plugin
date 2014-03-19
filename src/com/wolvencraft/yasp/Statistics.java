@@ -52,6 +52,7 @@ import com.wolvencraft.yasp.listeners.StatsSignListener;
 import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
+import com.wolvencraft.yasp.util.BookUtil;
 import com.wolvencraft.yasp.util.ExceptionHandler;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.CachedData;
@@ -115,6 +116,7 @@ public class Statistics extends JavaPlugin {
         
         new PatchManager();
         new Query();
+        new BookUtil();
         
         try { new Database(); }
         catch (Exception e) {

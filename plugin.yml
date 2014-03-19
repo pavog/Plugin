@@ -3,7 +3,7 @@ main: com.wolvencraft.yasp.Statistics
 version: 1.2.2
 description: Extremely detailed player/server statistic tracking with web portal
 website: http://dev.bukkit.org/bukkit-mods/Statistics/
-authors: [bitWolfy, Dazzel_]
+authors: [bitWolfy, Dazzel_, MarioG1]
 softdepend: [AdminCmd, BanHammer, Citizens, CommandBook, Factions, Jail, mcMMO, MobArena, PVPArena, Towny, VanishNoPacket, Vault, Vorifier, WorldEdit, WorldGuard]
 load: POSTWORLD
 commands:
