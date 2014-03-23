@@ -21,18 +21,20 @@
 package com.wolvencraft.yasp.util;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.db.totals.HookTotals;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
-import com.wolvencraft.yasp.util.VariableManager.PlayerVariable;
+import com.wolvencraft.yasp.util.VariableSwap.HookData;
 import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
+import com.wolvencraft.yasp.util.VariableSwap.PlayerData;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -87,17 +89,20 @@ public class BookUtil {
      */
     public static String[] getBookPages(String playerName) {
         PlayerTotals stats = OfflineSessionCache.fetch(playerName).getPlayerTotals();
-        String[] Book = new String[2];
+        HookTotals hooks = OfflineSessionCache.fetch(playerName).getHookTotals();
+        String[] Book = new String[50];
+        String fixed_line;
         int i=0;     
         for(List<String> list : Page){
             Book[i] = "";
-            Message.debug("Page: "+ i);
             for(String line : list){
-                Book[i]=Book[i]+line+" \n";
-                Message.debug("Line: "+ line);
+                fixed_line = PlayerData.swap(line,stats);
+                fixed_line = HookData.swap(fixed_line,hooks);
+                Book[i]=Book[i]+ ChatColor.translateAlternateColorCodes('&', fixed_line) + ChatColor.RESET + ChatColor.BLACK + "\n";
             }
             i++;
         }
-        return Book;
+        String[] finished_book = Arrays.copyOf(Book, i);
+        return finished_book;
     }
 }

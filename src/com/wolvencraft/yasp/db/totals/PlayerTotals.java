@@ -103,6 +103,8 @@ public class PlayerTotals {
         values.put(PlayerVariable.ITEMS_BROKEN, (int) Query.table(ItemTotals.TableName).column(ItemTotals.Broken).condition(ItemTotals.PlayerId, playerId).sum());
         values.put(PlayerVariable.ITEMS_CRAFTED, (int) Query.table(ItemTotals.TableName).column(ItemTotals.Crafted).condition(ItemTotals.PlayerId, playerId).sum());
         values.put(PlayerVariable.ITEMS_EATEN, (int) Query.table(ItemTotals.TableName).column(ItemTotals.Used).condition(ItemTotals.PlayerId, playerId).sum());
+        values.put(PlayerVariable.ITEMS_DROPPED, (long) Query.table(ItemTotals.TableName).column(ItemTotals.Dropped).condition(ItemTotals.PlayerId, playerId).sum());
+        values.put(PlayerVariable.ITEMS_PICKEDUP, (long) Query.table(ItemTotals.TableName).column(ItemTotals.PickedUp).condition(ItemTotals.PlayerId, playerId).sum());
         
         int pvpKills = (int) Query.table(PVPTotals.TableName).column(PVPTotals.Times).condition(PVPTotals.PlayerId, playerId).sum();
         values.put(PlayerVariable.PVP_KILLS, pvpKills);

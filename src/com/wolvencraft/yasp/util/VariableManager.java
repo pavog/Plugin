@@ -114,4 +114,17 @@ public class VariableManager {
         
     }
     
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum HookVariable implements Variable {
+        
+        MONEY           ("money"),
+        GROUP           ("group"),
+                
+        ;
+        
+        private String alias;
+        
+    }
+    
 }

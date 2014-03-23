@@ -20,6 +20,7 @@
 
 package com.wolvencraft.yasp.session;
 
+import com.wolvencraft.yasp.db.totals.HookTotals;
 import lombok.AccessLevel;
 import lombok.Getter;
 
@@ -43,6 +44,7 @@ public class OfflineSession implements PlayerSession {
     private final UUID uuid;
     
     private PlayerTotals playerTotals;
+    private HookTotals hookTotals;
     
     /**
      * <b>Default constructor</b><br />
@@ -55,6 +57,7 @@ public class OfflineSession implements PlayerSession {
         this.name = name;  
         this.id = PlayerCache.get(name);
         this.playerTotals = new PlayerTotals(id);
+        this.hookTotals = new HookTotals(id);
     }
 
     @Override
