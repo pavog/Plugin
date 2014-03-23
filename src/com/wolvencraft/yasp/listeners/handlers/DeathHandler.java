@@ -77,7 +77,10 @@ public class DeathHandler {
                    // | + Player shot by Player
                             Player killer = (Player) projectile.getShooter();
                             if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(player)) return;
-                            session.killedPlayer(player, Constants.ProjectileToItem.parse(projectile.getType()));
+                            OnlineSession killer_session = OnlineSessionCache.fetch(killer);
+                            if(killer_session.isReady()){
+                                killer_session.killedPlayer(player, Constants.ProjectileToItem.parse(projectile.getType()));
+                            }
                         } else if (projectile.getShooter() instanceof Creature) {
                     // | + Player was shot by a monster
                             if(!StatPerms.DeathPVE.has(player)) return;
@@ -88,7 +91,10 @@ public class DeathHandler {
                     // + Player killed Player
                         Player killer = (Player) killerEntity;
                         if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(player)) return;
-                        session.killedPlayer(player, killer.getItemInHand());
+                        OnlineSession killer_session = OnlineSessionCache.fetch(killer);
+                        if(killer_session.isReady()){
+                            killer_session.killedPlayer(player, killer.getItemInHand());  
+                        } 
                     } else if (killerEntity instanceof Creature) {
                     // + Creature killed Player
                         if(!StatPerms.DeathPVE.has(player)) return;
