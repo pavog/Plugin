@@ -72,8 +72,7 @@ public class BookUtil {
     public static ItemStack compileStatsBook (Player player) {
         ItemStack bookStack = new ItemStack(387, 1);
         BookMeta book = (BookMeta) bookStack.getItemMeta();
-        
-        book.setTitle(title);
+        book.setTitle(title.replace("%PLAYERNAME%",player.getName()));
         book.setAuthor("Statistics");
         book.setPages(getBookPages(player.getName()));
         
@@ -96,7 +95,8 @@ public class BookUtil {
         for(List<String> list : Page){
             Book[i] = "";
             for(String line : list){
-                fixed_line = PlayerData.swap(line,stats);
+                fixed_line = line.replace("%PLAYERNAME%",playerName);
+                fixed_line = PlayerData.swap(fixed_line,stats);
                 fixed_line = HookData.swap(fixed_line,hooks);
                 Book[i]=Book[i]+ ChatColor.translateAlternateColorCodes('&', fixed_line) + ChatColor.RESET + ChatColor.BLACK + "\n";
             }

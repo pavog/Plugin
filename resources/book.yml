@@ -1,7 +1,39 @@
-title: %playername% Stats book
+title: "%PLAYERNAME% Statistics"
 page:
     1:
-    - Hi
-    - This is the first page
+    - "&4&n %PLAYERNAME%"
+    - " "
+    - "Current session: %SESSION_LENGTH%"
+    - "Total playtime: %TOTAL_PLAYTIME%"
     2:
-    - This is Line 1 of the 2. Page
+    - "&4&n %PLAYERNAME%"
+    - " "
+    - "&lBlocks and items"
+    - " "
+    - "&l&cBlocks:"
+    - "Broken: %BLOCKS_BROKEN%"
+    - "Placed: %BLOCKS_PLACED%"
+    - " "
+    - "&l&cItems:"
+    - "Dropped: %ITEMS_DROPPED%"
+    - "Picekd up: %ITEMS_PICKEDUP%"
+    3:
+    - "&4&n %PLAYERNAME%"
+    - " "
+    - "&lTravel Log"
+    - " "
+    - "Total       : %DISTANCE_TRAVELED%"
+    - "By foot     : %DISTANCE_FOOT%"
+    - "Swimmed     : %DISTANCE_SWIM%"
+    - "In minecart : %DISTANCE_CART%"
+    - "In a boat   : %DISTANCE_BOAT%"
+    - "In a saddle : %DISTANCE_RIDE%"
+    4:
+    - "&4&n %PLAYERNAME%"
+    - " "
+    - "&lKills and Deaths"
+    - " "
+    - "PVP Kills: %PVP_KILLS%"
+    - "PVE kills: %PVE_KILLS%"
+    - "Deaths:    %DEATHS%"
+    - "K/D:       %KILL_DEATH_RATIO%"

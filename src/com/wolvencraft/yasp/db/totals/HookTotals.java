@@ -66,16 +66,16 @@ public class HookTotals {
                     JSONObject group = (JSONObject) JSONarray.get(0);
                     values.put(HookVariable.GROUP, group.get("group"));
                 } catch(ParseException e){
-                    values.put(HookVariable.GROUP, "null"); 
+                    values.put(HookVariable.GROUP, "Error!"); 
                 }
             } catch (NullPointerException e){
-               values.put(HookVariable.GROUP, "null"); 
+               values.put(HookVariable.GROUP, "Not tracked!"); 
                values.put(HookVariable.MONEY, (int) 0); 
             }
                 
         } else {
             values.put(HookVariable.MONEY, (int) 0);
-            values.put(HookVariable.GROUP, "none");
+            values.put(HookVariable.GROUP, "Hook disabled!");
         }
     }
     
