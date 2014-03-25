@@ -79,7 +79,7 @@ public class OnlineSessionCache implements CachedDataProcess {
             return;
         }
         Statistics.getInstance().setWorking(this.getClass().getSimpleName(),true);
-        Message.debug("Refreshing Online Sesseion Cache.");
+        Message.debug("Refreshing Online Session Cache.");
         for(OnlineSession session : getSessions()) {
             if(session.isOnline()) continue;
             session.finalize();
