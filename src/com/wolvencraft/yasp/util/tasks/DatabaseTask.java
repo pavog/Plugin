@@ -66,6 +66,7 @@ public class DatabaseTask implements Runnable {
 		}
                 Statistics.getInstance().setWorking(this.getClass().getSimpleName(),true);
                 commit();
+                Message.debug("Database syncronisation finished");
                 Statistics.getInstance().setWorking(this.getClass().getSimpleName(),false);
             }
             

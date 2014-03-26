@@ -82,13 +82,16 @@ public class OnlineSessionCache implements CachedDataProcess {
         Message.debug("Refreshing Online Session Cache.");
         for(OnlineSession session : getSessions()) {
             if(session.isOnline()) continue;
+            if(!session.isReady()) continue;
+            
             session.finalize();
             Message.debug("Saving online player data: "+session.getName()+ " ID:" + session.getId() +" (offline)");
             session.pushData();
                    
             long delay = RemoteConfiguration.LogDelay.asInteger();
-            if(delay == 0 || session.getPlayersData().getGeneralData().getTotalPlaytime() > delay){        
+            if(delay != 0 && session.getPlayersData().getGeneralData().getTotalPlaytime() < delay){        
                 //removes the Player from the database
+                Message.debug("Removing Player "+session.getName()+" from Database (Delayed Tracking)!");
                 PlayerUtil.remove(session.getUUID());
             }
             
