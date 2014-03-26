@@ -87,10 +87,10 @@ public class OnlineSessionCache implements CachedDataProcess {
             session.pushData();
                    
             long delay = RemoteConfiguration.LogDelay.asInteger();
-            if(delay == 0 || session.getPlayersData().getGeneralData().getTotalPlaytime() > delay) continue;
-            
-            //removes the Player from the database
-            PlayerUtil.remove(session.getUUID());
+            if(delay == 0 || session.getPlayersData().getGeneralData().getTotalPlaytime() > delay){        
+                //removes the Player from the database
+                PlayerUtil.remove(session.getUUID());
+            }
             
             removeSession(session);
         }
