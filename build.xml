@@ -18,6 +18,11 @@
                 <include name="*.sql"/>
             </fileset>
         </copy>
+        <copy todir="build/resources">
+            <fileset dir="resources">
+                <include name="*.yml"/>
+            </fileset>
+        </copy>
         <jar jarfile="Statistics.jar" basedir="build"/>
         <delete dir="build"/>
     </target>
