@@ -213,6 +213,10 @@ public class Database {
                 LocalConfiguration.DBUser.toString(),
                 LocalConfiguration.DBPass.toString()
             );
+            
+            try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
+            catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
+            
             Message.log("Connection re-established. No data is lost.");
             return true;
         } catch (Exception e) {
