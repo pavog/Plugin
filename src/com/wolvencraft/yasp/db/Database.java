@@ -94,10 +94,21 @@ public class Database {
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
-    public static boolean patchDatabase(boolean force) throws DatabaseConnectionException {
+    public static boolean patchDatabase(boolean force) throws DatabaseConnectionException{
         int databaseVersion;
         if(force) { databaseVersion = 1; }
-        else { databaseVersion = RemoteConfiguration.DatabaseVersion.asInteger(); }
+        else {
+            try {
+                if(connection.getMetaData().getTables(null, null, LocalConfiguration.DBPrefix.toString() + SettingsTable.TableName.toString(), null).next()){
+                    databaseVersion = RemoteConfiguration.DatabaseVersion.asInteger();
+                } else {
+                    databaseVersion = 0;
+                }
+            } catch (SQLException e) {
+                if (LocalConfiguration.Debug.toBoolean()) e.printStackTrace();
+                databaseVersion = 0;
+            }
+        }
         int latestPatchVersion = databaseVersion;
         
         File patchFile = null;
