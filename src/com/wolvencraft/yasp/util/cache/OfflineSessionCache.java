@@ -24,9 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wolvencraft.yasp.session.OfflineSession;
-import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.CachedData.CachedDataProcess;
-import java.util.UUID;
 
 /**
  * Caches Offline sessions server-side
@@ -60,15 +58,14 @@ public class OfflineSessionCache implements CachedDataProcess {
     
     /**
      * Fetches the OfflineSession from the cache
-     * @param uuid Player' uuid
+     * @param username Player name
      * @return Offline session
      */
-    public static OfflineSession fetch(UUID uuid) {
+    public static OfflineSession fetch(String username) {
         for(OfflineSession session : sessions) {
-            if(session.getUUID().equals(uuid)) return session;
-        }     
-        OfflineSession session = new OfflineSession(uuid);
-        Message.debug("Creating a new offline session for " + session.getName());
+            if(session.getName().equals(username)) return session;
+        }
+        OfflineSession session = new OfflineSession(username);
         sessions.add(session);
         return session;
     }
