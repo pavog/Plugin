@@ -45,6 +45,7 @@ import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import java.util.UUID;
 
 /**
  * Simple API for servers statistics
@@ -66,23 +67,23 @@ public class StatisticsAPI {
     /**
      * Returns the OfflineSession for the player with the specified username.<br />
      * The player might not be online, or not exist at all.
-     * @param username Player's username
+     * @param UUID Player's iiod
      * @return DataSession with player's totals
      */
-    public static OfflineSession getSession(String username) {
-        return OfflineSessionCache.fetch(username);
+    public static OfflineSession getSession(UUID uuid) {
+        return OfflineSessionCache.fetch(uuid);
     }
     
     /**
      * Returns the OfflineSession for the player with the specified username.<br />
      * The player might not be online, or not exist at all.
-     * @param username Player's username
+     * @param uuid Player's uuid
      * @param cached <b>true</b> if you want the plugin to cache this session
      * @return DataSession with player's totals
      */
-    public static OfflineSession getSession(String username, boolean cached) {
-        if(cached) return getSession(username);
-        else return new OfflineSession(username);
+    public static OfflineSession getSession(UUID uuid, boolean cached) {
+        if(cached) return getSession(uuid);
+        else return new OfflineSession(uuid);
     }
     
     /**

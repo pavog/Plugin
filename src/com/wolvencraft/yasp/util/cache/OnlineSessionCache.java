@@ -147,7 +147,7 @@ public class OnlineSessionCache implements CachedDataProcess {
      */
     private static void removeSession(OnlineSession session) {
         Message.debug("Removing a user session for " + session.getName());
-        Bukkit.getServer().getPluginManager().callEvent(new SessionRemoveEvent(session.getName()));
+        Bukkit.getServer().getPluginManager().callEvent(new SessionRemoveEvent(session.getUUID()));
         sessions.remove(session);
     }
     

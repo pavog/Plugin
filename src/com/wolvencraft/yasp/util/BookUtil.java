@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.wolvencraft.yasp.db.totals.PlayerTotals;
+import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.util.VariableSwap.HookData;
 import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 import com.wolvencraft.yasp.util.VariableSwap.PlayerData;
@@ -36,6 +37,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -74,7 +76,7 @@ public class BookUtil {
         BookMeta book = (BookMeta) bookStack.getItemMeta();
         book.setTitle(title.replace("%PLAYERNAME%",player.getName()));
         book.setAuthor("Statistics");
-        book.setPages(getBookPages(player.getName()));
+        book.setPages(getBookPages(player.getUniqueId()));
         
         bookStack.setItemMeta(book);
         return bookStack;
@@ -83,19 +85,20 @@ public class BookUtil {
     /**
      * Returns the pages for the book with player's statistics. Could be used for offline players.<br />
      * It is safe to use this method with any version of CraftBukkit.
-     * @param playerName Player name to use for the statistics
+     * @param uuid Player's uuid to use for the statistics
      * @return Array of strings, each of them representing a new page in the book.
      */
-    public static String[] getBookPages(String playerName) {
-        PlayerTotals stats = OfflineSessionCache.fetch(playerName).getPlayerTotals();
-        HookTotals hooks = OfflineSessionCache.fetch(playerName).getHookTotals();
+    public static String[] getBookPages(UUID uuid) {
+        OfflineSession session = OfflineSessionCache.fetch(uuid);
+        PlayerTotals stats = session.getPlayerTotals();
+        HookTotals hooks = session.getHookTotals();
         String[] Book = new String[50];
         String fixed_line;
         int i=0;     
         for(List<String> list : Page){
             Book[i] = "";
             for(String line : list){
-                fixed_line = line.replace("%PLAYERNAME%",playerName);
+                fixed_line = line.replace("%PLAYERNAME%",session.getName());
                 fixed_line = PlayerData.swap(fixed_line,stats);
                 fixed_line = HookData.swap(fixed_line,hooks);
                 Book[i]=Book[i]+ ChatColor.translateAlternateColorCodes('&', fixed_line) + ChatColor.RESET + ChatColor.BLACK + "\n";

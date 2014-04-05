@@ -27,6 +27,7 @@ import org.bukkit.event.HandlerList;
 
 import com.wolvencraft.yasp.events.StatisticsEvent;
 import com.wolvencraft.yasp.session.OfflineSession;
+import java.util.UUID;
 
 /**
  * Called when the player session expires.<br />
@@ -38,10 +39,10 @@ import com.wolvencraft.yasp.session.OfflineSession;
 public class SessionRemoveEvent extends StatisticsEvent {
     
     private static final HandlerList handlers = new HandlerList();
-    private String playerName;
+    private UUID uuid;
     
     public OfflineSession getSession() {
-        return new OfflineSession(playerName);
+        return new OfflineSession(uuid);
     }
     
     @Override

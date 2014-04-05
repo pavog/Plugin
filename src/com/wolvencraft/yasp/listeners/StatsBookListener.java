@@ -62,7 +62,7 @@ public class StatsBookListener implements Listener {
         
         if(!book.hasAuthor()) return;
         if(!book.getAuthor().equals("Statistics")) return;
-        book.setPages(BookUtil.getBookPages(player.getName()));
+        book.setPages(BookUtil.getBookPages(player.getUniqueId()));
         
         bookStack.setItemMeta(book);
         player.getInventory().setItemInHand(bookStack);

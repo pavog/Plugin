@@ -79,7 +79,6 @@ public class PlayerCache {
     /**
      * Returns the player ID based on his name.<br />
      * Very resource-heavy; if possible, use <code>get(Player player);</code>
-     * This method is only left for compatibility it shouldn't be uses anymore
      * @param username Player name to look up
      * @return Player ID or -1 if players wasn#t found
      */
@@ -91,6 +90,7 @@ public class PlayerCache {
         QueryResult playerRow = Query.table(PlayerStats.TableName)
                                      .column(PlayerStats.PlayerId)
                                      .condition(PlayerStats.Name, username)
+                                     .condition(PlayerStats.UUID, "NULL")
                                      .select();      
         if(playerRow == null) {
             Message.debug("User ID of Player "+username+" not found.");
@@ -99,6 +99,44 @@ public class PlayerCache {
         playerId = playerRow.asInt(PlayerStats.PlayerId);
         Message.debug("User ID (" + playerId +") found.");
         return playerId;
+    }
+    
+    /**
+     * Returns the player ID based on his uuid.<br />
+     * Very resource-heavy; if possible, use <code>get(Player player);</code>
+     * @param uuid Player's uuid to look up
+     * @return Player ID or -1 if players wasn#t found
+     */
+    public static int get(UUID uuid) {
+        int playerId = -1;
+        QueryResult playerRow = Query.table(PlayerStats.TableName)
+                                     .column(PlayerStats.PlayerId)
+                                     .condition(PlayerStats.UUID, uuid.toString())
+                                     .select();      
+        if(playerRow == null) {
+            return -1;
+        }
+        playerId = playerRow.asInt(PlayerStats.PlayerId);
+        Message.debug("User ID (" + playerId +") found.");
+        return playerId;
+    }
+    
+    /**
+     * Returns the player Name based on his uuid.<br />
+     * @param uuid Player's uuid to look up
+     * @return Player Name or null if players wasn't found
+     */
+    public static String getName(UUID uuid) {
+        String playerName;
+        QueryResult playerRow = Query.table(PlayerStats.TableName)
+                                     .column(PlayerStats.Name)
+                                     .condition(PlayerStats.UUID, uuid.toString())
+                                     .select();      
+        if(playerRow == null) {
+            return null;
+        }
+        playerName = playerRow.asString(PlayerStats.Name);
+        return playerName;
     }
 
 

@@ -116,7 +116,7 @@ public class PlayerTotals {
         values.put(PlayerVariable.DEATHS, deaths);
         
         double kdr = 1;
-        if(deaths != 0) kdr = (double) Math.round((pvpKills / deaths) * 100000) / 100000;
+        if(deaths != 0) kdr = (float) Math.round((pvpKills / deaths) * 100000) / 100000;
         else kdr = pvpKills;
         values.put(PlayerVariable.KILL_DEATH_RATIO, kdr);
     }

@@ -48,22 +48,20 @@ public class OfflineSession implements PlayerSession {
     
     /**
      * <b>Default constructor</b><br />
-     * Creates a new player data session based on the username and uuid
-     * @param name Player username
+     * Creates a new player data session based on his uuid
+     * @param uuid Player's uuid
      */
-    public OfflineSession(String name) {
-        //I hope there is an way to get the uuid form an offlien player in the future without using sending requests to the mc auth server
-        this.uuid = null;
-        this.name = name;  
-        this.id = PlayerCache.get(name);
+    public OfflineSession(UUID uuid) {
+        this.uuid = uuid;
+        this.id = PlayerCache.get(uuid);
+        this.name = PlayerCache.getName(uuid);
         this.playerTotals = new PlayerTotals(id);
         this.hookTotals = new HookTotals(id);
     }
 
     @Override
     public boolean isOnline() {
-        if(Bukkit.getPlayerExact(name) == null) return false;
-        return true;
+        return Bukkit.getPlayer(uuid).isOnline();
     }
     
     @Override
