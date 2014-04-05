@@ -67,7 +67,7 @@ public class StatisticsAPI {
     /**
      * Returns the OfflineSession for the player with the specified username.<br />
      * The player might not be online, or not exist at all.
-     * @param UUID Player's iiod
+     * @param UUID Player's uuid
      * @return DataSession with player's totals
      */
     public static OfflineSession getSession(UUID uuid) {
