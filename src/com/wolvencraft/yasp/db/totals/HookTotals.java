@@ -60,7 +60,7 @@ public class HookTotals {
         if(!Statistics.getInstance().isEnabled()) return;
         if(Module.Vault.isActive()){
             try{
-                values.put(HookVariable.MONEY, Query.table(Hook.VaultTable.TableName).column(Hook.VaultTable.Balance).condition(Hook.VaultTable.PlayerId, playerId).select().asLong(Hook.VaultTable.Balance));
+                values.put(HookVariable.MONEY, Query.table(Hook.VaultTable.TableName).column(Hook.VaultTable.Balance).condition(Hook.VaultTable.PlayerId, playerId).select().asDouble(Hook.VaultTable.Balance));
                 try{
                     JSONArray JSONarray = (JSONArray)new JSONParser().parse( Query.table(Hook.VaultTable.TableName).column(Hook.VaultTable.GroupName).condition(Hook.VaultTable.PlayerId, playerId).select().asString(Hook.VaultTable.GroupName));
                     JSONObject group = (JSONObject) JSONarray.get(0);
@@ -70,11 +70,11 @@ public class HookTotals {
                 }
             } catch (NullPointerException e){
                values.put(HookVariable.GROUP, "Not tracked!"); 
-               values.put(HookVariable.MONEY, (int) 0); 
+               values.put(HookVariable.MONEY, (double) 0); 
             }
                 
         } else {
-            values.put(HookVariable.MONEY, (int) 0);
+            values.put(HookVariable.MONEY, (double) 0);
             values.put(HookVariable.GROUP, "Hook disabled!");
         }
     }
