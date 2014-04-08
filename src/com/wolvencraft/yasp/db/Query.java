@@ -183,7 +183,12 @@ public class Query {
          * @return Database query
          */
         public DatabaseQuery condition(DBTable column, String value) {
-            this.conditions.add("`" + column.getColumnName() + "`='" + value + "'");
+            if (value.equals("NULL")){
+             this.conditions.add("`" + column.getColumnName() + "` IS NULL");    
+            } else {
+             this.conditions.add("`" + column.getColumnName() + "`='" + value + "'");               
+            }
+
             return instance;
         }
 
