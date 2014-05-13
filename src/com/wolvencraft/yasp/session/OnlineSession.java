@@ -269,7 +269,7 @@ public class OnlineSession implements PlayerSession {
         
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         scoreboard = manager.getNewScoreboard();
-        Bukkit.getServer().getPlayer(getUUID()).setScoreboard(scoreboard);
+        Bukkit.getServer().getPlayer(getName()).setScoreboard(scoreboard);
         
         scoreboard.clearSlot(DisplaySlot.SIDEBAR);
         Objective stats = scoreboard.registerNewObjective("stats", "dummy");
@@ -287,8 +287,8 @@ public class OnlineSession implements PlayerSession {
         Objective stats = scoreboard.getObjective("stats");
         
         for(NamedInteger value : playerTotals.getNamedValues()) {
-            for(String name : value.getPossibleNames())
-            stats.getScore(value.getName())
+            for(String name : value.getPossibleNames()) scoreboard.resetScores(Bukkit.getOfflinePlayer(name));
+            stats.getScore(Bukkit.getOfflinePlayer(value.getName()))
                  .setScore((Integer) (value.getValue()));
         }
     }
@@ -298,6 +298,8 @@ public class OnlineSession implements PlayerSession {
      */
     public void clearScoreboard() {
         if(scoreboard == null) return;
-        scoreboard.clearSlot(DisplaySlot.SIDEBAR);
+        for(NamedInteger value : playerTotals.getNamedValues()) {
+           for(String name : value.getPossibleNames()) scoreboard.resetScores(Bukkit.getOfflinePlayer(name));
+        }
     }
 }
