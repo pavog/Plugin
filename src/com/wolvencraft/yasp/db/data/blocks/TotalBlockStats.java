@@ -52,16 +52,11 @@ public class TotalBlockStats extends NormalData {
         broken = 0;
         placed = 0;
         
-        fetchData(playerId);
+        fetchData(playerId); //checks if an entry for this data exists if not create a new entry 
     }
     
     @Override
-    public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
+    public void fetchData(int playerId) {        
         QueryResult result = Query.table(BlockTotals.TableName)
                 .column(BlockTotals.Destroyed)
                 .column(BlockTotals.Placed)
@@ -76,9 +71,6 @@ public class TotalBlockStats extends NormalData {
                 .value(BlockTotals.Destroyed, broken)
                 .value(BlockTotals.Placed, placed)
                 .insert();
-        } else {
-            broken = result.asInt(BlockTotals.Destroyed);
-            placed = result.asInt(BlockTotals.Placed);
         }
     }
 
@@ -89,8 +81,8 @@ public class TotalBlockStats extends NormalData {
             .value(BlockTotals.Placed, placed)
             .condition(BlockTotals.PlayerId, playerId)
             .condition(BlockTotals.MaterialId, MaterialCache.parse(block))
-            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
-        fetchData(playerId);
+            .increment();
+        if(result) clearData(playerId);
         return result;
     }
     

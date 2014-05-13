@@ -54,16 +54,12 @@ public class TotalPVPStats extends NormalData {
         this.weapon.setAmount(1);
         times = 0;
         
-        fetchData(playerId);
+        fetchData(playerId); //checks if an entry for this data exists if not create a new entry
+        
     }
     
     @Override
     public void fetchData(int killerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(killerId);
-            return;
-        }
-        
         QueryResult result = Query.table(PVPTotals.TableName)
                 .column(PVPTotals.Times)
                 .condition(PVPTotals.PlayerId, killerId)
@@ -77,8 +73,6 @@ public class TotalPVPStats extends NormalData {
                 .value(PVPTotals.MaterialId, MaterialCache.parse(weapon))
                 .value(PVPTotals.Times, times)
                 .insert();
-        } else {
-            times = result.asInt(PVPTotals.Times);
         }
     }
 
@@ -89,8 +83,8 @@ public class TotalPVPStats extends NormalData {
                 .condition(PVPTotals.PlayerId, killerId)
                 .condition(PVPTotals.VictimId, victimId)
                 .condition(PVPTotals.MaterialId, MaterialCache.parse(weapon))
-                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
-        fetchData(killerId);
+                .increment();
+        if(result) clearData(killerId);
         return result;
     }
     

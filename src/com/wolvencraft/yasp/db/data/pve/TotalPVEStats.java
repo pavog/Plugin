@@ -58,16 +58,12 @@ public class TotalPVEStats extends NormalData {
         playerDeaths = 0;
         creatureDeaths = 0;
         
-        fetchData(playerId);
+        fetchData(playerId); //checks if an entry for this data exists if not create a new entry
+        
     }
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         QueryResult result = Query.table(PVETotals.TableName)
                 .column(PVETotals.PlayerKilled)
                 .column(PVETotals.CreatureKilled)
@@ -83,9 +79,6 @@ public class TotalPVEStats extends NormalData {
                 .value(PVETotals.PlayerKilled, playerDeaths)
                 .value(PVETotals.CreatureKilled, creatureDeaths)
                 .insert();
-        } else {
-            playerDeaths = result.asInt(PVETotals.PlayerKilled);
-            creatureDeaths = result.asInt(PVETotals.CreatureKilled);
         }
     }
 
@@ -97,8 +90,8 @@ public class TotalPVEStats extends NormalData {
                 .condition(PVETotals.PlayerId, playerId)
                 .condition(PVETotals.CreatureId, EntityCache.parse(creatureType))
                 .condition(PVETotals.MaterialId, MaterialCache.parse(weapon))
-                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
-        fetchData(playerId);
+                .increment();
+        if(result) clearData(playerId);
         return result;
     }
     

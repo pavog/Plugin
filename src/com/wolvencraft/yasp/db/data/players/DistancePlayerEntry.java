@@ -58,16 +58,12 @@ public class DistancePlayerEntry extends NormalData {
         minecart = 0;
         ride = 0;
         
-        fetchData(playerId);
+        fetchData(playerId); //checks if an entry for this data exists if not create a new entry
+        
     }
     
     @Override
-    public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
+    public void fetchData(int playerId) { 
         QueryResult result = Query.table(PlayerDistance.TableName)
                 .column(PlayerDistance.Foot)
                 .column(PlayerDistance.Swim)
@@ -87,13 +83,6 @@ public class DistancePlayerEntry extends NormalData {
                 .value(PlayerDistance.Minecart, minecart)
                 .value(PlayerDistance.Ride, ride)
                 .insert();
-        } else {
-            foot = result.asInt(PlayerDistance.Foot);
-            swim = result.asInt(PlayerDistance.Swim);
-            flight = result.asInt(PlayerDistance.Flight);
-            boat = result.asInt(PlayerDistance.Boat);
-            minecart = result.asInt(PlayerDistance.Minecart);
-            ride = result.asInt(PlayerDistance.Ride);
         }
     }
 
@@ -107,7 +96,8 @@ public class DistancePlayerEntry extends NormalData {
             .value(PlayerDistance.Minecart, minecart)
             .value(PlayerDistance.Ride, ride)
             .condition(PlayerDistance.PlayerId, playerId)
-            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+            .increment();
+        if(result) clearData(playerId);
         return result;
     }
     

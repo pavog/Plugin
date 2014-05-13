@@ -125,12 +125,13 @@ public class MiscInfoPlayerEntry extends NormalData {
     }
 
     @Override
+    //Needs complete rework
     public boolean pushData(int playerId) {
         refreshPlayerData();
         boolean result = Query.table(PlayerData.TableName)
             .valueRaw(values)
             .condition(PlayerData.PlayerId, playerId)
-            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+            .update();
         fetchData(playerId);
         return result;
     }

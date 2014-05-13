@@ -47,16 +47,11 @@ public class TotalDeathStats extends NormalData {
         this.cause = cause;
         times = 0;
         
-        fetchData(playerId);
+        fetchData(playerId); //checks if an entry for this data exists if not create a new entry        
     }
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         QueryResult result = Query.table(DeathTotals.TableName)
                 .column(DeathTotals.Times)
                 .condition(DeathTotals.PlayerId, playerId)
@@ -69,9 +64,7 @@ public class TotalDeathStats extends NormalData {
                 .value(DeathTotals.Cause, cause.name())
                 .value(DeathTotals.Times, times)
                 .insert();
-        } else {
-            times = result.asInt(DeathTotals.Times);
-        }
+            }
     }
 
     @Override
@@ -80,8 +73,8 @@ public class TotalDeathStats extends NormalData {
                 .value(DeathTotals.Times, times)
                 .condition(DeathTotals.PlayerId, playerId)
                 .condition(DeathTotals.Cause, cause.name())
-                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
-        fetchData(playerId);
+                .increment();
+        if(result) clearData(playerId);
         return result;
     }
     

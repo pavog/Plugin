@@ -67,16 +67,12 @@ public class TotalItemStats extends NormalData {
         enchanted = 0;
         repaired = 0;
         
-        fetchData(playerId);
+        fetchData(playerId); //checks if an entry for this data exists if not create a new entry
+        
     }
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
-        
         QueryResult result = Query.table(ItemTotals.TableName)
                 .column(ItemTotals.Dropped)
                 .column(ItemTotals.PickedUp)
@@ -103,15 +99,6 @@ public class TotalItemStats extends NormalData {
                 .value(ItemTotals.Enchanted, enchanted)
                 .value(ItemTotals.Repaired, repaired)
                 .insert();
-        } else {
-            dropped = result.asInt(ItemTotals.Dropped);
-            pickedUp = result.asInt(ItemTotals.PickedUp);
-            consumed = result.asInt(ItemTotals.Used);
-            crafted = result.asInt(ItemTotals.Crafted);
-            broken = result.asInt(ItemTotals.Broken);
-            smelted = result.asInt(ItemTotals.Smelted);
-            enchanted = result.asInt(ItemTotals.Enchanted);
-            repaired = result.asInt(ItemTotals.Repaired);
         }
     }
 
@@ -128,8 +115,8 @@ public class TotalItemStats extends NormalData {
                 .value(ItemTotals.Repaired, repaired)
                 .condition(ItemTotals.PlayerId, playerId)
                 .condition(ItemTotals.MaterialId, MaterialCache.parse(stack))
-                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
-        fetchData(playerId);
+                .increment();
+        if(result) clearData(playerId);
         return result;
     }
     

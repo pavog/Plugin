@@ -463,12 +463,10 @@ public class Query {
         }
         
         /**
-         * Builds and runs the UPDATE query.
-         * @param merged If <b>false</b>, old values will be overwritten
+         * Builds and runs the UPDATE query which increments the existing value.
          * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
          */
-        public boolean update(boolean merged) {
-            if(!merged) return update();
+        public boolean increment() {
             String sql = "UPDATE `" + LocalConfiguration.DBPrefix.toString() + table + "`";
             
             String valueString = "";
