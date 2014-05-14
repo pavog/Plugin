@@ -70,7 +70,7 @@ public class PlayerHandlers {
                     session.addDistance(PlayerDistance.Flight, distance);
                 } else {
                     if(from.getY() < to.getY() && to.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
-                        session.getPlayersData().getMiscData().incrementStat(PlayerData.TimesJumped);
+                        session.getPlayersData().getMiscStats().incrementStat(PlayerData.TimesJumped);
                         session.addDistance(PlayerDistance.Foot, distance);
                 }
             }
@@ -100,7 +100,7 @@ public class PlayerHandlers {
             OnlineSessionCache
                 .fetch(player)
                 .getPlayersData()
-                .getMiscData()
+                .getMiscStats()
                 .incrementStat(stat, value);
         }
     }

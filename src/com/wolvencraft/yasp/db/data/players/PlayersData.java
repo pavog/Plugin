@@ -40,6 +40,7 @@ public class PlayersData {
     private PlayerEntry generalData;
     private DistancePlayerEntry distanceData;
     private MiscInfoPlayerEntry miscData;
+    private MiscInfoPlayerStats miscStats;
     private InventoryEntry inventoryData;
     
     private List<DetailedData> detailedData;
@@ -55,6 +56,7 @@ public class PlayersData {
         generalData = new PlayerEntry(playerId, player);
         distanceData = new DistancePlayerEntry(playerId);
         miscData = new MiscInfoPlayerEntry(playerId, player);
+        miscStats = new MiscInfoPlayerStats(playerId, player);
         if(Module.Inventory.isEnabled()) inventoryData = new InventoryEntry(playerId, player);
         
         detailedData = new ArrayList<DetailedData>();
@@ -77,6 +79,7 @@ public class PlayersData {
         generalData.pushData(playerId);
         distanceData.pushData(playerId);
         miscData.pushData(playerId);
+        miscStats.pushData(playerId);
         if(Module.Inventory.isEnabled()) inventoryData.pushData(playerId);
         
         for(DetailedData entry : getDetailedData()) {
@@ -117,6 +120,15 @@ public class PlayersData {
      */
     public MiscInfoPlayerEntry getMiscData() {
         return miscData;
+    }
+    
+     /**
+     * Returns the information from the Miscellaneous table.<br />
+     * This information is likely to change rapidly.
+     * @return Miscellaneous data store
+     */
+    public MiscInfoPlayerStats getMiscStats() {
+        return miscStats;
     }
     
     /**

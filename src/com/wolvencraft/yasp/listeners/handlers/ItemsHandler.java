@@ -105,7 +105,7 @@ public class ItemsHandler {
                 ((ItemData) session.getDataStore(DataStoreType.Items)).itemConsume(player.getLocation(), itemStack);
                 if(ConsumableItems.isFood(itemStack.getTypeId())){
                 session.getPlayerTotals().snacksEaten();
-                session.getPlayersData().getMiscData().incrementStat(PlayerData.FoodEaten);
+                session.getPlayersData().getMiscStats().incrementStat(PlayerData.FoodEaten);
                 }
             }
         }

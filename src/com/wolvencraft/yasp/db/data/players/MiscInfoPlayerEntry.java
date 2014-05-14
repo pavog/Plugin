@@ -32,7 +32,6 @@ import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.data.NormalData;
 import com.wolvencraft.yasp.db.tables.DBTable;
 import com.wolvencraft.yasp.db.tables.Normal.PlayerData;
-import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
@@ -72,20 +71,7 @@ public class MiscInfoPlayerEntry extends NormalData {
         values.put(PlayerData.FoodLevel, player.getFoodLevel());
         values.put(PlayerData.HealthLevel, player.getHealth());
         values.put(PlayerData.ArmorLevel, Util.getArmorRating(player.getInventory()));
-        
-        values.put(PlayerData.ExpTotal,0);
-        values.put(PlayerData.FishCaught, 0);
-        values.put(PlayerData.TimesKicked, 0);
-        values.put(PlayerData.EggsThrown, 0);
-        values.put(PlayerData.FoodEaten, 0);
-        values.put(PlayerData.ArrowsShot, 0);
-        values.put(PlayerData.DamageTaken, 0);
-        values.put(PlayerData.BedsEntered, 0);
-        values.put(PlayerData.PortalsEntered, 0);
-        values.put(PlayerData.WordsSaid, 0);
-        values.put(PlayerData.CommandsSent, 0);
-        values.put(PlayerData.TimesJumped, 0);
-        
+               
         values.put(PlayerData.CurKillStreak, 0);
         values.put(PlayerData.MaxKillStreak, 0);
         
@@ -94,10 +80,6 @@ public class MiscInfoPlayerEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
         
         QueryResult result = Query.table(PlayerData.TableName)
             .condition(PlayerData.PlayerId, playerId)
@@ -108,24 +90,11 @@ public class MiscInfoPlayerEntry extends NormalData {
                 .valueRaw(values)
                 .insert();
         } else {
-            values.put(PlayerData.ExpTotal, result.asInt(PlayerData.ExpTotal));
-            values.put(PlayerData.FishCaught, result.asInt(PlayerData.FishCaught));
-            values.put(PlayerData.TimesKicked, result.asInt(PlayerData.TimesKicked));
-            values.put(PlayerData.EggsThrown, result.asInt(PlayerData.EggsThrown));
-            values.put(PlayerData.FoodEaten, result.asInt(PlayerData.FoodEaten));
-            values.put(PlayerData.ArrowsShot, result.asInt(PlayerData.ArrowsShot));
-            values.put(PlayerData.DamageTaken, result.asDouble(PlayerData.DamageTaken));
-            values.put(PlayerData.BedsEntered, result.asInt(PlayerData.BedsEntered));
-            values.put(PlayerData.PortalsEntered, result.asInt(PlayerData.PortalsEntered));
-            values.put(PlayerData.WordsSaid, result.asInt(PlayerData.WordsSaid));
-            values.put(PlayerData.CommandsSent, result.asInt(PlayerData.CommandsSent));
             values.put(PlayerData.MaxKillStreak, result.asInt(PlayerData.MaxKillStreak));
-            values.put(PlayerData.TimesJumped, result.asInt(PlayerData.TimesJumped));
         }
     }
 
     @Override
-    //Needs complete rework
     public boolean pushData(int playerId) {
         refreshPlayerData();
         boolean result = Query.table(PlayerData.TableName)
@@ -136,20 +105,7 @@ public class MiscInfoPlayerEntry extends NormalData {
         return result;
     }
     
-    public void clearData(int playerId) {
-        values.put(PlayerData.ExpTotal, 0);
-        values.put(PlayerData.FishCaught, 0);
-        values.put(PlayerData.TimesKicked, 0);
-        values.put(PlayerData.EggsThrown, 0);
-        values.put(PlayerData.FoodEaten, 0);
-        values.put(PlayerData.ArrowsShot, 0);
-        values.put(PlayerData.DamageTaken, 0);
-        values.put(PlayerData.BedsEntered, 0);
-        values.put(PlayerData.PortalsEntered, 0);
-        values.put(PlayerData.WordsSaid, 0);
-        values.put(PlayerData.CommandsSent, 0);
-        values.put(PlayerData.TimesJumped, 0);
-        
+    public void clearData(int playerId) {       
         values.put(PlayerData.CurKillStreak, 0);
         values.put(PlayerData.MaxKillStreak, 0);
     }
@@ -175,35 +131,6 @@ public class MiscInfoPlayerEntry extends NormalData {
         values.put(PlayerData.ArmorLevel, Util.getArmorRating(player.getInventory()));
     }
     
-    /**
-     * Increments the specified miscellaneous statistic by 1
-     * @param type Statistic type
-     */
-    public void incrementStat(PlayerData type) {
-        double value = 1;
-        if(values.containsKey(type)) {
-            Object valueObj = values.get(type);
-            if(valueObj instanceof Double)
-                value = ((Double) valueObj).doubleValue() + 1;
-            else value = ((Integer) valueObj).doubleValue() + 1;
-        }
-        values.put(type, value);
-    }
-    
-    /**
-     * Increments the miscellaneous statistic by the specified amount
-     * @param type Statistic type
-     * @param value Amount
-     */
-    public void incrementStat(PlayerData type, double value) {
-        if(values.containsKey(type)) {
-            Object valueObj = values.get(type);
-            if(valueObj instanceof Double)
-                value += ((Double) valueObj).doubleValue();
-            else value += ((Integer) valueObj).doubleValue();
-        }
-        values.put(type, value);
-    }
     
     /**
      * Logs player killing another player
