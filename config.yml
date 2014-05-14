@@ -1,9 +1,18 @@
-debug: false
+#The prfix which will appear in the serve log
 log-prefix: 'Stats'
+#Database settings
 database:
   host: 'localhost'
   port: 3306
   name: ''
   prefix: 'stats_'
+  #Don't remove the '' form the entries or you can get problems
   user: 'root'
   pass: 'root'
+#Bungee Cord Settins. Don't touch this if you don't know what Bungee Cord is
+bungeecord:
+    enable: false
+    #The name of the server which is shown on the Portal. 2 Servers can't have the same name.
+    servername: 'Lobby'
+#Enable debug Mode. Don't enable it on productive servers.
+debug: false 
