@@ -288,8 +288,9 @@ public class OnlineSession implements PlayerSession {
         
         for(NamedInteger value : playerTotals.getNamedValues()) {
             for(String name : value.getPossibleNames())
+            stats.getScoreboard().resetScores(name);
             stats.getScore(value.getName())
-                 .setScore((Integer) (value.getValue()));
+                 .setScore((Integer) (value.getValue()));                
         }
     }
     
