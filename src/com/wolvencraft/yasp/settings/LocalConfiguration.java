@@ -40,6 +40,9 @@ public enum LocalConfiguration {
     DBPrefix        ("database.prefix"),
     DBConnect       ("jdbc:mysql://" + DBHost.toString() + ":" + DBPort.toInteger() + "/" + DBName.toString(), true),
     LogPrefix       ("log-prefix"),
+    Bungee          ("bungeecord.enable"),
+    ServerName      ("bungeecord.servername")
+    
     ;
     
     private String node;
