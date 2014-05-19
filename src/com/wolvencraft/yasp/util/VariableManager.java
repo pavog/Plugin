@@ -53,6 +53,7 @@ public class VariableManager {
         TICKS_PER_SECOND    ("tps"),
         
         SERVER_IP           ("ip"),
+        SERVER_NAME         ("name"),
         SERVER_PORT         ("port"),
         SERVER_MOTD         ("motd"),
         BUKKIT_VERSION      ("version"),

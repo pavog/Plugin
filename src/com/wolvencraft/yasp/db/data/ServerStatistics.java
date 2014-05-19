@@ -33,6 +33,7 @@ import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
 import com.wolvencraft.yasp.db.tables.Miscellaneous.ServerStatsTable;
 import com.wolvencraft.yasp.db.tables.Normal;
+import com.wolvencraft.yasp.settings.LocalConfiguration;
 import com.wolvencraft.yasp.util.Util;
 import com.wolvencraft.yasp.util.VariableManager.ServerVariable;
 import com.wolvencraft.yasp.util.tasks.TickTask;
@@ -58,6 +59,7 @@ public class ServerStatistics {
     private int availableProcessors;
 
     private String serverIP;
+    private String serverName;
     private int serverPort;
     private String serverMOTD;
     private String bukkitVersion;
@@ -92,6 +94,12 @@ public class ServerStatistics {
         freeMemory = runtime.freeMemory();
         ticksPerSecond = TickTask.getTicksPerSecond();
         availableProcessors = runtime.availableProcessors();
+        
+        if(LocalConfiguration.Bungee.toBoolean()){
+            serverName = LocalConfiguration.ServerName.toString();
+        } else {
+            serverName = "default";
+        }
 
         serverIP = Bukkit.getIp();
         if(serverIP.equals("")) {
@@ -250,6 +258,7 @@ public class ServerStatistics {
             put(ServerVariable.TICKS_PER_SECOND, ticksPerSecond);
 
             put(ServerVariable.SERVER_IP, serverIP);
+            put(ServerVariable.SERVER_NAME, serverName);
             put(ServerVariable.SERVER_PORT, serverPort);
             put(ServerVariable.SERVER_MOTD, serverMOTD);
             put(ServerVariable.BUKKIT_VERSION, bukkitVersion);
