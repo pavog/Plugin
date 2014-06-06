@@ -26,10 +26,13 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 import com.wolvencraft.yasp.Statistics;
+import com.wolvencraft.yasp.db.Query;
+import com.wolvencraft.yasp.db.tables.Normal;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.settings.RemoteConfiguration;
 import com.wolvencraft.yasp.util.Message;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
+import org.bukkit.Bukkit;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class SessionHandlers {
@@ -49,6 +52,18 @@ public class SessionHandlers {
             long start = System.currentTimeMillis();
             Statistics.getServerStatistics().playerLogin();
             OnlineSessionCache.fetch(player, true);
+            
+            //Update the server on every join. Necessary because the session can still be cached.
+            Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
+            @Override
+                 public void run(){
+                     Query.table(Normal.PlayerStats.TableName)
+                          .value(Normal.PlayerStats.Server, Statistics.getServerStatistics().getID())
+                          .condition(Normal.PlayerStats.PlayerId, OnlineSessionCache.fetch(player).getId())
+                          .update(); 
+               }   
+             });
+            
             long stop = System.currentTimeMillis();
             Message.debug("Took "+(stop-start)+"ms to execute the PlayerJoin event.");
         }
