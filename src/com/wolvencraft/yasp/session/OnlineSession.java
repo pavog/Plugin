@@ -39,6 +39,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
@@ -114,6 +115,7 @@ public class OnlineSession implements PlayerSession {
         
                     Query.table(PlayerStats.TableName)
                     .value(PlayerStats.Online, true)
+                    .value(PlayerStats.Server, Statistics.getServerStatistics().getID())
                     .condition(PlayerStats.PlayerId, id)
                     .update();  
                     
