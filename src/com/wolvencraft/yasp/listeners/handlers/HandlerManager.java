@@ -35,9 +35,10 @@ public class HandlerManager {
     public static boolean playerLookup(Player player, ExtraChecks check) {
         if(Statistics.isPaused()) return false;
         
-        if(Module.Vanish.isActive()
+        //Not useful until the Vanish module is fully implemented
+        /*if(Module.Vanish.isActive()
                 && RemoteConfiguration.VanishDisablesTracking.asBoolean()
-                && VanishHook.isVanished(player)) return false;
+                && VanishHook.isVanished(player)) return false;*/
         
         if(player.hasMetadata("NPC")    // XXX Citizens fix
                 && player.getMetadata("NPC").get(0).asBoolean()) return false;
@@ -49,10 +50,11 @@ public class HandlerManager {
     
     public static boolean playerLookup(Player player, StatPerms permission) {
         if(Statistics.isPaused()) return false;
-        
-        if(Module.Vanish.isActive()
+ 
+        //Not useful until the Vanish module is fully implemented
+        /*if(Module.Vanish.isActive()
                 && RemoteConfiguration.VanishDisablesTracking.asBoolean()
-                && VanishHook.isVanished(player)) return false;
+                && VanishHook.isVanished(player)) return false;*/
         
         if(player.hasMetadata("NPC")    // XXX Citizens fix
                 && player.getMetadata("NPC").get(0).asBoolean()) return false;
