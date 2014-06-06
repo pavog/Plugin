@@ -27,6 +27,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.db.tables.Detailed.PlayerKillsPVP;
@@ -62,6 +63,7 @@ public class DetailedPVPStats {
                     .value(PlayerKillsPVP.VictimId, victimId)
                     .value(PlayerKillsPVP.MaterialId, MaterialCache.parse(weapon))
                     .value(PlayerKillsPVP.World, location.getWorld().getName())
+                    .value(PlayerKillsPVP.Server, Statistics.getServerStatistics().getID())
                     .value(PlayerKillsPVP.XCoord, location.getBlockX())
                     .value(PlayerKillsPVP.YCoord, location.getBlockY())
                     .value(PlayerKillsPVP.ZCoord, location.getBlockZ())

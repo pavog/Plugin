@@ -29,6 +29,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.db.tables.Detailed.PlayerKillsPVE;
@@ -81,6 +82,7 @@ public class DetailedPVEStats {
                     .value(PlayerKillsPVE.CreatureId, EntityCache.parse(creatureType))
                     .value(PlayerKillsPVE.PlayerKilled, playerKilled)
                     .value(PlayerKillsPVE.MaterialId, MaterialCache.parse(weapon))
+                    .value(PlayerKillsPVE.Server, Statistics.getServerStatistics().getID())
                     .value(PlayerKillsPVE.World, location.getWorld().getName())
                     .value(PlayerKillsPVE.XCoord, location.getBlockX())
                     .value(PlayerKillsPVE.YCoord, location.getBlockY())

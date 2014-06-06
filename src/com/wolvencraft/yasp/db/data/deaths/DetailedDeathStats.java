@@ -26,6 +26,7 @@ import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.db.tables.Detailed.PlayerDeaths;
@@ -57,6 +58,7 @@ public class DetailedDeathStats {
                     .value(PlayerDeaths.PlayerId, playerId)
                     .value(PlayerDeaths.Cause, cause.name())
                     .value(PlayerDeaths.World, location.getWorld().getName())
+                    .value(PlayerDeaths.Server, Statistics.getServerStatistics().getID())
                     .value(PlayerDeaths.XCoord, location.getBlockX())
                     .value(PlayerDeaths.YCoord, location.getBlockY())
                     .value(PlayerDeaths.ZCoord, location.getBlockZ())

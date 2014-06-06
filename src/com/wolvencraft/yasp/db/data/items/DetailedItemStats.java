@@ -26,6 +26,7 @@ import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.db.tables.Detailed.ItemsConsumed;
@@ -61,6 +62,7 @@ public class DetailedItemStats {
                     .value(ItemsDropped.PlayerId, playerId)
                     .value(ItemsDropped.MaterialId, MaterialCache.parse(stack))
                     .value(ItemsDropped.Amount, stack.getAmount())
+                    .value(ItemsDropped.Server, Statistics.getServerStatistics().getID())
                     .value(ItemsDropped.World, location.getWorld().getName())
                     .value(ItemsDropped.XCoord, location.getBlockX())
                     .value(ItemsDropped.YCoord, location.getBlockY())
@@ -96,6 +98,7 @@ public class DetailedItemStats {
                     .value(ItemsPickedUp.PlayerId, playerId)
                     .value(ItemsPickedUp.Material, MaterialCache.parse(stack))
                     .value(ItemsDropped.Amount, this.amount)
+                    .value(ItemsDropped.Server, Statistics.getServerStatistics().getID())
                     .value(ItemsPickedUp.World, location.getWorld().getName())
                     .value(ItemsPickedUp.XCoord, location.getBlockX())
                     .value(ItemsPickedUp.YCoord, location.getBlockY())
