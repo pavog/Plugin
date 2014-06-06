@@ -194,6 +194,7 @@ public class OnlineSession implements PlayerSession {
         Query.table(PlayerStats.TableName)
             .value(PlayerStats.Online, false)
             .condition(PlayerStats.PlayerId, id)
+            .condition(PlayerStats.Server, Statistics.getServerStatistics().getID())
             .update();
     }
     
