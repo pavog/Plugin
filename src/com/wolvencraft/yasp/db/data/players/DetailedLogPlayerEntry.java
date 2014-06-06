@@ -25,6 +25,7 @@ import lombok.Getter;
 
 import org.bukkit.Location;
 
+import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.db.tables.Detailed.PlayerLog;
@@ -54,6 +55,7 @@ public class DetailedLogPlayerEntry extends DetailedData {
                 .value(PlayerLog.PlayerId, playerId)
                 .value(PlayerLog.Timestamp, time)
                 .value(PlayerLog.IsLogin, isLogin)
+                .value(PlayerLog.Server, Statistics.getServerStatistics().getID())
                 .value(PlayerLog.World, location.getWorld().getName())
                 .value(PlayerLog.XCoord, location.getBlockX())
                 .value(PlayerLog.YCoord, location.getBlockY())
