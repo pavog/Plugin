@@ -68,6 +68,7 @@ public class Normal {
         PlayerId        ("player_id"),
         Name            ("name"),
         Online          ("online"),
+        Server          ("server"),
         LoginTime       ("login_time"),
         Playtime        ("playtime"),
         FirstLogin      ("first_login"),
