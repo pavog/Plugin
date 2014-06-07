@@ -115,8 +115,7 @@ public class Statistics extends JavaPlugin {
         }
         
         new PatchManager();
-        new Query();
-        new BookUtil();
+        new Query();   
         
         try { new Database(); }
         catch (Exception e) {
@@ -130,16 +129,16 @@ public class Statistics extends JavaPlugin {
         
         Message.log("Database connection established.");
         
-        hookManager = new HookManager();
-        hookManager.onEnable();
-        
         serverStatistics = new ServerStatistics();
         serverTotals = new ServerTotals();
+        
+        hookManager = new HookManager();
+        hookManager.onEnable();
         
         ConfigurationSerialization.registerClass(StatsSign.class, "StatsSign");
         
         new CommandManager();
-
+       
         if(Module.Blocks.isEnabled()) new BlockListener(this);
         if(Module.Deaths.isEnabled()) new DeathListener(this);
         if(Module.Items.isEnabled()) new ItemListener(this);
@@ -148,6 +147,7 @@ public class Statistics extends JavaPlugin {
         new SessionListener(this);
         new StatsBookListener(this);
         new StatsSignListener(this);
+        new BookUtil();
         
         long ping = RemoteConfiguration.Ping.asInteger() * 20;
         if(ping < (20 * 60)) ping = 20 * 60;

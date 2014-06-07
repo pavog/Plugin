@@ -29,6 +29,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 
 import com.google.common.collect.Lists;
+
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.db.Query;
 import com.wolvencraft.yasp.db.Query.QueryResult;
@@ -51,7 +52,8 @@ import com.wolvencraft.yasp.db.data.hooks.worldguard.WorldGuardData;
 import com.wolvencraft.yasp.db.data.items.ItemData;
 import com.wolvencraft.yasp.db.data.pve.PVEData;
 import com.wolvencraft.yasp.db.data.pvp.PVPData;
-import com.wolvencraft.yasp.db.tables.Miscellaneous.SettingsTable;
+import com.wolvencraft.yasp.db.tables.Miscellaneous.ModulesTable;
+import com.wolvencraft.yasp.util.Message;
 
 /**
  * Represents the different plugin modules
@@ -82,7 +84,6 @@ public enum Module {
     Votifier    ("votifier", true, VotifierData.class),
     WorldGuard  ("worldguard", true, WorldGuardData.class),
     
-    Unknown     ("unknown", false)
     ;
 
     public final String KEY;
@@ -105,7 +106,7 @@ public enum Module {
         
         try { updateCache(); }
         catch(Throwable t) { }
-        
+
         if(dataStores.length == 0) this.dataStores = Lists.newArrayList();
         else this.dataStores = Arrays.asList(dataStores);
         
@@ -157,10 +158,11 @@ public enum Module {
         if(refreshScheduled) updateCacheAsynchronously();
         this.version = version;
         if(!hook) return;
-        String versionKey = "version." + KEY;
-        Query.table(SettingsTable.TableName)
-             .value("value", version)
-             .condition("key", versionKey)
+        Query.table(ModulesTable.TableName)
+             .value(ModulesTable.Version, version)
+             .condition(ModulesTable.Type, "hook")
+             .condition(ModulesTable.Name, KEY)
+             .condition(ModulesTable.Server, Statistics.getServerStatistics().getID())
              .update();
     }
     
@@ -168,30 +170,36 @@ public enum Module {
      * Fetches the module variables from the database
      */
     private void updateCache() {
-        String stateKey = "";
-        if(hook) {
-            stateKey = "hook." + KEY;
-            
-            String versionKey = "version." + KEY;
-            QueryResult versionResult = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select();
-            if(versionResult == null) {
-                Query.table(SettingsTable.TableName).value("key", versionKey).value("value", 0).insert();
-                version = 0;
+            QueryResult Result = Query.table(ModulesTable.TableName)
+                                      .condition(ModulesTable.Server, Statistics.getServerStatistics().getID())
+                                      .condition(ModulesTable.Name, KEY)
+                                      .select();
+            if(Result == null) {
+                if(hook){
+                    Query.table(ModulesTable.TableName)
+                         .value(ModulesTable.Enabled, false)
+                         .value(ModulesTable.Version, 0)
+                         .value(ModulesTable.Type, "hook")
+                         .value(ModulesTable.Server, Statistics.getServerStatistics().getID())
+                         .value(ModulesTable.Name, KEY)
+                         .insert();
+                    version = 0;
+                    enabled = true; 
+                } else {
+                    Query.table(ModulesTable.TableName)
+                         .value(ModulesTable.Enabled, true)
+                         .value(ModulesTable.Version, -1)
+                         .value(ModulesTable.Type, "module")
+                         .value(ModulesTable.Server, Statistics.getServerStatistics().getID())
+                         .value(ModulesTable.Name, KEY)
+                         .insert();
+                    version = -1;
+                    enabled = true;                 
+                }
             } else {
-                version = versionResult.asInt("value");
+                version = Result.asInt(ModulesTable.Version);
+                enabled = Result.asBoolean(ModulesTable.Enabled);
             }
-        } else {
-            stateKey = "module." + KEY;
-            version = -1;
-        }
-        
-        QueryResult enabledResult = Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).select();
-        if(enabledResult == null) {
-            Query.table(SettingsTable.TableName).value("key", stateKey).value("value", false).insert();
-            enabled = true;
-        } else {
-            enabled = enabledResult.asBoolean("value");
-        }
     }
     
     /**

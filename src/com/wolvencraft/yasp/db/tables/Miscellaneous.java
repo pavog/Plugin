@@ -49,6 +49,28 @@ public class Miscellaneous {
         @Override
         public String toString() { return columnName; }
     }
+    
+     /**
+     * Represents the <i>modules</i> table.
+     * @author bitWolfy
+     *
+     */
+    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    public enum ModulesTable implements DBTable {
+        TableName       ("modules"),
+        Id              ("module_id"),
+        Server          ("server_id"),
+        Name            ("module_name"),
+        Type            ("module_type"),
+        Enabled         ("is_enabled"),
+        Version         ("version");
+        
+        private String columnName;
+        
+        @Override
+        public String toString() { return columnName; }
+    }
         
     /**
      * Represents the <i>materials</i> table.

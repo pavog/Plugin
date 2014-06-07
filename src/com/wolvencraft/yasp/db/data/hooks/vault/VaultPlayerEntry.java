@@ -57,10 +57,6 @@ public class VaultPlayerEntry extends NormalData {
     
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
-            clearData(playerId);
-            return;
-        }
         
         groups = GroupsSerializable.serialize(playerName);
         balance = VaultHook.getBalance(playerName);

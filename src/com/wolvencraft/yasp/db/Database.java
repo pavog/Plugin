@@ -84,7 +84,6 @@ public class Database {
         Statistics.setPaused(false);
         
         RemoteConfiguration.clearCache();
-        Module.clearCache();
     }
     
     /**
