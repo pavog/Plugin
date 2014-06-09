@@ -10,8 +10,6 @@ USE `$dbname` ;
 -- -----------------------------------------------------
 -- Table `$dbname`.`$prefix_hook_vaults`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `$dbname`.`$prefix_detailed_hook_vault` ;
-
 CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_detailed_hook_vault` (
   `detailed_vault_id` INT NOT NULL AUTO_INCREMENT ,
   `player_id` INT NOT NULL ,
