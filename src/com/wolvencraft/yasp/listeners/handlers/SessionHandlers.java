@@ -60,7 +60,13 @@ public class SessionHandlers {
                      Query.table(Normal.PlayerStats.TableName)
                           .value(Normal.PlayerStats.Server, Statistics.getServerStatistics().getID())
                           .condition(Normal.PlayerStats.PlayerId, OnlineSessionCache.fetch(player).getId())
-                          .update(); 
+                          .update();
+                     
+                     Query.table(Normal.PlayerStats.TableName)
+                          .value(Normal.PlayerStats.Logins, 1)
+                          .condition(Normal.PlayerStats.PlayerId, OnlineSessionCache.fetch(player).getId())
+                          .condition(Normal.PlayerStats.Online, false)
+                          .increment();
                }   
              });
             

@@ -20,7 +20,6 @@
 
 package com.wolvencraft.yasp.session;
 
-import com.wolvencraft.yasp.Statistics;
 import java.util.ArrayList;
 import java.util.List;
 

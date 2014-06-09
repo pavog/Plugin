@@ -83,8 +83,8 @@ public class PlayerEntry extends NormalData {
         Query.table(PlayerStats.TableName)
             .value(PlayerStats.LoginTime, lastSync)
             .value(PlayerStats.FirstLogin, firstLogin)
-            .value(PlayerStats.Logins, ++logins)
             .condition(PlayerStats.PlayerId, playerId)
+            .condition(PlayerStats.Online, false)
             .update();
     }
     

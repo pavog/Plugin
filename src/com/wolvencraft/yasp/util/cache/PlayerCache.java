@@ -162,7 +162,7 @@ public class PlayerCache {
                     .column(PlayerStats.PlayerId)
                     .condition(PlayerStats.UUID, uuid.toString())
                     .select();
-            
+                       
             if(playerRow == null) {
                 
                 //Try if a player with the given name already exists in the database
@@ -174,7 +174,7 @@ public class PlayerCache {
                         @Override
                         public void run(){
                             Query.table(PlayerStats.TableName)
-                            .value(PlayerStats.UUID, uuid)
+                            .value(PlayerStats.UUID, uuid.toString())
                             .condition(PlayerStats.Name, username)
                             .update();
                         }
@@ -183,12 +183,12 @@ public class PlayerCache {
                     break;
                 //If the player does not exist creat a new entry in the database    
                 } else {
-                    
+
                     Query.table(PlayerStats.TableName)
                     .value(PlayerStats.Name, username)
-                    .value(PlayerStats.UUID, uuid)
+                    .value(PlayerStats.UUID, uuid.toString())
                     .insert();
-                    
+                                                      
                 continue;    
                 }              
             } else {

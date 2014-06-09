@@ -79,6 +79,9 @@ public class Database {
         try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
         catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
         
+        try { if (connection.getTransactionIsolation() != connection.TRANSACTION_READ_COMMITTED) connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED); }
+        catch (Throwable t) { throw new RuntimeSQLException("Could not set TransactionIsolation to READ_COMMITTED. Cause: " + t, t); }
+        
         if(!patchDatabase(false)) Message.log("Target database is up to date");
         
         Statistics.setPaused(false);
@@ -226,6 +229,9 @@ public class Database {
             
             try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
             catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
+            
+            try { if (connection.getTransactionIsolation() != connection.TRANSACTION_READ_COMMITTED) connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED); }
+            catch (Throwable t) { throw new RuntimeSQLException("Could not set TransactionIsolation to READ_COMMITTED. Cause: " + t, t); }
             
             Message.log("Connection re-established. No data is lost.");
             return true;
