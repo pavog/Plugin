@@ -54,10 +54,11 @@ CREATE  TABLE IF NOT EXISTS `$dbname`.`$prefix_modules` (
   `module_id` INT NOT NULL AUTO_INCREMENT ,
   `server_id` INT NOT NULL,
   `module_name` VARCHAR(16) NOT NULL ,
+  `module_type` VARCHAR(16) NOT NULL ,
   `is_enabled` TINYINT(1) NOT NULL DEFAULT 0 ,
   `version` INT(11) NULL DEFAULT 0 ,
   PRIMARY KEY (`module_id`),
-  UNIQUE KEY `module_name` (`module_name`),
+  UNIQUE KEY `module_id` (`module_id`),
   CONSTRAINT `$prefix_fk_server_id1`
     FOREIGN KEY (`server_id` )
     REFERENCES `$dbname`.`$prefix_server_statistics` (`server_id` )
@@ -137,6 +138,53 @@ ALTER TABLE `$prefix_detailed_used_items` ADD CONSTRAINT `$prefix_fk_server_id11
     REFERENCES `$dbname`.`$prefix_server_statistics` (`server_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION;
+
+-- -----------------------------------------------------
+-- Clean up settings table
+-- -----------------------------------------------------
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.admincmd';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.banhammer';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.commandbook';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.factions';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.jail';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.jobs';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.mcbans';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.mcmmo';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.mobarena';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.pvparena';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.towny';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.vanish.no_tracking';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.vanishnopacket';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.vault';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.votifier';
+DELETE FROM `$prefix_settings` WHERE `key` = 'hook.worldguard';
+
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.admincmd';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.banhammer';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.commandbook';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.factions';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.jail';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.jobs';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.mcbans';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.mcmmo';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.mobarena';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.pvparena';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.towny';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.vanish.no_tracking';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.vanishnopacket';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.vault';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.votifier';
+DELETE FROM `$prefix_settings` WHERE `key` = 'version.worldguard';
+
+DELETE FROM `$prefix_settings` WHERE `key` = 'merged_data_tracking';
+DELETE FROM `$prefix_settings` WHERE `key` = 'module.blocks';
+DELETE FROM `$prefix_settings` WHERE `key` = 'module.deaths';
+DELETE FROM `$prefix_settings` WHERE `key` = 'module.inventory';
+DELETE FROM `$prefix_settings` WHERE `key` = 'module.items';
+DELETE FROM `$prefix_settings` WHERE `key` = 'module.server';
+DELETE FROM `$prefix_settings` WHERE `key` = 'module.unknown';
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
