@@ -30,7 +30,7 @@ import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-
+import com.wolvencraft.yasp.settings.Module;
 public class BlockHandlers {
     
     /**
@@ -48,8 +48,10 @@ public class BlockHandlers {
         public void run() {
             //Skip data tracking if not all players data is read from database
             OnlineSession session = OnlineSessionCache.fetch(player);
-            if(session.isReady()){       
-                ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockBreak(block);
+            if(session.isReady()){
+                if(Module.DetailedBlocks.isEnabled()){
+                    ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockBreak(block);
+                }
                 session.getPlayerTotals().blockBreak();
             }
         }

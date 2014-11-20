@@ -33,6 +33,7 @@ import com.wolvencraft.yasp.events.player.TrackedItemDropEvent;
 import com.wolvencraft.yasp.events.player.TrackedItemPickupEvent;
 import com.wolvencraft.yasp.events.player.TrackedItemUseEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.settings.Module;
 
 /**
  * Data store that records all item interactions on the server.
@@ -69,7 +70,9 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
         int amount = itemStack.getAmount();
         getNormalData(itemStack).addDropped(amount);
         ItemDropEntry detailedEntry = new ItemDropEntry(location, itemStack);
-        detailedData.add(detailedEntry);      
+        if(Module.DetailedItems.isEnabled()){
+            detailedData.add(detailedEntry);
+        }
         Bukkit.getServer().getPluginManager().callEvent(new TrackedItemDropEvent(session, detailedEntry));
     }
     
@@ -82,7 +85,9 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
     public void itemPickUp(Location location, ItemStack itemStack, int amount) {
         getNormalData(itemStack).addPickedUp(amount);
         ItemPickupEntry detailedEntry = new ItemPickupEntry(location, itemStack, amount);
-        detailedData.add(detailedEntry);   
+        if(Module.DetailedItems.isEnabled()){
+            detailedData.add(detailedEntry);
+        }
         Bukkit.getServer().getPluginManager().callEvent(new TrackedItemPickupEvent(session, detailedEntry));
     }
     
@@ -93,10 +98,10 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
      */
     public void itemConsume(Location location, ItemStack itemStack) {
             getNormalData(itemStack).addConsumed();
-        
             ItemConsumeEntry detailedEntry = new ItemConsumeEntry(location, itemStack);
-            detailedData.add(detailedEntry);
-            
+            if(Module.DetailedItems.isEnabled()){
+                detailedData.add(detailedEntry);
+            }
             Bukkit.getServer().getPluginManager().callEvent(new TrackedItemUseEvent(session, detailedEntry));
         
     }

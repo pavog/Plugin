@@ -30,6 +30,7 @@ import com.wolvencraft.yasp.db.data.blocks.DetailedBlockStats.BlockPlaceEntry;
 import com.wolvencraft.yasp.events.player.TrackedBlockBreakEvent;
 import com.wolvencraft.yasp.events.player.TrackedBlockPlaceEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.settings.Module;
 
 /**
  * Data store that handles all block interactions on the server
@@ -64,8 +65,9 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
     public void blockBreak(BlockState block) {
         getNormalData(block).addBroken();
         BlockBreakEntry detailedEntry = new BlockBreakEntry(block);
-        detailedData.add(detailedEntry);
-        
+        if(Module.DetailedBlocks.isEnabled()){
+            detailedData.add(detailedEntry);
+        }   
         Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockBreakEvent(session, detailedEntry));
     }
     
@@ -76,7 +78,9 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
     public void blockPlace(BlockState block) {
         getNormalData(block).addPlaced();
         BlockPlaceEntry detailedEntry = new BlockPlaceEntry(block);
-        detailedData.add(detailedEntry);
+        if(Module.DetailedBlocks.isEnabled()){
+            detailedData.add(detailedEntry);
+        }
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlaceEvent(session, detailedEntry));
     }

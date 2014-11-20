@@ -28,6 +28,7 @@ import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.pvp.DetailedPVPStats.PVPEntry;
 import com.wolvencraft.yasp.events.player.TrackedPVPEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.cache.PlayerCache;
 
 /**
@@ -66,7 +67,9 @@ public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
         int victimId = PlayerCache.get(victim);
         getNormalData(victimId, weapon).addTimes();
         PVPEntry detailedEntry = new PVPEntry(victim.getLocation(), victimId, weapon);
-        detailedData.add(detailedEntry);
+        if(Module.DetailedItems.isEnabled()){
+            detailedData.add(detailedEntry);
+        }
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVPEvent(session, detailedEntry));
     }

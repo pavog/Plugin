@@ -29,6 +29,7 @@ import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.db.data.pve.DetailedPVEStats.PVEEntry;
 import com.wolvencraft.yasp.events.player.TrackedPVEEvent;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.settings.Module;
 
 /**
  * Data store that handles all PVE statistics on the server
@@ -65,7 +66,9 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
     public void playerKilledCreature(Entity victim, ItemStack weapon) {
         getNormalData(victim.getType(), weapon).addCreatureDeaths();
         PVEEntry detailedEntry = new PVEEntry(victim.getType(), victim.getLocation(), weapon);
-        detailedData.add(detailedEntry);
+        if(Module.DetailedPVEDeaths.isEnabled()){
+            detailedData.add(detailedEntry);
+        }
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(session, detailedEntry));
     }
@@ -78,7 +81,9 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
     public void creatureKilledPlayer(Entity killer, ItemStack weapon) {
         getNormalData(killer.getType(), weapon).addPlayerDeaths();
         PVEEntry detailedEntry = new PVEEntry(killer.getType(), killer.getLocation());
-        detailedData.add(detailedEntry);
+        if(Module.DetailedItems.isEnabled()){
+            detailedData.add(detailedEntry);
+        }
         
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(session, detailedEntry));
     }

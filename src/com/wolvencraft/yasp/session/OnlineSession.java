@@ -287,7 +287,6 @@ public class OnlineSession implements PlayerSession {
         Objective stats = scoreboard.getObjective("stats");
         
         for(NamedInteger value : playerTotals.getNamedValues()) {
-            for(String name : value.getPossibleNames()) scoreboard.resetScores(Bukkit.getOfflinePlayer(name));
             stats.getScore(Bukkit.getOfflinePlayer(value.getName()))
                  .setScore((Integer) (value.getValue()));
         }
