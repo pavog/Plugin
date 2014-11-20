@@ -56,10 +56,6 @@ public class DatabaseTask implements Runnable {
      */
     @Override
     public void run() {
-        Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
-           
-            @Override
-            public void run() {
                 if (Statistics.getInstance().isWorking(this.getClass().getSimpleName())) {
                     Message.debug("Database syncronisation arleady started!");
 		   return;
@@ -68,9 +64,6 @@ public class DatabaseTask implements Runnable {
                 commit();
                 Message.debug("Database syncronisation finished");
                 Statistics.getInstance().setWorking(this.getClass().getSimpleName(),false);
-            }
-            
-        });
     }
     
     /**
