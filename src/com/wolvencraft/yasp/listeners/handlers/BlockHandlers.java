@@ -49,9 +49,7 @@ public class BlockHandlers {
             //Skip data tracking if not all players data is read from database
             OnlineSession session = OnlineSessionCache.fetch(player);
             if(session.isReady()){
-                if(Module.DetailedBlocks.isEnabled()){
-                    ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockBreak(block);
-                }
+                ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockBreak(block);
                 session.getPlayerTotals().blockBreak();
             }
         }
