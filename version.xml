@@ -1,5 +1,5 @@
 <plugin>
 	<version>1.2.3</version>
-	<bukkit>CB 1.7.9</bukkit>
+	<bukkit>1.8.0 - Spigot</bukkit>
 	<type>DEVELOPMENT</type>
 </plugin>
