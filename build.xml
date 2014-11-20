@@ -1,5 +1,5 @@
-<project name="Statistics" default="build">
-    <target name="build">
+<project name="Statistics" default="jat">
+    <target name="jar">
         <mkdir dir="build"/>
         <javac srcdir="src" destdir="build" debug="on">
             <classpath>

@@ -61,28 +61,32 @@ import com.wolvencraft.yasp.db.tables.Miscellaneous.SettingsTable;
 @SuppressWarnings("unchecked")
 public enum Module {
     
-    Server      ("server", false),
-    Blocks      ("blocks", false, BlockData.class),
-    Items       ("items", false, ItemData.class),
-    Deaths      ("deaths", false, DeathData.class, PVEData.class, PVPData.class),
-    Inventory   ("inventory", false),
+    Server              ("server", false),
+    Blocks              ("blocks", false, BlockData.class),
+    DetailedBlocks      ("detailed_blocks", false, BlockData.class),
+    Items               ("items", false, ItemData.class),
+    DetailedItems       ("detailed_items", false, ItemData.class),
+    Deaths              ("deaths", false, DeathData.class, PVEData.class, PVPData.class),
+    DetailedPVEDeaths   ("detailed_pve", false, PVEData.class),
+    DetailedPVPDeaths   ("detailed_pvp", false, PVPData.class),
+    Inventory           ("inventory", false),
     
-    AdminCmd    ("admincmd", true, AdminCmdData.class),
-    BanHammer   ("banhammer", true, BanHammerData.class),
-    CommandBook ("commandbook", true, CommandBookData.class),
-    Factions    ("factions", true, FactionsData.class),
-    Jail        ("jail", true, JailData.class),
-    McBans      ("mcbans", true),
-    McMMO       ("mcmmo", true, McMMOData.class),
-    MobArena    ("mobarena", true, MobArenaData.class),
-    PvpArena    ("pvparena", true, PvpArenaData.class),
-    Towny       ("towny", true, TownyData.class),
-    Vanish      ("vanishnopacket", true, VanishData.class),
-    Vault       ("vault", true, VaultData.class),
-    Votifier    ("votifier", true, VotifierData.class),
-    WorldGuard  ("worldguard", true, WorldGuardData.class),
+    AdminCmd        ("admincmd", true, AdminCmdData.class),
+    BanHammer       ("banhammer", true, BanHammerData.class),
+    CommandBook     ("commandbook", true, CommandBookData.class),
+    Factions        ("factions", true, FactionsData.class),
+    Jail            ("jail", true, JailData.class),
+    McBans          ("mcbans", true),
+    McMMO           ("mcmmo", true, McMMOData.class),
+    MobArena        ("mobarena", true, MobArenaData.class),
+    PvpArena        ("pvparena", true, PvpArenaData.class),
+    Towny           ("towny", true, TownyData.class),
+    Vanish          ("vanishnopacket", true, VanishData.class),
+    Vault           ("vault", true, VaultData.class),
+    Votifier        ("votifier", true, VotifierData.class),
+    WorldGuard      ("worldguard", true, WorldGuardData.class),
     
-    Unknown     ("unknown", false)
+    Unknown         ("unknown", false)
     ;
 
     public final String KEY;

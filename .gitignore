@@ -163,3 +163,5 @@ pip-log.txt
 .DS_Store
 /export.jardesc
 /MANIFEST.mf
+/nbproject/private/
+/Statistics.jar
