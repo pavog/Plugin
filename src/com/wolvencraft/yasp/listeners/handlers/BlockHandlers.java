@@ -30,7 +30,6 @@ import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import com.wolvencraft.yasp.settings.Module;
 public class BlockHandlers {
     
     /**

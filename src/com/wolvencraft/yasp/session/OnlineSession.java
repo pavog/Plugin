@@ -67,7 +67,7 @@ import java.util.UUID;
 @Getter(AccessLevel.PUBLIC)
 public class OnlineSession implements PlayerSession {
     
-    private final int id;
+    private int id;
     private final String name;
     private final UUID uuid;
     private boolean isready;
@@ -86,8 +86,7 @@ public class OnlineSession implements PlayerSession {
     public OnlineSession(Player player) {
         final Player tmp_player = player;
         this.uuid = tmp_player.getUniqueId();
-        name = tmp_player.getName();
-        id = PlayerCache.get(tmp_player);       
+        name = tmp_player.getName();     
         this.isready = false;
         
         this.dataStores = new ArrayList<DataStore>();
@@ -100,7 +99,9 @@ public class OnlineSession implements PlayerSession {
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             @Override
             public void run(){
-                        
+                    
+                    id = PlayerCache.get(tmp_player);  
+                    setid(id);
                     playersData = new PlayersData(tmp_player, id);
                     
                     //If player is still online add an login location to the database
@@ -133,6 +134,10 @@ public class OnlineSession implements PlayerSession {
     
     private synchronized void setPlayersData(PlayersData data){
         this.playersData = data;        
+    }
+    
+    private synchronized void setid(int id){
+        this.id = id;
     }
     
     public boolean isReady() {
