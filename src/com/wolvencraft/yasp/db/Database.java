@@ -58,6 +58,8 @@ import com.wolvencraft.yasp.util.Message;
 public class Database {
     
     private static Connection connection = null;
+    private static double last_reconnect = 0;
+    private static boolean already_reconnecting = false;
     
     /**
      * Default constructor. Connects to the remote database, performs patches if necessary, and holds to the DB info.<br />
@@ -218,6 +220,18 @@ public class Database {
                 Message.log("Connection is still present. Malformed query detected.");
                 return false;
             }
+            
+            if (System.currentTimeMillis() < last_reconnect + (LocalConfiguration.DBReconnect.toInteger() * 1000)) {
+                return false;
+            }
+            
+            if (already_reconnecting) {
+                return false;
+            } else {
+                already_reconnecting = true;
+            }
+            
+
             Message.log(Level.WARNING, "Attempting to re-connect to the database");
             connection = DriverManager.getConnection(
                 LocalConfiguration.DBConnect.toString(),
@@ -229,11 +243,14 @@ public class Database {
             catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
             
             Message.log("Connection re-established. No data is lost.");
+            already_reconnecting = false;
             return true;
         } catch (Exception e) {
+            already_reconnecting = false;
             Message.log(Level.SEVERE, "Failed to re-connect to the database. Data is being stored locally.");
             if (LocalConfiguration.Debug.toBoolean()) e.printStackTrace();
         }
+        last_reconnect = System.currentTimeMillis();
         return false;
     }
     

@@ -44,10 +44,10 @@ public class ExceptionHandler {
     /**
      * Display a properly formatted error log in the server console.
      * @param t Throwable to format
-     * @param debug If <b>true</b>, will perform a check to see if the debug mode is enabled
+     * @param debug If <b>true</b>, or debug in the config is set to true it will print an stacktacke otherwirse supress the error.
      */
     public static void handle(Throwable t, boolean debug) {
-        if(debug && !LocalConfiguration.Debug.toBoolean()) return;
+        if(debug || !LocalConfiguration.Debug.toBoolean()) return;
         
         if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
         else lastError = t.getClass().getName();

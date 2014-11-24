@@ -39,6 +39,7 @@ public enum LocalConfiguration {
     DBPass          ("database.pass"),
     DBPrefix        ("database.prefix"),
     DBConnect       ("jdbc:mysql://" + DBHost.toString() + ":" + DBPort.toInteger() + "/" + DBName.toString(), true),
+    DBReconnect     ("database.reconnect_interval"),
     LogPrefix       ("log-prefix"),
     ;
     
