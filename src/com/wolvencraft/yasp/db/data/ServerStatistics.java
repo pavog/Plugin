@@ -199,7 +199,7 @@ public class ServerStatistics {
      * Registers the player login in the server statistics
      */
     public void playerLogin() {
-        int playersOnline = Bukkit.getOnlinePlayers().length;
+        int playersOnline = Bukkit.getOnlinePlayers().size();
         if(playersOnline > maxPlayersOnline) {
             this.maxPlayersOnline = playersOnline;
             this.maxPlayersOnlineTime = Util.getTimestamp();
