@@ -45,11 +45,13 @@ public class Constants {
     @AllArgsConstructor(access=AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum ItemsWithMetadata {
+        STONE           (1, 0, 6),
         DIRT            (3, 0, 2),
         Plank           (5, 0, 5),
         Sapling         (6, 0, 5),
         Log             (17, 0, 3),
         Leave           (18, 0, 3),
+        SPONGE          (19, 0, 1),
         Sandstone       (24, 0, 2),
         TallGrass       (31, 0, 2),
         Wool            (35, 0, 15),
@@ -69,8 +71,11 @@ public class Constants {
         STAINED_GLASS_PANE (160, 0, 15),
         Leaves_2        (161, 0, 1),
         LOG_2           (162, 0, 1),
+        PRISMARINE      (168, 0, 2),
         CARPET          (171, 0, 15),
         DOUBLE_PLANT    (175, 0, 5),
+        STANDING_BANNER (176, 0, 15),
+        RED_SANDSTONE   (179, 0, 2),
         Coal            (263, 0, 1),
         GoldenApple     (322, 0, 1),
         RAW_FISH        (349, 0, 3),
