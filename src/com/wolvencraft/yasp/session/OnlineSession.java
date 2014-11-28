@@ -302,8 +302,6 @@ public class OnlineSession implements PlayerSession {
      */
     public void clearScoreboard() {
         if(scoreboard == null) return;
-        for(NamedInteger value : playerTotals.getNamedValues()) {
-           for(String name : value.getPossibleNames()) scoreboard.resetScores(Bukkit.getOfflinePlayer(value.getName()));
-        }
+        scoreboard.clearSlot(DisplaySlot.SIDEBAR);
     }
 }
