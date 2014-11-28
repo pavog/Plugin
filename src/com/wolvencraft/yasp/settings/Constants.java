@@ -83,7 +83,8 @@ public class Constants {
         Dye             (351, 0, 15),
         Potion          (373, 0, 16489),
         MobEgg          (383, 50, 120),
-        MobHead         (397, 0, 4);
+        MobHead         (397, 0, 4),
+        BANNER_ITEM     (425, 0, 15);
         
         private int id;
         private int minData;

@@ -5,8 +5,8 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:1", "grani
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:2", "polished_granite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_granite";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:3", "diorite") ON DUPLICATE KEY UPDATE `tp_name` = "diorite";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:4", "polished_diorite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_diorite";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:5", "andersite") ON DUPLICATE KEY UPDATE `tp_name` = "andersite";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:6", "polished_andersite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_andersite";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:5", "andersite") ON DUPLICATE KEY UPDATE `tp_name` = "andeslsite";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:6", "polished_andersite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_andesite";
 -- Sponge
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("19:0", "sponge") ON DUPLICATE KEY UPDATE `tp_name` = "sponge";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("19:1", "wet_sponge") ON DUPLICATE KEY UPDATE `tp_name` = "wet_sponge";
@@ -24,7 +24,7 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("176:9", "pin
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("176:10", "lime_banner") ON DUPLICATE KEY UPDATE `tp_name` = "lime_banner";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("176:11", "yellow_banner") ON DUPLICATE KEY UPDATE `tp_name` = "yellow_banner";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("176:12", "light_blue_banner") ON DUPLICATE KEY UPDATE `tp_name` = "light_blue_banner";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("176:13", "magenta_banner") ON DUPLICATE KEY UPDATE `magenta_banner` = "granite";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("176:13", "magenta_banner") ON DUPLICATE KEY UPDATE `tp_name` = "magenta_banner";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("176:14", "orange_banner") ON DUPLICATE KEY UPDATE `tp_name` = "orange_banner";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("176:15", "white_banner") ON DUPLICATE KEY UPDATE `tp_name` = "white_banner";
 -- Banner Item
@@ -41,13 +41,13 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:9", "pin
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:10", "lime_banner") ON DUPLICATE KEY UPDATE `tp_name` = "lime_banner";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:11", "yellow_banner") ON DUPLICATE KEY UPDATE `tp_name` = "yellow_banner";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:12", "light_blue_banner") ON DUPLICATE KEY UPDATE `tp_name` = "light_blue_banner";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:13", "magenta_banner") ON DUPLICATE KEY UPDATE `magenta_banner` = "granite";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:13", "magenta_banner") ON DUPLICATE KEY UPDATE `tp_name` = "magenta_banner";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:14", "orange_banner") ON DUPLICATE KEY UPDATE `tp_name` = "orange_banner";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:15", "white_banner") ON DUPLICATE KEY UPDATE `tp_name` = "white_banner";
 -- Red Sandstone
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:0", "red_sandstone") ON DUPLICATE KEY UPDATE `tp_name` = "red_sandstone";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:1", "chiseled_red_sandstone") ON DUPLICATE KEY UPDATE `tp_name` = "chiseled_red_sandstone";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("425:2", "smooth_red_sandstone") ON DUPLICATE KEY UPDATE `tp_name` = "smooth_red_sandstone";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("179:0", "red_sandstone") ON DUPLICATE KEY UPDATE `tp_name` = "red_sandstone";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("179:1", "chiseled_red_sandstone") ON DUPLICATE KEY UPDATE `tp_name` = "chiseled_red_sandstone";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("179:2", "smooth_red_sandstone") ON DUPLICATE KEY UPDATE `tp_name` = "smooth_red_sandstone";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("182:0", "red_sandstone_slab") ON DUPLICATE KEY UPDATE `tp_name` = "red_sandstone_slab";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("180:0", "red_sandstone_stairs") ON DUPLICATE KEY UPDATE `tp_name` = "red_sandstone_stairs";
 -- Door's
@@ -97,6 +97,7 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("383:67", "sp
 -- Other Stuff
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("3:1", "coarse_dirt") ON DUPLICATE KEY UPDATE `tp_name` = "coarse_dirt";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("416:0", "armor_stand") ON DUPLICATE KEY UPDATE `tp_name` = "armor_stand";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("165:0", "slime_block") ON DUPLICATE KEY UPDATE `tp_name` = "slime_block";
 
 -- 1.8 Mobs
 INSERT INTO `$prefix_entities` (`entity_id`, `tp_name`) VALUES ("101", "rabbit") ON DUPLICATE KEY UPDATE `tp_name` = "rabbit";
