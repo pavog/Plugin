@@ -52,6 +52,7 @@ import com.wolvencraft.yasp.db.data.items.ItemData;
 import com.wolvencraft.yasp.db.data.pve.PVEData;
 import com.wolvencraft.yasp.db.data.pvp.PVPData;
 import com.wolvencraft.yasp.db.tables.Miscellaneous.SettingsTable;
+import com.wolvencraft.yasp.util.Message;
 
 /**
  * Represents the different plugin modules
@@ -173,6 +174,7 @@ public enum Module {
      */
     private void updateCache() {
         String stateKey = "";
+        Message.log("UpdateCache: " + KEY);
         if(hook) {
             stateKey = "hook." + KEY;
             
@@ -196,6 +198,8 @@ public enum Module {
         } else {
             enabled = enabledResult.asBoolean("value");
         }
+        
+        refreshScheduled = false;
     }
     
     /**
