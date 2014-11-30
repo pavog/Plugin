@@ -174,7 +174,6 @@ public enum Module {
      */
     private void updateCache() {
         String stateKey = "";
-        Message.log("UpdateCache: " + KEY);
         if(hook) {
             stateKey = "hook." + KEY;
             
