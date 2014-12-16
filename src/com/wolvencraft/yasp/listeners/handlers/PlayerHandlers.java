@@ -97,11 +97,13 @@ public class PlayerHandlers {
         
         @Override
         public void run() {
-            OnlineSessionCache
-                .fetch(player)
+            OnlineSession session = OnlineSessionCache.fetch(player);
+            if(session.isReady()){
+                session
                 .getPlayersData()
                 .getMiscData()
                 .incrementStat(stat, value);
+            }
         }
     }
 }
