@@ -59,8 +59,10 @@ public class MiscInfoPlayerEntry extends NormalData {
         
         if(player.isOp()) values.put(PlayerData.IsOp, 1);
         else values.put(PlayerData.IsOp, 0);
-        if(player.isBanned()) values.put(PlayerData.IsBanned, 1);
-        else values.put(PlayerData.IsBanned, 0);
+        //Player should't be banned if the joines the server ;) (Probalby breaks the ban display)
+        //if(player.isBanned()) values.put(PlayerData.IsBanned, 1);
+        //else values.put(PlayerData.IsBanned, 0);
+        values.put(PlayerData.IsBanned, 0);
         
         InetAddress playerIp = player.getAddress().getAddress();
         if(playerIp == null) values.put(PlayerData.PlayerIp, "192.168.0.1");

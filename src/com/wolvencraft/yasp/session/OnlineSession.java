@@ -155,6 +155,16 @@ public class OnlineSession implements PlayerSession {
         return this.uuid;
     }
     
+    @Override
+    public String getName() {
+        return this.name;
+    }
+    
+    @Override
+    public int getId() {
+        return this.id;
+    }
+    
     /**
      * Returns the Bukkit player object associated with this session
      * @return Player object
