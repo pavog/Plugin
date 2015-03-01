@@ -5,8 +5,8 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:1", "grani
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:2", "polished_granite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_granite";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:3", "diorite") ON DUPLICATE KEY UPDATE `tp_name` = "diorite";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:4", "polished_diorite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_diorite";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:5", "andersite") ON DUPLICATE KEY UPDATE `tp_name` = "andeslsite";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:6", "polished_andersite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_andesite";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:5", "andesite") ON DUPLICATE KEY UPDATE `tp_name` = "andesite";
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:6", "polished_andesite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_andesite";
 -- Sponge
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("19:0", "sponge") ON DUPLICATE KEY UPDATE `tp_name` = "sponge";
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("19:1", "wet_sponge") ON DUPLICATE KEY UPDATE `tp_name` = "wet_sponge";
