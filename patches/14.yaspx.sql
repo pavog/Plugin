@@ -1,6 +1,6 @@
 -- Correct the names of some 1.8 blocks
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:5", "andesite") ON DUPLICATE KEY UPDATE `tp_name` = "andesite";
-INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:6", "polished_andesite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_andesite"
+INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("1:6", "polished_andesite") ON DUPLICATE KEY UPDATE `tp_name` = "polished_andesite";
 
 -- Add Wall Banners
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("177:0", "black_banner") ON DUPLICATE KEY UPDATE `tp_name` = "black_banner";
