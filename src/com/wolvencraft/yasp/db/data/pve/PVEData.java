@@ -81,7 +81,7 @@ public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
     public void creatureKilledPlayer(Entity killer, ItemStack weapon) {
         getNormalData(killer.getType(), weapon).addPlayerDeaths();
         PVEEntry detailedEntry = new PVEEntry(killer.getType(), killer.getLocation());
-        if(Module.DetailedItems.isEnabled()){
+        if(Module.DetailedPVEDeaths.isEnabled()){
             detailedData.add(detailedEntry);
         }
         

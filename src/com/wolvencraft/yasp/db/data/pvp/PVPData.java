@@ -67,7 +67,7 @@ public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
         int victimId = PlayerCache.get(victim);
         getNormalData(victimId, weapon).addTimes();
         PVPEntry detailedEntry = new PVPEntry(victim.getLocation(), victimId, weapon);
-        if(Module.DetailedItems.isEnabled()){
+        if(Module.DetailedPVPDeaths.isEnabled()){
             detailedData.add(detailedEntry);
         }
         
