@@ -48,7 +48,7 @@ public class PlayerCache {
      */
     public static int get(Player player) {
         long start = System.currentTimeMillis();
-        if(player.hasMetadata("stats_id")) {
+        if(player.hasMetadata("stats_id") && !player.getMetadata("stats_id").isEmpty()) {
             int playerId = player.getMetadata("stats_id").get(0).asInt();
             if (playerId != -1){
                                 
