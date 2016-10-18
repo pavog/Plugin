@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.wolvencraft.yasp</groupId>
+    <artifactId>Statistics</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <name>Statistics</name>
+    <url>https://dev.bukkit.org/bukkit-plugins/statistics/</url>
+
+
+    <build>
+        <finalName>${project.name}</finalName>
+
+        <!-- Resources -->
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>plugin.yml</include>
+                    <include>config.yml</include>
+                    <include>book.yml</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <!-- Plugins -->
+        <plugins>
+            <!-- Compilation plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
+
+            <!-- JAR creation plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+
+            <!-- Release plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.3.2</version>
+            </plugin>
+        </plugins>
+    </build>
+    <!-- Dependencies -->
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.10-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.6</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Local Plugin dependencies -->
+        <dependency>
+            <groupId>com.matejdro.bukkit.jail</groupId>
+            <artifactId>Jail</artifactId>
+            <version>2.6.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_Jail.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>be.Balor.bukkit.AdminCmd</groupId>
+            <artifactId>AdminCmd</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_AdminCmd.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.garbagemule.MobArena</groupId>
+            <artifactId>MobArena</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_MobArena.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.palmergames.bukkit.towny.object</groupId>
+            <artifactId>Towny</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_Towny.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vexsoftware.votifier.model</groupId>
+            <artifactId>Votifier</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_Votifier.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>net.slipcor.pvparena</groupId>
+            <artifactId>PvpArena</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_PvpArena.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gmail.nossr50</groupId>
+            <artifactId>McMMO</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_McMMO.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>name.richardson.james.bukkit.banhammer</groupId>
+            <artifactId>BanHammer</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_BanHammer.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.massivecraft.factions</groupId>
+            <artifactId>Factions</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_Factions.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kitteh.vanish</groupId>
+            <artifactId>VanishNoPacket</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hook_VanishNoPacket.jar</systemPath>
+        </dependency>
+
+        <!-- Maven Plugin Dependencies -->
+
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>commandbook</artifactId>
+            <version>2.5-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldedit</artifactId>
+            <version>6.0.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldguard</artifactId>
+            <version>6.1.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+    </dependencies>
+
+    <!-- Repositories -->
+    <repositories>
+        <repository>
+            <id>sk89q</id>
+            <url>http://maven.sk89q.com/repo/</url>
+        </repository>
+        <repository>
+            <id>bukkit</id>
+            <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>spigot</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>herocraftonline</id>
+            <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
+        </repository>
+    </repositories>
+
+    <!-- GitHub -->
+    <scm>
+        <connection>scm:git:git:@github.com:pavog/Statistics-Bukkit-Plugin.git</connection>
+        <developerConnection>scm:git:git:@github.com:pavog/Statistics-Bukkit-Plugin.git</developerConnection>
+        <url>http://github.com/pavog/Statistics-Bukkit-Plugin.git/tree/master/</url>
+        <tag>Statistics</tag>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+</project>
