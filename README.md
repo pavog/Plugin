@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/pavog/Statistics-Bukkit-Plugin.svg?branch=master)](https://travis-ci.org/pavog/Statistics-Bukkit-Plugin)
 ## Statistics ##
 
 Looking for a high-end plugin that tracks your players' data? Look no further!
