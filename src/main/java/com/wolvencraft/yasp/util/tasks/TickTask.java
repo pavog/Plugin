@@ -25,8 +25,8 @@ import com.wolvencraft.yasp.Statistics;
 /**
  * Measures the tick rate of the server.<br />
  * There can only be one instance of this method running in the plugin.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class TickTask implements Runnable {
 
@@ -35,6 +35,7 @@ public class TickTask implements Runnable {
     private long currentSec;
     private int ticks;
     private int delay;
+
     /**
      * <b>Default constructor.</b><br />
      * Creates a new tracker to record ticks per second.
@@ -51,18 +52,21 @@ public class TickTask implements Runnable {
     public static int getTicksPerSecond() {
         return ticksPerSecond;
     }
-    
+
     @Override
     public void run() {
         sec = (System.currentTimeMillis() / 1000);
-        if(currentSec == sec) { ticks++; }
-        else {
+        if (currentSec == sec) {
+            ticks++;
+        } else {
             currentSec = sec;
             ticksPerSecond = (ticksPerSecond == 0 ? ticks : ((ticksPerSecond + ticks) / 2));
             Statistics.getServerStatistics().updateTPS(ticksPerSecond);
             ticks = 0;
-            if((++delay % 300) == 0) { delay = 0; }
+            if ((++delay % 300) == 0) {
+                delay = 0;
+            }
         }
     }
-    
+
 }

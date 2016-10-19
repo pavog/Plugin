@@ -32,59 +32,62 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * Data store that handles all PVE statistics on the server
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class PVEData extends DataStore<TotalPVEStats, PVEEntry> {
-    
+
     public PVEData(OnlineSession session) {
         super(session, DataStoreType.PVE);
     }
-    
+
     /**
      * Returns a specific entry from the data store.<br />
      * If an entry does not exist, it will be created.
-     * @param type Entity type of the creature
+     *
+     * @param type   Entity type of the creature
      * @param weapon Weapon used in the event
      * @return Corresponding entry
      */
     public TotalPVEStats getNormalData(EntityType type, ItemStack weapon) {
-        for(TotalPVEStats entry : getNormalData()) {
-            if(entry.equals(type, weapon)) return entry;
+        for (TotalPVEStats entry : getNormalData()) {
+            if (entry.equals(type, weapon)) return entry;
         }
         TotalPVEStats entry = new TotalPVEStats(session.getId(), type, weapon);
         normalData.add(entry);
         return entry;
     }
-    
+
     /**
      * Registers the creature death in the data store
+     *
      * @param victim Creature killed
      * @param weapon Weapon used by killer
      */
     public void playerKilledCreature(Entity victim, ItemStack weapon) {
         getNormalData(victim.getType(), weapon).addCreatureDeaths();
         PVEEntry detailedEntry = new PVEEntry(victim.getType(), victim.getLocation(), weapon);
-        if(Module.DetailedPVEDeaths.isEnabled()){
+        if (Module.DetailedPVEDeaths.isEnabled()) {
             detailedData.add(detailedEntry);
         }
-        
+
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(session, detailedEntry));
     }
-    
+
     /**
      * Registers the player death in the data store
+     *
      * @param killer Creature that killed the player
      * @param weapon Weapon used by killer
      */
     public void creatureKilledPlayer(Entity killer, ItemStack weapon) {
         getNormalData(killer.getType(), weapon).addPlayerDeaths();
         PVEEntry detailedEntry = new PVEEntry(killer.getType(), killer.getLocation());
-        if(Module.DetailedPVEDeaths.isEnabled()){
+        if (Module.DetailedPVEDeaths.isEnabled()) {
             detailedData.add(detailedEntry);
         }
-        
+
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVEEvent(session, detailedEntry));
     }
-    
+
 }

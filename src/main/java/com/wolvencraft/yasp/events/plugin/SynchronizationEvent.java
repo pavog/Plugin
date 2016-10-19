@@ -29,22 +29,22 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Called when the database synchronization is starting
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @Getter(AccessLevel.PUBLIC)
 public class SynchronizationEvent extends StatisticsEvent implements Cancellable {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private int processId;
     @Setter(AccessLevel.PUBLIC)
     private boolean cancelled;
-    
+
     public SynchronizationEvent(int processId) {
         this.processId = processId;
         this.cancelled = false;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;

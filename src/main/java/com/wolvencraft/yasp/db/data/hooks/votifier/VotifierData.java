@@ -25,27 +25,27 @@ import com.wolvencraft.yasp.db.data.DataStore;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 public class VotifierData extends DataStore<TotalVotifierEntry, DetailedVotifierEntry> {
-    
+
     public VotifierData(OnlineSession session) {
         super(session, DataStoreType.Hook_Vanish);
     }
-    
+
     public void playerVoted(Vote vote) {
         TotalVotifierEntry entry = null;
-        for(TotalVotifierEntry testEntry : getNormalData()) {
-            if(testEntry.getServiceName().equals(vote.getServiceName())) {
+        for (TotalVotifierEntry testEntry : getNormalData()) {
+            if (testEntry.getServiceName().equals(vote.getServiceName())) {
                 entry = testEntry;
                 break;
             }
         }
-        
-        if(entry == null) {
+
+        if (entry == null) {
             entry = new TotalVotifierEntry(session.getId(), vote);
             normalData.add(entry);
         }
-        
+
         entry.addVote();
         detailedData.add(new DetailedVotifierEntry(vote));
     }
-    
+
 }

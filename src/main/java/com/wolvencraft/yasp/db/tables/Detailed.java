@@ -27,223 +27,241 @@ import lombok.Getter;
 /**
  * Represents any detailed-type tables in the database.<br >
  * Stores table and column names, so that they can be safely used from the plugin
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class Detailed {
-    
+
     /**
      * Represents the <i>detailed_destroyed_blocks</i> table
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum BlocksBroken implements DBTable {
-        TableName       ("detailed_destroyed_blocks"),
-        MaterialId      ("material_id"),
-        PlayerId        ("player_id"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        Timestamp       ("time");
-        
+        TableName("detailed_destroyed_blocks"),
+        MaterialId("material_id"),
+        PlayerId("player_id"),
+        World("world"),
+        XCoord("x"),
+        YCoord("y"),
+        ZCoord("z"),
+        Timestamp("time");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>detailed_placed_blocks</i> table
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum BlocksPlaced implements DBTable {
-        TableName       ("detailed_placed_blocks"),
-        MaterialId      ("material_id"),
-        PlayerId        ("player_id"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        Timestamp       ("time");
-        
+        TableName("detailed_placed_blocks"),
+        MaterialId("material_id"),
+        PlayerId("player_id"),
+        World("world"),
+        XCoord("x"),
+        YCoord("y"),
+        ZCoord("z"),
+        Timestamp("time");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>detailed_dropped_items</i> table
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum ItemsDropped implements DBTable {
-        TableName       ("detailed_dropped_items"),
-        MaterialId      ("material_id"),
-        PlayerId        ("player_id"),
-        Amount          ("amount"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        Timestamp       ("time");
-        
+        TableName("detailed_dropped_items"),
+        MaterialId("material_id"),
+        PlayerId("player_id"),
+        Amount("amount"),
+        World("world"),
+        XCoord("x"),
+        YCoord("y"),
+        ZCoord("z"),
+        Timestamp("time");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>detailed_pickedup_items</i> table
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum ItemsPickedUp implements DBTable {
-        TableName       ("detailed_pickedup_items"),
-        EntryId         ("detailed_pickedup_items_id"),
-        Material        ("material_id"),
-        PlayerId        ("player_id"),
-        Amount          ("amount"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        Timestamp       ("time");
-        
+        TableName("detailed_pickedup_items"),
+        EntryId("detailed_pickedup_items_id"),
+        Material("material_id"),
+        PlayerId("player_id"),
+        Amount("amount"),
+        World("world"),
+        XCoord("x"),
+        YCoord("y"),
+        ZCoord("z"),
+        Timestamp("time");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>detailed_used_items</i> table
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum ItemsConsumed implements DBTable {
-        TableName       ("detailed_used_items"),
-        MaterialId      ("material_id"),
-        PlayerId        ("player_id"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        Timestamp       ("time");
-        
+        TableName("detailed_used_items"),
+        MaterialId("material_id"),
+        PlayerId("player_id"),
+        World("world"),
+        XCoord("x"),
+        YCoord("y"),
+        ZCoord("z"),
+        Timestamp("time");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>detailed_log_players</i> table
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum PlayerLog implements DBTable {
-        TableName       ("detailed_log_players"),
-        PlayerId        ("player_id"),
-        Timestamp       ("time"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        IsLogin         ("is_login");
-        
+        TableName("detailed_log_players"),
+        PlayerId("player_id"),
+        Timestamp("time"),
+        World("world"),
+        XCoord("x"),
+        YCoord("y"),
+        ZCoord("z"),
+        IsLogin("is_login");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>detailed_death_players</i> table
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum PlayerDeaths implements DBTable {
-        TableName       ("detailed_death_players"),
-        PlayerId        ("player_id"),
-        Cause           ("cause"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        Timestamp       ("time");
-        
+        TableName("detailed_death_players"),
+        PlayerId("player_id"),
+        Cause("cause"),
+        World("world"),
+        XCoord("x"),
+        YCoord("y"),
+        ZCoord("z"),
+        Timestamp("time");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>detailed_pve_kills</i> table
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum PlayerKillsPVE implements DBTable {
-        TableName       ("detailed_pve_kills"),
-        MaterialId      ("material_id"),
-        CreatureId      ("entity_id"),
-        PlayerId        ("player_id"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        Timestamp       ("time"),
-        PlayerKilled    ("player_killed");
-        
+        TableName("detailed_pve_kills"),
+        MaterialId("material_id"),
+        CreatureId("entity_id"),
+        PlayerId("player_id"),
+        World("world"),
+        XCoord("x"),
+        YCoord("y"),
+        ZCoord("z"),
+        Timestamp("time"),
+        PlayerKilled("player_killed");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>detailed_pvp_kills</i> table
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum PlayerKillsPVP implements DBTable {
-        TableName       ("detailed_pvp_kills"),
-        MaterialId      ("material_id"),
-        KillerId        ("player_id"),
-        VictimId        ("victim_id"),
-        Cause           ("cause"),
-        World           ("world"),
-        XCoord          ("x"),
-        YCoord          ("y"),
-        ZCoord          ("z"),
-        Timestamp       ("time");
-        
+        TableName("detailed_pvp_kills"),
+        MaterialId("material_id"),
+        KillerId("player_id"),
+        VictimId("victim_id"),
+        Cause("cause"),
+        World("world"),
+        XCoord("x"),
+        YCoord("y"),
+        ZCoord("z"),
+        Timestamp("time");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
 }

@@ -58,169 +58,174 @@ import java.util.UUID;
  * Represents a player session that is created when a player logs into the server.<br />
  * This session can only be created from a Player object, therefore, the player must have
  * logged into the server at least once.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @SuppressWarnings("rawtypes")
 @Getter(AccessLevel.PUBLIC)
 public class OnlineSession implements PlayerSession {
-    
+
     private final String name;
     private final UUID uuid;
     private int id;
     private boolean isready;
     private PlayerTotals playerTotals;
-    
+
     private PlayersData playersData;
     private List<DataStore> dataStores;
-    
+
     private Scoreboard scoreboard;
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new player session from the Player object
+     *
      * @param player Player object
      */
     public OnlineSession(Player player) {
         final Player tmp_player = player;
         this.uuid = tmp_player.getUniqueId();
-        name = tmp_player.getName();     
+        name = tmp_player.getName();
         this.isready = false;
-        
+
         this.dataStores = new ArrayList<DataStore>();
         this.dataStores.addAll(Util.getModules(this));
         this.dataStores.addAll(Util.getHooks(this));
-        
+
         this.scoreboard = null;
-        
+
         //Run all database queries async to reduce lag on player join
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             @Override
-            public void run(){
-                    
-                    id = PlayerCache.get(tmp_player);  
-                    setid(id);
-                    playersData = new PlayersData(tmp_player, id);
-                    
-                    //If player is still online add an login location to the database
-                    if(tmp_player.isOnline()){
-                        playersData.addPlayerLog(tmp_player.getLocation(), true);
-                    }
-                    
-                    setPlayersData(playersData);
-                    playerTotals = new PlayerTotals(id);
-                    setPlayersTotals(playerTotals);
-        
-                    Query.table(PlayerStats.TableName)
-                    .value(PlayerStats.Online, true)
-                    .condition(PlayerStats.PlayerId, id)
-                    .update();  
-                    
-                    setReady();
+            public void run() {
+
+                id = PlayerCache.get(tmp_player);
+                setid(id);
+                playersData = new PlayersData(tmp_player, id);
+
+                //If player is still online add an login location to the database
+                if (tmp_player.isOnline()) {
+                    playersData.addPlayerLog(tmp_player.getLocation(), true);
+                }
+
+                setPlayersData(playersData);
+                playerTotals = new PlayerTotals(id);
+                setPlayersTotals(playerTotals);
+
+                Query.table(PlayerStats.TableName)
+                        .value(PlayerStats.Online, true)
+                        .condition(PlayerStats.PlayerId, id)
+                        .update();
+
+                setReady();
             }
         });
     }
-    
-    private synchronized void setReady(){
+
+    private synchronized void setReady() {
         Message.debug("Session is ready!");
-        this.isready = true;        
+        this.isready = true;
     }
-    
-    private synchronized void setPlayersTotals(PlayerTotals data){
-        this.playerTotals = data;        
+
+    private synchronized void setPlayersTotals(PlayerTotals data) {
+        this.playerTotals = data;
     }
-    
-    private synchronized void setPlayersData(PlayersData data){
-        this.playersData = data;        
+
+    private synchronized void setPlayersData(PlayersData data) {
+        this.playersData = data;
     }
-    
-    private synchronized void setid(int id){
+
+    private synchronized void setid(int id) {
         this.id = id;
     }
-    
+
     public boolean isReady() {
         return this.isready;
     }
-    
+
     @Override
     public boolean isOnline() {
-        if(Bukkit.getPlayerExact(name) == null) return false;
+        if (Bukkit.getPlayerExact(name) == null) return false;
         return true;
     }
-    
+
     @Override
     public UUID getUUID() {
         return this.uuid;
     }
-    
+
     @Override
     public String getName() {
         return this.name;
     }
-    
+
     @Override
     public int getId() {
         return this.id;
     }
-    
+
     /**
      * Returns the Bukkit player object associated with this session
+     *
      * @return Player object
      */
     public Player getBukkitPlayer() {
         return Bukkit.getPlayerExact(name);
     }
-    
+
     /**
      * Returns the data store with the specified type
+     *
      * @param type Data store type
      * @return Data store, or <b>null</b> if the type is not valid
      */
     public DataStore getDataStore(DataStoreType type) {
-        for(DataStore store : dataStores) {
-            if(store.getType().equals(type)) return store;
+        for (DataStore store : dataStores) {
+            if (store.getType().equals(type)) return store;
         }
         return null;
     }
-    
+
     /**
      * Performs a database operation to push the locally stored data.
      */
     public void pushData() {
         playersData.sync();
-        for(DataStore store : dataStores) store.pushData();
-        
+        for (DataStore store : dataStores) store.pushData();
+
         playerTotals.fetchData();
     }
-    
+
     /**
      * Dumps all locally stored data
      */
     public void dumpData() {
-        for(DataStore store : dataStores) store.dump();
+        for (DataStore store : dataStores) store.dump();
     }
-    
+
     @Override
     public void finalize() {
         Query.table(PlayerStats.TableName)
-            .value(PlayerStats.Online, false)
-            .condition(PlayerStats.PlayerId, id)
-            .update();
+                .value(PlayerStats.Online, false)
+                .condition(PlayerStats.PlayerId, id)
+                .update();
     }
-    
+
     /**
      * Add distance of the specified type to the statistics
-     * @param type Travel type
+     *
+     * @param type     Travel type
      * @param distance Distance traveled
      */
     public void addDistance(PlayerDistance type, double distance) {
         playersData.getDistanceData().addDistance(type, distance);
         playerTotals.addDistance(type, distance);
     }
-    
+
     /**
      * Registers the player death in the data store
-     * @param victim Player who was killed 
+     *
+     * @param victim Player who was killed
      * @param weapon Weapon used by killer
      */
     public void killedPlayer(Player victim, ItemStack weapon) {
@@ -229,9 +234,10 @@ public class OnlineSession implements PlayerSession {
         playerTotals.pvpKill();
         OnlineSessionCache.fetch(victim).getPlayerTotals().death();
     }
-    
+
     /**
      * Registers the creature death in the data store
+     *
      * @param victim Creature killed
      * @param weapon Weapon used by killer
      */
@@ -239,9 +245,10 @@ public class OnlineSession implements PlayerSession {
         ((PVEData) getDataStore(DataStoreType.PVE)).playerKilledCreature(victim, weapon);
         playerTotals.pveKill();
     }
-    
+
     /**
      * Registers the player death in the data store
+     *
      * @param killer Creature that killed the player
      * @param weapon Weapon used by killer
      */
@@ -249,17 +256,18 @@ public class OnlineSession implements PlayerSession {
         ((PVEData) getDataStore(DataStoreType.PVE)).creatureKilledPlayer(killer, weapon);
         died();
     }
-    
+
     /**
      * Runs when the session owner was killed by the environment
+     *
      * @param location Location of the death
-     * @param cause Death cause
+     * @param cause    Death cause
      */
     public void killedByEnvironment(Location location, DamageCause cause) {
         ((DeathData) getDataStore(DataStoreType.Deaths)).playerDied(location, cause);
         died();
     }
-    
+
     /**
      * Runs when the player dies (any cause).<br />
      * This method is for internal use; you do not need to run it from listener
@@ -268,50 +276,51 @@ public class OnlineSession implements PlayerSession {
         playersData.getMiscData().died();
         playerTotals.death();
     }
-    
+
     /**
      * Toggles the scoreboard state
+     *
      * @return <b>true</b> if the scoreboard has been turned on, <b>false</b> if it is now off
      */
     public boolean toggleScoreboard() {
-        if(scoreboard != null) {
+        if (scoreboard != null) {
             clearScoreboard();
             scoreboard = null;
             return false;
         }
-        
+
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         scoreboard = manager.getNewScoreboard();
         Bukkit.getServer().getPlayer(getName()).setScoreboard(scoreboard);
-        
+
         scoreboard.clearSlot(DisplaySlot.SIDEBAR);
         Objective stats = scoreboard.registerNewObjective("stats", "dummy");
         stats.setDisplaySlot(DisplaySlot.SIDEBAR);
-        stats.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Statistics");        
+        stats.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Statistics");
         return true;
     }
-    
+
     /**
      * Refreshes the statistics displayed on a scoreboard
      */
     public void refreshScoreboard() {
-        if(scoreboard == null) return;
+        if (scoreboard == null) return;
 
         Objective stats = scoreboard.getObjective("stats");
-        
-        for(NamedInteger value : playerTotals.getNamedValues()) {
-            for(String name : value.getPossibleNames())
-            stats.getScoreboard().resetScores(name);
+
+        for (NamedInteger value : playerTotals.getNamedValues()) {
+            for (String name : value.getPossibleNames())
+                stats.getScoreboard().resetScores(name);
             stats.getScore(value.getName())
-                 .setScore((Integer) (value.getValue()));                
+                    .setScore((Integer) (value.getValue()));
         }
     }
-    
+
     /**
      * Clears the scoreboard from all content
      */
     public void clearScoreboard() {
-        if(scoreboard == null) return;
+        if (scoreboard == null) return;
         scoreboard.clearSlot(DisplaySlot.SIDEBAR);
     }
 }

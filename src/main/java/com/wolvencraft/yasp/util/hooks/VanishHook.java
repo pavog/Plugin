@@ -27,7 +27,7 @@ import org.kitteh.vanish.VanishPlugin;
 public class VanishHook extends PluginHook {
 
     private static VanishPlugin instance;
-    
+
     public VanishHook() {
         super(Module.Vanish, "VanishNoPacket", "vanish");
     }
@@ -41,12 +41,12 @@ public class VanishHook extends PluginHook {
     public static boolean isVanished(Player player) {
         return instance.getManager().isVanished(player);
     }
-    
+
     @Override
     protected void onEnable() {
         instance = (VanishPlugin) super.plugin;
     }
-    
+
     @Override
     protected void onDisable() {
         instance = null;

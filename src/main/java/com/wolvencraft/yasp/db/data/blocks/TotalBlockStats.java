@@ -32,11 +32,11 @@ import org.bukkit.block.BlockState;
 /**
  * Represents an entry in the PVP data store.
  * It is dynamic, i.e. it can be edited once it has been created.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class TotalBlockStats extends NormalData {
-    
+
     private BlockState block;
     private int broken;
     private int placed;
@@ -44,37 +44,38 @@ public class TotalBlockStats extends NormalData {
     /**
      * <b>Default constructor</b><br />
      * Creates a new TotalItemsEntry based on the data provided
+     *
      * @param block BlockState of the block
      */
     public TotalBlockStats(int playerId, BlockState block) {
         this.block = block;
         broken = 0;
         placed = 0;
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
+        if (RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
-        
+
         QueryResult result = Query.table(BlockTotals.TableName)
                 .column(BlockTotals.Destroyed)
                 .column(BlockTotals.Placed)
                 .condition(BlockTotals.PlayerId, playerId)
                 .condition(BlockTotals.MaterialId, MaterialCache.parse(block))
                 .select();
-        
-        if(result == null) {
+
+        if (result == null) {
             Query.table(BlockTotals.TableName)
-                .value(BlockTotals.PlayerId, playerId)
-                .value(BlockTotals.MaterialId, MaterialCache.parse(block))
-                .value(BlockTotals.Destroyed, broken)
-                .value(BlockTotals.Placed, placed)
-                .insert();
+                    .value(BlockTotals.PlayerId, playerId)
+                    .value(BlockTotals.MaterialId, MaterialCache.parse(block))
+                    .value(BlockTotals.Destroyed, broken)
+                    .value(BlockTotals.Placed, placed)
+                    .insert();
         } else {
             broken = result.asInt(BlockTotals.Destroyed);
             placed = result.asInt(BlockTotals.Placed);
@@ -84,45 +85,46 @@ public class TotalBlockStats extends NormalData {
     @Override
     public boolean pushData(int playerId) {
         boolean result = Query.table(BlockTotals.TableName)
-            .value(BlockTotals.Destroyed, broken)
-            .value(BlockTotals.Placed, placed)
-            .condition(BlockTotals.PlayerId, playerId)
-            .condition(BlockTotals.MaterialId, MaterialCache.parse(block))
-            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+                .value(BlockTotals.Destroyed, broken)
+                .value(BlockTotals.Placed, placed)
+                .condition(BlockTotals.PlayerId, playerId)
+                .condition(BlockTotals.MaterialId, MaterialCache.parse(block))
+                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(playerId);
         return result;
     }
-    
+
     @Override
     public void clearData(int playerId) {
         broken = 0;
         placed = 0;
     }
-    
+
     /**
      * Checks if the object corresponds to provided parameters
+     *
      * @param block Block to compare to
      * @return <b>true</b> if the conditions are met, <b>false</b> otherwise
      */
     public boolean equals(BlockState block) {
-        if(ItemsWithMetadata.contains(block.getTypeId())) {
+        if (ItemsWithMetadata.contains(block.getTypeId())) {
             return block.getType().equals(this.block.getType()) && block.getData().getData() == this.block.getData().getData();
         } else {
             return block.getType().equals(this.block.getType());
         }
     }
-    
+
     /**
      * Increments the number of blocks to the total number of blocks destroyed
      */
     public void addBroken() {
-        broken ++;
+        broken++;
     }
-    
+
     /**
      * Increments the number of blocks to the total number of blocks placed
      */
     public void addPlaced() {
-        placed ++;
+        placed++;
     }
 }

@@ -30,20 +30,21 @@ import java.util.logging.Level;
 
 /**
  * Handles all the processes that refresh the plugin cache
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class CachedData {
-    
+
     private static Map<CachedDataType, Integer> tasks = new HashMap<CachedDataType, Integer>();
-    
+
     /**
      * Starts the specified process, as long as it is not running
+     *
      * @param type Process to start
      * @return <b>true</b> if the process has been started, <b>false</b> if an error occurred
      */
     public static boolean startProcess(CachedDataType type) {
-        if(tasks.containsKey(type)) return false;
+        if (tasks.containsKey(type)) return false;
         int processId = Bukkit.getScheduler().runTaskTimerAsynchronously(
                 Statistics.getInstance(),
                 type.process,
@@ -53,48 +54,51 @@ public class CachedData {
         tasks.put(type, processId);
         return true;
     }
-    
+
     /**
      * Stops the specified process (if it is running)
+     *
      * @param type Process to stop
      * @return <b>true</b> if the process has been stopped, <b>false</b> if an error occurred
      */
     public static boolean stopProcess(CachedDataType type) {
-        if(!tasks.containsKey(type)) return false;
+        if (!tasks.containsKey(type)) return false;
         Bukkit.getScheduler().cancelTask(tasks.get(type));
         return true;
     }
-    
+
     /**
      * Starts all processes, as long as they have not been started yet
+     *
      * @return <b>true</b> if all processes have been started, <b>false</b> if an error occurred
      */
     public static boolean startAll() {
         boolean result = true;
-        for(CachedDataType type : CachedDataType.values()) {
-            if(tasks.containsKey(type)) continue;
+        for (CachedDataType type : CachedDataType.values()) {
+            if (tasks.containsKey(type)) continue;
             result = result && startProcess(type);
         }
         return result;
     }
-    
+
     /**
      * Stops all processes, as long as they are running
+     *
      * @return <b>true</b> if all processes have been stopped, <b>false</b> if an error occurred
      */
     public static boolean stopAll() {
         boolean result = true;
-        for(CachedDataType type : CachedDataType.values()) {
-            if(tasks.containsKey(type)) continue;
+        for (CachedDataType type : CachedDataType.values()) {
+            if (tasks.containsKey(type)) continue;
             result = result && stopProcess(type);
         }
         return result;
     }
-    
+
     /**
      * Denotes different cached data types
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     public enum CachedDataType {
         Entity(EntityCache.class),
@@ -105,10 +109,18 @@ public class CachedData {
         private CachedDataProcess process;
 
         CachedDataType(Class<?> process) {
-            try { this.process = (CachedDataProcess) process.newInstance(); }
-            catch (InstantiationException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " InstantiationException)"); return; }
-            catch (IllegalAccessException e)    { Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " IllegalAccessException)"); return; }
-            catch (Exception e)                 { Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " " + e.getMessage() + ")"); return; }
+            try {
+                this.process = (CachedDataProcess) process.newInstance();
+            } catch (InstantiationException e) {
+                Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " InstantiationException)");
+                return;
+            } catch (IllegalAccessException e) {
+                Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " IllegalAccessException)");
+                return;
+            } catch (Exception e) {
+                Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " " + e.getMessage() + ")");
+                return;
+            }
         }
     }
 
@@ -127,6 +139,6 @@ public class CachedData {
         public long getRefreshRate();
 
     }
-    
+
 }
 

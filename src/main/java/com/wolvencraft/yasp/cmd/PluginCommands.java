@@ -32,7 +32,7 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 public class PluginCommands {
-    
+
     @Command(
             alias = "help",
             minArgs = 0,
@@ -41,16 +41,16 @@ public class PluginCommands {
             allowConsole = true,
             usage = "/stats help",
             description = "Full command help listing"
-            )
+    )
     public static boolean help(List<String> args) {
         Message.formatHeader(20, "Statistics Help");
-        for(CommandPair command : CommandManager.getCommands()) {
+        for (CommandPair command : CommandManager.getCommands()) {
             Command cmd = command.getProperties();
             Message.send(ChatColor.GREEN + cmd.usage() + " " + ChatColor.GRAY + cmd.description());
         }
         return true;
     }
-    
+
     @Command(
             alias = "pause",
             minArgs = 2,
@@ -59,9 +59,9 @@ public class PluginCommands {
             allowConsole = true,
             usage = "/stats pause",
             description = "Temporarily pauses all data collection"
-            )
+    )
     public static boolean pause(List<String> args) {
-        if(Statistics.isPaused()) {
+        if (Statistics.isPaused()) {
             Statistics.setPaused(false);
             Message.send("Data collection is unpaused");
         } else {
@@ -70,7 +70,7 @@ public class PluginCommands {
         }
         return true;
     }
-    
+
     @Command(
             alias = "remove",
             minArgs = 1,
@@ -79,11 +79,11 @@ public class PluginCommands {
             allowConsole = true,
             usage = "/stats remove <player>",
             description = "Removes an player from the database"
-            )
+    )
     public static boolean remove(List<String> args) {
         final CommandSender sender = CommandManager.getSender();
         final String player = args.get(0);
-        
+
         Message.sendFormattedSuccess("Attempting to remove player (" + player + ")");
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
 
@@ -113,10 +113,10 @@ public class PluginCommands {
                 }*/
                 Message.sendFormattedError(sender, "Command disabled for now! It will be readded in the future.");
             }
-            
+
         });
-        
+
         return true;
     }
-    
+
 }

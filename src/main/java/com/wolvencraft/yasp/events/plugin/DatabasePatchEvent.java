@@ -29,26 +29,26 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Called when the plugin is being patched by the database
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @Getter(AccessLevel.PUBLIC)
 public class DatabasePatchEvent extends StatisticsEvent implements Cancellable {
-    
+
     private static final HandlerList handlers = new HandlerList();
 
     @Setter(AccessLevel.PUBLIC)
     private boolean cancelled;
     private String patchId;
-    
+
     public DatabasePatchEvent(String patchId) {
         this.patchId = patchId;
         this.cancelled = false;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-    
+
 }

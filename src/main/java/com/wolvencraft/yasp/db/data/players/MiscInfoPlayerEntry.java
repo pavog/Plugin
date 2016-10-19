@@ -37,44 +37,45 @@ import java.util.Map;
 
 /**
  * Represents all the miscellaneous information that does not fit any other category
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class MiscInfoPlayerEntry extends NormalData {
 
     private final String playerName;
     private Map<DBTable, Object> values;
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new MiscInfoPlayers object based on arguments provided
+     *
      * @param playerId Player ID
-     * @param player Player object
+     * @param player   Player object
      */
     public MiscInfoPlayerEntry(int playerId, Player player) {
         playerName = player.getName();
-        
+
         values = new HashMap<DBTable, Object>();
-        
-        if(player.isOp()) values.put(PlayerData.IsOp, 1);
+
+        if (player.isOp()) values.put(PlayerData.IsOp, 1);
         else values.put(PlayerData.IsOp, 0);
         //Player should't be banned if the joines the server ;) (Probalby breaks the ban display)
         //if(player.isBanned()) values.put(PlayerData.IsBanned, 1);
         //else values.put(PlayerData.IsBanned, 0);
         values.put(PlayerData.IsBanned, 0);
-        
+
         InetAddress playerIp = player.getAddress().getAddress();
-        if(playerIp == null) values.put(PlayerData.PlayerIp, "192.168.0.1");
+        if (playerIp == null) values.put(PlayerData.PlayerIp, "192.168.0.1");
         else values.put(PlayerData.PlayerIp, playerIp.getHostAddress());
-        
+
         values.put(PlayerData.Gamemode, player.getGameMode().getValue());
         values.put(PlayerData.ExpPercent, player.getExp());
         values.put(PlayerData.ExpLevel, player.getLevel());
         values.put(PlayerData.FoodLevel, player.getFoodLevel());
         values.put(PlayerData.HealthLevel, player.getHealth());
         values.put(PlayerData.ArmorLevel, Util.getArmorRating(player.getInventory()));
-        
-        values.put(PlayerData.ExpTotal,0);
+
+        values.put(PlayerData.ExpTotal, 0);
         values.put(PlayerData.FishCaught, 0);
         values.put(PlayerData.TimesKicked, 0);
         values.put(PlayerData.EggsThrown, 0);
@@ -86,28 +87,28 @@ public class MiscInfoPlayerEntry extends NormalData {
         values.put(PlayerData.WordsSaid, 0);
         values.put(PlayerData.CommandsSent, 0);
         values.put(PlayerData.TimesJumped, 0);
-        
+
         values.put(PlayerData.CurKillStreak, 0);
         values.put(PlayerData.MaxKillStreak, 0);
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
+        if (RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
-        
+
         QueryResult result = Query.table(PlayerData.TableName)
-            .condition(PlayerData.PlayerId, playerId)
-            .select();
-        if(result == null) {
+                .condition(PlayerData.PlayerId, playerId)
+                .select();
+        if (result == null) {
             Query.table(PlayerData.TableName)
-                .value(PlayerData.PlayerId, playerId)
-                .valueRaw(values)
-                .insert();
+                    .value(PlayerData.PlayerId, playerId)
+                    .valueRaw(values)
+                    .insert();
         } else {
             values.put(PlayerData.ExpTotal, result.asInt(PlayerData.ExpTotal));
             values.put(PlayerData.FishCaught, result.asInt(PlayerData.FishCaught));
@@ -129,13 +130,13 @@ public class MiscInfoPlayerEntry extends NormalData {
     public boolean pushData(int playerId) {
         refreshPlayerData();
         boolean result = Query.table(PlayerData.TableName)
-            .valueRaw(values)
-            .condition(PlayerData.PlayerId, playerId)
-            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+                .valueRaw(values)
+                .condition(PlayerData.PlayerId, playerId)
+                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         fetchData(playerId);
         return result;
     }
-    
+
     public void clearData(int playerId) {
         values.put(PlayerData.ExpTotal, 0);
         values.put(PlayerData.FishCaught, 0);
@@ -149,24 +150,24 @@ public class MiscInfoPlayerEntry extends NormalData {
         values.put(PlayerData.WordsSaid, 0);
         values.put(PlayerData.CommandsSent, 0);
         values.put(PlayerData.TimesJumped, 0);
-        
+
         values.put(PlayerData.CurKillStreak, 0);
         values.put(PlayerData.MaxKillStreak, 0);
     }
-    
+
     /**
      * Fetches the player data from the player, if he is online
      */
     public void refreshPlayerData() {
         Player player = Bukkit.getServer().getPlayerExact(playerName);
-        if(player == null) return;
+        if (player == null) return;
 
-        if(player.isOp()) values.put(PlayerData.IsOp, 1);
+        if (player.isOp()) values.put(PlayerData.IsOp, 1);
         else values.put(PlayerData.IsOp, 0);
-        if(player.isBanned()) values.put(PlayerData.IsBanned, 1);
+        if (player.isBanned()) values.put(PlayerData.IsBanned, 1);
         else values.put(PlayerData.IsBanned, 0);
         values.put(PlayerData.PlayerIp, player.getAddress().getAddress().getHostAddress());
-        
+
         values.put(PlayerData.Gamemode, player.getGameMode().getValue());
         values.put(PlayerData.ExpPercent, player.getExp());
         values.put(PlayerData.ExpLevel, player.getLevel());
@@ -174,39 +175,42 @@ public class MiscInfoPlayerEntry extends NormalData {
         values.put(PlayerData.HealthLevel, player.getHealth());
         values.put(PlayerData.ArmorLevel, Util.getArmorRating(player.getInventory()));
     }
-    
+
     /**
      * Increments the specified miscellaneous statistic by 1
+     *
      * @param type Statistic type
      */
     public void incrementStat(PlayerData type) {
         double value = 1;
-        if(values.containsKey(type)) {
+        if (values.containsKey(type)) {
             Object valueObj = values.get(type);
-            if(valueObj instanceof Double)
+            if (valueObj instanceof Double)
                 value = ((Double) valueObj).doubleValue() + 1;
             else value = ((Integer) valueObj).doubleValue() + 1;
         }
         values.put(type, value);
     }
-    
+
     /**
      * Increments the miscellaneous statistic by the specified amount
-     * @param type Statistic type
+     *
+     * @param type  Statistic type
      * @param value Amount
      */
     public void incrementStat(PlayerData type, double value) {
-        if(values.containsKey(type)) {
+        if (values.containsKey(type)) {
             Object valueObj = values.get(type);
-            if(valueObj instanceof Double)
+            if (valueObj instanceof Double)
                 value += ((Double) valueObj).doubleValue();
             else value += ((Integer) valueObj).doubleValue();
         }
         values.put(type, value);
     }
-    
+
     /**
      * Logs player killing another player
+     *
      * @param player Player that was killed
      */
     public void killed(Player player) {
@@ -214,19 +218,19 @@ public class MiscInfoPlayerEntry extends NormalData {
         int curKillStreak = ((Integer) values.get(PlayerData.CurKillStreak)).intValue() + 1;
         int maxKillStreak = ((Integer) values.get(PlayerData.MaxKillStreak)).intValue();
         values.put(PlayerData.CurKillStreak, curKillStreak);
-        if(curKillStreak > maxKillStreak) {
+        if (curKillStreak > maxKillStreak) {
             maxKillStreak++;
             values.put(PlayerData.MaxKillStreak, maxKillStreak);
         }
     }
-    
+
     /**
      * Logs player being killed by mobs or natural causes
      */
     public void died() {
         int curKillStreak = ((Integer) values.get(PlayerData.CurKillStreak)).intValue();
         int maxKillStreak = ((Integer) values.get(PlayerData.MaxKillStreak)).intValue();
-        if(curKillStreak > maxKillStreak) {
+        if (curKillStreak > maxKillStreak) {
             maxKillStreak++;
             values.put(PlayerData.MaxKillStreak, maxKillStreak);
         }

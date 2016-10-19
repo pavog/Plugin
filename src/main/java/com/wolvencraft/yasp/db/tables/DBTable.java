@@ -23,22 +23,24 @@ package com.wolvencraft.yasp.db.tables;
 /**
  * Common interface for database tables.<br />
  * Table enums have to implement this method to be used in queries.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public interface DBTable {
-    
+
     /**
      * Returns the name of the column
+     *
      * @return Column name
      */
     public String getColumnName();
-    
+
     /**
      * Equivalent to <code>getColumnName();</code>.
      * Required due to some gimmicks in the Query code.
+     *
      * @return
      */
     public String toString();
-    
+
 }

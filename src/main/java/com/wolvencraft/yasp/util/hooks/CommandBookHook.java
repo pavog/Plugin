@@ -32,13 +32,14 @@ import org.bukkit.entity.Player;
 public class CommandBookHook extends PluginHook {
 
     private static ComponentManager<BukkitComponent> componentManager;
-    
+
     public CommandBookHook() {
         super(Module.CommandBook, "CommandBook");
     }
-    
+
     /**
      * Checks if the player is in the god mode
+     *
      * @param player Player to look up
      * @return <b>true</b> if the player has god mode on, <b>false</b> otherwise
      */
@@ -46,9 +47,10 @@ public class CommandBookHook extends PluginHook {
         GodComponent component = ((GodComponent) componentManager.getComponent(GodComponent.class));
         return component.isEnabled() && component.hasGodMode(player);
     }
-    
+
     /**
      * Returns the player's AFK status
+     *
      * @param player Player to look up
      * @return <b>true</b> if the player is AFK, <b>false</b> otherwise
      */
@@ -67,5 +69,5 @@ public class CommandBookHook extends PluginHook {
     protected void onDisable() {
         componentManager = null;
     }
-    
+
 }

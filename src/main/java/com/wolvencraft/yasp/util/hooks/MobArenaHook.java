@@ -25,24 +25,26 @@ import com.wolvencraft.yasp.settings.Module;
 import org.bukkit.entity.Player;
 
 public class MobArenaHook extends PluginHook {
-    
+
     private static MobArena instance;
-    
+
     public MobArenaHook() {
         super(Module.MobArena, "MobArena");
     }
-    
+
     /**
      * Checks if a player is participating in any of the arenas
+     *
      * @param player Player object
      * @return <b>true</b> if a player is in the arena, <b>false</b> otherwise
      */
     public static boolean isPlaying(Player player) {
         return instance.getArenaMaster().getAllPlayers().contains(player);
     }
-    
+
     /**
      * Returns the name of the arena the player is currently in
+     *
      * @param player Player object
      * @return <b>String</b> name of the arena, or <b>null</b> if the player is not participating
      */

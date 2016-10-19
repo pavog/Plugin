@@ -32,45 +32,47 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * Data store that handles all PVP statistics on the server
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class PVPData extends DataStore<TotalPVPStats, PVPEntry> {
-    
+
     public PVPData(OnlineSession session) {
         super(session, DataStoreType.PVP);
     }
-    
+
     /**
      * Returns the specific entry from the data store.<br />
      * If the entry does not exist, it will be created.
+     *
      * @param victimId ID of the victim in a PVP event
-     * @param weapon Weapon used in the event
+     * @param weapon   Weapon used in the event
      * @return Corresponding entry
      */
     public TotalPVPStats getNormalData(int victimId, ItemStack weapon) {
-        for(TotalPVPStats entry : getNormalData()) {
-            if(entry.equals(victimId, weapon)) return entry;
+        for (TotalPVPStats entry : getNormalData()) {
+            if (entry.equals(victimId, weapon)) return entry;
         }
         TotalPVPStats entry = new TotalPVPStats(session.getId(), victimId, weapon);
         normalData.add(entry);
         return entry;
     }
-    
+
     /**
      * Registers the player death in the data store
-     * @param victim Player who was killed 
+     *
+     * @param victim Player who was killed
      * @param weapon Weapon used by killer
      */
     public void playerKilledPlayer(Player victim, ItemStack weapon) {
         int victimId = PlayerCache.get(victim);
         getNormalData(victimId, weapon).addTimes();
         PVPEntry detailedEntry = new PVPEntry(victim.getLocation(), victimId, weapon);
-        if(Module.DetailedPVPDeaths.isEnabled()){
+        if (Module.DetailedPVPDeaths.isEnabled()) {
             detailedData.add(detailedEntry);
         }
-        
+
         Bukkit.getServer().getPluginManager().callEvent(new TrackedPVPEvent(session, detailedEntry));
     }
-    
+
 }

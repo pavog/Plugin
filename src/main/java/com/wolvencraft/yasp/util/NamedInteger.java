@@ -25,16 +25,16 @@ import lombok.Getter;
 
 /**
  * Represents an integer that has a String attached to it
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @Getter(AccessLevel.PUBLIC)
 public class NamedInteger {
-    
+
     private String name;
     private String[] possibleNames;
     private Integer value;
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates an empty NamedInteger with default data.
@@ -42,37 +42,40 @@ public class NamedInteger {
     public NamedInteger() {
         name = "NO_NAME";
         value = -1;
-        possibleNames = new String[] {"NO_NAME"};
+        possibleNames = new String[]{"NO_NAME"};
     }
-    
+
     /**
      * <b>Constructor</b><br />
      * Creates a NamedInteger with pre-defined data
-     * @param name Integer name
+     *
+     * @param name  Integer name
      * @param value Integer value
      */
     public NamedInteger(String name, Integer value) {
         this.name = name;
         this.value = value;
-        possibleNames = new String[] { name };
+        possibleNames = new String[]{name};
     }
-    
+
     /**
      * Sets the name and value for the Integer
-     * @param name New name
+     *
+     * @param name  New name
      * @param value New value
      */
     public void setData(String name, Integer value) {
         this.name = name;
         this.value = value;
     }
-    
+
     /**
      * Sets the possible names for the Integer
+     *
      * @param names Possible names
      */
     public void setPossibleNames(String... names) {
         this.possibleNames = names;
     }
-    
+
 }

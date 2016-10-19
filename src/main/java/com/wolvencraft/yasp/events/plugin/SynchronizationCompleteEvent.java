@@ -28,19 +28,19 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Called when the data has been synchronized with the database
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
-@AllArgsConstructor(access=AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
 public class SynchronizationCompleteEvent extends StatisticsEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private int processId;
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-    
+
 }

@@ -36,28 +36,28 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class DeathHandler {
-    
+
     /**
      * Executed when a player dies
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     public static class PlayerDeath implements Runnable {
-        
+
         public Player player;
         public PlayerDeathEvent event;
-        
+
         @Override
         public void run() {
             EntityDamageEvent lastDamageEvent = player.getLastDamageCause();
             OnlineSession session = OnlineSessionCache.fetch(player);
             //Skip data tracking if not all players data is read from database
-            if(session.isReady()){
-            
+            if (session.isReady()) {
+
                 if (lastDamageEvent == null) return;
                 DamageCause cause = lastDamageEvent.getCause();
-            
+
                 if (lastDamageEvent instanceof EntityDamageByEntityEvent) {
                     // Player killed by entity
                     Entity killerEntity = ((EntityDamageByEntityEvent) lastDamageEvent).getDamager();
@@ -66,80 +66,80 @@ public class DeathHandler {
                         // + Player was shot
                         Projectile projectile = (Projectile) killerEntity;
                         if (projectile.getShooter() instanceof Player) {
-                   // | + Player shot by Player
+                            // | + Player shot by Player
                             Player killer = (Player) projectile.getShooter();
-                            if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(player)) return;
+                            if (!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(player)) return;
                             OnlineSession killer_session = OnlineSessionCache.fetch(killer);
-                            if(killer_session.isReady()){
+                            if (killer_session.isReady()) {
                                 killer_session.killedPlayer(player, Constants.ProjectileToItem.parse(projectile.getType()));
                             }
                         } else if (projectile.getShooter() instanceof Creature) {
-                    // | + Player was shot by a monster
-                            if(!StatPerms.DeathPVE.has(player)) return;
+                            // | + Player was shot by a monster
+                            if (!StatPerms.DeathPVE.has(player)) return;
                             Entity killer = (Entity) projectile.getShooter();
                             session.killedByCreature(killer, Constants.ProjectileToItem.parse(projectile.getType()));
                         }
                     } else if (killerEntity instanceof Player) {
-                    // + Player killed Player
+                        // + Player killed Player
                         Player killer = (Player) killerEntity;
-                        if(!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(player)) return;
+                        if (!StatPerms.DeathPVP.has(killer) || !StatPerms.DeathPVP.has(player)) return;
                         OnlineSession killer_session = OnlineSessionCache.fetch(killer);
-                        if(killer_session.isReady()){
-                            killer_session.killedPlayer(player, killer.getItemInHand());  
-                        } 
+                        if (killer_session.isReady()) {
+                            killer_session.killedPlayer(player, killer.getItemInHand());
+                        }
                     } else if (killerEntity instanceof Creature) {
-                    // + Creature killed Player
-                        if(!StatPerms.DeathPVE.has(player)) return;
+                        // + Creature killed Player
+                        if (!StatPerms.DeathPVE.has(player)) return;
                         session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                     } else if (killerEntity instanceof Slime) {
-                    // + Slime killed player
-                        if(!StatPerms.DeathPVE.has(player)) return;
+                        // + Slime killed player
+                        if (!StatPerms.DeathPVE.has(player)) return;
                         session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                     } else if (killerEntity instanceof EnderDragon) {
-                    // + Ender Dragon killed player
-                        if(!StatPerms.DeathPVE.has(player)) return;
+                        // + Ender Dragon killed player
+                        if (!StatPerms.DeathPVE.has(player)) return;
                         session.killedByCreature(killerEntity, new ItemStack(Material.AIR));
                     } else {
-                    // + Player died
-                        if(!StatPerms.DeathOther.has(player)) return;
+                        // + Player died
+                        if (!StatPerms.DeathOther.has(player)) return;
                         session.killedByEnvironment(player.getLocation(), cause);
                     }
                 } else {
                     // Player killed by other means
-                    if(!StatPerms.DeathOther.has(player)) return;
+                    if (!StatPerms.DeathOther.has(player)) return;
                     session.killedByEnvironment(player.getLocation(), cause);
                 }
             }
         }
     }
-    
+
 
     /**
      * Executed when a monster dies
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     public static class MonsterDeath implements Runnable {
-        
+
         private EntityDeathEvent event;
-        
+
         @Override
         public void run() {
             Entity victim = event.getEntity();
             EntityDamageEvent lastDamageEvent = victim.getLastDamageCause();
             if (lastDamageEvent == null) return;
-            
+
             if (!(lastDamageEvent instanceof EntityDamageByEntityEvent)) return;
-            
+
             Entity killerEntity = ((EntityDamageByEntityEvent) lastDamageEvent).getDamager();
-            
+
             if (killerEntity instanceof Projectile) {
                 // Entity was shot
                 Projectile projectile = (Projectile) killerEntity;
                 if (!(projectile.getShooter() instanceof Player)) return;
                 Player killer = (Player) projectile.getShooter();
-                if(!StatPerms.DeathPVE.has(killer)) return;
+                if (!StatPerms.DeathPVE.has(killer)) return;
                 if (victim instanceof Creature) {
                     // + Player shot Creature
                     OnlineSessionCache.fetch(killer).killedCreature(victim, Constants.ProjectileToItem.parse(projectile.getType()));
@@ -156,7 +156,7 @@ public class DeathHandler {
             } else if (killerEntity instanceof Player) {
                 // Player killed an entity
                 Player killer = (Player) killerEntity;
-                if(!StatPerms.DeathPVE.has(killer)) return;
+                if (!StatPerms.DeathPVE.has(killer)) return;
                 if (victim instanceof Creature) {
                     // + Player killed Creature
                     OnlineSessionCache.fetch(killer).killedCreature(victim, killer.getItemInHand());
@@ -173,5 +173,5 @@ public class DeathHandler {
             }
         }
     }
-    
+
 }

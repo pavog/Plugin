@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class PlayerCommands {
-    
+
     @Command(
             alias = "book",
             minArgs = 0,
@@ -38,13 +38,13 @@ public class PlayerCommands {
             allowConsole = false,
             usage = "/stats book",
             description = "Get a book with all your statistical information"
-            )
+    )
     public static boolean book(List<String> args) {
         Player player = (Player) CommandManager.getSender();
         player.getInventory().addItem(com.wolvencraft.yasp.util.BookUtil.compileStatsBook(player));
         return false;
     }
-    
+
     @Command(
             alias = "scoreboard",
             minArgs = 0,
@@ -53,12 +53,12 @@ public class PlayerCommands {
             allowConsole = false,
             usage = "/stats scoreboard",
             description = "Displays stats on a scoreboard"
-            )
+    )
     public static boolean scoreboard(List<String> args) {
         Player player = (Player) CommandManager.getSender();
-        if(OnlineSessionCache.fetch(player).toggleScoreboard()) Message.sendFormattedSuccess("Displaying a scoreboard");
+        if (OnlineSessionCache.fetch(player).toggleScoreboard()) Message.sendFormattedSuccess("Displaying a scoreboard");
         else Message.sendFormattedSuccess("Scoreboard disabled");
         return true;
     }
-    
+
 }

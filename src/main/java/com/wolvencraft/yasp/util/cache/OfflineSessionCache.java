@@ -30,14 +30,14 @@ import java.util.UUID;
 
 /**
  * Caches Offline sessions server-side
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class OfflineSessionCache implements CachedDataProcess {
 
     private static List<OfflineSession> sessions;
     private final long REFRESH_RATE_TICKS = (long) (24 * 3600 * 20);
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates an list of Offline sessions for storage
@@ -45,24 +45,26 @@ public class OfflineSessionCache implements CachedDataProcess {
     public OfflineSessionCache() {
         sessions = new ArrayList<OfflineSession>();
     }
-    
+
     /**
      * Fetches the OfflineSession from the cache
+     *
      * @param username Player name
      * @return Offline session
      */
     public static OfflineSession fetch(UUID uuid) {
-        for(OfflineSession session : sessions) {
-            if(session.getUUID().equals(uuid)) return session;
+        for (OfflineSession session : sessions) {
+            if (session.getUUID().equals(uuid)) return session;
         }
         Message.debug("Creating a new offline Session.");
         OfflineSession session = new OfflineSession(uuid);
         sessions.add(session);
         return session;
     }
-    
+
     /**
      * Returns all stored sessions.
+     *
      * @return List of stored player sessions
      */
     public static List<OfflineSession> getSessions() {

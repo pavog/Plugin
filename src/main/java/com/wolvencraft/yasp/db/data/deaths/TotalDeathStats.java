@@ -32,41 +32,41 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 /**
  * Represents the total number of times a player died of a particular cause.<br />
  * Each entry must have a unique player and a unique death cause.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
-@Getter(AccessLevel.PUBLIC) 
+@Getter(AccessLevel.PUBLIC)
 public class TotalDeathStats extends NormalData {
-    
+
     private DamageCause cause;
     private int times;
-    
+
     public TotalDeathStats(int playerId, DamageCause cause) {
         this.cause = cause;
         times = 0;
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
+        if (RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
-        
+
         QueryResult result = Query.table(DeathTotals.TableName)
                 .column(DeathTotals.Times)
                 .condition(DeathTotals.PlayerId, playerId)
                 .condition(DeathTotals.Cause, cause.name())
                 .select();
-        
-        if(result == null) {
+
+        if (result == null) {
             Query.table(DeathTotals.TableName)
-                .value(DeathTotals.PlayerId, playerId)
-                .value(DeathTotals.Cause, cause.name())
-                .value(DeathTotals.Times, times)
-                .insert();
+                    .value(DeathTotals.PlayerId, playerId)
+                    .value(DeathTotals.Cause, cause.name())
+                    .value(DeathTotals.Times, times)
+                    .insert();
         } else {
             times = result.asInt(DeathTotals.Times);
         }
@@ -82,17 +82,17 @@ public class TotalDeathStats extends NormalData {
         fetchData(playerId);
         return result;
     }
-    
+
     @Override
     public void clearData(int playerId) {
         times = 0;
     }
-    
+
     /**
      * Increments the number of times a player died from the specified cause.
      */
     public void addTimes() {
         times++;
     }
-    
+
 }

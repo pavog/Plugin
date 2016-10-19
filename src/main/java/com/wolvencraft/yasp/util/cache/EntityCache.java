@@ -30,14 +30,14 @@ import java.util.List;
 
 /**
  * Caches entity IDs server-side
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class EntityCache implements CachedDataProcess {
-    
+
     private static List<String> entities;
     private final long REFRESH_RATE_TICKS = (long) (24 * 3600 * 20);
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new List for data storage
@@ -45,21 +45,22 @@ public class EntityCache implements CachedDataProcess {
     public EntityCache() {
         entities = new ArrayList<String>();
     }
-    
+
     /**
      * Parses the entity type and returns a valid entity ID
+     *
      * @param type Entity type
      * @return Entity ID
      */
     public static String parse(EntityType type) {
         String typeId = type.getTypeId() + ""; // TODO Use the correct metadata
-        if(entities.contains(typeId)) return typeId;
+        if (entities.contains(typeId)) return typeId;
         entities.add(typeId);
-        if(!Query.table(EntitiesTable.TableName).condition(EntitiesTable.EntityId, typeId).exists()) {
+        if (!Query.table(EntitiesTable.TableName).condition(EntitiesTable.EntityId, typeId).exists()) {
             Query.table(EntitiesTable.TableName)
-                 .value(EntitiesTable.EntityId, typeId)
-                 .value(EntitiesTable.TpName, "custom_" + type.getName().toLowerCase().replace(" ", "_"))
-                 .insert();
+                    .value(EntitiesTable.EntityId, typeId)
+                    .value(EntitiesTable.TpName, "custom_" + type.getName().toLowerCase().replace(" ", "_"))
+                    .insert();
         }
         return typeId + "";
     }
@@ -73,5 +74,5 @@ public class EntityCache implements CachedDataProcess {
     public void run() {
         entities.clear();
     }
-    
+
 }

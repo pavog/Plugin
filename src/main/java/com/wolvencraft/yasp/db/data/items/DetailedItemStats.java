@@ -33,26 +33,26 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 public class DetailedItemStats {
-    
+
     /**
      * An immutable item drop entry
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     @Getter(AccessLevel.PUBLIC)
     public static class ItemDropEntry extends DetailedData {
-        
+
         private final ItemStack stack;
         private final Location location;
         private final long timestamp;
-        
+
         public ItemDropEntry(Location location, ItemStack stack) {
             this.stack = stack.clone();
             //this.stack.setAmount(1);
             this.location = location.clone();
             timestamp = Util.getTimestamp();
         }
-        
+
         @Override
         public boolean pushData(int playerId) {
             return Query.table(ItemsDropped.TableName)
@@ -67,27 +67,27 @@ public class DetailedItemStats {
                     .insert();
         }
     }
-    
+
     /**
      * An immutable item pickup entry
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     @Getter(AccessLevel.PUBLIC)
     public static class ItemPickupEntry extends DetailedData {
-        
+
         private final ItemStack stack;
         private final int amount;
         private final Location location;
         private final long timestamp;
-        
+
         public ItemPickupEntry(Location location, ItemStack stack, int amount) {
             this.stack = stack.clone();
             this.amount = amount;
             this.location = location.clone();
             timestamp = Util.getTimestamp();
         }
-        
+
         @Override
         public boolean pushData(int playerId) {
             return Query.table(ItemsPickedUp.TableName)
@@ -102,11 +102,11 @@ public class DetailedItemStats {
                     .insert();
         }
     }
-    
+
     /**
      * An immutable item consume entry
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     @Getter(AccessLevel.PUBLIC)
     public static class ItemConsumeEntry extends DetailedData {
@@ -114,14 +114,14 @@ public class DetailedItemStats {
         private final ItemStack stack;
         private final Location location;
         private final long timestamp;
-        
+
         public ItemConsumeEntry(Location location, ItemStack stack) {
             this.stack = stack.clone();
             this.stack.setAmount(1);
             this.location = location.clone();
             timestamp = Util.getTimestamp();
         }
-        
+
         @Override
         public boolean pushData(int playerId) {
             return Query.table(ItemsConsumed.TableName)

@@ -30,36 +30,39 @@ import java.util.List;
 
 /**
  * Provides means to serialize a <code>Collection&lt;PotionEffect&gt;</code> into a Json array
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @SuppressWarnings("unused")
 public class EffectsSerializable {
-    
+
     private int effect_id;
     private int time;
-    
+
     /**
      * <b>Default constructor</b>
+     *
      * @param effect Potion effect type
      */
     private EffectsSerializable(PotionEffect effect) {
         effect_id = effect.getType().getId();
         time = effect.getDuration() / 20;
     }
-    
+
     /**
      * Compresses a Collection into a single-line json array.<br />
      * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code><br />
      * Stores only potion ID and duration.
+     *
      * @param effects Effects to compress
      * @return String Json array
      */
     public static String serialize(Collection<PotionEffect> effects) {
         List<EffectsSerializable> potEffects = new ArrayList<EffectsSerializable>();
-        for(PotionEffect eff : effects) {
-            try { potEffects.add(new EffectsSerializable(eff)); }
-            catch (Throwable t) {
+        for (PotionEffect eff : effects) {
+            try {
+                potEffects.add(new EffectsSerializable(eff));
+            } catch (Throwable t) {
                 ExceptionHandler.handle(t, true);
                 continue;
             }

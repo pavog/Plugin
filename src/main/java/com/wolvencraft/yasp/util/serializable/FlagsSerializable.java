@@ -31,33 +31,34 @@ import java.util.List;
 /**
  * Requires <b>WorldGuardHook</b><br />
  * Stores all flags from the ApplicableRegionSet in a Json array
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @SuppressWarnings("unused")
 public class FlagsSerializable {
-    
+
     private String flag;
     private Object value;
-    
-    
+
+
     private FlagsSerializable(String flag, Object value) {
         this.flag = flag;
         this.value = value;
     }
-    
+
     /**
      * Fetches the flags from the ApplicableRegionSet and stores them in a Json array.<br />
      * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code>
+     *
      * @param set Applicable region set
      * @return Json array
      */
     public static String serialize(ApplicableRegionSet set) {
         List<FlagsSerializable> flags = new ArrayList<FlagsSerializable>();
-        for(Flag<?> flag : DefaultFlag.flagsList) {
+        for (Flag<?> flag : DefaultFlag.flagsList) {
             flags.add(new FlagsSerializable(flag.getName(), set.getFlag(flag)));
         }
         return Util.toJsonArray(flags);
     }
-    
+
 }

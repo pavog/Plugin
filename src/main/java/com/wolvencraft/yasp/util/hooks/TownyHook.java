@@ -31,36 +31,45 @@ import com.wolvencraft.yasp.util.serializable.TownSerializable;
 import com.wolvencraft.yasp.util.serializable.TownyPlayerSerializable;
 
 public class TownyHook extends PluginHook {
-    
+
     public TownyHook() {
         super(Module.Towny, "Towny");
     }
-    
+
     public static String[] getPlayerData(String playerName) {
-        String[] data = new String[] {"", "", ""};
-        
+        String[] data = new String[]{"", "", ""};
+
         Resident resident;
-        try { resident = TownyUniverse.getDataSource().getResident(playerName); }
-        catch (NotRegisteredException e) { return data; }
-        if(resident == null) return data;
-        
+        try {
+            resident = TownyUniverse.getDataSource().getResident(playerName);
+        } catch (NotRegisteredException e) {
+            return data;
+        }
+        if (resident == null) return data;
+
         data[0] = TownyPlayerSerializable.serialize(resident);
-        
+
         Town town;
-        try { town = resident.getTown(); }
-        catch (NotRegisteredException e) { return data; }
-        if(town == null) return data;
-        
+        try {
+            town = resident.getTown();
+        } catch (NotRegisteredException e) {
+            return data;
+        }
+        if (town == null) return data;
+
         data[1] = TownSerializable.serialize(town);
-        
+
         Nation nation;
-        try { nation = town.getNation(); }
-        catch (NotRegisteredException e) { return data; }
-        if(nation == null) return data;
-        
+        try {
+            nation = town.getNation();
+        } catch (NotRegisteredException e) {
+            return data;
+        }
+        if (nation == null) return data;
+
         data[2] = NationSerializable.serialize(nation);
-        
+
         return data;
     }
-    
+
 }

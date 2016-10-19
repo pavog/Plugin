@@ -31,37 +31,40 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
 public class AdminCmdHook extends PluginHook {
-    
+
     public AdminCmdHook() {
         super(Module.AdminCmd, "AdminCmd");
     }
-    
+
     /**
      * Returns the player's AFK status
+     *
      * @param player Player to look up
      * @return <b>true</b> if the player is AFK, <b>false</b> otherwise
      */
     public static boolean isAfk(Player player) {
         return AFKWorker.getInstance().isAfk(player);
     }
-    
+
     /**
      * Checks if the player is vanished
+     *
      * @param player Player to look up
      * @return <b>true</b> if the player is vanished, <b>false</b> otherwise
      */
     public static boolean isInvisible(Player player) {
         return InvisibleWorker.getInstance().getAllInvisiblePlayers().contains(player);
     }
-    
+
     /**
      * Returns the ban data as a Json array
+     *
      * @param playerName Player to look up
      * @return Ban data, or an empty string
      */
     public static String getBan(String playerName) {
         IBan ban = ACHelper.getInstance().getBan(playerName);
-        if(ban == null) return BanRecordSerializable.serialize(new ArrayList<BanRecordSerializable>());
+        if (ban == null) return BanRecordSerializable.serialize(new ArrayList<BanRecordSerializable>());
         BanRecordSerializable banReason = new BanRecordSerializable(ban.getBanner(), ban.getReason(), ban.getDate().getTime() / 1000, -1L);
         return BanRecordSerializable.serialize(banReason);
     }

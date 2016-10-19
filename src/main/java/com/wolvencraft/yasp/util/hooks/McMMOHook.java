@@ -39,50 +39,53 @@ import java.util.Collections;
 import java.util.List;
 
 public class McMMOHook extends PluginHook {
-    
+
     private static List<String> SKILL_NAMES;
-    
+
     public McMMOHook() {
         super(Module.McMMO, "mcMMO");
     }
-    
+
     /**
      * Returns player's experience
+     *
      * @param player Player to look up
      * @return Experience
      */
     public static String getExp(Player player) {
         List<ValueSerializable> values = Lists.newArrayList();
-        for(String skillType : SKILL_NAMES) {
+        for (String skillType : SKILL_NAMES) {
             values.add(new ValueSerializable(skillType, ExperienceAPI.getXP(player, skillType)));
         }
         return Util.toJsonArray(values);
     }
-    
+
     /**
      * Returns player's skill levels
+     *
      * @param player Player to look up
      * @return Player's skill levels
      */
     public static String getLevel(Player player) {
         List<ValueSerializable> values = Lists.newArrayList();
-        for(String skillType : SKILL_NAMES) {
+        for (String skillType : SKILL_NAMES) {
             values.add(new ValueSerializable(skillType, ExperienceAPI.getLevel(player, skillType)));
         }
         return Util.toJsonArray(values);
     }
-    
+
     /**
      * Returns the serialized party data
+     *
      * @param player Player to look up
      * @return Party data, or empty String
      */
     public static String getParty(Player player) {
         String party = PartyAPI.getPartyName(player);
-        if(party == null) return "";
+        if (party == null) return "";
         List<Player> members = PartyAPI.getOnlineMembers(party);
         List<String> membersString = Lists.newArrayList();
-        for(Player pl : members) membersString.add(pl.getName());
+        for (Player pl : members) membersString.add(pl.getName());
         PartySerializable value = new PartySerializable(party, membersString);
         Gson gson = Statistics.getGson();
         return gson.toJson(value);
@@ -98,5 +101,5 @@ public class McMMOHook extends PluginHook {
         Collections.sort(names);
         SKILL_NAMES = ImmutableList.copyOf(names);
     }
-    
+
 }

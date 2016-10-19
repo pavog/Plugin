@@ -28,47 +28,48 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class AdminCmdPlayerEntry extends NormalData {
-    
+
     private String playerName;
-    
-    public AdminCmdPlayerEntry (Player player, int playerId) {
+
+    public AdminCmdPlayerEntry(Player player, int playerId) {
         this.playerName = player.getName();
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(Query.table(AdminCmdTable.TableName)
+        if (Query.table(AdminCmdTable.TableName)
                 .condition(AdminCmdTable.PlayerId, playerId)
                 .exists()) return;
-        
+
         Player player = Bukkit.getPlayerExact(playerName);
-        if(player == null) return;
-        
+        if (player == null) return;
+
         Query.table(AdminCmdTable.TableName)
-            .value(AdminCmdTable.PlayerId, playerId)
-            .value(AdminCmdTable.Afk, AdminCmdHook.isAfk(player))
-            .value(AdminCmdTable.Vanished, AdminCmdHook.isInvisible(player))
-            .value(AdminCmdTable.BanReason, AdminCmdHook.getBan(playerName))
-            .insert();
+                .value(AdminCmdTable.PlayerId, playerId)
+                .value(AdminCmdTable.Afk, AdminCmdHook.isAfk(player))
+                .value(AdminCmdTable.Vanished, AdminCmdHook.isInvisible(player))
+                .value(AdminCmdTable.BanReason, AdminCmdHook.getBan(playerName))
+                .insert();
     }
 
     @Override
     public boolean pushData(int playerId) {
         Player player = Bukkit.getPlayerExact(playerName);
-        if(player == null) return false;
-        
+        if (player == null) return false;
+
         return Query.table(AdminCmdTable.TableName)
-            .value(AdminCmdTable.Afk, AdminCmdHook.isAfk(player))
-            .value(AdminCmdTable.Vanished, AdminCmdHook.isInvisible(player))
-            .value(AdminCmdTable.BanReason, AdminCmdHook.getBan(playerName))
-            .condition(AdminCmdTable.PlayerId, playerId)
-            .update();
+                .value(AdminCmdTable.Afk, AdminCmdHook.isAfk(player))
+                .value(AdminCmdTable.Vanished, AdminCmdHook.isInvisible(player))
+                .value(AdminCmdTable.BanReason, AdminCmdHook.getBan(playerName))
+                .condition(AdminCmdTable.PlayerId, playerId)
+                .update();
     }
 
     @Override
     @Deprecated
-    public void clearData(int playerId) { }
-    
+    public void clearData(int playerId) {
+    }
+
 }

@@ -33,33 +33,33 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class PlayerHandlers {
-    
+
     /**
      * Executed when a player moves
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     public static class PlayerMove implements Runnable {
-        
+
         private Player player;
         private Location from;
         private Location to;
-        
+
         @Override
         public void run() {
             OnlineSession session = OnlineSessionCache.fetch(player);
             //Skip data tracking if not all players data is read from database
-            if(session.isReady()){
-                if(!from.getWorld().equals(to.getWorld())) return;
+            if (session.isReady()) {
+                if (!from.getWorld().equals(to.getWorld())) return;
                 double distance = from.distance(to);
-                if(player.isInsideVehicle()) {
+                if (player.isInsideVehicle()) {
                     EntityType vehicle = player.getVehicle().getType();
-                    if(vehicle.equals(EntityType.MINECART)) {
+                    if (vehicle.equals(EntityType.MINECART)) {
                         session.addDistance(PlayerDistance.Minecart, distance);
-                    } else if(vehicle.equals(EntityType.BOAT)) {
+                    } else if (vehicle.equals(EntityType.BOAT)) {
                         session.addDistance(PlayerDistance.Boat, distance);
-                    } else if(vehicle.equals(EntityType.PIG) || vehicle.equals(EntityType.HORSE)) {
+                    } else if (vehicle.equals(EntityType.PIG) || vehicle.equals(EntityType.HORSE)) {
                         session.addDistance(PlayerDistance.Ride, distance);
                     }
                 } else if (from.getBlock().getType().equals(Material.WATER) || from.getBlock().getType().equals(Material.STATIONARY_WATER)) {
@@ -67,9 +67,9 @@ public class PlayerHandlers {
                 } else if (player.isFlying()) {
                     session.addDistance(PlayerDistance.Flight, distance);
                 } else {
-                    if(from.getY() < to.getY() && to.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
+                    if (from.getY() < to.getY() && to.getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR))
                         session.getPlayersData().getMiscData().incrementStat(PlayerData.TimesJumped);
-                        session.addDistance(PlayerDistance.Foot, distance);
+                    session.addDistance(PlayerDistance.Foot, distance);
                 }
             }
         }
@@ -77,30 +77,30 @@ public class PlayerHandlers {
 
     /**
      * Executed when a player's stat has to be incremented asynchronously
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     public static class PlayerIncrementStat implements Runnable {
 
         private Player player;
         private PlayerData stat;
         private double value;
-        
+
         public PlayerIncrementStat(Player player, PlayerData stat) {
             this.player = player;
             this.stat = stat;
             this.value = 1;
         }
-        
+
         @Override
         public void run() {
             OnlineSession session = OnlineSessionCache.fetch(player);
-            if(session.isReady()){
+            if (session.isReady()) {
                 session
-                .getPlayersData()
-                .getMiscData()
-                .incrementStat(stat, value);
+                        .getPlayersData()
+                        .getMiscData()
+                        .incrementStat(stat, value);
             }
         }
     }

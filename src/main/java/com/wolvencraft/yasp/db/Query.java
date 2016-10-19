@@ -32,41 +32,44 @@ import java.util.logging.Level;
 
 /**
  * Modular database query factory. Used to build and run SELECT, INSERT, and UPDATE queries.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class Query {
-    
+
     private static Query instance;
-    
+
     /**
      * Creates a new QueryFactory instance. Should be used once, on plugin startup
      */
     public Query() {
         instance = this;
     }
-    
+
     /**
      * Returns a database query based on the table name provided
+     *
      * @param table Name of the table to query
      * @return Database query
      */
     public static DatabaseQuery table(DBTable table) {
         return instance.new DatabaseQuery(table.getColumnName());
     }
-    
+
     /**
      * Safely casts a Map to QueryResult
+     *
      * @param map Map to apply the cast to
      * @return <b>QueryResult</b> desired result
      */
     public static QueryResult toQueryResult(Map<String, String> map) {
         return instance.new QueryResult(map);
     }
-    
+
     /**
      * Safely pushes data to the remote database. <br />
      * Wraps around the corresponding Database method and handles any errors that might occur in it.
+     *
      * @param sql SQL query
      * @return <b>true</b> if the sync is successful, <b>false</b> otherwise
      */
@@ -77,14 +80,15 @@ public class Query {
         } catch (Throwable t) {
             Message.log(Level.SEVERE, "An error occurred while pushing data to the remote database.");
             Message.log(Level.SEVERE, t.getMessage());
-            if(LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
+            if (LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
             return false;
         }
     }
-    
+
     /**
      * Safely returns the data from the remote server according to the SQL query.<br />
      * Wraps around the corresponding Database method and handles any errors that might occur in it.
+     *
      * @param sql SQL query
      * @return Data from the remote database
      */
@@ -95,29 +99,30 @@ public class Query {
         } catch (Throwable t) {
             Message.log(Level.SEVERE, "An error occurred while fetching data from the remote database.");
             Message.log(Level.SEVERE, t.getMessage());
-            if(LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
+            if (LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
             return new ArrayList<QueryResult>();
         }
-    }    
-    
-    
+    }
+
+
     /**
      * Represents a standard database query
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     public class DatabaseQuery {
-        
+
         private DatabaseQuery instance;
         private String table;
         private List<String> columns;
         private Map<Object, Object> values;
         private List<String> conditions;
-        
+
         /**
          * <b>Default constructor</b><br />
          * Creates a new DatabaseQuery instance with the specified table name.<br />
          * While it is possible to create an instance of this class manually, it is recommended to use the table(String table) method in the Query class.
+         *
          * @param table
          */
         public DatabaseQuery(String table) {
@@ -127,43 +132,47 @@ public class Query {
             this.values = new HashMap<Object, Object>();
             this.conditions = new ArrayList<String>();
         }
-        
+
         /**
          * Defines which columns to return.<br />
          * If no columns are selected, returns everything
+         *
          * @param column Columns to include
          * @return Database query
          */
         public DatabaseQuery column(String... column) {
-            for(String col : column) this.columns.add(col);
+            for (String col : column) this.columns.add(col);
             return instance;
         }
-        
+
         /**
          * Defines which columns to return.<br />
          * If no columns are selected, returns everything
+         *
          * @param column Columns to include
          * @return Database query
          */
         public DatabaseQuery column(DBTable... columns) {
-            for(DBTable column : columns) this.columns.add(column.getColumnName());
+            for (DBTable column : columns) this.columns.add(column.getColumnName());
             return instance;
         }
-        
+
         /**
          * Defines which columns to return.<br />
          * If no columns are selected, returns everything
+         *
          * @param column Columns to include
          * @return Database query
          */
         public DatabaseQuery columns(String[] column) {
-            for(String col : column) this.columns.add(col);
+            for (String col : column) this.columns.add(col);
             return instance;
         }
-        
+
         /**
          * Applies a condition to the query
-         * @param key Column name
+         *
+         * @param key   Column name
          * @param value Column value
          * @return Database query
          */
@@ -171,18 +180,19 @@ public class Query {
             this.conditions.add("`" + key + "`='" + value.toString() + "'");
             return instance;
         }
-        
+
         /**
          * Applies a condition to the query
-         * @param key Column name
+         *
+         * @param key   Column name
          * @param value Column value
          * @return Database query
          */
         public DatabaseQuery condition(DBTable column, String value) {
-            if (value.equals("NULL")){
-             this.conditions.add("`" + column.getColumnName() + "` IS NULL");    
+            if (value.equals("NULL")) {
+                this.conditions.add("`" + column.getColumnName() + "` IS NULL");
             } else {
-             this.conditions.add("`" + column.getColumnName() + "`='" + value + "'");               
+                this.conditions.add("`" + column.getColumnName() + "`='" + value + "'");
             }
 
             return instance;
@@ -190,7 +200,8 @@ public class Query {
 
         /**
          * Applies a condition to the query
-         * @param key Column name
+         *
+         * @param key   Column name
          * @param value Column value
          * @return Database query
          */
@@ -201,7 +212,8 @@ public class Query {
 
         /**
          * Applies a condition to the query
-         * @param key Column name
+         *
+         * @param key   Column name
          * @param value Column value
          * @return Database query
          */
@@ -212,7 +224,8 @@ public class Query {
 
         /**
          * Applies a condition to the query
-         * @param key Column name
+         *
+         * @param key   Column name
          * @param value Column value
          * @return Database query
          */
@@ -223,18 +236,20 @@ public class Query {
 
         /**
          * Applies a condition to the query
-         * @param key Column name
+         *
+         * @param key   Column name
          * @param value Column value
          * @return Database query
          */
         public DatabaseQuery condition(DBTable column, Boolean value) {
-            if(value) this.conditions.add("`" + column.getColumnName() + "`=1");
+            if (value) this.conditions.add("`" + column.getColumnName() + "`=1");
             else this.conditions.add("`" + column.getColumnName() + "`=0");
             return instance;
         }
 
         /**
          * Applies a set of conditions to the query
+         *
          * @param list List of conditions
          * @return Database query
          */
@@ -242,10 +257,11 @@ public class Query {
             this.conditions.addAll(list);
             return instance;
         }
-        
+
         /**
          * Adds a value to be inserted into the database
-         * @param key Column name
+         *
+         * @param key   Column name
          * @param value Column value
          * @return Database query
          */
@@ -253,10 +269,11 @@ public class Query {
             this.values.put(key, value);
             return instance;
         }
-        
+
         /**
          * Adds a value to be inserted into the database
-         * @param key Column name
+         *
+         * @param key   Column name
          * @param value Column value
          * @return Database query
          */
@@ -264,21 +281,23 @@ public class Query {
             this.values.put(column.getColumnName(), value);
             return instance;
         }
-        
+
         /**
          * Adds a value to be inserted into the database
-         * @param key Column name
+         *
+         * @param key   Column name
          * @param value Column value
          * @return Database query
          */
         public DatabaseQuery value(DBTable column, boolean value) {
-            if(value) values.put(column.getColumnName(), 1);
+            if (value) values.put(column.getColumnName(), 1);
             else values.put(column.getColumnName(), 0);
             return instance;
         }
-        
+
         /**
          * Adds values to be inserted into the database
+         *
          * @param values Map of values to be added to the database
          * @return Database query
          */
@@ -286,9 +305,10 @@ public class Query {
             this.values.putAll(values);
             return instance;
         }
-        
+
         /**
          * Adds values to be inserted into the database
+         *
          * @param values Map of values to be added to the database
          * @return Database query
          */
@@ -296,338 +316,376 @@ public class Query {
             this.values.putAll(values);
             return instance;
         }
-        
+
         /**
          * Builds and runs the SELECT query that returns the first result found
+         *
          * @return <b>QueryResult</b> the first result found or <b>null</b> if there isn't one.
          */
         public QueryResult select() {
             return select(0);
         }
-        
+
         /**
          * Builds and runs the SELECT query that returns the result with the specified index
+         *
          * @param index Index to turn to
          * @return <b>QueryResult</b> the result found or <b>null</b> if there isn't one.
          */
         public QueryResult select(int index) {
             String sql = "SELECT ";
-            
+
             String columnString = "";
-            if(instance.columns.isEmpty()) columnString = "*";
+            if (instance.columns.isEmpty()) columnString = "*";
             else {
-                for(String str : instance.columns) {
-                    if(!columnString.equals("")) columnString += ", ";
+                for (String str : instance.columns) {
+                    if (!columnString.equals("")) columnString += ", ";
                     columnString += "`" + str + "`";
                 }
             }
             sql += columnString + " FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
-            
+
             String conditionString = "";
-            for(String str : instance.conditions) {
-                if(!conditionString.equals("")) conditionString += " AND ";
+            for (String str : instance.conditions) {
+                if (!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
-            if(!conditionString.equals("")) sql += " WHERE " + conditionString;
-            
-            try { return Query.executeQuery(sql + ";").get(index); }
-            catch (NullPointerException ex) { return null; }
-            catch (IndexOutOfBoundsException aiex) { return null; }
+            if (!conditionString.equals("")) sql += " WHERE " + conditionString;
+
+            try {
+                return Query.executeQuery(sql + ";").get(index);
+            } catch (NullPointerException ex) {
+                return null;
+            } catch (IndexOutOfBoundsException aiex) {
+                return null;
+            }
         }
-        
+
         /**
          * Builds and runs the SELECT query that returns a list of results from the database.<br />
          * In most cases, <code>select();</code> is sufficient.
+         *
          * @return List of results. Might be empty.
          */
         public List<QueryResult> selectAll() {
             String sql = "SELECT ";
-            
+
             String columnString = "";
-            if(instance.columns.isEmpty()) columnString = "*";
+            if (instance.columns.isEmpty()) columnString = "*";
             else {
-                for(String str : instance.columns) {
-                    if(!columnString.equals("")) columnString += ", ";
+                for (String str : instance.columns) {
+                    if (!columnString.equals("")) columnString += ", ";
                     columnString += "`" + str + "`";
                 }
             }
             sql += columnString + " FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
-            
+
             String conditionString = "";
-            for(String str : instance.conditions) {
-                if(!conditionString.equals("")) conditionString += " AND ";
+            for (String str : instance.conditions) {
+                if (!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
-            if(!conditionString.equals("")) sql += " WHERE " + conditionString;
-            
+            if (!conditionString.equals("")) sql += " WHERE " + conditionString;
+
             return Query.executeQuery(sql + ";");
         }
-        
+
         /**
          * Checks if the query will yield any results
+         *
          * @return <b>true</b> if the query has any results, <b>false</b> if it is empty
          */
         public boolean exists() {
             return !selectAll().isEmpty();
         }
-        
+
         /**
          * Calculates the sum of the rows in the specified column
+         *
          * @return <b>double</b> sum of rows in a specified column
          */
         public double sum() {
             String sql = "SELECT sum(";
-            
+
             String columnString = "";
-            if(instance.columns.isEmpty()) columnString = "*";
+            if (instance.columns.isEmpty()) columnString = "*";
             else {
-                for(String str : instance.columns) {
-                    if(!columnString.equals("")) columnString += ", ";
+                for (String str : instance.columns) {
+                    if (!columnString.equals("")) columnString += ", ";
                     else columnString += "`" + str + "`";
                 }
             }
             sql += columnString + ") as `temp` FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
-            
+
             String conditionString = "";
-            for(String str : instance.conditions) {
-                if(!conditionString.equals("")) conditionString += " AND ";
+            for (String str : instance.conditions) {
+                if (!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
-            if(!conditionString.equals("")) sql += " WHERE " + conditionString;
-            
-            try { return Query.executeQuery(sql + ";").get(0).asDouble("temp"); }
-            catch (Exception e) { return 0; }
+            if (!conditionString.equals("")) sql += " WHERE " + conditionString;
+
+            try {
+                return Query.executeQuery(sql + ";").get(0).asDouble("temp");
+            } catch (Exception e) {
+                return 0;
+            }
         }
-        
+
         /**
          * Builds and runs the INSERT query
+         *
          * @return <b>true</b> if the value was successfully inserted, <b>false</b> if an error occurred
          */
         public boolean insert() {
             String sql = "INSERT INTO `" + LocalConfiguration.DBPrefix.toString() + table + "` (";
-            
+
             String fieldString = "";
             String valueString = "";
             Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
-                if(!fieldString.equals("")) fieldString += ", ";
-                if(!valueString.equals("")) valueString += ", ";
-                
+                if (!fieldString.equals("")) fieldString += ", ";
+                if (!valueString.equals("")) valueString += ", ";
+
                 fieldString += "`" + pairs.getKey().toString() + "`";
                 valueString += "'" + Util.parseString(pairs.getValue().toString()) + "'";
                 it.remove();
             }
             sql += fieldString + ") VALUES (" + valueString + ")";
-            
+
             String conditionString = "";
-            for(String str : instance.conditions) {
-                if(!conditionString.equals("")) conditionString += " AND ";
+            for (String str : instance.conditions) {
+                if (!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
-            if(!conditionString.equals("")) sql += " WHERE " + conditionString;
-            
+            if (!conditionString.equals("")) sql += " WHERE " + conditionString;
+
             return executeUpdate(sql + ";");
         }
-        
+
         /**
          * Builds and runs the UPDATE query
+         *
          * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
          */
         public boolean update() {
             String sql = "UPDATE `" + LocalConfiguration.DBPrefix.toString() + table + "`";
-            
+
             String valueString = "";
             Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
-                if(!valueString.equals("")) valueString += ", ";
-                
+                if (!valueString.equals("")) valueString += ", ";
+
                 valueString += "`" + pairs.getKey().toString() + "`='" + Util.parseString(pairs.getValue().toString()) + "'";
                 it.remove();
             }
             sql += " SET " + valueString;
-            
+
             String conditionString = "";
-            for(String str : instance.conditions) {
-                if(!conditionString.equals("")) conditionString += " AND ";
+            for (String str : instance.conditions) {
+                if (!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
-            if(!conditionString.equals("")) sql += " WHERE " + conditionString;
-            
+            if (!conditionString.equals("")) sql += " WHERE " + conditionString;
+
             return executeUpdate(sql + ";");
         }
-        
+
         /**
          * Builds and runs the UPDATE query.
+         *
          * @param merged If <b>false</b>, old values will be overwritten
          * @return <b>true</b> if the value was successfully updated, <b>false</b> if an error occurred
          */
         public boolean update(boolean merged) {
-            if(!merged) return update();
+            if (!merged) return update();
             String sql = "UPDATE `" + LocalConfiguration.DBPrefix.toString() + table + "`";
-            
+
             String valueString = "";
             Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
-                if(!valueString.equals("")) valueString += ", ";
-                
+                if (!valueString.equals("")) valueString += ", ";
+
                 valueString += "`" + pairs.getKey().toString() + "` = `" + pairs.getKey().toString() + "` + '" + pairs.getValue().toString() + "'";
                 it.remove();
             }
             sql += " SET " + valueString;
-            
+
             String conditionString = "";
-            for(String str : instance.conditions) {
-                if(!conditionString.equals("")) conditionString += " AND ";
+            for (String str : instance.conditions) {
+                if (!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
-            if(!conditionString.equals("")) sql += " WHERE " + conditionString;
-            
+            if (!conditionString.equals("")) sql += " WHERE " + conditionString;
+
             return executeUpdate(sql + ";");
         }
-        
+
         /**
          * Deletes a row from the database
          * This method is dangerous and should not be used in normal circumstances
+         *
          * @return <b>true</b> if the row was deleted, <b>false</b> if an error occurred
          */
         public boolean delete() {
             String sql = "DELETE FROM `" + LocalConfiguration.DBPrefix.toString() + table + "`";
-            
+
             String conditionString = "";
-            for(String str : instance.conditions) {
-                if(!conditionString.equals("")) conditionString += " AND ";
+            for (String str : instance.conditions) {
+                if (!conditionString.equals("")) conditionString += " AND ";
                 conditionString += str;
             }
-            if(!conditionString.equals("")) sql += " WHERE " + conditionString;
-            
+            if (!conditionString.equals("")) sql += " WHERE " + conditionString;
+
             return executeUpdate(sql + ";");
         }
-        
+
     }
-    
-    
+
+
     /**
      * Represents the result of a SQL query to the database.<br />
      * This class wraps around a Map&lt;String, String&gt;, in which the key represents the column name,
      * and the value represents the value corresponding to the specified column.<br />
      * This class exists to prevent extremely confusing lists of maps, which can be quite a handful.
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     public class QueryResult {
         private Map<String, String> fields;
-        
+
         /**
          * <b>Default constructor.</b><br />
          * Creates a new QueryResult based on the specified column-value pairs
+         *
          * @param fields Column-value pairs
          */
         public QueryResult(Map<String, String> fields) {
             this.fields = fields;
         }
-        
+
         /**
          * Returns the value of the specified column.
+         *
          * @param column Column name
          * @return <b>String</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public String asString(String column) {
             return fields.get(column.toString());
         }
-        
+
         /**
          * Returns the value of the specified column.
+         *
          * @param column Column name
          * @return <b>String</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public String asString(DBTable column) {
             return asString(column.getColumnName());
         }
-        
+
         /**
          * Returns the value of the specified column.
+         *
          * @param column Column name
          * @return <b>boolean</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public boolean asBoolean(String column) {
             return fields.get(column).equalsIgnoreCase("1");
         }
-        
+
         /**
          * Returns the value of the specified column.
+         *
          * @param column Column name
          * @return <b>boolean</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public boolean asBoolean(DBTable column) {
             return asBoolean(column.getColumnName());
         }
-        
+
         /**
          * Returns the value of the specified column.
+         *
          * @param column Column name
          * @return <b>int</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public int asInt(String column) {
-            try { return Integer.parseInt(fields.get(column)); }
-            catch (NumberFormatException e) { return -1; }
+            try {
+                return Integer.parseInt(fields.get(column));
+            } catch (NumberFormatException e) {
+                return -1;
+            }
         }
+
         /**
          * Returns the value of the specified column.
+         *
          * @param column Column name
          * @return <b>int</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public int asInt(DBTable column) {
             return asInt(column.getColumnName());
         }
-        
+
         /**
          * Returns the value of the specified column.
+         *
          * @param column Column name
          * @return <b>long</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public long asLong(String column) {
-            try { return Long.parseLong(fields.get(column)); }
-            catch (NumberFormatException e) { return -1; }
+            try {
+                return Long.parseLong(fields.get(column));
+            } catch (NumberFormatException e) {
+                return -1;
+            }
         }
-        
+
         /**
          * Returns the value of the specified column.
+         *
          * @param column Column name
          * @return <b>long</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public long asLong(DBTable column) {
             return asLong(column.getColumnName());
         }
-        
+
         /**
          * Returns the raw value of the specified column.
+         *
          * @param column Column name
          * @return <b>double</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public double asDouble(String column) {
-            try { return Double.parseDouble(fields.get(column)); }
-            catch (NumberFormatException e) { return -1; }
+            try {
+                return Double.parseDouble(fields.get(column));
+            } catch (NumberFormatException e) {
+                return -1;
+            }
         }
-        
+
         /**
          * Returns the value of the specified column.
+         *
          * @param column Column name
          * @return <b>double</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public double asDouble(DBTable column) {
             return asDouble(column.getColumnName());
         }
-        
+
         /**
          * Returns all values in the QueryResult
+         *
          * @return Column values
          */
         public Map<String, String> asMap() {
             return fields;
         }
     }
-    
+
 }

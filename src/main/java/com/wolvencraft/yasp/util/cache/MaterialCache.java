@@ -35,14 +35,14 @@ import java.util.List;
 
 /**
  * Caches material IDs server-side
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class MaterialCache implements CachedDataProcess {
 
     private static List<String> materials;
     private final long REFRESH_RATE_TICKS = (long) (24 * 3600 * 20);
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new List for data storage
@@ -50,10 +50,11 @@ public class MaterialCache implements CachedDataProcess {
     public MaterialCache() {
         materials = new ArrayList<String>();
     }
-    
+
     /**
      * Parses a block type ID and data value and returns a String representation of the material.<br />
      * Inserts a new entry into the materials table
+     *
      * @param type Type ID
      * @param data Data value
      * @param name Item name
@@ -62,42 +63,45 @@ public class MaterialCache implements CachedDataProcess {
     private static String parse(int type, int data, String name) {
         String material = "";
 
-        if(type == -1) return "-1:0";
-        if(Material.getMaterial(type) == null) return "0:0";
-        if(!Constants.ItemsWithMetadata.contains(type)) material = type + ":" + "0";
+        if (type == -1) return "-1:0";
+        if (Material.getMaterial(type) == null) return "0:0";
+        if (!Constants.ItemsWithMetadata.contains(type)) material = type + ":" + "0";
         else material = type + ":" + ItemsWithMetadata.get(type).getValidData(data);
 
-        if(materials.contains(material)) return material;
+        if (materials.contains(material)) return material;
         materials.add(material);
-        if(!Query.table(MaterialsTable.TableName).condition(MaterialsTable.MaterialId, material).exists()) {
+        if (!Query.table(MaterialsTable.TableName).condition(MaterialsTable.MaterialId, material).exists()) {
             Query.table(MaterialsTable.TableName)
-                 .value(MaterialsTable.MaterialId, material)
-                 .value(MaterialsTable.TpName, "custom_" + name + "_" + data)
-                 .insert();
+                    .value(MaterialsTable.MaterialId, material)
+                    .value(MaterialsTable.TpName, "custom_" + name + "_" + data)
+                    .insert();
         }
         return material;
     }
-    
+
     /**
      * Parses an item stack and returns a String representation of the material
+     *
      * @param stack Item stack to parse
      * @return Material string
      */
     public static String parse(ItemStack stack) {
         return parse(stack.getTypeId(), stack.getDurability(), stack.getType().name().toLowerCase());
     }
-    
+
     /**
      * Parses the material data and returns a String representation of the material
+     *
      * @param stack Material data
      * @return Material string
      */
     public static String parse(MaterialData material) {
         return parse(material.getItemTypeId(), material.getData(), material.getItemType().name().toLowerCase());
     }
-    
+
     /**
      * Parses a block and returns a String representation of the material
+     *
      * @param block Block to parse
      * @return Material string
      */
@@ -114,5 +118,5 @@ public class MaterialCache implements CachedDataProcess {
     public void run() {
         materials.clear();
     }
-    
+
 }

@@ -30,41 +30,43 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 /**
  * Data store that handles all natural deaths on the server
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class DeathData extends DataStore<TotalDeathStats, NaturalDeathEntry> {
 
     /**
      * <b>Default constructor</b><br />
      * Creates an empty data store to save the statistics until database synchronization.
+     *
      * @param session Player session
      */
     public DeathData(OnlineSession session) {
         super(session, DataStoreType.Deaths);
     }
-    
+
     /**
      * Registers the player death in the data store
+     *
      * @param location Location of the event
-     * @param cause Death cause
+     * @param cause    Death cause
      */
     public void playerDied(Location location, DamageCause cause) {
         TotalDeathStats entry = null;
-        for(TotalDeathStats testEntry : getNormalData()) {
-            if(testEntry.getCause().equals(cause)) entry = testEntry;
+        for (TotalDeathStats testEntry : getNormalData()) {
+            if (testEntry.getCause().equals(cause)) entry = testEntry;
         }
-        
-        if(entry == null) {
+
+        if (entry == null) {
             entry = new TotalDeathStats(session.getId(), cause);
             normalData.add(entry);
         }
-        
+
         entry.addTimes();
         NaturalDeathEntry detailedEntry = new NaturalDeathEntry(location, cause);
         detailedData.add(detailedEntry);
-        
+
         Bukkit.getServer().getPluginManager().callEvent(new NaturalDeathEvent(session, detailedEntry));
     }
-    
+
 }

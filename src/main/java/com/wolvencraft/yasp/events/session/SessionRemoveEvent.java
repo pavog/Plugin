@@ -31,19 +31,19 @@ import java.util.UUID;
 /**
  * Called when the player session expires.<br />
  * This usually means that the player is offline
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
-@AllArgsConstructor(access=AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class SessionRemoveEvent extends StatisticsEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private UUID uuid;
-    
+
     public OfflineSession getSession() {
         return new OfflineSession(uuid);
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;

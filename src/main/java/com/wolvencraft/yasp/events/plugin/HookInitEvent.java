@@ -30,23 +30,23 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Called when a plugin hook is being initialized by the plugin
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @Getter(AccessLevel.PUBLIC)
 public class HookInitEvent extends StatisticsEvent implements Cancellable {
-    
+
     private static final HandlerList handlers = new HandlerList();
 
     @Setter(AccessLevel.PUBLIC)
     private boolean cancelled;
     private Module module;
-    
+
     public HookInitEvent(Module module) {
         this.module = module;
         this.cancelled = false;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;

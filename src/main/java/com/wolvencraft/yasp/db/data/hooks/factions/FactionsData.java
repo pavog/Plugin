@@ -26,13 +26,13 @@ import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * Hooks into Factions to track its statistics
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class FactionsData extends DataStore<FactionsPlayerEntry, DetailedData> {
-    
+
     public FactionsData(OnlineSession session) {
         super(session, DataStoreType.Hook_Factions);
     }
-    
+
 }

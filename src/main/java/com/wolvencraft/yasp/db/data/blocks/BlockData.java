@@ -33,11 +33,11 @@ import org.bukkit.block.BlockState;
 
 /**
  * Data store that handles all block interactions on the server
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
-    
+
     public BlockData(OnlineSession session) {
         super(session, DataStoreType.Blocks);
     }
@@ -45,43 +45,46 @@ public class BlockData extends DataStore<TotalBlockStats, DetailedData> {
     /**
      * Returns the specific entry from the data store.<br />
      * If the entry does not exist, it will be created.
+     *
      * @param block BlockState of the block
      * @return Corresponding entry
      */
     private TotalBlockStats getNormalData(BlockState block) {
-        for(TotalBlockStats entry : getNormalData()) {
-            if(entry.equals(block)) return entry;
+        for (TotalBlockStats entry : getNormalData()) {
+            if (entry.equals(block)) return entry;
         }
         TotalBlockStats entry = new TotalBlockStats(session.getId(), block);
         normalData.add(entry);
         return entry;
     }
-    
+
     /**
      * Registers the broken block in the data stores
+     *
      * @param block BlockState of the block
      */
     public void blockBreak(BlockState block) {
         getNormalData(block).addBroken();
         BlockBreakEntry detailedEntry = new BlockBreakEntry(block);
-        if(Module.DetailedBlocks.isEnabled()){
+        if (Module.DetailedBlocks.isEnabled()) {
             detailedData.add(detailedEntry);
-        }   
+        }
         Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockBreakEvent(session, detailedEntry));
     }
-    
+
     /**
      * Registers the placed block in the data stores
+     *
      * @param block BlockState of the block
      */
     public void blockPlace(BlockState block) {
         getNormalData(block).addPlaced();
         BlockPlaceEntry detailedEntry = new BlockPlaceEntry(block);
-        if(Module.DetailedBlocks.isEnabled()){
+        if (Module.DetailedBlocks.isEnabled()) {
             detailedData.add(detailedEntry);
         }
-        
+
         Bukkit.getServer().getPluginManager().callEvent(new TrackedBlockPlaceEvent(session, detailedEntry));
     }
-    
+
 }

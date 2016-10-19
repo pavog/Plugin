@@ -26,11 +26,11 @@ import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * WorldGuard data store
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class WorldGuardData extends DataStore<WorldGuardPlayerEntry, DetailedData> {
-    
+
     public WorldGuardData(OnlineSession session) {
         super(session, DataStoreType.Hook_Vault);
     }

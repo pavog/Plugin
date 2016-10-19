@@ -53,65 +53,66 @@ import java.util.List;
 
 /**
  * Represents the different plugin modules
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @SuppressWarnings("unchecked")
 public enum Module {
-    
-    Server              ("server", false),
-    Blocks              ("blocks", false, BlockData.class),
-    DetailedBlocks      ("detailed_blocks", false, BlockData.class),
-    Items               ("items", false, ItemData.class),
-    DetailedItems       ("detailed_items", false, ItemData.class),
-    Deaths              ("deaths", false, DeathData.class, PVEData.class, PVPData.class),
-    DetailedPVEDeaths   ("detailed_pve", false, PVEData.class),
-    DetailedPVPDeaths   ("detailed_pvp", false, PVPData.class),
-    Inventory           ("inventory", false),
-    
-    AdminCmd        ("admincmd", true, AdminCmdData.class),
-    BanHammer       ("banhammer", true, BanHammerData.class),
-    CommandBook     ("commandbook", true, CommandBookData.class),
-    Factions        ("factions", true, FactionsData.class),
-    Jail            ("jail", true, JailData.class),
-    McBans          ("mcbans", true),
-    McMMO           ("mcmmo", true, McMMOData.class),
-    MobArena        ("mobarena", true, MobArenaData.class),
-    PvpArena        ("pvparena", true, PvpArenaData.class),
-    Towny           ("towny", true, TownyData.class),
-    Vanish          ("vanishnopacket", true, VanishData.class),
-    Vault           ("vault", true, VaultData.class),
-    Votifier        ("votifier", true, VotifierData.class),
-    WorldGuard      ("worldguard", true, WorldGuardData.class),
-    
-    Unknown         ("unknown", false)
-    ;
+
+    Server("server", false),
+    Blocks("blocks", false, BlockData.class),
+    DetailedBlocks("detailed_blocks", false, BlockData.class),
+    Items("items", false, ItemData.class),
+    DetailedItems("detailed_items", false, ItemData.class),
+    Deaths("deaths", false, DeathData.class, PVEData.class, PVPData.class),
+    DetailedPVEDeaths("detailed_pve", false, PVEData.class),
+    DetailedPVPDeaths("detailed_pvp", false, PVPData.class),
+    Inventory("inventory", false),
+
+    AdminCmd("admincmd", true, AdminCmdData.class),
+    BanHammer("banhammer", true, BanHammerData.class),
+    CommandBook("commandbook", true, CommandBookData.class),
+    Factions("factions", true, FactionsData.class),
+    Jail("jail", true, JailData.class),
+    McBans("mcbans", true),
+    McMMO("mcmmo", true, McMMOData.class),
+    MobArena("mobarena", true, MobArenaData.class),
+    PvpArena("pvparena", true, PvpArenaData.class),
+    Towny("towny", true, TownyData.class),
+    Vanish("vanishnopacket", true, VanishData.class),
+    Vault("vault", true, VaultData.class),
+    Votifier("votifier", true, VotifierData.class),
+    WorldGuard("worldguard", true, WorldGuardData.class),
+
+    Unknown("unknown", false);
 
     public final String KEY;
-    
+
     @Getter(AccessLevel.PUBLIC)
     private boolean hook;
-    
+
     @Getter(AccessLevel.PUBLIC)
     private List<Class<? extends DataStore<?, ?>>> dataStores;
-    
+
     private boolean refreshScheduled;
-    
+
     private boolean enabled;
     private boolean active;
     private int version;
-    
+
     Module(String key, boolean isHook, Class<? extends DataStore<?, ?>>... dataStores) {
         this.hook = isHook;
         this.KEY = key;
-        
-        try { updateCache(); }
-        catch(Throwable t) { }
-        
-        if(dataStores.length == 0) this.dataStores = Lists.newArrayList();
+
+        try {
+            updateCache();
+        } catch (Throwable t) {
+        }
+
+        if (dataStores.length == 0) this.dataStores = Lists.newArrayList();
         else this.dataStores = Arrays.asList(dataStores);
-        
-        if(!isHook) active = true;
+
+        if (!isHook) active = true;
         refreshScheduled = false;
     }
 
@@ -124,15 +125,17 @@ public enum Module {
 
     /**
      * Returns the state of the module specified in the configuration.
+     *
      * @return <b>true</b> if the module is enabled, <b>false</b> if it is not
      */
     public boolean isEnabled() {
-        if(refreshScheduled) updateCacheAsynchronously();
+        if (refreshScheduled) updateCacheAsynchronously();
         return enabled;
     }
 
     /**
      * Checks if the module is actually active.
+     *
      * @return <b>true</b> if the module is both enabled and active, <b>false</b> otherwise
      */
     public boolean isActive() {
@@ -141,7 +144,6 @@ public enum Module {
 
     /**
      * Sets the active status of the module.
-     *
      */
     public void setActive(boolean active) {
         this.active = active;
@@ -150,40 +152,42 @@ public enum Module {
     /**
      * Returns the version of the module.<br />
      * Only relevant if the module is a plugin hook.
+     *
      * @return Module version
      */
     public int getVersion() {
-        if(refreshScheduled) updateCacheAsynchronously();
+        if (refreshScheduled) updateCacheAsynchronously();
         return version;
     }
-    
+
     /**
      * Sets the new version of the module.<br />
      * Updates the version in the database if the module is a hook
+     *
      * @param version New version
      */
     public void setVersion(int version) {
-        if(refreshScheduled) updateCacheAsynchronously();
+        if (refreshScheduled) updateCacheAsynchronously();
         this.version = version;
-        if(!hook) return;
+        if (!hook) return;
         String versionKey = "version." + KEY;
         Query.table(SettingsTable.TableName)
-             .value("value", version)
-             .condition("key", versionKey)
-             .update();
+                .value("value", version)
+                .condition("key", versionKey)
+                .update();
     }
-    
+
     /**
      * Fetches the module variables from the database
      */
     private void updateCache() {
         String stateKey = "";
-        if(hook) {
+        if (hook) {
             stateKey = "hook." + KEY;
 
             String versionKey = "version." + KEY;
             QueryResult versionResult = Query.table(SettingsTable.TableName).column("value").condition("key", versionKey).select();
-            if(versionResult == null) {
+            if (versionResult == null) {
                 Query.table(SettingsTable.TableName).value("key", versionKey).value("value", 0).insert();
                 version = 0;
             } else {
@@ -195,7 +199,7 @@ public enum Module {
         }
 
         QueryResult enabledResult = Query.table(SettingsTable.TableName).column("value").condition("key", stateKey).select();
-        if(enabledResult == null) {
+        if (enabledResult == null) {
             Query.table(SettingsTable.TableName).value("key", stateKey).value("value", false).insert();
             enabled = true;
         } else {
@@ -204,16 +208,18 @@ public enum Module {
 
         refreshScheduled = false;
     }
-    
+
     /**
      * Fetches the module variables from the database asynchronously
      */
     private void updateCacheAsynchronously() {
-        if(!Statistics.getInstance().isEnabled()) return;
+        if (!Statistics.getInstance().isEnabled()) return;
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             @Override
-            public void run() { updateCache(); }
+            public void run() {
+                updateCache();
+            }
         });
     }
-    
+
 }

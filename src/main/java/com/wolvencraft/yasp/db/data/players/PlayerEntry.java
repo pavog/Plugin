@@ -32,80 +32,87 @@ import org.bukkit.entity.Player;
 /**
  * Represents the Player data that is being tracked.<br />
  * Each entry must have a unique player name.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class PlayerEntry extends NormalData {
-    
+
     private final String username;
     private final String uuid;
     private long lastSync;
-    
-    @Getter(AccessLevel.PUBLIC) private long longestSession;
-    @Getter(AccessLevel.PUBLIC) private long currentSession;
-    
-    @Getter(AccessLevel.PUBLIC) private long totalPlaytime;
-    
-    public PlayerEntry (int playerId, Player player) {
+
+    @Getter(AccessLevel.PUBLIC)
+    private long longestSession;
+    @Getter(AccessLevel.PUBLIC)
+    private long currentSession;
+
+    @Getter(AccessLevel.PUBLIC)
+    private long totalPlaytime;
+
+    public PlayerEntry(int playerId, Player player) {
         username = player.getName();
         uuid = player.getUniqueId().toString();
         lastSync = Util.getTimestamp();
-        
+
         currentSession = 0;
         longestSession = 0;
-        
+
         long firstLogin = lastSync;
         int logins = 0;
-        
+
         QueryResult result = Query.table(PlayerStats.TableName)
-            .column(PlayerStats.Logins)
-            .column(PlayerStats.FirstLogin)
-            .column(PlayerStats.Playtime)
-            .column(PlayerStats.LongestSession)
-            .condition(PlayerStats.PlayerId, playerId)
-            .select();
-        
-        if(result == null) {
+                .column(PlayerStats.Logins)
+                .column(PlayerStats.FirstLogin)
+                .column(PlayerStats.Playtime)
+                .column(PlayerStats.LongestSession)
+                .condition(PlayerStats.PlayerId, playerId)
+                .select();
+
+        if (result == null) {
             Query.table(PlayerStats.TableName)
-                 .value(PlayerStats.Name, username)
-                 .value(PlayerStats.UUID, uuid)
-                 .insert();
+                    .value(PlayerStats.Name, username)
+                    .value(PlayerStats.UUID, uuid)
+                    .insert();
         } else {
             firstLogin = result.asLong(PlayerStats.FirstLogin);
-            if(firstLogin == -1) { firstLogin = lastSync; }
+            if (firstLogin == -1) {
+                firstLogin = lastSync;
+            }
             logins = result.asInt(PlayerStats.Logins);
             this.totalPlaytime = result.asLong(PlayerStats.Playtime);
             longestSession = result.asLong(PlayerStats.LongestSession);
         }
-        
+
         Query.table(PlayerStats.TableName)
-            .value(PlayerStats.LoginTime, lastSync)
-            .value(PlayerStats.FirstLogin, firstLogin)
-            .value(PlayerStats.Logins, ++logins)
-            .condition(PlayerStats.PlayerId, playerId)
-            .update();
+                .value(PlayerStats.LoginTime, lastSync)
+                .value(PlayerStats.FirstLogin, firstLogin)
+                .value(PlayerStats.Logins, ++logins)
+                .condition(PlayerStats.PlayerId, playerId)
+                .update();
     }
-    
+
     @Override
     @Deprecated
-    public void fetchData(int playerId) { }
-    
+    public void fetchData(int playerId) {
+    }
+
     @Override
     @Deprecated
-    public void clearData(int playerId) { }
-    
+    public void clearData(int playerId) {
+    }
+
     @Override
     public boolean pushData(int playerId) {
         currentSession += Util.getTimestamp() - lastSync;
-        if(longestSession < currentSession) longestSession = currentSession;
+        if (longestSession < currentSession) longestSession = currentSession;
         totalPlaytime += Util.getTimestamp() - lastSync;
         lastSync = Util.getTimestamp();
-        
+
         return Query.table(PlayerStats.TableName)
-            .value(PlayerStats.Playtime, totalPlaytime)
-            .value(PlayerStats.LongestSession, longestSession)
-            .condition(PlayerStats.PlayerId, playerId)
-            .update();
+                .value(PlayerStats.Playtime, totalPlaytime)
+                .value(PlayerStats.LongestSession, longestSession)
+                .condition(PlayerStats.PlayerId, playerId)
+                .update();
     }
-    
+
 }

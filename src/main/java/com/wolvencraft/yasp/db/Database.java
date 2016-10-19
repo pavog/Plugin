@@ -43,56 +43,67 @@ import java.util.logging.Level;
 /**
  * Represents a running database instance.<br />
  * There can only be one instance running at any given time.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class Database {
-    
+
     private static Connection connection = null;
     private static double last_reconnect = 0;
     private static boolean already_reconnecting = false;
-    
+
     /**
      * Default constructor. Connects to the remote database, performs patches if necessary, and holds to the DB info.<br />
+     *
      * @throws DatabaseConnectionException Thrown if the plugin could not connect to the database
      */
     public Database() throws DatabaseConnectionException {
-        
-        try { Class.forName("com.mysql.jdbc.Driver"); }
-        catch (ClassNotFoundException ex) { throw new DatabaseConnectionException("MySQL driver was not found!"); }
-        
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            throw new DatabaseConnectionException("MySQL driver was not found!");
+        }
+
         try {
             connection = DriverManager.getConnection(
-                LocalConfiguration.DBConnect.toString(),
-                LocalConfiguration.DBUser.toString(),
-                LocalConfiguration.DBPass.toString()
+                    LocalConfiguration.DBConnect.toString(),
+                    LocalConfiguration.DBUser.toString(),
+                    LocalConfiguration.DBPass.toString()
             );
-        } catch (SQLException e) { throw new DatabaseConnectionException(e); }
-        
-        try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
-        catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
-        
-        if(!patchDatabase(false)) Message.log("Target database is up to date");
-        
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException(e);
+        }
+
+        try {
+            if (connection.getAutoCommit()) connection.setAutoCommit(false);
+        } catch (Throwable t) {
+            throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t);
+        }
+
+        if (!patchDatabase(false)) Message.log("Target database is up to date");
+
         Statistics.setPaused(false);
-        
+
         RemoteConfiguration.clearCache();
         Module.clearCache();
     }
-    
+
     /**
      * Patches the remote database to the latest version.<br />
      * This method will run in the <b>main server thread</b> and therefore will freeze the server until the patch is complete.
+     *
      * @param force <b>true</b> to drop all data in the database and start anew.
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
-    public static boolean patchDatabase(boolean force) throws DatabaseConnectionException{
+    public static boolean patchDatabase(boolean force) throws DatabaseConnectionException {
         int databaseVersion;
-        if(force) { databaseVersion = 1; }
-        else {
+        if (force) {
+            databaseVersion = 1;
+        } else {
             try {
-                if(connection.getMetaData().getTables(null, null, LocalConfiguration.DBPrefix.toString() + SettingsTable.TableName.toString(), null).next()){
+                if (connection.getMetaData().getTables(null, null, LocalConfiguration.DBPrefix.toString() + SettingsTable.TableName.toString(), null).next()) {
                     databaseVersion = RemoteConfiguration.DatabaseVersion.asInteger();
                 } else {
                     databaseVersion = 0;
@@ -103,21 +114,23 @@ public class Database {
             }
         }
         int latestPatchVersion = databaseVersion;
-        
+
         File patchFile = null;
         do {
             patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + PatchManager.PATCH_KEY + ".sql");
-            if(patchFile.exists()) latestPatchVersion++;
+            if (patchFile.exists()) latestPatchVersion++;
             else break;
-        } while(patchFile != null && patchFile.exists());
-        
-        if(databaseVersion >= latestPatchVersion) { return true; }
+        } while (patchFile != null && patchFile.exists());
+
+        if (databaseVersion >= latestPatchVersion) {
+            return true;
+        }
         Message.debug("Current version: " + databaseVersion + ", latest version: " + latestPatchVersion);
         databaseVersion++;
-        
+
         ScriptRunner scriptRunner = new ScriptRunner(connection);
         Message.log("+-------] Database Patcher [-------+");
-        for(; databaseVersion <= latestPatchVersion; databaseVersion++) {
+        for (; databaseVersion <= latestPatchVersion; databaseVersion++) {
             Message.log("|       Applying patch " + databaseVersion + " / " + latestPatchVersion + "       |");
             executePatch(scriptRunner, databaseVersion + "." + PatchManager.PATCH_KEY);
             RemoteConfiguration.DatabaseVersion.update(databaseVersion);
@@ -125,36 +138,42 @@ public class Database {
         Message.log("+----------------------------------+");
         return true;
     }
-    
+
     /**
      * Patches the specified module to the latest version.<br />
      * This method will run in the <b>main server thread</b> and therefore will freeze the server until the patch is complete.
-     * @param force <b>true</b> to drop all data in the database and start anew.
+     *
+     * @param force  <b>true</b> to drop all data in the database and start anew.
      * @param module Module to patch
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
      * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
     public static boolean patchModule(boolean force, Module module) throws DatabaseConnectionException {
         int moduleVersion;
-        if(force) { moduleVersion = 0; }
-        else { moduleVersion = module.getVersion(); }
+        if (force) {
+            moduleVersion = 0;
+        } else {
+            moduleVersion = module.getVersion();
+        }
         int latestPatchVersion = moduleVersion;
-        
+
         File patchFile = null;
         do {
             patchFile = new File(Statistics.getInstance().getDataFolder() + "/patches/" + (latestPatchVersion + 1) + "." + module.KEY + ".sql");
-            if(patchFile.exists()) latestPatchVersion++;
+            if (patchFile.exists()) latestPatchVersion++;
             else break;
-        } while(patchFile != null && patchFile.exists());
-        
-        if(moduleVersion >= latestPatchVersion) { return true; }
+        } while (patchFile != null && patchFile.exists());
+
+        if (moduleVersion >= latestPatchVersion) {
+            return true;
+        }
         Message.debug("Current version: " + moduleVersion + ", latest version: " + latestPatchVersion);
         moduleVersion++;
-        
+
         ScriptRunner scriptRunner = new ScriptRunner(connection);
         Message.log("+-------] Database Patcher [-------+");
         Message.log("|" + Message.centerString("Patching " + module.name(), 34) + "|");
-        for(; moduleVersion <= latestPatchVersion; moduleVersion++) {
+        for (; moduleVersion <= latestPatchVersion; moduleVersion++) {
             Message.log("|       Applying patch " + moduleVersion + " / " + latestPatchVersion + "       |");
             executePatch(scriptRunner, moduleVersion + "." + module.name().toLowerCase());
             module.setVersion(moduleVersion);
@@ -162,47 +181,55 @@ public class Database {
         Message.log("+----------------------------------+");
         return true;
     }
-    
+
     /**
      * Applies the patch to the remote database
+     *
      * @param patchId Unique ID of the desired patch, i.e. <code>1.vault</code>.
-     * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
+     * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
     public static boolean executePatch(String patchId) throws DatabaseConnectionException {
         return executePatch(new ScriptRunner(connection), patchId);
     }
-    
+
     /**
      * Applies the patch to the remote database
+     *
      * @param scriptRunner Script runner instance that executes the patch
-     * @param patchId Unique ID of the desired patch, i.e. <code>1.vault</code>.
-     * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
+     * @param patchId      Unique ID of the desired patch, i.e. <code>1.vault</code>.
      * @return <b>true</b> if a patch was applied, <b>false</b> if it was not.
+     * @throws DatabaseConnectionException Thrown if the plugin is unable to patch the remote database
      */
     private static boolean executePatch(ScriptRunner scriptRunner, String patchId) throws DatabaseConnectionException {
         DatabasePatchEvent event = new DatabasePatchEvent(patchId);
         Bukkit.getServer().getPluginManager().callEvent(event);
-        
-        if(event.isCancelled()) return false;
-        
+
+        if (event.isCancelled()) return false;
+
         InputStream is;
-        try { is = new FileInputStream(Statistics.getInstance().getDataFolder() + "/patches/" + patchId + ".sql"); }
-        catch (FileNotFoundException e1) { return false; }
+        try {
+            is = new FileInputStream(Statistics.getInstance().getDataFolder() + "/patches/" + patchId + ".sql");
+        } catch (FileNotFoundException e1) {
+            return false;
+        }
         Message.log(Level.FINE, "Executing database patch: " + patchId + ".sql");
-        try {scriptRunner.runScript(new InputStreamReader(is)); }
-        catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + patchId + ".sql", e); }
-        finally {
-            if(!Query.table(SettingsTable.TableName).condition("key", "patched").exists()) {
+        try {
+            scriptRunner.runScript(new InputStreamReader(is));
+        } catch (RuntimeSQLException e) {
+            throw new DatabaseConnectionException("An error occured while executing database patch: " + patchId + ".sql", e);
+        } finally {
+            if (!Query.table(SettingsTable.TableName).condition("key", "patched").exists()) {
                 Query.table(SettingsTable.TableName).value("key", "patched").value("value", 1).insert();
             }
             Query.table(SettingsTable.TableName).value("value", 1).condition("key", "patched").update();
         }
         return true;
     }
-    
+
     /**
      * Attempts to reconnect to the remote server
+     *
      * @return <b>true</b> if the connection was present, or reconnect is successful. <b>false</b> otherwise.
      */
     public static boolean reconnect() {
@@ -211,28 +238,31 @@ public class Database {
                 Message.log("Connection is still present. Malformed query detected.");
                 return false;
             }
-            
+
             if (System.currentTimeMillis() < last_reconnect + (LocalConfiguration.DBReconnect.toInteger() * 1000)) {
                 return false;
             }
-            
+
             if (already_reconnecting) {
                 return false;
             } else {
                 already_reconnecting = true;
             }
-            
+
 
             Message.log(Level.WARNING, "Attempting to re-connect to the database");
             connection = DriverManager.getConnection(
-                LocalConfiguration.DBConnect.toString(),
-                LocalConfiguration.DBUser.toString(),
-                LocalConfiguration.DBPass.toString()
+                    LocalConfiguration.DBConnect.toString(),
+                    LocalConfiguration.DBUser.toString(),
+                    LocalConfiguration.DBPass.toString()
             );
-            
-            try { if (connection.getAutoCommit()) connection.setAutoCommit(false); }
-            catch (Throwable t) { throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t); }
-            
+
+            try {
+                if (connection.getAutoCommit()) connection.setAutoCommit(false);
+            } catch (Throwable t) {
+                throw new RuntimeSQLException("Could not set AutoCommit to false. Cause: " + t, t);
+            }
+
             Message.log("Connection re-established. No data is lost.");
             already_reconnecting = false;
             return true;
@@ -244,11 +274,12 @@ public class Database {
         last_reconnect = System.currentTimeMillis();
         return false;
     }
-    
+
     /**
      * Pushes data to the remote database.<br />
-     * This is a raw method and should never be used by itself. Use the <b>QueryUtils</b> wrapper for more options 
+     * This is a raw method and should never be used by itself. Use the <b>QueryUtils</b> wrapper for more options
      * and proper error handling. This method is not to be used for regular commits to the database.
+     *
      * @param query SQL query
      * @return <b>true</b> if the sync is successful, <b>false</b> otherwise
      */
@@ -262,21 +293,25 @@ public class Database {
             connection.commit();
         } catch (Throwable t) {
             ExceptionHandler.handle(t);
-            if(reconnect()) return executeUpdate(query);
+            if (reconnect()) return executeUpdate(query);
             else return false;
         } finally {
             if (statement != null) {
-                try { statement.close(); }
-                catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    Message.log(Level.SEVERE, "Error closing database connection");
+                }
             }
         }
         return rowsChanged > 0;
     }
-    
+
     /**
      * Returns the data from the remote server according to the SQL query.<br />
-     * This is a raw method and should never be used by itself. Use the <b>QueryUtils</b> wrapper for more options 
+     * This is a raw method and should never be used by itself. Use the <b>QueryUtils</b> wrapper for more options
      * and proper error handling. This method is not to be used for regular commits to the database.
+     *
      * @param query SQL query
      * @return Data from the remote database
      */
@@ -296,40 +331,51 @@ public class Database {
             }
         } catch (Throwable t) {
             ExceptionHandler.handle(t);
-            if(reconnect()) return executeQuery(query);
+            if (reconnect()) return executeQuery(query);
             else return new ArrayList<QueryResult>();
         } finally {
             if (rs != null) {
-                try { rs.close(); }
-                catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection [ResultSet]"); }
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Message.log(Level.SEVERE, "Error closing database connection [ResultSet]");
+                }
             }
             if (statement != null) {
-                try { statement.close(); }
-                catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection [Statement]"); }
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    Message.log(Level.SEVERE, "Error closing database connection [Statement]");
+                }
             }
         }
         return colData;
     }
-    
+
     /**
      * Closes the database connection and cleans up any leftover instances to prevent memory leaks
      */
     public static void close() {
-        try { connection.close(); }
-        catch (SQLException e) { Message.log(Level.SEVERE, "Error closing database connection"); }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            Message.log(Level.SEVERE, "Error closing database connection");
+        }
         connection = null;
     }
-    
+
     /**
      * Checks if the database connection is safe to use
+     *
      * @return <b>true</b> if the connection is closed, <b>false</b> if it is open.
      */
     public static boolean isClosed() {
         return connection == null;
     }
-    
+
     /**
      * Returns the connection instance
+     *
      * @return Connection instance
      */
     public static Connection getConnection() {

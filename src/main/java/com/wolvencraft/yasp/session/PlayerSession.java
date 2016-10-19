@@ -25,33 +25,37 @@ import java.util.UUID;
 
 /**
  * Player session interface
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public interface PlayerSession {
-    
+
     /**
      * Returns the stored player ID
+     *
      * @return Player ID
      */
     public int getId();
-        
+
     /**
      * Returns the player name
+     *
      * @return Player name
      */
     public String getName();
-    
+
     /**
      * Returns the player uuid
+     *
      * @return UUID uuid
      */
     public UUID getUUID();
-    
+
     /**
      * Checks if the player is online
+     *
      * @return <b>true</b> if the player is online, <b>false</b> otherwise
      */
     public boolean isOnline();
-    
+
 }

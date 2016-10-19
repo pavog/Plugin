@@ -31,46 +31,50 @@ import java.util.List;
 
 /**
  * Provides means to serialize a <code>List&lt;ItemStack&gt;</code> into a Json array
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @SuppressWarnings("unused")
 public class InventorySerializable {
-    
+
     private String material_id;
     private double durability;
     private int amount;
     private List<EnchantmentsSerializable> enchantments;
-    
+
     /**
      * <b>Default constructor</b>
+     *
      * @param ItemStack Stack of items
      */
     private InventorySerializable(ItemStack stack) {
         material_id = MaterialCache.parse(stack);
         short curDurability = stack.getDurability();
         short maxDurability = stack.getType().getMaxDurability();
-        if(curDurability <= 0 || maxDurability <= 0) durability = 0;
+        if (curDurability <= 0 || maxDurability <= 0) durability = 0;
         else {
-            durability = (double)(maxDurability - curDurability) / maxDurability;
-            durability = ((int)(100 * durability)) / 100.0;
+            durability = (double) (maxDurability - curDurability) / maxDurability;
+            durability = ((int) (100 * durability)) / 100.0;
         }
         amount = stack.getAmount();
         enchantments = EnchantmentsSerializable.serialize(stack.getEnchantments());
     }
-    
+
     /**
      * Compresses a List into a single-line json array.<br />
      * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code><br />
      * Stores material, amount, and durability of an itemstack
+     *
      * @param inventoryRow inventory row to compress
      * @return String json array
      */
     public static String serialize(List<ItemStack> inventoryRow) {
         List<InventorySerializable> invRow = new ArrayList<InventorySerializable>();
-        for(ItemStack stack : inventoryRow) {
+        for (ItemStack stack : inventoryRow) {
             try {
-                if(stack == null) { stack = new ItemStack(Material.AIR); }
+                if (stack == null) {
+                    stack = new ItemStack(Material.AIR);
+                }
                 invRow.add(new InventorySerializable(stack));
             } catch (Throwable t) {
                 ExceptionHandler.handle(t, true);

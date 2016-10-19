@@ -30,10 +30,10 @@ import org.bukkit.event.HandlerList;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedItemUseEvent extends StatisticsPlayerEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private ItemConsumeEntry data;
-    
+
     public TrackedItemUseEvent(OnlineSession session, ItemConsumeEntry data) {
         super(session, PlayerVariable.ITEMS_EATEN);
         this.data = data;
@@ -48,5 +48,5 @@ public class TrackedItemUseEvent extends StatisticsPlayerEvent {
     public String getParameterString() {
         return data.getStack().getTypeId() + ":" + data.getStack().getDurability();
     }
-    
+
 }

@@ -35,37 +35,38 @@ import org.bukkit.inventory.meta.BookMeta;
 /**
  * Handles StatsBook events.<br />
  * Prone to errors on CraftBukkit updates.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class StatsBookListener implements Listener {
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new instance of the Listener and registers it with the PluginManager
+     *
      * @param plugin StatsPlugin instance
      */
     public StatsBookListener(Statistics plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         Message.debug("StatsBookListener loads");
     }
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBookOpen(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !event.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
         ItemStack bookStack = event.getItem();
-        if(bookStack == null || bookStack.getTypeId() != 387) return;
+        if (bookStack == null || bookStack.getTypeId() != 387) return;
         BookMeta book = (BookMeta) bookStack.getItemMeta();
-        
+
         Player player = event.getPlayer();
-        
-        if(!book.hasAuthor()) return;
-        if(!book.getAuthor().equals("Statistics")) return;
+
+        if (!book.hasAuthor()) return;
+        if (!book.getAuthor().equals("Statistics")) return;
         book.setPages(BookUtil.getBookPages(player.getUniqueId()));
-        
+
         bookStack.setItemMeta(book);
         player.getInventory().setItemInHand(bookStack);
         Message.debug("Refreshed the book contents");
     }
-    
+
 }

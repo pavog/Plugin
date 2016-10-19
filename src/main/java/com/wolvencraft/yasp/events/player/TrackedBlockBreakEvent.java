@@ -30,10 +30,10 @@ import org.bukkit.event.HandlerList;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedBlockBreakEvent extends StatisticsPlayerEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private BlockBreakEntry data;
-    
+
     public TrackedBlockBreakEvent(OnlineSession session, BlockBreakEntry data) {
         super(session, PlayerVariable.BLOCKS_BROKEN);
         this.data = data;
@@ -48,5 +48,5 @@ public class TrackedBlockBreakEvent extends StatisticsPlayerEvent {
     public String getParameterString() {
         return data.getBlock().getTypeId() + ":" + data.getBlock().getRawData();
     }
-    
+
 }

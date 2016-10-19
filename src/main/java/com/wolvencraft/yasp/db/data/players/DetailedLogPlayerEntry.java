@@ -30,22 +30,22 @@ import org.bukkit.Location;
 
 /**
  * An immutable player login / logout entry
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @Getter(AccessLevel.PUBLIC)
 public class DetailedLogPlayerEntry extends DetailedData {
-    
+
     private final long time;
     private final boolean isLogin;
     private final Location location;
-    
+
     public DetailedLogPlayerEntry(Location location, boolean isLogin) {
         time = Util.getTimestamp();
         this.isLogin = isLogin;
         this.location = location.clone();
     }
-     
+
     @Override
     public boolean pushData(int playerId) {
         return Query.table(PlayerLog.TableName)
@@ -58,5 +58,5 @@ public class DetailedLogPlayerEntry extends DetailedData {
                 .value(PlayerLog.ZCoord, location.getBlockZ())
                 .insert();
     }
- 
+
 }

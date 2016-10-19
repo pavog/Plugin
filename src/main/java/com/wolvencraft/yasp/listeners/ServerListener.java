@@ -31,14 +31,15 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 
 /**
  * Listens to generic server events and reports them to the plugin.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class ServerListener implements Listener {
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new instance of the Listener and registers it with the PluginManager
+     *
      * @param plugin StatsPlugin instance
      */
     public ServerListener(Statistics plugin) {
@@ -47,20 +48,20 @@ public class ServerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWeatherChange(WeatherChangeEvent event) {
-        if(Statistics.isPaused()) return;
-        if(!Bukkit.getWorlds().get(0).equals(event.getWorld())) return;
+        if (Statistics.isPaused()) return;
+        if (!Bukkit.getWorlds().get(0).equals(event.getWorld())) return;
         Statistics.getServerStatistics().weatherChange(event.toWeatherState(), event.getWorld().getWeatherDuration());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPluginEnable(PluginEnableEvent event) {
-        if(Statistics.isPaused()) return;
+        if (Statistics.isPaused()) return;
         Statistics.getServerStatistics().pluginNumberChange();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPluginDisable(PluginDisableEvent event) {
-        if(Statistics.isPaused()) return;
+        if (Statistics.isPaused()) return;
         Statistics.getServerStatistics().pluginNumberChange();
     }
 }

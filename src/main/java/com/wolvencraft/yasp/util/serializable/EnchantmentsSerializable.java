@@ -31,28 +31,30 @@ import java.util.Map.Entry;
 
 /**
  * Provides means to serialize a <code>Map&lt;Enchantment, Integer&gt;</code> into a Json array
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @SuppressWarnings("unused")
 public class EnchantmentsSerializable {
-    
+
     private int enchantment_id;
     private int enchantment_level;
-    
+
     /**
      * <b>Default constructor</b>
+     *
      * @param enchantment Enchantment type
-     * @param level Enchantment level
+     * @param level       Enchantment level
      */
     private EnchantmentsSerializable(Enchantment enchantment, int level) {
         enchantment_id = enchantment.getId();
         enchantment_level = level;
     }
-    
+
     /**
      * Compresses a Map of enchantments into a Json array.<br />
      * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code>
+     *
      * @param enchantments Enchantments
      * @return Json array
      */
@@ -61,7 +63,7 @@ public class EnchantmentsSerializable {
         Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator();
         while (it.hasNext()) {
             try {
-                Map.Entry<Enchantment, Integer> enchantment = (Map.Entry<Enchantment, Integer>)it.next();
+                Map.Entry<Enchantment, Integer> enchantment = (Map.Entry<Enchantment, Integer>) it.next();
                 enchList.add(new EnchantmentsSerializable(enchantment.getKey(), enchantment.getValue().intValue()));
             } catch (Throwable t) {
                 ExceptionHandler.handle(t, true);
@@ -70,5 +72,5 @@ public class EnchantmentsSerializable {
         }
         return enchList;
     }
-    
+
 }

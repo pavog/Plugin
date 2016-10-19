@@ -25,34 +25,34 @@ import com.wolvencraft.yasp.util.hooks.VaultHook;
 import org.bukkit.entity.Player;
 
 /**
- *
  * @author Mario
  */
 public class DetailedVaultEntry extends DetailedData {
     private final String playerName;
-    
+
     private final double balance;
-    private final long timestamp; 
-    
-     /**
+    private final long timestamp;
+
+    /**
      * <b>Default constructor</b><br />
      * Creates a new detailed Vault entry fot the player (current money + rank)
-     * @param player Player object
+     *
+     * @param player   Player object
      * @param playerId Player ID
-     */   
+     */
     public DetailedVaultEntry(Player player, int playerId) {
         this.playerName = player.getName();
         this.balance = VaultHook.getBalance(playerName);
         this.timestamp = Util.getTimestamp();
-    } 
-    
+    }
+
     @Override
     public boolean pushData(int playerId) {
         return Query.table(Hook.DetailedVaultTable.TableName)
-                    .value(Hook.DetailedVaultTable.PlayerId, playerId)
-                    .value(Hook.DetailedVaultTable.Balance, balance)
-                    .value(Hook.DetailedVaultTable.TimeStamp, timestamp)
-                    .insert();
-        }
+                .value(Hook.DetailedVaultTable.PlayerId, playerId)
+                .value(Hook.DetailedVaultTable.Balance, balance)
+                .value(Hook.DetailedVaultTable.TimeStamp, timestamp)
+                .insert();
+    }
 }
  

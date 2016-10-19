@@ -31,11 +31,11 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Represents the total number of items player dropped and picked up.<br />
  * Each entry must have a unique player - material ID combination.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class TotalItemStats extends NormalData {
-    
+
     private ItemStack stack;
     private int dropped;
     private int pickedUp;
@@ -45,16 +45,17 @@ public class TotalItemStats extends NormalData {
     private int smelted;
     private int enchanted;
     private int repaired;
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new TotalItemsEntry based on the data provided
+     *
      * @param stack Item stack
      */
     public TotalItemStats(int playerId, ItemStack stack) {
         this.stack = stack.clone();
         this.stack.setAmount(1);
-        
+
         dropped = 0;
         pickedUp = 0;
         consumed = 0;
@@ -63,17 +64,17 @@ public class TotalItemStats extends NormalData {
         smelted = 0;
         enchanted = 0;
         repaired = 0;
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
+        if (RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
-        
+
         QueryResult result = Query.table(ItemTotals.TableName)
                 .column(ItemTotals.Dropped)
                 .column(ItemTotals.PickedUp)
@@ -86,20 +87,20 @@ public class TotalItemStats extends NormalData {
                 .condition(ItemTotals.PlayerId, playerId)
                 .condition(ItemTotals.MaterialId, MaterialCache.parse(stack))
                 .select();
-        
-        if(result == null) {
+
+        if (result == null) {
             Query.table(ItemTotals.TableName)
-                .value(ItemTotals.PlayerId, playerId)
-                .value(ItemTotals.MaterialId, MaterialCache.parse(stack))
-                .value(ItemTotals.Dropped, dropped)
-                .value(ItemTotals.PickedUp, pickedUp)
-                .value(ItemTotals.Used, consumed)
-                .value(ItemTotals.Crafted, crafted)
-                .value(ItemTotals.Broken, broken)
-                .value(ItemTotals.Smelted, smelted)
-                .value(ItemTotals.Enchanted, enchanted)
-                .value(ItemTotals.Repaired, repaired)
-                .insert();
+                    .value(ItemTotals.PlayerId, playerId)
+                    .value(ItemTotals.MaterialId, MaterialCache.parse(stack))
+                    .value(ItemTotals.Dropped, dropped)
+                    .value(ItemTotals.PickedUp, pickedUp)
+                    .value(ItemTotals.Used, consumed)
+                    .value(ItemTotals.Crafted, crafted)
+                    .value(ItemTotals.Broken, broken)
+                    .value(ItemTotals.Smelted, smelted)
+                    .value(ItemTotals.Enchanted, enchanted)
+                    .value(ItemTotals.Repaired, repaired)
+                    .insert();
         } else {
             dropped = result.asInt(ItemTotals.Dropped);
             pickedUp = result.asInt(ItemTotals.PickedUp);
@@ -129,7 +130,7 @@ public class TotalItemStats extends NormalData {
         fetchData(playerId);
         return result;
     }
-    
+
     @Override
     public void clearData(int playerId) {
         dropped = 0;
@@ -141,82 +142,91 @@ public class TotalItemStats extends NormalData {
         enchanted = 0;
         repaired = 0;
     }
-    
+
     /**
-     * Checks if the ItemStack corresponds to this entry 
+     * Checks if the ItemStack corresponds to this entry
+     *
      * @param stack ItemStack to check
      * @return b>true</b> if the data matches, <b>false</b> otherwise.
      */
     public boolean equals(ItemStack stack) {
-        if(stack.isSimilar(this.stack)) {
+        if (stack.isSimilar(this.stack)) {
             return true;
         } else {
             return false;
         }
     }
-    
+
     /**
      * Increments the number of items dropped
+     *
      * @param amount Number of items
      */
     public void addDropped(int amount) {
         dropped += amount;
     }
-    
+
     /**
      * Increments the number of items picked up
+     *
      * @param amount Number of items
      */
     public void addPickedUp(int amount) {
         pickedUp += amount;
     }
-    
+
     /**
      * Increments the number of items used.<br />
      * Currently only tracks food consumption
+     *
      * @param amount Number of items
      */
     public void addConsumed() {
         consumed += 1;
     }
-    
+
     /**
      * Increments the number of items crafted
+     *
      * @param amount Number of items
      */
     public void addCrafted(int amount) {
         crafted += amount;
     }
-    
+
     /**
      * Increments the number of tools broken
+     *
      * @param amount Number of items
      */
     public void addBroken(int amount) {
         broken += amount;
     }
-    
+
     /**
      * Increments the number of items smelted
+     *
      * @param amount Number of items
      */
     public void addSmelted(int amount) {
         smelted += amount;
     }
-    
+
     /**
      * Increments the number of items enchanted
+     *
      * @param amount Number of items
      */
     public void addEnchanted(int amount) {
         enchanted += amount;
     }
-    
+
     /**
      * Increments the number of items repaired
+     *
      * @param amount Number of items
      */
     public void addRepaired(int amount) {
-        
+
     }
 }

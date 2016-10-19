@@ -28,43 +28,44 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class VanishPlayerEntry extends NormalData {
-    
+
     private String playerName;
-    
-    public VanishPlayerEntry (Player player, int playerId) {
+
+    public VanishPlayerEntry(Player player, int playerId) {
         this.playerName = player.getName();
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(Query.table(VanishTable.TableName)
+        if (Query.table(VanishTable.TableName)
                 .condition(VanishTable.PlayerId, playerId)
                 .exists()) return;
-        
+
         Player player = Bukkit.getPlayerExact(playerName);
-        if(player == null) return;
-        
+        if (player == null) return;
+
         Query.table(VanishTable.TableName)
-            .value(VanishTable.PlayerId, playerId)
-            .value(VanishTable.IsVanished, VanishHook.isVanished(player))
-            .insert();
+                .value(VanishTable.PlayerId, playerId)
+                .value(VanishTable.IsVanished, VanishHook.isVanished(player))
+                .insert();
     }
 
     @Override
     public boolean pushData(int playerId) {
         Player player = Bukkit.getPlayerExact(playerName);
-        if(player == null) return false;
-        
+        if (player == null) return false;
+
         return Query.table(VanishTable.TableName)
-            .value(VanishTable.IsVanished, VanishHook.isVanished(player))
-            .condition(VanishTable.PlayerId, playerId)
-            .update();
+                .value(VanishTable.IsVanished, VanishHook.isVanished(player))
+                .condition(VanishTable.PlayerId, playerId)
+                .update();
     }
 
     @Override
     @Deprecated
-    public void clearData(int playerId) { }
-    
+    public void clearData(int playerId) {
+    }
+
 }

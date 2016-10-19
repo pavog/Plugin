@@ -37,46 +37,47 @@ import java.util.List;
 
 /**
  * Caches Online player sessions server-side
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class OnlineSessionCache implements CachedDataProcess {
 
     private static List<OnlineSession> sessions = new ArrayList<OnlineSession>();
     private final long REFRESH_RATE_TICKS = (long) (5 * 60 * 20);
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a List for data storage and loads the online players into the list at a delay
      */
     public OnlineSessionCache() {
         Bukkit.getScheduler().runTaskLaterAsynchronously(Statistics.getInstance(), new Runnable() {
-            
+
             @Override
             public void run() {
-                for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                    if(StatPerms.Statistics.has(player))
+                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                    if (StatPerms.Statistics.has(player))
                         //Skip data tracking if not all players data is read from database
-                        if(OnlineSessionCache.fetch(player).isReady()){
+                        if (OnlineSessionCache.fetch(player).isReady()) {
                             OnlineSessionCache.fetch(player).getPlayersData().addPlayerLog(player.getLocation(), true);
                         }
                 }
             }
-            
+
         }, 100L);
     }
-    
+
     /**
      * Returns the OnlineSession associated with the specified player.<br />
      * If no session is found, it will be created.
+     *
      * @param player Tracked player
-     * @param login login event
+     * @param login  login event
      * @return OnlineSession associated with the player
      */
     public static OnlineSession fetch(Player player, boolean login) {
-        for(OnlineSession session : sessions) {
-            if(session.getUUID().equals(player.getUniqueId())) {
-                if(login && RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
+        for (OnlineSession session : sessions) {
+            if (session.getUUID().equals(player.getUniqueId())) {
+                if (login && RemoteConfiguration.ShowWelcomeMessages.asBoolean()) {
                     Message.send(player, RemoteConfiguration.WelcomeMessage.asString().replace("<PLAYER>", player.getPlayerListName()));
                 }
                 return session;
@@ -86,29 +87,31 @@ public class OnlineSessionCache implements CachedDataProcess {
         OnlineSession newSession = new OnlineSession(player);
         sessions.add(newSession);
 
-        if(login && RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
+        if (login && RemoteConfiguration.ShowFirstJoinMessages.asBoolean()) {
             Message.send(
-                player,
-                RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
+                    player,
+                    RemoteConfiguration.FirstJoinMessage.asString().replace("<PLAYER>", player.getName())
             );
         }
 
         Bukkit.getServer().getPluginManager().callEvent(new SessionCreateEvent(newSession));
         return newSession;
     }
-    
+
     /**
      * Returns the OnlineSession associated with the specified player.<br />
      * If no session is found, it will be created.
+     *
      * @param player Tracked player
      * @return OnlineSession associated with the player.
      */
     public static OnlineSession fetch(Player player) {
         return fetch(player, false);
     }
-    
+
     /**
      * Removes the specified session
+     *
      * @param session Session to remove
      */
     private static void removeSession(OnlineSession session) {
@@ -116,21 +119,22 @@ public class OnlineSessionCache implements CachedDataProcess {
         Bukkit.getServer().getPluginManager().callEvent(new SessionRemoveEvent(session.getUUID()));
         sessions.remove(session);
     }
-    
+
     /**
      * Returns all stored sessions.
+     *
      * @return List of stored player sessions
      */
     public static List<OnlineSession> getSessions() {
         return new ArrayList<OnlineSession>(sessions);
     }
-    
+
     /**
      * Cycles through all open player sessions and dumps their data.
      * After that, clears the session list.
      */
     public static void dumpSessions() {
-        for(OnlineSession session : getSessions()) {
+        for (OnlineSession session : getSessions()) {
             session.dumpData();
             removeSession(session);
         }
@@ -169,10 +173,10 @@ public class OnlineSessionCache implements CachedDataProcess {
         }
         Statistics.getInstance().setWorking(this.getClass().getSimpleName(), false);
     }
-    
+
     @Override
     public void finalize() {
         dumpSessions();
     }
-    
+
 }

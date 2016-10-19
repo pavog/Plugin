@@ -30,10 +30,10 @@ import org.bukkit.event.HandlerList;
 
 @Getter(AccessLevel.PUBLIC)
 public class NaturalDeathEvent extends StatisticsPlayerEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private NaturalDeathEntry data;
-    
+
     public NaturalDeathEvent(OnlineSession session, NaturalDeathEntry data) {
         super(session, PlayerVariable.DEATHS);
         this.data = data;
@@ -48,5 +48,5 @@ public class NaturalDeathEvent extends StatisticsPlayerEvent {
     public String getParameterString() {
         return data.getCause().name();
     }
-    
+
 }

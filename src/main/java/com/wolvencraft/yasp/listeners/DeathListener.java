@@ -34,11 +34,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 /**
  * Listens to any entity deaths on the server and reports them to the plugin
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class DeathListener implements Listener {
-    
+
     public DeathListener(Statistics plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -46,14 +46,14 @@ public class DeathListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        if(!HandlerManager.playerLookup(player, StatPerms.Death)) return;
-        
+        if (!HandlerManager.playerLookup(player, StatPerms.Death)) return;
+
         HandlerManager.runAsyncTask(new PlayerDeath(player, event));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMonsterDeath(EntityDeathEvent event) {
-        if(Statistics.isPaused()) return;
+        if (Statistics.isPaused()) return;
 
         HandlerManager.runAsyncTask(new MonsterDeath(event));
     }

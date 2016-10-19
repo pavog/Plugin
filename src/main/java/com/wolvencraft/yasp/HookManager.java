@@ -35,13 +35,13 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class HookManager {
-    
+
     private List<PluginHook> activeHooks;
-    
+
     public HookManager() {
         activeHooks = new ArrayList<PluginHook>();
     }
-    
+
     public void onEnable() {
         PluginManager plManager = Statistics.getInstance().getServer().getPluginManager();
         int hooksEnabled = 0;
@@ -49,16 +49,17 @@ public class HookManager {
                 "+-------- [ Hook Manager ] --------+",
                 "|" + Message.centerString("Hook Manager starting up", 34) + "|",
                 "|" + Message.centerString("", 34) + "|"
-                );
-        
-        for(ApplicableHook hook : ApplicableHook.values()) {
+        );
+
+        for (ApplicableHook hook : ApplicableHook.values()) {
             PluginHook hookObj;
-            try { hookObj = hook.getHook().newInstance(); }
-            catch (Throwable t) {
+            try {
+                hookObj = hook.getHook().newInstance();
+            } catch (Throwable t) {
                 ExceptionHandler.handle(t);
                 continue;
             }
-            
+
             if (plManager.getPlugin(hookObj.getPluginName()) == null) {
                 Message.debug(Level.FINER, "|" + Message.centerString(hookObj.getPluginName() + " is not found", 34) + "|");
             } else if (!hookObj.getModule().isEnabled()) {
@@ -66,61 +67,60 @@ public class HookManager {
             } else {
                 HookInitEvent event = new HookInitEvent(hookObj.getModule());
                 Bukkit.getServer().getPluginManager().callEvent(event);
-                if(event.isCancelled()) {
+                if (event.isCancelled()) {
                     Message.log("|" + Message.centerString(hookObj.getPluginName() + " is cancelled", 34) + "|");
                     continue;
                 }
-                
-                if(hookObj.enable()) {
+
+                if (hookObj.enable()) {
                     Message.log("|" + Message.centerString(hookObj.getPluginName() + " has been enabled", 34) + "|");
                     activeHooks.add(hookObj);
                     hooksEnabled++;
                 } else
-                    Message.log("|" + Message.centerString("Could not enable " + hookObj.getPluginName(), 34) + "|"); 
+                    Message.log("|" + Message.centerString("Could not enable " + hookObj.getPluginName(), 34) + "|");
             }
         }
         Message.log(
                 "|                                  |",
                 "|" + Message.centerString(hooksEnabled + " hooks enabled", 34) + "|",
                 "+----------------------------------+"
-                );
+        );
     }
-    
+
     public void onDisable() {
         Message.log(
                 "+-------- [ Hook Manager ] --------+",
                 "|" + Message.centerString("Hook Manager shutting down", 34) + "|",
                 "|" + Message.centerString("", 34) + "|"
-                );
-        
-        for(PluginHook hook : activeHooks) {
+        );
+
+        for (PluginHook hook : activeHooks) {
             hook.disable();
             Message.log("|" + Message.centerString(hook.getPluginName() + " is shutting down", 34) + "|");
         }
-        
+
         Message.log("+----------------------------------+");
     }
-    
+
     @Getter(AccessLevel.PUBLIC)
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     public enum ApplicableHook {
-        
-        ADMIN_CMD       (AdminCmdHook.class),
-        BAN_HAMMER      (BanHammerHook.class),
-        COMMAND_BOOK    (CommandBookHook.class),
-        FACTIONS        (FactionsHook.class),
-        MCMMO           (McMMOHook.class),
-        MOB_ARENA       (MobArenaHook.class),
-        PVP_ARENA       (PvpArenaHook.class),
-        VANISH          (VanishHook.class),
-        VAULT           (VaultHook.class),
-        VOTIFIER        (VotifierHook.class),
-        WORLD_GUARD     (WorldGuardHook.class)
-        ;
-        
+
+        ADMIN_CMD(AdminCmdHook.class),
+        BAN_HAMMER(BanHammerHook.class),
+        COMMAND_BOOK(CommandBookHook.class),
+        FACTIONS(FactionsHook.class),
+        MCMMO(McMMOHook.class),
+        MOB_ARENA(MobArenaHook.class),
+        PVP_ARENA(PvpArenaHook.class),
+        VANISH(VanishHook.class),
+        VAULT(VaultHook.class),
+        VOTIFIER(VotifierHook.class),
+        WORLD_GUARD(WorldGuardHook.class);
+
         @Getter(AccessLevel.PRIVATE)
         private Class<? extends PluginHook> hook;
-        
+
     }
-    
+
 }

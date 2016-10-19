@@ -26,26 +26,28 @@ import com.wolvencraft.yasp.settings.Module;
 import com.wolvencraft.yasp.util.cache.OnlineSessionCache;
 
 /**
- * Saves all Hook data from plugins which don't provide any events where I can listen on periodically 
+ * Saves all Hook data from plugins which don't provide any events where I can listen on periodically
  * This task runs every 10 minuts
+ *
  * @author Mario
  */
 public class HookRefreshTask implements Runnable {
-    
-     /**
+
+    /**
      * <b>Default constructor</b>
      */
-    public HookRefreshTask() { }
-    
+    public HookRefreshTask() {
+    }
+
     @Override
     public void run() {
-        for(OnlineSession session : OnlineSessionCache.getSessions()) {
-            if(session.isOnline() && session.isReady()){
-                if(Module.Vault.isActive() && StatPerms.HookVault.has(session.getBukkitPlayer())){
+        for (OnlineSession session : OnlineSessionCache.getSessions()) {
+            if (session.isOnline() && session.isReady()) {
+                if (Module.Vault.isActive() && StatPerms.HookVault.has(session.getBukkitPlayer())) {
                     ((VaultData) session.getDataStore(DataStore.DataStoreType.Hook_Vault)).VaultEntry();
-                }         
+                }
             }
         }
     }
-    
+
 }

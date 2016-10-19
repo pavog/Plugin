@@ -36,11 +36,11 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * Data store that records all item interactions on the server.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class ItemData extends DataStore<TotalItemStats, DetailedData> {
-    
+
     public ItemData(OnlineSession session) {
         super(session, DataStoreType.Items);
     }
@@ -48,106 +48,115 @@ public class ItemData extends DataStore<TotalItemStats, DetailedData> {
     /**
      * Returns the specific entry from the data store.<br />
      * If the entry does not exist, it will be created.
+     *
      * @param itemStack Item stack
      * @return Corresponding entry
      */
     public TotalItemStats getNormalData(ItemStack itemStack) {
-        for(TotalItemStats entry : getNormalData()) {
-            if(entry.equals(itemStack)) return entry;
+        for (TotalItemStats entry : getNormalData()) {
+            if (entry.equals(itemStack)) return entry;
         }
         TotalItemStats entry = new TotalItemStats(session.getId(), itemStack);
         normalData.add(entry);
         return entry;
     }
-    
+
     /**
      * Registers the dropped item in the data stores
-     * @param location Location of the event
+     *
+     * @param location  Location of the event
      * @param itemStack Stack of items in question
      */
     public void itemDrop(Location location, ItemStack itemStack) {
         int amount = itemStack.getAmount();
         getNormalData(itemStack).addDropped(amount);
         ItemDropEntry detailedEntry = new ItemDropEntry(location, itemStack);
-        if(Module.DetailedItems.isEnabled()){
+        if (Module.DetailedItems.isEnabled()) {
             detailedData.add(detailedEntry);
         }
         Bukkit.getServer().getPluginManager().callEvent(new TrackedItemDropEvent(session, detailedEntry));
     }
-    
+
     /**
      * Registers the picked up item in the data stores
-     * @param location Location of the event
+     *
+     * @param location  Location of the event
      * @param itemStack Stack of items in question
-     * @param amount Amount of picked up items
+     * @param amount    Amount of picked up items
      */
     public void itemPickUp(Location location, ItemStack itemStack, int amount) {
         getNormalData(itemStack).addPickedUp(amount);
         ItemPickupEntry detailedEntry = new ItemPickupEntry(location, itemStack, amount);
-        if(Module.DetailedItems.isEnabled()){
+        if (Module.DetailedItems.isEnabled()) {
             detailedData.add(detailedEntry);
         }
         Bukkit.getServer().getPluginManager().callEvent(new TrackedItemPickupEvent(session, detailedEntry));
     }
-    
+
     /**
      * Registers the used item in the data stores
-     * @param location Location of the event
+     *
+     * @param location  Location of the event
      * @param itemStack Stack of items in question
      */
     public void itemConsume(Location location, ItemStack itemStack) {
-            getNormalData(itemStack).addConsumed();
-            ItemConsumeEntry detailedEntry = new ItemConsumeEntry(location, itemStack);
-            if(Module.DetailedItems.isEnabled()){
-                detailedData.add(detailedEntry);
-            }
-            Bukkit.getServer().getPluginManager().callEvent(new TrackedItemUseEvent(session, detailedEntry));
-        
+        getNormalData(itemStack).addConsumed();
+        ItemConsumeEntry detailedEntry = new ItemConsumeEntry(location, itemStack);
+        if (Module.DetailedItems.isEnabled()) {
+            detailedData.add(detailedEntry);
+        }
+        Bukkit.getServer().getPluginManager().callEvent(new TrackedItemUseEvent(session, detailedEntry));
+
     }
-    
+
     /**
      * Registers the crafted item in the data stores
-     * @param location Location of the event
+     *
+     * @param location  Location of the event
      * @param itemStack Stack of items in question
      */
     public void itemCraft(Location location, ItemStack itemStack) {
         getNormalData(itemStack).addCrafted(itemStack.getAmount());
     }
-    
+
     /**
      * Registers the smelted item in the data stores
-     * @param location Location of the event
+     *
+     * @param location  Location of the event
      * @param itemStack Stack of items in question
      */
     public void itemSmelt(Location location, ItemStack itemStack) {
         getNormalData(itemStack).addSmelted(itemStack.getAmount());
     }
-    
+
     /**
      * Registers the broken item in the data stores
-     * @param location Location of the event
+     *
+     * @param location  Location of the event
      * @param itemStack Stack of items in question
      */
     public void itemBreak(Location location, ItemStack itemStack) {
         getNormalData(itemStack).addBroken(1);
     }
-    
+
     /**
      * Registers the enchanted item in the data stores
-     * @param location Location of the event
+     *
+     * @param location  Location of the event
      * @param itemStack Stack of items in question
      */
     public void itemEnchant(Location location, ItemStack itemStack) {
         getNormalData(itemStack).addEnchanted(1);
     }
-    
+
     /**
      * Registers the repaired item in the data stores
-     * @param location Location of the event
+     *
+     * @param location  Location of the event
      * @param itemStack Stack of items in question
      */
     public void itemRepair(Location location, ItemStack itemStack) {
         getNormalData(itemStack).addRepaired(itemStack.getAmount());
     }
-    
+
 }

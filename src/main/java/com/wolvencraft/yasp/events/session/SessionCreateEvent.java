@@ -27,17 +27,17 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Called when a new player session is being created
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class SessionCreateEvent extends StatisticsPlayerEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
-    
+
     public SessionCreateEvent(OnlineSession session) {
         super(session, PlayerVariable.LOGINS);
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;

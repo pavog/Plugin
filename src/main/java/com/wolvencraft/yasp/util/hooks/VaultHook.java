@@ -32,43 +32,46 @@ import org.bukkit.plugin.ServicesManager;
 import java.util.logging.Level;
 
 public class VaultHook extends PluginHook {
-    
+
     private static Economy economy;
     private static Permission permissions;
-    
+
     public VaultHook() {
         super(Module.Vault, "Vault");
     }
-    
+
     /**
      * <b>Returns the primary group for the specified player</b>
-     * @deprecated Use <code>getGroup(player, world);</code> instead
+     *
      * @param player Player object
      * @return Player's group
+     * @deprecated Use <code>getGroup(player, world);</code> instead
      */
     public static String getGroup(Player player) {
-        if(permissions == null) return "";
+        if (permissions == null) return "";
         return permissions.getPrimaryGroup(player);
     }
-    
+
     /**
      * <b>Returns the primary group for the specified player in the world</b>
+     *
      * @param player Player name
-     * @param world World name
+     * @param world  World name
      * @return Player's group
      */
     public static String getGroup(String player, String world) {
-        if(permissions == null) return "";
+        if (permissions == null) return "";
         return permissions.getPrimaryGroup(world, player);
     }
-    
+
     /**
      * Returns the player's balance
+     *
      * @param playerName Player's name
      * @return Player's balance
      */
     public static double getBalance(String playerName) {
-        if(economy == null) return 0;
+        if (economy == null) return 0;
         return economy.getBalance(playerName);
     }
 
@@ -94,5 +97,5 @@ public class VaultHook extends PluginHook {
         economy = null;
         permissions = null;
     }
-    
+
 }

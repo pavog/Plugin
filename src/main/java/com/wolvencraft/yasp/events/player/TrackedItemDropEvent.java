@@ -30,10 +30,10 @@ import org.bukkit.event.HandlerList;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedItemDropEvent extends StatisticsPlayerEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private ItemDropEntry data;
-    
+
     public TrackedItemDropEvent(OnlineSession session, ItemDropEntry data) {
         super(session, PlayerVariable.ITEMS_DROPPED);
         this.data = data;
@@ -48,5 +48,5 @@ public class TrackedItemDropEvent extends StatisticsPlayerEvent {
     public String getParameterString() {
         return data.getStack().getTypeId() + ":" + data.getStack().getDurability();
     }
-    
+
 }

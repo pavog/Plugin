@@ -27,26 +27,26 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class TownyPlayerSerializable {
-    
+
     private List<String> town_ranks;
     private List<String> nation_ranks;
-    
+
     private String title;
     private String surname;
-    
+
     private int town_blocks_count;
-    
+
     private TownyPlayerSerializable(Resident resident) {
         title = resident.getTitle();
         surname = resident.getSurname();
-        
+
         town_ranks = resident.getTownRanks();
         nation_ranks = resident.getNationRanks();
         town_blocks_count = resident.getTownBlocks().size();
     }
-    
+
     public static String serialize(Resident resident) {
         return Statistics.getGson().toJson(new TownyPlayerSerializable(resident));
     }
-    
+
 }

@@ -30,62 +30,64 @@ import org.bukkit.entity.Player;
 
 /**
  * Represents the information about player's group and balance
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class VaultPlayerEntry extends NormalData {
-    
+
     private String playerName;
-    
+
     private String groups;
     private double balance;
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new normal table for the player
-     * @param player Player object
+     *
+     * @param player   Player object
      * @param playerId Player ID
      */
     public VaultPlayerEntry(Player player, int playerId) {
         this.playerName = player.getName();
         groups = "";
         balance = 0;
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
+        if (RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
-        
+
         groups = GroupsSerializable.serialize(playerName);
         balance = VaultHook.getBalance(playerName);
-        
-        if(Query.table(VaultTable.TableName)
+
+        if (Query.table(VaultTable.TableName)
                 .condition(VaultTable.PlayerId, playerId)
                 .exists()) return;
-        
+
         Query.table(VaultTable.TableName)
-             .value(VaultTable.PlayerId, playerId)
-             .value(VaultTable.Balance, balance)
-             .value(VaultTable.GroupName, groups)
-             .insert();
+                .value(VaultTable.PlayerId, playerId)
+                .value(VaultTable.Balance, balance)
+                .value(VaultTable.GroupName, groups)
+                .insert();
     }
-    
+
     @Override
     public boolean pushData(int playerId) {
         return Query.table(VaultTable.TableName)
-            .value(VaultTable.Balance, balance)
-            .value(VaultTable.GroupName, groups)
-            .condition(VaultTable.PlayerId, playerId)
-            .update();
+                .value(VaultTable.Balance, balance)
+                .value(VaultTable.GroupName, groups)
+                .condition(VaultTable.PlayerId, playerId)
+                .update();
     }
-    
+
     @Override
     @Deprecated
-    public void clearData(int playerId) { }
-    
+    public void clearData(int playerId) {
+    }
+
 }

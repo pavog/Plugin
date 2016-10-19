@@ -32,27 +32,27 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 public class DetailedPVPStats {
-    
+
     /**
      * An immutable PVP entry
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     @Getter(AccessLevel.PUBLIC)
     public static class PVPEntry extends DetailedData {
-        
+
         private final int victimId;
         private final MaterialData weapon;
         private final Location location;
         private final long timestamp;
-        
+
         public PVPEntry(Location location, int victimId, ItemStack weapon) {
             this.victimId = victimId;
             this.weapon = weapon.getData();
             this.location = location.clone();
             timestamp = Util.getTimestamp();
         }
-        
+
         @Override
         public boolean pushData(int killerId) {
             return Query.table(PlayerKillsPVP.TableName)

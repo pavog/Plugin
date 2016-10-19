@@ -29,31 +29,31 @@ import org.bukkit.Bukkit;
 /**
  * Represents the configuration pulled from the database.<br />
  * No data is stored locally; all information is pulled from the database during runtime.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public enum RemoteConfiguration {
-    
-    DatabaseVersion             ("version"),
-    
-    Ping                        ("ping"),
-    LogDelay                    ("log_delay"),
-    ShowWelcomeMessages         ("show_welcome_messages"),
-    WelcomeMessage              ("welcome_message"),
-    ShowFirstJoinMessages       ("show_first_join_message"),
-    FirstJoinMessage            ("first_join_message"),
-    
-    VanishDisablesTracking      ("hook.vanish.no_tracking"),
-    MergedDataTracking          ("merged_data_tracking"),
-    ;
-    
+
+    DatabaseVersion("version"),
+
+    Ping("ping"),
+    LogDelay("log_delay"),
+    ShowWelcomeMessages("show_welcome_messages"),
+    WelcomeMessage("welcome_message"),
+    ShowFirstJoinMessages("show_first_join_message"),
+    FirstJoinMessage("first_join_message"),
+
+    VanishDisablesTracking("hook.vanish.no_tracking"),
+    MergedDataTracking("merged_data_tracking"),;
+
     String key;
     QueryResult entry;
     boolean refreshScheduled;
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new RemoteConfiguration entry based on the specified key
+     *
      * @param key Entry key
      */
     RemoteConfiguration(String key) {
@@ -61,7 +61,7 @@ public enum RemoteConfiguration {
         this.key = key;
         updateCache();
     }
-    
+
     /**
      * Signals the plugin to pull the stored value from the database next time it is called
      */
@@ -73,53 +73,68 @@ public enum RemoteConfiguration {
 
     /**
      * Returns the configuration value as String
-     * @deprecated <code>asString();</code> should be used instead
+     *
      * @return Configuration value
+     * @deprecated <code>asString();</code> should be used instead
      */
     @Override
     public String toString() {
         return asString();
     }
-    
+
     /**
      * Returns the configuration value as String
+     *
      * @return Configuration value
      */
     public String asString() {
-        if(refreshScheduled) updateCacheAsynchronously();
-        try { return entry.asString("value"); }
-        catch (Throwable t) { return ""; }
+        if (refreshScheduled) updateCacheAsynchronously();
+        try {
+            return entry.asString("value");
+        } catch (Throwable t) {
+            return "";
+        }
     }
-    
+
     /**
      * Returns the configuration value as an integer
+     *
      * @return Configuration value
      */
     public int asInteger() {
-        if(refreshScheduled) updateCacheAsynchronously();
-        try { return entry.asInt("value"); }
-        catch (Throwable t) { com.wolvencraft.yasp.util.Message.log("Entry is null (" + t.getMessage() + ")"); return 0; }
+        if (refreshScheduled) updateCacheAsynchronously();
+        try {
+            return entry.asInt("value");
+        } catch (Throwable t) {
+            com.wolvencraft.yasp.util.Message.log("Entry is null (" + t.getMessage() + ")");
+            return 0;
+        }
     }
-    
+
     /**
      * Returns the configuration value as a boolean
+     *
      * @return Configuration value
      */
     public boolean asBoolean() {
-        if(refreshScheduled) updateCacheAsynchronously();
-        try { return entry.asBoolean("value"); }
-        catch (Throwable t) { return false; }
+        if (refreshScheduled) updateCacheAsynchronously();
+        try {
+            return entry.asBoolean("value");
+        } catch (Throwable t) {
+            return false;
+        }
     }
-    
+
     /**
      * Updates the configuration with the specified value
+     *
      * @param value New configuration value
      * @return <b>true</b> if the update was successful, <b>false</b> otherwise
      */
     public boolean update(Object value) {
         return Query.table(SettingsTable.TableName).value("value", value).condition("key", key).update();
     }
-    
+
     /**
      * Fetches the configuration data from the database
      */
@@ -130,15 +145,17 @@ public enum RemoteConfiguration {
                 .select();
         refreshScheduled = false;
     }
-    
+
     /**
      * Fetches the configuration data from the database asynchronously
      */
     private void updateCacheAsynchronously() {
-        if(!Statistics.getInstance().isEnabled()) return;
+        if (!Statistics.getInstance().isEnabled()) return;
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
             @Override
-            public void run() { updateCache(); }
+            public void run() {
+                updateCache();
+            }
         });
     }
 }

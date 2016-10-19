@@ -47,10 +47,10 @@ import java.util.logging.Level;
 
 /**
  * A library designed to execute extremely long database queries from file
+ *
  * @author MyBatis Team
  * @author ChaseHQ
  * @author bitWolfy
- *
  */
 public class ScriptRunner {
 
@@ -61,34 +61,38 @@ public class ScriptRunner {
 
     private String delimiter = ScriptRunner.DEFAULT_DELIMITER;
     private boolean fullLineDelimiter = false;
-    
+
     /**
      * <b>Constructor</b><br />
      * Creates a new ScriptRunner instance
+     *
      * @param connection Database connection instance
      */
     public ScriptRunner(Connection connection) {
         this.connection = connection;
     }
-    
+
     /**
      * Sets a custom delimiter
+     *
      * @param delimiter Delimiter to set
      */
     public void setDelimiter(String delimiter) {
         this.delimiter = delimiter;
     }
-    
+
     /**
      * Sets a custom full line delimiter
+     *
      * @param fullLineDelimiter Delimiter to set
      */
     public void setFullLineDelimiter(boolean fullLineDelimiter) {
         this.fullLineDelimiter = fullLineDelimiter;
     }
-    
+
     /**
      * Executes a database script
+     *
      * @param reader Reader
      * @throws RuntimeSQLException thrown if an error occurs while executing a line
      */
@@ -109,7 +113,7 @@ public class ScriptRunner {
                     line = StringUtils.replace(line, "$prefix_", dbPrefix);
                     command = this.handleLine(command, line);
                     i++;
-                    if(i % 50 == 0 && debug) Message.log(Level.FINEST, "Executing line " + i);
+                    if (i % 50 == 0 && debug) Message.log(Level.FINEST, "Executing line " + i);
                 }
                 Message.log(Level.FINER, "Executed " + i + " lines total");
                 this.commitConnection();
@@ -118,37 +122,47 @@ public class ScriptRunner {
                 String message = "Error executing: " + command + ".  Cause: " + e;
                 throw new RuntimeSQLException(message, e);
             }
+        } finally {
+            this.rollbackConnection();
         }
-        finally { this.rollbackConnection(); }
     }
-    
+
     /**
      * Closes the database connection
      */
     public void closeConnection() {
-        try { this.connection.close(); }
-        catch (Exception e) { }
+        try {
+            this.connection.close();
+        } catch (Exception e) {
+        }
     }
-    
+
     /**
      * Commits the changes to the database
+     *
      * @throws RuntimeSQLException thrown if unable to commit the transaction.
      */
     private void commitConnection() throws RuntimeSQLException {
-        try { this.connection.commit(); }
-        catch (Throwable t) { throw new RuntimeSQLException("Could not commit transaction. Cause: " + t, t); }
+        try {
+            this.connection.commit();
+        } catch (Throwable t) {
+            throw new RuntimeSQLException("Could not commit transaction. Cause: " + t, t);
+        }
     }
-    
+
     /**
      * Rolls back the connection
      */
     private void rollbackConnection() {
-        try { this.connection.rollback(); }
-        catch (Throwable t) { }
+        try {
+            this.connection.rollback();
+        } catch (Throwable t) {
+        }
     }
-    
+
     /**
      * Checks for the missing line terminator
+     *
      * @param command Line to check
      * @throws RuntimeSQLException Thrown if the line is missing a terminator
      */
@@ -157,9 +171,10 @@ public class ScriptRunner {
             throw new RuntimeSQLException("Line missing end-of-line terminator (" + this.delimiter + ") => " + command);
         }
     }
-    
+
     /**
      * Handles the individual line
+     *
      * @param command
      * @param line
      * @return Parsed string
@@ -182,27 +197,30 @@ public class ScriptRunner {
         }
         return command;
     }
-    
+
     /**
      * Checks if the specified line is a comment
+     *
      * @param trimmedLine Line to check
      * @return <b>true</b> if the line is a comment, <b>false</b> otherwise
      */
     private boolean lineIsComment(String trimmedLine) {
         return trimmedLine.startsWith("//") || trimmedLine.startsWith("--");
     }
-    
+
     /**
      * Checks if the specified line is ready to be executed
+     *
      * @param trimmedLine Line to check
      * @return <b>true</b> if the line is ready to be executed, <b>false</b> otherwise
      */
     private boolean commandReadyToExecute(String trimmedLine) {
         return !this.fullLineDelimiter && trimmedLine.endsWith(this.delimiter) || this.fullLineDelimiter && trimmedLine.equals(this.delimiter);
     }
-    
+
     /**
      * Executes the specified command
+     *
      * @param command Command to execute
      * @throws SQLException
      * @throws UnsupportedEncodingException
@@ -211,11 +229,13 @@ public class ScriptRunner {
         Statement statement = this.connection.createStatement();
         String sql = command;
         sql = sql.replaceAll("\r\n", "\n");
-        
+
         statement.execute(sql);
-        
-        try { statement.close(); }
-        catch (Exception e) { }
+
+        try {
+            statement.close();
+        } catch (Exception e) {
+        }
     }
-    
+
 }

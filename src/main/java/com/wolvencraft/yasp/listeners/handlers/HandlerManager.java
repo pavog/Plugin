@@ -30,47 +30,47 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 public class HandlerManager {
-    
+
     public static boolean playerLookup(Player player, ExtraChecks check) {
-        if(Statistics.isPaused()) return false;
-        
-        if(Module.Vanish.isActive()
+        if (Statistics.isPaused()) return false;
+
+        if (Module.Vanish.isActive()
                 && RemoteConfiguration.VanishDisablesTracking.asBoolean()
                 && VanishHook.isVanished(player)) return false;
-        
-        if(player.hasMetadata("NPC")    // XXX Citizens fix
+
+        if (player.hasMetadata("NPC")    // XXX Citizens fix
                 && player.getMetadata("NPC").get(0).asBoolean()) return false;
-        
-        if(!check.check(player)) return false;
-        
+
+        if (!check.check(player)) return false;
+
         return true;
     }
-    
+
     public static boolean playerLookup(Player player, StatPerms permission) {
-        if(Statistics.isPaused()) return false;
-        
-        if(Module.Vanish.isActive()
+        if (Statistics.isPaused()) return false;
+
+        if (Module.Vanish.isActive()
                 && RemoteConfiguration.VanishDisablesTracking.asBoolean()
                 && VanishHook.isVanished(player)) return false;
-        
-        if(player.hasMetadata("NPC")    // XXX Citizens fix
+
+        if (player.hasMetadata("NPC")    // XXX Citizens fix
                 && player.getMetadata("NPC").get(0).asBoolean()) return false;
-        
+
         return permission.has(player);
     }
-    
+
     public static BukkitTask runTask(Runnable task) {
         return Bukkit.getScheduler().runTask(Statistics.getInstance(), task);
     }
-    
+
     public static BukkitTask runAsyncTask(Runnable task) {
         return Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), task);
     }
-    
+
     public static BukkitTask runTaskLater(Runnable task, long delay) {
         return Bukkit.getScheduler().runTaskLater(Statistics.getInstance(), task, delay);
     }
-    
+
     public static BukkitTask runAsyncTaskLater(Runnable task, long delay) {
         return Bukkit.getScheduler().runTaskLaterAsynchronously(Statistics.getInstance(), task, delay);
     }
@@ -80,5 +80,5 @@ public class HandlerManager {
         public boolean check(Player player);
 
     }
-    
+
 }

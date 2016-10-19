@@ -31,35 +31,36 @@ import java.util.Map.Entry;
 /**
  * <b>Requires WorldGuardHook</b><br />
  * Stores the regional data in a Json array
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class RegionsSerializable {
-    
+
     String region_name;
     int priority;
-    
+
     private RegionsSerializable(String regionName, int priority) {
         this.region_name = regionName;
         this.priority = priority;
     }
-    
+
     /**
      * Compresses a Map into a single-line json array.<br />
      * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code><br />
      * Stores region name and priority
+     *
      * @param regions Map of regions
      * @return String json array
      */
     public static String serialize(Map<String, Integer> regions) {
         List<RegionsSerializable> values = new LinkedList<RegionsSerializable>();
         Iterator<Entry<String, Integer>> it = regions.entrySet().iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Map.Entry<String, Integer> pairs = (Map.Entry<String, Integer>) it.next();
             values.add(new RegionsSerializable(pairs.getKey(), pairs.getValue()));
             it.remove();
         }
         return Util.toJsonArray(values);
     }
-    
+
 }

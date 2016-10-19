@@ -32,35 +32,37 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class WorldGuardHook extends PluginHook {
-    
+
     private static WorldGuardPlugin instance;
-    
+
     public WorldGuardHook() {
         super(Module.WorldGuard, "WorldGuard");
     }
-    
+
     /**
      * Returns a Json array of regions at the specified location
+     *
      * @param loc Player location
      * @return Json array of regions
      */
-    public static String getRegions (Location loc) {
+    public static String getRegions(Location loc) {
         Map<String, Integer> regions = new HashMap<String, Integer>();
         Iterator<ProtectedRegion> it = instance.getRegionManager(loc.getWorld()).getApplicableRegions(loc).iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             ProtectedRegion region = it.next();
             regions.put(region.getId(), region.getPriority());
             it.remove();
         }
         return RegionsSerializable.serialize(regions);
     }
-    
+
     /**
      * Returns a Json array of flags at the specified location
+     *
      * @param loc Player location
      * @return Json array of flags
      */
-    public static String getFlags (Location loc) {
+    public static String getFlags(Location loc) {
         return FlagsSerializable.serialize(instance.getRegionManager(loc.getWorld()).getApplicableRegions(loc));
     }
 
@@ -73,5 +75,5 @@ public class WorldGuardHook extends PluginHook {
     protected void onDisable() {
         instance = null;
     }
-    
+
 }

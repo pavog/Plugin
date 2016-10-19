@@ -22,8 +22,8 @@ package com.wolvencraft.yasp.exceptions;
 
 /**
  * Exception thrown when the database returns an error to the request
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class RuntimeSQLException extends RuntimeException {
     private static final long serialVersionUID = 5224696788505678598L;

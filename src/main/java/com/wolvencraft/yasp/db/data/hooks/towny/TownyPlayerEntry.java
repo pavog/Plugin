@@ -28,40 +28,41 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class TownyPlayerEntry extends NormalData {
-    
+
     private String playerName;
-    
-    public TownyPlayerEntry (Player player, int playerId) {
+
+    public TownyPlayerEntry(Player player, int playerId) {
         this.playerName = player.getName();
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(Query.table(TownyTable.TableName)
+        if (Query.table(TownyTable.TableName)
                 .condition(TownyTable.PlayerId, playerId)
                 .exists()) return;
-        
+
         Player player = Bukkit.getPlayerExact(playerName);
-        if(player == null) return;
-        
+        if (player == null) return;
+
         Query.table(TownyTable.TableName)
-            .value(TownyTable.PlayerId, playerId)
-            .value(TownyTable.PlayerData, TownyHook.getPlayerData(playerName))
-            .insert();
+                .value(TownyTable.PlayerId, playerId)
+                .value(TownyTable.PlayerData, TownyHook.getPlayerData(playerName))
+                .insert();
     }
 
     @Override
     public boolean pushData(int playerId) {
         return Query.table(TownyTable.TableName)
-            .value(TownyTable.PlayerData, TownyHook.getPlayerData(playerName))
-            .condition(TownyTable.PlayerId, playerId)
-            .update();
+                .value(TownyTable.PlayerData, TownyHook.getPlayerData(playerName))
+                .condition(TownyTable.PlayerId, playerId)
+                .update();
     }
 
     @Override
     @Deprecated
-    public void clearData(int playerId) { }
-    
+    public void clearData(int playerId) {
+    }
+
 }

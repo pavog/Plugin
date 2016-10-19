@@ -35,43 +35,44 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 public class DetailedPVEStats {
-    
+
     /**
      * An immutable PVE entry
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     @Getter(AccessLevel.PUBLIC)
     public static class PVEEntry extends DetailedData {
-        
+
         private final EntityType creatureType;
         private final MaterialData weapon;
         private final Location location;
         private final boolean playerKilled;
         private final long timestamp;
-        
-        public PVEEntry (EntityType creatureType, Location location, ItemStack weapon) {
+
+        public PVEEntry(EntityType creatureType, Location location, ItemStack weapon) {
             this.creatureType = creatureType;
             this.weapon = weapon.getData();
             this.location = location.clone();
             playerKilled = false;
             timestamp = Util.getTimestamp();
         }
-        
+
         /**
          * <b>Creature killed a player</b><br />
          * Creates a new DetailedPVEEntry where the creature killed a player.
+         *
          * @param creatureType Type of the creature
-         * @param location Location of the event
+         * @param location     Location of the event
          */
-        public PVEEntry (EntityType creatureType, Location location) {
+        public PVEEntry(EntityType creatureType, Location location) {
             this.creatureType = creatureType;
             this.weapon = new MaterialData(Material.AIR);
             this.location = location.clone();
             playerKilled = true;
             timestamp = Util.getTimestamp();
         }
-        
+
         @Override
         public boolean pushData(int playerId) {
             return Query.table(PlayerKillsPVE.TableName)

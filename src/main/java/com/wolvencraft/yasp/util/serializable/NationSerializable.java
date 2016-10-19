@@ -25,27 +25,27 @@ import com.wolvencraft.yasp.Statistics;
 
 @SuppressWarnings("unused")
 public class NationSerializable {
-    
+
     private String name;
     private String tag;
     private String capital;
-    
+
     private int num_towns;
     private int num_residents;
     private double taxes;
-    
+
     private NationSerializable(Nation nation) {
         name = nation.getName();
         tag = nation.getTag();
         capital = nation.getCapital().getName();
-        
+
         num_towns = nation.getNumTowns();
         num_residents = nation.getNumResidents();
         taxes = nation.getTaxes();
     }
-    
+
     public static String serialize(Nation nation) {
         return Statistics.getGson().toJson(new NationSerializable(nation));
     }
-    
+
 }

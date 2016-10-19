@@ -25,22 +25,24 @@ import net.slipcor.pvparena.api.PVPArenaAPI;
 import org.bukkit.entity.Player;
 
 public class PvpArenaHook extends PluginHook {
-    
+
     public PvpArenaHook() {
         super(Module.PvpArena, "PvpArena");
     }
-    
+
     /**
      * Checks if a player is participating in any of the arenas
+     *
      * @param player Player object
      * @return <b>true</b> if a player is in the arena, <b>false</b> otherwise
      */
     public static boolean isPlaying(Player player) {
         return (PVPArenaAPI.getArenaName(player) == null);
     }
-    
+
     /**
      * Returns the name of the arena the player is currently in
+     *
      * @param player Player object
      * @return <b>String</b> name of the arena, or <b>null</b> if the player is not participating
      */

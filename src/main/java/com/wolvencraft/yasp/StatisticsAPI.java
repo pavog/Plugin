@@ -48,83 +48,91 @@ import java.util.logging.Level;
 
 /**
  * Simple API for servers statistics
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class StatisticsAPI {
-    
+
     /**
      * Returns the online player session
+     *
      * @param player Player object
      * @return Player session
      */
     public static OnlineSession getSession(Player player) {
-        if(!isTracked(player)) return null;
+        if (!isTracked(player)) return null;
         return OnlineSessionCache.fetch(player);
     }
-    
+
     /**
      * Returns the OfflineSession for the player with the specified username.<br />
      * The player might not be online, or not exist at all.
+     *
      * @param UUID Player's uuid
      * @return DataSession with player's totals
      */
     public static OfflineSession getSession(UUID uuid) {
         return OfflineSessionCache.fetch(uuid);
     }
-    
+
     /**
      * Returns the OfflineSession for the player with the specified username.<br />
      * The player might not be online, or not exist at all.
-     * @param uuid Player's uuid
+     *
+     * @param uuid   Player's uuid
      * @param cached <b>true</b> if you want the plugin to cache this session
      * @return DataSession with player's totals
      */
     public static OfflineSession getSession(UUID uuid, boolean cached) {
-        if(cached) return getSession(uuid);
+        if (cached) return getSession(uuid);
         else return new OfflineSession(uuid);
     }
-    
+
     /**
      * Checks if the player is tracked by the plugin
+     *
      * @param player Player object
      * @return <b>true</b> if the player is tracked, <b>false</b> otherwise
      */
     public static boolean isTracked(Player player) {
         return HandlerManager.playerLookup(player, StatPerms.Statistics);
     }
-    
+
     /**
      * Returns the value of the specified variable
+     *
      * @param type Variable type
      * @return Variable value
      */
     public static Object getValue(ServerVariable type) {
         return Statistics.getServerTotals().getValues().get(type);
     }
-    
+
     /**
      * Executes an external patch
+     *
      * @param plugin Plugin instance
-     * @param path Path to the patch file (relative to your plugin's data folder), without the extension
+     * @param path   Path to the patch file (relative to your plugin's data folder), without the extension
      * @return <b>true</b> if the patch was executed, <b>false</b> if the patching was cancelled
      * @throws DatabaseConnectionException If an error occurred while executing a database patch
-     * @throws FileNotFoundException If the patch file could not be found
+     * @throws FileNotFoundException       If the patch file could not be found
      */
     public static boolean executeExternalPatch(Plugin plugin, String path) throws DatabaseConnectionException, FileNotFoundException {
         DatabasePatchEvent event = new DatabasePatchEvent(path);
         Bukkit.getServer().getPluginManager().callEvent(event);
-        
-        if(event.isCancelled()) return false;
-        
+
+        if (event.isCancelled()) return false;
+
         InputStream is = new FileInputStream(plugin.getDataFolder() + "/" + path + ".sql");
         Message.log(Level.FINE, "Executing external database patch: " + path + ".sql");
-        
+
         ScriptRunner scriptRunner = new ScriptRunner(Database.getConnection());
-        try {scriptRunner.runScript(new InputStreamReader(is)); }
-        catch (RuntimeSQLException e) { throw new DatabaseConnectionException("An error occured while executing database patch: " + path + ".sql", e); }
-        finally {
-            if(!Query.table(SettingsTable.TableName).condition("key", "patched").exists()) {
+        try {
+            scriptRunner.runScript(new InputStreamReader(is));
+        } catch (RuntimeSQLException e) {
+            throw new DatabaseConnectionException("An error occured while executing database patch: " + path + ".sql", e);
+        } finally {
+            if (!Query.table(SettingsTable.TableName).condition("key", "patched").exists()) {
                 Query.table(SettingsTable.TableName).value("key", "patched").value("value", 1).insert();
             }
             Query.table(SettingsTable.TableName).value("value", 1).condition("key", "patched").update();

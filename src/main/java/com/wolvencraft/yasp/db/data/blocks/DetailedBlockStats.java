@@ -32,18 +32,18 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 
 public class DetailedBlockStats {
-    
+
     /**
      * An immutable block breaking entry
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     @Getter(AccessLevel.PUBLIC)
     public static class BlockBreakEntry extends DetailedData {
-        
+
         private final BlockState block;
         private final long timestamp;
-        
+
         public BlockBreakEntry(BlockState block) {
             this.block = block;
             timestamp = Util.getTimestamp();
@@ -53,28 +53,28 @@ public class DetailedBlockStats {
         public boolean pushData(int playerId) {
             Location location = block.getLocation();
             return Query.table(BlocksBroken.TableName)
-                .value(BlocksBroken.PlayerId, playerId)
-                .value(BlocksBroken.MaterialId, MaterialCache.parse(block))
-                .value(BlocksBroken.World, location.getWorld().getName())
-                .value(BlocksBroken.XCoord, location.getBlockX())
-                .value(BlocksBroken.YCoord, location.getBlockY())
-                .value(BlocksBroken.ZCoord, location.getBlockZ())
-                .value(BlocksBroken.Timestamp, timestamp)
-                .insert();
+                    .value(BlocksBroken.PlayerId, playerId)
+                    .value(BlocksBroken.MaterialId, MaterialCache.parse(block))
+                    .value(BlocksBroken.World, location.getWorld().getName())
+                    .value(BlocksBroken.XCoord, location.getBlockX())
+                    .value(BlocksBroken.YCoord, location.getBlockY())
+                    .value(BlocksBroken.ZCoord, location.getBlockZ())
+                    .value(BlocksBroken.Timestamp, timestamp)
+                    .insert();
         }
     }
-    
+
     /**
      * An immutable block placement entry
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     @Getter(AccessLevel.PUBLIC)
     public static class BlockPlaceEntry extends DetailedData {
-        
+
         private final BlockState block;
         private final long timestamp;
-        
+
         public BlockPlaceEntry(BlockState block) {
             this.block = block;
             timestamp = Util.getTimestamp();
@@ -84,14 +84,14 @@ public class DetailedBlockStats {
         public boolean pushData(int playerId) {
             Location location = block.getLocation();
             return Query.table(BlocksPlaced.TableName)
-                .value(BlocksPlaced.PlayerId, playerId)
-                .value(BlocksPlaced.MaterialId, MaterialCache.parse(block))
-                .value(BlocksPlaced.World, location.getWorld().getName())
-                .value(BlocksPlaced.XCoord, location.getBlockX())
-                .value(BlocksPlaced.YCoord, location.getBlockY())
-                .value(BlocksPlaced.ZCoord, location.getBlockZ())
-                .value(BlocksPlaced.Timestamp, timestamp)
-                .insert();
+                    .value(BlocksPlaced.PlayerId, playerId)
+                    .value(BlocksPlaced.MaterialId, MaterialCache.parse(block))
+                    .value(BlocksPlaced.World, location.getWorld().getName())
+                    .value(BlocksPlaced.XCoord, location.getBlockX())
+                    .value(BlocksPlaced.YCoord, location.getBlockY())
+                    .value(BlocksPlaced.ZCoord, location.getBlockZ())
+                    .value(BlocksPlaced.Timestamp, timestamp)
+                    .insert();
         }
     }
 }

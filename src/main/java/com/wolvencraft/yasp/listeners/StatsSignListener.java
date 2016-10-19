@@ -37,50 +37,51 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
  * Handles StatsSign events
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class StatsSignListener implements Listener {
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new instance of the Listener and registers it with the PluginManager
+     *
      * @param plugin StatsPlugin instance
      */
     public StatsSignListener(Statistics plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onStatsSignInit(PlayerInteractEvent event) {
-        if(!event.getPlayer().isOp()) return;
+        if (!event.getPlayer().isOp()) return;
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
-        
+
         Block block = event.getClickedBlock();
-        if(!(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) return;
-        if(!(block.getState() instanceof Sign)) return;
-        
+        if (!(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) return;
+        if (!(block.getState() instanceof Sign)) return;
+
         Sign sign = (Sign) block.getState();
-        if(SignRefreshTask.isValid(sign)) {
+        if (SignRefreshTask.isValid(sign)) {
             Message.debug("Stats sign found at the location!");
             return;
         }
-        
-        if(!sign.getLines()[0].startsWith("<Y>")) return;
+
+        if (!sign.getLines()[0].startsWith("<Y>")) return;
         SignRefreshTask.add(sign);
         Message.sendFormattedSuccess(CommandManager.getSender(), "A new StatsSign has been added");
         SignRefreshTask.updateAll();
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onStatsSignBreak(BlockBreakEvent event) {
         BlockState blockState = event.getBlock().getState();
-        if(!(blockState instanceof Sign)) return;
+        if (!(blockState instanceof Sign)) return;
         Sign sign = (Sign) blockState;
-        if(!SignRefreshTask.isValid(sign)) return;
+        if (!SignRefreshTask.isValid(sign)) return;
         Message.debug("Stats sign found at the location!");
         SignRefreshTask.remove(sign);
         Message.sendFormattedSuccess(event.getPlayer(), "Sign successfully removed");
     }
-    
+
 }

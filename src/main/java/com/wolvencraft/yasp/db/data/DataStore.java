@@ -30,81 +30,84 @@ import java.util.List;
 
 /**
  * Common interface for all data stores
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public abstract class DataStore<N extends NormalData, D extends DetailedData> {
-    
-    @Getter(AccessLevel.PUBLIC) protected OnlineSession session;
+
+    @Getter(AccessLevel.PUBLIC)
+    protected OnlineSession session;
     protected List<N> normalData;
     protected List<D> detailedData;
     @Getter(AccessLevel.PUBLIC)
     private DataStoreType type;
-    
+
     public DataStore(OnlineSession session, DataStoreType type) {
         this.session = session;
         this.type = type;
         this.normalData = new ArrayList<N>();
         this.detailedData = new ArrayList<D>();
     }
-    
+
     /**
      * Returns the dynamic entries in the data store.<br />
      * Asynchronous method; changes to the returned List will not affect the data store.
+     *
      * @return Dynamic entries in the data store
      */
     public List<N> getNormalData() {
         return new ArrayList<N>(normalData);
     }
-    
+
     /**
      * Returns the static entries in the data store.
+     *
      * @return Static entries in the data store
      */
     public List<D> getDetailedData() {
         return new ArrayList<D>(detailedData);
     }
-    
+
     /**
      * Synchronizes the data from the data store to the database, then removes it from local storage<br />
      * If an entry was not synchronized, it will not be removed.
      */
     public void pushData() {
-        for(N entry : getNormalData()) {
-           try{
-                 if(((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
-           } catch(NullPointerException e ){
-                 Message.debug("NPE occurred while saving NormalData: "+ ((NormalData) entry));
-                 normalData.remove(entry);
-           }
-        }   
-        for(D entry : getDetailedData()) {
-            try{
-                 if(((DetailedData) entry).pushData(session.getId())) detailedData.remove(entry);
-            } catch(NullPointerException e ){
-                 Message.debug("NPE occurred while saving DetailedData: "+ ((DetailedData) entry));
-                 detailedData.remove(entry);
+        for (N entry : getNormalData()) {
+            try {
+                if (((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
+            } catch (NullPointerException e) {
+                Message.debug("NPE occurred while saving NormalData: " + ((NormalData) entry));
+                normalData.remove(entry);
+            }
+        }
+        for (D entry : getDetailedData()) {
+            try {
+                if (((DetailedData) entry).pushData(session.getId())) detailedData.remove(entry);
+            } catch (NullPointerException e) {
+                Message.debug("NPE occurred while saving DetailedData: " + ((DetailedData) entry));
+                detailedData.remove(entry);
             }
         }
     }
-    
+
     /**
      * Clears the data store of all locally stored data.
      */
     public void dump() {
-        for(N entry : getNormalData()) {
+        for (N entry : getNormalData()) {
             normalData.remove(entry);
         }
-        
-        for(D entry : getDetailedData()) {
+
+        for (D entry : getDetailedData()) {
             detailedData.remove(entry);
         }
     }
-    
+
     /**
      * Represents the data store type
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
     public enum DataStoreType {
         Blocks,
@@ -112,7 +115,7 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         Deaths,
         PVE,
         PVP,
-        
+
         Hook_AdminCmd,
         Hook_BanHammer,
         Hook_CommandBook,

@@ -28,47 +28,48 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class McMMOPlayerEntry extends NormalData {
-    
+
     private String playerName;
-    
-    public McMMOPlayerEntry (Player player, int playerId) {
+
+    public McMMOPlayerEntry(Player player, int playerId) {
         this.playerName = player.getName();
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(Query.table(McMMOTable.TableName)
+        if (Query.table(McMMOTable.TableName)
                 .condition(McMMOTable.PlayerId, playerId)
                 .exists()) return;
-        
+
         Player player = Bukkit.getPlayerExact(playerName);
-        if(player == null) return;
-        
+        if (player == null) return;
+
         Query.table(McMMOTable.TableName)
-            .value(McMMOTable.PlayerId, playerId)
-            .value(McMMOTable.Experience, McMMOHook.getExp(player))
-            .value(McMMOTable.Levels, McMMOHook.getLevel(player))
-            .value(McMMOTable.Party, McMMOHook.getParty(player))
-            .insert();
+                .value(McMMOTable.PlayerId, playerId)
+                .value(McMMOTable.Experience, McMMOHook.getExp(player))
+                .value(McMMOTable.Levels, McMMOHook.getLevel(player))
+                .value(McMMOTable.Party, McMMOHook.getParty(player))
+                .insert();
     }
 
     @Override
     public boolean pushData(int playerId) {
         Player player = Bukkit.getPlayerExact(playerName);
-        if(player == null) return false;
-        
+        if (player == null) return false;
+
         return Query.table(McMMOTable.TableName)
-            .value(McMMOTable.Experience, McMMOHook.getExp(player))
-            .value(McMMOTable.Levels, McMMOHook.getLevel(player))
-            .value(McMMOTable.Party, McMMOHook.getParty(player))
-            .condition(McMMOTable.PlayerId, playerId)
-            .update();
+                .value(McMMOTable.Experience, McMMOHook.getExp(player))
+                .value(McMMOTable.Levels, McMMOHook.getLevel(player))
+                .value(McMMOTable.Party, McMMOHook.getParty(player))
+                .condition(McMMOTable.PlayerId, playerId)
+                .update();
     }
 
     @Override
     @Deprecated
-    public void clearData(int playerId) { }
-    
+    public void clearData(int playerId) {
+    }
+
 }

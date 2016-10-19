@@ -25,9 +25,9 @@ import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 public class TownyData extends DataStore<TownyPlayerEntry, DetailedData> {
-    
+
     public TownyData(OnlineSession session) {
         super(session, DataStoreType.Hook_Towny);
     }
-    
+
 }

@@ -33,23 +33,23 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class SessionListener implements Listener {
-    
+
     public SessionListener(Statistics plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.Statistics)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.Statistics)) return;
         HandlerManager.runTask(new PlayerLogin(player));
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.Statistics)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.Statistics)) return;
         HandlerManager.runTask(new PlayerLogout(player));
     }
-    
+
 }

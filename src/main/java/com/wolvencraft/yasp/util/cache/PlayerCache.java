@@ -33,105 +33,110 @@ import java.util.UUID;
 
 /**
  * Caches player names and IDs server-side
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class PlayerCache {
-    
-    private PlayerCache() { }
-    
+
+    private PlayerCache() {
+    }
+
     /**
      * Returns the ID of the player
+     *
      * @param player Player to look up
      * @return Player ID
      */
     public static int get(Player player) {
         long start = System.currentTimeMillis();
-        if(player.hasMetadata("stats_id") && !player.getMetadata("stats_id").isEmpty()) {
+        if (player.hasMetadata("stats_id") && !player.getMetadata("stats_id").isEmpty()) {
             int playerId = player.getMetadata("stats_id").get(0).asInt();
-            if (playerId != -1){
-                                
+            if (playerId != -1) {
+
                 long stop = System.currentTimeMillis();
-                Message.debug("Took "+(stop-start)+"ms to retrieve " + player.getName()+"'s ID from cache.");
-                
+                Message.debug("Took " + (stop - start) + "ms to retrieve " + player.getName() + "'s ID from cache.");
+
                 return playerId;
             } else {
-                playerId = get(player.getName(),player.getUniqueId());
+                playerId = get(player.getName(), player.getUniqueId());
                 player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
-                
+
                 long stop = System.currentTimeMillis();
-                Message.debug("Took "+(stop-start)+"ms to retrieve " + player.getName()+"'s ID from database.");
-                
-                return playerId;  
+                Message.debug("Took " + (stop - start) + "ms to retrieve " + player.getName() + "'s ID from database.");
+
+                return playerId;
             }
         } else {
-            int playerId = get(player.getName(),player.getUniqueId());
+            int playerId = get(player.getName(), player.getUniqueId());
             player.setMetadata("stats_id", new FixedMetadataValue(Statistics.getInstance(), playerId));
-                            
+
             long stop = System.currentTimeMillis();
-            Message.debug("Took "+(stop-start)+"ms to retrieve " + player.getName()+"'s ID from database.");
-                
+            Message.debug("Took " + (stop - start) + "ms to retrieve " + player.getName() + "'s ID from database.");
+
             return playerId;
         }
     }
-    
+
     /**
      * Returns the player ID based on his name.<br />
      * Very resource-heavy; if possible, use <code>get(Player player);</code>
+     *
      * @param username Player name to look up
      * @return Player ID or -1 if players wasn#t found
      */
     public static int get(String username) {
         Message.debug("Retrieving a player ID for " + username);
-        
+
         int playerId = -1;
-        
+
         QueryResult playerRow = Query.table(PlayerStats.TableName)
-                                     .column(PlayerStats.PlayerId)
-                                     .condition(PlayerStats.Name, username)
-                                     .condition(PlayerStats.UUID, "NULL")
-                                     .select();      
-        if(playerRow == null) {
-            Message.debug("User ID of Player "+username+" not found.");
+                .column(PlayerStats.PlayerId)
+                .condition(PlayerStats.Name, username)
+                .condition(PlayerStats.UUID, "NULL")
+                .select();
+        if (playerRow == null) {
+            Message.debug("User ID of Player " + username + " not found.");
             return -1;
         }
         playerId = playerRow.asInt(PlayerStats.PlayerId);
-        Message.debug("User ID (" + playerId +") found.");
+        Message.debug("User ID (" + playerId + ") found.");
         return playerId;
     }
-    
+
     /**
      * Returns the player ID based on his uuid.<br />
      * Very resource-heavy; if possible, use <code>get(Player player);</code>
+     *
      * @param uuid Player's uuid to look up
      * @return Player ID or -1 if players wasn#t found
      */
     public static int get(UUID uuid) {
         int playerId = -1;
         QueryResult playerRow = Query.table(PlayerStats.TableName)
-                                     .column(PlayerStats.PlayerId)
-                                     .condition(PlayerStats.UUID, uuid.toString())
-                                     .select();      
-        if(playerRow == null) {
+                .column(PlayerStats.PlayerId)
+                .condition(PlayerStats.UUID, uuid.toString())
+                .select();
+        if (playerRow == null) {
             return -1;
         }
         playerId = playerRow.asInt(PlayerStats.PlayerId);
-        Message.debug("User ID (" + playerId +") found.");
+        Message.debug("User ID (" + playerId + ") found.");
         return playerId;
     }
-    
+
     /**
      * Returns the player Name based on his uuid.<br />
+     *
      * @param uuid Player's uuid to look up
      * @return Player Name or null if players wasn't found
      */
     public static String getName(UUID uuid) {
         String playerName;
         QueryResult playerRow = Query.table(PlayerStats.TableName)
-                                     .column(PlayerStats.Name)
-                                     .condition(PlayerStats.UUID, uuid.toString())
-                                     .select();      
-        if(playerRow == null) {
+                .column(PlayerStats.Name)
+                .condition(PlayerStats.UUID, uuid.toString())
+                .select();
+        if (playerRow == null) {
             return null;
         }
         playerName = playerRow.asString(PlayerStats.Name);
@@ -144,16 +149,17 @@ public class PlayerCache {
      * If the no player is found with the given uuid searches for an player by the given name in the database and updates the uuid.
      * This is needen to support also pre 1.8 databases with no uuid's at all.
      * Very resource-heavy; if possible, use <code>get(Player player);</code>
+     *
      * @param username_ Player name to look up
-     * @param uuid_ Players uuid to look up
+     * @param uuid_     Players uuid to look up
      * @return Player ID or -1 if players wasn#t found
      */
     public static int get(String username_, UUID uuid_) {
-        final String username = username_; 
+        final String username = username_;
         final UUID uuid = uuid_;
         int playerId = -1;
         int tries = 0;
-        
+
         Message.debug("Retrieving a player ID for " + username);
         do {
             tries++;
@@ -161,50 +167,50 @@ public class PlayerCache {
                     .column(PlayerStats.PlayerId)
                     .condition(PlayerStats.UUID, uuid.toString())
                     .select();
-            
-            if(playerRow == null) {
-                
+
+            if (playerRow == null) {
+
                 //Try if a player with the given name already exists in the database
                 playerId = get(username);
                 //If the player exists updtae his UUID
-                if(playerId != -1){
-                    
+                if (playerId != -1) {
+
                     Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
                         @Override
-                        public void run(){
+                        public void run() {
                             Query.table(PlayerStats.TableName)
-                            .value(PlayerStats.UUID, uuid)
-                            .condition(PlayerStats.Name, username)
-                            .update();
+                                    .value(PlayerStats.UUID, uuid)
+                                    .condition(PlayerStats.Name, username)
+                                    .update();
                         }
                     });
-                    
+
                     break;
-                //If the player does not exist creat a new entry in the database    
+                    //If the player does not exist creat a new entry in the database
                 } else {
-                    
+
                     Query.table(PlayerStats.TableName)
-                    .value(PlayerStats.Name, username)
-                    .value(PlayerStats.UUID, uuid)
-                    .insert();
-                    
-                continue;    
-                }              
+                            .value(PlayerStats.Name, username)
+                            .value(PlayerStats.UUID, uuid)
+                            .insert();
+
+                    continue;
+                }
             } else {
                 //If an player with the given UUID exists in the database update his name
                 Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
                     @Override
-                    public void run(){
+                    public void run() {
                         Query.table(PlayerStats.TableName)
-                        .value(PlayerStats.Name, username)
-                        .condition(PlayerStats.UUID, uuid.toString())
-                        .update();
+                                .value(PlayerStats.Name, username)
+                                .condition(PlayerStats.UUID, uuid.toString())
+                                .update();
                     }
-                });               
+                });
             }
             playerId = playerRow.asInt(PlayerStats.PlayerId);
         } while (playerId == -1);
-        Message.debug("User ID (" + playerId +") after "+tries +" tries found.");
+        Message.debug("User ID (" + playerId + ") after " + tries + " tries found.");
         return playerId;
     }
 }

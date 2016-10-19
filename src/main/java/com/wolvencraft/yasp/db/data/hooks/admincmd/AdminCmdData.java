@@ -25,7 +25,7 @@ import com.wolvencraft.yasp.db.data.DetailedData;
 import com.wolvencraft.yasp.session.OnlineSession;
 
 public class AdminCmdData extends DataStore<AdminCmdPlayerEntry, DetailedData> {
-    
+
     public AdminCmdData(OnlineSession session) {
         super(session, DataStoreType.Hook_AdminCmd);
     }

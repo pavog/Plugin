@@ -25,7 +25,7 @@ import com.wolvencraft.yasp.Statistics;
 
 @SuppressWarnings("unused")
 public class TownSerializable {
-    
+
     private String name;
     private String tag;
     private String mayor;
@@ -33,7 +33,7 @@ public class TownSerializable {
     private double taxes;
     private int town_blocks_count;
     private String board;
-    
+
     private TownSerializable(Town town) {
         name = town.getName();
         tag = town.getTag();
@@ -43,9 +43,9 @@ public class TownSerializable {
         town_blocks_count = town.getTotalBlocks();
         board = town.getTownBoard();
     }
-    
+
     public static String serialize(Town town) {
         return Statistics.getGson().toJson(new TownSerializable(town));
     }
-    
+
 }

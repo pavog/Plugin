@@ -14,19 +14,18 @@ import java.util.UUID;
 
 
 public class PlayerUtil {
-    
-/**
- *
- * @author Mario
- * @param uuid Player uuid
- * @return TRUE on success
- */
-    public static boolean remove(UUID uuid){
-             
-           return Query.table(Normal.PlayerStats.TableName)
-                        .condition(Normal.PlayerStats.UUID, uuid.toString())
-                        .delete();  
-        
+
+    /**
+     * @param uuid Player uuid
+     * @return TRUE on success
+     * @author Mario
+     */
+    public static boolean remove(UUID uuid) {
+
+        return Query.table(Normal.PlayerStats.TableName)
+                .condition(Normal.PlayerStats.UUID, uuid.toString())
+                .delete();
+
     }
-    
+
 }

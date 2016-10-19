@@ -30,10 +30,10 @@ import org.bukkit.event.HandlerList;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedItemPickupEvent extends StatisticsPlayerEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private ItemPickupEntry data;
-    
+
     public TrackedItemPickupEvent(OnlineSession session, ItemPickupEntry data) {
         super(session, PlayerVariable.ITEMS_PICKEDUP);
         this.data = data;
@@ -48,5 +48,5 @@ public class TrackedItemPickupEvent extends StatisticsPlayerEvent {
     public String getParameterString() {
         return data.getStack().getTypeId() + ":" + data.getStack().getDurability();
     }
-    
+
 }

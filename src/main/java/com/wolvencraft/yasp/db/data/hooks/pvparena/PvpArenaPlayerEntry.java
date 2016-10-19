@@ -28,45 +28,46 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class PvpArenaPlayerEntry extends NormalData {
-    
+
     private String playerName;
-    
-    public PvpArenaPlayerEntry (Player player, int playerId) {
+
+    public PvpArenaPlayerEntry(Player player, int playerId) {
         this.playerName = player.getName();
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(Query.table(PvpArenaTable.TableName)
+        if (Query.table(PvpArenaTable.TableName)
                 .condition(PvpArenaTable.PlayerId, playerId)
                 .exists()) return;
-        
+
         Player player = Bukkit.getPlayerExact(playerName);
-        if(player == null) return;
-        
+        if (player == null) return;
+
         Query.table(PvpArenaTable.TableName)
-            .value(PvpArenaTable.PlayerId, playerId)
-            .value(PvpArenaTable.IsPlaying, PvpArenaHook.isPlaying(player))
-            .value(PvpArenaTable.CurrentArena, PvpArenaHook.getArenaName(player))
-            .insert();
+                .value(PvpArenaTable.PlayerId, playerId)
+                .value(PvpArenaTable.IsPlaying, PvpArenaHook.isPlaying(player))
+                .value(PvpArenaTable.CurrentArena, PvpArenaHook.getArenaName(player))
+                .insert();
     }
 
     @Override
     public boolean pushData(int playerId) {
         Player player = Bukkit.getPlayerExact(playerName);
-        if(player == null) return false;
-        
+        if (player == null) return false;
+
         return Query.table(PvpArenaTable.TableName)
-            .value(PvpArenaTable.IsPlaying, PvpArenaHook.isPlaying(player))
-            .value(PvpArenaTable.CurrentArena, PvpArenaHook.getArenaName(player))
-            .condition(PvpArenaTable.PlayerId, playerId)
-            .update();
+                .value(PvpArenaTable.IsPlaying, PvpArenaHook.isPlaying(player))
+                .value(PvpArenaTable.CurrentArena, PvpArenaHook.getArenaName(player))
+                .condition(PvpArenaTable.PlayerId, playerId)
+                .update();
     }
 
     @Override
     @Deprecated
-    public void clearData(int playerId) { }
-    
+    public void clearData(int playerId) {
+    }
+
 }

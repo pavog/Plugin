@@ -34,11 +34,11 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
  * Listens to any block changes on the server and reports them to the plugin.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class BlockListener implements Listener {
-    
+
     public BlockListener(Statistics plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -46,15 +46,15 @@ public class BlockListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.BlockBreak)) return;
-        
+        if (!HandlerManager.playerLookup(player, StatPerms.BlockBreak)) return;
+
         HandlerManager.runAsyncTask(new BlockBreak(player, event.getBlock().getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.BlockPlace)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.BlockPlace)) return;
 
         HandlerManager.runAsyncTask(new BlockPlace(player, event.getBlock().getState()));
     }

@@ -28,52 +28,53 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+
 public class BlockHandlers {
-    
+
     /**
      * Executed when a player breaks a block
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     public static class BlockBreak implements Runnable {
-        
+
         private Player player;
         private BlockState block;
-        
+
         @Override
         public void run() {
             //Skip data tracking if not all players data is read from database
             OnlineSession session = OnlineSessionCache.fetch(player);
-            if(session.isReady()){
+            if (session.isReady()) {
                 ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockBreak(block);
                 session.getPlayerTotals().blockBreak();
             }
         }
-        
+
     }
-    
+
     /**
      * Executed when a player places a block
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     public static class BlockPlace implements Runnable {
 
         private Player player;
         private BlockState block;
-        
+
         @Override
         public void run() {
             OnlineSession session = OnlineSessionCache.fetch(player);
             //Skip data tracking if not all players data is read from database
-            if(session.isReady()){
+            if (session.isReady()) {
                 ((BlockData) session.getDataStore(DataStoreType.Blocks)).blockPlace(block);
                 session.getPlayerTotals().blockPlace();
             }
         }
-        
+
     }
-    
+
 }

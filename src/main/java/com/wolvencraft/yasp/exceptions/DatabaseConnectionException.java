@@ -22,13 +22,13 @@ package com.wolvencraft.yasp.exceptions;
 
 /**
  * Exception thrown when an error occurs while connecting to the database
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class DatabaseConnectionException extends Exception {
     private static final long serialVersionUID = 1325478012737090439L;
 
-    public DatabaseConnectionException() { 
+    public DatabaseConnectionException() {
         super();
     }
 

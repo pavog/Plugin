@@ -6,11 +6,11 @@ import lombok.Getter;
 
 import java.util.List;
 
-@AllArgsConstructor(access=AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
 public class PartySerializable {
-    
+
     private String partyName;
     private List<String> partyMembers;
-    
+
 }

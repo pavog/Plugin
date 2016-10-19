@@ -33,22 +33,23 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Represents an entry in the PVE data store.
  * It is dynamic, i.e. it can be edited once it has been created.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class TotalPVEStats extends NormalData {
-    
+
     private EntityType creatureType;
     private ItemStack weapon;
     private int playerDeaths;
     private int creatureDeaths;
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new TotalPVE object based on the player and creature in question
-     * @param playerId Player in question
+     *
+     * @param playerId     Player in question
      * @param creatureType Creature in question
-     * @param weapon Weapon used
+     * @param weapon       Weapon used
      */
     public TotalPVEStats(int playerId, EntityType creatureType, ItemStack weapon) {
         this.creatureType = creatureType;
@@ -56,17 +57,17 @@ public class TotalPVEStats extends NormalData {
         this.weapon.setAmount(1);
         playerDeaths = 0;
         creatureDeaths = 0;
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
+        if (RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
-        
+
         QueryResult result = Query.table(PVETotals.TableName)
                 .column(PVETotals.PlayerKilled)
                 .column(PVETotals.CreatureKilled)
@@ -74,14 +75,14 @@ public class TotalPVEStats extends NormalData {
                 .condition(PVETotals.CreatureId, EntityCache.parse(creatureType))
                 .condition(PVETotals.MaterialId, MaterialCache.parse(weapon))
                 .select();
-        if(result == null) {
+        if (result == null) {
             Query.table(PVETotals.TableName)
-                .value(PVETotals.PlayerId, playerId)
-                .value(PVETotals.CreatureId, EntityCache.parse(creatureType))
-                .value(PVETotals.MaterialId, MaterialCache.parse(weapon))
-                .value(PVETotals.PlayerKilled, playerDeaths)
-                .value(PVETotals.CreatureKilled, creatureDeaths)
-                .insert();
+                    .value(PVETotals.PlayerId, playerId)
+                    .value(PVETotals.CreatureId, EntityCache.parse(creatureType))
+                    .value(PVETotals.MaterialId, MaterialCache.parse(weapon))
+                    .value(PVETotals.PlayerKilled, playerDeaths)
+                    .value(PVETotals.CreatureKilled, creatureDeaths)
+                    .insert();
         } else {
             playerDeaths = result.asInt(PVETotals.PlayerKilled);
             creatureDeaths = result.asInt(PVETotals.CreatureKilled);
@@ -100,7 +101,7 @@ public class TotalPVEStats extends NormalData {
         fetchData(playerId);
         return result;
     }
-    
+
     @Override
     public void clearData(int playerId) {
         playerDeaths = 0;
@@ -109,24 +110,25 @@ public class TotalPVEStats extends NormalData {
 
     /**
      * Matches data provided in the arguments with the one in the entry.
+     *
      * @param creatureType Type of the creature
-     * @param weapon Weapon used in the event
+     * @param weapon       Weapon used in the event
      * @return <b>true</b> if the data matches, <b>false</b> otherwise.
      */
     public boolean equals(EntityType creatureType, ItemStack weapon) {
-        if(!this.creatureType.equals(creatureType)) return false;
+        if (!this.creatureType.equals(creatureType)) return false;
         ItemStack comparableWeapon = weapon.clone();
         comparableWeapon.setAmount(1);
         return comparableWeapon.equals(this.weapon);
     }
-    
+
     /**
      * Increments the number of times the player has died
      */
     public void addPlayerDeaths() {
         playerDeaths++;
     }
-    
+
     /**
      * Increments the number of times the creature has died
      */

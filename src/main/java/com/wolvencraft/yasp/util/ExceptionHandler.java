@@ -29,28 +29,30 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 public class ExceptionHandler {
-    
+
     private static String lastError = "";
-    
+
     /**
      * Display a properly formatted error log in the server console
+     *
      * @param t Throwable to format
      */
     public static void handle(Throwable t) {
         handle(t, false);
     }
-    
+
     /**
      * Display a properly formatted error log in the server console.
-     * @param t Throwable to format
+     *
+     * @param t     Throwable to format
      * @param debug If <b>true</b>, or debug in the config is set to true it will print an stacktacke otherwirse supress the error.
      */
     public static void handle(Throwable t, boolean debug) {
-        if(debug || !LocalConfiguration.Debug.toBoolean()) return;
-        
-        if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
+        if (debug || !LocalConfiguration.Debug.toBoolean()) return;
+
+        if (t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
         else lastError = t.getClass().getName();
-        
+
         PluginDescriptionFile description = Statistics.getInstance().getDescription();
         Message.log(
                 "+-------------- [ Statistics ] --------------+",
@@ -67,36 +69,37 @@ public class ExceptionHandler {
                 "| The stack trace of the error follows: ",
                 "| ",
                 "| " + t.getClass().getName()
-                );
-        for(StackTraceElement element : t.getStackTrace()) {
+        );
+        for (StackTraceElement element : t.getStackTrace()) {
             Message.log("| at " + element.toString());
         }
         Message.log(
                 "| Multiple errors might have occurred, only",
                 "| one stack trace is shown.",
                 "+--------------------------------------------+"
-                );
+        );
     }
-    
+
     /**
      * Display a properly formatted error log in the server console.
      * Used to handle errors that occur while executing a command
-     * @param t Throwable
-     * @param sender Command sender
+     *
+     * @param t       Throwable
+     * @param sender  Command sender
      * @param command Command pair that was sent
      */
     public static void handle(Throwable t, CommandSender sender, CommandPair command) {
-        if(t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
+        if (t.getLocalizedMessage().equalsIgnoreCase(lastError)) return;
         else lastError = t.getClass().getName();
-        
+
         Message.send(sender, ChatColor.RED + "An internal error occurred while executing the command");
-        
+
         PluginDescriptionFile description = Statistics.getInstance().getDescription();
         String alias = "";
-        for(String str : command.getProperties().alias()) {
+        for (String str : command.getProperties().alias()) {
             alias += str + " ";
         }
-        
+
         Message.log(
                 "+-------------- [ Statistics ] --------------+",
                 "| The plugin 'Statistics' has caused an error.",
@@ -114,15 +117,15 @@ public class ExceptionHandler {
                 "+--------------------------------------------+",
                 "| The stack trace of the error follows: ",
                 "| "
-                );
-        for(StackTraceElement element : t.getStackTrace()) {
+        );
+        for (StackTraceElement element : t.getStackTrace()) {
             Message.log("| " + element.toString());
         }
         Message.log(
                 "| Multiple errors might have occurred, only",
                 "| one stack trace is shown.",
                 "+--------------------------------------------+"
-                );
+        );
     }
-    
+
 }

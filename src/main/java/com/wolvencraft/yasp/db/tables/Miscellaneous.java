@@ -27,81 +27,89 @@ import lombok.Getter;
 /**
  * Represents any miscellaneous tables in the database.<br >
  * Stores table and column names, so that they can be safely used from the plugin.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class Miscellaneous {
-    
+
     /**
      * Represents the <i>settings</i> table.
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum SettingsTable implements DBTable {
-        TableName       ("settings"),
-        Key             ("key"),
-        Value           ("value");
-        
+        TableName("settings"),
+        Key("key"),
+        Value("value");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>server_statistics</i> table.
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum ServerStatsTable implements DBTable {
-        TableName       ("server_statistics"),
-        Key             ("key"),
-        Value           ("value");
-        
+        TableName("server_statistics"),
+        Key("key"),
+        Value("value");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>materials</i> table.
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum MaterialsTable implements DBTable {
-        TableName       ("materials"),
-        MaterialId      ("material_id"),
-        TpName          ("tp_name");
-        
+        TableName("materials"),
+        MaterialId("material_id"),
+        TpName("tp_name");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
     /**
      * Represents the <i>entities</i> table.
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @AllArgsConstructor(access=AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
     public enum EntitiesTable implements DBTable {
-        TableName       ("entities"),
-        EntityId        ("entity_id"),
-        TpName          ("tp_name");
-        
+        TableName("entities"),
+        EntityId("entity_id"),
+        TpName("tp_name");
+
         private String columnName;
-        
+
         @Override
-        public String toString() { return columnName; }
+        public String toString() {
+            return columnName;
+        }
     }
-    
+
 }

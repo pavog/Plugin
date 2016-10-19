@@ -33,62 +33,64 @@ import java.util.Map;
 
 /**
  * Generic Hook information used on DisplaySigns and books.
+ *
  * @author Mario
  */
 public class HookTotals {
-    
+
     private int playerId;
     private Map<HookVariable, Object> values;
-    
-     /**
+
+    /**
      * <b>Default Constructor</b><br />
      * Sets up the default values for the data holder.
      */
     public HookTotals(int playerId) {
         this.playerId = playerId;
-        
+
         values = new HashMap<HookVariable, Object>();
-        
+
         fetchData();
     }
-    
-     /**
+
+    /**
      * Fetches the data from the remote database.<br />
      * Automatically calculates values from the contents of corresponding tables.
      */
     public void fetchData() {
-        
-        if(!Statistics.getInstance().isEnabled()) return;
-        if(Module.Vault.isActive()){
-            try{
+
+        if (!Statistics.getInstance().isEnabled()) return;
+        if (Module.Vault.isActive()) {
+            try {
                 values.put(HookVariable.MONEY, Query.table(Hook.VaultTable.TableName).column(Hook.VaultTable.Balance).condition(Hook.VaultTable.PlayerId, playerId).select().asDouble(Hook.VaultTable.Balance));
-                try{
-                    JSONArray JSONarray = (JSONArray)new JSONParser().parse( Query.table(Hook.VaultTable.TableName).column(Hook.VaultTable.GroupName).condition(Hook.VaultTable.PlayerId, playerId).select().asString(Hook.VaultTable.GroupName));
+                try {
+                    JSONArray JSONarray = (JSONArray) new JSONParser().parse(Query.table(Hook.VaultTable.TableName).column(Hook.VaultTable.GroupName).condition(Hook.VaultTable.PlayerId, playerId).select().asString(Hook.VaultTable.GroupName));
                     JSONObject group = (JSONObject) JSONarray.get(0);
                     values.put(HookVariable.GROUP, group.get("group"));
-                } catch(ParseException e){
-                    values.put(HookVariable.GROUP, "Error!"); 
+                } catch (ParseException e) {
+                    values.put(HookVariable.GROUP, "Error!");
                 }
-            } catch (NullPointerException e){
-               values.put(HookVariable.GROUP, "Not tracked!"); 
-               values.put(HookVariable.MONEY, (double) 0); 
+            } catch (NullPointerException e) {
+                values.put(HookVariable.GROUP, "Not tracked!");
+                values.put(HookVariable.MONEY, (double) 0);
             }
-                
+
         } else {
             values.put(HookVariable.MONEY, (double) 0);
             values.put(HookVariable.GROUP, "Hook disabled!");
         }
     }
-    
-     /**
+
+    /**
      * Safely returns the value of the specified variable
+     *
      * @param type Variable to return
      * @return Variable value
      */
     public Object getValue(VariableManager.HookVariable type) {
-        if(values.containsKey(type)) return values.get(type);
+        if (values.containsKey(type)) return values.get(type);
         values.put(type, 0);
         return 0;
     }
-    
+
 }

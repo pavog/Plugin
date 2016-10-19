@@ -27,41 +27,42 @@ import com.wolvencraft.yasp.util.hooks.JailHook;
 import org.bukkit.entity.Player;
 
 public class JailPlayerEntry extends NormalData {
-    
+
     private String playerName;
-    
-    public JailPlayerEntry (Player player, int playerId) {
+
+    public JailPlayerEntry(Player player, int playerId) {
         this.playerName = player.getName();
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(Query.table(JailTable.TableName)
+        if (Query.table(JailTable.TableName)
                 .condition(JailTable.PlayerId, playerId)
                 .exists()) return;
-        
+
         Query.table(JailTable.TableName)
-            .value(JailTable.PlayerId, playerId)
-            .value(JailTable.IsJailed, JailHook.isJailed(playerName))
-            .value(JailTable.Jailer, JailHook.getJailer(playerName))
-            .value(JailTable.RemainingTime, JailHook.getRemainingTime(playerName))
-            .insert();
+                .value(JailTable.PlayerId, playerId)
+                .value(JailTable.IsJailed, JailHook.isJailed(playerName))
+                .value(JailTable.Jailer, JailHook.getJailer(playerName))
+                .value(JailTable.RemainingTime, JailHook.getRemainingTime(playerName))
+                .insert();
     }
 
     @Override
     public boolean pushData(int playerId) {
         return Query.table(JailTable.TableName)
-            .value(JailTable.IsJailed, JailHook.isJailed(playerName))
-            .value(JailTable.Jailer, JailHook.getJailer(playerName))
-            .value(JailTable.RemainingTime, JailHook.getRemainingTime(playerName))
-            .condition(JailTable.PlayerId, playerId)
-            .update();
+                .value(JailTable.IsJailed, JailHook.isJailed(playerName))
+                .value(JailTable.Jailer, JailHook.getJailer(playerName))
+                .value(JailTable.RemainingTime, JailHook.getRemainingTime(playerName))
+                .condition(JailTable.PlayerId, playerId)
+                .update();
     }
 
     @Override
     @Deprecated
-    public void clearData(int playerId) { }
-    
+    public void clearData(int playerId) {
+    }
+
 }

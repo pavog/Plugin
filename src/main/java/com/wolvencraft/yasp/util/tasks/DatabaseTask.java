@@ -35,11 +35,11 @@ import org.bukkit.Bukkit;
 
 /**
  * Synchronizes the collected data to the database
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class DatabaseTask implements Runnable {
-    
+
     private static int iteration;
 
     /**
@@ -48,7 +48,7 @@ public class DatabaseTask implements Runnable {
     public DatabaseTask() {
         iteration = 0;
     }
-    
+
     /**
      * Commits collected data to the database.<br />
      * Performs actions in the following order:<br />
@@ -63,26 +63,26 @@ public class DatabaseTask implements Runnable {
      * Asynchronous threading is strongly recommended.
      */
     public static void commit() {
-        if(Statistics.isPaused()) return;
+        if (Statistics.isPaused()) return;
 
         SynchronizationEvent event = new SynchronizationEvent(iteration);
         Bukkit.getServer().getPluginManager().callEvent(event);
-        if(event.isCancelled()) return;
+        if (event.isCancelled()) return;
 
         Message.debug("Database synchronization in progress");
 
-        for(OnlineSession session : OnlineSessionCache.getSessions()) {
-            if(!session.isOnline()){
-                Message.debug("Skipping player "+session.getName());
+        for (OnlineSession session : OnlineSessionCache.getSessions()) {
+            if (!session.isOnline()) {
+                Message.debug("Skipping player " + session.getName());
                 continue;
             }
-            Message.debug("Saving online player data: "+session.getName()+ " ID:" + session.getId());
+            Message.debug("Saving online player data: " + session.getName() + " ID:" + session.getId());
             session.pushData();
             session.getPlayerTotals().fetchData();
         }
 
-        for(OfflineSession session : OfflineSessionCache.getSessions()) {
-            Message.debug("Saving offline player data: " +session.getName()+ " ID:" + session.getId());
+        for (OfflineSession session : OfflineSessionCache.getSessions()) {
+            Message.debug("Saving offline player data: " + session.getName() + " ID:" + session.getId());
             session.getPlayerTotals().fetchData();
         }
 

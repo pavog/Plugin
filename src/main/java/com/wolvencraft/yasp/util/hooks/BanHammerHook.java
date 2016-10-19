@@ -29,21 +29,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BanHammerHook extends PluginHook {
-    
+
     private static BanHammer instance;
-    
+
     public BanHammerHook() {
         super(Module.BanHammer, "BanHammer");
     }
-    
+
     /**
      * Returns the ban data as a Json array
+     *
      * @param playerName Player to look up
      * @return Ban data, or an empty string
      */
     public static String getBan(String playerName) {
         List<BanRecordSerializable> records = new ArrayList<BanRecordSerializable>();
-        for(BanRecord record : instance.getHandler().getPlayerBans(playerName)) {
+        for (BanRecord record : instance.getHandler().getPlayerBans(playerName)) {
             records.add(new BanRecordSerializable(
                     record.getCreator().getName(),
                     record.getReason(),
@@ -62,5 +63,5 @@ public class BanHammerHook extends PluginHook {
     protected void onDisable() {
         instance = null;
     }
-    
+
 }

@@ -40,7 +40,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class DatabaseCommands {
-    
+
     @Command(
             alias = "sync",
             minArgs = 0,
@@ -49,7 +49,7 @@ public class DatabaseCommands {
             allowConsole = true,
             usage = "/stats sync",
             description = "Forces the plugin to push data to the database"
-            )
+    )
     public static boolean sync(List<String> args) {
         final CommandSender sender = CommandManager.getSender();
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
@@ -57,30 +57,30 @@ public class DatabaseCommands {
             @Override
             public void run() {
                 DatabaseTask.commit();
-                
-                List<QueryResult> results= Query.table(PlayerStats.TableName).column(PlayerStats.Name).condition(PlayerStats.Online, true).selectAll();
-                for(QueryResult result : results) {
+
+                List<QueryResult> results = Query.table(PlayerStats.TableName).column(PlayerStats.Name).condition(PlayerStats.Online, true).selectAll();
+                for (QueryResult result : results) {
                     String playerName = result.asString(PlayerStats.Name);
-                    if(Bukkit.getPlayerExact(playerName) == null)
+                    if (Bukkit.getPlayerExact(playerName) == null)
                         Query.table(PlayerStats.TableName).value(PlayerStats.Online, false).condition(PlayerStats.Name, playerName).update();
                 }
-                
+
                 Bukkit.getScheduler().runTask(Statistics.getInstance(), new Runnable() {
-                    
+
                     @Override
                     public void run() {
                         SignRefreshTask.updateAll();
                     }
-                    
+
                 });
-                
+
                 Message.sendFormattedSuccess(sender, "Synchronization complete");
             }
-            
+
         });
         return true;
     }
-    
+
     @Command(
             alias = "patch",
             minArgs = 0,
@@ -89,36 +89,37 @@ public class DatabaseCommands {
             allowConsole = true,
             usage = "/stats patch [id]",
             description = "Exectutes a database patch"
-            )
+    )
     public static boolean patch(List<String> args) {
         final CommandSender sender = CommandManager.getSender();
         final String patchId = args.get(0);
-        
+
         Message.sendFormattedSuccess("Attempting to patch the database (" + patchId + ")");
         Statistics.setPaused(true);
         Bukkit.getScheduler().runTaskAsynchronously(Statistics.getInstance(), new Runnable() {
 
             @Override
             public void run() {
-                try { Database.executePatch(patchId); }
-                catch (Throwable t) {
+                try {
+                    Database.executePatch(patchId);
+                } catch (Throwable t) {
                     ExceptionHandler.handle(t);
                     Message.sendFormattedError(sender, "Patch failed!");
                 } finally {
-                    for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                        if(StatPerms.Statistics.has(player)) OnlineSessionCache.fetch(player);
+                    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                        if (StatPerms.Statistics.has(player)) OnlineSessionCache.fetch(player);
                     }
                     Statistics.getServerStatistics().pushStaticData();
                     Message.sendFormattedSuccess(sender, "Patching finished.");
                     Statistics.setPaused(false);
                 }
             }
-            
+
         });
-        
+
         return true;
     }
-    
+
     @Command(
             alias = "repatch",
             minArgs = 0,
@@ -127,7 +128,7 @@ public class DatabaseCommands {
             allowConsole = true,
             usage = "/stats repatch",
             description = "Attempts to re-patch the database"
-            )
+    )
     public static boolean repatch(List<String> args) {
         final CommandSender sender = CommandManager.getSender();
         Message.sendFormattedSuccess(sender, "Attempting to patch the database...");
@@ -137,24 +138,25 @@ public class DatabaseCommands {
 
             @Override
             public void run() {
-                try { Database.patchDatabase(true); }
-                catch (Throwable t) {
+                try {
+                    Database.patchDatabase(true);
+                } catch (Throwable t) {
                     ExceptionHandler.handle(t);
                     Message.sendFormattedError(sender, "Patch failed!");
                 } finally {
-                    for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                        if(StatPerms.Statistics.has(player)) OnlineSessionCache.fetch(player);
+                    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                        if (StatPerms.Statistics.has(player)) OnlineSessionCache.fetch(player);
                     }
                     Statistics.getServerStatistics().pushStaticData();
                     Message.sendFormattedSuccess(sender, "Patching finished.");
                     Statistics.setPaused(false);
                 }
             }
-            
+
         });
         return true;
     }
-    
+
     @Command(
             alias = "reconnect",
             minArgs = 0,
@@ -163,7 +165,7 @@ public class DatabaseCommands {
             allowConsole = true,
             usage = "/stats reconnect",
             description = "Attempts to reconnect to the database"
-            )
+    )
     public static boolean reconnect(List<String> args) {
         try {
             Database.reconnect();
@@ -174,7 +176,7 @@ public class DatabaseCommands {
             return false;
         }
     }
-    
+
     @Command(
             alias = "dump",
             minArgs = 0,
@@ -183,7 +185,7 @@ public class DatabaseCommands {
             allowConsole = true,
             usage = "/stats dump",
             description = "Dumps the locally stored data"
-            )
+    )
     public static boolean dump(List<String> args) {
         OnlineSessionCache.dumpSessions();
         Message.sendFormattedSuccess(CommandManager.getSender(), "The local data has been dumped");

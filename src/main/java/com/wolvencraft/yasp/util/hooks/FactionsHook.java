@@ -28,13 +28,14 @@ import com.wolvencraft.yasp.settings.Module;
 import org.bukkit.entity.Player;
 
 public class FactionsHook extends PluginHook {
-    
+
     public FactionsHook() {
         super(Module.Factions, "Factions");
     }
-    
+
     /**
      * Returns the name of the player's faction
+     *
      * @param player Player object
      * @return Name of the faction
      */
@@ -42,21 +43,23 @@ public class FactionsHook extends PluginHook {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getFaction().getId();
     }
-    
+
     /**
      * Returns the faction that owns the land the player is currently standing.
+     *
      * @param player Player object
      * @return Name of the faction
      */
     public static String getCurrentLocation(Player player) {
         FPlayer fplayer = FPlayers.i.get(player);
         Faction factionAt = Board.getFactionAt(fplayer.getLastStoodAt());
-        if(factionAt == null) return "none";
+        if (factionAt == null) return "none";
         return factionAt.getId();
     }
-    
+
     /**
      * Returns the player's current power
+     *
      * @param player Player object
      * @return Player's power
      */
@@ -64,9 +67,10 @@ public class FactionsHook extends PluginHook {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getPower();
     }
-    
+
     /**
      * Returns the player's maximum power
+     *
      * @param player Player object
      * @return Player's maximum power
      */
@@ -74,9 +78,10 @@ public class FactionsHook extends PluginHook {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getPowerMax();
     }
-    
+
     /**
      * Returns the player's role
+     *
      * @param player Player object
      * @return Player's role
      */
@@ -84,9 +89,10 @@ public class FactionsHook extends PluginHook {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getRole().name();
     }
-    
+
     /**
      * Returns the player's title
+     *
      * @param player Player object
      * @return Player's title
      */
@@ -94,5 +100,5 @@ public class FactionsHook extends PluginHook {
         FPlayer fplayer = FPlayers.i.get(player);
         return fplayer.getTitle();
     }
-    
+
 }

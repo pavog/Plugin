@@ -31,35 +31,36 @@ import org.bukkit.plugin.Plugin;
 
 @Getter(AccessLevel.PUBLIC)
 public abstract class PluginHook {
-    
+
     protected Module module;
     protected String patchExtension;
     protected String pluginName;
-    
+
     protected Plugin plugin;
-    
+
     public PluginHook(Module module, String pluginName) {
         this.module = module;
         this.pluginName = pluginName;
         this.patchExtension = pluginName.toLowerCase().replace(" ", "");
     }
-    
+
     public PluginHook(Module module, String pluginName, String patchExtension) {
         this.module = module;
         this.pluginName = pluginName;
         this.patchExtension = patchExtension;
     }
-    
+
     /**
      * Executes the hook enabling routine
+     *
      * @return <b>true</b> if the plugin is present and was enabled, <b>false</b> otherwise
      */
     public final boolean enable() {
         plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
-        
+
         if (plugin == null) return false;
         module.setActive(true);
-        
+
         try {
             PatchManager.fetch(patchExtension);
             Database.patchModule(false, module);
@@ -68,11 +69,11 @@ public abstract class PluginHook {
             module.setActive(false);
             return false;
         }
-        
+
         onEnable();
         return true;
     }
-    
+
     /**
      * Executes the hook disabling routine
      */
@@ -80,14 +81,16 @@ public abstract class PluginHook {
         onDisable();
         plugin = null;
     }
-    
+
     /**
      * Extra code to be executed after the hook is enabled
      */
-    protected void onEnable() { }
-    
-     /**
+    protected void onEnable() {
+    }
+
+    /**
      * Extra code to be executed before the hook is disabled
      */
-    protected void onDisable() { }
+    protected void onDisable() {
+    }
 }

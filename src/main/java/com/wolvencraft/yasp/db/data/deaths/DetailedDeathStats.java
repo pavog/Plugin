@@ -30,19 +30,19 @@ import org.bukkit.Location;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class DetailedDeathStats {
-    
+
     /**
      * An immutable natural death entry
-     * @author bitWolfy
      *
+     * @author bitWolfy
      */
-    @Getter(AccessLevel.PUBLIC) 
+    @Getter(AccessLevel.PUBLIC)
     public static class NaturalDeathEntry extends DetailedData {
-        
+
         private DamageCause cause;
         private Location location;
         private long timestamp;
-        
+
         public NaturalDeathEntry(Location location, DamageCause cause) {
             this.cause = cause;
             this.location = location.clone();

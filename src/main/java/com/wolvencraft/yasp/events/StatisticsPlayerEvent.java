@@ -29,20 +29,21 @@ import org.bukkit.event.player.PlayerEvent;
 
 @Getter(AccessLevel.PUBLIC)
 public abstract class StatisticsPlayerEvent extends PlayerEvent {
-    
+
     private OnlineSession session;
     private PlayerVariable actionType;
-    
+
     public StatisticsPlayerEvent(OnlineSession session, PlayerVariable actionType) {
         super(Bukkit.getServer().getPlayer(session.getName()));
         this.session = session;
         this.actionType = actionType;
     }
-    
+
     /**
      * Returns the data associated with the event as a parameter
-     * @deprecated Unsafe and unreliable
+     *
      * @return Parameter String
+     * @deprecated Unsafe and unreliable
      */
     public abstract String getParameterString();
 

@@ -32,22 +32,23 @@ import java.util.UUID;
 /**
  * A simplistic representation of a player's session.<br />
  * The player in question might be offline, or not exist at all.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @Getter(AccessLevel.PUBLIC)
 public class OfflineSession implements PlayerSession {
-    
+
     private final int id;
     private final String name;
     private final UUID uuid;
-    
+
     private PlayerTotals playerTotals;
     private HookTotals hookTotals;
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new player data session based on his uuid
+     *
      * @param uuid Player's uuid
      */
     public OfflineSession(UUID uuid) {
@@ -62,7 +63,7 @@ public class OfflineSession implements PlayerSession {
     public boolean isOnline() {
         return Bukkit.getPlayer(uuid).isOnline();
     }
-    
+
     @Override
     public UUID getUUID() {
         return this.uuid;

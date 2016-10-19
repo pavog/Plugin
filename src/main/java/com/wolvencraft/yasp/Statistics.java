@@ -55,23 +55,27 @@ import java.util.logging.Level;
 /**
  * <b>Main plugin class</b><br />
  * Establishes a database connection and sets up the event listeners
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class Statistics extends JavaPlugin {
 
     private static final HashSet<String> working = new HashSet<>();
-    @Getter(AccessLevel.PUBLIC) private static Statistics instance;
+    @Getter(AccessLevel.PUBLIC)
+    private static Statistics instance;
     private static PluginMetrics metrics;
     @Getter(AccessLevel.PUBLIC)
     @Setter(AccessLevel.PUBLIC)
     private static boolean paused;
     private static boolean crashed;
-    @Getter(AccessLevel.PUBLIC) private static Gson gson;
+    @Getter(AccessLevel.PUBLIC)
+    private static Gson gson;
     private static HookManager hookManager;
-    @Getter(AccessLevel.PUBLIC) private static ServerTotals serverTotals;
-    @Getter(AccessLevel.PUBLIC) private static ServerStatistics serverStatistics;
-    
+    @Getter(AccessLevel.PUBLIC)
+    private static ServerTotals serverTotals;
+    @Getter(AccessLevel.PUBLIC)
+    private static ServerStatistics serverStatistics;
+
     /**
      * <b>Default constructor</b><br />
      * Creates a new instance of the Statistics.
@@ -80,7 +84,7 @@ public class Statistics extends JavaPlugin {
         instance = this;
         paused = true;
         crashed = false;
-        
+
         gson = new Gson();
     }
 
@@ -91,7 +95,7 @@ public class Statistics extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        if(!new File(getDataFolder(), "config.yml").exists()) {
+        if (!new File(getDataFolder(), "config.yml").exists()) {
             Message.log("Config.yml not found. Creating a one for you.");
             getConfig().options().copyDefaults(true);
             saveConfig();
@@ -104,8 +108,9 @@ public class Statistics extends JavaPlugin {
         new Query();
         new BookUtil();
 
-        try { new Database(); }
-        catch (Exception e) {
+        try {
+            new Database();
+        } catch (Exception e) {
             crashed = true;
             Message.log(Level.SEVERE, "Cannot establish a database connection!");
             Message.log(Level.SEVERE, "Is the plugin set up correctly?");
@@ -126,9 +131,9 @@ public class Statistics extends JavaPlugin {
 
         new CommandManager();
 
-        if(Module.Blocks.isEnabled()) new BlockListener(this);
-        if(Module.Deaths.isEnabled()) new DeathListener(this);
-        if(Module.Items.isEnabled()) new ItemListener(this);
+        if (Module.Blocks.isEnabled()) new BlockListener(this);
+        if (Module.Deaths.isEnabled()) new DeathListener(this);
+        if (Module.Items.isEnabled()) new ItemListener(this);
         new PlayerListener(this);
         new ServerListener(this);
         new SessionListener(this);
@@ -136,14 +141,15 @@ public class Statistics extends JavaPlugin {
         new StatsSignListener(this);
 
         long ping = RemoteConfiguration.Ping.asInteger() * 20;
-        if(ping < (20 * 60)) ping = 20 * 60;
+        if (ping < (20 * 60)) ping = 20 * 60;
 
 
         try {
             metrics = new PluginMetrics(this);
-            if(!metrics.isOptOut()) metrics.start();
+            if (!metrics.isOptOut()) metrics.start();
+        } catch (IOException e) {
+            Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics");
         }
-        catch (IOException e) { Message.log(Level.SEVERE, "An error occurred while connecting to PluginMetrics"); }
 
         CachedData.startAll();
 
@@ -159,10 +165,13 @@ public class Statistics extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if(crashed) { crashed = false; return; }
+        if (crashed) {
+            crashed = false;
+            return;
+        }
 
         try {
-            for(Player player : Bukkit.getOnlinePlayers()) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
                 OnlineSessionCache.fetch(player).getPlayersData().addPlayerLog(player.getLocation(), false);
             }
             DatabaseTask.commit();
@@ -177,24 +186,24 @@ public class Statistics extends JavaPlugin {
             Database.close();
         } catch (Throwable t) {
             Message.log(Level.SEVERE, t.getMessage());
-            if(LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
+            if (LocalConfiguration.Debug.toBoolean()) ExceptionHandler.handle(t);
         }
     }
 
     //Database Syncronisation
-        
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return CommandManager.run(sender, args);
     }
 
     public synchronized void setWorking(final String thread, final boolean working) {
-	if (working) this.working.add(thread);
-	else this.working.remove(thread);
+        if (working) this.working.add(thread);
+        else this.working.remove(thread);
     }
 
     public synchronized boolean isWorking() {
-	return working.size() > 0;
+        return working.size() > 0;
     }
-        
+
 }

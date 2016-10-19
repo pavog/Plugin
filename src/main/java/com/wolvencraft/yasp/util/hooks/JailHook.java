@@ -26,42 +26,45 @@ import com.matejdro.bukkit.jail.JailPrisoner;
 import com.wolvencraft.yasp.settings.Module;
 
 public class JailHook extends PluginHook {
-    
+
     private static JailAPI instance;
-    
+
     public JailHook() {
         super(Module.Jail, "Jail");
     }
-    
+
     /**
      * Checks if the player is jailed
+     *
      * @param playerName Player name
      * @return <b>true</b> if the player is jailed, <b>false</b> otherwise
      */
     public static boolean isJailed(String playerName) {
-        if(instance.getPrisoner(playerName) == null) return false;
+        if (instance.getPrisoner(playerName) == null) return false;
         return true;
     }
-    
+
     /**
      * Returns the jailer's name
+     *
      * @param playerName Player name
      * @return Jailer
      */
     public static String getJailer(String playerName) {
         JailPrisoner prisoner = instance.getPrisoner(playerName);
-        if(prisoner == null) return "";
+        if (prisoner == null) return "";
         return prisoner.getJailer();
     }
-    
+
     /**
      * Returns the remaining jail time
+     *
      * @param playerName Player name
      * @return Remaining jail time
      */
     public static int getRemainingTime(String playerName) {
         JailPrisoner prisoner = instance.getPrisoner(playerName);
-        if(prisoner == null) return 0;
+        if (prisoner == null) return 0;
         return prisoner.getRemainingTime();
     }
 
@@ -74,5 +77,5 @@ public class JailHook extends PluginHook {
     protected void onDisable() {
         instance = null;
     }
-    
+
 }

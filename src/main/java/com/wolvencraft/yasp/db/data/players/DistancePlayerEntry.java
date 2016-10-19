@@ -31,22 +31,23 @@ import lombok.Getter;
 /**
  * Represents the distances a player traveled.
  * Only one entry per player is allowed.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @Getter(AccessLevel.PUBLIC)
 public class DistancePlayerEntry extends NormalData {
-    
+
     private double foot;
     private double swim;
     private double flight;
     private double boat;
     private double minecart;
     private double ride;
-    
+
     /**
      * Default constructor. Takes in the Player object and pulls corresponding values from the remote database.<br />
      * If no data is found in the database, the default values are inserted.
+     *
      * @param playerId ID of the tracked player
      */
     public DistancePlayerEntry(int playerId) {
@@ -56,17 +57,17 @@ public class DistancePlayerEntry extends NormalData {
         boat = 0;
         minecart = 0;
         ride = 0;
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(RemoteConfiguration.MergedDataTracking.asBoolean()) {
+        if (RemoteConfiguration.MergedDataTracking.asBoolean()) {
             clearData(playerId);
             return;
         }
-        
+
         QueryResult result = Query.table(PlayerDistance.TableName)
                 .column(PlayerDistance.Foot)
                 .column(PlayerDistance.Swim)
@@ -76,16 +77,16 @@ public class DistancePlayerEntry extends NormalData {
                 .column(PlayerDistance.Ride)
                 .condition(PlayerDistance.PlayerId, playerId)
                 .select();
-        if(result == null) {
+        if (result == null) {
             Query.table(PlayerDistance.TableName)
-                .value(PlayerDistance.PlayerId, playerId)
-                .value(PlayerDistance.Foot, foot)
-                .value(PlayerDistance.Swim, swim)
-                .value(PlayerDistance.Flight, flight)
-                .value(PlayerDistance.Boat, boat)
-                .value(PlayerDistance.Minecart, minecart)
-                .value(PlayerDistance.Ride, ride)
-                .insert();
+                    .value(PlayerDistance.PlayerId, playerId)
+                    .value(PlayerDistance.Foot, foot)
+                    .value(PlayerDistance.Swim, swim)
+                    .value(PlayerDistance.Flight, flight)
+                    .value(PlayerDistance.Boat, boat)
+                    .value(PlayerDistance.Minecart, minecart)
+                    .value(PlayerDistance.Ride, ride)
+                    .insert();
         } else {
             foot = result.asInt(PlayerDistance.Foot);
             swim = result.asInt(PlayerDistance.Swim);
@@ -99,17 +100,17 @@ public class DistancePlayerEntry extends NormalData {
     @Override
     public boolean pushData(int playerId) {
         boolean result = Query.table(PlayerDistance.TableName)
-            .value(PlayerDistance.Foot, foot)
-            .value(PlayerDistance.Swim, swim)
-            .value(PlayerDistance.Flight, flight)
-            .value(PlayerDistance.Boat, boat)
-            .value(PlayerDistance.Minecart, minecart)
-            .value(PlayerDistance.Ride, ride)
-            .condition(PlayerDistance.PlayerId, playerId)
-            .update(RemoteConfiguration.MergedDataTracking.asBoolean());
+                .value(PlayerDistance.Foot, foot)
+                .value(PlayerDistance.Swim, swim)
+                .value(PlayerDistance.Flight, flight)
+                .value(PlayerDistance.Boat, boat)
+                .value(PlayerDistance.Minecart, minecart)
+                .value(PlayerDistance.Ride, ride)
+                .condition(PlayerDistance.PlayerId, playerId)
+                .update(RemoteConfiguration.MergedDataTracking.asBoolean());
         return result;
     }
-    
+
     @Override
     public void clearData(int playerId) {
         foot = 0;
@@ -119,14 +120,15 @@ public class DistancePlayerEntry extends NormalData {
         minecart = 0;
         ride = 0;
     }
-    
+
     /**
      * Increments the distance of the specified type by the amount
-     * @param type Travel type
+     *
+     * @param type     Travel type
      * @param distance Distance travelled
      */
     public void addDistance(PlayerDistance type, double distance) {
-        switch(type) {
+        switch (type) {
             case Foot:
                 foot += distance;
                 break;
@@ -134,7 +136,7 @@ public class DistancePlayerEntry extends NormalData {
                 swim += distance;
                 break;
             case Flight:
-                flight  += distance;
+                flight += distance;
                 break;
             case Boat:
                 boat += distance;

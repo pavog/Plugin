@@ -27,37 +27,38 @@ import com.wolvencraft.yasp.util.hooks.BanHammerHook;
 import org.bukkit.entity.Player;
 
 public class BanHammerPlayerEntry extends NormalData {
-    
+
     private String playerName;
-    
-    public BanHammerPlayerEntry (Player player, int playerId) {
+
+    public BanHammerPlayerEntry(Player player, int playerId) {
         this.playerName = player.getName();
-        
+
         fetchData(playerId);
     }
-    
+
     @Override
     public void fetchData(int playerId) {
-        if(Query.table(BanHammerTable.TableName)
+        if (Query.table(BanHammerTable.TableName)
                 .condition(BanHammerTable.PlayerId, playerId)
                 .exists()) return;
-        
+
         Query.table(BanHammerTable.TableName)
-            .value(BanHammerTable.PlayerId, playerId)
-            .value(BanHammerTable.Bans, BanHammerHook.getBan(playerName))
-            .insert();
+                .value(BanHammerTable.PlayerId, playerId)
+                .value(BanHammerTable.Bans, BanHammerHook.getBan(playerName))
+                .insert();
     }
 
     @Override
     public boolean pushData(int playerId) {
         return Query.table(BanHammerTable.TableName)
-            .value(BanHammerTable.Bans, BanHammerHook.getBan(playerName))
-            .condition(BanHammerTable.PlayerId, playerId)
-            .update();
+                .value(BanHammerTable.Bans, BanHammerHook.getBan(playerName))
+                .condition(BanHammerTable.PlayerId, playerId)
+                .update();
     }
 
     @Override
     @Deprecated
-    public void clearData(int playerId) { }
-    
+    public void clearData(int playerId) {
+    }
+
 }

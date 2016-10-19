@@ -43,14 +43,14 @@ import java.util.logging.Level;
 
 /**
  * Handles all StatsSign functionality.
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class SignRefreshTask implements Runnable {
-    
+
     private static List<StatsSign> signs;
     private static SignRefreshTask instance;
-    
+
     /**
      * <b>Default constructor</b><br />
      * Creates a list of active signs and loads stored sign information from file
@@ -62,9 +62,11 @@ public class SignRefreshTask implements Runnable {
         if (!signFolder.exists() || !signFolder.isDirectory()) signFolder.mkdir();
         else {
             File[] signFiles;
-                signFiles = signFolder.listFiles(new FileFilter() {
-                   public boolean accept(File file) { return file.getName().contains(".sign.yml"); }
-                });
+            signFiles = signFolder.listFiles(new FileFilter() {
+                public boolean accept(File file) {
+                    return file.getName().contains(".sign.yml");
+                }
+            });
             for (File signFile : signFiles) {
                 try {
                     FileConfiguration mineConf = YamlConfiguration.loadConfiguration(signFile);
@@ -77,91 +79,100 @@ public class SignRefreshTask implements Runnable {
             }
         }
     }
-    
+
     /**
      * Saves all sign information to file
+     *
      * @return <b>true</b> if all data was saved, <b>false</b> if an error occurred
      */
     public static boolean saveAll() {
         boolean result = true;
         for (StatsSign sign : signs) {
-            if(!sign.saveFile()) result = false;
+            if (!sign.saveFile()) result = false;
         }
         return result;
     }
-    
+
     /**
      * Updates all signs with the valid variable information
+     *
      * @return <b>true</b> if all signs were updated, <b>false</b> if an error occurred
      */
     public static boolean updateAll() {
         boolean result = true;
-        for(StatsSign sign : signs) {
-            if(!sign.update()) result = false;
+        for (StatsSign sign : signs) {
+            if (!sign.update()) result = false;
         }
         return result;
     }
-    
+
     /**
      * Adds a new sign to the StatsSign update query
+     *
      * @param sign Sign to add
      * @return <b>true</b> if the sign was added successfully, <b>false</b> if an error occurred
      */
     public static boolean add(Sign sign) {
         return signs.add(instance.new StatsSign(sign));
     }
-    
+
     /**
      * Removes the Sign from the StatsSign update query
+     *
      * @param sign Sign to remove
      * @return <b>true</b> if the sign was removed successfully, <b>false</b> if an error occurred
      */
     public static boolean remove(Sign sign) {
         Location loc = sign.getLocation();
         List<StatsSign> temp = new ArrayList<StatsSign>();
-        for(StatsSign statsSign : signs) temp.add(statsSign);
-        for(StatsSign statsSign : temp) {
-            if(statsSign.getLocation().equals(loc)) {
+        for (StatsSign statsSign : signs) temp.add(statsSign);
+        for (StatsSign statsSign : temp) {
+            if (statsSign.getLocation().equals(loc)) {
                 statsSign.deleteFile();
                 return signs.remove(statsSign);
             }
         }
         return false;
     }
-    
+
     /**
      * Checks if a certain Sign is in the StatsSign update query
+     *
      * @param sign Sign to check
      * @return <b>true</b> if the sign is in the update query, <b>false</b> otherwise
      */
     public static boolean isValid(Sign sign) {
         Location loc = sign.getLocation();
-        for(StatsSign statsSign : signs) {
-            if(loc.equals(statsSign.getLocation())) return true;
+        for (StatsSign statsSign : signs) {
+            if (loc.equals(statsSign.getLocation())) return true;
         }
         return false;
     }
-    
+
     /**
      * Checks if the specified ID is unique
+     *
      * @param id ID to check
      * @return <b>true</b> if the ID is unique, <b>false</b> if there is a duplicate
      */
     private static boolean isUnique(String id) {
-        for(StatsSign statsSign : signs) {
-            if(statsSign.getId().equals(id)) return false;
+        for (StatsSign statsSign : signs) {
+            if (statsSign.getId().equals(id)) return false;
         }
         return true;
     }
-    
+
     /**
      * Generates a random unique 8-bit unique ID for signs.<br />
      * The IDs are checked to be unique.
+     *
      * @return Unique sign ID
      */
     private static String generateId() {
         String id = "";
-        do { id = Long.toString(Math.abs(new Random().nextLong()), 8); }
+        do {
+            id = Long.toString(Math.abs(new Random().nextLong()), 8);
+        }
         while (!isUnique(id));
         return id;
     }
@@ -170,49 +181,54 @@ public class SignRefreshTask implements Runnable {
     public void run() {
         updateAll();
     }
-    
+
     @SerializableAs("StatsSign")
-    public class StatsSign implements ConfigurationSerializable  {
+    public class StatsSign implements ConfigurationSerializable {
         private String signId;
         private Sign sign;
         private List<String> originalText;
-        
+
         /**
          * <b>Default constructor</b><br />
          * Creates a new StatsSign instance from the Sign object
+         *
          * @param sign Sign to base the StatsSign on
          */
         public StatsSign(Sign sign) {
             this.signId = generateId();
             this.sign = sign;
-            
+
             originalText = new ArrayList<String>();
-            for(String line : sign.getLines()) { originalText.add(line); }
-            
+            for (String line : sign.getLines()) {
+                originalText.add(line);
+            }
+
             saveFile();
         }
-        
+
         /**
          * Constructor for de-serialization from a map
+         *
          * @param map Map to de-serialize from
-         * @throws Exception 
+         * @throws Exception
          */
         @SuppressWarnings("unchecked")
         public StatsSign(Map<String, Object> map) throws Exception {
             signId = (String) map.get("id");
-            
+
             World world = Bukkit.getWorld((String) map.get("world"));
             Block signBlock = world.getBlockAt(((Vector) map.get("loc")).toLocation(world));
-            if(!(signBlock.getState() instanceof Sign)) {
+            if (!(signBlock.getState() instanceof Sign)) {
                 deleteFile();
                 throw new Exception("No sign found at the stored location");
             }
             sign = (Sign) signBlock.getState();
             originalText = (List<String>) map.get("lines");
         }
-        
+
         /**
          * Serialization method for sign data storage
+         *
          * @return Serialization map
          */
         public Map<String, Object> serialize() {
@@ -224,32 +240,44 @@ public class SignRefreshTask implements Runnable {
             return me;
         }
 
-        public String getId()             { return signId; }
-        public Location getLocation()     { return sign.getLocation(); }
-        public List<String> getLines()     { return originalText; }
-        
+        public String getId() {
+            return signId;
+        }
+
+        public Location getLocation() {
+            return sign.getLocation();
+        }
+
+        public List<String> getLines() {
+            return originalText;
+        }
+
         /**
          * Updates the StatsSign's lines with the appropriate variables
+         *
          * @return <b>true</b> if the update was successful, <b>false</b> otherwise
          */
         public boolean update() {
             BlockState b = sign.getBlock().getState();
-            if(b instanceof Sign) {
+            if (b instanceof Sign) {
                 Sign signBlock = (Sign) b;
-                for(int i = 0; i < originalText.size(); i++) { signBlock.setLine(i, Util.parseVars(originalText.get(i))); }
+                for (int i = 0; i < originalText.size(); i++) {
+                    signBlock.setLine(i, Util.parseVars(originalText.get(i)));
+                }
                 signBlock.update();
                 return true;
             }
             return false;
         }
-        
+
         /**
          * Saves the sign data to file.
+         *
          * @return <b>true</b> if the save was successful, <b>false</b> if an error occurred
          */
         public boolean saveFile() {
             File signFile = new File(new File(Statistics.getInstance().getDataFolder(), "signs"), signId + ".sign.yml");
-            FileConfiguration signConf =  YamlConfiguration.loadConfiguration(signFile);
+            FileConfiguration signConf = YamlConfiguration.loadConfiguration(signFile);
             signConf.set("StatsSign", this);
             try {
                 signConf.save(signFile);
@@ -260,22 +288,25 @@ public class SignRefreshTask implements Runnable {
             }
             return true;
         }
-        
+
         /**
          * Deletes the sign data file.<br />
          * <b>Warning:</b> invoking this method will not remove the sign from the list of active signs
+         *
          * @return <b>true</b> if the deletion was successful, <b>false</b> if an error occurred
          */
         public boolean deleteFile() {
             File signFolder = new File(Statistics.getInstance().getDataFolder(), "signs");
-            if(!signFolder.exists() || !signFolder.isDirectory()) return false;
-            
+            if (!signFolder.exists() || !signFolder.isDirectory()) return false;
+
             File[] signFiles = signFolder.listFiles(new FileFilter() {
-                public boolean accept(File file) { return file.getName().contains(".sign.yml"); }
+                public boolean accept(File file) {
+                    return file.getName().contains(".sign.yml");
+                }
             });
-            
-            for(File signFile : signFiles) {
-                if(signFile.getName().equals(signId + ".sign.yml")) {
+
+            for (File signFile : signFiles) {
+                if (signFile.getName().equals(signId + ".sign.yml")) {
                     return signFile.delete();
                 }
             }

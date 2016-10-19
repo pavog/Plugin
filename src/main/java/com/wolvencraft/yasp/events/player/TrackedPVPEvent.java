@@ -30,10 +30,10 @@ import org.bukkit.event.HandlerList;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedPVPEvent extends StatisticsPlayerEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private PVPEntry data;
-    
+
     public TrackedPVPEvent(OnlineSession session, PVPEntry data) {
         super(session, PlayerVariable.PVP_KILLS);
         this.data = data;
@@ -49,5 +49,5 @@ public class TrackedPVPEvent extends StatisticsPlayerEvent {
         // TODO Auto-generated method stub
         return null;
     }
-    
+
 }

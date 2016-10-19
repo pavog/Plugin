@@ -34,24 +34,24 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public class VotifierHook extends PluginHook implements Listener {
-    
+
     public VotifierHook() {
         super(Module.Votifier, "Votifier");
     }
-    
+
     @Override
     protected void onEnable() {
         Bukkit.getServer().getPluginManager().registerEvents(this, Statistics.getInstance());
     }
-    
-    @EventHandler(priority=EventPriority.MONITOR)
+
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onVotifierEvent(VotifierEvent event) {
         Vote vote = event.getVote();
         Player player = Bukkit.getPlayerExact(vote.getUsername());
-        if(player == null) return;
+        if (player == null) return;
         VotifierData dataStore = (VotifierData) OnlineSessionCache.fetch(player).getDataStore(DataStoreType.Hook_Votifier);
-        if(dataStore == null) return;
+        if (dataStore == null) return;
         dataStore.playerVoted(vote);
     }
-    
+
 }

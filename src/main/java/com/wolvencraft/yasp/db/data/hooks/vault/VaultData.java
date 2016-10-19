@@ -26,20 +26,20 @@ import com.wolvencraft.yasp.session.OnlineSession;
 
 /**
  * Hooks into Vault to track its statistics
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 public class VaultData extends DataStore<VaultPlayerEntry, DetailedData> {
-    
+
     public VaultData(OnlineSession session) {
         super(session, DataStoreType.Hook_Vault);
     }
-    
+
     public void VaultEntry() {
-        VaultPlayerEntry entry = new VaultPlayerEntry(session.getBukkitPlayer(),session.getId());
+        VaultPlayerEntry entry = new VaultPlayerEntry(session.getBukkitPlayer(), session.getId());
         normalData.add(entry);
-        
-        DetailedVaultEntry detailedentry = new DetailedVaultEntry(session.getBukkitPlayer(),session.getId());
+
+        DetailedVaultEntry detailedentry = new DetailedVaultEntry(session.getBukkitPlayer(), session.getId());
         detailedData.add(detailedentry);
     }
 }

@@ -41,48 +41,50 @@ import java.util.List;
 import java.util.UUID;
 
 public class BookUtil {
-    
+
     private static String title;
-    private static ArrayList<List<String>> Page = new ArrayList<>(); 
-    
+    private static ArrayList<List<String>> Page = new ArrayList<>();
+
     public BookUtil() {
         int i = 1;
         File bookFile = new File(Statistics.getInstance().getDataFolder(), "resources/book.yml");
-        if (!bookFile.exists()){
-            Message.log("Book.yml not found. Creating one for you.");        
-            Statistics.getInstance().saveResource("resources/book.yml",false);        
+        if (!bookFile.exists()) {
+            Message.log("Book.yml not found. Creating one for you.");
+            Statistics.getInstance().saveResource("resources/book.yml", false);
         }
-            
+
         FileConfiguration bookconf = YamlConfiguration.loadConfiguration(bookFile);
         title = bookconf.getString("title");
-            
-        do{   
-           Page.add(bookconf.getStringList("page."+i)); 
-           i++;
-        }while(bookconf.getList("page." +i) != null);       
-         
+
+        do {
+            Page.add(bookconf.getStringList("page." + i));
+            i++;
+        } while (bookconf.getList("page." + i) != null);
+
     }
-    
+
     /**
      * Creates a new statistics book based for the specified player.<br />
      * Version-specific method. Include methods to check for CraftBukkit version in the implementation.
+     *
      * @param player Player to use for statistics
      * @return Book with player's statistics
      */
-    public static ItemStack compileStatsBook (Player player) {
+    public static ItemStack compileStatsBook(Player player) {
         ItemStack bookStack = new ItemStack(387, 1);
         BookMeta book = (BookMeta) bookStack.getItemMeta();
-        book.setTitle(title.replace("%PLAYERNAME%",player.getName()));
+        book.setTitle(title.replace("%PLAYERNAME%", player.getName()));
         book.setAuthor("Statistics");
         book.setPages(getBookPages(player.getUniqueId()));
-        
+
         bookStack.setItemMeta(book);
         return bookStack;
     }
-    
+
     /**
      * Returns the pages for the book with player's statistics. Could be used for offline players.<br />
      * It is safe to use this method with any version of CraftBukkit.
+     *
      * @param uuid Player's uuid to use for the statistics
      * @return Array of strings, each of them representing a new page in the book.
      */
@@ -92,14 +94,14 @@ public class BookUtil {
         HookTotals hooks = session.getHookTotals();
         String[] Book = new String[50];
         String fixed_line;
-        int i=0;     
-        for(List<String> list : Page){
+        int i = 0;
+        for (List<String> list : Page) {
             Book[i] = "";
-            for(String line : list){
-                fixed_line = line.replace("%PLAYERNAME%",session.getName());
-                fixed_line = PlayerData.swap(fixed_line,stats);
-                fixed_line = HookData.swap(fixed_line,hooks);
-                Book[i]=Book[i]+ ChatColor.translateAlternateColorCodes('&', fixed_line) + ChatColor.RESET + ChatColor.BLACK + "\n";
+            for (String line : list) {
+                fixed_line = line.replace("%PLAYERNAME%", session.getName());
+                fixed_line = PlayerData.swap(fixed_line, stats);
+                fixed_line = HookData.swap(fixed_line, hooks);
+                Book[i] = Book[i] + ChatColor.translateAlternateColorCodes('&', fixed_line) + ChatColor.RESET + ChatColor.BLACK + "\n";
             }
             i++;
         }

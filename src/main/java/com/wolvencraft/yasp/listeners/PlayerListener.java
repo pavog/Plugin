@@ -37,68 +37,68 @@ import org.bukkit.event.player.PlayerFishEvent.State;
 
 /**
  * Listens to miscellaneous player events on the server and reports them to the plugin.
- * @author bitWolfy
- * @param player Player object
  *
+ * @param player Player object
+ * @author bitWolfy
  */
 public class PlayerListener implements Listener {
-    
+
     public PlayerListener(Statistics plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if(event instanceof PlayerTeleportEvent) return;
-        
+        if (event instanceof PlayerTeleportEvent) return;
+
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerDistances)) return;
-        
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerDistances)) return;
+
         HandlerManager.runTask(new PlayerMove(player, event.getFrom(), event.getTo()));
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerFish(PlayerFishEvent event) {
-        if(!event.getState().equals(State.CAUGHT_FISH)) return;
-        
+        if (!event.getState().equals(State.CAUGHT_FISH)) return;
+
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
-        
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.FishCaught));
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
-        
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.TimesKicked));
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEggThrow(PlayerEggThrowEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.EggsThrown));
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onArrowShoot(EntityShootBowEvent event) {
-        if(!(event.getEntity() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.ArrowsShot));
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageEvent event) {
-        if(!(event.getEntity() instanceof Player)) return;
-        
+        if (!(event.getEntity() instanceof Player)) return;
+
         Player player = (Player) event.getEntity();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.DamageTaken, event.getDamage()));
     }
@@ -106,7 +106,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBedEnter(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.BedsEntered));
     }
@@ -114,33 +114,33 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPortalEnter(PlayerPortalEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.PortalsEntered));
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChatMessage(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
 
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.WordsSaid, event.getMessage().split(" ").length));
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChatCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
-        
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.CommandsSent));
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void PlayerExpChangeEvent(PlayerExpChangeEvent event) {
         Player player = event.getPlayer();
         int amount = event.getAmount();
-        if(!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
-        
+        if (!HandlerManager.playerLookup(player, StatPerms.PlayerMisc)) return;
+
         HandlerManager.runAsyncTask(new PlayerIncrementStat(player, PlayerData.ExpTotal, amount));
     }
 }

@@ -30,10 +30,10 @@ import org.bukkit.event.HandlerList;
 
 @Getter(AccessLevel.PUBLIC)
 public class TrackedPVEEvent extends StatisticsPlayerEvent {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private PVEEntry data;
-    
+
     public TrackedPVEEvent(OnlineSession session, PVEEntry data) {
         super(session, PlayerVariable.PVE_KILLS);
         this.data = data;
@@ -48,5 +48,5 @@ public class TrackedPVEEvent extends StatisticsPlayerEvent {
     public String getParameterString() {
         return data.isPlayerKilled() + "";
     }
-    
+
 }

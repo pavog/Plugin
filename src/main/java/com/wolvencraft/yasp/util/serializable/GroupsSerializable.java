@@ -31,17 +31,18 @@ import java.util.List;
 /**
  * <b>Requires VaultHook</b><br />
  * Provides means to serialize player's groups into a Json array
- * @author bitWolfy
  *
+ * @author bitWolfy
  */
 @SuppressWarnings("unused")
 public class GroupsSerializable {
-    
+
     private String group;
     private String world;
-    
+
     /**
      * <b>Default constructor</b>
+     *
      * @param group Group name
      * @param world World name
      */
@@ -49,20 +50,21 @@ public class GroupsSerializable {
         this.group = group;
         this.world = world;
     }
-    
+
     /**
      * Compresses a List into a single-line json array.<br />
      * Wraps around <code>Util.toJsonArray(List&lt;?&gt; source);</code><br />
      * Stores world and group names
+     *
      * @param playerName Name of the player to serialize
      * @return String json array
      */
     public static String serialize(String playerName) {
         List<GroupsSerializable> groups = new ArrayList<GroupsSerializable>();
-        for(World world : Bukkit.getServer().getWorlds()) {
+        for (World world : Bukkit.getServer().getWorlds()) {
             groups.add(new GroupsSerializable(VaultHook.getGroup(playerName, world.getName()), world.getName()));
         }
         return Util.toJsonArray(groups);
     }
-    
+
 }
