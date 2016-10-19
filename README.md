@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/pavog/Statistics-Bukkit-Plugin.svg?branch=master)](https://travis-ci.org/pavog/Statistics-Bukkit-Plugin)
+[![Download Here](https://img.shields.io/badge/download-here-brightgreen.svg?style=flat)](https://github.com/pavog/Statistics-Bukkit-Plugin/releases)
 
 ## Statistics Introduction ##
 
