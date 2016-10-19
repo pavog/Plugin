@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/pavog/Statistics-Bukkit-Plugin.svg?branch=master)](https://travis-ci.org/pavog/Statistics-Bukkit-Plugin)
-## Statistics ##
+
+## Statistics Introduction ##
 
 Looking for a high-end plugin that tracks your players' data? Look no further!
 
@@ -9,13 +10,55 @@ amount of information collected to a staggering amount. Name a data point, and w
 probably tracking it. This plugin was made to be highly customizable; it will do only what  
 you tell it to do.
 
-![Statistics logo](http://static.mctrakr.com/img/dbo/statistics/logo.png)
-![](http://static.mctrakr.com/img/dbo/statistics/menu_0.png)
+## Statistics v2.0 ##
 
-[ ![](http://static.mctrakr.com/img/dbo/statistics/menu_1.png) ](http://dev.bukkit.org/bukkit-mods/statistics/files/)
-[ ![](http://static.mctrakr.com/img/dbo/statistics/menu_2.png) ](http://dev.bukkit.org/bukkit-mods/statistics/tickets/)
-[ ![](http://static.mctrakr.com/img/dbo/statistics/menu_3.png) ](http://dev.bukkit.org/bukkit-mods/statistics/pages/wiki/)
+This is a new version of Statistics (v2.0) which is developed by Paul <pavog> Vogel.
 
-![Features](http://static.mctrakr.com/img/dbo/statistics/features.png)
+The Bukkit Plugin of Statistics has been updated and is currently working. I am developing the v2 at the moment which will bring new features.
+ - In the [Master branch](https://github.com/pavog/Statistics-Bukkit-Plugin "Statistics master branch") you find the currently working (and tested) code.
+ - In the [Development branch](https://github.com/pavog/Statistics-Bukkit-Plugin/tree/dev "Statistics dev branch") you find the code for v2 which is under heavy development and my not work.
 
-![Requirements](http://static.mctrakr.com/img/dbo/statistics/requirements.png)
+[![Statistics logo](https://dev.bukkit.org/media/images/56/243/dbo-1.png)](https://dev.bukkit.org/bukkit-plugins/statistics/)
+
+## Statistics for ##
+
+### Server ###
+ - Startup and shutdown times
+ - Current server status
+ - Uptime statistics
+ - Total gameplay
+ - Online players
+ 
+### World ###
+ - Distance Travelled
+ - PVP, PVE, natural deaths
+ - Blocks played and broken
+ - Items picked up, dropped, used, eaten, etc.
+ 
+### Player ###
+ - Player inventory
+ - Health, hunger, experience
+ - Armour rating
+ - Game mode
+ - Words said, command sent
+ - Login and logout times
+ - Time spent on the server
+ - Distance travelled
+ - Detailed kills and deaths
+ 
+### Plugin ### 
+ - Vault (for money, groups, ...)
+
+## Requirements for the plugin ##
+
+ - A Bukkit or Spigot server (Tested with versions: 1.8, 1.9, 1.10)
+ 
+## Requirements for the web panel ##
+
+ - PHP 5.3.2 or greater
+ - With GD2 lib
+ - With cURL lib
+ - With fsockopen
+ - MySQL 5.5 or greater
+ - With InnoDB support
+ - With remote connections allowed
