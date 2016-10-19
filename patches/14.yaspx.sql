@@ -21,10 +21,13 @@ INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("177:14", "or
 INSERT INTO `$prefix_materials` (`material_id`, `tp_name`) VALUES ("177:15", "white_banner") ON DUPLICATE KEY UPDATE `tp_name` = "white_banner";
 
 -- Remove dublicate Entries
-set session old_alter_table=1;
-ALTER IGNORE TABLE `$prefix_total_blocks` ADD UNIQUE INDEX `$prefix_un_blocks_id1_idx` (`material_id`, `player_id`);
-ALTER IGNORE TABLE `$prefix_total_items` ADD UNIQUE INDEX `$prefix_un_items_id1_idx` (`material_id`, `player_id`);
-ALTER IGNORE TABLE `$prefix_total_deaths` ADD UNIQUE INDEX `$prefix_un_deaths_id1_idx` (`player_id`, `cause`);
-ALTER IGNORE TABLE `$prefix_total_pve_kills` ADD UNIQUE INDEX `$prefix_un_pve_kills_id1_idx` (`material_id`, `player_id`, `entity_id`);
-ALTER IGNORE TABLE `$prefix_total_pvp_kills` ADD UNIQUE INDEX `$prefix_un_pvp_kills_id1_idx` (`material_id`, `player_id`, `victim_id`);
-set session old_alter_table=0;
+
+-- Not used since it caused errors while testing
+
+-- set session old_alter_table=1;
+-- ALTER IGNORE TABLE `$prefix_total_blocks` ADD UNIQUE INDEX `$prefix_un_blocks_id1_idx` (`material_id`, `player_id`);
+-- ALTER IGNORE TABLE `$prefix_total_items` ADD UNIQUE INDEX `$prefix_un_items_id1_idx` (`material_id`, `player_id`);
+-- ALTER IGNORE TABLE `$prefix_total_deaths` ADD UNIQUE INDEX `$prefix_un_deaths_id1_idx` (`player_id`, `cause`);
+-- ALTER IGNORE TABLE `$prefix_total_pve_kills` ADD UNIQUE INDEX `$prefix_un_pve_kills_id1_idx` (`material_id`, `player_id`, `entity_id`);
+-- ALTER IGNORE TABLE `$prefix_total_pvp_kills` ADD UNIQUE INDEX `$prefix_un_pvp_kills_id1_idx` (`material_id`, `player_id`, `victim_id`);
+-- set session old_alter_table=0;
