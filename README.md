@@ -1,6 +1,11 @@
-[![Build Status](https://travis-ci.org/pavog/Statistics-Bukkit-Plugin.svg?branch=master)](https://travis-ci.org/pavog/Statistics-Bukkit-Plugin)
-[![Download Here](https://img.shields.io/badge/download-here-brightgreen.svg?style=flat)](https://github.com/pavog/Statistics-Bukkit-Plugin/releases)
+[![TravisCI](https://img.shields.io/travis/pavog/Statistics-Bukkit-Plugin/master.svg?style=flat-square)](https://travis-ci.org/pavog/Statistics-Bukkit-Plugin)
 [![StyleCI](https://styleci.io/repos/71280436/shield?branch=master)](https://styleci.io/repos/71280436)
+[![GitHub release](https://img.shields.io/github/release/pavog/Statistics-Bukkit-Plugin.svg?style=flat-square)](https://github.com/pavog/Statistics-Bukkit-Plugin/releases)
+
+[![Github Issues](https://img.shields.io/github/issues-raw/pavog/Statistics-Bukkit-Plugin.svg?style=flat-square)](https://github.com/pavog/Statistics-Bukkit-Plugin/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/pavog/Statistics-Bukkit-Plugin.svg?style=flat-square)](https://github.com/pavog/Statistics-Bukkit-Plugin/pulls)
+[![License](https://img.shields.io/github/license/pavog/Statistics-Bukkit-Plugin.svg?style=flat-square)](https://github.com/pavog/Statistics-Bukkit-Plugin/)
+
 
 ## Statistics Introduction ##
 
