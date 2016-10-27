@@ -64,11 +64,10 @@ public class EnchantmentsSerializable {
         Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator();
         while (it.hasNext()) {
             try {
-                Map.Entry<Enchantment, Integer> enchantment = (Map.Entry<Enchantment, Integer>) it.next();
+                Map.Entry<Enchantment, Integer> enchantment = it.next();
                 enchList.add(new EnchantmentsSerializable(enchantment.getKey(), enchantment.getValue().intValue()));
             } catch (Throwable t) {
                 ExceptionHandler.handle(t, true);
-                continue;
             }
         }
         return enchList;

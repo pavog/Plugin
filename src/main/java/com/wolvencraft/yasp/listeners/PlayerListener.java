@@ -39,7 +39,6 @@ import org.bukkit.event.player.PlayerFishEvent.State;
 /**
  * Listens to miscellaneous player events on the server and reports them to the plugin.
  *
- * @param Statistics plugin
  * @author bitWolfy
  */
 public class PlayerListener implements Listener {

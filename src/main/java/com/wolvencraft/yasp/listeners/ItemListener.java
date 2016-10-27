@@ -58,7 +58,8 @@ public class ItemListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public static void onItemRepair(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (!HandlerManager.playerLookup(player, StatPerms.ItemAnvil)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.ItemAnvil))
+            return;
 
 
         HandlerManager.runAsyncTask(new ItemRepair(player, event));
@@ -67,8 +68,10 @@ public class ItemListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemPickup(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
-        if (!HandlerManager.playerLookup(player, StatPerms.ItemPickUp)) return;
-        if (event.getItem().getItemStack().getAmount() == 0) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.ItemPickUp))
+            return;
+        if (event.getItem().getItemStack().getAmount() == 0)
+            return;
 
         HandlerManager.runAsyncTask(new ItemPickup(player, player.getLocation(), event.getItem().getItemStack(), event.getItem().getItemStack().getAmount()));
     }
@@ -76,8 +79,10 @@ public class ItemListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        if (!HandlerManager.playerLookup(player, StatPerms.ItemDrop)) return;
-        if (event.getItemDrop().getItemStack().getAmount() == 0) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.ItemDrop))
+            return;
+        if (event.getItemDrop().getItemStack().getAmount() == 0)
+            return;
 
         HandlerManager.runAsyncTask(new ItemDrop(player, player.getLocation(), event.getItemDrop().getItemStack()));
     }
@@ -85,7 +90,8 @@ public class ItemListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
-        if (!HandlerManager.playerLookup(player, StatPerms.ItemUse)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.ItemUse))
+            return;
 
         HandlerManager.runAsyncTask(new ItemConsume(player, event.getItem()));
     }
@@ -93,7 +99,8 @@ public class ItemListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemCraft(CraftItemEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (!HandlerManager.playerLookup(player, StatPerms.ItemCraft)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.ItemCraft))
+            return;
 
         //The metod of tracken the amount of craftet items in bukkit is returns wrong amount of items on shift + klick an workaround for this would be to complicated at the moment
         HandlerManager.runAsyncTask(new ItemCraft(player, player.getLocation(), event.getCurrentItem()));
@@ -102,7 +109,8 @@ public class ItemListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onItemSmelt(FurnaceExtractEvent event) {
         Player player = event.getPlayer();
-        if (!HandlerManager.playerLookup(player, StatPerms.ItemMisc)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.ItemMisc))
+            return;
 
         //Disabled for the mombent because the FurnaceExtractEvent is fired twice on shift + click in the same tick wich causes dublicate database entries
         //HandlerManager.runAsyncTask(new ItemSmelt(player, player.getLocation(), new ItemStack(event.getItemType())));
@@ -111,7 +119,8 @@ public class ItemListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onToolBreak(PlayerItemBreakEvent event) {
         Player player = event.getPlayer();
-        if (!HandlerManager.playerLookup(player, StatPerms.ItemBreak)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.ItemBreak))
+            return;
 
         HandlerManager.runAsyncTask(new ToolBreak(player, player.getLocation(), event.getBrokenItem()));
     }
@@ -119,7 +128,8 @@ public class ItemListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemEnchant(EnchantItemEvent event) {
         Player player = event.getEnchanter();
-        if (!HandlerManager.playerLookup(player, StatPerms.ItemMisc)) return;
+        if (!HandlerManager.playerLookup(player, StatPerms.ItemMisc))
+            return;
 
         HandlerManager.runAsyncTask(new ItemEnchant(player, player.getLocation(), event.getItem()));
     }

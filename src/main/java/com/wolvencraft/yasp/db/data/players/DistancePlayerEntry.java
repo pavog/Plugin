@@ -100,7 +100,7 @@ public class DistancePlayerEntry extends NormalData {
 
     @Override
     public boolean pushData(int playerId) {
-        boolean result = Query.table(PlayerDistance.TableName)
+        return Query.table(PlayerDistance.TableName)
                 .value(PlayerDistance.Foot, foot)
                 .value(PlayerDistance.Swim, swim)
                 .value(PlayerDistance.Flight, flight)
@@ -109,7 +109,6 @@ public class DistancePlayerEntry extends NormalData {
                 .value(PlayerDistance.Ride, ride)
                 .condition(PlayerDistance.PlayerId, playerId)
                 .update(RemoteConfiguration.MergedDataTracking.asBoolean());
-        return result;
     }
 
     @Override

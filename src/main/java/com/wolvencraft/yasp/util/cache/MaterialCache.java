@@ -64,12 +64,18 @@ public class MaterialCache implements CachedDataProcess {
     private static String parse(int type, int data, String name) {
         String material = "";
 
-        if (type == -1) return "-1:0";
-        if (Material.getMaterial(type) == null) return "0:0";
-        if (!Constants.ItemsWithMetadata.contains(type)) material = type + ":" + "0";
-        else material = type + ":" + ItemsWithMetadata.get(type).getValidData(data);
+        if (type == -1)
+            return "-1:0";
+        if (Material.getMaterial(type) == null)
+            return "0:0";
+        if (!Constants.ItemsWithMetadata.contains(type))
+            material = type + ":" + "0";
+        else
+            material = type + ":" + ItemsWithMetadata.get(type).getValidData(data);
 
-        if (materials.contains(material)) return material;
+
+        if (materials.contains(material))
+            return material;
         materials.add(material);
         if (!Query.table(MaterialsTable.TableName).condition(MaterialsTable.MaterialId, material).exists()) {
             Query.table(MaterialsTable.TableName)
@@ -93,7 +99,7 @@ public class MaterialCache implements CachedDataProcess {
     /**
      * Parses the material data and returns a String representation of the material
      *
-     * @param MaterialData Material data
+     * @param material data
      * @return Material string
      */
     public static String parse(MaterialData material) {

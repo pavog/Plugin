@@ -232,7 +232,7 @@ public class PlayerTotals {
         if (blocksBroken < 100000) {
             value.setData(ChatColor.GOLD + "Broken", blocksBroken);
         } else {
-            value.setData(ChatColor.GOLD + "Broken (k)", (int) (blocksBroken / 1000));
+            value.setData(ChatColor.GOLD + "Broken (k)", blocksBroken / 1000);
         }
         value.setPossibleNames(ChatColor.GOLD + "Broken", ChatColor.GOLD + "Broken (k)");
         return value;
@@ -250,7 +250,7 @@ public class PlayerTotals {
         if (blocksPlaced < 100000) {
             value.setData(ChatColor.GOLD + "Placed", blocksPlaced);
         } else {
-            value.setData(ChatColor.GOLD + "Placed (k)", (int) (blocksPlaced / 1000));
+            value.setData(ChatColor.GOLD + "Placed (k)", blocksPlaced / 1000);
         }
         value.setPossibleNames(ChatColor.GOLD + "Placed", ChatColor.GOLD + "Placed (k)");
         return value;

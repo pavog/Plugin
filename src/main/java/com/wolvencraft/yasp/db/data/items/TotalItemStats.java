@@ -151,11 +151,7 @@ public class TotalItemStats extends NormalData {
      * @return b>true</b> if the data matches, <b>false</b> otherwise.
      */
     public boolean equals(ItemStack stack) {
-        if (stack.isSimilar(this.stack)) {
-            return true;
-        } else {
-            return false;
-        }
+        return stack.isSimilar(this.stack);
     }
 
     /**

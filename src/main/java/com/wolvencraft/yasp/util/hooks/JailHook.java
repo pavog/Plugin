@@ -41,8 +41,7 @@ public class JailHook extends PluginHook {
      * @return <b>true</b> if the player is jailed, <b>false</b> otherwise
      */
     public static boolean isJailed(String playerName) {
-        if (instance.getPrisoner(playerName) == null) return false;
-        return true;
+        return instance.getPrisoner(playerName) != null;
     }
 
     /**

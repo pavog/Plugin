@@ -107,7 +107,7 @@ public enum Module {
 
         try {
             updateCache();
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
 
         if (dataStores.length == 0) this.dataStores = Lists.newArrayList();

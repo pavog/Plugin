@@ -146,8 +146,7 @@ public class OnlineSession implements PlayerSession {
 
     @Override
     public boolean isOnline() {
-        if (Bukkit.getPlayerExact(name) == null) return false;
-        return true;
+        return Bukkit.getPlayerExact(name) != null;
     }
 
     @Override
@@ -313,7 +312,7 @@ public class OnlineSession implements PlayerSession {
             for (String name : value.getPossibleNames())
                 stats.getScoreboard().resetScores(name);
             stats.getScore(value.getName())
-                    .setScore((Integer) (value.getValue()));
+                    .setScore(value.getValue());
         }
     }
 

@@ -133,7 +133,7 @@ public class ScriptRunner {
     public void closeConnection() {
         try {
             this.connection.close();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -156,7 +156,7 @@ public class ScriptRunner {
     private void rollbackConnection() {
         try {
             this.connection.rollback();
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
     }
 
@@ -234,7 +234,7 @@ public class ScriptRunner {
 
         try {
             statement.close();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

@@ -115,7 +115,7 @@ public class Hook {
         CurrentPower("current_power"),
         MaximumPower("max_power"),
         FactionRole("role"),
-        Title("title");;
+        Title("title");
 
         private String columnName;
 

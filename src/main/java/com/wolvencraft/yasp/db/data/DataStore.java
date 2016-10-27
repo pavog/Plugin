@@ -76,17 +76,17 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
     public void pushData() {
         for (N entry : getNormalData()) {
             try {
-                if (((NormalData) entry).pushData(session.getId())) normalData.remove(entry);
+                if (entry.pushData(session.getId())) normalData.remove(entry);
             } catch (NullPointerException e) {
-                Message.debug("NPE occurred while saving NormalData: " + ((NormalData) entry));
+                Message.debug("NPE occurred while saving NormalData: " + entry);
                 normalData.remove(entry);
             }
         }
         for (D entry : getDetailedData()) {
             try {
-                if (((DetailedData) entry).pushData(session.getId())) detailedData.remove(entry);
+                if (entry.pushData(session.getId())) detailedData.remove(entry);
             } catch (NullPointerException e) {
-                Message.debug("NPE occurred while saving DetailedData: " + ((DetailedData) entry));
+                Message.debug("NPE occurred while saving DetailedData: " + entry);
                 detailedData.remove(entry);
             }
         }
@@ -129,7 +129,7 @@ public abstract class DataStore<N extends NormalData, D extends DetailedData> {
         Hook_Vanish,
         Hook_Vault,
         Hook_Votifier,
-        Hook_WorldGuard;
+        Hook_WorldGuard
     }
 
 }

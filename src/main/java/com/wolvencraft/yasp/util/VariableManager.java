@@ -139,7 +139,7 @@ public class VariableManager {
          *
          * @return Variable alias
          */
-        public String getAlias();
+        String getAlias();
 
     }
 

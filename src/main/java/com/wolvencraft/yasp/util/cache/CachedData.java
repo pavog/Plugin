@@ -114,13 +114,10 @@ public class CachedData {
                 this.process = (CachedDataProcess) process.newInstance();
             } catch (InstantiationException e) {
                 Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " InstantiationException)");
-                return;
             } catch (IllegalAccessException e) {
                 Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " IllegalAccessException)");
-                return;
             } catch (Exception e) {
                 Message.log(Level.SEVERE, "Error while instantiating a cache process! (" + process.getSimpleName() + " " + e.getMessage() + ")");
-                return;
             }
         }
     }
@@ -137,7 +134,7 @@ public class CachedData {
          *
          * @return Cache refresh rate (in ticks)
          */
-        public long getRefreshRate();
+        long getRefreshRate();
 
     }
 

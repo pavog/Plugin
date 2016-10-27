@@ -57,7 +57,7 @@ public class RegionsSerializable {
         List<RegionsSerializable> values = new LinkedList<RegionsSerializable>();
         Iterator<Entry<String, Integer>> it = regions.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String, Integer> pairs = (Map.Entry<String, Integer>) it.next();
+            Map.Entry<String, Integer> pairs = it.next();
             values.add(new RegionsSerializable(pairs.getKey(), pairs.getValue()));
             it.remove();
         }

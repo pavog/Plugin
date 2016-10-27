@@ -106,7 +106,6 @@ public class BookUtil {
             }
             i++;
         }
-        String[] finished_book = Arrays.copyOf(Book, i);
-        return finished_book;
+        return Arrays.copyOf(Book, i);
     }
 }

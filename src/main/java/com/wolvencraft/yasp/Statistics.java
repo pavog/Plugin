@@ -200,9 +200,9 @@ public class Statistics extends JavaPlugin {
 
     public synchronized void setWorking(final String thread, final boolean working) {
         if (working)
-            this.working.add(thread);
+            Statistics.working.add(thread);
         else
-            this.working.remove(thread);
+            Statistics.working.remove(thread);
     }
 
     public synchronized boolean isWorking() {

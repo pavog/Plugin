@@ -35,27 +35,26 @@ public class HandlerManager {
     public static boolean playerLookup(Player player, ExtraChecks check) {
         if (Statistics.isPaused()) return false;
 
-        if (Module.Vanish.isActive()
-                && RemoteConfiguration.VanishDisablesTracking.asBoolean()
-                && VanishHook.isVanished(player)) return false;
+        if (Module.Vanish.isActive() && RemoteConfiguration.VanishDisablesTracking.asBoolean() && VanishHook.isVanished(player))
+            return false;
 
-        if (player.hasMetadata("NPC")    // XXX Citizens fix
-                && player.getMetadata("NPC").get(0).asBoolean()) return false;
+        // XXX Citizens fix
+        if (player.hasMetadata("NPC") && player.getMetadata("NPC").get(0).asBoolean())
+            return false;
 
-        if (!check.check(player)) return false;
+        return check.check(player);
 
-        return true;
     }
 
     public static boolean playerLookup(Player player, StatPerms permission) {
         if (Statistics.isPaused()) return false;
 
-        if (Module.Vanish.isActive()
-                && RemoteConfiguration.VanishDisablesTracking.asBoolean()
-                && VanishHook.isVanished(player)) return false;
+        if (Module.Vanish.isActive() && RemoteConfiguration.VanishDisablesTracking.asBoolean() && VanishHook.isVanished(player))
+            return false;
 
-        if (player.hasMetadata("NPC")    // XXX Citizens fix
-                && player.getMetadata("NPC").get(0).asBoolean()) return false;
+        // XXX Citizens fix
+        if (player.hasMetadata("NPC") && player.getMetadata("NPC").get(0).asBoolean())
+            return false;
 
         return permission.has(player);
     }
@@ -76,9 +75,9 @@ public class HandlerManager {
         return Bukkit.getScheduler().runTaskLaterAsynchronously(Statistics.getInstance(), task, delay);
     }
 
-    public static interface ExtraChecks {
+    public interface ExtraChecks {
 
-        public boolean check(Player player);
+        boolean check(Player player);
 
     }
 

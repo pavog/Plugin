@@ -65,7 +65,6 @@ public class EffectsSerializable {
                 potEffects.add(new EffectsSerializable(eff));
             } catch (Throwable t) {
                 ExceptionHandler.handle(t, true);
-                continue;
             }
         }
         return Util.toJsonArray(potEffects);

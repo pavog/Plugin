@@ -46,7 +46,7 @@ public class InventorySerializable {
     /**
      * <b>Default constructor</b>
      *
-     * @param ItemStack Stack of items
+     * @param stack of items
      */
     private InventorySerializable(ItemStack stack) {
         material_id = MaterialCache.parse(stack);
@@ -79,7 +79,6 @@ public class InventorySerializable {
                 invRow.add(new InventorySerializable(stack));
             } catch (Throwable t) {
                 ExceptionHandler.handle(t, true);
-                continue;
             }
         }
         return Util.toJsonArray(invRow);

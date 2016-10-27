@@ -194,7 +194,6 @@ public class Message {
         if (!arguments.equalsIgnoreCase("")) arguments = " " + arguments;
         if (sender.hasPermission(node) || node.equals(""))
             sender.sendMessage(ChatColor.GOLD + "/stats " + command + ChatColor.GRAY + arguments + ChatColor.WHITE + " " + description);
-        return;
     }
 
     /**
@@ -208,7 +207,6 @@ public class Message {
      */
     public static void formatHelp(String command, String arguments, String description) {
         formatHelp(command, arguments, description, "");
-        return;
     }
 
     /**

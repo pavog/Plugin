@@ -104,7 +104,7 @@ public class DatabaseTask implements Runnable {
      */
     @Override
     public void run() {
-        if (Statistics.getInstance().isWorking(this.getClass().getSimpleName())) {
+        if (Statistics.isWorking(this.getClass().getSimpleName())) {
             Message.debug("Database syncronisation arleady started!");
             return;
         }

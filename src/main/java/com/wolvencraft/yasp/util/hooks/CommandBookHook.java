@@ -45,7 +45,7 @@ public class CommandBookHook extends PluginHook {
      * @return <b>true</b> if the player has god mode on, <b>false</b> otherwise
      */
     public static boolean isGodMode(Player player) {
-        GodComponent component = ((GodComponent) componentManager.getComponent(GodComponent.class));
+        GodComponent component = componentManager.getComponent(GodComponent.class);
         return component.isEnabled() && component.hasGodMode(player);
     }
 

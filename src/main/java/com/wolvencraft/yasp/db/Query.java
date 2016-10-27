@@ -142,7 +142,7 @@ public class Query {
          * @return Database query
          */
         public DatabaseQuery column(String... column) {
-            for (String col : column) this.columns.add(col);
+            Collections.addAll(this.columns, column);
             return instance;
         }
 
@@ -150,7 +150,7 @@ public class Query {
          * Defines which columns to return.<br />
          * If no columns are selected, returns everything
          *
-         * @param DBTable... Columns to include
+         * @param columns to include
          * @return Database query
          */
         public DatabaseQuery column(DBTable... columns) {
@@ -166,7 +166,7 @@ public class Query {
          * @return Database query
          */
         public DatabaseQuery columns(String[] column) {
-            for (String col : column) this.columns.add(col);
+            Collections.addAll(this.columns, column);
             return instance;
         }
 
@@ -185,7 +185,7 @@ public class Query {
         /**
          * Applies a condition to the query
          *
-         * @param DBTable Column name
+         * @param column name
          * @param value   Column value
          * @return Database query
          */
@@ -202,7 +202,7 @@ public class Query {
         /**
          * Applies a condition to the query
          *
-         * @param DBTable Column name
+         * @param column name
          * @param value   Column value
          * @return Database query
          */
@@ -214,7 +214,7 @@ public class Query {
         /**
          * Applies a condition to the query
          *
-         * @param DBTable Column name
+         * @param column name
          * @param value   Column value
          * @return Database query
          */
@@ -226,7 +226,7 @@ public class Query {
         /**
          * Applies a condition to the query
          *
-         * @param DBTable Column name
+         * @param column name
          * @param value   Column value
          * @return Database query
          */
@@ -238,7 +238,7 @@ public class Query {
         /**
          * Applies a condition to the query
          *
-         * @param DBTable Column name
+         * @param column name
          * @param value   Column value
          * @return Database query
          */
@@ -274,7 +274,7 @@ public class Query {
         /**
          * Adds a value to be inserted into the database
          *
-         * @param DBTable Column name
+         * @param column name
          * @param value   Column value
          * @return Database query
          */
@@ -286,7 +286,7 @@ public class Query {
         /**
          * Adds a value to be inserted into the database
          *
-         * @param DBTable Column name
+         * @param column name
          * @param value   Column value
          * @return Database query
          */
@@ -444,7 +444,7 @@ public class Query {
             String valueString = "";
             Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
+                Map.Entry<Object, Object> pairs = it.next();
                 if (!fieldString.equals("")) fieldString += ", ";
                 if (!valueString.equals("")) valueString += ", ";
 
@@ -475,7 +475,7 @@ public class Query {
             String valueString = "";
             Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
+                Map.Entry<Object, Object> pairs = it.next();
                 if (!valueString.equals("")) valueString += ", ";
 
                 valueString += "`" + pairs.getKey().toString() + "`='" + Util.parseString(pairs.getValue().toString()) + "'";
@@ -506,7 +506,7 @@ public class Query {
             String valueString = "";
             Iterator<Entry<Object, Object>> it = instance.values.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<Object, Object> pairs = (Entry<Object, Object>) it.next();
+                Map.Entry<Object, Object> pairs = it.next();
                 if (!valueString.equals("")) valueString += ", ";
 
                 valueString += "`" + pairs.getKey().toString() + "` = `" + pairs.getKey().toString() + "` + '" + pairs.getValue().toString() + "'";
@@ -574,7 +574,7 @@ public class Query {
          * @return <b>String</b> The value of the specified column, or <b>null</b> if there isn't one.
          */
         public String asString(String column) {
-            return fields.get(column.toString());
+            return fields.get(column);
         }
 
         /**

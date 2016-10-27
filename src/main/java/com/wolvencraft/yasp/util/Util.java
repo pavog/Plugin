@@ -130,7 +130,7 @@ public class Util {
         Map<ServerVariable, Object> values = Statistics.getServerTotals().getValues();
         Iterator<Entry<ServerVariable, Object>> it = values.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<ServerVariable, Object> pairs = (Map.Entry<ServerVariable, Object>) it.next();
+            Map.Entry<ServerVariable, Object> pairs = it.next();
             str = str.replace("<" + pairs.getKey().getAlias() + ">", pairs.getValue() + "");
             it.remove();
         }

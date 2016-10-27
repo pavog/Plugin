@@ -75,7 +75,6 @@ public class SignRefreshTask implements Runnable {
                     if (sign instanceof StatsSign) signs.add((StatsSign) sign);
                 } catch (IllegalArgumentException ex) {
                     Message.log(Level.SEVERE, ex.getMessage());
-                    continue;
                 }
             }
         }
@@ -200,9 +199,7 @@ public class SignRefreshTask implements Runnable {
             this.sign = sign;
 
             originalText = new ArrayList<String>();
-            for (String line : sign.getLines()) {
-                originalText.add(line);
-            }
+            Collections.addAll(originalText, sign.getLines());
 
             saveFile();
         }

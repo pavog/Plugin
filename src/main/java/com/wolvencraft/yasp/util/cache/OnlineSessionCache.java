@@ -149,7 +149,7 @@ public class OnlineSessionCache implements CachedDataProcess {
 
     @Override
     public void run() {
-        if (Statistics.getInstance().isWorking(this.getClass().getSimpleName())) {
+        if (Statistics.isWorking(this.getClass().getSimpleName())) {
             Message.debug("Cache refreshing already started!");
             return;
         }

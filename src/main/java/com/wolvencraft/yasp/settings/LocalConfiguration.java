@@ -73,12 +73,12 @@ public enum LocalConfiguration {
     LocalConfiguration(Object value, boolean fixedValue) {
         if (fixedValue) {
             this.node = "";
-            this.fixedValue = fixedValue;
+            this.fixedValue = true;
             this.cached = false;
             this.cachedValue = value;
         } else {
             this.node = (String) value;
-            this.fixedValue = fixedValue;
+            this.fixedValue = false;
             this.cached = false;
             this.cachedValue = null;
 

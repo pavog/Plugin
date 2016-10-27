@@ -50,7 +50,7 @@ public class OfflineSessionCache implements CachedDataProcess {
     /**
      * Fetches the OfflineSession from the cache
      *
-     * @param UUID Player uuid
+     * @param uuid Player uuid
      * @return Offline session
      */
     public static OfflineSession fetch(UUID uuid) {

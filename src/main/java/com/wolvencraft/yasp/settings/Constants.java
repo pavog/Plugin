@@ -123,8 +123,7 @@ public class Constants {
          * @return <b>true</b> if the data is valid, <b>false</b> otherwise
          */
         public boolean isDataValid(int data) {
-            if (data < minData || data > maxData) return false;
-            return true;
+            return !(data < minData || data > maxData);
         }
 
         /**

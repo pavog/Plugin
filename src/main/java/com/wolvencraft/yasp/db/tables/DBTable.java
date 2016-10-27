@@ -34,7 +34,7 @@ public interface DBTable {
      *
      * @return Column name
      */
-    public String getColumnName();
+    String getColumnName();
 
     /**
      * Equivalent to <code>getColumnName();</code>.
@@ -42,6 +42,6 @@ public interface DBTable {
      *
      * @return
      */
-    public String toString();
+    String toString();
 
 }

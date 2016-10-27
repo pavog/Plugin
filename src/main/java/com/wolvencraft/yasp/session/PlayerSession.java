@@ -36,27 +36,27 @@ public interface PlayerSession {
      *
      * @return Player ID
      */
-    public int getId();
+    int getId();
 
     /**
      * Returns the player name
      *
      * @return Player name
      */
-    public String getName();
+    String getName();
 
     /**
      * Returns the player uuid
      *
      * @return UUID uuid
      */
-    public UUID getUUID();
+    UUID getUUID();
 
     /**
      * Checks if the player is online
      *
      * @return <b>true</b> if the player is online, <b>false</b> otherwise
      */
-    public boolean isOnline();
+    boolean isOnline();
 
 }

@@ -187,7 +187,7 @@ public class CommandManager {
          *
          * @return List of alias
          */
-        public String[] alias();
+        String[] alias();
 
         /**
          * Returns the minimum number of arguments this command accepts.
@@ -196,7 +196,7 @@ public class CommandManager {
          *
          * @return Minimum number of arguments
          */
-        public int minArgs() default 0;
+        int minArgs() default 0;
 
         /**
          * Returns the maximum number of arguments this command accepts.
@@ -205,7 +205,7 @@ public class CommandManager {
          *
          * @return Minimum number of arguments
          */
-        public int maxArgs() default -1;
+        int maxArgs() default -1;
 
         /**
          * Returns the permission required to use this command.
@@ -213,14 +213,14 @@ public class CommandManager {
          *
          * @return Command permission
          */
-        public String permission() default "";
+        String permission() default "";
 
         /**
          * Should the console sender be allowed to run this command
          *
          * @return <b>true</b> if the console command sender should be allowed to run the command, <b>false</b> otherwise
          */
-        public boolean allowConsole() default true;
+        boolean allowConsole() default true;
 
         /**
          * Returns the usage of the command. Requires {@link #description()}.<br />
@@ -228,7 +228,7 @@ public class CommandManager {
          *
          * @return Command usage
          */
-        public String usage() default "";
+        String usage() default "";
 
         /**
          * Returns the description string for the help page.
@@ -236,7 +236,7 @@ public class CommandManager {
          *
          * @return Description string
          */
-        public String description() default "";
+        String description() default "";
 
     }
 

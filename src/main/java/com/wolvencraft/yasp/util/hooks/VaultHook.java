@@ -27,7 +27,6 @@ import com.wolvencraft.yasp.util.Message;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 
 import java.util.logging.Level;
@@ -81,13 +80,13 @@ public class VaultHook extends PluginHook {
         ServicesManager svm = Statistics.getInstance().getServer().getServicesManager();
 
         try {
-            economy = ((RegisteredServiceProvider<Economy>) (svm.getRegistration(Economy.class))).getProvider();
+            economy = svm.getRegistration(Economy.class).getProvider();
         } catch (Throwable t) {
             Message.log(Level.SEVERE, "An error occurred while initializing economy");
         }
 
         try {
-            permissions = ((RegisteredServiceProvider<Permission>) (svm.getRegistration(Permission.class))).getProvider();
+            permissions = svm.getRegistration(Permission.class).getProvider();
         } catch (Throwable t) {
             Message.log(Level.SEVERE, "An error occurred while initializing permissions");
         }
