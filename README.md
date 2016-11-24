@@ -22,8 +22,8 @@ you tell it to do.
 This is a new version of Statistics (v2.0) which is developed by Paul <pavog> Vogel.
 
 The Bukkit Plugin of Statistics has been updated and is currently working. I am developing the v2 at the moment which will bring new features.
- - In the [Master branch](https://github.com/pavog/Statistics-Bukkit-Plugin "Statistics master branch") you find the currently working (and tested) code.
- - In the [Development branch](https://github.com/pavog/Statistics-Bukkit-Plugin/tree/dev "Statistics dev branch") you find the code for v2 which is under heavy development and my not work.
+ - In the [Master branch](https://github.com/pavog/Statistics-Bukkit-Plugin "master branch") you find the currently working (and tested) code.
+ - In the [Development branch](https://github.com/pavog/Statistics-Bukkit-Plugin/tree/dev "dev branch") you find the code for v2 which is under heavy development and my not work.
 
 [![Statistics logo](https://dev.bukkit.org/media/images/56/243/dbo-1.png)](https://dev.bukkit.org/bukkit-plugins/statistics/)
 
